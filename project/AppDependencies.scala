@@ -12,13 +12,13 @@ object AppDependencies {
     "uk.gov.hmrc" %% "play-ui" % "7.22.0",
     "uk.gov.hmrc" %% "http-caching-client" % "7.1.0",
     "uk.gov.hmrc" %% "play-conditional-form-mapping" % "0.2.0",
-    "uk.gov.hmrc" %% "bootstrap-play-25" % "3.7.0",
+    "uk.gov.hmrc" %% "bootstrap-play-25" % "3.13.0",
     "uk.gov.hmrc" %% "play-language" % "3.4.0",
     "uk.gov.hmrc" %% "play-whitelist-filter" % "2.0.0"
   )
 
   val test = Seq(
-    "uk.gov.hmrc" %% "hmrctest" % "3.1.0",
+    "uk.gov.hmrc" %% "hmrctest" % "3.2.0",
     "org.scalatest" %% "scalatest" % "3.0.4",
     "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.1",
     "org.pegdown" % "pegdown" % "1.6.0",
