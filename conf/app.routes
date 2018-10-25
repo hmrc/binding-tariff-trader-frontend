@@ -12,7 +12,7 @@ GET        /check-your-answers                          controllers.CheckYourAns
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
-GET        /registered_address_for_eori                        controllers.registered_address_for_eoriController.onPageLoad(mode: Mode = NormalMode)
-POST       /registered_address_for_eori                        controllers.registered_address_for_eoriController.onSubmit(mode: Mode = NormalMode)
-GET        /changeregistered_address_for_eori                  controllers.registered_address_for_eoriController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeregistered_address_for_eori                  controllers.registered_address_for_eoriController.onSubmit(mode: Mode = CheckMode)
+GET        /registeredAddressForEori                        controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = NormalMode)
+POST       /registeredAddressForEori                        controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = NormalMode)
+GET        /changeRegisteredAddressForEori                  controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeRegisteredAddressForEori                  controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = CheckMode)

@@ -21,8 +21,8 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 
-index.title = binding-tariff-trader-frontend
-index.heading = binding-tariff-trader-frontend
+index.title = Binding tariff trader
+index.heading = Binding tariff trader
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
 session_expired.title = For your security, this service has been reset
@@ -37,8 +37,27 @@ site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
 site.continue = Continue
-site.service_name = binding-tariff-trader-frontend
+site.service_name = Binding tariff trader
 site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+registeredAddressForEori.title = This EORI is associated with the Government Gateway Account:
+registeredAddressForEori.heading = This EORI is associated with the Government Gateway Account:
+registeredAddressForEori.businessName = Business name
+registeredAddressForEori.addressLine1 = Address line 1
+registeredAddressForEori.townCity = Town or city
+registeredAddressForEori.postcode = Postcode
+registeredAddressForEori.country = Country
+registeredAddressForEori.checkYourAnswersLabel = registeredAddressForEori
+registeredAddressForEori.error.field1.required = Enter business name
+registeredAddressForEori.error.field2.required = Enter address line 1
+registeredAddressForEori.error.field3.required = Enter town or city
+registeredAddressForEori.error.field4.required = Enter postcode
+registeredAddressForEori.error.field5.required = Enter country
+registeredAddressForEori.error.field1.length = Business name must be 75 characters or less
+registeredAddressForEori.error.field2.length = Address line 1 must be 75 characters or less
+registeredAddressForEori.error.field3.length = Town or city line must be 75 characters or less
+registeredAddressForEori.error.field4.length = Postcode line must be 75 characters or less
+registeredAddressForEori.error.field5.length = Country line must be 75 characters or less

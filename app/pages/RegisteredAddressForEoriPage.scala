@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package utils
+package pages
 
-import controllers.routes
-import models.{CheckMode, UserAnswers}
-import pages._
-import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
+import models.RegisteredAddressForEori
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+case object RegisteredAddressForEoriPage extends QuestionPage[RegisteredAddressForEori] {
 
-  def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map {
-    x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
-  }
+  override def toString: String = "registeredAddressForEori"
 }

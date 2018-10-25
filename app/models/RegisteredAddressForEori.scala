@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package utils
+package models
 
-import controllers.routes
-import models.{CheckMode, UserAnswers}
-import pages._
-import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
+import play.api.libs.json._
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+case class RegisteredAddressForEori (field1: String, field2: String, field3: String, field4: String, field5: String)
 
-  def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map {
-    x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
-  }
+object RegisteredAddressForEori {
+  implicit val format = Json.format[RegisteredAddressForEori]
 }

@@ -6,6 +6,14 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryRegisteredAddressForEori: Arbitrary[RegisteredAddressForEori] =
+    Arbitrary {
+      for {
+        field1 <- arbitrary[String]
+        field2 <- arbitrary[String]
+      } yield RegisteredAddressForEori(field1, field2)
+    }
+
   implicit lazy val arbitraryregistered_address_for_eori: Arbitrary[registered_address_for_eori] =
     Arbitrary {
       for {
