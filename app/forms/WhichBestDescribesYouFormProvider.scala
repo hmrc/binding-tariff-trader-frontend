@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import org.scalacheck.Arbitrary
-import pages._
+import javax.inject.Inject
 
-trait PageGenerators {
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.WhichBestDescribesYou
 
-  implicit lazy val arbitraryWhichBestDescribesYouPage: Arbitrary[WhichBestDescribesYouPage.type] =
-    Arbitrary(WhichBestDescribesYouPage)
+class WhichBestDescribesYouFormProvider @Inject() extends Mappings {
 
-  implicit lazy val arbitraryRegisteredAddressForEoriPage: Arbitrary[RegisteredAddressForEoriPage.type] =
-    Arbitrary(RegisteredAddressForEoriPage)
-
+  def apply(): Form[WhichBestDescribesYou] =
+    Form(
+      "value" -> enumerable[WhichBestDescribesYou]("whichBestDescribesYou.error.required")
+    )
 }

@@ -16,3 +16,8 @@ GET        /registeredAddressForEori                        controllers.Register
 POST       /registeredAddressForEori                        controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = NormalMode)
 GET        /changeRegisteredAddressForEori                  controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeRegisteredAddressForEori                  controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = CheckMode)
+
+GET        /whichBestDescribesYou               controllers.WhichBestDescribesYouController.onPageLoad(mode: Mode = NormalMode)
+POST       /whichBestDescribesYou               controllers.WhichBestDescribesYouController.onSubmit(mode: Mode = NormalMode)
+GET        /changeWhichBestDescribesYou                  controllers.WhichBestDescribesYouController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeWhichBestDescribesYou                  controllers.WhichBestDescribesYouController.onSubmit(mode: Mode = CheckMode)

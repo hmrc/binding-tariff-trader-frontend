@@ -61,3 +61,10 @@ registeredAddressForEori.error.field2.length = Address line 1 must be 75 charact
 registeredAddressForEori.error.field3.length = Town or city line must be 75 characters or less
 registeredAddressForEori.error.field4.length = Postcode line must be 75 characters or less
 registeredAddressForEori.error.field5.length = Country line must be 75 characters or less
+
+whichBestDescribesYou.title = Which of these best describes you?
+whichBestDescribesYou.heading = Which of these best describes you?
+whichBestDescribesYou.option1 = I am an employee or owner of the business or organisation
+whichBestDescribesYou.option2 = I am a representative applying for a different business or organisation
+whichBestDescribesYou.checkYourAnswersLabel = Which of these best describes you?
+whichBestDescribesYou.error.required = Select which of these best describes you?

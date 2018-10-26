@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import org.scalacheck.Arbitrary
-import pages._
+import models.WhichBestDescribesYou
 
-trait PageGenerators {
+case object WhichBestDescribesYouPage extends QuestionPage[WhichBestDescribesYou] {
 
-  implicit lazy val arbitraryWhichBestDescribesYouPage: Arbitrary[WhichBestDescribesYouPage.type] =
-    Arbitrary(WhichBestDescribesYouPage)
-
-  implicit lazy val arbitraryRegisteredAddressForEoriPage: Arbitrary[RegisteredAddressForEoriPage.type] =
-    Arbitrary(RegisteredAddressForEoriPage)
-
+  override def toString: String = "whichBestDescribesYou"
 }

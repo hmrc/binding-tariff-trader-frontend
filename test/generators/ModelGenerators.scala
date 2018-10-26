@@ -22,6 +22,11 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryWhichBestDescribesYou: Arbitrary[WhichBestDescribesYou] =
+    Arbitrary {
+      Gen.oneOf(WhichBestDescribesYou.values.toSeq)
+    }
+
   implicit lazy val arbitraryRegisteredAddressForEori: Arbitrary[RegisteredAddressForEori] =
     Arbitrary {
       for {

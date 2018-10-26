@@ -23,6 +23,10 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def whichBestDescribesYou: Option[AnswerRow] = userAnswers.get(WhichBestDescribesYouPage) map {
+    x => AnswerRow("whichBestDescribesYou.checkYourAnswersLabel", s"whichBestDescribesYou.$x", true, routes.WhichBestDescribesYouController.onPageLoad(CheckMode).url)
+  }
+
   def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map {
     x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }

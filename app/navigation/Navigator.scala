@@ -27,7 +27,7 @@ import models._
 class Navigator @Inject()() {
 
   private val routeMap: Map[Page, UserAnswers => Call] = Map(
-
+    RegisteredAddressForEoriPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode))
   )
 
   private val checkRouteMap: Map[Page, UserAnswers => Call] = Map(

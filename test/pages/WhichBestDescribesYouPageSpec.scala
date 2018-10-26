@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import org.scalacheck.Arbitrary
-import pages._
+import models.WhichBestDescribesYou
+import pages.behaviours.PageBehaviours
 
-trait PageGenerators {
+class WhichBestDescribesYouSpec extends PageBehaviours {
 
-  implicit lazy val arbitraryWhichBestDescribesYouPage: Arbitrary[WhichBestDescribesYouPage.type] =
-    Arbitrary(WhichBestDescribesYouPage)
+  "YourLocation" must {
 
-  implicit lazy val arbitraryRegisteredAddressForEoriPage: Arbitrary[RegisteredAddressForEoriPage.type] =
-    Arbitrary(RegisteredAddressForEoriPage)
+    beRetrievable[WhichBestDescribesYou](WhichBestDescribesYouPage)
 
+    beSettable[WhichBestDescribesYou](WhichBestDescribesYouPage)
+
+    beRemovable[WhichBestDescribesYou](WhichBestDescribesYouPage)
+  }
 }
