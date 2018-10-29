@@ -23,6 +23,10 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  }
+
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {
     x => AnswerRow("registerBusinessRepresenting.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
   }

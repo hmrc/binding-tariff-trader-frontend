@@ -31,3 +31,8 @@ GET        /registerBusinessRepresenting                        controllers.Regi
 POST       /registerBusinessRepresenting                        controllers.RegisterBusinessRepresentingController.onSubmit(mode: Mode = NormalMode)
 GET        /changeRegisterBusinessRepresenting                  controllers.RegisterBusinessRepresentingController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeRegisterBusinessRepresenting                  controllers.RegisterBusinessRepresentingController.onSubmit(mode: Mode = CheckMode)
+
+GET        /enterContactDetails                        controllers.EnterContactDetailsController.onPageLoad(mode: Mode = NormalMode)
+POST       /enterContactDetails                        controllers.EnterContactDetailsController.onSubmit(mode: Mode = NormalMode)
+GET        /changeEnterContactDetails                  controllers.EnterContactDetailsController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeEnterContactDetails                  controllers.EnterContactDetailsController.onSubmit(mode: Mode = CheckMode)

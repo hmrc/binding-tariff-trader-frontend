@@ -85,3 +85,16 @@ registerBusinessRepresenting.error.field1.required = Enter field1
 registerBusinessRepresenting.error.field2.required = Enter field2
 registerBusinessRepresenting.error.field1.length = field1 must be 100 characters or less
 registerBusinessRepresenting.error.field2.length = field2 must be 100 characters or less
+
+enterContactDetails.title = Enter contact details
+enterContactDetails.heading = Enter contact details
+enterContactDetails.field1 = Full name
+enterContactDetails.field2 = Email address
+enterContactDetails.field3 = Direct telephone number
+enterContactDetails.checkYourAnswersLabel = Enter contact details
+enterContactDetails.error.field1.required = Enter your full name
+enterContactDetails.error.field2.required = Enter email address
+enterContactDetails.error.field3.required = Enter direct telephone number
+enterContactDetails.error.field1.length = Full name must be 100 characters or less
+enterContactDetails.error.field2.length = Email address must be 100 characters or less
+enterContactDetails.error.field3.length = Direct telephone number must be 100 characters or less
