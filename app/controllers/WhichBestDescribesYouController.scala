@@ -26,9 +26,11 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.WhichBestDescribesYouFormProvider
 import models.{Enumerable, Mode}
-import pages._
+import pages.WhichBestDescribesYouPage
 import navigation.Navigator
 import views.html.whichBestDescribesYou
+import models.WhichBestDescribesYou.{Option1, Option2}
+import pages.{RegisterBusinessRepresentingPage, SelectApplicationTypePage, WhichBestDescribesYouPage}
 
 import scala.concurrent.Future
 
@@ -65,9 +67,14 @@ class WhichBestDescribesYouController @Inject()(
         (value) => {
           val updatedAnswers = request.userAnswers.set(WhichBestDescribesYouPage, value)
 
+          val redirectedPage = value match {
+            case Option1 => SelectApplicationTypePage
+            case Option2 => RegisterBusinessRepresentingPage
+          }
+
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
-              Redirect(navigator.nextPage(WhichBestDescribesYouPage, mode)(updatedAnswers))
+              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
           )
         }
       )
