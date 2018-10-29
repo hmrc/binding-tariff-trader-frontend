@@ -26,3 +26,8 @@ GET        /selectApplicationType               controllers.SelectApplicationTyp
 POST       /selectApplicationType               controllers.SelectApplicationTypeController.onSubmit(mode: Mode = NormalMode)
 GET        /changeSelectApplicationType                  controllers.SelectApplicationTypeController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeSelectApplicationType                  controllers.SelectApplicationTypeController.onSubmit(mode: Mode = CheckMode)
+
+GET        /registerBusinessRepresenting                        controllers.RegisterBusinessRepresentingController.onPageLoad(mode: Mode = NormalMode)
+POST       /registerBusinessRepresenting                        controllers.RegisterBusinessRepresentingController.onSubmit(mode: Mode = NormalMode)
+GET        /changeRegisterBusinessRepresenting                  controllers.RegisterBusinessRepresentingController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeRegisterBusinessRepresenting                  controllers.RegisterBusinessRepresentingController.onSubmit(mode: Mode = CheckMode)

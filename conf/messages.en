@@ -75,3 +75,13 @@ selectApplicationType.newCommodity = New commodity code ruling
 selectApplicationType.previousCommodity = Renew a previous commodity code ruling
 selectApplicationType.checkYourAnswersLabel = Select application type
 selectApplicationType.error.required = Select application type
+
+registerBusinessRepresenting.title = registerBusinessRepresenting
+registerBusinessRepresenting.heading = registerBusinessRepresenting
+registerBusinessRepresenting.field1 = Field 1
+registerBusinessRepresenting.field2 = Field 2
+registerBusinessRepresenting.checkYourAnswersLabel = registerBusinessRepresenting
+registerBusinessRepresenting.error.field1.required = Enter field1
+registerBusinessRepresenting.error.field2.required = Enter field2
+registerBusinessRepresenting.error.field1.length = field1 must be 100 characters or less
+registerBusinessRepresenting.error.field2.length = field2 must be 100 characters or less

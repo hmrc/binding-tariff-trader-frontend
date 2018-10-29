@@ -24,36 +24,35 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
-import forms.WhichBestDescribesYouFormProvider
-import models.{Enumerable, Mode}
-import pages._
+import forms.RegisterBusinessRepresentingFormProvider
+import models.Mode
+import pages.RegisterBusinessRepresentingPage
 import navigation.Navigator
-import views.html.whichBestDescribesYou
+import views.html.registerBusinessRepresenting
 
 import scala.concurrent.Future
 
-class WhichBestDescribesYouController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: WhichBestDescribesYouFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppConfig,
+                                      override val messagesApi: MessagesApi,
+                                      dataCacheConnector: DataCacheConnector,
+                                      navigator: Navigator,
+                                      identify: IdentifierAction,
+                                      getData: DataRetrievalAction,
+                                      requireData: DataRequiredAction,
+                                      formProvider: RegisterBusinessRepresentingFormProvider
+                                      ) extends FrontendController with I18nSupport {
 
   val form = formProvider()
 
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(WhichBestDescribesYouPage) match {
+      val preparedForm = request.userAnswers.get(RegisterBusinessRepresentingPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(whichBestDescribesYou(appConfig, preparedForm, mode))
+      Ok(registerBusinessRepresenting(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
@@ -61,13 +60,13 @@ class WhichBestDescribesYouController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(whichBestDescribesYou(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(registerBusinessRepresenting(appConfig, formWithErrors, mode))),
         (value) => {
-          val updatedAnswers = request.userAnswers.set(WhichBestDescribesYouPage, value)
+          val updatedAnswers = request.userAnswers.set(RegisterBusinessRepresentingPage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
-              Redirect(navigator.nextPage(WhichBestDescribesYouPage, mode)(updatedAnswers))
+              Redirect(navigator.nextPage(RegisterBusinessRepresentingPage, mode)(updatedAnswers))
           )
         }
       )

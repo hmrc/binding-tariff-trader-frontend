@@ -22,6 +22,14 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryRegisterBusinessRepresenting: Arbitrary[RegisterBusinessRepresenting] =
+    Arbitrary {
+      for {
+        field1 <- arbitrary[String]
+        field2 <- arbitrary[String]
+      } yield RegisterBusinessRepresenting(field1, field2)
+    }
+
   implicit lazy val arbitrarySelectApplicationType: Arbitrary[SelectApplicationType] =
     Arbitrary {
       Gen.oneOf(SelectApplicationType.values.toSeq)
