@@ -26,10 +26,9 @@ trait CacheMapGenerator {
   self: Generators =>
 
   val generators: Seq[Gen[(Page, JsValue)]] =
+    arbitrary[(SelectApplicationTypePage.type, JsValue)] ::
     arbitrary[(WhichBestDescribesYouPage.type, JsValue)] ::
     arbitrary[(RegisteredAddressForEoriPage.type, JsValue)] ::
-    arbitrary[(registered_address_for_eoriPage.type, JsValue)] ::
-    arbitrary[(registered-address-for-eoriPage.type, JsValue)] ::
     Nil
 
   implicit lazy val arbitraryCacheMap: Arbitrary[CacheMap] =

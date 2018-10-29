@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import org.scalacheck.Arbitrary
-import pages._
+import models.SelectApplicationType
+import pages.behaviours.PageBehaviours
 
-trait PageGenerators {
+class SelectApplicationTypeSpec extends PageBehaviours {
 
-  implicit lazy val arbitrarySelectApplicationTypePage: Arbitrary[SelectApplicationTypePage.type] =
-    Arbitrary(SelectApplicationTypePage)
+  "YourLocation" must {
 
-  implicit lazy val arbitraryWhichBestDescribesYouPage: Arbitrary[WhichBestDescribesYouPage.type] =
-    Arbitrary(WhichBestDescribesYouPage)
+    beRetrievable[SelectApplicationType](SelectApplicationTypePage)
 
-  implicit lazy val arbitraryRegisteredAddressForEoriPage: Arbitrary[RegisteredAddressForEoriPage.type] =
-    Arbitrary(RegisteredAddressForEoriPage)
+    beSettable[SelectApplicationType](SelectApplicationTypePage)
 
+    beRemovable[SelectApplicationType](SelectApplicationTypePage)
+  }
 }

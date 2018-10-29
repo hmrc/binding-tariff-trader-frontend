@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import org.scalacheck.Arbitrary
-import pages._
+import models.SelectApplicationType
 
-trait PageGenerators {
+case object SelectApplicationTypePage extends QuestionPage[SelectApplicationType] {
 
-  implicit lazy val arbitrarySelectApplicationTypePage: Arbitrary[SelectApplicationTypePage.type] =
-    Arbitrary(SelectApplicationTypePage)
-
-  implicit lazy val arbitraryWhichBestDescribesYouPage: Arbitrary[WhichBestDescribesYouPage.type] =
-    Arbitrary(WhichBestDescribesYouPage)
-
-  implicit lazy val arbitraryRegisteredAddressForEoriPage: Arbitrary[RegisteredAddressForEoriPage.type] =
-    Arbitrary(RegisteredAddressForEoriPage)
-
+  override def toString: String = "selectApplicationType"
 }

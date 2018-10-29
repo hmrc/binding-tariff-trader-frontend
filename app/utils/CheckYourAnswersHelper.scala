@@ -23,6 +23,14 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def enterRegisteredBusinessRepresenting: Option[AnswerRow] = userAnswers.get(EnterRegisteredBusinessRepresentingPage) map {
+    x => AnswerRow("enterRegisteredBusinessRepresenting.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.EnterRegisteredBusinessRepresentingController.onPageLoad(CheckMode).url)
+  }
+
+  def selectApplicationType: Option[AnswerRow] = userAnswers.get(SelectApplicationTypePage) map {
+    x => AnswerRow("selectApplicationType.checkYourAnswersLabel", s"selectApplicationType.$x", true, routes.SelectApplicationTypeController.onPageLoad(CheckMode).url)
+  }
+
   def whichBestDescribesYou: Option[AnswerRow] = userAnswers.get(WhichBestDescribesYouPage) map {
     x => AnswerRow("whichBestDescribesYou.checkYourAnswersLabel", s"whichBestDescribesYou.$x", true, routes.WhichBestDescribesYouController.onPageLoad(CheckMode).url)
   }

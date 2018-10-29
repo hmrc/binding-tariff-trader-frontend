@@ -21,3 +21,8 @@ GET        /whichBestDescribesYou               controllers.WhichBestDescribesYo
 POST       /whichBestDescribesYou               controllers.WhichBestDescribesYouController.onSubmit(mode: Mode = NormalMode)
 GET        /changeWhichBestDescribesYou                  controllers.WhichBestDescribesYouController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeWhichBestDescribesYou                  controllers.WhichBestDescribesYouController.onSubmit(mode: Mode = CheckMode)
+
+GET        /selectApplicationType               controllers.SelectApplicationTypeController.onPageLoad(mode: Mode = NormalMode)
+POST       /selectApplicationType               controllers.SelectApplicationTypeController.onSubmit(mode: Mode = NormalMode)
+GET        /changeSelectApplicationType                  controllers.SelectApplicationTypeController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSelectApplicationType                  controllers.SelectApplicationTypeController.onSubmit(mode: Mode = CheckMode)

@@ -68,3 +68,10 @@ whichBestDescribesYou.option1 = I am an employee or owner of the business or org
 whichBestDescribesYou.option2 = I am a representative applying for a different business or organisation
 whichBestDescribesYou.checkYourAnswersLabel = Which of these best describes you?
 whichBestDescribesYou.error.required = Select which of these best describes you?
+
+selectApplicationType.title = Select application type
+selectApplicationType.heading = Select application type
+selectApplicationType.newCommodity = New commodity code ruling
+selectApplicationType.previousCommodity = Renew a previous commodity code ruling
+selectApplicationType.checkYourAnswersLabel = Select application type
+selectApplicationType.error.required = Select application type
