@@ -151,3 +151,8 @@ $(document).ready(function() {
               e.preventDefault();
       });
   }
+
+  // $(':radio').change(function () {
+  //     $(this).closest("form")
+  //     $($(this).parent().data("target")).toggleClass("js-hidden")
+  // });

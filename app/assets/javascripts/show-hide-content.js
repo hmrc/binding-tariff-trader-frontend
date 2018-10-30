@@ -13,7 +13,7 @@
     // Radio and Checkbox selectors
     var selectors = {
       namespace: 'ShowHideContent',
-      radio: '.block-label[data-target] input[type="radio"]',
+      radio: '[data-target] > input[type="radio"]',
       checkbox: '.block-label[data-target] input[type="checkbox"]'
     }
 
