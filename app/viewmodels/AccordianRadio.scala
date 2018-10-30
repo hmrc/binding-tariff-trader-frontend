@@ -18,4 +18,12 @@ package viewmodels
 
 import play.twirl.api.Html
 
-case class AccordianRadio(radioOption: RadioOption, html: Option[Html])
+class AccordianRadio
+(
+  id: String,
+  value: String,
+  messageKey: String,
+  html: Option[Html]
+) extends RadioOption(id, value, messageKey) {
+  def getHtml = html
+}
