@@ -9,7 +9,7 @@ The Front End for the BTI Application journey on GOV.UK
 ##### To run this Service you will need:
 
 1) [Service Manager](https://github.com/hmrc/service-manager) Installed
-2) [SBT](https://www.scala-sbt.org) Installed
+2) [SBT](https://www.scala-sbt.org) Version `>0.13.13` Installed
 
 ##### Starting the application:
 
@@ -22,6 +22,10 @@ The Front End for the BTI Application journey on GOV.UK
 
 Go to the [Start Page](http://localhost:9000/binding-tariff-trader-frontend/registeredAddressForEori).
 You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisation` and Submit.
+
+### Changes
+
+This project uses [Scaffold](https://github.com/hmrc/hmrc-frontend-scaffold.g8) to create its pages.
 
 ### License
 
