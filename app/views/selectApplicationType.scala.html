@@ -25,13 +25,13 @@
 @import viewmodels.RadioOption
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-    @renew = {
+@*    @renew = {
         <label class="form-label" for="renew">Commodity code ruling reference number</label>
         <input id="renew" class="form-control" type="text"/>
 
         <h2 class="heading-medium">Have your goods changed?</h2>
         <p>It is important that you update this application with any changes to the goods.</p>
-    }
+    }*@
 
     @main_template(
         title = s"${errorPrefix(form)} ${messages("selectApplicationType.title")}",
@@ -53,7 +53,7 @@
                 inputs = SelectApplicationType.options.toSeq
             )
 
-            @components.accordian(
+@*            @components.accordian(
                 field = form("value"),
                 legend = messages("selectApplicationType.heading"),
                 legendClass = Some("visually-hidden"),
@@ -71,7 +71,7 @@
                         Some(renew)
                     )
                 )
-            )
+            )*@
 
             @components.submit_button()
         }
