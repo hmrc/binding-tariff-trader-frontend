@@ -6,7 +6,12 @@ The Front End for the BTI Application journey on GOV.UK
 
 ### Running
 
-To run this Service you will need:
+##### To run this Service you will need:
+
+1) [Service Manager](https://github.com/hmrc/service-manager) Installed
+2) [SBT](https://www.scala-sbt.org) Installed
+
+##### Starting the application:
 
 1) Run [Binding Tariff Classification](https://github.com/hmrc/binding-tariff-classification) on Port 9090: `sbt 'run 9090'`
 2) Start Assets Frontend Using `sm --start ASSETS_FRONTEND -r 3.2.2`
