@@ -24,17 +24,15 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
-import forms.SelectApplicationTypeFormProvider
+import forms.InformationAboutYourItemFormProvider
 import models.{Enumerable, Mode}
-import pages.SelectApplicationTypePage
+import pages.InformationAboutYourItemPage
 import navigation.Navigator
-import views.html.selectApplicationType
-import models.SelectApplicationType.{Newcommodity, Previouscommodity}
-import pages.{PreviousCommodityCodePage, InformationAboutYourItemPage}
+import views.html.informationAboutYourItem
 
 import scala.concurrent.Future
 
-class SelectApplicationTypeController @Inject()(
+class InformationAboutYourItemController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
                                         dataCacheConnector: DataCacheConnector,
@@ -42,7 +40,7 @@ class SelectApplicationTypeController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: SelectApplicationTypeFormProvider
+                                        formProvider: InformationAboutYourItemFormProvider
                                       ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -50,12 +48,12 @@ class SelectApplicationTypeController @Inject()(
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(SelectApplicationTypePage) match {
+      val preparedForm = request.userAnswers.get(InformationAboutYourItemPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(selectApplicationType(appConfig, preparedForm, mode))
+      Ok(informationAboutYourItem(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
@@ -63,18 +61,13 @@ class SelectApplicationTypeController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(selectApplicationType(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(informationAboutYourItem(appConfig, formWithErrors, mode))),
         (value) => {
-          val updatedAnswers = request.userAnswers.set(SelectApplicationTypePage, value)
-
-          val redirectedPage = value match {
-            case Newcommodity => InformationAboutYourItemPage
-            case Previouscommodity => PreviousCommodityCodePage
-          }
+          val updatedAnswers = request.userAnswers.set(InformationAboutYourItemPage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
-              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+              Redirect(navigator.nextPage(InformationAboutYourItemPage, mode)(updatedAnswers))
           )
         }
       )

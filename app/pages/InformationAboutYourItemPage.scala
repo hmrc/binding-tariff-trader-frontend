@@ -16,17 +16,9 @@
 
 package pages
 
-import models.RegisterBusinessRepresenting
-import pages.behaviours.PageBehaviours
+import models.InformationAboutYourItem
 
-class RegisterBusinessRepresentingPageSpec extends PageBehaviours {
+case object InformationAboutYourItemPage extends QuestionPage[InformationAboutYourItem] {
 
-  "RegisterBusinessRepresentingPage" must {
-
-    beRetrievable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beSettable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beRemovable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-  }
+  override def toString: String = "informationAboutYourItem"
 }

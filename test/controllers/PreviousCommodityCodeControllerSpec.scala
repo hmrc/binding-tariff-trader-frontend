@@ -23,26 +23,26 @@ import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
 import play.api.test.Helpers._
-import forms.RegisterBusinessRepresentingFormProvider
-import models.{NormalMode, RegisterBusinessRepresenting}
-import pages.RegisterBusinessRepresentingPage
+import forms.PreviousCommodityCodeFormProvider
+import models.{NormalMode, PreviousCommodityCode}
+import pages.PreviousCommodityCodePage
 import play.api.mvc.Call
-import views.html.registerBusinessRepresenting
+import views.html.previousCommodityCode
 
-class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
+class PreviousCommodityCodeControllerSpec extends ControllerSpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new RegisterBusinessRepresentingFormProvider()
+  val formProvider = new PreviousCommodityCodeFormProvider()
   val form = formProvider()
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new RegisterBusinessRepresentingController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
+    new PreviousCommodityCodeController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
       dataRetrievalAction, new DataRequiredActionImpl, formProvider)
 
-  def viewAsString(form: Form[_] = form) = registerBusinessRepresenting(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = previousCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
 
-  "RegisterBusinessRepresenting Controller" must {
+  "PreviousCommodityCode Controller" must {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
@@ -52,12 +52,12 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(RegisterBusinessRepresentingPage.toString -> Json.toJson(RegisterBusinessRepresenting("value 1", "value 2")))
+      val validData = Map(PreviousCommodityCodePage.toString -> Json.toJson(PreviousCommodityCode("value 1", "value 2")))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(RegisterBusinessRepresenting("value 1", "value 2")))
+      contentAsString(result) mustBe viewAsString(form.fill(PreviousCommodityCode("value 1", "value 2")))
     }
 
     "redirect to the next page when valid data is submitted" in {

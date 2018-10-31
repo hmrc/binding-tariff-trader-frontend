@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.RegisterBusinessRepresenting
-import pages.behaviours.PageBehaviours
+import javax.inject.Inject
 
-class RegisterBusinessRepresentingPageSpec extends PageBehaviours {
+import forms.mappings.Mappings
+import play.api.data.Form
+import play.api.data.Forms._
+import models.PreviousCommodityCode
 
-  "RegisterBusinessRepresentingPage" must {
+class PreviousCommodityCodeFormProvider @Inject() extends Mappings {
 
-    beRetrievable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beSettable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beRemovable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-  }
-}
+   def apply(): Form[PreviousCommodityCode] = Form(
+     mapping(
+      "field1" -> text("previousCommodityCode.error.field1.required")
+        .verifying(maxLength(100, "previousCommodityCode.error.field1.length"))
+    )(PreviousCommodityCode.apply)(PreviousCommodityCode.unapply)
+   )
+ }

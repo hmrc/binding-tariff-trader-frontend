@@ -16,17 +16,17 @@
 
 package pages
 
-import models.RegisterBusinessRepresenting
+import models.InformationAboutYourItem
 import pages.behaviours.PageBehaviours
 
-class RegisterBusinessRepresentingPageSpec extends PageBehaviours {
+class InformationAboutYourItemSpec extends PageBehaviours {
 
-  "RegisterBusinessRepresentingPage" must {
+  "YourLocation" must {
 
-    beRetrievable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
+    beRetrievable[InformationAboutYourItem](InformationAboutYourItemPage)
 
-    beSettable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
+    beSettable[InformationAboutYourItem](InformationAboutYourItemPage)
 
-    beRemovable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
+    beRemovable[InformationAboutYourItem](InformationAboutYourItemPage)
   }
 }

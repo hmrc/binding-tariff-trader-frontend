@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import models.RegisterBusinessRepresenting
-import pages.behaviours.PageBehaviours
+import play.api.libs.json._
 
-class RegisterBusinessRepresentingPageSpec extends PageBehaviours {
+case class PreviousCommodityCode (field1: String)
 
-  "RegisterBusinessRepresentingPage" must {
-
-    beRetrievable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beSettable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beRemovable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-  }
+object PreviousCommodityCode {
+  implicit val format = Json.format[PreviousCommodityCode]
 }

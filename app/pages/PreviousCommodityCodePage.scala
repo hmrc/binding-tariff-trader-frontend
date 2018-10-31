@@ -16,17 +16,9 @@
 
 package pages
 
-import models.RegisterBusinessRepresenting
-import pages.behaviours.PageBehaviours
+import models.PreviousCommodityCode
 
-class RegisterBusinessRepresentingPageSpec extends PageBehaviours {
+case object PreviousCommodityCodePage extends QuestionPage[PreviousCommodityCode] {
 
-  "RegisterBusinessRepresentingPage" must {
-
-    beRetrievable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beSettable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beRemovable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-  }
+  override def toString: String = "previousCommodityCode"
 }

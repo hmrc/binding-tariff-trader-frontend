@@ -16,17 +16,17 @@
 
 package pages
 
-import models.RegisterBusinessRepresenting
+import models.PreviousCommodityCode
 import pages.behaviours.PageBehaviours
 
-class RegisterBusinessRepresentingPageSpec extends PageBehaviours {
+class PreviousCommodityCodePageSpec extends PageBehaviours {
 
-  "RegisterBusinessRepresentingPage" must {
+  "PreviousCommodityCodePage" must {
 
-    beRetrievable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
+    beRetrievable[PreviousCommodityCode](PreviousCommodityCodePage)
 
-    beSettable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
+    beSettable[PreviousCommodityCode](PreviousCommodityCodePage)
 
-    beRemovable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
+    beRemovable[PreviousCommodityCode](PreviousCommodityCodePage)
   }
 }

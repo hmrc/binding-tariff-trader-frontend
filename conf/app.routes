@@ -36,3 +36,13 @@ GET        /enterContactDetails                        controllers.EnterContactD
 POST       /enterContactDetails                        controllers.EnterContactDetailsController.onSubmit(mode: Mode = NormalMode)
 GET        /changeEnterContactDetails                  controllers.EnterContactDetailsController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeEnterContactDetails                  controllers.EnterContactDetailsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /informationAboutYourItem               controllers.InformationAboutYourItemController.onPageLoad(mode: Mode = NormalMode)
+POST       /informationAboutYourItem               controllers.InformationAboutYourItemController.onSubmit(mode: Mode = NormalMode)
+GET        /changeInformationAboutYourItem                  controllers.InformationAboutYourItemController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeInformationAboutYourItem                  controllers.InformationAboutYourItemController.onSubmit(mode: Mode = CheckMode)
+
+GET        /previousCommodityCode                        controllers.PreviousCommodityCodeController.onPageLoad(mode: Mode = NormalMode)
+POST       /previousCommodityCode                        controllers.PreviousCommodityCodeController.onSubmit(mode: Mode = NormalMode)
+GET        /changePreviousCommodityCode                  controllers.PreviousCommodityCodeController.onPageLoad(mode: Mode = CheckMode)
+POST       /changePreviousCommodityCode                  controllers.PreviousCommodityCodeController.onSubmit(mode: Mode = CheckMode)

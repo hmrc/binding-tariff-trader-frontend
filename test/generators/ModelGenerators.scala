@@ -22,6 +22,19 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryPreviousCommodityCode: Arbitrary[PreviousCommodityCode] =
+    Arbitrary {
+      for {
+        field1 <- arbitrary[String]
+        field2 <- arbitrary[String]
+      } yield PreviousCommodityCode(field1, field2)
+    }
+
+  implicit lazy val arbitraryInformationAboutYourItem: Arbitrary[InformationAboutYourItem] =
+    Arbitrary {
+      Gen.oneOf(InformationAboutYourItem.values.toSeq)
+    }
+
   implicit lazy val arbitraryEnterContactDetails: Arbitrary[EnterContactDetails] =
     Arbitrary {
       for {

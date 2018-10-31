@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.RegisterBusinessRepresenting
-import pages.behaviours.PageBehaviours
+import javax.inject.Inject
 
-class RegisterBusinessRepresentingPageSpec extends PageBehaviours {
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.InformationAboutYourItem
 
-  "RegisterBusinessRepresentingPage" must {
+class InformationAboutYourItemFormProvider @Inject() extends Mappings {
 
-    beRetrievable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beSettable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beRemovable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-  }
+  def apply(): Form[InformationAboutYourItem] =
+    Form(
+      "value" -> enumerable[InformationAboutYourItem]("informationAboutYourItem.error.required")
+    )
 }

@@ -18,23 +18,23 @@ package views
 
 import play.api.data.Form
 import controllers.routes
-import forms.EnterContactDetailsFormProvider
-import models.{NormalMode, EnterContactDetails}
+import forms.PreviousCommodityCodeFormProvider
+import models.{NormalMode, PreviousCommodityCode}
 import views.behaviours.QuestionViewBehaviours
-import views.html.enterContactDetails
+import views.html.previousCommodityCode
 
-class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDetails] {
+class PreviousCommodityCodeViewSpec extends QuestionViewBehaviours[PreviousCommodityCode] {
 
-  val messageKeyPrefix = "enterContactDetails"
+  val messageKeyPrefix = "previousCommodityCode"
 
-  override val form = new EnterContactDetailsFormProvider()()
+  override val form = new PreviousCommodityCodeFormProvider()()
 
-  def createView = () => enterContactDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => previousCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => enterContactDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => previousCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
 
-  "EnterContactDetails view" must {
+  "PreviousCommodityCode view" must {
 
     behave like normalPage(createView, messageKeyPrefix)
 
@@ -43,7 +43,7 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
     behave like pageWithTextFields(
       createViewUsingForm,
       messageKeyPrefix,
-      routes.EnterContactDetailsController.onSubmit(NormalMode).url,
+      routes.PreviousCommodityCodeController.onSubmit(NormalMode).url,
       "field1", "field2"
     )
   }
