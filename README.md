@@ -11,7 +11,7 @@ The Front End for the BTI Application journey on GOV.UK
 1) [Service Manager](https://github.com/hmrc/service-manager) Installed
 2) [SBT](https://www.scala-sbt.org) Version `>0.13.13` Installed
 
-##### Starting the application:
+##### Starting dependencies:
 
 1) Start Assets Frontend Using `sm --start ASSETS_FRONTEND -r 3.2.2`
 2) Start [Binding Tariff Classification](https://github.com/hmrc/binding-tariff-classification) Using `sm --start BINDING_TARIFF_CLASSIFICATION -f`
@@ -20,9 +20,18 @@ The Front End for the BTI Application journey on GOV.UK
 5) Start Auth Login API `sm --start AUTH_LOGIN_API -f`
 6) Start User Details `sm --start USER_DETAILS -f`
 
-Finally Run `sbt run` to boot the app
+##### Running With SBT
+
+Run `sbt run` to boot the app
 
 Go to the [Start Page](http://localhost:9000/binding-tariff-trader-frontend/registeredAddressForEori).
+You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisation` and Submit.
+
+##### Running with Service Manager
+
+Run `sm --start BINDING_TARIFF_TRADER_FRONTEND -r`
+
+Go to the [Start Page](http://localhost:9582/binding-tariff-trader-frontend/registeredAddressForEori).
 You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisation` and Submit.
 
 ### Changes
