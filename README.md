@@ -34,6 +34,10 @@ Run `sm --start BINDING_TARIFF_TRADER_FRONTEND -r`
 Go to the [Start Page](http://localhost:9582/binding-tariff-trader-frontend/registeredAddressForEori).
 You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisation` and Submit.
 
+### Testing
+
+Run `sbt test`
+
 ### Changes
 
 This project uses [Scaffold](https://github.com/hmrc/hmrc-frontend-scaffold.g8) to create its pages.
