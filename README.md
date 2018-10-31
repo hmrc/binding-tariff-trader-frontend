@@ -13,12 +13,14 @@ The Front End for the BTI Application journey on GOV.UK
 
 ##### Starting the application:
 
-1) Run [Binding Tariff Classification](https://github.com/hmrc/binding-tariff-classification) on Port 9090: `sbt 'run 9090'`
-2) Start Assets Frontend Using `sm --start ASSETS_FRONTEND -r 3.2.2`
+1) Start Assets Frontend Using `sm --start ASSETS_FRONTEND -r 3.2.2`
+2) Start [Binding Tariff Classification](https://github.com/hmrc/binding-tariff-classification) Using `sm --start BINDING_TARIFF_CLASSIFICATION -f`
 3) Start Auth Using `sm --start AUTH -f`
 4) Start Auth Login Stub `sm --start AUTH_LOGIN_STUB -f`
 5) Start Auth Login API `sm --start AUTH_LOGIN_API -f`
 6) Start User Details `sm --start USER_DETAILS -f`
+
+Finally Run `sbt run` to boot the app
 
 Go to the [Start Page](http://localhost:9000/binding-tariff-trader-frontend/registeredAddressForEori).
 You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisation` and Submit.
