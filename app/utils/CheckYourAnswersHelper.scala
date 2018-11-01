@@ -23,6 +23,14 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def confidentialInformation: Option[AnswerRow] = userAnswers.get(ConfidentialInformationPage) map {
+    x => AnswerRow("confidentialInformation.checkYourAnswersLabel", s"${x.field1}", false, routes.ConfidentialInformationController.onPageLoad(CheckMode).url)
+  }
+
+  def describeYourItem: Option[AnswerRow] = userAnswers.get(DescribeYourItemPage) map {
+    x => AnswerRow("describeYourItem.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.DescribeYourItemController.onPageLoad(CheckMode).url)
+  }
+
   def previousCommodityCode: Option[AnswerRow] = userAnswers.get(PreviousCommodityCodePage) map {
     x => AnswerRow("previousCommodityCode.checkYourAnswersLabel", s"${x.field1}", false, routes.PreviousCommodityCodeController.onPageLoad(CheckMode).url)
   }

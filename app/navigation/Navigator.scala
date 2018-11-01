@@ -29,10 +29,16 @@ class Navigator @Inject()() {
   private val routeMap: Map[Page, UserAnswers => Call] = Map(
     RegisteredAddressForEoriPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
     EnterContactDetailsPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
+
     SelectApplicationTypePage -> (_ => routes.SelectApplicationTypeController.onPageLoad(NormalMode)),
     RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(NormalMode)),
+
     InformationAboutYourItemPage -> (_ => routes.InformationAboutYourItemController.onPageLoad(NormalMode)),
-    PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode))
+    PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
+
+    ConfidentialInformationPage -> (_ => routes.ConfidentialInformationController.onPageLoad(NormalMode)),
+    DescribeYourItemPage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode))
+
   )
 
   private val checkRouteMap: Map[Page, UserAnswers => Call] = Map(

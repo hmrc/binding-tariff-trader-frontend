@@ -29,6 +29,8 @@ import models.{Enumerable, Mode}
 import pages.InformationAboutYourItemPage
 import navigation.Navigator
 import views.html.informationAboutYourItem
+import models.InformationAboutYourItem.{Yesihaveinfo, No}
+import pages.{ConfidentialInformationPage, DescribeYourItemPage}
 
 import scala.concurrent.Future
 
@@ -65,9 +67,14 @@ class InformationAboutYourItemController @Inject()(
         (value) => {
           val updatedAnswers = request.userAnswers.set(InformationAboutYourItemPage, value)
 
+          val redirectedPage = value match {
+            case Yesihaveinfo => ConfidentialInformationPage
+            case No => DescribeYourItemPage
+          }
+
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
-              Redirect(navigator.nextPage(InformationAboutYourItemPage, mode)(updatedAnswers))
+              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
           )
         }
       )

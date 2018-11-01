@@ -46,3 +46,13 @@ GET        /previousCommodityCode                        controllers.PreviousCom
 POST       /previousCommodityCode                        controllers.PreviousCommodityCodeController.onSubmit(mode: Mode = NormalMode)
 GET        /changePreviousCommodityCode                  controllers.PreviousCommodityCodeController.onPageLoad(mode: Mode = CheckMode)
 POST       /changePreviousCommodityCode                  controllers.PreviousCommodityCodeController.onSubmit(mode: Mode = CheckMode)
+
+GET        /describeYourItem                        controllers.DescribeYourItemController.onPageLoad(mode: Mode = NormalMode)
+POST       /describeYourItem                        controllers.DescribeYourItemController.onSubmit(mode: Mode = NormalMode)
+GET        /changeDescribeYourItem                  controllers.DescribeYourItemController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeDescribeYourItem                  controllers.DescribeYourItemController.onSubmit(mode: Mode = CheckMode)
+
+GET        /confidentialInformation                        controllers.ConfidentialInformationController.onPageLoad(mode: Mode = NormalMode)
+POST       /confidentialInformation                        controllers.ConfidentialInformationController.onSubmit(mode: Mode = NormalMode)
+GET        /changeConfidentialInformation                  controllers.ConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeConfidentialInformation                  controllers.ConfidentialInformationController.onSubmit(mode: Mode = CheckMode)

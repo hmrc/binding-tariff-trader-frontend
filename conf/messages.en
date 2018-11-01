@@ -43,8 +43,8 @@ site.textarea.char_limit = (Limit is {0} characters)
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
-registeredAddressForEori.title = This EORI is associated with the Government Gateway Account:
-registeredAddressForEori.heading = This EORI is associated with the Government Gateway Account:
+registeredAddressForEori.title = This EORI is associated with the Government Gateway Account
+registeredAddressForEori.heading = This EORI is associated with the Government Gateway Account
 registeredAddressForEori.businessName = Business name
 registeredAddressForEori.addressLine1 = Address line 1
 registeredAddressForEori.townCity = Town or city
@@ -118,3 +118,21 @@ previousCommodityCode.field1 = Previous commodity code ruling
 previousCommodityCode.checkYourAnswersLabel = Previous commodity code ruling
 previousCommodityCode.error.field1.required = Enter previous commodity code ruling
 previousCommodityCode.error.field1.length = Previous commodity code ruling must be 100 characters or less
+
+describeYourItem.title = Describe your item
+describeYourItem.heading = Describe your item
+describeYourItem.field1 = Item name
+describeYourItem.field2 = Describe your item in detail
+describeYourItem.field2.hint = Information in this box will be made public
+describeYourItem.checkYourAnswersLabel = Describe your item
+describeYourItem.error.field1.required = Enter item name
+describeYourItem.error.field2.required = Describe your item in detail
+describeYourItem.error.field1.length = Item name must be 100 characters or less
+describeYourItem.error.field2.length = Describe your item in detail must be 100 characters or less
+
+confidentialInformation.title = Provide information you want to remain confidential
+confidentialInformation.heading = Provide information you want to remain confidential
+confidentialInformation.field1 = Confidential information
+confidentialInformation.checkYourAnswersLabel = Confidential information
+confidentialInformation.error.field1.required = Enter confidential information
+confidentialInformation.error.field1.length = Confidential information must be 100 characters or less

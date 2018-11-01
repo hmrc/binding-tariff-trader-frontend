@@ -35,6 +35,16 @@
 
         @components.heading("registeredAddressForEori.heading")
 
+        <ul role="list" class="govuk-check-your-answers cya-questions-long section">
+            <li>
+                <div class="cya-question">EORI number</div>
+                <div class="cya-answer">GB6723190</div>
+                <div class="cya-change">
+                    <a href="#">Change <span class="visually-hidden">EORI details</span></a>
+                </div>
+            </li>
+        </ul>
+
         @components.input_text(
             field = form("field1"),
             label = messages("registeredAddressForEori.businessName")

@@ -18,8 +18,9 @@ package models
 
 import play.api.libs.json._
 import viewmodels.RadioOption
+import pages.Page
 
-sealed trait InformationAboutYourItem
+sealed trait InformationAboutYourItem extends Page
 
 object InformationAboutYourItem {
 
