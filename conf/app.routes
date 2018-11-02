@@ -61,3 +61,8 @@ GET        /uploadSupportingMaterialMultiple                        controllers.
 POST       /uploadSupportingMaterialMultiple                        controllers.UploadSupportingMaterialMultipleController.onSubmit(mode: Mode = NormalMode)
 GET        /changeUploadSupportingMaterialMultiple                  controllers.UploadSupportingMaterialMultipleController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeUploadSupportingMaterialMultiple                  controllers.UploadSupportingMaterialMultipleController.onSubmit(mode: Mode = CheckMode)
+
+GET        /commodityCodeBestMatch               controllers.CommodityCodeBestMatchController.onPageLoad(mode: Mode = NormalMode)
+POST       /commodityCodeBestMatch               controllers.CommodityCodeBestMatchController.onSubmit(mode: Mode = NormalMode)
+GET        /changeCommodityCodeBestMatch                  controllers.CommodityCodeBestMatchController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeCommodityCodeBestMatch                  controllers.CommodityCodeBestMatchController.onSubmit(mode: Mode = CheckMode)

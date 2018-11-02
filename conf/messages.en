@@ -142,3 +142,11 @@ uploadSupportingMaterialMultiple.heading = uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.checkYourAnswersLabel = uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
+
+commodityCodeBestMatch.title = Have you found a commodity code that best matches your goods?
+commodityCodeBestMatch.heading = Have you found a commodity code that best matches your goods?
+commodityCodeBestMatch.yesFoundCommodityCode = Yes - I have found a commodity code
+commodityCodeBestMatch.noHaventFoundCommodityCode = No - I have not found a commodity code
+commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code that best matches your goods?
+commodityCodeBestMatch.error.required = Select if you have a commodity code that best matches your goods?
+commodityCodeBestMatch.paragraph = Commodity codes classify goods for import and export and can be up to 14 digits. HMRC use these to check if you need to pay VAT or duty. You can find <a href="https://www.gov.uk/trade-tariff">commodity codes</a> on GOV.UK.

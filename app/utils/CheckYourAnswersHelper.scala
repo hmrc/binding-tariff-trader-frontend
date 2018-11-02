@@ -23,6 +23,10 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def commodityCodeBestMatch: Option[AnswerRow] = userAnswers.get(CommodityCodeBestMatchPage) map {
+    x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", s"commodityCodeBestMatch.$x", true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
+  }
+
   def uploadSupportingMaterialMultiple: Option[AnswerRow] = userAnswers.get(UploadSupportingMaterialMultiplePage) map {
     x => AnswerRow("uploadSupportingMaterialMultiple.checkYourAnswersLabel", s"$x", false, routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode).url)
   }

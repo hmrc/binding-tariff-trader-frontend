@@ -24,15 +24,15 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
-import forms.UploadSupportingMaterialMultipleFormProvider
-import models.Mode
-import pages.{UploadSupportingMaterialMultiplePage,CommodityCodeBestMatchPage}
+import forms.CommodityCodeBestMatchFormProvider
+import models.{Enumerable, Mode}
+import pages.CommodityCodeBestMatchPage
 import navigation.Navigator
-import views.html.uploadSupportingMaterialMultiple
+import views.html.commodityCodeBestMatch
 
 import scala.concurrent.Future
 
-class UploadSupportingMaterialMultipleController @Inject()(
+class CommodityCodeBestMatchController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
                                         dataCacheConnector: DataCacheConnector,
@@ -40,20 +40,20 @@ class UploadSupportingMaterialMultipleController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: UploadSupportingMaterialMultipleFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                        formProvider: CommodityCodeBestMatchFormProvider
+                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
 
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(UploadSupportingMaterialMultiplePage) match {
+      val preparedForm = request.userAnswers.get(CommodityCodeBestMatchPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(uploadSupportingMaterialMultiple(appConfig, preparedForm, mode))
+      Ok(commodityCodeBestMatch(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
@@ -61,9 +61,9 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(uploadSupportingMaterialMultiple(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode))),
         (value) => {
-          val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, value)
+          val updatedAnswers = request.userAnswers.set(CommodityCodeBestMatchPage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>

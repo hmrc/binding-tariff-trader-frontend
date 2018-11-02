@@ -39,7 +39,8 @@ class Navigator @Inject()() {
     ConfidentialInformationPage -> (_ => routes.ConfidentialInformationController.onPageLoad(NormalMode)),
     DescribeYourItemPage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode)),
 
-    UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode))
+    UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
+    CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode))
 
   )
 
