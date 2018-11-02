@@ -24,16 +24,15 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
-import forms.WhenToSendSampleFormProvider
+import forms.SimilarItemCommodityCodeFormProvider
 import models.{Enumerable, Mode}
-import pages.{WhenToSendSamplePage, ReturnSamplesPage, SimilarItemCommodityCodePage}
+import pages.SimilarItemCommodityCodePage
 import navigation.Navigator
-import views.html.whenToSendSample
-import models.WhenToSendSample.{Yesprovidesample, Notsendingsample}
+import views.html.similarItemCommodityCode
 
 import scala.concurrent.Future
 
-class WhenToSendSampleController @Inject()(
+class SimilarItemCommodityCodeController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
                                         dataCacheConnector: DataCacheConnector,
@@ -41,7 +40,7 @@ class WhenToSendSampleController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: WhenToSendSampleFormProvider
+                                        formProvider: SimilarItemCommodityCodeFormProvider
                                       ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -49,12 +48,12 @@ class WhenToSendSampleController @Inject()(
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(WhenToSendSamplePage) match {
+      val preparedForm = request.userAnswers.get(SimilarItemCommodityCodePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(whenToSendSample(appConfig, preparedForm, mode))
+      Ok(similarItemCommodityCode(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
@@ -62,18 +61,13 @@ class WhenToSendSampleController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(whenToSendSample(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(similarItemCommodityCode(appConfig, formWithErrors, mode))),
         (value) => {
-          val updatedAnswers = request.userAnswers.set(WhenToSendSamplePage, value)
-
-          val redirectedPage = value match {
-            case Yesprovidesample => ReturnSamplesPage
-            case Notsendingsample => SimilarItemCommodityCodePage
-          }
+          val updatedAnswers = request.userAnswers.set(SimilarItemCommodityCodePage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
-              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+              Redirect(navigator.nextPage(SimilarItemCommodityCodePage, mode)(updatedAnswers))
           )
         }
       )

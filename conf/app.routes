@@ -76,3 +76,13 @@ GET        /whenToSendSample               controllers.WhenToSendSampleControlle
 POST       /whenToSendSample               controllers.WhenToSendSampleController.onSubmit(mode: Mode = NormalMode)
 GET        /changeWhenToSendSample                  controllers.WhenToSendSampleController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeWhenToSendSample                  controllers.WhenToSendSampleController.onSubmit(mode: Mode = CheckMode)
+
+GET        /returnSamples               controllers.ReturnSamplesController.onPageLoad(mode: Mode = NormalMode)
+POST       /returnSamples               controllers.ReturnSamplesController.onSubmit(mode: Mode = NormalMode)
+GET        /changeReturnSamples                  controllers.ReturnSamplesController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeReturnSamples                  controllers.ReturnSamplesController.onSubmit(mode: Mode = CheckMode)
+
+GET        /similarItemCommodityCode               controllers.SimilarItemCommodityCodeController.onPageLoad(mode: Mode = NormalMode)
+POST       /similarItemCommodityCode               controllers.SimilarItemCommodityCodeController.onSubmit(mode: Mode = NormalMode)
+GET        /changeSimilarItemCommodityCode                  controllers.SimilarItemCommodityCodeController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSimilarItemCommodityCode                  controllers.SimilarItemCommodityCodeController.onSubmit(mode: Mode = CheckMode)

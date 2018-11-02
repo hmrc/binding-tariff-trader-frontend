@@ -21,6 +21,12 @@ import pages._
 
 trait PageGenerators {
 
+  implicit lazy val arbitrarySimilarItemCommodityCodePage: Arbitrary[SimilarItemCommodityCodePage.type] =
+    Arbitrary(SimilarItemCommodityCodePage)
+
+  implicit lazy val arbitraryReturnSamplesPage: Arbitrary[ReturnSamplesPage.type] =
+    Arbitrary(ReturnSamplesPage)
+
   implicit lazy val arbitraryWhenToSendSamplePage: Arbitrary[WhenToSendSamplePage.type] =
     Arbitrary(WhenToSendSamplePage)
 

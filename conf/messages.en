@@ -171,3 +171,17 @@ whenToSendSample.listItem1 = textiles
 whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
 whenToSendSample.legend = Are you sending a sample?
+
+returnSamples.title = Would you like the samples returned?
+returnSamples.heading = Would you like the samples returned?
+returnSamples.yesReturnSamples = Yes - I would like my sample returned
+returnSamples.noDontReturnSamples = No - I do not want my sample returned
+returnSamples.checkYourAnswersLabel = Would you like the samples returned?
+returnSamples.error.required = Select if you would you like the samples returned
+
+similarItemCommodityCode.title = Are you aware of a similar item that already has a commodity code ruling?
+similarItemCommodityCode.heading = Are you aware of a similar item that already has a commodity code ruling?
+similarItemCommodityCode.yesAwareSimilarCode = Yes - I am aware of a similar commodity code ruling
+similarItemCommodityCode.noNotAware = No - I am not aware of a similar commodity code ruling
+similarItemCommodityCode.checkYourAnswersLabel = Are you aware of a similar item that already has a commodity code ruling?
+similarItemCommodityCode.error.required = Select if you are aware of a similar item that already has a commodity code ruling

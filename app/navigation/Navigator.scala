@@ -43,7 +43,10 @@ class Navigator @Inject()() {
     CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)),
 
     CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(NormalMode)),
-    WhenToSendSamplePage -> (_ => routes.WhenToSendSampleController.onPageLoad(NormalMode))
+    WhenToSendSamplePage -> (_ => routes.WhenToSendSampleController.onPageLoad(NormalMode)),
+
+    ReturnSamplesPage -> (_ => routes.ReturnSamplesController.onPageLoad(NormalMode)),
+    SimilarItemCommodityCodePage -> (_ => routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode))
 
   )
 
