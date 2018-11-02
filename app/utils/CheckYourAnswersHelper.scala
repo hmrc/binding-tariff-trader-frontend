@@ -23,6 +23,10 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def uploadSupportingMaterialMultiple: Option[AnswerRow] = userAnswers.get(UploadSupportingMaterialMultiplePage) map {
+    x => AnswerRow("uploadSupportingMaterialMultiple.checkYourAnswersLabel", s"$x", false, routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode).url)
+  }
+
   def confidentialInformation: Option[AnswerRow] = userAnswers.get(ConfidentialInformationPage) map {
     x => AnswerRow("confidentialInformation.checkYourAnswersLabel", s"${x.field1}", false, routes.ConfidentialInformationController.onPageLoad(CheckMode).url)
   }

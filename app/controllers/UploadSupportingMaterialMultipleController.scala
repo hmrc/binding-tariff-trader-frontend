@@ -24,22 +24,23 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
-import forms.DescribeYourItemFormProvider
+import forms.UploadSupportingMaterialMultipleFormProvider
 import models.Mode
-import pages.{DescribeYourItemPage, UploadSupportingMaterialMultiplePage}
+import pages.UploadSupportingMaterialMultiplePage
 import navigation.Navigator
-import views.html.describeYourItem
+import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.Future
 
-class DescribeYourItemController @Inject()(appConfig: FrontendAppConfig,
-                                      override val messagesApi: MessagesApi,
-                                      dataCacheConnector: DataCacheConnector,
-                                      navigator: Navigator,
-                                      identify: IdentifierAction,
-                                      getData: DataRetrievalAction,
-                                      requireData: DataRequiredAction,
-                                      formProvider: DescribeYourItemFormProvider
+class UploadSupportingMaterialMultipleController @Inject()(
+                                        appConfig: FrontendAppConfig,
+                                        override val messagesApi: MessagesApi,
+                                        dataCacheConnector: DataCacheConnector,
+                                        navigator: Navigator,
+                                        identify: IdentifierAction,
+                                        getData: DataRetrievalAction,
+                                        requireData: DataRequiredAction,
+                                        formProvider: UploadSupportingMaterialMultipleFormProvider
                                       ) extends FrontendController with I18nSupport {
 
   val form = formProvider()
@@ -47,12 +48,12 @@ class DescribeYourItemController @Inject()(appConfig: FrontendAppConfig,
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(DescribeYourItemPage) match {
+      val preparedForm = request.userAnswers.get(UploadSupportingMaterialMultiplePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(describeYourItem(appConfig, preparedForm, mode))
+      Ok(uploadSupportingMaterialMultiple(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
@@ -60,9 +61,9 @@ class DescribeYourItemController @Inject()(appConfig: FrontendAppConfig,
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(describeYourItem(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(uploadSupportingMaterialMultiple(appConfig, formWithErrors, mode))),
         (value) => {
-          val updatedAnswers = request.userAnswers.set(DescribeYourItemPage, value)
+          val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>

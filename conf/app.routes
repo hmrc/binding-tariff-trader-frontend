@@ -56,3 +56,8 @@ GET        /confidentialInformation                        controllers.Confident
 POST       /confidentialInformation                        controllers.ConfidentialInformationController.onSubmit(mode: Mode = NormalMode)
 GET        /changeConfidentialInformation                  controllers.ConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeConfidentialInformation                  controllers.ConfidentialInformationController.onSubmit(mode: Mode = CheckMode)
+
+GET        /uploadSupportingMaterialMultiple                        controllers.UploadSupportingMaterialMultipleController.onPageLoad(mode: Mode = NormalMode)
+POST       /uploadSupportingMaterialMultiple                        controllers.UploadSupportingMaterialMultipleController.onSubmit(mode: Mode = NormalMode)
+GET        /changeUploadSupportingMaterialMultiple                  controllers.UploadSupportingMaterialMultipleController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeUploadSupportingMaterialMultiple                  controllers.UploadSupportingMaterialMultipleController.onSubmit(mode: Mode = CheckMode)

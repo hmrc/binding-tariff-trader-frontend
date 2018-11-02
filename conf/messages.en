@@ -136,3 +136,9 @@ confidentialInformation.field1 = Confidential information
 confidentialInformation.checkYourAnswersLabel = Confidential information
 confidentialInformation.error.field1.required = Enter confidential information
 confidentialInformation.error.field1.length = Confidential information must be 100 characters or less
+
+uploadSupportingMaterialMultiple.title = uploadSupportingMaterialMultiple
+uploadSupportingMaterialMultiple.heading = uploadSupportingMaterialMultiple
+uploadSupportingMaterialMultiple.checkYourAnswersLabel = uploadSupportingMaterialMultiple
+uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
+uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
