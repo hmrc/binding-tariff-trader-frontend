@@ -24,16 +24,15 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
-import forms.CommodityCodeBestMatchFormProvider
-import models.{Enumerable, Mode}
-import pages.{CommodityCodeBestMatchPage, CommodityCodeDigitsPage, WhenToSendSamplePage}
+import forms.CommodityCodeDigitsFormProvider
+import models.Mode
+import pages.{CommodityCodeDigitsPage, WhenToSendSamplePage}
 import navigation.Navigator
-import views.html.commodityCodeBestMatch
-import models.CommodityCodeBestMatch.{Yesfoundcommoditycode, Nohaventfoundcommoditycode}
+import views.html.commodityCodeDigits
 
 import scala.concurrent.Future
 
-class CommodityCodeBestMatchController @Inject()(
+class CommodityCodeDigitsController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
                                         dataCacheConnector: DataCacheConnector,
@@ -41,20 +40,20 @@ class CommodityCodeBestMatchController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: CommodityCodeBestMatchFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                        formProvider: CommodityCodeDigitsFormProvider
+                                      ) extends FrontendController with I18nSupport {
 
   val form = formProvider()
 
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(CommodityCodeBestMatchPage) match {
+      val preparedForm = request.userAnswers.get(CommodityCodeDigitsPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(commodityCodeBestMatch(appConfig, preparedForm, mode))
+      Ok(commodityCodeDigits(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
@@ -62,18 +61,13 @@ class CommodityCodeBestMatchController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(commodityCodeDigits(appConfig, formWithErrors, mode))),
         (value) => {
-          val updatedAnswers = request.userAnswers.set(CommodityCodeBestMatchPage, value)
-
-          val redirectedPage = value match {
-            case Yesfoundcommoditycode => CommodityCodeDigitsPage
-            case Nohaventfoundcommoditycode => WhenToSendSamplePage
-          }
+          val updatedAnswers = request.userAnswers.set(CommodityCodeDigitsPage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
-              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+              Redirect(navigator.nextPage(WhenToSendSamplePage, mode)(updatedAnswers))
           )
         }
       )

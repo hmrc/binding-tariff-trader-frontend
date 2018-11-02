@@ -40,7 +40,10 @@ class Navigator @Inject()() {
     DescribeYourItemPage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode)),
 
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
-    CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode))
+    CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)),
+
+    CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(NormalMode)),
+    WhenToSendSamplePage -> (_ => routes.WhenToSendSampleController.onPageLoad(NormalMode))
 
   )
 

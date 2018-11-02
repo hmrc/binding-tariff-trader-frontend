@@ -18,8 +18,9 @@ package models
 
 import play.api.libs.json._
 import viewmodels.RadioOption
+import pages.Page
 
-sealed trait CommodityCodeBestMatch
+sealed trait CommodityCodeBestMatch extends Page
 
 object CommodityCodeBestMatch {
 

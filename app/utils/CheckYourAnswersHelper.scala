@@ -23,6 +23,14 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def whenToSendSample: Option[AnswerRow] = userAnswers.get(WhenToSendSamplePage) map {
+    x => AnswerRow("whenToSendSample.checkYourAnswersLabel", s"whenToSendSample.$x", true, routes.WhenToSendSampleController.onPageLoad(CheckMode).url)
+  }
+
+  def commodityCodeDigits: Option[AnswerRow] = userAnswers.get(CommodityCodeDigitsPage) map {
+    x => AnswerRow("commodityCodeDigits.checkYourAnswersLabel", s"$x", false, routes.CommodityCodeDigitsController.onPageLoad(CheckMode).url)
+  }
+
   def commodityCodeBestMatch: Option[AnswerRow] = userAnswers.get(CommodityCodeBestMatchPage) map {
     x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", s"commodityCodeBestMatch.$x", true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
   }

@@ -21,6 +21,12 @@ import pages._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryWhenToSendSamplePage: Arbitrary[WhenToSendSamplePage.type] =
+    Arbitrary(WhenToSendSamplePage)
+
+  implicit lazy val arbitraryCommodityCodeDigitsPage: Arbitrary[CommodityCodeDigitsPage.type] =
+    Arbitrary(CommodityCodeDigitsPage)
+
   implicit lazy val arbitraryCommodityCodeBestMatchPage: Arbitrary[CommodityCodeBestMatchPage.type] =
     Arbitrary(CommodityCodeBestMatchPage)
 

@@ -22,6 +22,11 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryWhenToSendSample: Arbitrary[WhenToSendSample] =
+    Arbitrary {
+      Gen.oneOf(WhenToSendSample.values.toSeq)
+    }
+
   implicit lazy val arbitraryCommodityCodeBestMatch: Arbitrary[CommodityCodeBestMatch] =
     Arbitrary {
       Gen.oneOf(CommodityCodeBestMatch.values.toSeq)

@@ -150,3 +150,24 @@ commodityCodeBestMatch.noHaventFoundCommodityCode = No - I have not found a comm
 commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code that best matches your goods?
 commodityCodeBestMatch.error.required = Select if you have a commodity code that best matches your goods?
 commodityCodeBestMatch.paragraph = Commodity codes classify goods for import and export and can be up to 14 digits. HMRC use these to check if you need to pay VAT or duty. You can find <a href="https://www.gov.uk/trade-tariff">commodity codes</a> on GOV.UK.
+
+commodityCodeDigits.title = Enter your commodity code
+commodityCodeDigits.heading = Enter your commodity code
+commodityCodeDigits.checkYourAnswersLabel = Commodity code
+commodityCodeDigits.error.required = Enter your commodity code
+commodityCodeDigits.error.length = Commodity code must be 100 characters or less
+commodityCodeDigits.label = Entering at least the first 2 digits of this code could speed up your application.
+
+whenToSendSample.title = When to send a sample to the classification team
+whenToSendSample.heading = When to send a sample to the classification team
+whenToSendSample.yesProvideSample = Yes - I want to provide a sample
+whenToSendSample.notSendingSample = No - I will not be sending a sample
+whenToSendSample.checkYourAnswersLabel = When to send a sample to the classification team
+whenToSendSample.error.required = Select if are you sending a sample
+whenToSendSample.first.paragraph = We usually ask for samples of:
+whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for the classification team to contact you if one is needed.
+whenToSendSample.third.paragraph = <a href="https://www.gov.uk/guidance/binding-tariff-information-rulings#samples">Get more information about samples</a>
+whenToSendSample.listItem1 = textiles
+whenToSendSample.listItem2 = shoes
+whenToSendSample.listItem3 = ceramics
+whenToSendSample.legend = Are you sending a sample?

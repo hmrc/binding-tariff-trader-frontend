@@ -66,3 +66,13 @@ GET        /commodityCodeBestMatch               controllers.CommodityCodeBestMa
 POST       /commodityCodeBestMatch               controllers.CommodityCodeBestMatchController.onSubmit(mode: Mode = NormalMode)
 GET        /changeCommodityCodeBestMatch                  controllers.CommodityCodeBestMatchController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeCommodityCodeBestMatch                  controllers.CommodityCodeBestMatchController.onSubmit(mode: Mode = CheckMode)
+
+GET        /commodityCodeDigits                        controllers.CommodityCodeDigitsController.onPageLoad(mode: Mode = NormalMode)
+POST       /commodityCodeDigits                        controllers.CommodityCodeDigitsController.onSubmit(mode: Mode = NormalMode)
+GET        /changeCommodityCodeDigits                  controllers.CommodityCodeDigitsController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeCommodityCodeDigits                  controllers.CommodityCodeDigitsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /whenToSendSample               controllers.WhenToSendSampleController.onPageLoad(mode: Mode = NormalMode)
+POST       /whenToSendSample               controllers.WhenToSendSampleController.onSubmit(mode: Mode = NormalMode)
+GET        /changeWhenToSendSample                  controllers.WhenToSendSampleController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeWhenToSendSample                  controllers.WhenToSendSampleController.onSubmit(mode: Mode = CheckMode)
