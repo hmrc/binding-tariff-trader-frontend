@@ -26,7 +26,7 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.CommodityCodeRulingReferenceFormProvider
 import models.Mode
-import pages.CommodityCodeRulingReferencePage
+import pages.{CommodityCodeRulingReferencePage, LegalChallengePage}
 import navigation.Navigator
 import views.html.commodityCodeRulingReference
 
@@ -67,7 +67,7 @@ class CommodityCodeRulingReferenceController @Inject()(
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
-              Redirect(navigator.nextPage(CommodityCodeRulingReferencePage, mode)(updatedAnswers))
+              Redirect(navigator.nextPage(LegalChallengePage, mode)(updatedAnswers))
           )
         }
       )
