@@ -86,3 +86,13 @@ GET        /similarItemCommodityCode               controllers.SimilarItemCommod
 POST       /similarItemCommodityCode               controllers.SimilarItemCommodityCodeController.onSubmit(mode: Mode = NormalMode)
 GET        /changeSimilarItemCommodityCode                  controllers.SimilarItemCommodityCodeController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeSimilarItemCommodityCode                  controllers.SimilarItemCommodityCodeController.onSubmit(mode: Mode = CheckMode)
+
+GET        /commodityCodeRulingReference                        controllers.CommodityCodeRulingReferenceController.onPageLoad(mode: Mode = NormalMode)
+POST       /commodityCodeRulingReference                        controllers.CommodityCodeRulingReferenceController.onSubmit(mode: Mode = NormalMode)
+GET        /changeCommodityCodeRulingReference                  controllers.CommodityCodeRulingReferenceController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeCommodityCodeRulingReference                  controllers.CommodityCodeRulingReferenceController.onSubmit(mode: Mode = CheckMode)
+
+GET        /legalChallenge               controllers.LegalChallengeController.onPageLoad(mode: Mode = NormalMode)
+POST       /legalChallenge               controllers.LegalChallengeController.onSubmit(mode: Mode = NormalMode)
+GET        /changeLegalChallenge                  controllers.LegalChallengeController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeLegalChallenge                  controllers.LegalChallengeController.onSubmit(mode: Mode = CheckMode)

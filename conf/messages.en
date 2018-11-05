@@ -185,3 +185,17 @@ similarItemCommodityCode.yesAwareSimilarCode = Yes - I am aware of a similar com
 similarItemCommodityCode.noNotAware = No - I am not aware of a similar commodity code ruling
 similarItemCommodityCode.checkYourAnswersLabel = Are you aware of a similar item that already has a commodity code ruling?
 similarItemCommodityCode.error.required = Select if you are aware of a similar item that already has a commodity code ruling
+
+commodityCodeRulingReference.title = Commodity code ruling reference number
+commodityCodeRulingReference.heading = Commodity code ruling reference number
+commodityCodeRulingReference.checkYourAnswersLabel = Commodity code ruling reference number
+commodityCodeRulingReference.error.required = Enter commodity code ruling reference number
+commodityCodeRulingReference.error.length = Commodity code ruling reference number must be 100 characters or less
+
+legalChallenge.title = Are you aware of any legal challenge relating to the classification of the item?
+legalChallenge.heading = Are you aware of any legal challenge relating to the classification of the item?
+legalChallenge.yesLegalChallenge = Yes - I am aware of a legal challenge
+legalChallenge.noLegalChallenge = No - I am not aware of a legal challenge
+legalChallenge.checkYourAnswersLabel = Are you aware of any legal challenge relating to the classification of the item?
+legalChallenge.error.required = Select if you are aware of any legal challenge relating to the classification of the item
+legalChallenge.paragraph = This refers to any court rulings or administrative proceedings on your item's tariff classification. This helps the classification team avoid any contradictions in rulings.

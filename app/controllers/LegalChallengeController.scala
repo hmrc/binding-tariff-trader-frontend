@@ -24,16 +24,15 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
-import forms.SimilarItemCommodityCodeFormProvider
+import forms.LegalChallengeFormProvider
 import models.{Enumerable, Mode}
-import pages.{SimilarItemCommodityCodePage, CommodityCodeRulingReferencePage, LegalChallengePage}
+import pages.LegalChallengePage
 import navigation.Navigator
-import views.html.similarItemCommodityCode
-import models.SimilarItemCommodityCode.{Yesawaresimilarcode, Nonotaware}
+import views.html.legalChallenge
 
 import scala.concurrent.Future
 
-class SimilarItemCommodityCodeController @Inject()(
+class LegalChallengeController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
                                         dataCacheConnector: DataCacheConnector,
@@ -41,7 +40,7 @@ class SimilarItemCommodityCodeController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: SimilarItemCommodityCodeFormProvider
+                                        formProvider: LegalChallengeFormProvider
                                       ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -49,12 +48,12 @@ class SimilarItemCommodityCodeController @Inject()(
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(SimilarItemCommodityCodePage) match {
+      val preparedForm = request.userAnswers.get(LegalChallengePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(similarItemCommodityCode(appConfig, preparedForm, mode))
+      Ok(legalChallenge(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
@@ -62,18 +61,13 @@ class SimilarItemCommodityCodeController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(similarItemCommodityCode(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, mode))),
         (value) => {
-          val updatedAnswers = request.userAnswers.set(SimilarItemCommodityCodePage, value)
-
-          val redirectedPage = value match {
-            case Yesawaresimilarcode => CommodityCodeRulingReferencePage
-            case Nonotaware => LegalChallengePage
-          }
+          val updatedAnswers = request.userAnswers.set(LegalChallengePage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
-              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+              Redirect(navigator.nextPage(LegalChallengePage, mode)(updatedAnswers))
           )
         }
       )

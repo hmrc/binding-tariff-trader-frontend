@@ -21,6 +21,12 @@ import pages._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryLegalChallengePage: Arbitrary[LegalChallengePage.type] =
+    Arbitrary(LegalChallengePage)
+
+  implicit lazy val arbitraryCommodityCodeRulingReferencePage: Arbitrary[CommodityCodeRulingReferencePage.type] =
+    Arbitrary(CommodityCodeRulingReferencePage)
+
   implicit lazy val arbitrarySimilarItemCommodityCodePage: Arbitrary[SimilarItemCommodityCodePage.type] =
     Arbitrary(SimilarItemCommodityCodePage)
 
