@@ -96,3 +96,13 @@ GET        /legalChallenge               controllers.LegalChallengeController.on
 POST       /legalChallenge               controllers.LegalChallengeController.onSubmit(mode: Mode = NormalMode)
 GET        /changeLegalChallenge                  controllers.LegalChallengeController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeLegalChallenge                  controllers.LegalChallengeController.onSubmit(mode: Mode = CheckMode)
+
+GET        /legalChallengeDetails                        controllers.LegalChallengeDetailsController.onPageLoad(mode: Mode = NormalMode)
+POST       /legalChallengeDetails                        controllers.LegalChallengeDetailsController.onSubmit(mode: Mode = NormalMode)
+GET        /changeLegalChallengeDetails                  controllers.LegalChallengeDetailsController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeLegalChallengeDetails                  controllers.LegalChallengeDetailsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /supportingInformation               controllers.SupportingInformationController.onPageLoad(mode: Mode = NormalMode)
+POST       /supportingInformation               controllers.SupportingInformationController.onSubmit(mode: Mode = NormalMode)
+GET        /changeSupportingInformation                  controllers.SupportingInformationController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSupportingInformation                  controllers.SupportingInformationController.onSubmit(mode: Mode = CheckMode)

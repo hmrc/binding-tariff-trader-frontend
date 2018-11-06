@@ -49,7 +49,10 @@ class Navigator @Inject()() {
     SimilarItemCommodityCodePage -> (_ => routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode)),
 
     CommodityCodeRulingReferencePage -> (_ => routes.CommodityCodeRulingReferenceController.onPageLoad(NormalMode)),
-    LegalChallengePage -> (_ => routes.LegalChallengeController.onPageLoad(NormalMode))
+    LegalChallengePage -> (_ => routes.LegalChallengeController.onPageLoad(NormalMode)),
+
+    LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(NormalMode)),
+    SupportingInformationPage -> (_ => routes.SupportingInformationController.onPageLoad(NormalMode))
   )
 
   private val checkRouteMap: Map[Page, UserAnswers => Call] = Map(

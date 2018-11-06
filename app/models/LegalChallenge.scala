@@ -18,8 +18,9 @@ package models
 
 import play.api.libs.json._
 import viewmodels.RadioOption
+import pages.Page
 
-sealed trait LegalChallenge
+sealed trait LegalChallenge extends Page
 
 object LegalChallenge {
 

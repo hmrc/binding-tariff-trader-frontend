@@ -199,3 +199,16 @@ legalChallenge.noLegalChallenge = No - I am not aware of a legal challenge
 legalChallenge.checkYourAnswersLabel = Are you aware of any legal challenge relating to the classification of the item?
 legalChallenge.error.required = Select if you are aware of any legal challenge relating to the classification of the item
 legalChallenge.paragraph = This refers to any court rulings or administrative proceedings on your item's tariff classification. This helps the classification team avoid any contradictions in rulings.
+
+legalChallengeDetails.title = Provide details of any legal or administrative challenge
+legalChallengeDetails.heading = Provide details of any legal or administrative challenge
+legalChallengeDetails.checkYourAnswersLabel = Provide details of any legal or administrative challenge
+legalChallengeDetails.error.required = Enter details of any legal or administrative challenge
+legalChallengeDetails.error.length = Details of any legal or administrative challenge must be 100 characters or less
+
+supportingInformation.title = Enter any other information to support the application
+supportingInformation.heading = Enter any other information to support the application
+supportingInformation.yesInformation = Yes - I have other information
+supportingInformation.noInformation = No - I do not have any other information
+supportingInformation.checkYourAnswersLabel = Enter any other information to support the application
+supportingInformation.error.required = Select enter any other information to support the application

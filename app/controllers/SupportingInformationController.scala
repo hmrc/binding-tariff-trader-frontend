@@ -24,16 +24,15 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
-import forms.LegalChallengeFormProvider
+import forms.SupportingInformationFormProvider
 import models.{Enumerable, Mode}
-import pages.{LegalChallengePage, LegalChallengeDetailsPage, SupportingInformationPage}
+import pages.SupportingInformationPage
 import navigation.Navigator
-import views.html.legalChallenge
-import models.LegalChallenge.{Yeslegalchallenge, Nolegalchallenge}
+import views.html.supportingInformation
 
 import scala.concurrent.Future
 
-class LegalChallengeController @Inject()(
+class SupportingInformationController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
                                         dataCacheConnector: DataCacheConnector,
@@ -41,7 +40,7 @@ class LegalChallengeController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: LegalChallengeFormProvider
+                                        formProvider: SupportingInformationFormProvider
                                       ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -49,12 +48,12 @@ class LegalChallengeController @Inject()(
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(LegalChallengePage) match {
+      val preparedForm = request.userAnswers.get(SupportingInformationPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(legalChallenge(appConfig, preparedForm, mode))
+      Ok(supportingInformation(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
@@ -62,18 +61,13 @@ class LegalChallengeController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(supportingInformation(appConfig, formWithErrors, mode))),
         (value) => {
-          val updatedAnswers = request.userAnswers.set(LegalChallengePage, value)
-
-          val redirectedPage = value match {
-            case Yeslegalchallenge => LegalChallengeDetailsPage
-            case Nolegalchallenge => SupportingInformationPage
-          }
+          val updatedAnswers = request.userAnswers.set(SupportingInformationPage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
-              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+              Redirect(navigator.nextPage(SupportingInformationPage, mode)(updatedAnswers))
           )
         }
       )

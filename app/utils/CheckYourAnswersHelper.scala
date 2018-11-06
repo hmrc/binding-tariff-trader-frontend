@@ -23,6 +23,14 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def supportingInformation: Option[AnswerRow] = userAnswers.get(SupportingInformationPage) map {
+    x => AnswerRow("supportingInformation.checkYourAnswersLabel", s"supportingInformation.$x", true, routes.SupportingInformationController.onPageLoad(CheckMode).url)
+  }
+
+  def legalChallengeDetails: Option[AnswerRow] = userAnswers.get(LegalChallengeDetailsPage) map {
+    x => AnswerRow("legalChallengeDetails.checkYourAnswersLabel", s"$x", false, routes.LegalChallengeDetailsController.onPageLoad(CheckMode).url)
+  }
+
   def legalChallenge: Option[AnswerRow] = userAnswers.get(LegalChallengePage) map {
     x => AnswerRow("legalChallenge.checkYourAnswersLabel", s"legalChallenge.$x", true, routes.LegalChallengeController.onPageLoad(CheckMode).url)
   }
