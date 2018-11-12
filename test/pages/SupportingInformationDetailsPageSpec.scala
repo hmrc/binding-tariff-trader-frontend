@@ -16,17 +16,17 @@
 
 package pages
 
-import models.SupportingInformation
 import pages.behaviours.PageBehaviours
 
-class SupportingInformationSpec extends PageBehaviours {
 
-  "YourLocation" must {
+class SupportingInformationDetailsPageSpec extends PageBehaviours {
 
-    beRetrievable[SupportingInformation](SupportingInformationPage)
+  "SupportingInformationDetailsPage" must {
 
-    beSettable[SupportingInformation](SupportingInformationPage)
+    beRetrievable[String](SupportingInformationDetailsPage)
 
-    beRemovable[SupportingInformation](SupportingInformationPage)
+    beSettable[String](SupportingInformationDetailsPage)
+
+    beRemovable[String](SupportingInformationDetailsPage)
   }
 }

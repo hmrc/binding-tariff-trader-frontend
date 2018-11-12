@@ -19,13 +19,13 @@ package forms
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 
-class CommodityCodeRulingReferenceFormProviderSpec extends StringFieldBehaviours {
+class SupportingInformationDetailsFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "commodityCodeRulingReference.error.required"
-  val lengthKey = "commodityCodeRulingReference.error.length"
+  val requiredKey = "supportingInformationDetails.error.required"
+  val lengthKey = "supportingInformationDetails.error.length"
   val maxLength = 100
 
-  val form = new CommodityCodeRulingReferenceFormProvider()()
+  val form = new SupportingInformationDetailsFormProvider()()
 
   ".value" must {
 

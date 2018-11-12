@@ -1,5 +1,5 @@
-checkYourAnswers.title = Check Your Answers
-checkYourAnswers.heading = Check Your Answers
+checkYourAnswers.title = Check your answers before sending your application
+checkYourAnswers.heading = Check your answers before sending your application
 checkYourAnswers.guidance = Guidance for check your answers
 
 date.day = Day
@@ -50,7 +50,7 @@ registeredAddressForEori.addressLine1 = Address line 1
 registeredAddressForEori.townCity = Town or city
 registeredAddressForEori.postcode = Postcode
 registeredAddressForEori.country = Country
-registeredAddressForEori.checkYourAnswersLabel = registeredAddressForEori
+registeredAddressForEori.checkYourAnswersLabel = Applicant details
 registeredAddressForEori.error.field1.required = Enter business name
 registeredAddressForEori.error.field2.required = Enter address line 1
 registeredAddressForEori.error.field3.required = Enter town or city
@@ -133,7 +133,7 @@ describeYourItem.error.field2.length = Describe your item in detail must be 100 
 confidentialInformation.title = Provide information you want to remain confidential
 confidentialInformation.heading = Provide information you want to remain confidential
 confidentialInformation.field1 = Confidential information
-confidentialInformation.checkYourAnswersLabel = Confidential information
+confidentialInformation.checkYourAnswersLabel = Confidential information about your item
 confidentialInformation.error.field1.required = Enter confidential information
 confidentialInformation.error.field1.length = Confidential information must be 100 characters or less
 
@@ -162,7 +162,7 @@ whenToSendSample.title = When to send a sample to the classification team
 whenToSendSample.heading = When to send a sample to the classification team
 whenToSendSample.yesProvideSample = Yes - I want to provide a sample
 whenToSendSample.notSendingSample = No - I will not be sending a sample
-whenToSendSample.checkYourAnswersLabel = When to send a sample to the classification team
+whenToSendSample.checkYourAnswersLabel = Are you sending a sample to the classification team?
 whenToSendSample.error.required = Select if are you sending a sample
 whenToSendSample.first.paragraph = We usually ask for samples of:
 whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for the classification team to contact you if one is needed.
@@ -202,7 +202,7 @@ legalChallenge.paragraph = This refers to any court rulings or administrative pr
 
 legalChallengeDetails.title = Provide details of any legal or administrative challenge
 legalChallengeDetails.heading = Provide details of any legal or administrative challenge
-legalChallengeDetails.checkYourAnswersLabel = Provide details of any legal or administrative challenge
+legalChallengeDetails.checkYourAnswersLabel = Details of any legal or administrative challenge
 legalChallengeDetails.error.required = Enter details of any legal or administrative challenge
 legalChallengeDetails.error.length = Details of any legal or administrative challenge must be 100 characters or less
 
@@ -212,3 +212,10 @@ supportingInformation.yesInformation = Yes - I have other information
 supportingInformation.noInformation = No - I do not have any other information
 supportingInformation.checkYourAnswersLabel = Enter any other information to support the application
 supportingInformation.error.required = Select enter any other information to support the application
+
+supportingInformationDetails.title = Provide supporting information
+supportingInformationDetails.heading = Provide supporting information
+supportingInformationDetails.checkYourAnswersLabel = Supporting information
+supportingInformationDetails.checkYourAnswersHeading = Other information
+supportingInformationDetails.error.required = Enter supporting information
+supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less

@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.SupportingInformation
-import pages.behaviours.PageBehaviours
+import javax.inject.Inject
 
-class SupportingInformationSpec extends PageBehaviours {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  "YourLocation" must {
+class SupportingInformationDetailsFormProvider @Inject() extends Mappings {
 
-    beRetrievable[SupportingInformation](SupportingInformationPage)
-
-    beSettable[SupportingInformation](SupportingInformationPage)
-
-    beRemovable[SupportingInformation](SupportingInformationPage)
-  }
+  def apply(): Form[String] =
+    Form(
+      "value" -> text("supportingInformationDetails.error.required")
+        .verifying(maxLength(100, "supportingInformationDetails.error.length"))
+    )
 }

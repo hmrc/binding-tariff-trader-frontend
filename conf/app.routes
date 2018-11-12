@@ -106,3 +106,8 @@ GET        /supportingInformation               controllers.SupportingInformatio
 POST       /supportingInformation               controllers.SupportingInformationController.onSubmit(mode: Mode = NormalMode)
 GET        /changeSupportingInformation                  controllers.SupportingInformationController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeSupportingInformation                  controllers.SupportingInformationController.onSubmit(mode: Mode = CheckMode)
+
+GET        /supportingInformationDetails                        controllers.SupportingInformationDetailsController.onPageLoad(mode: Mode = NormalMode)
+POST       /supportingInformationDetails                        controllers.SupportingInformationDetailsController.onSubmit(mode: Mode = NormalMode)
+GET        /changeSupportingInformationDetails                  controllers.SupportingInformationDetailsController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSupportingInformationDetails                  controllers.SupportingInformationDetailsController.onSubmit(mode: Mode = CheckMode)

@@ -18,26 +18,26 @@ package views
 
 import play.api.data.Form
 import controllers.routes
-import forms.UploadSupportingMaterialMultipleFormProvider
+import forms.SupportingInformationDetailsFormProvider
 import models.NormalMode
 import views.behaviours.StringViewBehaviours
-import views.html.uploadSupportingMaterialMultiple
+import views.html.supportingInformationDetails
 
-class UploadSupportingMaterialMultipleViewSpec extends StringViewBehaviours {
+class SupportingInformationDetailsViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "uploadSupportingMaterialMultiple"
+  val messageKeyPrefix = "supportingInformationDetails"
 
-  val form = new UploadSupportingMaterialMultipleFormProvider()()
+  val form = new SupportingInformationDetailsFormProvider()()
 
-  def createView = () => uploadSupportingMaterialMultiple(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => supportingInformationDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) => uploadSupportingMaterialMultiple(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[String]) => supportingInformationDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  "UploadSupportingMaterialMultiple view" must {
+  "SupportingInformationDetails view" must {
     behave like normalPage(createView, messageKeyPrefix)
 
     behave like pageWithBackLink(createView)
 
-    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.UploadSupportingMaterialMultipleController.onSubmit(NormalMode).url)
+    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.SupportingInformationDetailsController.onSubmit(NormalMode).url)
   }
 }

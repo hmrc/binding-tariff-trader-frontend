@@ -23,21 +23,21 @@
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("legalChallengeDetails.title")}",
+    title = s"${errorPrefix(form)} ${messages("supportingInformationDetails.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = LegalChallengeDetailsController.onSubmit(mode), 'autoComplete -> "off") {
+    @helpers.form(action = SupportingInformationDetailsController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading("legalChallengeDetails.heading")
+        @components.heading("supportingInformationDetails.heading")
 
         @components.input_textarea(
           field = form("value"),
-          label = messages("legalChallengeDetails.heading"),
+          label = messages("supportingInformationDetails.heading"),
           labelClass=Some("visually-hidden")
         )
 

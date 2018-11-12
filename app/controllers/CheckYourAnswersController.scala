@@ -34,7 +34,38 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
   def onPageLoad() = (authenticate andThen getData andThen requireData) {
     implicit request =>
       val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
-      val sections = Seq(AnswerSection(None, Seq()))
+
+      val sections = Seq(
+        AnswerSection(
+          Some("registeredAddressForEori.checkYourAnswersLabel"),
+          Seq(
+            checkYourAnswersHelper.registeredAddressForEori,
+            checkYourAnswersHelper.whichBestDescribesYou,
+            checkYourAnswersHelper.enterContactDetails
+          ).flatten
+        ),
+        AnswerSection(
+          Some("informationAboutYourItem.checkYourAnswersLabel"),
+          Seq(
+            checkYourAnswersHelper.previousCommodityCode,
+            checkYourAnswersHelper.confidentialInformation,
+            checkYourAnswersHelper.describeYourItem,
+            checkYourAnswersHelper.commodityCodeDigits,
+            checkYourAnswersHelper.whenToSendSample,
+            checkYourAnswersHelper.returnSamples,
+            checkYourAnswersHelper.commodityCodeRulingReference,
+            checkYourAnswersHelper.legalChallenge,
+            checkYourAnswersHelper.legalChallengeDetails
+          ).flatten
+        ),
+        AnswerSection(
+          Some("supportingInformationDetails.checkYourAnswersHeading"),
+          Seq(
+            checkYourAnswersHelper.supportingInformationDetails
+          ).flatten
+        )
+      )
+
       Ok(check_your_answers(appConfig, sections))
   }
 }

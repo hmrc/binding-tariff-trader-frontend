@@ -52,7 +52,10 @@ class Navigator @Inject()() {
     LegalChallengePage -> (_ => routes.LegalChallengeController.onPageLoad(NormalMode)),
 
     LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(NormalMode)),
-    SupportingInformationPage -> (_ => routes.SupportingInformationController.onPageLoad(NormalMode))
+    SupportingInformationPage -> (_ => routes.SupportingInformationController.onPageLoad(NormalMode)),
+
+    SupportingInformationDetailsPage -> (_ => routes.SupportingInformationDetailsController.onPageLoad(NormalMode)),
+    CheckYourAnswersPage -> (_ => routes.CheckYourAnswersController.onPageLoad())
   )
 
   private val checkRouteMap: Map[Page, UserAnswers => Call] = Map(

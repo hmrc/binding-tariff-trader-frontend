@@ -24,16 +24,15 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
-import forms.SupportingInformationFormProvider
-import models.{Enumerable, Mode}
-import pages.{SupportingInformationPage, SupportingInformationDetailsPage, CheckYourAnswersPage}
+import forms.SupportingInformationDetailsFormProvider
+import models.Mode
+import pages.{SupportingInformationDetailsPage, CheckYourAnswersPage}
 import navigation.Navigator
-import views.html.supportingInformation
-import models.SupportingInformation.{Yesinformation, Noinformation}
+import views.html.supportingInformationDetails
 
 import scala.concurrent.Future
 
-class SupportingInformationController @Inject()(
+class SupportingInformationDetailsController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
                                         dataCacheConnector: DataCacheConnector,
@@ -41,20 +40,20 @@ class SupportingInformationController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: SupportingInformationFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                        formProvider: SupportingInformationDetailsFormProvider
+                                      ) extends FrontendController with I18nSupport {
 
   val form = formProvider()
 
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(SupportingInformationPage) match {
+      val preparedForm = request.userAnswers.get(SupportingInformationDetailsPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(supportingInformation(appConfig, preparedForm, mode))
+      Ok(supportingInformationDetails(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
@@ -62,18 +61,13 @@ class SupportingInformationController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(supportingInformation(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(supportingInformationDetails(appConfig, formWithErrors, mode))),
         (value) => {
-          val updatedAnswers = request.userAnswers.set(SupportingInformationPage, value)
-
-          val redirectedPage = value match {
-            case Yesinformation => SupportingInformationDetailsPage
-            case Noinformation => CheckYourAnswersPage
-          }
+          val updatedAnswers = request.userAnswers.set(SupportingInformationDetailsPage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
-              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+              Redirect(navigator.nextPage(CheckYourAnswersPage, mode)(updatedAnswers))
           )
         }
       )

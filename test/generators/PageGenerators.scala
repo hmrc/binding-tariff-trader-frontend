@@ -21,6 +21,9 @@ import pages._
 
 trait PageGenerators {
 
+  implicit lazy val arbitrarySupportingInformationDetailsPage: Arbitrary[SupportingInformationDetailsPage.type] =
+    Arbitrary(SupportingInformationDetailsPage)
+
   implicit lazy val arbitrarySupportingInformationPage: Arbitrary[SupportingInformationPage.type] =
     Arbitrary(SupportingInformationPage)
 

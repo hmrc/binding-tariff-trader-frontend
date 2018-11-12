@@ -23,6 +23,10 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def supportingInformationDetails: Option[AnswerRow] = userAnswers.get(SupportingInformationDetailsPage) map {
+    x => AnswerRow("supportingInformationDetails.checkYourAnswersLabel", s"$x", false, routes.SupportingInformationDetailsController.onPageLoad(CheckMode).url)
+  }
+
   def supportingInformation: Option[AnswerRow] = userAnswers.get(SupportingInformationPage) map {
     x => AnswerRow("supportingInformation.checkYourAnswersLabel", s"supportingInformation.$x", true, routes.SupportingInformationController.onPageLoad(CheckMode).url)
   }
@@ -80,7 +84,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", s"${x.field1} ${x.field2} ${x.field3}", false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
   }
 
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {
@@ -96,6 +100,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map {
-    x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
+    x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", s"${x.field1} ${x.field2} ${x.field3} ${x.field4} ${x.field5}", false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }
 }
