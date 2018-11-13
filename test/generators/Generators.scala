@@ -19,8 +19,6 @@ package generators
 import org.scalacheck.{Arbitrary, Gen, Shrink}
 import Gen._
 import Arbitrary._
-import play.api.libs.json.{JsBoolean, JsNumber, JsString}
-import uk.gov.hmrc.http.cache.client.CacheMap
 
 trait Generators extends CacheMapGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators {
 
@@ -58,7 +56,7 @@ trait Generators extends CacheMapGenerator with PageGenerators with ModelGenerat
     arbitrary[BigInt] suchThat(x => x < Int.MinValue)
 
   def nonNumerics: Gen[String] =
-    alphaStr suchThat(_.size > 0)
+    alphaStr suchThat(_.nonEmpty)
 
   def decimals: Gen[String] =
     arbitrary[BigDecimal]
