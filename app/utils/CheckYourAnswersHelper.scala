@@ -23,11 +23,83 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
-  def registered_address_for_eori: Option[AnswerRow] = userAnswers.get(registered_address_for_eoriPage) map {
-    x => AnswerRow("registered_address_for_eori.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.registered_address_for_eoriController.onPageLoad(CheckMode).url)
+  def supportingInformationDetails: Option[AnswerRow] = userAnswers.get(SupportingInformationDetailsPage) map {
+    x => AnswerRow("supportingInformationDetails.checkYourAnswersLabel", s"$x", false, routes.SupportingInformationDetailsController.onPageLoad(CheckMode).url)
   }
 
-  def registered_address_for_eori: Option[AnswerRow] = userAnswers.get(registered_address_for_eoriPage) map {
-    x => AnswerRow("registered_address_for_eori.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.registered_address_for_eoriController.onPageLoad(CheckMode).url)
+  def supportingInformation: Option[AnswerRow] = userAnswers.get(SupportingInformationPage) map {
+    x => AnswerRow("supportingInformation.checkYourAnswersLabel", s"supportingInformation.$x", true, routes.SupportingInformationController.onPageLoad(CheckMode).url)
+  }
+
+  def legalChallengeDetails: Option[AnswerRow] = userAnswers.get(LegalChallengeDetailsPage) map {
+    x => AnswerRow("legalChallengeDetails.checkYourAnswersLabel", s"$x", false, routes.LegalChallengeDetailsController.onPageLoad(CheckMode).url)
+  }
+
+  def legalChallenge: Option[AnswerRow] = userAnswers.get(LegalChallengePage) map {
+    x => AnswerRow("legalChallenge.checkYourAnswersLabel", s"legalChallenge.$x", true, routes.LegalChallengeController.onPageLoad(CheckMode).url)
+  }
+
+  def commodityCodeRulingReference: Option[AnswerRow] = userAnswers.get(CommodityCodeRulingReferencePage) map {
+    x => AnswerRow("commodityCodeRulingReference.checkYourAnswersLabel", s"$x", false, routes.CommodityCodeRulingReferenceController.onPageLoad(CheckMode).url)
+  }
+
+  def similarItemCommodityCode: Option[AnswerRow] = userAnswers.get(SimilarItemCommodityCodePage) map {
+    x => AnswerRow("similarItemCommodityCode.checkYourAnswersLabel", s"similarItemCommodityCode.$x", true, routes.SimilarItemCommodityCodeController.onPageLoad(CheckMode).url)
+  }
+
+  def returnSamples: Option[AnswerRow] = userAnswers.get(ReturnSamplesPage) map {
+    x => AnswerRow("returnSamples.checkYourAnswersLabel", s"returnSamples.$x", true, routes.ReturnSamplesController.onPageLoad(CheckMode).url)
+  }
+
+  def whenToSendSample: Option[AnswerRow] = userAnswers.get(WhenToSendSamplePage) map {
+    x => AnswerRow("whenToSendSample.checkYourAnswersLabel", s"whenToSendSample.$x", true, routes.WhenToSendSampleController.onPageLoad(CheckMode).url)
+  }
+
+  def commodityCodeDigits: Option[AnswerRow] = userAnswers.get(CommodityCodeDigitsPage) map {
+    x => AnswerRow("commodityCodeDigits.checkYourAnswersLabel", s"$x", false, routes.CommodityCodeDigitsController.onPageLoad(CheckMode).url)
+  }
+
+  def commodityCodeBestMatch: Option[AnswerRow] = userAnswers.get(CommodityCodeBestMatchPage) map {
+    x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", s"commodityCodeBestMatch.$x", true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
+  }
+
+  def uploadSupportingMaterialMultiple: Option[AnswerRow] = userAnswers.get(UploadSupportingMaterialMultiplePage) map {
+    x => AnswerRow("uploadSupportingMaterialMultiple.checkYourAnswersLabel", s"$x", false, routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode).url)
+  }
+
+  def confidentialInformation: Option[AnswerRow] = userAnswers.get(ConfidentialInformationPage) map {
+    x => AnswerRow("confidentialInformation.checkYourAnswersLabel", s"${x.field1}", false, routes.ConfidentialInformationController.onPageLoad(CheckMode).url)
+  }
+
+  def describeYourItem: Option[AnswerRow] = userAnswers.get(DescribeYourItemPage) map {
+    x => AnswerRow("describeYourItem.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.DescribeYourItemController.onPageLoad(CheckMode).url)
+  }
+
+  def previousCommodityCode: Option[AnswerRow] = userAnswers.get(PreviousCommodityCodePage) map {
+    x => AnswerRow("previousCommodityCode.checkYourAnswersLabel", s"${x.field1}", false, routes.PreviousCommodityCodeController.onPageLoad(CheckMode).url)
+  }
+
+  def informationAboutYourItem: Option[AnswerRow] = userAnswers.get(InformationAboutYourItemPage) map {
+    x => AnswerRow("informationAboutYourItem.checkYourAnswersLabel", s"informationAboutYourItem.$x", true, routes.InformationAboutYourItemController.onPageLoad(CheckMode).url)
+  }
+
+  def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", s"${x.field1} ${x.field2} ${x.field3}", false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  }
+
+  def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {
+    x => AnswerRow("registerBusinessRepresenting.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
+  }
+
+  def selectApplicationType: Option[AnswerRow] = userAnswers.get(SelectApplicationTypePage) map {
+    x => AnswerRow("selectApplicationType.checkYourAnswersLabel", s"selectApplicationType.$x", true, routes.SelectApplicationTypeController.onPageLoad(CheckMode).url)
+  }
+
+  def whichBestDescribesYou: Option[AnswerRow] = userAnswers.get(WhichBestDescribesYouPage) map {
+    x => AnswerRow("whichBestDescribesYou.checkYourAnswersLabel", s"whichBestDescribesYou.$x", true, routes.WhichBestDescribesYouController.onPageLoad(CheckMode).url)
+  }
+
+  def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map {
+    x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", s"${x.field1} ${x.field2} ${x.field3} ${x.field4} ${x.field5}", false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }
 }
