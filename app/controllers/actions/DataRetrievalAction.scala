@@ -21,7 +21,6 @@ import play.api.mvc.ActionTransformer
 import connectors.DataCacheConnector
 import models.UserAnswers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.ExecutionContext.Implicits.global
