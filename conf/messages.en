@@ -43,6 +43,10 @@ site.textarea.char_limit = (Limit is {0} characters)
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
+## Generic messages
+eori.number = EORI number
+eori.details = EORI details
+
 registeredAddressForEori.title = This EORI is associated with the Government Gateway Account
 registeredAddressForEori.heading = This EORI is associated with the Government Gateway Account
 registeredAddressForEori.businessName = Business name
@@ -118,6 +122,10 @@ previousCommodityCode.field1 = Previous commodity code ruling
 previousCommodityCode.checkYourAnswersLabel = Previous commodity code ruling
 previousCommodityCode.error.field1.required = Enter previous commodity code ruling
 previousCommodityCode.error.field1.length = Previous commodity code ruling must be 100 characters or less
+previousCommodityCode.heading2 = Have your goods changed?
+previousCommodityCode.paragraph.changes = It is important that you update this application with any changes to the goods.
+previousCommodityCode.details.summary = What is my commodity code ruling reference
+previousCommodityCode.details.contentParagraph = This reference number was supplied on the document when you were given your original commodity code ruling. This was known as a BTI ruling for applications before January 2019.
 
 describeYourItem.title = Describe your item
 describeYourItem.heading = Describe your item
@@ -129,6 +137,12 @@ describeYourItem.error.field1.required = Enter item name
 describeYourItem.error.field2.required = Describe your item in detail
 describeYourItem.error.field1.length = Item name must be 100 characters or less
 describeYourItem.error.field2.length = Describe your item in detail must be 100 characters or less
+describeYourItem.pullOut.paragraph = Include as much information as you can, this will prevent any delays to your application.
+describeYourItem.paragraph.includes = This may include:
+describeYourItem.listItem1 = what it is used for
+describeYourItem.listItem2 = how it works
+describeYourItem.listItem3 = what it is made from
+describeYourItem.listItem4 = how it is packaged
 
 confidentialInformation.title = Provide information you want to remain confidential
 confidentialInformation.heading = Provide information you want to remain confidential
@@ -185,6 +199,8 @@ similarItemCommodityCode.yesAwareSimilarCode = Yes - I am aware of a similar com
 similarItemCommodityCode.noNotAware = No - I am not aware of a similar commodity code ruling
 similarItemCommodityCode.checkYourAnswersLabel = Are you aware of a similar item that already has a commodity code ruling?
 similarItemCommodityCode.error.required = Select if you are aware of a similar item that already has a commodity code ruling
+similarItemCommodityCode.listItem1 = if your business operates in other countries and you're aware that they have a commodity code ruling, it is useful for us to know to align rulings
+similarItemCommodityCode.listItem2 = if you know of a similar item that has a commodity code ruling, it can help us to classify your goods
 
 commodityCodeRulingReference.title = Commodity code ruling reference number
 commodityCodeRulingReference.heading = Commodity code ruling reference number

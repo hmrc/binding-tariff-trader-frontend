@@ -41,14 +41,14 @@
         )
 
         <details>
-          <summary><span class="summary">What is my commodity code ruling reference</span></summary>
+          <summary><span class="summary">@messages("previousCommodityCode.details.summary")</span></summary>
           <div class="panel panel-border-narrow">
-            <p>This reference number was supplied on the document when you were given your original commodity code ruling. This was known as a BTI ruling for applications before January 2019.</p>
+            <p>@messages("previousCommodityCode.details.contentParagraph")</p>
           </div>
         </details>
 
-        <h2 class="heading-medium">Have your goods changed?</h2>
-        <p>It is important that you update this application with any changes to the goods.</p>
+        <h2 class="heading-medium">@messages("previousCommodityCode.heading2")</h2>
+        <p>@messages("previousCommodityCode.paragraph.changes")</p>
 
         @components.submit_button()
     }
