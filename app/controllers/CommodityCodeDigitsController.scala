@@ -17,7 +17,6 @@
 package controllers
 
 import javax.inject.Inject
-
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -28,8 +27,10 @@ import forms.CommodityCodeDigitsFormProvider
 import models.Mode
 import pages.{CommodityCodeDigitsPage, WhenToSendSamplePage}
 import navigation.Navigator
+import play.api.mvc.{Action, AnyContent}
 import views.html.commodityCodeDigits
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CommodityCodeDigitsController @Inject()(
@@ -45,7 +46,7 @@ class CommodityCodeDigitsController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(CommodityCodeDigitsPage) match {
@@ -56,13 +57,13 @@ class CommodityCodeDigitsController @Inject()(
       Ok(commodityCodeDigits(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(commodityCodeDigits(appConfig, formWithErrors, mode))),
-        (value) => {
+        value => {
           val updatedAnswers = request.userAnswers.set(CommodityCodeDigitsPage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(

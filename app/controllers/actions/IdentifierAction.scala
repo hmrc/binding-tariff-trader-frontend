@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthConnector, config: FrontendAppConfig)
                               (implicit ec: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
 
-  override def invokeBlock[A](request: Request[A], block: (IdentifierRequest[A]) => Future[Result]): Future[Result] = {
+  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
     authorised().retrieve(Retrievals.internalId) {
@@ -41,18 +41,18 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
         internalId => block(IdentifierRequest(request, internalId))
       }.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
     } recover {
-      case ex: NoActiveSession =>
+      case _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
-      case ex: InsufficientEnrolments =>
-        Redirect(routes.UnauthorisedController.onPageLoad)
-      case ex: InsufficientConfidenceLevel =>
-        Redirect(routes.UnauthorisedController.onPageLoad)
-      case ex: UnsupportedAuthProvider =>
-        Redirect(routes.UnauthorisedController.onPageLoad)
-      case ex: UnsupportedAffinityGroup =>
-        Redirect(routes.UnauthorisedController.onPageLoad)
-      case ex: UnsupportedCredentialRole =>
-        Redirect(routes.UnauthorisedController.onPageLoad)
+      case _: InsufficientEnrolments =>
+        Redirect(routes.UnauthorisedController.onPageLoad())
+      case _: InsufficientConfidenceLevel =>
+        Redirect(routes.UnauthorisedController.onPageLoad())
+      case _: UnsupportedAuthProvider =>
+        Redirect(routes.UnauthorisedController.onPageLoad())
+      case _: UnsupportedAffinityGroup =>
+        Redirect(routes.UnauthorisedController.onPageLoad())
+      case _: UnsupportedCredentialRole =>
+        Redirect(routes.UnauthorisedController.onPageLoad())
     }
   }
 }
@@ -62,7 +62,7 @@ trait IdentifierAction extends ActionBuilder[IdentifierRequest] with ActionFunct
 class SessionIdentifierAction @Inject()(config: FrontendAppConfig)
                                  (implicit ec: ExecutionContext) extends IdentifierAction {
 
-  override def invokeBlock[A](request: Request[A], block: (IdentifierRequest[A]) => Future[Result]): Future[Result] = {
+  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
     hc.sessionId match {

@@ -17,7 +17,6 @@
 package controllers
 
 import javax.inject.Inject
-
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -28,8 +27,10 @@ import forms.RegisteredAddressForEoriFormProvider
 import models.{Mode, UserAnswers}
 import pages.RegisteredAddressForEoriPage
 import navigation.Navigator
+import play.api.mvc.{Action, AnyContent}
 import views.html.registeredAddressForEori
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
@@ -43,7 +44,7 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode) = (identify andThen getData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.flatMap(_.get(RegisteredAddressForEoriPage)) match {
@@ -54,13 +55,13 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
       Ok(registeredAddressForEori(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(registeredAddressForEori(appConfig, formWithErrors, mode))),
-        (value) => {
+        value => {
           val updatedAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId)).set(RegisteredAddressForEoriPage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(

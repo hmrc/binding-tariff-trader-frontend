@@ -17,7 +17,6 @@
 package controllers
 
 import javax.inject.Inject
-
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -26,11 +25,13 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.WhenToSendSampleFormProvider
 import models.{Enumerable, Mode}
-import pages.{WhenToSendSamplePage, ReturnSamplesPage, SimilarItemCommodityCodePage}
+import pages.{ReturnSamplesPage, SimilarItemCommodityCodePage, WhenToSendSamplePage}
 import navigation.Navigator
 import views.html.whenToSendSample
-import models.WhenToSendSample.{Yesprovidesample, Notsendingsample}
+import models.WhenToSendSample.{Notsendingsample, Yesprovidesample}
+import play.api.mvc.{Action, AnyContent}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class WhenToSendSampleController @Inject()(
@@ -46,7 +47,7 @@ class WhenToSendSampleController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(WhenToSendSamplePage) match {
@@ -57,13 +58,13 @@ class WhenToSendSampleController @Inject()(
       Ok(whenToSendSample(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(whenToSendSample(appConfig, formWithErrors, mode))),
-        (value) => {
+        value => {
           val updatedAnswers = request.userAnswers.set(WhenToSendSamplePage, value)
 
           val redirectedPage = value match {

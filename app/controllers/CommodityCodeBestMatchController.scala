@@ -17,7 +17,6 @@
 package controllers
 
 import javax.inject.Inject
-
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -29,8 +28,10 @@ import models.{Enumerable, Mode}
 import pages.{CommodityCodeBestMatchPage, CommodityCodeDigitsPage, WhenToSendSamplePage}
 import navigation.Navigator
 import views.html.commodityCodeBestMatch
-import models.CommodityCodeBestMatch.{Yesfoundcommoditycode, Nohaventfoundcommoditycode}
+import models.CommodityCodeBestMatch.{Nohaventfoundcommoditycode, Yesfoundcommoditycode}
+import play.api.mvc.{Action, AnyContent}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CommodityCodeBestMatchController @Inject()(
@@ -46,7 +47,7 @@ class CommodityCodeBestMatchController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(CommodityCodeBestMatchPage) match {
@@ -57,13 +58,13 @@ class CommodityCodeBestMatchController @Inject()(
       Ok(commodityCodeBestMatch(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode))),
-        (value) => {
+        value => {
           val updatedAnswers = request.userAnswers.set(CommodityCodeBestMatchPage, value)
 
           val redirectedPage = value match {

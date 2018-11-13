@@ -17,7 +17,6 @@
 package controllers
 
 import javax.inject.Inject
-
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -28,8 +27,10 @@ import forms.PreviousCommodityCodeFormProvider
 import models.Mode
 import pages.PreviousCommodityCodePage
 import navigation.Navigator
+import play.api.mvc.{Action, AnyContent}
 import views.html.previousCommodityCode
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
@@ -44,7 +45,7 @@ class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(PreviousCommodityCodePage) match {
@@ -55,13 +56,13 @@ class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
       Ok(previousCommodityCode(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(previousCommodityCode(appConfig, formWithErrors, mode))),
-        (value) => {
+        value => {
           val updatedAnswers = request.userAnswers.set(PreviousCommodityCodePage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(

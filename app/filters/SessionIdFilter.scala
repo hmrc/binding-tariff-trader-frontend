@@ -37,7 +37,7 @@ class SessionIdFilter (
     this(mat, UUID.randomUUID(), ec)
   }
 
-  override def apply(f: (RequestHeader) => Future[Result])(rh: RequestHeader): Future[Result] = {
+  override def apply(f: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] = {
 
     lazy val sessionId: String = s"session-$uuid"
 

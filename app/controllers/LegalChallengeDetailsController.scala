@@ -17,7 +17,6 @@
 package controllers
 
 import javax.inject.Inject
-
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -28,8 +27,10 @@ import forms.LegalChallengeDetailsFormProvider
 import models.Mode
 import pages.{LegalChallengeDetailsPage, SupportingInformationPage}
 import navigation.Navigator
+import play.api.mvc.{Action, AnyContent}
 import views.html.legalChallengeDetails
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class LegalChallengeDetailsController @Inject()(
@@ -45,7 +46,7 @@ class LegalChallengeDetailsController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(LegalChallengeDetailsPage) match {
@@ -56,13 +57,13 @@ class LegalChallengeDetailsController @Inject()(
       Ok(legalChallengeDetails(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(legalChallengeDetails(appConfig, formWithErrors, mode))),
-        (value) => {
+        value => {
           val updatedAnswers = request.userAnswers.set(LegalChallengeDetailsPage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(

@@ -17,7 +17,6 @@
 package controllers
 
 import javax.inject.Inject
-
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -30,8 +29,10 @@ import pages.SelectApplicationTypePage
 import navigation.Navigator
 import views.html.selectApplicationType
 import models.SelectApplicationType.{Newcommodity, Previouscommodity}
-import pages.{PreviousCommodityCodePage, InformationAboutYourItemPage}
+import pages.{InformationAboutYourItemPage, PreviousCommodityCodePage}
+import play.api.mvc.{Action, AnyContent}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SelectApplicationTypeController @Inject()(
@@ -47,7 +48,7 @@ class SelectApplicationTypeController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(SelectApplicationTypePage) match {
@@ -58,13 +59,13 @@ class SelectApplicationTypeController @Inject()(
       Ok(selectApplicationType(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(selectApplicationType(appConfig, formWithErrors, mode))),
-        (value) => {
+        value => {
           val updatedAnswers = request.userAnswers.set(SelectApplicationTypePage, value)
 
           val redirectedPage = value match {

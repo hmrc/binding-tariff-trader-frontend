@@ -30,7 +30,7 @@ class LanguageSwitchController @Inject() (
                                            implicit val messagesApi: MessagesApi
                                          ) extends Controller with I18nSupport {
 
-  private def langToCall(lang: String): (String) => Call = appConfig.routeToSwitchLanguage
+  private def langToCall(lang: String): String => Call = appConfig.routeToSwitchLanguage
 
   private def fallbackURL: String = routes.IndexController.onPageLoad().url
 

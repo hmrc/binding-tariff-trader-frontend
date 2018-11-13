@@ -17,7 +17,6 @@
 package controllers
 
 import javax.inject.Inject
-
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -26,11 +25,13 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.SimilarItemCommodityCodeFormProvider
 import models.{Enumerable, Mode}
-import pages.{SimilarItemCommodityCodePage, CommodityCodeRulingReferencePage, LegalChallengePage}
+import pages.{CommodityCodeRulingReferencePage, LegalChallengePage, SimilarItemCommodityCodePage}
 import navigation.Navigator
 import views.html.similarItemCommodityCode
-import models.SimilarItemCommodityCode.{Yesawaresimilarcode, Nonotaware}
+import models.SimilarItemCommodityCode.{Nonotaware, Yesawaresimilarcode}
+import play.api.mvc.{Action, AnyContent}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SimilarItemCommodityCodeController @Inject()(
@@ -46,7 +47,7 @@ class SimilarItemCommodityCodeController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(SimilarItemCommodityCodePage) match {
@@ -57,13 +58,13 @@ class SimilarItemCommodityCodeController @Inject()(
       Ok(similarItemCommodityCode(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(similarItemCommodityCode(appConfig, formWithErrors, mode))),
-        (value) => {
+        value => {
           val updatedAnswers = request.userAnswers.set(SimilarItemCommodityCodePage, value)
 
           val redirectedPage = value match {
