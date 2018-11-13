@@ -60,11 +60,9 @@ registeredAddressForEori.error.field2.required = Enter address line 1
 registeredAddressForEori.error.field3.required = Enter town or city
 registeredAddressForEori.error.field4.required = Enter postcode
 registeredAddressForEori.error.field5.required = Enter country
-registeredAddressForEori.error.field1.length = Business name must be 75 characters or less
-registeredAddressForEori.error.field2.length = Address line 1 must be 75 characters or less
-registeredAddressForEori.error.field3.length = Town or city line must be 75 characters or less
-registeredAddressForEori.error.field4.length = Postcode line must be 75 characters or less
-registeredAddressForEori.error.field5.length = Country line must be 75 characters or less
+registeredAddressForEori.error.field2.length = Address line 1 must be 70 characters or less
+registeredAddressForEori.error.field3.length = Town or city must be 35 characters or less
+registeredAddressForEori.error.field4.length = Postcode must be 9 characters or less
 
 whichBestDescribesYou.title = Which of these best describes you?
 whichBestDescribesYou.heading = Which of these best describes you?

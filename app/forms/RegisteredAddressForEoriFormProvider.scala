@@ -27,16 +27,14 @@ class RegisteredAddressForEoriFormProvider @Inject() extends Mappings {
 
    def apply(): Form[RegisteredAddressForEori] = Form(
      mapping(
-      "field1" -> text("registeredAddressForEori.error.field1.required")
-	      .verifying(maxLength(75, "registeredAddressForEori.error.field1.length")),
+      "field1" -> text("registeredAddressForEori.error.field1.required"),
       "field2" -> text("registeredAddressForEori.error.field2.required")
-        .verifying(maxLength(75, "registeredAddressForEori.error.field2.length")),
+        .verifying(maxLength(70, "registeredAddressForEori.error.field2.length")),
       "field3" -> text("registeredAddressForEori.error.field3.required")
-        .verifying(maxLength(75, "registeredAddressForEori.error.field3.length")),
+        .verifying(maxLength(35, "registeredAddressForEori.error.field3.length")),
       "field4" -> text("registeredAddressForEori.error.field4.required")
-        .verifying(maxLength(75, "registeredAddressForEori.error.field4.length")),
+        .verifying(maxLength(9, "registeredAddressForEori.error.field4.length")),
       "field5" -> text("registeredAddressForEori.error.field5.required")
-        .verifying(maxLength(75, "registeredAddressForEori.error.field5.length"))
     )(RegisteredAddressForEori.apply)(RegisteredAddressForEori.unapply)
    )
  }
