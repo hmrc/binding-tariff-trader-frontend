@@ -37,8 +37,14 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
   val form = formProvider()
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new RegisteredAddressForEoriController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+    new RegisteredAddressForEoriController(
+      frontendAppConfig,
+      messagesApi, FakeDataCacheConnector,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      formProvider
+    )
 
   def viewAsString(form: Form[_] = form) = registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
 
@@ -52,12 +58,12 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(RegisteredAddressForEoriPage.toString -> Json.toJson(RegisteredAddressForEori("value 1", "value 2")))
+      val validData = Map(RegisteredAddressForEoriPage.toString -> Json.toJson(RegisteredAddressForEori("value 1", "value 2", "value 3", "value 4", "value 5")))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(RegisteredAddressForEori("value 1", "value 2")))
+      contentAsString(result) mustBe viewAsString(form.fill(RegisteredAddressForEori("value 1", "value 2", "value 3", "value 4", "value 5")))
     }
 
     "redirect to the next page when valid data is submitted" in {

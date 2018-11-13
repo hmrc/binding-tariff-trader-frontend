@@ -22,6 +22,12 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
+
+  implicit lazy val arbitrarySupportInformation: Arbitrary[SupportingInformation] =
+    Arbitrary {
+      Gen.oneOf(SupportingInformation.values.toSeq)
+    }
+
   implicit lazy val arbitraryLegalChallenge: Arbitrary[LegalChallenge] =
     Arbitrary {
       Gen.oneOf(LegalChallenge.values.toSeq)
@@ -51,8 +57,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         field1 <- arbitrary[String]
-        field2 <- arbitrary[String]
-      } yield ConfidentialInformation(field1, field2)
+      } yield ConfidentialInformation(field1)
     }
 
   implicit lazy val arbitraryDescribeYourItem: Arbitrary[DescribeYourItem] =
@@ -67,8 +72,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         field1 <- arbitrary[String]
-        field2 <- arbitrary[String]
-      } yield PreviousCommodityCode(field1, field2)
+      } yield PreviousCommodityCode(field1)
     }
 
   implicit lazy val arbitraryInformationAboutYourItem: Arbitrary[InformationAboutYourItem] =
@@ -81,7 +85,8 @@ trait ModelGenerators {
       for {
         field1 <- arbitrary[String]
         field2 <- arbitrary[String]
-      } yield EnterContactDetails(field1, field2)
+        field3 <- arbitrary[String]
+      } yield EnterContactDetails(field1, field2, field3)
     }
 
   implicit lazy val arbitraryRegisterBusinessRepresenting: Arbitrary[RegisterBusinessRepresenting] =
@@ -107,22 +112,10 @@ trait ModelGenerators {
       for {
         field1 <- arbitrary[String]
         field2 <- arbitrary[String]
-      } yield RegisteredAddressForEori(field1, field2)
+        field3 <- arbitrary[String]
+        field4 <- arbitrary[String]
+        field5 <- arbitrary[String]
+      } yield RegisteredAddressForEori(field1, field2, field3, field4, field5)
     }
 
-  implicit lazy val arbitraryregistered_address_for_eori: Arbitrary[registered_address_for_eori] =
-    Arbitrary {
-      for {
-        field1 <- arbitrary[String]
-        field2 <- arbitrary[String]
-      } yield registered_address_for_eori(field1, field2)
-    }
-
-  implicit lazy val arbitraryregistered-address-for-eori: Arbitrary[registered-address-for-eori] =
-    Arbitrary {
-      for {
-        field1 <- arbitrary[String]
-        field2 <- arbitrary[String]
-      } yield registered-address-for-eori(field1, field2)
-    }
 }

@@ -52,12 +52,12 @@ class ConfidentialInformationControllerSpec extends ControllerSpecBase {
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(ConfidentialInformationPage.toString -> Json.toJson(ConfidentialInformation("value 1", "value 2")))
+      val validData = Map(ConfidentialInformationPage.toString -> Json.toJson(ConfidentialInformation("value 1")))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(ConfidentialInformation("value 1", "value 2")))
+      contentAsString(result) mustBe viewAsString(form.fill(ConfidentialInformation("value 1")))
     }
 
     "redirect to the next page when valid data is submitted" in {
