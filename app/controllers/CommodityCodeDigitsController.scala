@@ -65,8 +65,7 @@ class CommodityCodeDigitsController @Inject()(
         val updatedAnswers = request.userAnswers.set(CommodityCodeDigitsPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ =>
-            Redirect(navigator.nextPage(WhenToSendSamplePage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(WhenToSendSamplePage, mode)(updatedAnswers))
         )
       }
     )

@@ -65,8 +65,7 @@ class CommodityCodeRulingReferenceController @Inject()(
         val updatedAnswers = request.userAnswers.set(CommodityCodeRulingReferencePage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ =>
-            Redirect(navigator.nextPage(LegalChallengePage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(LegalChallengePage, mode)(updatedAnswers))
         )
       }
     )

@@ -64,8 +64,7 @@ class ConfidentialInformationController @Inject()(appConfig: FrontendAppConfig,
         val updatedAnswers = request.userAnswers.set(ConfidentialInformationPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ =>
-            Redirect(navigator.nextPage(DescribeYourItemPage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(DescribeYourItemPage, mode)(updatedAnswers))
         )
       }
     )

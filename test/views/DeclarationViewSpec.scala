@@ -17,7 +17,6 @@
 package views
 
 import play.api.data.Form
-import controllers.routes
 import models.NormalMode
 import views.behaviours.StringViewBehaviours
 import views.html.declaration
@@ -30,14 +29,10 @@ class DeclarationViewSpec extends StringViewBehaviours {
 
   def createView = () => declaration(frontendAppConfig, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) => declaration(frontendAppConfig, NormalMode)(fakeRequest, messages)
-
   "Declaration view" must {
     behave like normalPage(createView, messageKeyPrefix)
 
     behave like pageWithBackLink(createView)
-
-    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.DeclarationController.onSubmit(NormalMode).url)
   }
 
 }
