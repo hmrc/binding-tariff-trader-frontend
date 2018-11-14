@@ -111,3 +111,12 @@ GET        /supportingInformationDetails                        controllers.Supp
 POST       /supportingInformationDetails                        controllers.SupportingInformationDetailsController.onSubmit(mode: Mode = NormalMode)
 GET        /changeSupportingInformationDetails                  controllers.SupportingInformationDetailsController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeSupportingInformationDetails                  controllers.SupportingInformationDetailsController.onSubmit(mode: Mode = CheckMode)
+
+POST       /check-your-answers                          controllers.CheckYourAnswersController.onSubmit()
+
+GET        /declaration                        controllers.DeclarationController.onPageLoad(mode: Mode = NormalMode)
+POST       /declaration                        controllers.DeclarationController.onSubmit(mode: Mode = NormalMode)
+GET        /changeDeclaration                  controllers.DeclarationController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeDeclaration                  controllers.DeclarationController.onSubmit(mode: Mode = CheckMode)
+
+GET        /confirmation                       controllers.ConfirmationController.onPageLoad()

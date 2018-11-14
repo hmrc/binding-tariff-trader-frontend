@@ -1,0 +1,56 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+
+@(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    title = messages("confirmation.title"),
+    appConfig = appConfig,
+    bodyClasses = None) {
+
+	  <div class="govuk-box-highlight">
+			@components.heading("confirmation.heading", "heading-xlarge")
+      <p class="font-large">
+    		@messages("confirmation.yourRefNumber")<br>
+        <span class="bold">GBJ2123F</span>
+      </p>
+	  </div>
+
+	  <p>@messages("confirmation.paragragh.confirmationEmail")</p>
+		<ul class="list">
+		  <li><a href="#">@messages("confirmation.download.link.PDF")</a></li>
+		  <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
+		</ul>
+
+		<h2 class="heading-medium">@messages("confirmation.heading2.whatNext")</h2>
+		<p>@Html(messages("confirmation.paragraph.whatNext"))</p>
+
+		<h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
+		<p>@messages("confirmation.paragraph1.sendingSamples") GBJ2123F</p>
+		<p>@messages("confirmation.paragraph2.sendingSamples")</p>
+
+		<p><a href="https://www.gov.uk/guidance/binding-tariff-information-rulings#samples">@messages("confirmation.paragraph3.sendingSamples.link")</a></p>
+
+		<p>@messages("confirmation.paragraph4.sendingSamples")</p>
+
+		<address>
+			@Html(messages("confirmation.sendingSamples.address"))
+		</address>
+
+		<p><a href="#">@messages("confirmation.paragraph5.sendingSamples.link")</a></p>
+}

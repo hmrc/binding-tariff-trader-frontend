@@ -233,3 +233,30 @@ supportingInformationDetails.checkYourAnswersLabel = Supporting information
 supportingInformationDetails.checkYourAnswersHeading = Other information
 supportingInformationDetails.error.required = Enter supporting information
 supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less
+
+declaration.title = Declaration
+declaration.heading = Declaration
+declaration.checkYourAnswersLabel = Declaration
+declaration.paragraph = By submitting the application you are acknowledging that:
+declaration.listItem1 = the information is correct and up to date to the best of your knowledge
+declaration.listItem2 = any supporting information and data provided on the application, or supplied after the application is submitted, can be stored on a database and published on a UK website.  This includes photographs, images, brochures and any other supporting information
+declaration.listItem3 = information provided in the confidential information section will not be published
+declaration.listItem4 = any samples you provide may be damaged during laboratory tests
+
+confirmation.title = Application complete
+confirmation.heading = Application complete
+confirmation.heading2.whatNext = What happens next
+confirmation.paragraph.whatNext = The classification team will issue your commodity code ruling within 30 to 60 days. You can find out the status of your application by checking your commodity code ruling <a href="#">account page</a>.
+confirmation.heading2.sendingSamples = Sending samples
+confirmation.paragraph1.sendingSamples = You must label your sample with the application reference number .
+confirmation.paragraph2.sendingSamples = If you are sending samples the application will not be processed until they have been received.
+confirmation.paragraph3.sendingSamples.link = Get more information about samples
+confirmation.paragraph4.sendingSamples = Send your samples to:
+confirmation.sendingSamples.address = HM Revenue and Customs<br> Tariff Classification Service<br> 10th Floor SE<br> Alexander House<br> 21 Victoria Avenue<br> Southend-on-Sea<br> Essex<br> SS99 1AA
+confirmation.paragraph5.sendingSamples.link = Apply for another commodity code ruling
+
+
+confirmation.yourRefNumber = Your reference number
+confirmation.paragragh.confirmationEmail = We have sent your confirmation email to
+confirmation.download.link.PDF = Download a PDF of the application
+confirmation.download.link.accessibleText = Download an accessible text file of the application

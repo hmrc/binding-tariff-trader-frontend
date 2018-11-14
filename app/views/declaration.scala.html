@@ -17,31 +17,29 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
+@import models.Mode
 @import views.ViewUtils._
-@import viewmodels.{Section, AnswerSection, RepeaterAnswerSection}
 
-@(appConfig: FrontendAppConfig, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("checkYourAnswers.title"),
+    title = s"${messages("declaration.title")}",
     appConfig = appConfig,
-    mainClass = Some("full-width"),
     bodyClasses = None) {
 
-    @helpers.form(action = CheckYourAnswersController.onSubmit(), 'autoComplete -> "off") {
+    @helpers.form(action = DeclarationController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.heading("checkYourAnswers.heading")
+        @components.heading("declaration.heading")
 
-        @for(section <- answerSections){
-            @{
-                section match {
-                    case a: AnswerSection => components.answer_section(a)
-                    case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-                }
-            }
-        }
+        <p>@messages("declaration.paragraph")</p>
+
+        <ul class="list list-bullet">
+          <li>@messages("declaration.listItem1")</li>
+          <li>@messages("declaration.listItem2")</li>
+          <li>@messages("declaration.listItem3")</li>
+          <li>@messages("declaration.listItem4")</li>
+        </ul>
 
         @components.submit_button()
     }
-
 }
