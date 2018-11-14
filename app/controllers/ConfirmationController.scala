@@ -17,14 +17,12 @@
 package controllers
 
 import javax.inject.Inject
-
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import controllers.actions._
 import config.FrontendAppConfig
+import play.api.mvc.{Action, AnyContent}
 import views.html.confirmation
-
-import scala.concurrent.Future
 
 class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                          override val messagesApi: MessagesApi,
@@ -33,8 +31,8 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                          requireData: DataRequiredAction
                                          ) extends FrontendController with I18nSupport {
 
-  def onPageLoad = (identify andThen getData andThen requireData) {
-    implicit request =>
-      Ok(confirmation(appConfig))
+  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    Ok(confirmation(appConfig))
   }
+
 }

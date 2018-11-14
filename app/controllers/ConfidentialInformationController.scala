@@ -45,31 +45,30 @@ class ConfidentialInformationController @Inject()(appConfig: FrontendAppConfig,
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.get(ConfidentialInformationPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
+    val preparedForm = request.userAnswers.get(ConfidentialInformationPage) match {
+      case None => form
+      case Some(value) => form.fill(value)
+    }
+
+    Ok(confidentialInformation(appConfig, preparedForm, mode))
+  }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        Future.successful(BadRequest(confidentialInformation(appConfig, formWithErrors, mode))),
+      value => {
+        val updatedAnswers = request.userAnswers.set(ConfidentialInformationPage, value)
+
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ =>
+            Redirect(navigator.nextPage(DescribeYourItemPage, mode)(updatedAnswers))
+        )
       }
-
-      Ok(confidentialInformation(appConfig, preparedForm, mode))
+    )
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(confidentialInformation(appConfig, formWithErrors, mode))),
-        value => {
-          val updatedAnswers = request.userAnswers.set(ConfidentialInformationPage, value)
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(DescribeYourItemPage, mode)(updatedAnswers))
-          )
-        }
-      )
-  }
 }

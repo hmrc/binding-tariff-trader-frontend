@@ -17,16 +17,15 @@
 package controllers
 
 import javax.inject.Inject
-
-import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
 import models.Mode
-import pages.{DeclarationPage, ConfirmationPage}
+import pages.ConfirmationPage
 import navigation.Navigator
+import play.api.mvc.{Action, AnyContent}
 import views.html.declaration
 
 import scala.concurrent.Future
@@ -40,13 +39,12 @@ class DeclarationController @Inject()(
                                         getData: DataRetrievalAction
                                       ) extends FrontendController with I18nSupport {
 
-  def onPageLoad(mode: Mode) = (identify andThen getData) {
-    implicit request =>
-      Ok(declaration(appConfig, mode))
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
+    Ok(declaration(appConfig, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData).async {
-    implicit request =>
-      Future.successful(Redirect(navigator.nextPage(ConfirmationPage, mode)(request.userAnswers.get)))
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+    Future.successful(Redirect(navigator.nextPage(ConfirmationPage, mode)(request.userAnswers.get)))
   }
+
 }

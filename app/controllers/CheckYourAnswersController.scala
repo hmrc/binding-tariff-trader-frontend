@@ -24,7 +24,7 @@ import viewmodels.AnswerSection
 import views.html.check_your_answers
 import models.NormalMode
 import navigation.Navigator
-import pages.{CheckYourAnswersPage, DeclarationPage}
+import pages.DeclarationPage
 import config.FrontendAppConfig
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -38,48 +38,47 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction) extends FrontendController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (authenticate andThen getData andThen requireData) {
-    implicit request =>
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
+  def onPageLoad(): Action[AnyContent] = (authenticate andThen getData andThen requireData) { implicit request =>
+    val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
 
-      val sections = Seq(
-        AnswerSection(
-          Some("registeredAddressForEori.checkYourAnswersLabel"),
-          Seq(
-            checkYourAnswersHelper.registeredAddressForEori,
-            checkYourAnswersHelper.whichBestDescribesYou,
-            checkYourAnswersHelper.enterContactDetails
-          ).flatten
-        ),
-        AnswerSection(
-          Some("informationAboutYourItem.checkYourAnswersLabel"),
-          Seq(
-            checkYourAnswersHelper.previousCommodityCode,
-            checkYourAnswersHelper.confidentialInformation,
-            checkYourAnswersHelper.describeYourItem,
-            checkYourAnswersHelper.commodityCodeDigits,
-            checkYourAnswersHelper.whenToSendSample,
-            checkYourAnswersHelper.returnSamples,
-            checkYourAnswersHelper.commodityCodeRulingReference,
-            checkYourAnswersHelper.legalChallenge,
-            checkYourAnswersHelper.legalChallengeDetails
-          ).flatten
-        ),
-        AnswerSection(
-          Some("supportingInformationDetails.checkYourAnswersHeading"),
-          Seq(
-            checkYourAnswersHelper.supportingInformationDetails
-          ).flatten
-        )
+    val sections = Seq(
+      AnswerSection(
+        Some("registeredAddressForEori.checkYourAnswersLabel"),
+        Seq(
+          checkYourAnswersHelper.registeredAddressForEori,
+          checkYourAnswersHelper.whichBestDescribesYou,
+          checkYourAnswersHelper.enterContactDetails
+        ).flatten
+      ),
+      AnswerSection(
+        Some("informationAboutYourItem.checkYourAnswersLabel"),
+        Seq(
+          checkYourAnswersHelper.previousCommodityCode,
+          checkYourAnswersHelper.confidentialInformation,
+          checkYourAnswersHelper.describeYourItem,
+          checkYourAnswersHelper.commodityCodeDigits,
+          checkYourAnswersHelper.whenToSendSample,
+          checkYourAnswersHelper.returnSamples,
+          checkYourAnswersHelper.commodityCodeRulingReference,
+          checkYourAnswersHelper.legalChallenge,
+          checkYourAnswersHelper.legalChallengeDetails
+        ).flatten
+      ),
+      AnswerSection(
+        Some("supportingInformationDetails.checkYourAnswersHeading"),
+        Seq(
+          checkYourAnswersHelper.supportingInformationDetails
+        ).flatten
       )
+    )
 
-      Ok(check_your_answers(appConfig, sections))
+    Ok(check_your_answers(appConfig, sections))
   }
 
-  def onSubmit() = (authenticate andThen getData andThen requireData).async {
-    implicit request =>
-      Future.successful(
-        Redirect(navigator.nextPage(DeclarationPage, NormalMode)(request.userAnswers))
-      )
+  def onSubmit(): Action[AnyContent] = (authenticate andThen getData andThen requireData).async { implicit request =>
+    Future.successful(
+      Redirect(navigator.nextPage(DeclarationPage, NormalMode)(request.userAnswers))
+    )
   }
+
 }

@@ -46,31 +46,30 @@ class CommodityCodeDigitsController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.get(CommodityCodeDigitsPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
+    val preparedForm = request.userAnswers.get(CommodityCodeDigitsPage) match {
+      case None => form
+      case Some(value) => form.fill(value)
+    }
+
+    Ok(commodityCodeDigits(appConfig, preparedForm, mode))
+  }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        Future.successful(BadRequest(commodityCodeDigits(appConfig, formWithErrors, mode))),
+      value => {
+        val updatedAnswers = request.userAnswers.set(CommodityCodeDigitsPage, value)
+
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ =>
+            Redirect(navigator.nextPage(WhenToSendSamplePage, mode)(updatedAnswers))
+        )
       }
-
-      Ok(commodityCodeDigits(appConfig, preparedForm, mode))
+    )
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(commodityCodeDigits(appConfig, formWithErrors, mode))),
-        value => {
-          val updatedAnswers = request.userAnswers.set(CommodityCodeDigitsPage, value)
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(WhenToSendSamplePage, mode)(updatedAnswers))
-          )
-        }
-      )
-  }
 }
