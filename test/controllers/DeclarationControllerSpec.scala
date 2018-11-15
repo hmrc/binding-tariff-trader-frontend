@@ -16,14 +16,11 @@
 
 package controllers
 
-import play.api.libs.json.JsString
-import uk.gov.hmrc.http.cache.client.CacheMap
 import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
 import play.api.test.Helpers._
 import models.NormalMode
-import pages.DeclarationPage
 import play.api.mvc.Call
 import views.html.declaration
 
