@@ -1,0 +1,78 @@
+/*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package mapper
+
+import models._
+import pages._
+
+class CaseMapper {
+
+  def map(answers: UserAnswers): Case = {
+    val confidentialInfo: Option[ConfidentialInformation] = answers.get(ConfidentialInformationPage)
+    val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
+    val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
+    val previousCommodityCode: Option[PreviousCommodityCode] = answers.get(PreviousCommodityCodePage)
+    val registeredAddressForEori: Option[RegisteredAddressForEori] = answers.get(RegisteredAddressForEoriPage)
+    val commodityCodeRulingReference: Option[String] = answers.get(CommodityCodeRulingReferencePage)
+    val legalChallengeDetails: Option[String] = answers.get(LegalChallengeDetailsPage)
+    val commodityCodeDigits: Option[String] = answers.get(CommodityCodeDigitsPage)
+    val supportingInformationDetails: Option[String] = answers.get(SupportingInformationDetailsPage)
+
+    val contact = contactDetails.map(toContact).get
+    val holder: EORIDetails = registeredAddressForEori.map(toHolder).get
+
+    val app = Application(
+      holder = holder,
+      contact = contact,
+      agent = None, // TODO Unimplemented
+      offline = false,
+      goodName = describeYourItem.map(_.field1).getOrElse("N/A"),
+      goodDescription = describeYourItem.map(_.field2).getOrElse("N/A"),
+      confidentialInformation = confidentialInfo.map(_.field1),
+      otherInformation = supportingInformationDetails,
+      reissuedBTIReference = previousCommodityCode.map(_.field1),
+      relatedBTIReference = commodityCodeRulingReference,
+      knownLegalProceedings = legalChallengeDetails,
+      envisagedCommodityCode = commodityCodeDigits,
+      sampleToBeProvided = false, // TODO Unimplemented
+      sampleToBeReturned = false // TODO Unimplemented
+    )
+
+    Case(app)
+  }
+
+  def toHolder: RegisteredAddressForEori => EORIDetails = { details =>
+    EORIDetails(
+      "",//TODO Hard Coded
+      details.field1,
+      details.field2,
+      details.field3,
+      "",//TODO Missing From Model
+      details.field4,
+      details.field5
+    )
+  }
+
+  def toContact: EnterContactDetails => Contact = { details =>
+    Contact(
+      name = details.field1,
+      email = details.field2,
+      phone = details.field3
+    )
+  }
+
+}
