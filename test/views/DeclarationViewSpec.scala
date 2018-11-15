@@ -31,8 +31,6 @@ class DeclarationViewSpec extends StringViewBehaviours {
 
   "Declaration view" must {
     behave like normalPage(createView, messageKeyPrefix)
-
-    behave like pageWithBackLink(createView)
   }
 
 }

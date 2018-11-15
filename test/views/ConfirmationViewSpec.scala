@@ -27,7 +27,5 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)
-
-    behave like pageWithBackLink(createView)
   }
 }
