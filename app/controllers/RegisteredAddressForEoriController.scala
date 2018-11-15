@@ -24,7 +24,7 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
 import forms.RegisteredAddressForEoriFormProvider
-import models.{Mode, UserAnswers}
+import models.Mode
 import pages.RegisteredAddressForEoriPage
 import navigation.Navigator
 import play.api.mvc.{Action, AnyContent}
@@ -39,36 +39,35 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                       navigator: Navigator,
                                       identify: IdentifierAction,
                                       getData: DataRetrievalAction,
+                                      requireData: DataRequiredAction,
                                       formProvider: RegisteredAddressForEoriFormProvider
                                       ) extends FrontendController with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.flatMap(_.get(RegisteredAddressForEoriPage)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+    val preparedForm = request.userAnswers.get(RegisteredAddressForEoriPage) match {
+      case None => form
+      case Some(value) => form.fill(value)
+    }
+
+    Ok(registeredAddressForEori(appConfig, preparedForm, mode))
+  }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        Future.successful(BadRequest(registeredAddressForEori(appConfig, formWithErrors, mode))),
+      value => {
+        val updatedAnswers = request.userAnswers.set(RegisteredAddressForEoriPage, value)
+
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ => Redirect(navigator.nextPage(RegisteredAddressForEoriPage, mode)(updatedAnswers))
+        )
       }
-
-      Ok(registeredAddressForEori(appConfig, preparedForm, mode))
+    )
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(registeredAddressForEori(appConfig, formWithErrors, mode))),
-        value => {
-          val updatedAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId)).set(RegisteredAddressForEoriPage, value)
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(RegisteredAddressForEoriPage, mode)(updatedAnswers))
-          )
-        }
-      )
-  }
 }

@@ -43,6 +43,7 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
+      new DataRequiredActionImpl,
       formProvider
     )
 
@@ -99,5 +100,7 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
+
   }
+
 }
