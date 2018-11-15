@@ -18,18 +18,17 @@ package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import config.FrontendAppConfig
-import models.{Case, oCase}
+import models.oCase
 import org.apache.http.HttpStatus
 import org.mockito.BDDMockito._
 import org.scalatest.mockito.MockitoSugar
 import play.api.Environment
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-
 import utils.JsonFormatters.caseFormat
 
 class BindingTariffClassificationConnectorSpec extends UnitSpec
