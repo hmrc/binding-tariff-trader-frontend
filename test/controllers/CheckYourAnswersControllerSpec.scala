@@ -18,13 +18,24 @@ package controllers
 
 import play.api.test.Helpers._
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeIdentifierAction}
+import navigation.FakeNavigator
+import play.api.mvc.Call
 import viewmodels.AnswerSection
 import views.html.check_your_answers
 
 class CheckYourAnswersControllerSpec extends ControllerSpecBase {
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new CheckYourAnswersController(frontendAppConfig, messagesApi, FakeIdentifierAction, dataRetrievalAction, new DataRequiredActionImpl)
+  private def onwardRoute = Call("GET", "/foo")
+
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+    new CheckYourAnswersController(
+      frontendAppConfig,
+      messagesApi,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl
+    )
 
   "Check Your Answers Controller" must {
     "return 200 and the correct view for a GET" in {

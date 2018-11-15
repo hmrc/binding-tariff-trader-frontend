@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-package controllers.actions
+package pages
 
-import play.api.mvc.{Request, Result}
-import models.requests.IdentifierRequest
+case object DeclarationPage extends QuestionPage[String] {
 
-import scala.concurrent.Future
-
-object FakeIdentifierAction extends IdentifierAction {
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
-    block(IdentifierRequest(request, "id"))
+  override def toString: String = "declaration"
 }
-

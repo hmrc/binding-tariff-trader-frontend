@@ -48,36 +48,34 @@ class InformationAboutYourItemController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.get(InformationAboutYourItemPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+    val preparedForm = request.userAnswers.get(InformationAboutYourItemPage) match {
+      case None => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(informationAboutYourItem(appConfig, preparedForm, mode))
+    Ok(informationAboutYourItem(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(informationAboutYourItem(appConfig, formWithErrors, mode))),
-        value => {
-          val updatedAnswers = request.userAnswers.set(InformationAboutYourItemPage, value)
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        Future.successful(BadRequest(informationAboutYourItem(appConfig, formWithErrors, mode))),
+      value => {
+        val updatedAnswers = request.userAnswers.set(InformationAboutYourItemPage, value)
 
-          val redirectedPage = value match {
-            case Yesihaveinfo => ConfidentialInformationPage
-            case No => DescribeYourItemPage
-          }
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
-          )
+        val redirectedPage = value match {
+          case Yesihaveinfo => ConfidentialInformationPage
+          case No => DescribeYourItemPage
         }
-      )
+
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+        )
+      }
+    )
   }
+
 }

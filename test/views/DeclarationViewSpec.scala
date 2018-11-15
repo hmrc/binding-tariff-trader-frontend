@@ -14,15 +14,23 @@
  * limitations under the License.
  */
 
-package controllers.actions
+package views
 
-import play.api.mvc.{Request, Result}
-import models.requests.IdentifierRequest
+import play.api.data.Form
+import models.NormalMode
+import views.behaviours.StringViewBehaviours
+import views.html.declaration
 
-import scala.concurrent.Future
+class DeclarationViewSpec extends StringViewBehaviours {
 
-object FakeIdentifierAction extends IdentifierAction {
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
-    block(IdentifierRequest(request, "id"))
+  val messageKeyPrefix = "declaration"
+
+  override val form: Form[String] = ???
+
+  def createView = () => declaration(frontendAppConfig, NormalMode)(fakeRequest, messages)
+
+  "Declaration view" must {
+    behave like normalPage(createView, messageKeyPrefix)
+  }
+
 }
-

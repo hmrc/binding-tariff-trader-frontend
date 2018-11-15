@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package controllers.actions
+package views
 
-import play.api.mvc.{Request, Result}
-import models.requests.IdentifierRequest
+import views.behaviours.ViewBehaviours
+import views.html.confirmation
 
-import scala.concurrent.Future
+class ConfirmationViewSpec extends ViewBehaviours {
 
-object FakeIdentifierAction extends IdentifierAction {
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
-    block(IdentifierRequest(request, "id"))
+  val messageKeyPrefix = "confirmation"
+
+  def createView = () => confirmation(frontendAppConfig)(fakeRequest, messages)
+
+  "Confirmation view" must {
+    behave like normalPage(createView, messageKeyPrefix)
+  }
 }
-

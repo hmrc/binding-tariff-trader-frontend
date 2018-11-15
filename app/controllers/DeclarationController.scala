@@ -17,58 +17,34 @@
 package controllers
 
 import javax.inject.Inject
-import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
-import forms.CommodityCodeDigitsFormProvider
 import models.Mode
-import pages.{CommodityCodeDigitsPage, WhenToSendSamplePage}
+import pages.ConfirmationPage
 import navigation.Navigator
 import play.api.mvc.{Action, AnyContent}
-import views.html.commodityCodeDigits
+import views.html.declaration
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CommodityCodeDigitsController @Inject()(
+class DeclarationController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
                                         dataCacheConnector: DataCacheConnector,
                                         navigator: Navigator,
                                         identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: CommodityCodeDigitsFormProvider
+                                        getData: DataRetrievalAction
                                       ) extends FrontendController with I18nSupport {
 
-  val form = formProvider()
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.get(CommodityCodeDigitsPage) match {
-      case None => form
-      case Some(value) => form.fill(value)
-    }
-
-    Ok(commodityCodeDigits(appConfig, preparedForm, mode))
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
+    Ok(declaration(appConfig, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(commodityCodeDigits(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(CommodityCodeDigitsPage, value)
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(WhenToSendSamplePage, mode)(updatedAnswers))
-        )
-      }
-    )
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+    Future.successful(Redirect(navigator.nextPage(ConfirmationPage, mode)(request.userAnswers.get)))
   }
 
 }

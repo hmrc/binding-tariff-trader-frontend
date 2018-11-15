@@ -55,7 +55,10 @@ class Navigator @Inject()() {
     SupportingInformationPage -> (_ => routes.SupportingInformationController.onPageLoad(NormalMode)),
 
     SupportingInformationDetailsPage -> (_ => routes.SupportingInformationDetailsController.onPageLoad(NormalMode)),
-    CheckYourAnswersPage -> (_ => routes.CheckYourAnswersController.onPageLoad())
+    CheckYourAnswersPage -> (_ => routes.CheckYourAnswersController.onPageLoad()),
+
+    DeclarationPage -> (_ => routes.DeclarationController.onPageLoad(NormalMode)),
+    ConfirmationPage -> (_ => routes.ConfirmationController.onPageLoad())
   )
 
   private val checkRouteMap: Map[Page, UserAnswers => Call] = Map(

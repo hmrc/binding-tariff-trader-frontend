@@ -44,7 +44,7 @@ class ConfidentialInformationViewSpec extends QuestionViewBehaviours[Confidentia
       createViewUsingForm,
       messageKeyPrefix,
       routes.ConfidentialInformationController.onSubmit(NormalMode).url,
-      "field1", "field2"
+      "field1"
     )
   }
 }

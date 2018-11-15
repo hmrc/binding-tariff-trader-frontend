@@ -23,10 +23,10 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
 
   val answer = "answer"
 
-  def stringPage(createView: (Form[String]) => HtmlFormat.Appendable,
+  def stringPage(createView: Form[String] => HtmlFormat.Appendable,
                  messageKeyPrefix: String,
                  expectedFormAction: String,
-                 expectedHintKey: Option[String] = None) = {
+                 expectedHintKey: Option[String] = None): Unit = {
 
     "behave like a page with a string value field" when {
       "rendered" must {
@@ -70,4 +70,5 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
       }
     }
   }
+
 }

@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package controllers.actions
+package pages
 
-import play.api.mvc.{Request, Result}
-import models.requests.IdentifierRequest
+import pages.behaviours.PageBehaviours
 
-import scala.concurrent.Future
 
-object FakeIdentifierAction extends IdentifierAction {
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
-    block(IdentifierRequest(request, "id"))
+class DeclarationPageSpec extends PageBehaviours {
+
+  "DeclarationPage" must {
+
+    beRetrievable[String](DeclarationPage)
+
+    beSettable[String](DeclarationPage)
+
+    beRemovable[String](DeclarationPage)
+  }
 }
-
