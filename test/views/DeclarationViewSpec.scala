@@ -16,16 +16,13 @@
 
 package views
 
-import play.api.data.Form
 import models.NormalMode
-import views.behaviours.StringViewBehaviours
+import views.behaviours.ViewBehaviours
 import views.html.declaration
 
-class DeclarationViewSpec extends StringViewBehaviours {
+class DeclarationViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "declaration"
-
-  override val form: Form[String] = ???
 
   def createView = () => declaration(frontendAppConfig, NormalMode)(fakeRequest, messages)
 
