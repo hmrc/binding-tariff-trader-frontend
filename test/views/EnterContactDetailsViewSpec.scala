@@ -44,7 +44,8 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
       createViewUsingForm,
       messageKeyPrefix,
       routes.EnterContactDetailsController.onSubmit(NormalMode).url,
-      "field1", "field2"
+      "field1", "field2", "field3"
     )
   }
+
 }

@@ -19,7 +19,7 @@ package pages
 import models.SimilarItemCommodityCode
 import pages.behaviours.PageBehaviours
 
-class SimilarItemCommodityCodeSpec extends PageBehaviours {
+class SimilarItemCommodityCodePageSpec extends PageBehaviours {
 
   "YourLocation" must {
 

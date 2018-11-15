@@ -47,4 +47,5 @@ class DescribeYourItemViewSpec extends QuestionViewBehaviours[DescribeYourItem] 
       "field1", "field2"
     )
   }
+
 }

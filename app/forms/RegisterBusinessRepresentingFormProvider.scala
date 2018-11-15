@@ -31,6 +31,7 @@ class RegisterBusinessRepresentingFormProvider @Inject() extends Mappings {
         .verifying(maxLength(100, "registerBusinessRepresenting.error.field1.length")),
       "field2" -> text("registerBusinessRepresenting.error.field2.required")
         .verifying(maxLength(100, "registerBusinessRepresenting.error.field2.length"))
-    )(RegisterBusinessRepresenting.apply)(RegisterBusinessRepresenting.unapply)
+     )(RegisterBusinessRepresenting.apply)(RegisterBusinessRepresenting.unapply)
    )
- }
+
+}

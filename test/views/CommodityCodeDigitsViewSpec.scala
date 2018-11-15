@@ -38,6 +38,11 @@ class CommodityCodeDigitsViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.CommodityCodeDigitsController.onSubmit(NormalMode).url)
+    behave like stringPage(
+      createViewUsingForm,
+      messageKeyPrefix,
+      routes.CommodityCodeDigitsController.onSubmit(NormalMode).url
+    )
   }
+
 }

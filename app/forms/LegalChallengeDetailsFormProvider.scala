@@ -28,4 +28,5 @@ class LegalChallengeDetailsFormProvider @Inject() extends Mappings {
       "value" -> text("legalChallengeDetails.error.required")
         .verifying(maxLength(100, "legalChallengeDetails.error.length"))
     )
+
 }

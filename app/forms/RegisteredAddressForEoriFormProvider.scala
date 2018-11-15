@@ -35,6 +35,7 @@ class RegisteredAddressForEoriFormProvider @Inject() extends Mappings {
       "field4" -> text("registeredAddressForEori.error.field4.required")
         .verifying(maxLength(9, "registeredAddressForEori.error.field4.length")),
       "field5" -> text("registeredAddressForEori.error.field5.required")
-    )(RegisteredAddressForEori.apply)(RegisteredAddressForEori.unapply)
+     )(RegisteredAddressForEori.apply)(RegisteredAddressForEori.unapply)
    )
- }
+
+}

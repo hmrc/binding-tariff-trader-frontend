@@ -19,7 +19,7 @@ package pages
 import models.CommodityCodeBestMatch
 import pages.behaviours.PageBehaviours
 
-class CommodityCodeBestMatchSpec extends PageBehaviours {
+class CommodityCodeBestMatchPageSpec extends PageBehaviours {
 
   "YourLocation" must {
 
@@ -29,4 +29,5 @@ class CommodityCodeBestMatchSpec extends PageBehaviours {
 
     beRemovable[CommodityCodeBestMatch](CommodityCodeBestMatchPage)
   }
+
 }

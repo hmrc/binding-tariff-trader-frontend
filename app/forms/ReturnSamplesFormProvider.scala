@@ -28,4 +28,5 @@ class ReturnSamplesFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[ReturnSamples]("returnSamples.error.required")
     )
+
 }

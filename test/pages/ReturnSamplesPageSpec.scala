@@ -19,7 +19,7 @@ package pages
 import models.ReturnSamples
 import pages.behaviours.PageBehaviours
 
-class ReturnSamplesSpec extends PageBehaviours {
+class ReturnSamplesPageSpec extends PageBehaviours {
 
   "YourLocation" must {
 

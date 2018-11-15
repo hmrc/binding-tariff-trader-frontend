@@ -19,7 +19,7 @@ package pages
 import models.WhenToSendSample
 import pages.behaviours.PageBehaviours
 
-class WhenToSendSampleSpec extends PageBehaviours {
+class WhenToSendSamplePageSpec extends PageBehaviours {
 
   "YourLocation" must {
 

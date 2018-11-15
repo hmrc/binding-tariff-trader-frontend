@@ -19,7 +19,7 @@ package pages
 import models.InformationAboutYourItem
 import pages.behaviours.PageBehaviours
 
-class InformationAboutYourItemSpec extends PageBehaviours {
+class InformationAboutYourItemPageSpec extends PageBehaviours {
 
   "YourLocation" must {
 

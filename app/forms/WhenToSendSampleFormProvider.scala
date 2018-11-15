@@ -28,4 +28,5 @@ class WhenToSendSampleFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[WhenToSendSample]("whenToSendSample.error.required")
     )
+
 }
