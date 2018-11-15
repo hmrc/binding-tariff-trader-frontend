@@ -49,9 +49,9 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
     given(configuration.bindingTariffClassificationUrl).willReturn(getUrl)
   }
 
-  "Connector 'Update Case'" should {
+  "Connector 'Create Case'" should {
 
-    "update valid case" in {
+    "create valid case" in {
       val ref = "case-reference"
       val validCase = oCase.btiCaseExample
       val json = Json.toJson(validCase).toString()
