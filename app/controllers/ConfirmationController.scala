@@ -36,9 +36,13 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                       ) extends FrontendController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val data: Confirmation = request.userAnswers.get(ConfirmationPage).get
-    dataCacheConnector.remove(request.userAnswers.cacheMap)
-    Ok(confirmation(appConfig, data))
+    request.userAnswers.get(ConfirmationPage) match {
+      case Some(c: Confirmation) =>
+        dataCacheConnector.remove(request.userAnswers.cacheMap)
+        Ok(confirmation(appConfig, c))
+      case _ => Redirect(routes.SessionExpiredController.onPageLoad())
+    }
+
   }
 
 }
