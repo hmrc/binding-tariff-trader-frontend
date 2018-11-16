@@ -30,4 +30,5 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(index(appConfig))
   }
+
 }

@@ -28,4 +28,5 @@ class CommodityCodeRulingReferenceFormProvider @Inject() extends Mappings {
       "value" -> text("commodityCodeRulingReference.error.required")
         .verifying(maxLength(100, "commodityCodeRulingReference.error.length"))
     )
+
 }

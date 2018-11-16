@@ -28,6 +28,7 @@ class ConfidentialInformationFormProvider @Inject() extends Mappings {
    def apply(): Form[ConfidentialInformation] = Form(
      mapping(
       "field1" -> text("confidentialInformation.error.field1.required")
-    )(ConfidentialInformation.apply)(ConfidentialInformation.unapply)
+     )(ConfidentialInformation.apply)(ConfidentialInformation.unapply)
    )
- }
+
+}

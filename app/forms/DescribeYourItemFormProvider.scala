@@ -30,6 +30,7 @@ class DescribeYourItemFormProvider @Inject() extends Mappings {
       "field1" -> text("describeYourItem.error.field1.required")
         .verifying(maxLength(100, "describeYourItem.error.field1.length")),
       "field2" -> text("describeYourItem.error.field2.required")
-    )(DescribeYourItem.apply)(DescribeYourItem.unapply)
+     )(DescribeYourItem.apply)(DescribeYourItem.unapply)
    )
- }
+
+}

@@ -28,4 +28,5 @@ class LegalChallengeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[LegalChallenge]("legalChallenge.error.required")
     )
+
 }

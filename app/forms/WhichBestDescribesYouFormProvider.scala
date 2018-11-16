@@ -28,4 +28,5 @@ class WhichBestDescribesYouFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[WhichBestDescribesYou]("whichBestDescribesYou.error.required")
     )
+
 }

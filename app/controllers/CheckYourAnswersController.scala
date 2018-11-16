@@ -39,6 +39,7 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
                                            requireData: DataRequiredAction) extends FrontendController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (authenticate andThen getData andThen requireData) { implicit request =>
+
     val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
 
     val sections = Seq(

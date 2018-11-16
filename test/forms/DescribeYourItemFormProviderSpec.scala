@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.FormError
 
 class DescribeYourItemFormProviderSpec extends StringFieldBehaviours {
@@ -54,20 +55,11 @@ class DescribeYourItemFormProviderSpec extends StringFieldBehaviours {
 
     val fieldName = "field2"
     val requiredKey = "describeYourItem.error.field2.required"
-    val lengthKey = "describeYourItem.error.field2.length"
-    val maxLength = 100
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      arbitrary[String]
     )
 
     behave like mandatoryField(
@@ -76,4 +68,5 @@ class DescribeYourItemFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

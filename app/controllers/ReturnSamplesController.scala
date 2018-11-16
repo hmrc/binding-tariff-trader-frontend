@@ -46,31 +46,29 @@ class ReturnSamplesController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.get(ReturnSamplesPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
+    val preparedForm = request.userAnswers.get(ReturnSamplesPage) match {
+      case None => form
+      case Some(value) => form.fill(value)
+    }
+
+    Ok(returnSamples(appConfig, preparedForm, mode))
+  }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        Future.successful(BadRequest(returnSamples(appConfig, formWithErrors, mode))),
+      value => {
+        val updatedAnswers = request.userAnswers.set(ReturnSamplesPage, value)
+
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ => Redirect(navigator.nextPage(ReturnSamplesPage, mode)(updatedAnswers))
+        )
       }
-
-      Ok(returnSamples(appConfig, preparedForm, mode))
+    )
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(returnSamples(appConfig, formWithErrors, mode))),
-        value => {
-          val updatedAnswers = request.userAnswers.set(ReturnSamplesPage, value)
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(ReturnSamplesPage, mode)(updatedAnswers))
-          )
-        }
-      )
-  }
 }

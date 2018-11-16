@@ -56,12 +56,13 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
         Redirect(routes.UnauthorisedController.onPageLoad())
     }
   }
+
 }
 
 trait IdentifierAction extends ActionBuilder[IdentifierRequest] with ActionFunction[Request, IdentifierRequest]
 
 class SessionIdentifierAction @Inject()(config: FrontendAppConfig)
-                                 (implicit ec: ExecutionContext) extends IdentifierAction {
+                                       (implicit ec: ExecutionContext) extends IdentifierAction {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
@@ -69,7 +70,8 @@ class SessionIdentifierAction @Inject()(config: FrontendAppConfig)
 
     hc.sessionId match {
       case Some(session) => block(IdentifierRequest(request, session.value))
-      case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+      case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
   }
+
 }

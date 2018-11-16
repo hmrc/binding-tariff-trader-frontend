@@ -28,4 +28,5 @@ class InformationAboutYourItemFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[InformationAboutYourItem]("informationAboutYourItem.error.required")
     )
+
 }

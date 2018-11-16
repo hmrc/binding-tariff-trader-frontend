@@ -19,7 +19,7 @@ package pages
 import models.SelectApplicationType
 import pages.behaviours.PageBehaviours
 
-class SelectApplicationTypeSpec extends PageBehaviours {
+class SelectApplicationTypePageSpec extends PageBehaviours {
 
   "YourLocation" must {
 

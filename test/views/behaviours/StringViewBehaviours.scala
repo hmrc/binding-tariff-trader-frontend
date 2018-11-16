@@ -23,18 +23,37 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
 
   val answer = "answer"
 
+  private def getMessage(key: String): Option[String] = {
+    messages(key) match {
+      case m if m == key => None
+      case s => Some(s)
+    }
+  }
+
+  private def expectedLabel(messageKeyPrefix: String): String = {
+    getMessage(s"$messageKeyPrefix.label") match {
+      case Some(l) => l
+      case _ => getMessage(s"$messageKeyPrefix.heading") match {
+        case Some(h) => h
+        case _ => "no label or value defined"
+      }
+    }
+  }
+
   def stringPage(createView: Form[String] => HtmlFormat.Appendable,
                  messageKeyPrefix: String,
                  expectedFormAction: String,
                  expectedHintKey: Option[String] = None): Unit = {
 
     "behave like a page with a string value field" when {
+
       "rendered" must {
 
         "contain a label for the value" in {
           val doc = asDocument(createView(form))
-          val expectedHintText = expectedHintKey map(k => messages(k))
-          assertContainsLabel(doc, "value", messages(s"$messageKeyPrefix.heading"), expectedHintText)
+          val expectedHintText = expectedHintKey map (k => messages(k))
+
+          assertContainsLabel(doc, "value",  expectedLabel(messageKeyPrefix), expectedHintText)
         }
 
         "contain an input for the value" in {

@@ -33,6 +33,7 @@ class EnterContactDetailsFormProvider @Inject() extends Mappings {
         .verifying(maxLength(100, "enterContactDetails.error.field2.length")),
       "field3" -> text("enterContactDetails.error.field3.required")
         .verifying(maxLength(100, "enterContactDetails.error.field3.length"))
-    )(EnterContactDetails.apply)(EnterContactDetails.unapply)
+     )(EnterContactDetails.apply)(EnterContactDetails.unapply)
    )
- }
+
+}

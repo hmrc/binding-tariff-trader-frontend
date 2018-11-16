@@ -28,4 +28,5 @@ class UploadSupportingMaterialMultipleFormProvider @Inject() extends Mappings {
       "value" -> text("uploadSupportingMaterialMultiple.error.required")
         .verifying(maxLength(100, "uploadSupportingMaterialMultiple.error.length"))
     )
+
 }

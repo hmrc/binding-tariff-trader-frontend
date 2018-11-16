@@ -38,10 +38,18 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
     )
 
   "Check Your Answers Controller" must {
+
     "return 200 and the correct view for a GET" in {
       val result = controller().onPageLoad()(fakeRequest)
       status(result) mustBe OK
-      contentAsString(result) mustBe check_your_answers(frontendAppConfig, Seq(AnswerSection(None, Seq())))(fakeRequest, messages).toString
+
+      val expectedSections = Seq(
+        AnswerSection(Some("Applicant details"), Seq()),
+        AnswerSection(Some("Information about your item"), Seq()),
+        AnswerSection(Some("Other information"), Seq())
+      )
+
+      contentAsString(result) mustBe check_your_answers(frontendAppConfig, expectedSections)(fakeRequest, messages).toString
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -50,5 +58,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
+
   }
+
 }
