@@ -25,7 +25,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.Environment
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
@@ -49,11 +49,11 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
   }
 
   "Connector 'Create Case'" should {
+    val request = oCase.newBtiCaseExample
+    val requestJSON = Json.toJson(request).toString()
 
     "Create valid case" in {
-      val request = oCase.newBtiCaseExample
       val response = oCase.btiCaseExample
-      val requestJSON = Json.toJson(request).toString()
       val responseJSON = Json.toJson(response).toString()
 
       stubFor(post(urlEqualTo("/cases"))
@@ -65,6 +65,18 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
       )
 
       await(connector.createCase(request)) shouldBe response
+    }
+
+    "propagate errors" in {
+      stubFor(post(urlEqualTo("/cases"))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_BAD_GATEWAY)
+        )
+      )
+
+      intercept[Upstream5xxResponse] {
+        await(connector.createCase(request))
+      }
     }
   }
 
