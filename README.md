@@ -1,7 +1,7 @@
 
 # Binding Tariff Trader Front End
 
-The Front End microrservice for the BTI Application journey on GOV.UK
+The Front-end microrservice for the BTI Application journey on GOV.UK
 
 
 ### Running
