@@ -28,4 +28,5 @@ class CommodityCodeBestMatchFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[CommodityCodeBestMatch]("commodityCodeBestMatch.error.required")
     )
+
 }

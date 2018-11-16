@@ -28,4 +28,5 @@ class SupportingInformationFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[SupportingInformation]("supportingInformation.error.required")
     )
+
 }

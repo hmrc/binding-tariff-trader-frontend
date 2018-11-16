@@ -28,4 +28,5 @@ class CommodityCodeDigitsFormProvider @Inject() extends Mappings {
       "value" -> text("commodityCodeDigits.error.required")
         .verifying(maxLength(100, "commodityCodeDigits.error.length"))
     )
+
 }

@@ -28,4 +28,5 @@ class SelectApplicationTypeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[SelectApplicationType]("selectApplicationType.error.required")
     )
+
 }

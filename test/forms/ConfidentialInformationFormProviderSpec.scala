@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.FormError
 
 class ConfidentialInformationFormProviderSpec extends StringFieldBehaviours {
@@ -27,20 +28,11 @@ class ConfidentialInformationFormProviderSpec extends StringFieldBehaviours {
 
     val fieldName = "field1"
     val requiredKey = "confidentialInformation.error.field1.required"
-    val lengthKey = "confidentialInformation.error.field1.length"
-    val maxLength = 100
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      arbitrary[String]
     )
 
     behave like mandatoryField(
@@ -49,4 +41,5 @@ class ConfidentialInformationFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

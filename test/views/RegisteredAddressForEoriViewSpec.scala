@@ -44,7 +44,8 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
       createViewUsingForm,
       messageKeyPrefix,
       routes.RegisteredAddressForEoriController.onSubmit(NormalMode).url,
-      "field1", "field2"
+      "field1", "field2", "field3", "field4", "field5"
     )
   }
+
 }

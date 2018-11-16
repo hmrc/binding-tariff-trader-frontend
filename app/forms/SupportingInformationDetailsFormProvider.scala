@@ -28,4 +28,5 @@ class SupportingInformationDetailsFormProvider @Inject() extends Mappings {
       "value" -> text("supportingInformationDetails.error.required")
         .verifying(maxLength(100, "supportingInformationDetails.error.length"))
     )
+
 }

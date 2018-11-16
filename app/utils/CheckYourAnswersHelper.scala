@@ -19,7 +19,7 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
-import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
+import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
@@ -102,4 +102,5 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map {
     x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", s"${x.field1} ${x.field2} ${x.field3} ${x.field4} ${x.field5}", false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }
+
 }

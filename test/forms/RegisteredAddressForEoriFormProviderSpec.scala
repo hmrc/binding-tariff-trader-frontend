@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.FormError
 
 class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
@@ -27,20 +28,11 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
 
     val fieldName = "field1"
     val requiredKey = "registeredAddressForEori.error.field1.required"
-    val lengthKey = "registeredAddressForEori.error.field1.length"
-    val maxLength = 100
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      arbitrary[String]
     )
 
     behave like mandatoryField(
@@ -55,7 +47,7 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
     val fieldName = "field2"
     val requiredKey = "registeredAddressForEori.error.field2.required"
     val lengthKey = "registeredAddressForEori.error.field2.length"
-    val maxLength = 75
+    val maxLength = 70
 
     behave like fieldThatBindsValidData(
       form,
@@ -76,4 +68,77 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
+  ".field3" must {
+
+    val fieldName = "field3"
+    val requiredKey = "registeredAddressForEori.error.field3.required"
+    val lengthKey = "registeredAddressForEori.error.field3.length"
+    val maxLength = 35
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+
+  ".field4" must {
+
+    val fieldName = "field4"
+    val requiredKey = "registeredAddressForEori.error.field4.required"
+    val lengthKey = "registeredAddressForEori.error.field4.length"
+    val maxLength = 9
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+
+  ".field5" must {
+
+    val fieldName = "field5"
+    val requiredKey = "registeredAddressForEori.error.field5.required"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      arbitrary[String]
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+
 }

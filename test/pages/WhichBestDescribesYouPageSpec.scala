@@ -19,7 +19,7 @@ package pages
 import models.WhichBestDescribesYou
 import pages.behaviours.PageBehaviours
 
-class WhichBestDescribesYouSpec extends PageBehaviours {
+class WhichBestDescribesYouPageSpec extends PageBehaviours {
 
   "YourLocation" must {
 

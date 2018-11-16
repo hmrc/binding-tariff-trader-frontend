@@ -28,4 +28,5 @@ class SimilarItemCommodityCodeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[SimilarItemCommodityCode]("similarItemCommodityCode.error.required")
     )
+
 }

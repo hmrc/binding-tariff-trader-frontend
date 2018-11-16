@@ -16,18 +16,15 @@
 
 package controllers
 
+import play.api.libs.json.JsString
+import uk.gov.hmrc.http.cache.client.CacheMap
+import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import mapper.CaseRequestMapper
-import models.{Case, NewCaseRequest, NormalMode, UserAnswers}
-import navigation.FakeNavigator
-import org.mockito.BDDMockito.given
-import org.mockito.Matchers.{any, refEq}
-import org.scalatest.mockito.MockitoSugar
-import play.api.mvc.Call
 import play.api.test.Helpers._
-import service.CasesService
-import uk.gov.hmrc.http.HeaderCarrier
+import models.NormalMode
+import pages.DeclarationPage
+import play.api.mvc.Call
 import views.html.declaration
 
 import scala.concurrent.Future
@@ -74,6 +71,24 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some("/foo")
+    }
+
+    "populate the view correctly on a GET when the question has previously been answered" in {
+      val validData = Map(DeclarationPage.toString -> JsString(testAnswer))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+
+      contentAsString(result) mustBe viewAsString
+    }
+
+    "redirect to the next page when valid data is submitted" in {
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
+
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(onwardRoute.url)
     }
   }
 }

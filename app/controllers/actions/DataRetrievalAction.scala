@@ -38,6 +38,7 @@ class DataRetrievalActionImpl @Inject()(val dataCacheConnector: DataCacheConnect
       case Some(data) => OptionalDataRequest(request.request, request.identifier, Some(UserAnswers(data)))
     }
   }
+
 }
 
 trait DataRetrievalAction extends ActionTransformer[IdentifierRequest, OptionalDataRequest]

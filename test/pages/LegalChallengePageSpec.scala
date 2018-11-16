@@ -19,7 +19,7 @@ package pages
 import models.LegalChallenge
 import pages.behaviours.PageBehaviours
 
-class LegalChallengeSpec extends PageBehaviours {
+class LegalChallengePageSpec extends PageBehaviours {
 
   "YourLocation" must {
 
