@@ -72,6 +72,6 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = {
 coverageExcludedFiles := "<empty>;Reverse.*;.*filters.*;.*handlers.*;.*components.*;.*repositories.*;" +
   ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;" +
   ".*ControllerConfiguration;.*LanguageSwitchController"
-coverageMinimum := 80
+coverageMinimum := 86
 coverageFailOnMinimum := true
 coverageHighlighting := true
