@@ -66,4 +66,5 @@ class DeclarationControllerSpec extends ControllerSpecBase {
       redirectLocation(result) mustBe Some(onwardRoute.url)
     }
   }
+
 }

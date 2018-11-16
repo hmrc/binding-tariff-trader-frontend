@@ -37,6 +37,7 @@ class DataRequiredActionImpl @Inject() extends DataRequiredAction {
       case Some(data) => Future.successful(Right(DataRequest(request.request, request.internalId, data)))
     }
   }
+
 }
 
 trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
