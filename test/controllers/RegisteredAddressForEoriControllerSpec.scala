@@ -43,7 +43,6 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
-      new DataRequiredActionImpl,
       formProvider
     )
 
@@ -85,22 +84,6 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
       status(result) mustBe BAD_REQUEST
       contentAsString(result) mustBe viewAsString(boundForm)
     }
-
-    "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("field1", "value 1"), ("field2", "value 2"), ("field3", "value 3"), ("field4", "value 4"), ("field5", "value 5"))
-      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
-
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
-
   }
 
 }
