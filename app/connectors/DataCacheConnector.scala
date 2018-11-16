@@ -18,10 +18,10 @@ package connectors
 
 import com.google.inject.Inject
 import play.api.libs.json.Format
-import uk.gov.hmrc.http.cache.client.CacheMap
 import repositories.SessionRepository
-import scala.concurrent.ExecutionContext.Implicits.global
+import uk.gov.hmrc.http.cache.client.CacheMap
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class MongoCacheConnector @Inject()(val sessionRepository: SessionRepository) extends DataCacheConnector {
@@ -38,6 +38,10 @@ class MongoCacheConnector @Inject()(val sessionRepository: SessionRepository) ex
       optionalCacheMap.flatMap { cacheMap => cacheMap.getEntry(key)}
     }
   }
+
+  def remove(cacheMap: CacheMap): Future[Boolean] = {
+    sessionRepository().remove(cacheMap)
+  }
 }
 
 trait DataCacheConnector {
@@ -46,4 +50,6 @@ trait DataCacheConnector {
   def fetch(cacheId: String): Future[Option[CacheMap]]
 
   def getEntry[A](cacheId: String, key: String)(implicit fmt: Format[A]): Future[Option[A]]
+
+  def remove(cacheMap: CacheMap): Future[Boolean]
 }

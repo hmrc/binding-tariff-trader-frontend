@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 
-@(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, confirmation: Confirmation)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("confirmation.title"),
@@ -27,7 +27,7 @@
 			@components.heading("confirmation.heading", "heading-xlarge")
       <p class="font-large">
     		@messages("confirmation.yourRefNumber")<br>
-        <span class="bold">GBJ2123F</span>
+        <span class="bold">@messages("confirmation.refValue", confirmation.reference)</span>
       </p>
 	  </div>
 
@@ -41,7 +41,7 @@
 		<p>@Html(messages("confirmation.paragraph.whatNext"))</p>
 
 		<h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
-		<p>@messages("confirmation.paragraph1.sendingSamples") GBJ2123F</p>
+		<p>@messages("confirmation.paragraph1.sendingSamples") @messages("confirmation.refValue", confirmation.reference)</p>
 		<p>@messages("confirmation.paragraph2.sendingSamples")</p>
 
 		<p><a href="https://www.gov.uk/guidance/binding-tariff-information-rulings#samples">@messages("confirmation.paragraph3.sendingSamples.link")</a></p>

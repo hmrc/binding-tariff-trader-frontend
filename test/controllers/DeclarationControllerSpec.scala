@@ -16,28 +16,48 @@
 
 package controllers
 
-import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import play.api.test.Helpers._
-import models.NormalMode
+import mapper.CaseRequestMapper
+import models.{Case, NewCaseRequest, NormalMode, UserAnswers}
+import navigation.FakeNavigator
+import org.mockito.BDDMockito.given
+import org.mockito.Matchers._
+import org.scalatest.mockito.MockitoSugar
 import pages.DeclarationPage
 import play.api.libs.json.JsString
 import play.api.mvc.Call
+import play.api.test.Helpers._
+import service.CasesService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.declaration
 
-class DeclarationControllerSpec extends ControllerSpecBase {
+import scala.concurrent.Future
+
+class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
+  val casesService = mock[CasesService]
+  val mapper = mock[CaseRequestMapper]
+  val newCase = mock[NewCaseRequest]
+  val createdCase = mock[Case]
+  val testAnswer = "answer"
+
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new DeclarationController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction)
+    new DeclarationController(
+      frontendAppConfig,
+      messagesApi,
+      FakeDataCacheConnector,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      casesService,
+      mapper
+    )
 
   def viewAsString = declaration(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
-
-  val testAnswer = "answer"
 
   "Declaration Controller" must {
 
@@ -57,14 +77,15 @@ class DeclarationControllerSpec extends ControllerSpecBase {
       contentAsString(result) mustBe viewAsString
     }
 
-    "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
+    "return OK and the correct view for a POST" in {
+      given(mapper.map(any[UserAnswers])).willReturn(newCase)
+      given(casesService.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(createdCase))
+      given(createdCase.reference).willReturn("reference")
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val result = controller().onSubmit(NormalMode)(fakeRequest)
 
       status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      redirectLocation(result) mustBe Some("/foo")
     }
   }
-
 }

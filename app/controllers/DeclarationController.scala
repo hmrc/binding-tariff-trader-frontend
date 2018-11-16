@@ -16,35 +16,48 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
-import models.Mode
-import pages.ConfirmationPage
+import javax.inject.Inject
+import mapper.CaseRequestMapper
+import models.Confirmation.format
+import models._
 import navigation.Navigator
+import pages.ConfirmationPage
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import service.CasesService
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.declaration
 
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class DeclarationController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction
-                                      ) extends FrontendController with I18nSupport {
+                                       appConfig: FrontendAppConfig,
+                                       override val messagesApi: MessagesApi,
+                                       dataCacheConnector: DataCacheConnector,
+                                       navigator: Navigator,
+                                       identify: IdentifierAction,
+                                       getData: DataRetrievalAction,
+                                       service: CasesService,
+                                       mapper: CaseRequestMapper
+                                     ) extends FrontendController with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     Ok(declaration(appConfig, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
-    Future.successful(Redirect(navigator.nextPage(ConfirmationPage, mode)(request.userAnswers.get)))
+    val answers: UserAnswers = request.userAnswers.get
+
+    service
+      .createCase(mapper.map(answers))
+      .map(c => answers.set(ConfirmationPage, Confirmation(c.reference)))
+      .flatMap(updatedAnswers => {
+        dataCacheConnector.save(updatedAnswers.cacheMap)
+          .map(_ => Redirect(navigator.nextPage(ConfirmationPage, mode)(updatedAnswers)))
+      })
   }
 
 }

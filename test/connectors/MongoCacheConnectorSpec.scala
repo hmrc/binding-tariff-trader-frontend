@@ -17,20 +17,18 @@
 package connectors
 
 import generators.Generators
-import org.mockito.Mockito._
 import org.mockito.Matchers.{eq => eqTo, _}
+import org.mockito.Mockito._
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{MustMatchers, OptionValues, WordSpec}
-import play.api.libs.json.{JsBoolean, JsNumber, JsString}
+import play.api.libs.json.JsString
 import repositories.{ReactiveMongoRepository, SessionRepository}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class MongoCacheConnectorSpec
   extends WordSpec with MustMatchers with PropertyChecks with Generators with MockitoSugar with ScalaFutures with OptionValues {
@@ -57,6 +55,33 @@ class MongoCacheConnectorSpec
 
               savedCacheMap mustEqual cacheMap
               verify(mockReactiveMongoRepository).upsert(cacheMap)
+          }
+      }
+    }
+  }
+
+  ".remove" must {
+
+    "remove the cache map to the Mongo repository" in {
+
+      val mockReactiveMongoRepository = mock[ReactiveMongoRepository]
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.apply()) thenReturn mockReactiveMongoRepository
+      when(mockReactiveMongoRepository.remove(any[CacheMap])) thenReturn Future.successful(true)
+
+      val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository)
+
+      forAll(arbitrary[CacheMap]) {
+        cacheMap =>
+
+          val result = mongoCacheConnector.remove(cacheMap)
+
+          whenReady(result) {
+            savedCacheMap =>
+
+              savedCacheMap mustEqual true
+              verify(mockReactiveMongoRepository).remove(cacheMap)
           }
       }
     }

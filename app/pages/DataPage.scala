@@ -14,17 +14,6 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-case class NewCaseRequest
-(
-  application: Application,
-  attachments: Seq[String] = Seq.empty
-)
-
-case class Case
-(
-  reference: String,
-  application: Application,
-  attachments: Seq[String] = Seq.empty
-)
+trait DataPage[A] extends Page

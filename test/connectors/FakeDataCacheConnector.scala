@@ -19,9 +19,8 @@ package connectors
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.CacheMap
 
-import scala.concurrent.Future
-
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object FakeDataCacheConnector extends DataCacheConnector {
 
@@ -30,4 +29,6 @@ object FakeDataCacheConnector extends DataCacheConnector {
   override def fetch(cacheId: String): Future[Option[CacheMap]] = Future(Some(CacheMap(cacheId, Map())))
 
   override def getEntry[A](cacheId: String, key: String)(implicit fmt: Format[A]): Future[Option[A]] = ???
+
+  override def remove(cacheMap: CacheMap): Future[Boolean] = Future.successful(true)
 }

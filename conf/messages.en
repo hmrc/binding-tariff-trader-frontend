@@ -254,6 +254,7 @@ confirmation.paragraph3.sendingSamples.link = Get more information about samples
 confirmation.paragraph4.sendingSamples = Send your samples to:
 confirmation.sendingSamples.address = HM Revenue and Customs<br> Tariff Classification Service<br> 10th Floor SE<br> Alexander House<br> 21 Victoria Avenue<br> Southend-on-Sea<br> Essex<br> SS99 1AA
 confirmation.paragraph5.sendingSamples.link = Apply for another commodity code ruling
+confirmation.refValue = GB{0}
 
 
 confirmation.yourRefNumber = Your reference number

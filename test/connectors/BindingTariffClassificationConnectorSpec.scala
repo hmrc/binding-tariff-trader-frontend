@@ -18,19 +18,18 @@ package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import config.FrontendAppConfig
-import models.{Case, oCase}
+import models.oCase
 import org.apache.http.HttpStatus
 import org.mockito.BDDMockito._
 import org.scalatest.mockito.MockitoSugar
 import play.api.Environment
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException}
+import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-
-import utils.JsonFormatters.caseFormat
+import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
 class BindingTariffClassificationConnectorSpec extends UnitSpec
   with WiremockTestServer with MockitoSugar with WithFakeApplication {
@@ -50,21 +49,34 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
   }
 
   "Connector 'Create Case'" should {
+    val request = oCase.newBtiCaseExample
+    val requestJSON = Json.toJson(request).toString()
 
-    "create valid case" in {
-      val ref = "case-reference"
-      val validCase = oCase.btiCaseExample
-      val json = Json.toJson(validCase).toString()
+    "Create valid case" in {
+      val response = oCase.btiCaseExample
+      val responseJSON = Json.toJson(response).toString()
 
       stubFor(post(urlEqualTo("/cases"))
-        .withRequestBody(equalToJson(json))
+        .withRequestBody(equalToJson(requestJSON))
         .willReturn(aResponse()
           .withStatus(HttpStatus.SC_OK)
-          .withBody(json)
+          .withBody(responseJSON)
         )
       )
 
-      await(connector.createCase(validCase)) shouldBe validCase
+      await(connector.createCase(request)) shouldBe response
+    }
+
+    "propagate errors" in {
+      stubFor(post(urlEqualTo("/cases"))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_BAD_GATEWAY)
+        )
+      )
+
+      intercept[Upstream5xxResponse] {
+        await(connector.createCase(request))
+      }
     }
   }
 
