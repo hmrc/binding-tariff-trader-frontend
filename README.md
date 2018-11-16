@@ -1,7 +1,7 @@
 
 # Binding Tariff Trader Front End
 
-The Front End for the BTI Application journey on GOV.UK
+The Front End microrservice for the BTI Application journey on GOV.UK
 
 
 ### Running
@@ -36,7 +36,7 @@ You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisati
 
 ### Testing
 
-Run `sbt test`
+Run `sbt test it:test`
 
 ### Changes
 
