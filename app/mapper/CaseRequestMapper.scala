@@ -16,9 +16,11 @@
 
 package mapper
 
+import javax.inject.Singleton
 import models._
 import pages._
 
+@Singleton
 class CaseRequestMapper {
 
   def map(answers: UserAnswers): NewCaseRequest = {
