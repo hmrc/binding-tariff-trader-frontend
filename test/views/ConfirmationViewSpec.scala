@@ -16,6 +16,7 @@
 
 package views
 
+import models.Confirmation
 import views.behaviours.ViewBehaviours
 import views.html.confirmation
 
@@ -23,9 +24,14 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "confirmation"
 
-  def createView = () => confirmation(frontendAppConfig)(fakeRequest, messages)
+  def createView = () => confirmation(frontendAppConfig, Confirmation("reference"))(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)
+
+    "with reference" in {
+      val doc = asDocument(createView())
+      doc.text() must include("GBreference")
+    }
   }
 }

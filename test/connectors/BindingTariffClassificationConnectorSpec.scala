@@ -29,7 +29,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import utils.JsonFormatters.caseFormat
+import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
 class BindingTariffClassificationConnectorSpec extends UnitSpec
   with WiremockTestServer with MockitoSugar with WithFakeApplication {
@@ -51,19 +51,20 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
   "Connector 'Create Case'" should {
 
     "create valid case" in {
-      val validCaseRequest = oCase.newBtiCaseExample
-      val validCaseResponse = oCase.btiCaseExample
-      val json = Json.toJson(validCaseResponse).toString()
+      val request = oCase.newBtiCaseExample
+      val response = oCase.btiCaseExample
+      val requestJSON = Json.toJson(request).toString()
+      val responseJSON = Json.toJson(response).toString()
 
       stubFor(post(urlEqualTo("/cases"))
-        .withRequestBody(equalToJson(json))
+        .withRequestBody(equalToJson(requestJSON))
         .willReturn(aResponse()
           .withStatus(HttpStatus.SC_OK)
-          .withBody(json)
+          .withBody(responseJSON)
         )
       )
 
-      await(connector.createCase(validCaseRequest)) shouldBe validCaseResponse
+      await(connector.createCase(request)) shouldBe response
     }
   }
 
