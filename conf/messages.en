@@ -21,8 +21,8 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 
-index.title = Binding tariff trader
-index.heading = Binding tariff trader
+index.title = Binding Tariff Application
+index.heading = Binding Tariff Application
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
 session_expired.title = For your security, this service has been reset
@@ -37,7 +37,7 @@ site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
 site.continue = Continue
-site.service_name = Binding tariff trader
+site.service_name = Binding Tariff Application
 site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
@@ -248,7 +248,7 @@ confirmation.heading = Application complete
 confirmation.heading2.whatNext = What happens next
 confirmation.paragraph.whatNext = The classification team will issue your commodity code ruling within 30 to 60 days. You can find out the status of your application by checking your commodity code ruling <a href="#">account page</a>.
 confirmation.heading2.sendingSamples = Sending samples
-confirmation.paragraph1.sendingSamples = You must label your sample with the application reference number .
+confirmation.paragraph1.sendingSamples = You must label your sample with the application reference number:
 confirmation.paragraph2.sendingSamples = If you are sending samples the application will not be processed until they have been received.
 confirmation.paragraph3.sendingSamples.link = Get more information about samples
 confirmation.paragraph4.sendingSamples = Send your samples to:
