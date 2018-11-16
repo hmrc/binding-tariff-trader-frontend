@@ -16,6 +16,7 @@
 
 package controllers
 
+import connectors.FakeDataCacheConnector
 import controllers.actions._
 import models.Confirmation
 import play.api.test.Helpers._
@@ -29,7 +30,8 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
       messagesApi,
       FakeIdentifierAction,
       dataRetrievalAction,
-      new DataRequiredActionImpl
+      new DataRequiredActionImpl,
+      FakeDataCacheConnector
     )
 
   def viewAsString() = confirmation(frontendAppConfig, Confirmation("ref"))(fakeRequest, messages).toString

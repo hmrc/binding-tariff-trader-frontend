@@ -17,10 +17,9 @@
 package repositories
 
 import javax.inject.{Inject, Singleton}
-
 import org.joda.time.{DateTime, DateTimeZone}
-import play.api.{Configuration, Logger}
 import play.api.libs.json.{JsValue, Json}
+import play.api.{Configuration, Logger}
 import play.modules.reactivemongo.MongoDbConnection
 import reactivemongo.api.DefaultDB
 import reactivemongo.api.indexes.{Index, IndexType}
@@ -79,6 +78,10 @@ class ReactiveMongoRepository(config: Configuration, mongo: () => DefaultDB)
 
   def get(id: String): Future[Option[CacheMap]] =
     collection.find(Json.obj("id" -> id)).one[CacheMap]
+
+  def remove(cm: CacheMap): Future[Boolean] = {
+    collection.remove(Json.obj("id" -> cm.id)).map(_.ok)
+  }
 }
 
 @Singleton

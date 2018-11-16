@@ -17,6 +17,7 @@
 package controllers
 
 import config.FrontendAppConfig
+import connectors.DataCacheConnector
 import controllers.actions._
 import javax.inject.Inject
 import models.Confirmation
@@ -27,14 +28,16 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.confirmation
 
 class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
-                                         override val messagesApi: MessagesApi,
-                                         identify: IdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction
-                                         ) extends FrontendController with I18nSupport {
+                                       override val messagesApi: MessagesApi,
+                                       identify: IdentifierAction,
+                                       getData: DataRetrievalAction,
+                                       requireData: DataRequiredAction,
+                                       dataCacheConnector: DataCacheConnector
+                                      ) extends FrontendController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val data: Confirmation = request.userAnswers.get(ConfirmationPage).get
+    dataCacheConnector.remove(request.userAnswers.cacheMap)
     Ok(confirmation(appConfig, data))
   }
 
