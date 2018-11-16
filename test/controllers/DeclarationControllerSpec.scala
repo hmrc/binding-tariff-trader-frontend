@@ -16,15 +16,21 @@
 
 package controllers
 
-import play.api.libs.json.JsString
-import uk.gov.hmrc.http.cache.client.CacheMap
-import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import play.api.test.Helpers._
-import models.NormalMode
+import mapper.CaseRequestMapper
+import models.{Case, NewCaseRequest, NormalMode, UserAnswers}
+import navigation.FakeNavigator
+import org.mockito.BDDMockito.given
+import org.mockito.Matchers._
+import org.scalatest.mockito.MockitoSugar
 import pages.DeclarationPage
+import play.api.libs.json.JsString
 import play.api.mvc.Call
+import play.api.test.Helpers._
+import service.CasesService
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.declaration
 
 import scala.concurrent.Future
@@ -62,17 +68,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
       contentAsString(result) mustBe viewAsString
     }
 
-    "return OK and the correct view for a POST" in {
-      given(mapper.map(any[UserAnswers])).willReturn(newCase)
-      given(casesService.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(createdCase))
-      given(createdCase.reference).willReturn("reference")
-
-      val result = controller().onSubmit(NormalMode)(fakeRequest)
-
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some("/foo")
-    }
-
     "populate the view correctly on a GET when the question has previously been answered" in {
       val validData = Map(DeclarationPage.toString -> JsString(testAnswer))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
@@ -82,13 +77,15 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
       contentAsString(result) mustBe viewAsString
     }
 
-    "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
+    "return OK and the correct view for a POST" in {
+      given(mapper.map(any[UserAnswers])).willReturn(newCase)
+      given(casesService.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(createdCase))
+      given(createdCase.reference).willReturn("reference")
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val result = controller().onSubmit(NormalMode)(fakeRequest)
 
       status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      redirectLocation(result) mustBe Some("/foo")
     }
   }
 }
