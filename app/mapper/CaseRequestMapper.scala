@@ -19,9 +19,9 @@ package mapper
 import models._
 import pages._
 
-class CaseMapper {
+class CaseRequestMapper {
 
-  def map(answers: UserAnswers): Case = {
+  def map(answers: UserAnswers): NewCaseRequest = {
     val confidentialInfo: Option[ConfidentialInformation] = answers.get(ConfidentialInformationPage)
     val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
     val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
@@ -52,7 +52,7 @@ class CaseMapper {
       sampleToBeReturned = false // TODO Unimplemented
     )
 
-    Case(app)
+    NewCaseRequest(app)
   }
 
   def toHolder: RegisteredAddressForEori => EORIDetails = { details =>

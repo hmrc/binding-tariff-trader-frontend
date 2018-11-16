@@ -19,10 +19,10 @@ package connectors
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import javax.inject.Singleton
-import models.Case
+import models.{Case, NewCaseRequest}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import utils.JsonFormatters.caseFormat
+import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -30,9 +30,9 @@ import scala.concurrent.Future
 @Singleton
 class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppConfig, client: HttpClient) {
 
-  def createCase(c: Case)(implicit hc: HeaderCarrier): Future[Case] = {
+  def createCase(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
     val url = s"${configuration.bindingTariffClassificationUrl}/cases"
-    client.POST[Case, Case](url, body = c)
+    client.POST[NewCaseRequest, Case](url, body = c)
   }
 
 }

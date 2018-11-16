@@ -17,7 +17,7 @@
 package service
 
 import connectors.BindingTariffClassificationConnector
-import models.Case
+import models.{Case, NewCaseRequest}
 import org.mockito.BDDMockito.given
 import org.mockito.Matchers._
 import org.scalatest.mockito.MockitoSugar
@@ -28,17 +28,18 @@ import scala.concurrent.Future
 
 class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
-  val c = mock[Case]
-  val connector = mock[BindingTariffClassificationConnector]
+  private val existingCase = mock[Case]
+  private val newCase = mock[NewCaseRequest]
+  private val connector = mock[BindingTariffClassificationConnector]
 
-  val service = new CasesService(connector)
+  private val service = new CasesService(connector)
 
   "Service 'Create Case'" should {
 
     "delegate to connector" in {
-      given(connector.createCase(refEq(c))(any[HeaderCarrier])).willReturn(Future.successful(c))
+      given(connector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
 
-      await(connector.createCase(c)(HeaderCarrier())) shouldBe c
+      await(service.createCase(newCase)(HeaderCarrier())) shouldBe existingCase
     }
   }
 

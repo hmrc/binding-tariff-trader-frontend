@@ -16,15 +16,10 @@
 
 package models
 
-case class NewCaseRequest
-(
-  application: Application,
-  attachments: Seq[String] = Seq.empty
-)
+import play.api.libs.json.Json
 
-case class Case
-(
-  reference: String,
-  application: Application,
-  attachments: Seq[String] = Seq.empty
-)
+case class Confirmation(reference: String)
+
+object Confirmation {
+  implicit val format = Json.format[Confirmation]
+}

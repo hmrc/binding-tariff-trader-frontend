@@ -6,9 +6,9 @@ import play.api.libs.json.{JsValue, Json, Writes}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.UnitSpec
 
-class CaseMapperTest extends UnitSpec {
+class CaseRequestMapperTest extends UnitSpec {
 
-  private val mapper = new CaseMapper()
+  private val mapper = new CaseRequestMapper()
 
 
   "Mapper" should {

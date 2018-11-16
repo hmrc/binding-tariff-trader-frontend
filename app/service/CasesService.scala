@@ -18,7 +18,7 @@ package service
 
 import connectors.BindingTariffClassificationConnector
 import javax.inject.{Inject, Singleton}
-import models.Case
+import models.{Case, NewCaseRequest}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
@@ -26,7 +26,7 @@ import scala.concurrent.Future
 @Singleton
 class CasesService @Inject()(connector: BindingTariffClassificationConnector){
 
-  def createCase(c: Case)(implicit hc: HeaderCarrier): Future[Case] = {
+  def createCase(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
     connector.createCase(c)
   }
 

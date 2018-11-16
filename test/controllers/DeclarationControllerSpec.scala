@@ -16,28 +16,35 @@
 
 package controllers
 
-import play.api.libs.json.JsString
-import uk.gov.hmrc.http.cache.client.CacheMap
-import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import play.api.test.Helpers._
 import models.NormalMode
-import pages.DeclarationPage
+import navigation.FakeNavigator
+import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Call
+import play.api.test.Helpers._
+import service.CasesService
 import views.html.declaration
 
-class DeclarationControllerSpec extends ControllerSpecBase {
+class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
+  val casesService = mock[CasesService]
+  val testAnswer = "answer"
+
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new DeclarationController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction)
+    new DeclarationController(
+      frontendAppConfig,
+      messagesApi,
+      FakeDataCacheConnector,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      casesService
+    )
 
   def viewAsString = declaration(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
-
-  val testAnswer = "answer"
 
   "Declaration Controller" must {
 

@@ -51,9 +51,9 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
   "Connector 'Create Case'" should {
 
     "create valid case" in {
-      val ref = "case-reference"
-      val validCase = oCase.btiCaseExample
-      val json = Json.toJson(validCase).toString()
+      val validCaseRequest = oCase.newBtiCaseExample
+      val validCaseResponse = oCase.btiCaseExample
+      val json = Json.toJson(validCaseResponse).toString()
 
       stubFor(post(urlEqualTo("/cases"))
         .withRequestBody(equalToJson(json))
@@ -63,7 +63,7 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
         )
       )
 
-      await(connector.createCase(validCase)) shouldBe validCase
+      await(connector.createCase(validCaseRequest)) shouldBe validCaseResponse
     }
   }
 

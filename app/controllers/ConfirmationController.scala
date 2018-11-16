@@ -16,12 +16,14 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import controllers.actions._
 import config.FrontendAppConfig
+import controllers.actions._
+import javax.inject.Inject
+import models.Confirmation
+import pages.ConfirmationPage
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.confirmation
 
 class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
@@ -32,7 +34,8 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                          ) extends FrontendController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    Ok(confirmation(appConfig))
+    val data: Confirmation = request.userAnswers.get(ConfirmationPage).get
+    Ok(confirmation(appConfig, data))
   }
 
 }

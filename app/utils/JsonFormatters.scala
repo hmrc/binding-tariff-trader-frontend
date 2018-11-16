@@ -26,6 +26,7 @@ object JsonFormatters {
   implicit val eoriDetailsFormat = Json.format[EORIDetails]
   implicit val applicationFormat = Json.format[Application]
   implicit val caseFormat = Json.format[Case]
+  implicit val newCaseRequestFormat = Json.format[NewCaseRequest]
 }
 
 object EnumJson {

@@ -16,4 +16,8 @@
 
 package pages
 
-case object ConfirmationPage extends Page
+import models.Confirmation
+
+case object ConfirmationPage extends DataPage[Confirmation] {
+  override def toString: String = "confirmationPage"
+}
