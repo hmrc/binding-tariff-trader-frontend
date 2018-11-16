@@ -19,13 +19,18 @@ package controllers
 import connectors.FakeDataCacheConnector
 import controllers.actions._
 import mapper.CaseRequestMapper
-import models.NormalMode
+import models.{Case, NewCaseRequest, NormalMode, UserAnswers}
 import navigation.FakeNavigator
+import org.mockito.BDDMockito.given
+import org.mockito.Matchers.{any, refEq}
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import service.CasesService
+import uk.gov.hmrc.http.HeaderCarrier
 import views.html.declaration
+
+import scala.concurrent.Future
 
 class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
@@ -33,6 +38,8 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   val casesService = mock[CasesService]
   val mapper = mock[CaseRequestMapper]
+  val newCase = mock[NewCaseRequest]
+  val createdCase = mock[Case]
   val testAnswer = "answer"
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
@@ -59,10 +66,14 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
     }
 
     "return OK and the correct view for a POST" in {
+      given(mapper.map(any[UserAnswers])).willReturn(newCase)
+      given(casesService.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(createdCase))
+      given(createdCase.reference).willReturn("reference")
+
       val result = controller().onSubmit(NormalMode)(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some("/foo")
     }
   }
 }
