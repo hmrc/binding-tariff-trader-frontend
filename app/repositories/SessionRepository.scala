@@ -77,10 +77,14 @@ class ReactiveMongoRepository(config: Configuration, mongo: () => DefaultDB)
   }
 
   def get(id: String): Future[Option[CacheMap]] =
-    collection.find(Json.obj("id" -> id)).one[CacheMap]
+    collection.find(byId(id)).one[CacheMap]
 
   def remove(cm: CacheMap): Future[Boolean] = {
-    collection.remove(Json.obj("id" -> cm.id)).map(_.ok)
+    collection.remove(byId(cm.id)).map(_.ok)
+  }
+
+  private def byId(value: String) = {
+    Json.obj("id" -> value)
   }
 }
 
