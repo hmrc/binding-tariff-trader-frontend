@@ -50,7 +50,7 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
 
   "Connector 'Create Case'" should {
 
-    "create valid case" in {
+    "Create valid case" in {
       val request = oCase.newBtiCaseExample
       val response = oCase.btiCaseExample
       val requestJSON = Json.toJson(request).toString()

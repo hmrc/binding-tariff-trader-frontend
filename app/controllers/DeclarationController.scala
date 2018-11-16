@@ -40,7 +40,8 @@ class DeclarationController @Inject()(
                                        navigator: Navigator,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
-                                       service: CasesService
+                                       service: CasesService,
+                                       mapper: CaseRequestMapper
                                      ) extends FrontendController with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
@@ -51,7 +52,7 @@ class DeclarationController @Inject()(
     val answers: UserAnswers = request.userAnswers.get
 
     service
-      .createCase(new CaseRequestMapper().map(answers))
+      .createCase(mapper.map(answers))
       .map(c => answers.set(ConfirmationPage, Confirmation(c.reference)))
       .flatMap(updatedAnswers => {
         dataCacheConnector.save(updatedAnswers.cacheMap)

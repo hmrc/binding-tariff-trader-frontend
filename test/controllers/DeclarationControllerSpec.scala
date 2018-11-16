@@ -18,6 +18,7 @@ package controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
+import mapper.CaseRequestMapper
 import models.NormalMode
 import navigation.FakeNavigator
 import org.scalatest.mockito.MockitoSugar
@@ -31,6 +32,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
   def onwardRoute = Call("GET", "/foo")
 
   val casesService = mock[CasesService]
+  val mapper = mock[CaseRequestMapper]
   val testAnswer = "answer"
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
@@ -41,7 +43,8 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
-      casesService
+      casesService,
+      mapper
     )
 
   def viewAsString = declaration(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
@@ -50,6 +53,13 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
+
+      status(result) mustBe OK
+      contentAsString(result) mustBe viewAsString
+    }
+
+    "return OK and the correct view for a POST" in {
+      val result = controller().onSubmit(NormalMode)(fakeRequest)
 
       status(result) mustBe OK
       contentAsString(result) mustBe viewAsString
