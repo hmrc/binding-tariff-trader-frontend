@@ -1,6 +1,7 @@
 import sbt._
 
 object AppDependencies {
+
   import play.core.PlayVersion
 
   val compile = Seq(
@@ -17,17 +18,19 @@ object AppDependencies {
     "uk.gov.hmrc" %% "play-whitelist-filter"            % "2.0.0"
   )
 
+  lazy val scope: String = "test,it"
+
   val test = Seq(
-    "com.github.tomakehurst"    %  "wiremock"           % "2.19.0",
-    "uk.gov.hmrc"               %% "hmrctest"           % "3.2.0",
-    "org.scalatest"             %% "scalatest"          % "3.0.4",
-    "org.scalatestplus.play"    %% "scalatestplus-play" % "2.0.1",
-    "org.pegdown"               % "pegdown"             % "1.6.0",
-    "org.jsoup"                 % "jsoup"               % "1.11.3",
-    "com.typesafe.play"         %% "play-test"          % PlayVersion.current,
-    "org.mockito"               % "mockito-all"         % "1.10.19",
-    "org.scalacheck"            %% "scalacheck"         % "1.14.0"
-  ).map(_ % Test)
+    "com.github.tomakehurst"    %  "wiremock"           % "2.19.0"            % scope,
+    "uk.gov.hmrc"               %% "hmrctest"           % "3.2.0"             % scope,
+    "org.scalatest"             %% "scalatest"          % "3.0.4"             % scope,
+    "org.scalatestplus.play"    %% "scalatestplus-play" % "2.0.1"             % scope,
+    "org.pegdown"               % "pegdown"             % "1.6.0"             % scope,
+    "org.jsoup"                 % "jsoup"               % "1.11.3"            % scope,
+    "com.typesafe.play"         %% "play-test"          % PlayVersion.current % scope,
+    "org.mockito"               % "mockito-all"         % "1.10.19"           % scope,
+    "org.scalacheck"            %% "scalacheck"         % "1.14.0"            % scope
+  )
 
   def apply(): Seq[ModuleID] = compile ++ test
 }
