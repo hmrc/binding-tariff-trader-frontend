@@ -36,7 +36,8 @@ You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisati
 
 ### Testing
 
-Run `sbt test it:test`
+Run `./run_all_tests.sh`
+or `sbt test it:test`
 
 ### Changes
 
