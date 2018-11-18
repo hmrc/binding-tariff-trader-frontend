@@ -47,36 +47,35 @@ class LegalChallengeController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.get(LegalChallengePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+    val preparedForm = request.userAnswers.get(LegalChallengePage) match {
+      case Some(value) => form.fill(value)
+      case _ => form
+    }
 
-      Ok(legalChallenge(appConfig, preparedForm, mode))
+    Ok(legalChallenge(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, mode))),
-        value => {
-          val updatedAnswers = request.userAnswers.set(LegalChallengePage, value)
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, mode))),
+      value => {
+        val updatedAnswers = request.userAnswers.set(LegalChallengePage, value)
 
-          val redirectedPage = value match {
-            case Yeslegalchallenge => LegalChallengeDetailsPage
-            case Nolegalchallenge => SupportingInformationPage
-          }
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
-          )
+        val redirectedPage = value match {
+          case Yeslegalchallenge => LegalChallengeDetailsPage
+          case Nolegalchallenge => SupportingInformationPage
         }
-      )
+
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+        )
+      }
+    )
+
   }
+
 }
