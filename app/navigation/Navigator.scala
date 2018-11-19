@@ -16,48 +16,58 @@
 
 package navigation
 
-import javax.inject.{Inject, Singleton}
-
-import play.api.mvc.Call
 import controllers.routes
-import pages._
+import javax.inject.{Inject, Singleton}
 import models._
+import pages._
+import play.api.mvc.Call
 
 @Singleton
 class Navigator @Inject()() {
 
   private val routeMap: Map[Page, UserAnswers => Call] = Map(
     RegisteredAddressForEoriPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
+
     EnterContactDetailsPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
 
     SelectApplicationTypePage -> (_ => routes.SelectApplicationTypeController.onPageLoad(NormalMode)),
+
     RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(NormalMode)),
 
     InformationAboutYourItemPage -> (_ => routes.InformationAboutYourItemController.onPageLoad(NormalMode)),
+
     PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
 
     ConfidentialInformationPage -> (_ => routes.ConfidentialInformationController.onPageLoad(NormalMode)),
+
     DescribeYourItemPage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode)),
 
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
+
     CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)),
 
     CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(NormalMode)),
+
     WhenToSendSamplePage -> (_ => routes.WhenToSendSampleController.onPageLoad(NormalMode)),
 
     ReturnSamplesPage -> (_ => routes.ReturnSamplesController.onPageLoad(NormalMode)),
+
     SimilarItemCommodityCodePage -> (_ => routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode)),
 
     CommodityCodeRulingReferencePage -> (_ => routes.CommodityCodeRulingReferenceController.onPageLoad(NormalMode)),
+
     LegalChallengePage -> (_ => routes.LegalChallengeController.onPageLoad(NormalMode)),
 
     LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(NormalMode)),
+
     SupportingInformationPage -> (_ => routes.SupportingInformationController.onPageLoad(NormalMode)),
 
     SupportingInformationDetailsPage -> (_ => routes.SupportingInformationDetailsController.onPageLoad(NormalMode)),
+
     CheckYourAnswersPage -> (_ => routes.CheckYourAnswersController.onPageLoad()),
 
     DeclarationPage -> (_ => routes.DeclarationController.onPageLoad(NormalMode)),
+
     ConfirmationPage -> (_ => routes.ConfirmationController.onPageLoad())
   )
 
