@@ -16,18 +16,18 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.PreviousCommodityCodeFormProvider
+import javax.inject.Inject
 import models.Mode
-import pages.PreviousCommodityCodePage
 import navigation.Navigator
+import pages.{InformationAboutYourItemPage, PreviousCommodityCodePage}
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.previousCommodityCode
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -64,7 +64,7 @@ class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
         val updatedAnswers = request.userAnswers.set(PreviousCommodityCodePage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(PreviousCommodityCodePage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(InformationAboutYourItemPage, mode)(updatedAnswers))
         )
       }
     )
