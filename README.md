@@ -19,6 +19,7 @@ The Front-end microrservice for the BTI Application journey on GOV.UK
 4) Start Auth Login Stub `sm --start AUTH_LOGIN_STUB -f`
 5) Start Auth Login API `sm --start AUTH_LOGIN_API -f`
 6) Start User Details `sm --start USER_DETAILS -f`
+7) Start Mongo `sm --start MONGO`
 
 ##### Running With SBT
 
