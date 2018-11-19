@@ -13,7 +13,7 @@ object AppDependencies {
     "uk.gov.hmrc" %% "play-ui"                          % "7.25.0-play-25",
     "uk.gov.hmrc" %% "http-caching-client"              % "7.2.0",
     "uk.gov.hmrc" %% "play-conditional-form-mapping"    % "0.2.0",
-    "uk.gov.hmrc" %% "bootstrap-play-25"                % "3.14.0",
+    "uk.gov.hmrc" %% "bootstrap-play-25"                % "3.15.0",
     "uk.gov.hmrc" %% "play-language"                    % "3.4.0",
     "uk.gov.hmrc" %% "play-whitelist-filter"            % "2.0.0"
   )
