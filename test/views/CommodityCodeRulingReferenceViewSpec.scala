@@ -16,10 +16,10 @@
 
 package views
 
-import play.api.data.Form
 import controllers.routes
 import forms.CommodityCodeRulingReferenceFormProvider
 import models.NormalMode
+import play.api.data.Form
 import views.behaviours.StringViewBehaviours
 import views.html.commodityCodeRulingReference
 
@@ -38,6 +38,6 @@ class CommodityCodeRulingReferenceViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.CommodityCodeRulingReferenceController.onSubmit(NormalMode).url)
+    behave like textareaPage(createViewUsingForm, messageKeyPrefix, routes.CommodityCodeRulingReferenceController.onSubmit(NormalMode).url)
   }
 }

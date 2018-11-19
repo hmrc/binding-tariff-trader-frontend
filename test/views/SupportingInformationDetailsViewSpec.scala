@@ -16,10 +16,10 @@
 
 package views
 
-import play.api.data.Form
 import controllers.routes
 import forms.SupportingInformationDetailsFormProvider
 import models.NormalMode
+import play.api.data.Form
 import views.behaviours.StringViewBehaviours
 import views.html.supportingInformationDetails
 
@@ -38,6 +38,6 @@ class SupportingInformationDetailsViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.SupportingInformationDetailsController.onSubmit(NormalMode).url)
+    behave like textareaPage(createViewUsingForm, messageKeyPrefix, routes.SupportingInformationDetailsController.onSubmit(NormalMode).url)
   }
 }
