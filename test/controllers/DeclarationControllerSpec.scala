@@ -21,14 +21,14 @@ import controllers.actions._
 import mapper.CaseRequestMapper
 import models.{Case, NewCaseRequest, NormalMode, UserAnswers}
 import navigation.FakeNavigator
-import org.mockito.BDDMockito.given
 import org.mockito.Matchers._
+import org.mockito.Mockito
 import org.scalatest.mockito.MockitoSugar
 import pages.DeclarationPage
 import play.api.libs.json.JsString
 import play.api.mvc.Call
 import play.api.test.Helpers._
-import service.CasesService
+import service.{AuditService, CasesService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.declaration
@@ -37,27 +37,42 @@ import scala.concurrent.Future
 
 class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  private def onwardRoute = Call("GET", "/foo")
 
-  val casesService = mock[CasesService]
-  val mapper = mock[CaseRequestMapper]
-  val newCase = mock[NewCaseRequest]
-  val createdCase = mock[Case]
-  val testAnswer = "answer"
+  private val casesService = mock[CasesService]
+  private val mapper = mock[CaseRequestMapper]
+  private val newCase = mock[NewCaseRequest]
+  private val createdCase = mock[Case]
+  private val testAnswer = "answer"
+  private val auditService = mock[AuditService]
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  private val fieldsToExcludeFromHeaderCarrier = List("requestChain", "nsStamp")
+
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) = {
     new DeclarationController(
       frontendAppConfig,
       messagesApi,
       FakeDataCacheConnector,
+      auditService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
       casesService,
       mapper
     )
+  }
 
-  def viewAsString = declaration(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
+  private def viewAsString = declaration(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
+
+  private def reset(): Unit = {
+//    Mockito.when(mapper.map(any[UserAnswers])).thenReturn(newCase)
+//    Mockito.when(createdCase.reference).thenReturn("reference")
+
+    // /CANNOT for Unit type
+//    Mockito.when(auditService.auditBTIApplicationSubmissionFailed(any[NewCaseRequest])(any[HeaderCarrier])).thenReturn((): Unit)
+//    Mockito.when(auditService.auditBTIApplicationSubmissionFilled(any[NewCaseRequest])(any[HeaderCarrier])).thenReturn((): Unit)
+//    Mockito.when(auditService.auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier])).thenReturn((): Unit)
+  }
 
   "Declaration Controller" must {
 
@@ -78,14 +93,54 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar {
     }
 
     "return OK and the correct view for a POST" in {
-      given(mapper.map(any[UserAnswers])).willReturn(newCase)
-      given(casesService.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(createdCase))
-      given(createdCase.reference).willReturn("reference")
+      Mockito.reset(casesService, auditService)
+      Mockito.when(casesService.createCase(refEq(newCase))(any[HeaderCarrier])).thenReturn(Future.successful(createdCase))
+      reset()
 
       val result = controller().onSubmit(NormalMode)(fakeRequest)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some("/foo")
     }
+
+    "send the expected explicit audit events when the BTI application information has been submitted successfully" in {
+      Mockito.reset(casesService, auditService)
+      Mockito.when(casesService.createCase(refEq(newCase))(any[HeaderCarrier])).thenReturn(Future.successful(createdCase))
+      reset()
+
+      val req = fakeRequest
+      val validData = Map(DeclarationPage.toString -> JsString(testAnswer))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      val c = controller(getRelevantData)
+      val expectedHeaderCarrier = c.hc(req)
+
+      // TODO: mock happy path
+      c.onSubmit(NormalMode)(req)
+
+      Mockito.verify(auditService, Mockito.times(1)).auditBTIApplicationSubmissionFilled(refEq(newCase))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
+      Mockito.verify(auditService, Mockito.times(1)).auditBTIApplicationSubmissionSuccessful(refEq(createdCase))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
+      Mockito.verify(auditService, Mockito.never()).auditBTIApplicationSubmissionFailed(any[NewCaseRequest])(any[HeaderCarrier])
+    }
+
+    "send the expected explicit audit events when the BTI application failed to be submitted" in {
+      Mockito.reset(casesService, auditService)
+      Mockito.when(casesService.createCase(refEq(newCase))(any[HeaderCarrier])).thenReturn(Future.failed(new RuntimeException))
+      reset()
+
+      val req = fakeRequest
+      val validData = Map(DeclarationPage.toString -> JsString(testAnswer))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      val c = controller(getRelevantData)
+      val expectedHeaderCarrier = c.hc(req)
+
+      // TODO: mock failure
+      c.onSubmit(NormalMode)(req)
+
+      Mockito.verify(auditService, Mockito.times(1)).auditBTIApplicationSubmissionFilled(refEq(newCase))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
+      Mockito.verify(auditService, Mockito.never()).auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier])
+      Mockito.verify(auditService, Mockito.times(1)).auditBTIApplicationSubmissionFailed(refEq(newCase))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
+    }
+
   }
+
 }

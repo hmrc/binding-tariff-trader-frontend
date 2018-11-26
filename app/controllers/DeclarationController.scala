@@ -27,7 +27,7 @@ import navigation.Navigator
 import pages.ConfirmationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import service.CasesService
+import service.{AuditService, CasesService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.declaration
 
@@ -37,6 +37,7 @@ class DeclarationController @Inject()(
                                        appConfig: FrontendAppConfig,
                                        override val messagesApi: MessagesApi,
                                        dataCacheConnector: DataCacheConnector,
+                                       auditService: AuditService,
                                        navigator: Navigator,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
@@ -49,15 +50,25 @@ class DeclarationController @Inject()(
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
-    val answers: UserAnswers = request.userAnswers.get
 
-    service
-      .createCase(mapper.map(answers))
-      .map(c => answers.set(ConfirmationPage, Confirmation(c.reference)))
-      .flatMap(updatedAnswers => {
-        dataCacheConnector.save(updatedAnswers.cacheMap)
-          .map(_ => Redirect(navigator.nextPage(ConfirmationPage, mode)(updatedAnswers)))
-      })
+    val userAnswers: UserAnswers = request.userAnswers.get // TODO: we should not call `get` on an Option
+
+    val newCaseRequest: NewCaseRequest = mapper.map(userAnswers)
+    auditService.auditBTIApplicationSubmissionFilled(newCaseRequest)
+    service.createCase(newCaseRequest).map { c: Case =>
+      auditService.auditBTIApplicationSubmissionSuccessful(c)
+      userAnswers.set(ConfirmationPage, Confirmation(c.reference))
+    }.flatMap { updatedAnswers =>
+      dataCacheConnector.save(updatedAnswers.cacheMap).map { _ =>
+        Redirect(navigator.nextPage(ConfirmationPage, mode)(updatedAnswers))
+      }
+    }
+    // TODO: call `handleFailingSubmission` properly
   }
+
+//  private def handleFailingSubmission(newCaseRequest: NewCaseRequest)(implicit hc: HeaderCarrier) = {
+//    case _: Throwable =>
+//      auditService.auditBTIApplicationSubmissionFailed(newCaseRequest)
+//  }
 
 }
