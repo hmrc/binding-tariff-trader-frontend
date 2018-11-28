@@ -28,10 +28,12 @@ import pages.ConfirmationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import service.{AuditService, CasesService}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.declaration
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class DeclarationController @Inject()(
                                        appConfig: FrontendAppConfig,
@@ -54,23 +56,31 @@ class DeclarationController @Inject()(
     val userAnswers: UserAnswers = request.userAnswers.get // TODO: we should not call `get` on an Option
 
     val newCaseRequest: NewCaseRequest = mapper.map(userAnswers)
-
     auditService.auditBTIApplicationSubmissionFilled(newCaseRequest)
 
-    service.createCase(newCaseRequest).map { c: Case =>
-      auditService.auditBTIApplicationSubmissionSuccessful(c)
-      userAnswers.set(ConfirmationPage, Confirmation(c.reference))
-    }.flatMap { updatedAnswers =>
-      dataCacheConnector.save(updatedAnswers.cacheMap).map { _ =>
-        Redirect(navigator.nextPage(ConfirmationPage, mode)(updatedAnswers))
+    service.createCase(newCaseRequest)
+      .map(Some(_))
+      .recover(handleFailingSubmission(newCaseRequest))
+      .flatMap {
+        case Some(c: Case) =>
+          auditService.auditBTIApplicationSubmissionSuccessful(c)
+          userAnswers.set(ConfirmationPage, Confirmation(c.reference))
+
+          dataCacheConnector.save(userAnswers.cacheMap) map ( _ => redirect(mode, userAnswers) )
+        case _ =>
+          Future.successful(redirect(mode, userAnswers))
       }
-    }
-    // TODO: call `handleFailingSubmission` properly
   }
 
-//  private def handleFailingSubmission(newCaseRequest: NewCaseRequest)(implicit hc: HeaderCarrier) = {
-//    case _: Throwable =>
-//      auditService.auditBTIApplicationSubmissionFailed(newCaseRequest)
-//  }
+  private def redirect(mode: Mode, userAnswers: UserAnswers) = {
+    Redirect(navigator.nextPage(ConfirmationPage, mode)(userAnswers))
+  }
+
+  private def handleFailingSubmission(newCaseRequest: NewCaseRequest)
+                                     (implicit hc: HeaderCarrier): PartialFunction[Throwable, Option[Case]] = {
+    case _: Throwable =>
+      auditService.auditBTIApplicationSubmissionFailed(newCaseRequest)
+      None
+  }
 
 }
