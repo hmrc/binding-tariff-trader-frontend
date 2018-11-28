@@ -54,10 +54,8 @@ class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
 
 object AuditPayloadType {
 
-  val BTIAttachmentS3Uploaded = "BTIAttachmentS3Uploaded"
-  val BTIAttachmentS3Deleted = "BTIAttachmentS3Deleted"
-  val BTIApplicationSubmissionFilled = "BTIApplicationSubmissionFilled"
-  val BTIApplicationSubmissionSuccessful = "BTIApplicationSubmissionSuccessful"
-  val BTIApplicationSubmissionFailed = "BTIApplicationSubmissionFailed"
+  val BTIApplicationSubmissionFilled = "BindingTariffApplication"
+  val BTIApplicationSubmissionSuccessful = "BindingTariffApplicationSubmissionSuccessful"
+  val BTIApplicationSubmissionFailed = "BindingTariffApplicationSubmissionFailed"
 
 }

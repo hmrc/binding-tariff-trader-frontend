@@ -54,7 +54,9 @@ class DeclarationController @Inject()(
     val userAnswers: UserAnswers = request.userAnswers.get // TODO: we should not call `get` on an Option
 
     val newCaseRequest: NewCaseRequest = mapper.map(userAnswers)
+
     auditService.auditBTIApplicationSubmissionFilled(newCaseRequest)
+
     service.createCase(newCaseRequest).map { c: Case =>
       auditService.auditBTIApplicationSubmissionSuccessful(c)
       userAnswers.set(ConfirmationPage, Confirmation(c.reference))
