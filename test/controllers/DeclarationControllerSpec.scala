@@ -132,7 +132,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
       val caught = intercept[error.type] {
         await(c.onSubmit(NormalMode)(req))
       }
-      caught shouldBe error
+      caught mustBe error
 
       verify(auditService, never).auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier])
       verify(auditService, times(1)).auditBTIApplicationSubmission(refEq(newCaseReq))(refEq(expectedHeaderCarrier, fieldsToBeExcludedWhenComparingHeaderCarriers: _*))
