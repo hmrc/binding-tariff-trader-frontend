@@ -22,7 +22,7 @@ import mapper.CaseRequestMapper
 import models.{Case, NewCaseRequest, NormalMode, UserAnswers}
 import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers.{any, refEq}
-import org.mockito.Mockito.{doNothing, never, reset, times, verify, verifyNoMoreInteractions, verifyZeroInteractions, when}
+import org.mockito.Mockito.{never, reset, times, verify, verifyNoMoreInteractions, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
 import pages.DeclarationPage
@@ -48,7 +48,6 @@ class DeclarationControllerSpec extends ControllerSpecBase
   private val createdCase = mock[Case]
   private val auditService = mock[AuditService]
   private val casesService = mock[CasesService]
-//  private val userAnswers = mock[UserAnswers]
 
   private val fieldsToExcludeFromHeaderCarrier = List("requestChain", "nsStamp")
 
@@ -84,16 +83,12 @@ class DeclarationControllerSpec extends ControllerSpecBase
 
     when(createdCase.reference).thenReturn("reference")
     when(mapper.map(any[UserAnswers])).thenReturn(newCaseReq)
-
-//    doNothing().when(auditService.auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier]))
-//    doNothing().when(auditService.auditBTIApplicationSubmissionFilled(any[NewCaseRequest])(any[HeaderCarrier]))
-//    doNothing().when(auditService.auditBTIApplicationSubmissionFailed(any[NewCaseRequest])(any[HeaderCarrier]))
   }
 
   override def afterEach(): Unit = {
     super.afterEach()
 
-    reset(casesService, auditService, mapper, newCaseReq, createdCase)
+    reset(casesService, auditService)
   }
 
   private def viewAsString = {
@@ -125,7 +120,7 @@ class DeclarationControllerSpec extends ControllerSpecBase
       redirectLocation(result) mustBe Some("/foo")
     }
 
-    "send the expected explicit audit events when the BTI application information has been submitted successfully" in {
+    "send the expected explicit audit events when the BTI application has been submitted successfully" in {
       stubSuccessfulCaseCreation()
 
       val c = controller(extractDataFromCache)
@@ -139,9 +134,9 @@ class DeclarationControllerSpec extends ControllerSpecBase
       verify(auditService, times(1)).auditBTIApplicationSubmissionSuccessful(refEq(createdCase))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
 
       verifyNoMoreInteractions(auditService)
-      verifyZeroInteractions(auditService)
     }
 
+    // TODO: it runs individually, but not together with the other tests
     "send the expected explicit audit events when the BTI application failed to be submitted" in {
       stubFailingCaseCreation()
 
@@ -156,7 +151,6 @@ class DeclarationControllerSpec extends ControllerSpecBase
       verify(auditService, times(1)).auditBTIApplicationSubmissionFailed(refEq(newCaseReq))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
 
       verifyNoMoreInteractions(auditService)
-      verifyZeroInteractions(auditService)
     }
 
   }
