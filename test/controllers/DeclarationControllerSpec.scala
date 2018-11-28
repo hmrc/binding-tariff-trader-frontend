@@ -58,7 +58,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
 
   private implicit val mat: Materializer = app.materializer
 
-  private lazy val error = new IllegalStateException()
+  private lazy val error = new IllegalStateException("expected error")
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -129,9 +129,10 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
       val req = fakeRequest
       val expectedHeaderCarrier = c.hc(req)
 
-      intercept[error.type] {
+      val caught = intercept[error.type] {
         await(c.onSubmit(NormalMode)(req))
       }
+      caught shouldBe error
 
       verify(auditService, never).auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier])
       verify(auditService, times(1)).auditBTIApplicationSubmission(refEq(newCaseReq))(refEq(expectedHeaderCarrier, fieldsToBeExcludedWhenComparingHeaderCarriers: _*))
