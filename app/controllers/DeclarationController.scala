@@ -56,7 +56,7 @@ class DeclarationController @Inject()(
     val userAnswers: UserAnswers = request.userAnswers.get // TODO: we should not call `get` on an Option
 
     val newCaseRequest: NewCaseRequest = mapper.map(userAnswers)
-    auditService.auditBTIApplicationSubmissionFilled(newCaseRequest)
+    auditService.auditBTIApplicationSubmission(newCaseRequest)
 
     service.createCase(newCaseRequest)
       .map(Some(_))

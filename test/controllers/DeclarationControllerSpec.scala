@@ -130,7 +130,7 @@ class DeclarationControllerSpec extends ControllerSpecBase
       c.onSubmit(NormalMode)(req)
 
       verify(auditService, never()).auditBTIApplicationSubmissionFailed(any[NewCaseRequest])(any[HeaderCarrier])
-      verify(auditService, times(1)).auditBTIApplicationSubmissionFilled(refEq(newCaseReq))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
+      verify(auditService, times(1)).auditBTIApplicationSubmission(refEq(newCaseReq))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
       verify(auditService, times(1)).auditBTIApplicationSubmissionSuccessful(refEq(createdCase))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
 
       verifyNoMoreInteractions(auditService)
@@ -147,7 +147,7 @@ class DeclarationControllerSpec extends ControllerSpecBase
       c.onSubmit(NormalMode)(req)
 
       verify(auditService, never()).auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier])
-      verify(auditService, times(1)).auditBTIApplicationSubmissionFilled(refEq(newCaseReq))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
+      verify(auditService, times(1)).auditBTIApplicationSubmission(refEq(newCaseReq))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
       verify(auditService, times(1)).auditBTIApplicationSubmissionFailed(refEq(newCaseReq))(refEq(expectedHeaderCarrier, fieldsToExcludeFromHeaderCarrier: _*))
 
       verifyNoMoreInteractions(auditService)

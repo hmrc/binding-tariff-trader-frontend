@@ -28,19 +28,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 @Singleton
 class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
 
-  // TBC: do we need explicit audit events when files are added or deleted from the S3 buckets?
-
-  // TODO: to be called from the appropriate controller, when the trader/agent finished filling the information, just before he/she presses the submit BTI application button
-  def auditBTIApplicationSubmissionFilled(req: NewCaseRequest)(implicit hc: HeaderCarrier): Unit = {
-    sendExplicitAuditEvent(AuditPayloadType.BTIApplicationSubmissionFilled, Json.toJson(req))
+  def auditBTIApplicationSubmission(req: NewCaseRequest)(implicit hc: HeaderCarrier): Unit = {
+    sendExplicitAuditEvent(AuditPayloadType.BTIApplicationSubmission, Json.toJson(req))
   }
 
-  // TODO: to be called from the appropriate controller, when the trader/agent successfully submitted their BTI application
   def auditBTIApplicationSubmissionSuccessful(c: Case)(implicit hc: HeaderCarrier): Unit = {
     sendExplicitAuditEvent(AuditPayloadType.BTIApplicationSubmissionSuccessful, Json.toJson(c))
   }
 
-  // TODO: to be called from the appropriate controller, when there is any error after the trader/agent tried to submit the BTI application
   def auditBTIApplicationSubmissionFailed(req: NewCaseRequest)(implicit hc: HeaderCarrier): Unit = {
     sendExplicitAuditEvent(AuditPayloadType.BTIApplicationSubmissionFailed, Json.toJson(req))
   }
@@ -54,7 +49,7 @@ class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
 
 object AuditPayloadType {
 
-  val BTIApplicationSubmissionFilled = "BindingTariffApplication"
+  val BTIApplicationSubmission = "BindingTariffApplication"
   val BTIApplicationSubmissionSuccessful = "BindingTariffApplicationSubmissionSuccessful"
   val BTIApplicationSubmissionFailed = "BindingTariffApplicationSubmissionFailed"
 
