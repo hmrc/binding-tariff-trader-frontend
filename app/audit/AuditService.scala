@@ -14,30 +14,36 @@
  * limitations under the License.
  */
 
-package service
+package audit
 
 import javax.inject.{Inject, Singleton}
+import audit.AuditPayloadType._
+import audit.model.CaseRequestAuditPayload
 import models.{Case, NewCaseRequest}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json.toJson
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
-import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
+import utils.JsonFormatters.{caseFormat, newCaseRequestAuditPayload}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
 
-  def auditBTIApplicationSubmission(req: NewCaseRequest)(implicit hc: HeaderCarrier): Unit = {
-    sendExplicitAuditEvent(AuditPayloadType.BTIApplicationSubmission, Json.toJson(req))
+  def auditBTIApplicationSubmission(req: NewCaseRequest)
+                                   (implicit hc: HeaderCarrier): Unit = {
+    sendExplicitAuditEvent(auditEventType = BTIApplicationSubmission, toJson(CaseRequestAuditPayload(req)))
   }
 
-  def auditBTIApplicationSubmissionSuccessful(c: Case)(implicit hc: HeaderCarrier): Unit = {
-    sendExplicitAuditEvent(AuditPayloadType.BTIApplicationSubmissionSuccessful, Json.toJson(c))
+  def auditBTIApplicationSubmissionFailed(req: NewCaseRequest, error: String)
+                                         (implicit hc: HeaderCarrier): Unit = {
+    sendExplicitAuditEvent(BTIApplicationSubmissionFailed, toJson(CaseRequestAuditPayload(req, Some(error))))
   }
 
-  def auditBTIApplicationSubmissionFailed(req: NewCaseRequest)(implicit hc: HeaderCarrier): Unit = {
-    sendExplicitAuditEvent(AuditPayloadType.BTIApplicationSubmissionFailed, Json.toJson(req))
+  def auditBTIApplicationSubmissionSuccessful(c: Case)
+                                             (implicit hc: HeaderCarrier): Unit = {
+    sendExplicitAuditEvent(BTIApplicationSubmissionSuccessful, toJson(c))
   }
 
   private def sendExplicitAuditEvent(auditEventType: String, auditPayload: JsValue)
@@ -52,5 +58,4 @@ object AuditPayloadType {
   val BTIApplicationSubmission = "BindingTariffApplication"
   val BTIApplicationSubmissionSuccessful = "BindingTariffApplicationSubmissionSuccessful"
   val BTIApplicationSubmissionFailed = "BindingTariffApplicationSubmissionFailed"
-
 }
