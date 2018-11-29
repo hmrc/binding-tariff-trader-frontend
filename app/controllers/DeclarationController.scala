@@ -16,6 +16,7 @@
 
 package controllers
 
+import audit.AuditService
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
@@ -27,7 +28,7 @@ import navigation.Navigator
 import pages.ConfirmationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import service.{AuditService, CasesService}
+import service.CasesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.declaration
 
@@ -55,7 +56,7 @@ class DeclarationController @Inject()(
 
     def createCase(newCaseRequest: NewCaseRequest): Future[Case] = {
       service.createCase(newCaseRequest).recover { case e: Throwable =>
-        auditService.auditBTIApplicationSubmissionFailed(newCaseRequest)
+        auditService.auditBTIApplicationSubmissionFailed(newCaseRequest, e.getMessage)
         throw e
       }
     }

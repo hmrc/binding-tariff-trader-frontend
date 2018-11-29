@@ -16,17 +16,19 @@
 
 package utils
 
+import audit.model.CaseRequestAuditPayload
 import models._
 import play.api.libs.json._
 
 object JsonFormatters {
 
-  implicit val caseStatusFormat = EnumJson.format(CaseStatus)
-  implicit val contactFormat = Json.format[Contact]
-  implicit val eoriDetailsFormat = Json.format[EORIDetails]
-  implicit val applicationFormat = Json.format[Application]
-  implicit val caseFormat = Json.format[Case]
-  implicit val newCaseRequestFormat = Json.format[NewCaseRequest]
+  implicit val caseStatusFormat: Format[CaseStatus.Value] = EnumJson.format(CaseStatus)
+  implicit val contactFormat: OFormat[Contact] = Json.format[Contact]
+  implicit val eoriDetailsFormat: OFormat[EORIDetails] = Json.format[EORIDetails]
+  implicit val applicationFormat: OFormat[Application] = Json.format[Application]
+  implicit val caseFormat: OFormat[Case] = Json.format[Case]
+  implicit val newCaseRequestFormat: OFormat[NewCaseRequest] = Json.format[NewCaseRequest]
+  implicit val newCaseRequestAuditPayload: OFormat[CaseRequestAuditPayload] = Json.format[CaseRequestAuditPayload]
 }
 
 object EnumJson {

@@ -20,12 +20,13 @@ import java.nio.charset.Charset
 
 import akka.stream.Materializer
 import akka.util.ByteString
+import audit.AuditService
 import connectors.FakeDataCacheConnector
 import controllers.actions._
 import mapper.CaseRequestMapper
 import models.{Case, NewCaseRequest, NormalMode, UserAnswers}
 import navigation.FakeNavigator
-import org.mockito.ArgumentMatchers.{any, refEq}
+import org.mockito.ArgumentMatchers.{any, anyString, refEq}
 import org.mockito.Mockito.{never, reset, times, verify, verifyNoMoreInteractions, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
@@ -35,7 +36,7 @@ import play.api.http.Status
 import play.api.libs.json.JsString
 import play.api.mvc.Call
 import play.api.test.Helpers._
-import service.{AuditService, CasesService}
+import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.declaration
@@ -117,7 +118,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
 
       verify(auditService, times(1)).auditBTIApplicationSubmission(refEq(newCaseReq))(refEq(expectedHeaderCarrier, fieldsToBeExcludedWhenComparingHeaderCarriers: _*))
       verify(auditService, times(1)).auditBTIApplicationSubmissionSuccessful(refEq(createdCase))(refEq(expectedHeaderCarrier, fieldsToBeExcludedWhenComparingHeaderCarriers: _*))
-      verify(auditService, never).auditBTIApplicationSubmissionFailed(any[NewCaseRequest])(any[HeaderCarrier])
+      verify(auditService, never).auditBTIApplicationSubmissionFailed(any[NewCaseRequest], anyString)(any[HeaderCarrier])
 
       verifyNoMoreInteractions(auditService)
     }
@@ -134,9 +135,9 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
       }
       caught mustBe error
 
-      verify(auditService, never).auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier])
       verify(auditService, times(1)).auditBTIApplicationSubmission(refEq(newCaseReq))(refEq(expectedHeaderCarrier, fieldsToBeExcludedWhenComparingHeaderCarriers: _*))
-      verify(auditService, times(1)).auditBTIApplicationSubmissionFailed(refEq(newCaseReq))(refEq(expectedHeaderCarrier, fieldsToBeExcludedWhenComparingHeaderCarriers: _*))
+      verify(auditService, times(1)).auditBTIApplicationSubmissionFailed(refEq(newCaseReq), refEq(error.getMessage))(refEq(expectedHeaderCarrier, fieldsToBeExcludedWhenComparingHeaderCarriers: _*))
+      verify(auditService, never).auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier])
 
       verifyNoMoreInteractions(auditService)
     }
