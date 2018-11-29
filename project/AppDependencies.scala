@@ -31,5 +31,5 @@ object AppDependencies {
     "uk.gov.hmrc"               %% "hmrctest"           % "3.2.0"             % scope
   )
 
-  def apply(): Seq[ModuleID] = compile ++ test
+  def apply(): Seq[ModuleID] = (compile ++ test).map(_ withSources())
 }
