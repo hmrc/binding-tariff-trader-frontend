@@ -55,7 +55,7 @@ class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
 
 object AuditPayloadType {
 
-  val BTIApplicationSubmission = "BindingTariffApplication"
+  val BTIApplicationSubmission           = "BindingTariffApplication"
   val BTIApplicationSubmissionSuccessful = "BindingTariffApplicationSubmissionSuccessful"
-  val BTIApplicationSubmissionFailed = "BindingTariffApplicationSubmissionFailed"
+  val BTIApplicationSubmissionFailed     = "BindingTariffApplicationSubmissionFailed"
 }
