@@ -27,12 +27,12 @@ class EnterContactDetailsFormProvider @Inject() extends Mappings {
 
    def apply(): Form[EnterContactDetails] = Form(
      mapping(
-      "field1" -> text("enterContactDetails.error.field1.required")
-        .verifying(maxLength(100, "enterContactDetails.error.field1.length")),
-      "field2" -> text("enterContactDetails.error.field2.required")
-        .verifying(maxLength(100, "enterContactDetails.error.field2.length")),
-      "field3" -> text("enterContactDetails.error.field3.required")
-        .verifying(maxLength(100, "enterContactDetails.error.field3.length"))
+       "field1" -> text("enterContactDetails.error.field1.required")
+         .verifying(maxLength(100, "enterContactDetails.error.field1.length")),
+       "field2" -> text("enterContactDetails.error.field2.required")
+         .verifying(maxLength(100, "enterContactDetails.error.field2.length")),
+       "field3" -> optional(text("enterContactDetails.error.field3.required"))
+         .verifying(optionalMaxLength(20, "enterContactDetails.error.field3.length"))
      )(EnterContactDetails.apply)(EnterContactDetails.unapply)
    )
 

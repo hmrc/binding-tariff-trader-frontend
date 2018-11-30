@@ -31,16 +31,19 @@ import views.html.enterContactDetails
 
 class EnterContactDetailsControllerSpec extends ControllerSpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
+  private def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new EnterContactDetailsFormProvider()
-  val form = formProvider()
+  private val formProvider = new EnterContactDetailsFormProvider()
+  private val form = formProvider()
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): EnterContactDetailsController = {
     new EnterContactDetailsController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
       dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+  }
 
-  def viewAsString(form: Form[_] = form) = enterContactDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  private def viewAsString(form: Form[_] = form): String = {
+    enterContactDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  }
 
   "EnterContactDetails Controller" must {
 
@@ -52,12 +55,13 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase {
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(EnterContactDetailsPage.toString -> Json.toJson(EnterContactDetails("value 1", "value 2", "value 3")))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      List(Some("value 3"), None).foreach { phoneNumber: Option[String] =>
+        val validData = Map(EnterContactDetailsPage.toString -> Json.toJson(EnterContactDetails("value 1", "value 2", phoneNumber)))
+        val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
-
-      contentAsString(result) mustBe viewAsString(form.fill(EnterContactDetails("value 1", "value 2", "value 3")))
+        val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+        contentAsString(result) mustBe viewAsString(form.fill(EnterContactDetails("value 1", "value 2", phoneNumber)))
+      }
     }
 
     "redirect to the next page when valid data is submitted" in {
@@ -93,5 +97,7 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase {
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
+
   }
+
 }
