@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package service
+package models
 
-import connectors.BindingTariffClassificationConnector
-import javax.inject.{Inject, Singleton}
-import models.{Case, NewCaseRequest}
-import uk.gov.hmrc.http.HeaderCarrier
+import java.time.ZonedDateTime
 
-import scala.concurrent.Future
+import play.api.libs.json.{Json, OFormat}
 
-@Singleton
-class CasesService @Inject()(connector: BindingTariffClassificationConnector){
+case class Attachment
+(
+  application: Boolean = true,
+  public: Boolean = false,
+  url: String,
+  mimeType: String,
+  timestamp: ZonedDateTime = ZonedDateTime.now()
+)
 
-  def create(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
-    connector.createCase(c)
-  }
-
+object Attachment {
+  implicit val format: OFormat[Attachment] = Json.format[Attachment]
 }

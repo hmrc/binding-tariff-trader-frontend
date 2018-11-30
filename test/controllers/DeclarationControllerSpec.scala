@@ -27,14 +27,13 @@ import mapper.CaseRequestMapper
 import models.{Case, NewCaseRequest, NormalMode, UserAnswers}
 import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers.{any, anyString, refEq}
-import org.mockito.Mockito.{never, reset, times, verify, verifyNoMoreInteractions, when}
+import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
-import play.api.mvc.Result
 import pages.DeclarationPage
 import play.api.http.Status
 import play.api.libs.json.JsString
-import play.api.mvc.Call
+import play.api.mvc.{Call, Result}
 import play.api.test.Helpers._
 import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -75,11 +74,11 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
   }
 
   private def stubSuccessfulCaseCreation(): Unit = {
-    when(casesService.createCase(refEq(newCaseReq))(any[HeaderCarrier])).thenReturn(successful(createdCase))
+    when(casesService.create(refEq(newCaseReq))(any[HeaderCarrier])).thenReturn(successful(createdCase))
   }
 
   private def stubFailingCaseCreation(): Unit = {
-    when(casesService.createCase(refEq(newCaseReq))(any[HeaderCarrier])).thenReturn(failed(error))
+    when(casesService.create(refEq(newCaseReq))(any[HeaderCarrier])).thenReturn(failed(error))
   }
 
   "Declaration Controller" must {

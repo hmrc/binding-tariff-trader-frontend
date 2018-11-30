@@ -18,7 +18,7 @@ package service
 
 import connectors.BindingTariffFilestoreConnector
 import javax.inject.{Inject, Singleton}
-import models.FileAttachment
+import models._
 import models.response.FilestoreResponse
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
@@ -38,12 +38,26 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
     connector.get(file).map(toFileAttachment(file.size))
   }
 
-  def publish(file: FileAttachment)(implicit headerCarrier: HeaderCarrier): Future[FileAttachment] = {
-    connector.publish(file).map(toFileAttachment(file.size))
+  def publish(file: FileAttachment)(implicit headerCarrier: HeaderCarrier): Future[SubmittedFileAttachment] = {
+    connector.get(file).flatMap { r =>
+      r.scanStatus match {
+        case Some(ScanStatus.READY) => connector.publish(file).map(toPublishedAttachment(file.size))
+        case Some(ScanStatus.FAILED) =>  Future.successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Quarantined"))
+        case _ => Future.successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Unscanned"))
+      }
+    }
+  }
+
+  def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[SubmittedFileAttachment]] = {
+    Future.sequence(files.map(publish(_)))
   }
 
   private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
-    r => FileAttachment(r.id, r.fileName, size)
+    r => FileAttachment(r.id, r.fileName, r.mimeType, size)
+  }
+
+  private def toPublishedAttachment(size: Long): FilestoreResponse => SubmittedFileAttachment = {
+    r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size, r.url.get)
   }
 
 }

@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package service
+package models
 
-import connectors.BindingTariffClassificationConnector
-import javax.inject.{Inject, Singleton}
-import models.{Case, NewCaseRequest}
-import uk.gov.hmrc.http.HeaderCarrier
+import utils.EnumJson
 
-import scala.concurrent.Future
+object ScanStatus extends Enumeration {
+  type ScanStatus = Value
+  val READY, FAILED = Value
 
-@Singleton
-class CasesService @Inject()(connector: BindingTariffClassificationConnector){
-
-  def create(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
-    connector.createCase(c)
-  }
-
+  implicit val format = EnumJson.format(ScanStatus)
 }

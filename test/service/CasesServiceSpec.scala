@@ -39,7 +39,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
     "delegate to connector" in {
       given(connector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
 
-      await(service.createCase(newCase)(HeaderCarrier())) shouldBe existingCase
+      await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
     }
 
     "propagate any error" in {
@@ -47,7 +47,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
       given(connector.createCase(any[NewCaseRequest])(any[HeaderCarrier])).willThrow(exception)
 
       val caught = intercept[RuntimeException] {
-        await(service.createCase(newCase)(HeaderCarrier()))
+        await(service.create(newCase)(HeaderCarrier()))
       }
       caught shouldBe exception
     }

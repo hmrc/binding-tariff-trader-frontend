@@ -25,10 +25,12 @@ import mapper.CaseRequestMapper
 import models.Confirmation.format
 import models._
 import navigation.Navigator
-import pages.ConfirmationPage
+import pages.{ConfirmationPage, UploadSupportingMaterialMultiplePage}
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import service.CasesService
+import service.{CasesService, FileService}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.declaration
 
@@ -44,7 +46,8 @@ class DeclarationController @Inject()(
                                        navigator: Navigator,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
-                                       service: CasesService,
+                                       caseService: CasesService,
+                                       fileService: FileService,
                                        mapper: CaseRequestMapper
                                      ) extends FrontendController with I18nSupport {
 
@@ -54,19 +57,19 @@ class DeclarationController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
-    def createCase(newCaseRequest: NewCaseRequest): Future[Case] = {
-      service.createCase(newCaseRequest).recover { case e: Throwable =>
-        auditService.auditBTIApplicationSubmissionFailed(newCaseRequest, e.getMessage)
-        throw e
-      }
-    }
+
 
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
     val newCaseRequest = mapper.map(answers)
     auditService.auditBTIApplicationSubmission(newCaseRequest)
 
+    val attachments: Seq[FileAttachment] = answers
+      .get(UploadSupportingMaterialMultiplePage)
+      .getOrElse(Seq.empty)
+
     for {
-      c: Case <- createCase(newCaseRequest)
+      att: Seq[SubmittedFileAttachment] <- fileService.publish(attachments)
+      c: Case <- createCase(newCaseRequest, att)
       _ = auditService.auditBTIApplicationSubmissionSuccessful(c)
       userAnswers = answers.set(ConfirmationPage, Confirmation(c.reference))
       _ <- dataCacheConnector.save(userAnswers.cacheMap)
@@ -75,4 +78,22 @@ class DeclarationController @Inject()(
 
   }
 
+  private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Case] = {
+    attachments
+      .filter(_.isInstanceOf[UnpublishedFileAttachment])
+      .map(_.asInstanceOf[UnpublishedFileAttachment])
+      .foreach(file => Logger.error(s"File could not be published [${file.reason}]. It will be lost."))
+
+    val published: Seq[Attachment] = attachments
+      .filter(_.isInstanceOf[PublishedFileAttachment])
+      .map(_.asInstanceOf[PublishedFileAttachment])
+      .map(f => Attachment(url = f.url, mimeType = f.mimeType))
+
+    val request = newCaseRequest.copy(attachments = published)
+
+    caseService.create(request).recover { case e: Throwable =>
+      auditService.auditBTIApplicationSubmissionFailed(newCaseRequest, e.getMessage)
+      throw e
+    }
+  }
 }
