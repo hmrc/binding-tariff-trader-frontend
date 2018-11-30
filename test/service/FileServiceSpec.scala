@@ -25,7 +25,7 @@ class FileServiceSpec extends UnitSpec with MockitoSugar {
     "Delegate to connector" in {
       given(connector.upload(refEq(fileUploading))(any[HeaderCarrier])).willReturn(Future.successful(fileUploaded))
 
-      await(service.uploadFile(fileUploading)) shouldBe fileUploaded
+      await(service.upload(fileUploading)) shouldBe fileUploaded
     }
   }
 

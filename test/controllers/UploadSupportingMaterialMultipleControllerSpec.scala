@@ -20,26 +20,35 @@ import connectors.FakeDataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models.NormalMode
+import models.response.UploadFileResponse
 import navigation.FakeNavigator
+import org.mockito.ArgumentMatchers._
+import org.mockito.BDDMockito.given
+import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
 import pages.UploadSupportingMaterialMultiplePage
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
-import play.api.libs.json.JsString
+import play.api.libs.json.JsArray
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc.{Call, MultipartFormData}
 import play.api.test.Helpers._
 import service.FileService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.uploadSupportingMaterialMultiple
 
-class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with MockitoSugar {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val fileService = mock[FileService]
-  val formProvider = new UploadSupportingMaterialMultipleFormProvider()
-  val form = formProvider()
+  private val fileService = mock[FileService]
+  private val formProvider = new UploadSupportingMaterialMultipleFormProvider()
+  private val form = formProvider()
+  private implicit val headers: HeaderCarrier = HeaderCarrier()
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new UploadSupportingMaterialMultipleController(
@@ -58,6 +67,11 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
   val testAnswer = "answer"
 
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(fileService)
+  }
+
   "UploadSupportingMaterialMultiple Controller" must {
 
     "return OK and the correct view for a GET" in {
@@ -68,7 +82,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(UploadSupportingMaterialMultiplePage.toString -> JsString(testAnswer))
+      val validData = Map(UploadSupportingMaterialMultiplePage.toString -> JsArray())
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
@@ -77,14 +91,34 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
 
     "redirect to the next page when valid data is submitted" in {
+      // Given A Form
       val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"), ref = TemporaryFile("example-file.txt"))
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
+      given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(concurrent.Future(UploadFileResponse("id", "file-name", "type")))
+
+      // When
       val result = controller().onSubmit(NormalMode)(postRequest)
 
+      // Then
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(onwardRoute.url)
+    }
+
+    "redirect to the next page when no data is submitted" in {
+      // Given A Form
+      val filePart = FilePart[TemporaryFile](key = "file", "", contentType = Some("application/octet-stream"), ref = TemporaryFile())
+      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
+      val postRequest = fakeRequest.withBody(form)
+
+      // When
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      // Then
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(onwardRoute.url)
+      verifyZeroInteractions(fileService)
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
