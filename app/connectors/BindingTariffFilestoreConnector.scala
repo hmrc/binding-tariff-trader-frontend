@@ -22,7 +22,6 @@ import akka.util.ByteString
 import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
 import models.response.UploadFileResponse
-import play.api.http.HeaderNames.CONTENT_TYPE
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
@@ -38,10 +37,6 @@ class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig
 
   def upload(file: MultipartFormData.FilePart[TemporaryFile])
             (implicit hc: HeaderCarrier): Future[UploadFileResponse] = {
-
-
-    val h: Seq[(String, String)] = Seq((CONTENT_TYPE, "multipart/form-data"))
-
     val url = s"${configuration.bindingTariffFileStoreUrl}/binding-tariff-filestore/file"
 
     val filePart: MultipartFormData.Part[Source[ByteString, Future[IOResult]]] = FilePart(

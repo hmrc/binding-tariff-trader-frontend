@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.Json
 
-case class FileAttachment(id: String, name: String)
+case class FileAttachment(id: String, name: String, size: Long)
 
 object FileAttachment {
   implicit val format = Json.format[FileAttachment]

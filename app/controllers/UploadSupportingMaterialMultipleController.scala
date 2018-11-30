@@ -67,7 +67,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
       Future
         .sequence(
-          files.map(fileService.uploadFile(_).map(r => FileAttachment(r.id, r.fileName)))
+          files.map(f => fileService.uploadFile(f).map(r => FileAttachment(r.id, r.fileName, f.ref.file.getTotalSpace)))
         )
         .flatMap {
           case savedFiles: Seq[FileAttachment] if savedFiles.nonEmpty =>
