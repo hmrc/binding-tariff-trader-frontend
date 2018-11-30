@@ -24,6 +24,7 @@ import pages._
 class CaseRequestMapper {
 
   def map(answers: UserAnswers): NewCaseRequest = {
+
     val confidentialInfo: Option[ConfidentialInformation] = answers.get(ConfidentialInformationPage)
     val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
     val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
@@ -59,11 +60,11 @@ class CaseRequestMapper {
 
   def toHolder: RegisteredAddressForEori => EORIDetails = { details =>
     EORIDetails(
-      "",//TODO Hard Coded
+      "", // TODO: Hard Coded
       details.field1,
       details.field2,
       details.field3,
-      "",//TODO Missing From Model
+      "", // TODO: Missing From model
       details.field4,
       details.field5
     )
