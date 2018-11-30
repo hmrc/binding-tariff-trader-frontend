@@ -39,27 +39,28 @@
         @components.heading("uploadSupportingMaterialMultiple.heading")
 
 
-        <p class="bold">You can upload:</p>
-
-        <ul class="list list-bullet">
-            <li>up to 10 MB</li>
-            <li>maimum individual file size of 10MB</li>
-            @*<li>@messages("describeYourItem.listItem3")</li>*@
-
+        <p>@messages("uploadSupportingMaterialMultiple.upload.title")</p>
+        <ul class="bullets">
+            <li>@messages("uploadSupportingMaterialMultiple.upload.restrictionFiles")</li>
+            <li>@messages("uploadSupportingMaterialMultiple.upload.restrictionSize")</li>
         </ul>
+        <details id="upload--restrictions" class="">
+            <summary role="button" aria-expanded="false"> @messages("uploadSupportingMaterialMultiple.upload.typeOfFiles.title") </summary>
+            <div class="indent" id="details-content-1">
+                <ul class="list list-bullet">
+                    <li>pdf</li>
+                    <li>doc</li>
+                    <li>docx</li>
+                    <li>xlsx</li>
+                    <li>xls</li>
+                    <li>pneg</li>
+                    <li>jpeg</li>
+                    <li>txt</li>
+                </ul>
 
-         <p class="bold">What file type can I upload?</p>
-
-        <ul class="list list-bullet">
-            <li>.pdf</li>
-            <li>.doc</li>
-            <li>.docx</li>
-            <li>.xlsx</li>
-            <li>.xls</li>
-            <li>.pneg</li>
-            <li>.jpeg</li>
-            <li>.txt</li>
-        </ul>
+            </div>
+        </details>
+        <br>
 
         @components.input_file(
             field = form("multiple-file-input"),
@@ -68,13 +69,11 @@
             multiple = true
         )
 
-
         <div id="list-of-files-table" class="draganddroptable"></div>
 
         <br>
 
         <script>
-
 
             uploadFileNameSpace = ( function() {
 
