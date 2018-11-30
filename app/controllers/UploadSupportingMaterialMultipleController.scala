@@ -22,7 +22,6 @@ import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import javax.inject.Inject
 import models.FileAttachment.format
-import models.response.UploadFileResponse
 import models.{FileAttachment, Mode}
 import navigation.Navigator
 import pages.{CommodityCodeBestMatchPage, UploadSupportingMaterialMultiplePage}
@@ -66,12 +65,9 @@ class UploadSupportingMaterialMultipleController @Inject()(
       val files: Seq[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.files.filter(!_.filename.isEmpty)
 
       Future
-        .sequence(files.map(fileService.uploadFile(_)))
-        .map { responses: Seq[UploadFileResponse] =>
-          responses.map { r: UploadFileResponse =>
-            FileAttachment(r.id, r.fileName)
-          }
-        }
+        .sequence(
+          files.map(fileService.uploadFile(_).map(r => FileAttachment(r.id, r.fileName)))
+        )
         .flatMap { savedFiles: Seq[FileAttachment] =>
           val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
           val updatedFiles = existingFiles ++ savedFiles
