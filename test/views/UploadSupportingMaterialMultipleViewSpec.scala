@@ -20,24 +20,31 @@ import controllers.routes
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models.NormalMode
 import play.api.data.Form
-import views.behaviours.StringViewBehaviours
+import play.twirl.api.HtmlFormat
+import views.behaviours.FileUploadViewBehaviours
 import views.html.uploadSupportingMaterialMultiple
 
-class UploadSupportingMaterialMultipleViewSpec extends StringViewBehaviours {
+class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours {
 
   val messageKeyPrefix = "uploadSupportingMaterialMultiple"
 
   val form = new UploadSupportingMaterialMultipleFormProvider()()
 
-  def createView = () => uploadSupportingMaterialMultiple(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable = () => uploadSupportingMaterialMultiple(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) => uploadSupportingMaterialMultiple(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
+    (form: Form[String]) => uploadSupportingMaterialMultiple(
+      frontendAppConfig,
+      form,
+      Seq.empty,
+      NormalMode
+    )(fakeRequest, messages)
 
   "UploadSupportingMaterialMultiple view" must {
     behave like normalPage(createView, messageKeyPrefix)
 
     behave like pageWithBackLink(createView)
 
-    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.UploadSupportingMaterialMultipleController.onSubmit(NormalMode).url)
+    behave like multipleFileUploadPage(createViewUsingForm, messageKeyPrefix, routes.UploadSupportingMaterialMultipleController.onSubmit(NormalMode).url)
   }
 }

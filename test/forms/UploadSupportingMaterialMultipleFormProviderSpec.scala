@@ -17,7 +17,6 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
 
 class UploadSupportingMaterialMultipleFormProviderSpec extends StringFieldBehaviours {
 
@@ -27,27 +26,28 @@ class UploadSupportingMaterialMultipleFormProviderSpec extends StringFieldBehavi
 
   val form = new UploadSupportingMaterialMultipleFormProvider()()
 
-  ".value" must {
-
-    val fieldName = "value"
-
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
+  // TODO - Add Form Tests once we decide which fields need to be within it.
+  //  ".value" must {
+  //
+  //    val fieldName = "value"
+  //
+  //    behave like fieldThatBindsValidData(
+  //      form,
+  //      fieldName,
+  //      stringsWithMaxLength(maxLength)
+  //    )
+  //
+  //    behave like fieldWithMaxLength(
+  //      form,
+  //      fieldName,
+  //      maxLength = maxLength,
+  //      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+  //    )
+  //
+  //    behave like mandatoryField(
+  //      form,
+  //      fieldName,
+  //      requiredError = FormError(fieldName, requiredKey)
+  //    )
+  //  }
 }
