@@ -16,12 +16,14 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
+import connectors.DataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
-import models.NormalMode
+import models.FileAttachment.format
 import models.response.UploadFileResponse
+import models.{FileAttachment, NormalMode}
 import navigation.FakeNavigator
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
@@ -30,7 +32,7 @@ import org.scalatest.mockito.MockitoSugar
 import pages.UploadSupportingMaterialMultiplePage
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
-import play.api.libs.json.JsArray
+import play.api.libs.json.Json
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc.{Call, MultipartFormData}
 import play.api.test.Helpers._
@@ -40,12 +42,14 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
   private val fileService = mock[FileService]
+  private val cacheConnector = mock[DataCacheConnector]
   private val formProvider = new UploadSupportingMaterialMultipleFormProvider()
   private val form = formProvider()
   private implicit val headers: HeaderCarrier = HeaderCarrier()
@@ -54,7 +58,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     new UploadSupportingMaterialMultipleController(
       frontendAppConfig,
       messagesApi,
-      FakeDataCacheConnector,
+      cacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
@@ -63,9 +67,12 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       fileService
     )
 
-  def viewAsString(form: Form[_] = form) = uploadSupportingMaterialMultiple(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages).toString
-
-  val testAnswer = "answer"
+  private def viewAsString(form: Form[_] = form, existingFiles: Seq[FileAttachment] = Seq.empty): String = uploadSupportingMaterialMultiple(
+    frontendAppConfig,
+    form,
+    existingFiles,
+    NormalMode
+  )(fakeRequest, messages).toString
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -82,21 +89,27 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(UploadSupportingMaterialMultiplePage.toString -> JsArray())
+      val files = Seq(FileAttachment("id", "file-name", 1L))
+
+      val validData = Map(UploadSupportingMaterialMultiplePage.toString -> Json.toJson(files))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(testAnswer))
+      contentAsString(result) mustBe viewAsString(form, files)
     }
 
     "redirect to the next page when valid data is submitted" in {
       // Given A Form
-      val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"), ref = TemporaryFile("example-file.txt"))
+      val file = TemporaryFile("example-file.txt")
+      val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"), ref = file)
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
       given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(concurrent.Future(UploadFileResponse("id", "file-name", "type")))
+
+      val savedCacheMap = mock[CacheMap]
+      given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
 
       // When
       val result = controller().onSubmit(NormalMode)(postRequest)
@@ -104,6 +117,9 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       // Then
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(onwardRoute.url)
+
+      val cache = theCacheSaved
+      cache.getEntry[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage) mustBe Some(Seq(FileAttachment("id", "file-name", file.file.length())))
     }
 
     "redirect to the next page when no data is submitted" in {
@@ -137,5 +153,11 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
+  }
+
+  private def theCacheSaved: CacheMap = {
+    val captor = ArgumentCaptor.forClass(classOf[CacheMap])
+    verify(cacheConnector).save(captor.capture())
+    captor.getValue
   }
 }
