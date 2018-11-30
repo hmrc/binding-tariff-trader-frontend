@@ -18,18 +18,32 @@ package service
 
 import connectors.BindingTariffFilestoreConnector
 import javax.inject.{Inject, Singleton}
+import models.FileAttachment
 import models.response.FilestoreResponse
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import uk.gov.hmrc.http.HeaderCarrier
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
 class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
 
-  def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
-    connector.upload(f)
+  def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
+    connector.upload(f).map(toFileAttachment(f.ref.file.length))
+  }
+
+  def refresh(file: FileAttachment)(implicit headerCarrier: HeaderCarrier): Future[FileAttachment] = {
+    connector.get(file).map(toFileAttachment(file.size))
+  }
+
+  def publish(file: FileAttachment)(implicit headerCarrier: HeaderCarrier): Future[FileAttachment] = {
+    connector.publish(file).map(toFileAttachment(file.size))
+  }
+
+  private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
+    r => FileAttachment(r.id, r.fileName, size)
   }
 
 }

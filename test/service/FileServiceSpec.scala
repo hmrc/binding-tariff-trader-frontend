@@ -17,6 +17,7 @@
 package service
 
 import connectors.BindingTariffFilestoreConnector
+import models.FileAttachment
 import models.response.FilestoreResponse
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
@@ -34,14 +35,39 @@ class FileServiceSpec extends UnitSpec with MockitoSugar {
   private val service = new FileService(connector)
   private implicit val headers: HeaderCarrier = HeaderCarrier()
 
-  "Service" should {
-    val fileUploading = mock[MultipartFormData.FilePart[TemporaryFile]]
-    val fileUploaded = mock[FilestoreResponse]
+  "Upload" should {
+    val fileUploading = MultipartFormData.FilePart[TemporaryFile]("key", "filename", Some("type"), TemporaryFile())
+    val connectorResponse = FilestoreResponse("id", "filename-updated", "type")
+    val fileUploaded = FileAttachment("id", "filename-updated", 0)
 
     "Delegate to connector" in {
-      given(connector.upload(refEq(fileUploading))(any[HeaderCarrier])).willReturn(Future.successful(fileUploaded))
+      given(connector.upload(refEq(fileUploading))(any[HeaderCarrier])).willReturn(Future.successful(connectorResponse))
 
       await(service.upload(fileUploading)) shouldBe fileUploaded
+    }
+  }
+
+  "Refresh" should {
+    val outdatedFile = FileAttachment("id", "filename", 0)
+    val connectorResponse = FilestoreResponse("id", "filename-updated", "type")
+    val fileUpdated = FileAttachment("id", "filename-updated", 0)
+
+    "Delegate to connector" in {
+      given(connector.get(refEq(outdatedFile))(any[HeaderCarrier])).willReturn(Future.successful(connectorResponse))
+
+      await(service.refresh(outdatedFile)) shouldBe fileUpdated
+    }
+  }
+
+  "Publish" should {
+    val filePublishing = FileAttachment("id", "filename", 0)
+    val connectorResponse = FilestoreResponse("id", "filename-updated", "type")
+    val filePublished = FileAttachment("id", "filename-updated", 0)
+
+    "Delegate to connector" in {
+      given(connector.publish(refEq(filePublishing))(any[HeaderCarrier])).willReturn(Future.successful(connectorResponse))
+
+      await(service.publish(filePublishing)) shouldBe filePublished
     }
   }
 

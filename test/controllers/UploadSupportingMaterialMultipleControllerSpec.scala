@@ -20,7 +20,6 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models.FileAttachment.format
-import models.response.FilestoreResponse
 import models.{FileAttachment, NormalMode}
 import navigation.FakeNavigator
 import org.mockito.ArgumentCaptor
@@ -106,7 +105,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
-      given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(concurrent.Future(FilestoreResponse("id", "file-name", "type")))
+      given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(concurrent.Future(FileAttachment("id", "file-name", 0)))
 
       val savedCacheMap = mock[CacheMap]
       given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
