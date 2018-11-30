@@ -35,6 +35,7 @@ import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.Future.successful
 
 class UploadSupportingMaterialMultipleController @Inject()(
                                                             appConfig: FrontendAppConfig,
@@ -69,10 +70,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
           files.map(fileService.uploadFile(_).map(r => FileAttachment(r.id, r.fileName)))
         )
         .flatMap {
-          case s: Seq[FileAttachment] if s.isEmpty =>
-            Future.successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers)))
-
-          case savedFiles: Seq[FileAttachment] =>
+          case savedFiles: Seq[FileAttachment] if savedFiles.nonEmpty =>
             val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
             val updatedFiles = existingFiles ++ savedFiles
             val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
@@ -81,6 +79,8 @@ class UploadSupportingMaterialMultipleController @Inject()(
                 _ =>
                   Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers))
               )
+
+          case _ => successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers)))
         }
   }
 }
