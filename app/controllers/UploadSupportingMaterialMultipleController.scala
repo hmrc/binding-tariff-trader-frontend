@@ -68,14 +68,19 @@ class UploadSupportingMaterialMultipleController @Inject()(
         .sequence(
           files.map(fileService.uploadFile(_).map(r => FileAttachment(r.id, r.fileName)))
         )
-        .flatMap { savedFiles: Seq[FileAttachment] =>
-          val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
-          val updatedFiles = existingFiles ++ savedFiles
-          val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers))
-          )
+        .flatMap {
+          case s: Seq[FileAttachment] if s.isEmpty =>
+            Future.successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers)))
+
+          case savedFiles: Seq[FileAttachment] =>
+            val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
+            val updatedFiles = existingFiles ++ savedFiles
+            val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
+            dataCacheConnector.save(updatedAnswers.cacheMap)
+              .map(
+                _ =>
+                  Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers))
+              )
         }
   }
 }
