@@ -16,10 +16,10 @@
 
 package forms
 
-import forms.behaviours.StringFieldBehaviours
+import forms.behaviours.{EmailFieldBehaviours, StringFieldBehaviours}
 import play.api.data.FormError
 
-class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours {
+class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with EmailFieldBehaviours {
 
   val form = new EnterContactDetailsFormProvider()()
 
@@ -63,7 +63,7 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(maxLength)
     )
 
-    behave like fieldWithMaxLength(
+    behave like emailFieldWithMaxLength(
       form,
       fieldName,
       maxLength = maxLength,

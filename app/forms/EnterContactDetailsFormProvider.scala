@@ -22,6 +22,7 @@ import forms.mappings.Mappings
 import play.api.data.Form
 import play.api.data.Forms._
 import models.EnterContactDetails
+import play.api.data.validation.Constraints
 
 class EnterContactDetailsFormProvider @Inject() extends Mappings {
 
@@ -30,6 +31,7 @@ class EnterContactDetailsFormProvider @Inject() extends Mappings {
        "field1" -> text("enterContactDetails.error.field1.required")
          .verifying(maxLength(100, "enterContactDetails.error.field1.length")),
        "field2" -> text("enterContactDetails.error.field2.required")
+         .verifying(Constraints.emailAddress)
          .verifying(maxLength(100, "enterContactDetails.error.field2.length")),
        "field3" -> optional(text("enterContactDetails.error.field3.required"))
          .verifying(optionalMaxLength(20, "enterContactDetails.error.field3.length"))

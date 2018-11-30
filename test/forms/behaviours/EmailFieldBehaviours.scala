@@ -16,21 +16,29 @@
 
 package forms.behaviours
 
+import forms.FormSpec
+import generators.EmailAddressGenerators
+import org.scalatest.prop.PropertyChecks
 import play.api.data.{Form, FormError}
 
-trait StringFieldBehaviours extends FieldBehaviours {
+trait EmailFieldBehaviours extends FormSpec with PropertyChecks with EmailAddressGenerators {
 
-    def fieldWithMaxLength(form: Form[_],
-                           fieldName: String,
-                           maxLength: Int,
-                           lengthError: FormError): Unit = {
+  protected def emailFieldWithMaxLength(form: Form[_],
+                                        fieldName: String,
+                                        maxLength: Int,
+                                        lengthError: FormError): Unit = {
 
-    s"not bind strings longer than $maxLength characters" in {
+    s"not bind email addresses longer than $maxLength characters" in {
 
-      forAll(stringsLongerThan(maxLength) -> "longString") { str: String =>
+      forAll(validEmailAddressesLongerThan(maxLength) -> "longEmail") { str: String =>
         val result = form.bind(Map(fieldName -> str)).apply(fieldName)
         result.errors shouldEqual Seq(lengthError)
       }
+
+    }
+
+    "not bind email addresses without `.` and `@` characters" in {
+      // TODO
     }
 
   }

@@ -65,7 +65,7 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("field1", "value 1"), ("field2", "value 2"), ("field3", "value 3"))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("field1", "value 1"), ("field2", "value2@me.com"), ("field3", "value 3"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
