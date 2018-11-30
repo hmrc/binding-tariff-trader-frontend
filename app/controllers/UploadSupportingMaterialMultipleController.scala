@@ -16,61 +16,101 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.UploadSupportingMaterialMultipleFormProvider
-import models.Mode
-import pages.{CommodityCodeBestMatchPage, UploadSupportingMaterialMultiplePage}
+import javax.inject.Inject
+import models.response.UploadFileResponse
+import models.{FileToSave, Mode, UserAnswers}
 import navigation.Navigator
-import play.api.mvc.{Action, AnyContent}
+import pages.{CommodityCodeBestMatchPage, UploadSupportingMaterialMultiplePage}
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.Files
+import play.api.libs.json.Json
+import play.api.mvc.{Action, AnyContent, MultipartFormData}
+import service.FileService
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class UploadSupportingMaterialMultipleController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: UploadSupportingMaterialMultipleFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                                            appConfig: FrontendAppConfig,
+                                                            override val messagesApi: MessagesApi,
+                                                            dataCacheConnector: DataCacheConnector,
+                                                            navigator: Navigator,
+                                                            identify: IdentifierAction,
+                                                            getData: DataRetrievalAction,
+                                                            requireData: DataRequiredAction,
+                                                            formProvider: UploadSupportingMaterialMultipleFormProvider,
+                                                            fileService: FileService
+                                                          ) extends FrontendController with I18nSupport {
 
   val form = formProvider()
+
+  implicit val fileTosaveFormatter = Json.format[FileToSave]
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(UploadSupportingMaterialMultiplePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+//      val preparedForm = request.userAnswers.get(UploadSupportingMaterialMultiplePage) match {
+//        case None => form
+//        case Some(value) => form.fill(value)
+//      }
+//
+    //  Ok(uploadSupportingMaterialMultiple(appConfig, preparedForm, mode))
 
-      Ok(uploadSupportingMaterialMultiple(appConfig, preparedForm, mode))
+      Ok(uploadSupportingMaterialMultiple(appConfig, form, mode))
   }
+
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(uploadSupportingMaterialMultiple(appConfig, formWithErrors, mode))),
-        value => {
-          val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, value)
+      val multiPartFiles: Seq[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.asMultipartFormData.get.files
 
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers))
-          )
+      val filesToPersist: Future[Seq[FileToSave]] = Future.sequence(multiPartFiles.map { f =>
+        fileService.uploadFile(f)
+      }).map { responses: Seq[UploadFileResponse] =>
+        responses.map { r: UploadFileResponse =>
+          FileToSave(r.id, r.fileName)
         }
+      }
+
+      Future.sequence(filesToPersist).map{
+
+
+      }
+
+
+      // Validation doesnt work
+      // Future.successful(BadRequest(uploadSupportingMaterialMultiple(appConfig, formWithErrors, mode)))
+
+
+      //      val results = for ( saved <- filesToPersist) yield saved
+
+       val futures = filesToPersist.map { r: Seq[FileToSave] =>
+        val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
+        val updatedFiles = existingFiles :+ r
+
+//        //request.userAnswers.set(UploadSupportingMaterialMultiplePage, r)
+//
+//        request.userAnswers.set(UploadSupportingMaterialMultiplePage, r)
+      }
+
+//      request.userAnswers.set(UploadSupportingMaterialMultiplePage, r)
+
+
+
+      val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, Seq(FileToSave("Nothing","Yet")))
+
+      dataCacheConnector.save(updatedAnswers.cacheMap).map(
+        _ =>
+          Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers))
       )
+
+
   }
 }

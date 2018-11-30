@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package models.response
 
-import models.FileToSave
+import play.api.libs.json.{Json, OFormat}
 
-case object UploadSupportingMaterialMultiplePage extends QuestionPage[Seq[FileToSave]] {
+case class UploadFileResponse
+(
+  id: String ,
+  fileName: String,
+  mimeType: String,
+  url: Option[String] = None,
+  scanStatus: Option[String] = None
+)
 
-  override def toString: String = "uploadSupportingMaterialMultiple"
+object UploadFileResponse {
+  implicit val format: OFormat[UploadFileResponse] = Json.format[UploadFileResponse]
 }

@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import models.FileToSave
+case class FileToSave(id: String, name: String)
 
-case object UploadSupportingMaterialMultiplePage extends QuestionPage[Seq[FileToSave]] {
-
-  override def toString: String = "uploadSupportingMaterialMultiple"
-}

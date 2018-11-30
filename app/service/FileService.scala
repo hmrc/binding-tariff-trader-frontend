@@ -14,11 +14,22 @@
  * limitations under the License.
  */
 
-package pages
+package service
 
-import models.FileToSave
+import connectors.BindingTariffFilestoreConnector
+import javax.inject.{Inject, Singleton}
+import models.response.UploadFileResponse
+import play.api.libs.Files.TemporaryFile
+import play.api.mvc.MultipartFormData
+import uk.gov.hmrc.http.HeaderCarrier
 
-case object UploadSupportingMaterialMultiplePage extends QuestionPage[Seq[FileToSave]] {
+import scala.concurrent.Future
 
-  override def toString: String = "uploadSupportingMaterialMultiple"
+@Singleton
+class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
+
+  def uploadFile(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[UploadFileResponse] = {
+    connector.uploadFile(f)
+  }
+
 }
