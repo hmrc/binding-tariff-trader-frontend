@@ -16,6 +16,7 @@
 
 package controllers
 
+import audit.AuditService
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
@@ -32,11 +33,14 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.declaration
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.concurrent.Future.successful
 
 class DeclarationController @Inject()(
                                        appConfig: FrontendAppConfig,
                                        override val messagesApi: MessagesApi,
                                        dataCacheConnector: DataCacheConnector,
+                                       auditService: AuditService,
                                        navigator: Navigator,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
@@ -49,15 +53,26 @@ class DeclarationController @Inject()(
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
-    val answers: UserAnswers = request.userAnswers.get
 
-    service
-      .createCase(mapper.map(answers))
-      .map(c => answers.set(ConfirmationPage, Confirmation(c.reference)))
-      .flatMap(updatedAnswers => {
-        dataCacheConnector.save(updatedAnswers.cacheMap)
-          .map(_ => Redirect(navigator.nextPage(ConfirmationPage, mode)(updatedAnswers)))
-      })
+    def createCase(newCaseRequest: NewCaseRequest): Future[Case] = {
+      service.createCase(newCaseRequest).recover { case e: Throwable =>
+        auditService.auditBTIApplicationSubmissionFailed(newCaseRequest, e.getMessage)
+        throw e
+      }
+    }
+
+    val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
+    val newCaseRequest = mapper.map(answers)
+    auditService.auditBTIApplicationSubmission(newCaseRequest)
+
+    for {
+      c: Case <- createCase(newCaseRequest)
+      _ = auditService.auditBTIApplicationSubmissionSuccessful(c)
+      userAnswers = answers.set(ConfirmationPage, Confirmation(c.reference))
+      _ <- dataCacheConnector.save(userAnswers.cacheMap)
+      res <- successful( Redirect(navigator.nextPage(ConfirmationPage, mode)(userAnswers)) )
+    } yield res
+
   }
 
 }
