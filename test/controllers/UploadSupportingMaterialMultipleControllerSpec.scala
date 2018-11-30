@@ -16,31 +16,45 @@
 
 package controllers
 
-import play.api.data.Form
-import play.api.libs.json.JsString
-import uk.gov.hmrc.http.cache.client.CacheMap
-import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import play.api.test.Helpers._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models.NormalMode
+import navigation.FakeNavigator
+import org.scalatest.mockito.MockitoSugar
 import pages.UploadSupportingMaterialMultiplePage
-import play.api.mvc.Call
+import play.api.data.Form
+import play.api.libs.Files.TemporaryFile
+import play.api.libs.json.JsString
+import play.api.mvc.MultipartFormData.FilePart
+import play.api.mvc.{Call, MultipartFormData}
+import play.api.test.Helpers._
+import service.FileService
+import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.uploadSupportingMaterialMultiple
 
-class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase {
+class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
+  val fileService = mock[FileService]
   val formProvider = new UploadSupportingMaterialMultipleFormProvider()
   val form = formProvider()
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new UploadSupportingMaterialMultipleController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+    new UploadSupportingMaterialMultipleController(
+      frontendAppConfig,
+      messagesApi,
+      FakeDataCacheConnector,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl,
+      formProvider,
+      fileService
+    )
 
-  def viewAsString(form: Form[_] = form) = uploadSupportingMaterialMultiple(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = uploadSupportingMaterialMultiple(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages).toString
 
   val testAnswer = "answer"
 
@@ -63,22 +77,14 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"), ref = TemporaryFile("example-file.txt"))
+      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
+      val postRequest = fakeRequest.withBody(form)
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(onwardRoute.url)
-    }
-
-    "return a Bad Request and errors when invalid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", ""))
-      val boundForm = form.bind(Map("value" -> ""))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) mustBe BAD_REQUEST
-      contentAsString(result) mustBe viewAsString(boundForm)
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -89,7 +95,9 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"), ref = TemporaryFile("example-file.txt"))
+      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
+      val postRequest = fakeRequest.withBody(form)
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER

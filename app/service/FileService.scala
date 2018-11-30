@@ -29,7 +29,7 @@ import scala.concurrent.Future
 class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
 
   def uploadFile(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[UploadFileResponse] = {
-    connector.uploadFile(f)
+    connector.upload(f)
   }
 
 }

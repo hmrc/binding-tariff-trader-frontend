@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package connectors
 
-import models.FileAttachment
-import pages.behaviours.PageBehaviours
+import scala.io.Source
 
+trait ResourceFiles {
 
-class UploadSupportingMaterialMultiplePageSpec extends PageBehaviours {
-
-  "UploadSupportingMaterialMultiplePage" must {
-
-    beRetrievable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beSettable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beRemovable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
+  def fromFile(path: String): String = {
+    Source.fromFile(path).getLines().mkString
   }
+
 }

@@ -45,7 +45,7 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
-    given(configuration.bindingTariffClassificationUrl).willReturn(getUrl)
+    given(configuration.bindingTariffClassificationUrl).willReturn(wireMockUrl)
   }
 
   "Connector 'Create Case'" should {

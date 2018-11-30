@@ -24,21 +24,20 @@ import javax.inject.{Inject, Singleton}
 import models.response.UploadFileResponse
 import play.api.http.HeaderNames.CONTENT_TYPE
 import play.api.libs.Files.TemporaryFile
-import play.api.libs.json.{JsResult, Json}
-import play.api.libs.ws.{WSClient, WSResponse}
+import play.api.libs.json.Json
+import play.api.libs.ws.WSClient
 import play.api.mvc.MultipartFormData
-import play.api.mvc.MultipartFormData.{DataPart, FilePart}
+import play.api.mvc.MultipartFormData.FilePart
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig, client: HttpClient, ws: WSClient) {
+class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig, ws: WSClient) {
 
-  def uploadFile(file: MultipartFormData.FilePart[TemporaryFile])
-                (implicit hc: HeaderCarrier): Future[UploadFileResponse] = {
+  def upload(file: MultipartFormData.FilePart[TemporaryFile])
+            (implicit hc: HeaderCarrier): Future[UploadFileResponse] = {
 
 
     val h: Seq[(String, String)] = Seq((CONTENT_TYPE, "multipart/form-data"))

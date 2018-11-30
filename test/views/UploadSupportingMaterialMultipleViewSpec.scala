@@ -16,10 +16,10 @@
 
 package views
 
-import play.api.data.Form
 import controllers.routes
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models.NormalMode
+import play.api.data.Form
 import views.behaviours.StringViewBehaviours
 import views.html.uploadSupportingMaterialMultiple
 
@@ -29,9 +29,9 @@ class UploadSupportingMaterialMultipleViewSpec extends StringViewBehaviours {
 
   val form = new UploadSupportingMaterialMultipleFormProvider()()
 
-  def createView = () => uploadSupportingMaterialMultiple(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => uploadSupportingMaterialMultiple(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) => uploadSupportingMaterialMultiple(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[String]) => uploadSupportingMaterialMultiple(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages)
 
   "UploadSupportingMaterialMultiple view" must {
     behave like normalPage(createView, messageKeyPrefix)
