@@ -80,7 +80,7 @@ class BindingTariffFilestoreConnectorSpec
           )
       )
 
-      await(connector.get(FileAttachment("id", "name", 0))) shouldBe FilestoreResponse(
+      await(connector.get(FileAttachment("id", "name", "type", 0))) shouldBe FilestoreResponse(
         id = "id",
         fileName = "file-name.txt",
         mimeType = "text/plain"
@@ -97,7 +97,7 @@ class BindingTariffFilestoreConnectorSpec
           )
       )
 
-      await(connector.get(FileAttachment("id", "name", 0))) shouldBe FilestoreResponse(
+      await(connector.get(FileAttachment("id", "name", "type", 0))) shouldBe FilestoreResponse(
         id = "id",
         fileName = "file-name.txt",
         mimeType = "text/plain"

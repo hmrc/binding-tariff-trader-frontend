@@ -56,9 +56,6 @@ class DeclarationController @Inject()(
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
-
-
-
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
     val newCaseRequest = mapper.map(answers)
     auditService.auditBTIApplicationSubmission(newCaseRequest)

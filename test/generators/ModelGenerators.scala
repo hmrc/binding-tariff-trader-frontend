@@ -65,8 +65,9 @@ trait ModelGenerators {
       for {
         id <- arbitrary[String]
         name <- arbitrary[String]
+        mimeType <- arbitrary[String]
         size <- arbitrary[Long]
-      } yield Seq(FileAttachment(id, name, size))
+      } yield Seq(FileAttachment(id, name, mimeType, size))
     }
 
   implicit lazy val arbitraryDescribeYourItem: Arbitrary[DescribeYourItem] =

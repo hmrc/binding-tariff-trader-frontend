@@ -88,7 +88,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val files = Seq(FileAttachment("id", "file-name", 1L))
+      val files = Seq(FileAttachment("id", "file-name", "type", 1L))
 
       val validData = Map(UploadSupportingMaterialMultiplePage.toString -> Json.toJson(files))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
@@ -105,7 +105,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
-      given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(concurrent.Future(FileAttachment("id", "file-name", 0)))
+      given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(concurrent.Future(FileAttachment("id", "file-name", "type", 0)))
 
       val savedCacheMap = mock[CacheMap]
       given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
@@ -118,7 +118,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       redirectLocation(result) mustBe Some(onwardRoute.url)
 
       val cache = theCacheSaved
-      cache.getEntry[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage) mustBe Some(Seq(FileAttachment("id", "file-name", file.file.length())))
+      cache.getEntry[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage) mustBe Some(Seq(FileAttachment("id", "file-name", "type", file.file.length())))
     }
 
     "redirect to the next page when no data is submitted" in {
