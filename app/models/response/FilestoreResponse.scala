@@ -18,7 +18,7 @@ package models.response
 
 import play.api.libs.json.{Json, OFormat}
 
-case class UploadFileResponse
+case class FilestoreResponse
 (
   id: String ,
   fileName: String,
@@ -27,6 +27,6 @@ case class UploadFileResponse
   scanStatus: Option[String] = None
 )
 
-object UploadFileResponse {
-  implicit val format: OFormat[UploadFileResponse] = Json.format[UploadFileResponse]
+object FilestoreResponse {
+  implicit val format: OFormat[FilestoreResponse] = Json.format[FilestoreResponse]
 }

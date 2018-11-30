@@ -17,7 +17,7 @@
 package service
 
 import connectors.BindingTariffFilestoreConnector
-import models.response.UploadFileResponse
+import models.response.FilestoreResponse
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
@@ -36,7 +36,7 @@ class FileServiceSpec extends UnitSpec with MockitoSugar {
 
   "Service" should {
     val fileUploading = mock[MultipartFormData.FilePart[TemporaryFile]]
-    val fileUploaded = mock[UploadFileResponse]
+    val fileUploaded = mock[FilestoreResponse]
 
     "Delegate to connector" in {
       given(connector.upload(refEq(fileUploading))(any[HeaderCarrier])).willReturn(Future.successful(fileUploaded))

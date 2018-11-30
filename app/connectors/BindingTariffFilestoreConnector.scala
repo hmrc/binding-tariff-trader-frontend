@@ -21,23 +21,26 @@ import akka.stream.scaladsl.{FileIO, Source}
 import akka.util.ByteString
 import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
-import models.response.UploadFileResponse
+import models.FileAttachment
+import models.response.FilestoreResponse
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig, ws: WSClient) {
+class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig, ws: WSClient, http: HttpClient) {
+
+  lazy val filestoreAPIRoot = s"${configuration.bindingTariffFileStoreUrl}/binding-tariff-filestore"
 
   def upload(file: MultipartFormData.FilePart[TemporaryFile])
-            (implicit hc: HeaderCarrier): Future[UploadFileResponse] = {
-    val url = s"${configuration.bindingTariffFileStoreUrl}/binding-tariff-filestore/file"
+  (implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
 
     val filePart: MultipartFormData.Part[Source[ByteString, Future[IOResult]]] = FilePart(
       "file",
@@ -46,9 +49,17 @@ class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig
       FileIO.fromPath(file.ref.file.toPath)
     )
 
-    ws.url(url).post(Source(List(filePart)))
-      .map(response => Json.fromJson[UploadFileResponse](Json.parse(response.body)).get)
+    ws.url(s"$filestoreAPIRoot/file").post(Source(List(filePart)))
+      .map(response => Json.fromJson[FilestoreResponse](Json.parse(response.body)).get)
 
+  }
+
+  def get(file: FileAttachment)(implicit headers: HeaderCarrier): Future[FilestoreResponse] = {
+    http.GET[FilestoreResponse](s"$filestoreAPIRoot/file/${file.id}")
+  }
+
+  def publish(file: FileAttachment)(implicit headers: HeaderCarrier): Future[FilestoreResponse] = {
+    http.POSTEmpty[FilestoreResponse](s"$filestoreAPIRoot/file/${file.id}/publish")
   }
 
 }
