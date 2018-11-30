@@ -21,13 +21,14 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import javax.inject.Inject
+import models.FileAttachment.format
 import models.response.UploadFileResponse
-import models.{FileToSave, Mode, UserAnswers}
+import models.{FileAttachment, Mode}
 import navigation.Navigator
 import pages.{CommodityCodeBestMatchPage, UploadSupportingMaterialMultiplePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.Files
-import play.api.libs.json.Json
+import play.api.libs.Files.TemporaryFile
 import play.api.mvc.{Action, AnyContent, MultipartFormData}
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -50,67 +51,35 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
   val form = formProvider()
 
-  implicit val fileTosaveFormatter = Json.format[FileToSave]
-
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-//      val preparedForm = request.userAnswers.get(UploadSupportingMaterialMultiplePage) match {
-//        case None => form
-//        case Some(value) => form.fill(value)
-//      }
-//
-    //  Ok(uploadSupportingMaterialMultiple(appConfig, preparedForm, mode))
+      val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
 
-      Ok(uploadSupportingMaterialMultiple(appConfig, form, mode))
+      Ok(uploadSupportingMaterialMultiple(appConfig, form, existingFiles, mode))
   }
 
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData).async(parse.multipartFormData) {
     implicit request =>
 
-      val multiPartFiles: Seq[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.asMultipartFormData.get.files
+      val files: Seq[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.files.filter(!_.filename.isEmpty)
 
-      val filesToPersist: Future[Seq[FileToSave]] = Future.sequence(multiPartFiles.map { f =>
-        fileService.uploadFile(f)
-      }).map { responses: Seq[UploadFileResponse] =>
-        responses.map { r: UploadFileResponse =>
-          FileToSave(r.id, r.fileName)
+      Future
+        .sequence(files.map(fileService.uploadFile(_)))
+        .map { responses: Seq[UploadFileResponse] =>
+          responses.map { r: UploadFileResponse =>
+            FileAttachment(r.id, r.fileName)
+          }
         }
-      }
-
-      Future.sequence(filesToPersist).map{
-
-
-      }
-
-
-      // Validation doesnt work
-      // Future.successful(BadRequest(uploadSupportingMaterialMultiple(appConfig, formWithErrors, mode)))
-
-
-      //      val results = for ( saved <- filesToPersist) yield saved
-
-       val futures = filesToPersist.map { r: Seq[FileToSave] =>
-        val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
-        val updatedFiles = existingFiles :+ r
-
-//        //request.userAnswers.set(UploadSupportingMaterialMultiplePage, r)
-//
-//        request.userAnswers.set(UploadSupportingMaterialMultiplePage, r)
-      }
-
-//      request.userAnswers.set(UploadSupportingMaterialMultiplePage, r)
-
-
-
-      val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, Seq(FileToSave("Nothing","Yet")))
-
-      dataCacheConnector.save(updatedAnswers.cacheMap).map(
-        _ =>
-          Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers))
-      )
-
-
+        .flatMap { savedFiles: Seq[FileAttachment] =>
+          val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
+          val updatedFiles = existingFiles ++ savedFiles
+          val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
+          dataCacheConnector.save(updatedAnswers.cacheMap).map(
+            _ =>
+              Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers))
+          )
+        }
   }
 }

@@ -16,5 +16,12 @@
 
 package models
 
-case class FileToSave(id: String, name: String)
+import play.api.libs.json.Json
+
+case class FileAttachment(id: String, name: String)
+
+object FileAttachment {
+  implicit val format = Json.format[FileAttachment]
+}
+
 

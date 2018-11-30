@@ -17,14 +17,11 @@
 package utils
 
 import controllers.routes
-import models.{CheckMode, FileToSave, UserAnswers}
+import models.{CheckMode, UserAnswers}
 import pages._
-import play.api.libs.json.Json
 import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
-
-  implicit val fileTosaveFormatter = Json.format[FileToSave]
 
   def supportingInformationDetails: Option[AnswerRow] = userAnswers.get(SupportingInformationDetailsPage) map {
     x => AnswerRow("supportingInformationDetails.checkYourAnswersLabel", s"$x", false, routes.SupportingInformationDetailsController.onPageLoad(CheckMode).url)
