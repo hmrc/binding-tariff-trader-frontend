@@ -21,7 +21,6 @@
   box-sizing: border-box;
 }
 
-
 .file-list__name {
   width: 70%;
 }
@@ -35,8 +34,20 @@
   width: 15%;
 }
 
+.file-list__file-error {
+  border: 3px solid #df3034;
+}
 
-
+.file-list__file-error .file-list__status {
+  padding-top: 0.5em;
+  color: #df3034;
+  float: left;
+  text-align: left;
+  width: 80%;
+}
+.file-list__file-error div {
+  display: inline-block;
+}
 details summary {
   display: inline-block;
   color: #005ea5;
@@ -44,7 +55,6 @@ details summary {
   position: relative;
   margin-bottom: .2631578947em;
 }
-
 
 .indent {
   font-family: "nta",Arial,sans-serif;
