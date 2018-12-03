@@ -154,10 +154,10 @@ uploadSupportingMaterialMultiple.title = Upload photographs, manuals, brochures 
 uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, brochures and other supporting material
 uploadSupportingMaterialMultiple.label = Choose documents
 uploadSupportingMaterialMultiple.upload.title =  You can upload:
-uploadSupportingMaterialMultiple.upload.restrictionFiles = up to 10 files  
+uploadSupportingMaterialMultiple.upload.restrictionFiles = up to 10 files
 uploadSupportingMaterialMultiple.upload.restrictionSize =  maximum individual file size of 10MB
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title =  What file type can I upload?
-uploadSupportingMaterialMultiple.checkYourAnswersLabel = uploadSupportingMaterialMultiple
+uploadSupportingMaterialMultiple.checkYourAnswersLabel = Upload photographs, manuals, brochures and other supporting material
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
 

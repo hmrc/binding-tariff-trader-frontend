@@ -63,12 +63,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", s"commodityCodeBestMatch.$x", true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
   }
 
-  def uploadSupportingMaterialMultiple: Option[AnswerRow] = userAnswers.get(UploadSupportingMaterialMultiplePage) map {
-    x => AnswerRow("uploadSupportingMaterialMultiple.checkYourAnswersLabel", s"$x", false, routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode).url)
-  }
-
   def confidentialInformation: Option[AnswerRow] = userAnswers.get(ConfidentialInformationPage) map {
     x => AnswerRow("confidentialInformation.checkYourAnswersLabel", s"${x.field1}", false, routes.ConfidentialInformationController.onPageLoad(CheckMode).url)
+  }
+
+  def uploadSupportingMaterialMultiple: Option[AnswerRow] = userAnswers.get(UploadSupportingMaterialMultiplePage) map {
+    x => AnswerRow("uploadSupportingMaterialMultiple.checkYourAnswersLabel", x.map(_.name).reduce((a,b) => s"$a\n$b"), false, routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode).url)
   }
 
   def describeYourItem: Option[AnswerRow] = userAnswers.get(DescribeYourItemPage) map {
