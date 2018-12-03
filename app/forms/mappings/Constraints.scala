@@ -16,6 +16,7 @@
 
 package forms.mappings
 
+import org.apache.commons.validator.routines.EmailValidator
 import play.api.data.validation.{Constraint, Invalid, Valid}
 
 trait Constraints {
@@ -90,6 +91,13 @@ trait Constraints {
       case None => Valid
       case Some(str: String) if str.length <= maximum => Valid
       case _ => Invalid(errorKey, maximum)
+    }
+  }
+
+  protected def validEmailAddress(errorKey: String): Constraint[String] = {
+    Constraint {
+      case str: String if EmailValidator.getInstance().isValid(str) => Valid
+      case _ => Invalid(errorKey)
     }
   }
 
