@@ -63,12 +63,7 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
           checkYourAnswersHelper.returnSamples,
           checkYourAnswersHelper.commodityCodeRulingReference,
           checkYourAnswersHelper.legalChallenge,
-          checkYourAnswersHelper.legalChallengeDetails
-        ).flatten
-      ),
-      AnswerSection(
-        Some("supportingInformationDetails.checkYourAnswersHeading"),
-        Seq(
+          checkYourAnswersHelper.legalChallengeDetails,
           checkYourAnswersHelper.supportingInformationDetails
         ).flatten
       )

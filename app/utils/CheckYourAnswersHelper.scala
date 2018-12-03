@@ -68,11 +68,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def uploadSupportingMaterialMultiple: Option[AnswerRow] = userAnswers.get(UploadSupportingMaterialMultiplePage) map {
-    x => AnswerRow("uploadSupportingMaterialMultiple.checkYourAnswersLabel", x.map(_.name).reduce((a,b) => s"$a\n$b"), false, routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode).url)
+    x => AnswerRow("uploadSupportingMaterialMultiple.checkYourAnswersLabel", x.map(_.name), false, routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode).url)
   }
 
   def describeYourItem: Option[AnswerRow] = userAnswers.get(DescribeYourItemPage) map {
-    x => AnswerRow("describeYourItem.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.DescribeYourItemController.onPageLoad(CheckMode).url)
+    x => AnswerRow("describeYourItem.checkYourAnswersLabel", Seq(x.field1, x.field2), false, routes.DescribeYourItemController.onPageLoad(CheckMode).url)
   }
 
   def previousCommodityCode: Option[AnswerRow] = userAnswers.get(PreviousCommodityCodePage) map {
@@ -84,11 +84,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", s"${x.field1} ${x.field2} ${x.field3}", false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", Seq(x.field1, x.field2, x.field3), false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
   }
 
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {
-    x => AnswerRow("registerBusinessRepresenting.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
+    x => AnswerRow("registerBusinessRepresenting.checkYourAnswersLabel", Seq(x.field1, x.field2), false, routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
   }
 
   def selectApplicationType: Option[AnswerRow] = userAnswers.get(SelectApplicationTypePage) map {
@@ -100,7 +100,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map {
-    x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", s"${x.field1} ${x.field2} ${x.field3} ${x.field4} ${x.field5}", false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
+    x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", Seq(x.field1, x.field2, x.field3, x.field4, x.field5), false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }
 
 }

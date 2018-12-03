@@ -238,7 +238,6 @@ supportingInformation.error.required = Select enter any other information to sup
 supportingInformationDetails.title = Provide supporting information
 supportingInformationDetails.heading = Provide supporting information
 supportingInformationDetails.checkYourAnswersLabel = Supporting information
-supportingInformationDetails.checkYourAnswersHeading = Other information
 supportingInformationDetails.error.required = Enter supporting information
 supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less
 
