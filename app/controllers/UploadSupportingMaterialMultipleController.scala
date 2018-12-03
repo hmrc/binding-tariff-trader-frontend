@@ -63,11 +63,11 @@ class UploadSupportingMaterialMultipleController @Inject()(
   def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData).async(parse.multipartFormData) {
     implicit request =>
 
-      val files: Seq[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.files.filter(!_.filename.isEmpty)
+      val files: Seq[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.files.filter(_.filename.nonEmpty)
 
       Future
         .sequence(
-          files.map(f => fileService.upload(f))
+          files.map(fileService.upload(_))
         )
         .flatMap {
           case savedFiles: Seq[FileAttachment] if savedFiles.nonEmpty =>
