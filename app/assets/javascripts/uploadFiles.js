@@ -212,5 +212,6 @@
     })();
 
     global.uploadFileNameSpace = uploadFileNameSpace;
+    global.fileList = fileList;
 
 })(window)
