@@ -120,6 +120,51 @@ var fileList = (function () {
 
 })();
 
+var validateUploads = ( function() {
+
+    var valid_extensions = ['jpg', 'png'];
+
+    var hasInvalidSize = function (file) {
+        // Less than 10 MB
+        return file.size > 10485760;
+    };
+
+    var hasInvalidExtension = function (file) {
+        var ext = file.name.split('.').pop();
+        return !valid_extensions.includes(ext);
+    };
+
+    return {
+        validate: function (file) {
+
+            if (hasInvalidExtension(file)) {
+                return "Your document will not upload because it's in the wrong format";
+            }
+
+            if (hasInvalidSize(file)) {
+                return "Your document will not upload because it's bigger than 10MB";
+            }
+
+            return "";
+
+        },
+        showErrors: function () {
+            var errorDiv =
+                '      <div class="error-summary error-summary--show" role="group" aria-labelledby="error-summary-heading" tabindex="-1">\n' +
+                '            <h2 class="heading-medium error-summary-heading" id="error-summary-heading">\n' +
+                '                There were problems with some documents\n' +
+                '            </h2>\n' +
+                '            <p>You need to remove the documents to continue</p>\n' +
+                '            <a id="error" href="javascript:fileList.deleteFailed()">Remove all failed documents</a>\n' +
+                '        </div>\n';
+
+            $('#error-dialog').html(errorDiv);
+        }
+    }
+
+})();
+
+
 var uploadFileNameSpace = ( function() {
 
     function beforeSubmit(e) {
@@ -155,46 +200,9 @@ var uploadFileNameSpace = ( function() {
         }
     }
 
-})();
-
-var validateUploads = ( function() {
-
-    var valid_extensions = ['jpg', 'png'];
-
-    var hasInvalidSize = function (file) {
-        return file.size > 1000000;
-    };
-
-    var hasInvalidExtension = function (file) {
-        var ext = file.name.split('.').pop();
-        return !valid_extensions.includes(ext);
-    };
-
-    return {
-        validate: function (file) {
-
-            if (hasInvalidExtension(file)) {
-                return "Your document will not upload because it's in the wrong format ";
-            }
-
-            if (hasInvalidSize(file)) {
-                return "Your document will not upload because it's bigger than 10MB ";
-            }
-
-        },
-        showErrors: function () {
-            var href = "javascript:fileList.deleteFailed()";
-            var errorDiv =
-                '      <div class="error-summary error-summary--show" role="group" aria-labelledby="error-summary-heading" tabindex="-1">\n' +
-                '            <h2 class="heading-medium error-summary-heading" id="error-summary-heading">\n' +
-                '                There were problems with some documents\n' +
-                '            </h2>\n' +
-                '            <p>You need to remove the documents to continue</p>\n' +
-                '            <a id="error" href=" ' + href + '">Remove all failed documents</a>\n' +
-                '        </div>\n';
-
-            $('#error-dialog').html(errorDiv);
-        }
-    }
+    $( document ).ready(function() {
+        uploadFileNameSpace.initialize("upload-files-form","multiple-file-input","list-of-files-table");
+    });
 
 })();
+
