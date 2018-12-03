@@ -48,7 +48,7 @@ class CaseRequestMapperTest extends UnitSpec {
       val contact: Contact = application.contact
       contact.name shouldBe "Name"
       contact.email shouldBe "Email"
-      contact.phone shouldBe "Phone"
+      contact.phone shouldBe Some("Phone")
 
       application.agent shouldBe None // TODO Implement This
       application.offline shouldBe false
@@ -86,7 +86,7 @@ class CaseRequestMapperTest extends UnitSpec {
       val contact: Contact = application.contact
       contact.name shouldBe "Name"
       contact.email shouldBe "Email"
-      contact.phone shouldBe "Phone"
+      contact.phone shouldBe None
 
       application.agent shouldBe None // TODO Implement This
       application.offline shouldBe false
@@ -123,7 +123,7 @@ class CaseRequestMapperTest extends UnitSpec {
             EnterContactDetails(
               "Name",
               "Email",
-              "Phone"
+              None
             )
           ),
           DescribeYourItemPage.toString -> js(
@@ -170,7 +170,7 @@ class CaseRequestMapperTest extends UnitSpec {
             EnterContactDetails(
               "Name",
               "Email",
-              "Phone"
+              Some("Phone")
             )
           ),
           DescribeYourItemPage.toString -> js(

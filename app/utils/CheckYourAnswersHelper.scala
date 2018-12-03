@@ -84,7 +84,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", Seq(x.field1, x.field2, x.field3), false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", Seq(x.field1, x.field2, x.field3.orNull), false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
   }
 
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {

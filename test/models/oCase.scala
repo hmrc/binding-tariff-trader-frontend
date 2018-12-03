@@ -20,7 +20,7 @@ object oCase {
 
   val eoriDetailsExample = EORIDetails("eori", "trader-name", "line1", "line2", "line3", "postcode", "country")
   val eoriAgentDetailsExample = EORIDetails("eori", "agent-name", "line1", "line2", "line3", "postcode", "country")
-  val contactExample = Contact("name", "email", "phone")
+  val contactExample = Contact("name", "email", Some("phone"))
   val btiApplicationExample = Application(
     "BTI",
     eoriDetailsExample,

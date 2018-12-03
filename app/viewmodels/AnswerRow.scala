@@ -16,9 +16,11 @@
 
 package viewmodels
 
+import org.apache.commons.lang3.StringUtils
+
 case class AnswerRow(label: String, answer: String, answerIsMessageKey: Boolean, changeUrl: String) {
   def this(label: String, answer: Seq[String], answerIsMessageKey: Boolean, changeUrl: String)
-  = this(label, answer.reduce((a, b) => s"$a\n$b"), answerIsMessageKey, changeUrl)
+  = this(label, answer.filter(StringUtils.isNoneBlank(_)).reduce((a, b) => s"$a\n$b"), answerIsMessageKey, changeUrl)
 }
 
 object AnswerRow {

@@ -28,7 +28,7 @@ import navigation.Navigator
 import pages.{ConfirmationPage, UploadSupportingMaterialMultiplePage}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Result}
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -70,7 +70,7 @@ class DeclarationController @Inject()(
       _ = auditService.auditBTIApplicationSubmissionSuccessful(c)
       userAnswers = answers.set(ConfirmationPage, Confirmation(c.reference))
       _ <- dataCacheConnector.save(userAnswers.cacheMap)
-      res <- successful( Redirect(navigator.nextPage(ConfirmationPage, mode)(userAnswers)) )
+      res: Result <- successful( Redirect(navigator.nextPage(ConfirmationPage, mode)(userAnswers)) )
     } yield res
 
   }
