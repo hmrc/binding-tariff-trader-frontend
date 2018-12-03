@@ -60,18 +60,26 @@
 
             </div>
         </details>
-        <br>
 
-        @components.input_file(
-            field = form("multiple-file-input"),
-            label = messages("uploadSupportingMaterialMultiple.label"),
-            accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.pneg,.png,.jpeg,.txt"),
-            multiple = true
-        )
+        <div class="js-visible mt-3">
+            @components.input_file(
+                field = form("multiple-file-input"),
+                label = messages("uploadSupportingMaterialMultiple.label"),
+                accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.pneg,.png,.jpeg,.txt"),
+                multiple = true
+            )
 
-        <div id="list-of-files-table" class="draganddroptable"></div>
+            <div id="list-of-files-table" class="draganddroptable"></div>
+        </div>
 
-        <br>
+        <div class="notice js-hidden my-3">
+            <i class="icon icon-important">
+                <span class="visually-hidden">@messages("uploadSupportingMaterialMultiple.jsDisabled.title")</span>
+            </i>
+            <strong class="bold-small">
+                @messages("uploadSupportingMaterialMultiple.jsDisabled.label")
+            </strong>
+        </div>
 
         <script>
 

@@ -1,3 +1,5 @@
+@import '_variables.scss';
+
 /*
 ====================================
 Utility alignments
@@ -26,4 +28,42 @@ Pulled from GDS elements typography
 }
 label > .bold {
   display: block; /*temp fix until form story can fix label structure*/
+}
+
+// Margin Top
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.mt-1 {
+  margin-top: ($spacer * .25) !important;
+}
+
+.mt-2 {
+  margin-top: ($spacer * .5) !important;
+}
+
+.mt-3 {
+  margin-top: ($spacer * .75) !important;
+}
+
+// Margin Y
+.my-0 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.my-1 {
+  margin-top: ($spacer * .25) !important;
+  margin-bottom: ($spacer * .25) !important;
+}
+
+.my-2 {
+  margin-top: ($spacer * .5) !important;
+  margin-bottom: ($spacer * .5) !important;
+}
+
+.my-3 {
+  margin-top: ($spacer * .75) !important;
+  margin-bottom: ($spacer * .75) !important;
 }
