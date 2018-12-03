@@ -42,4 +42,5 @@ class CommodityCodeBestMatchFormProviderSpec extends OptionFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

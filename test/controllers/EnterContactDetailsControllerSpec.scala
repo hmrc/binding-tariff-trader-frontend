@@ -33,7 +33,7 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new EnterContactDetailsFormProvider()
+  private val formProvider = new EnterContactDetailsFormProvider
   private val form = formProvider()
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): EnterContactDetailsController = {
