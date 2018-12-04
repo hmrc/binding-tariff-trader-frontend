@@ -1,4 +1,3 @@
-
 ;(function (global) {
 
     var fileList = (function () {
@@ -44,7 +43,7 @@
             });
         };
 
-        var fileBoxDiv = function (name, size, errorMsg){
+        var fileBoxDiv = function (name, size, errorMsg) {
 
             var href = "javascript:fileList.delete('" + name + "')";
 
@@ -58,37 +57,28 @@
             if (errorMsg) {
                 output += '    <div class="file-list__status" aria-live="polite" aria-hidden="true">' + errorMsg + '</div>\n';
             }
-            output +=     '</div>';
+            output += '</div>';
 
             return output;
         };
 
         return {
-            init: function (tableId){
-                _tableId  = tableId
+            init: function (tableId) {
+                _tableId = tableId
             },
             add: function (file) {
                 if (fileDoesntExist(file)) {
                     _files.push(file);
                 }
             },
-            delete: function (name){
+            delete: function (name) {
 
-                for( var i = 0; i < _files.length; i++){
-                    if ( _files[i].name === name) {
+                for (var i = 0; i < _files.length; i++) {
+                    if (_files[i].name === name) {
                         _files.splice(i, 1);
                     }
                 }
                 this.showListOn();
-            },
-            deleteFailed: function (name){
-                for( var i = 0; i < _files.length; i++){
-                    if ( validateUploads.validate(_files[i])) {
-                        _files.splice(i, 1);
-                    }
-                }
-                this.showListOn();
-                $('#error-dialog').empty();
             },
             postAll: function () {
                 var csrfToken = document.getElementsByName('csrfToken')[0].value;
@@ -102,30 +92,51 @@
             showListOn: function () {
                 $('#' + _tableId).empty();
                 _files.forEach(function (f) {
-                    $('#' + _tableId).append(fileBoxDiv(f.name,f.size,f.errorMsg))
+                    $('#' + _tableId).append(fileBoxDiv(f.name, f.size, f.errorMsg))
                 });
             },
             validate: function () {
-                var isValidForm = true;
-                _files.forEach(function (f) {
-                    var errorMsg = validateUploads.validate(f)
+
+                var errors = [];
+                for (var i = 0; i < _files.length; i++) {
+                    var errorMsg = validate.file(_files[i])
                     if (errorMsg) {
-                        isValidForm = false;
-                        f.errorMsg = errorMsg
-                    } else {
-                        f.errorMsg = ""
+                        errors.push('Remove invalid files to continue');
+                        _files[i].errorMsg = errorMsg;
                     }
-                });
+                }
+                if (validate.fileList(_files)) {
+                    errors.push('Reduce the number of files to a maximum of 10');
+                }
                 this.showListOn();
-                return isValidForm;
+                return errors;
+            },
+            showErrors: function (errorMessages) {
+                var errorDiv =
+                    '      <div class="error-summary error-summary--show" role="group" aria-labelledby="error-summary-heading" tabindex="-1">\n' +
+                    '            <h2 class="heading-medium error-summary-heading" id="error-summary-heading">\n' +
+                    '                There were problems with some documents\n' +
+                    '            </h2>\n' +
+                    '            <ul>';
+
+                errorMessages.forEach(function (error) {
+                    errorDiv += '<li>' + error + '</li> ';
+                });
+
+                errorDiv += '            </ul>\n';
+                errorDiv += '        </div>\n';
+
+                $('#error-dialog').html(errorDiv);
             }
         }
 
     })();
 
-    var validateUploads = ( function() {
+    var validate = (function () {
 
-        var valid_extensions = ['pdf', 'doc', 'docx' , 'xlsx' , 'xls', 'pneg', 'png', 'jpg', 'jpeg', 'txt' ];
+        var maxFilesPermitted = 10;
+
+        var valid_extensions = ['pdf', 'doc', 'docx', 'xlsx', 'xls', 'pneg', 'png', 'jpg', 'jpeg', 'txt'];
 
         var hasInvalidSize = function (file) {
             // Less than 10 MB
@@ -138,7 +149,7 @@
         };
 
         return {
-            validate: function (file) {
+            file: function (file) {
 
                 if (hasInvalidExtension(file)) {
                     return "Your document will not upload because it's in the wrong format";
@@ -151,30 +162,23 @@
                 return "";
 
             },
-            showErrors: function () {
-                var errorDiv =
-                    '      <div class="error-summary error-summary--show" role="group" aria-labelledby="error-summary-heading" tabindex="-1">\n' +
-                    '            <h2 class="heading-medium error-summary-heading" id="error-summary-heading">\n' +
-                    '                There were problems with some documents\n' +
-                    '            </h2>\n' +
-                    '            <p>You need to remove the documents to continue</p>\n' +
-                    '            <a id="error" href="javascript:fileList.deleteFailed()">Remove all failed documents</a>\n' +
-                    '        </div>\n';
-
-                $('#error-dialog').html(errorDiv);
+            fileList: function (files) {
+                return files.length > maxFilesPermitted;
             }
         }
 
     })();
 
-    var uploadFileNameSpace = ( function() {
+    var uploadFileNameSpace = (function () {
 
         function beforeSubmit(e) {
 
             // Validate and prevent submition in case of invalid files
-            if (!fileList.validate()){
+            var errorList = fileList.validate();
+            if (errorList.length > 0) {
                 if (e.preventDefault) e.preventDefault();
-                validateUploads.showErrors();
+                fileList.showErrors(errorList);
+                $(window).scrollTop(0);
                 return false;
             }
 
@@ -184,13 +188,13 @@
         };
 
         return {
-            initialize: function (formId, inputFileId, tableId){
+            initialize: function (formId, inputFileId, tableId) {
 
                 // Prevent to init if the form doesn't exists
                 // This JS should only work on the upload files page
 
-                if (! $('#' + formId).length) {
-                    return ;
+                if (!$('#' + formId).length) {
+                    return;
                 }
 
                 var form = document.getElementById(formId);
@@ -214,4 +218,5 @@
     global.uploadFileNameSpace = uploadFileNameSpace;
     global.fileList = fileList;
 
-})(window)
+})
+(window)

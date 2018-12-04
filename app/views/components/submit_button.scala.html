@@ -14,8 +14,14 @@
  * limitations under the License.
  *@
 
-@()(implicit messages: Messages)
+@(label: Option[String] = None)(implicit messages: Messages)
 
 <div class="section">
-    <button id="submit" class="button">@messages("site.continue")</button>
+    <button id="submit" class="button">
+        @if(label.nonEmpty) {
+            @label
+        } else {
+            @messages("site.continue")
+        }
+    </button>
 </div>

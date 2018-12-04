@@ -38,6 +38,7 @@ site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
 site.continue = Continue
+site.upload_continue = Upload and continue
 site.service_name = Binding Tariff Application
 site.textarea.char_limit = (Limit is {0} characters)
 
