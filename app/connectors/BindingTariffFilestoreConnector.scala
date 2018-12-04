@@ -40,7 +40,7 @@ class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig
   lazy val filestoreAPIRoot = s"${configuration.bindingTariffFileStoreUrl}/binding-tariff-filestore"
 
   def upload(file: MultipartFormData.FilePart[TemporaryFile])
-  (implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
+            (implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
 
     val filePart: MultipartFormData.Part[Source[ByteString, Future[IOResult]]] = FilePart(
       "file",
@@ -49,8 +49,9 @@ class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig
       FileIO.fromPath(file.ref.file.toPath)
     )
 
-    ws.url(s"$filestoreAPIRoot/file").post(Source(List(filePart)))
-      .map(response => Json.fromJson[FilestoreResponse](Json.parse(response.body)).get)
+    ws.url(s"$filestoreAPIRoot/file")
+      .post(Source(List(filePart)))
+      .map( response => Json.fromJson[FilestoreResponse](Json.parse(response.body)).get )
 
   }
 

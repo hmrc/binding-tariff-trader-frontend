@@ -34,8 +34,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.concurrent.Future.successful
+import scala.concurrent.Future.{sequence, successful}
 
 class UploadSupportingMaterialMultipleController @Inject()(
                                                             appConfig: FrontendAppConfig,
@@ -51,36 +50,30 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-      val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
+    val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
 
-      Ok(uploadSupportingMaterialMultiple(appConfig, form, existingFiles, mode))
+    Ok(uploadSupportingMaterialMultiple(appConfig, form, existingFiles, mode))
   }
 
 
-  def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData).async(parse.multipartFormData) {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
+    .async(parse.multipartFormData) { implicit request =>
 
       val files: Seq[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.files.filter(_.filename.nonEmpty)
 
-      Future
-        .sequence(
-          files.map(fileService.upload(_))
-        )
-        .flatMap {
-          case savedFiles: Seq[FileAttachment] if savedFiles.nonEmpty =>
-            val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
-            val updatedFiles = existingFiles ++ savedFiles
-            val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
-            dataCacheConnector.save(updatedAnswers.cacheMap)
-              .map(
-                _ =>
-                  Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers))
-              )
+      sequence(files.map(fileService.upload(_))).flatMap {
 
-          case _ => successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers)))
-        }
-  }
+        case savedFiles: Seq[FileAttachment] if savedFiles.nonEmpty =>
+          val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
+          val updatedFiles = existingFiles ++ savedFiles
+          val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
+          dataCacheConnector.save(updatedAnswers.cacheMap)
+            .map(_ => Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers)))
+
+        case _ => successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers)))
+      }
+    }
+
 }

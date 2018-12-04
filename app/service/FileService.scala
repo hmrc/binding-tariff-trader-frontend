@@ -26,6 +26,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.Future.{sequence, successful}
 
 @Singleton
 class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
@@ -39,17 +40,17 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
   }
 
   def publish(file: FileAttachment)(implicit headerCarrier: HeaderCarrier): Future[SubmittedFileAttachment] = {
-    connector.get(file).flatMap { r =>
+    connector.get(file).flatMap { r: FilestoreResponse =>
       r.scanStatus match {
         case Some(ScanStatus.READY) => connector.publish(file).map(toPublishedAttachment(file.size))
-        case Some(ScanStatus.FAILED) =>  Future.successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Quarantined"))
-        case _ => Future.successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Unscanned"))
+        case Some(ScanStatus.FAILED) => successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Quarantined"))
+        case _ => successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Unscanned"))
       }
     }
   }
 
   def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[SubmittedFileAttachment]] = {
-    Future.sequence(files.map(publish(_)))
+    sequence(files.map(publish(_)))
   }
 
   private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
