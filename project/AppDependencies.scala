@@ -7,13 +7,13 @@ object AppDependencies {
   val compile = Seq(
     "commons-validator" % "commons-validator"                 % "1.6",
     play.sbt.PlayImport.ws,
-    "uk.gov.hmrc"       %% "bootstrap-play-25"                % "4.0.0",
+    "uk.gov.hmrc"       %% "bootstrap-play-25"                % "4.1.0",
     "uk.gov.hmrc"       %% "govuk-template"                   % "5.25.0-play-25",
     "uk.gov.hmrc"       %% "http-caching-client"              % "8.0.0",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"    % "0.2.0",
     "uk.gov.hmrc"       %% "play-health"                      % "3.8.0-play-25",
     "uk.gov.hmrc"       %% "play-language"                    % "3.4.0",
-    "uk.gov.hmrc"       %% "play-ui"                          % "7.26.0-play-25",
+    "uk.gov.hmrc"       %% "play-ui"                          % "7.27.0-play-25",
     "uk.gov.hmrc"       %% "play-reactivemongo"               % "6.2.0",
     "uk.gov.hmrc"       %% "play-whitelist-filter"            % "2.0.0"
   )
@@ -29,7 +29,7 @@ object AppDependencies {
     "org.scalacheck"            %% "scalacheck"             % "1.14.0"            % scope,
     "org.scalatest"             %% "scalatest"              % "3.0.4"             % scope,
     "org.scalatestplus.play"    %% "scalatestplus-play"     % "2.0.1"             % scope,
-    "uk.gov.hmrc"               %% "hmrctest"               % "3.2.0"             % scope
+    "uk.gov.hmrc"               %% "hmrctest"               % "3.3.0"             % scope
   )
 
   def apply(): Seq[ModuleID] = (compile ++ test).map(_ withSources())
