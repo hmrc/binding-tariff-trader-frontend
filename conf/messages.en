@@ -99,9 +99,10 @@ enterContactDetails.checkYourAnswersLabel = Contact details
 enterContactDetails.error.field1.required = Enter your full name
 enterContactDetails.error.field2.required = Enter email address
 enterContactDetails.error.field3.required = Enter direct telephone number
+enterContactDetails.error.field2.invalid = Enter a valid email address
 enterContactDetails.error.field1.length = Full name must be 100 characters or less
 enterContactDetails.error.field2.length = Email address must be 100 characters or less
-enterContactDetails.error.field3.length = Direct telephone number must be 100 characters or less
+enterContactDetails.error.field3.length = Direct telephone number must be 20 characters or less
 
 informationAboutYourItem.title = Provide information about your item
 informationAboutYourItem.heading = Provide information about your item

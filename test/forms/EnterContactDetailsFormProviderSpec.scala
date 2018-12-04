@@ -16,13 +16,14 @@
 
 package forms
 
-import forms.behaviours.StringFieldBehaviours
+import forms.behaviours.{EmailFieldBehaviours, StringFieldBehaviours}
 import play.api.data.FormError
 
-class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours {
+class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with EmailFieldBehaviours {
 
   val form = new EnterContactDetailsFormProvider()()
 
+  // name
   ".field1" must {
 
     val fieldName = "field1"
@@ -50,10 +51,12 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
+  // email address
   ".field2" must {
 
     val fieldName = "field2"
     val requiredKey = "enterContactDetails.error.field2.required"
+    val validKey = "enterContactDetails.error.field2.invalid"
     val lengthKey = "enterContactDetails.error.field2.length"
     val maxLength = 100
 
@@ -63,11 +66,12 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(maxLength)
     )
 
-    behave like fieldWithMaxLength(
+    behave like validEmailFieldWithMaxLength(
       form,
       fieldName,
       maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength)),
+      invalidEmailError = FormError(fieldName, validKey)
     )
 
     behave like mandatoryField(
@@ -77,6 +81,7 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
+  // phone number
   ".field3" must {
 
     val fieldName = "field3"
