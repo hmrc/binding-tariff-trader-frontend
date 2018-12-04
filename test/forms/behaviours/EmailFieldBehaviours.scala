@@ -17,28 +17,57 @@
 package forms.behaviours
 
 import forms.FormSpec
-import generators.EmailAddressGenerators
 import org.scalatest.prop.PropertyChecks
 import play.api.data.{Form, FormError}
 
-trait EmailFieldBehaviours extends FormSpec with PropertyChecks with EmailAddressGenerators {
+trait EmailFieldBehaviours extends FormSpec with PropertyChecks {
 
-  protected def emailFieldWithMaxLength(form: Form[_],
-                                        fieldName: String,
-                                        maxLength: Int,
-                                        lengthError: FormError): Unit = {
+  protected def validEmailFieldWithMaxLength(form: Form[_],
+                                             fieldName: String,
+                                             maxLength: Int,
+                                             lengthError: FormError,
+                                             invalidEmailError: FormError): Unit = {
 
-    s"not bind email addresses longer than $maxLength characters" in {
+    s"not bind valid email addresses longer than $maxLength characters" in {
 
-      forAll(validEmailAddressesLongerThan(maxLength) -> "longEmail") { str: String =>
+      // TODO: we should use ScalaCheck for testing this, but it is not trivial to generate valid email addresses
+
+      val s = "a123456789"
+      val usr = List.fill(6)(s).mkString
+      val domain = s"${List.fill(3)(s).mkString}.me.you.us"
+      val tooLongEmailAddress = s"$usr@$domain"
+      tooLongEmailAddress.length shouldBe maxLength + 1
+
+      val invalidEmailAddresses = List(tooLongEmailAddress)
+      invalidEmailAddresses foreach { str: String =>
         val result = form.bind(Map(fieldName -> str)).apply(fieldName)
         result.errors shouldEqual Seq(lengthError)
       }
-
     }
 
-    "not bind email addresses without `.` and `@` characters" in {
-      // TODO
+    "not bind invalid email addresses" in {
+
+      // TODO: we should use ScalaCheck for testing this
+
+      val invalidEmailAddresses = List(
+        s"${List.fill(65)('a').mkString}@email.me",
+        s"frank@${List.fill(64)('c').mkString}.fr",
+        "emilio@email.italy",
+        ".",
+        "jon@jon..com",
+        "jon..smith@email.com",
+        "emilio.smith",
+        "jon@gmail",
+        "jon@ gmail.com",
+        "a@a.a",
+        "people@-email.com",
+        "people@email.-com"
+      )
+
+      invalidEmailAddresses foreach { str: String =>
+        val result = form.bind(Map(fieldName -> str)).apply(fieldName)
+        result.errors shouldEqual Seq(invalidEmailError)
+      }
     }
 
   }
