@@ -27,11 +27,12 @@ trait StringFieldBehaviours extends FieldBehaviours {
 
     s"not bind strings longer than $maxLength characters" in {
 
-      forAll(stringsLongerThan(maxLength) -> "longString") {
-        string =>
-          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-          result.errors shouldEqual Seq(lengthError)
+      forAll(stringsLongerThan(maxLength) -> "longString") { str: String =>
+        val result = form.bind(Map(fieldName -> str)).apply(fieldName)
+        result.errors shouldEqual Seq(lengthError)
       }
     }
+
   }
+
 }
