@@ -35,7 +35,7 @@
                 contentType: false,
                 processData: false,
                 success: function (data, status, response) {
-                    window.location.href =  "/binding-tariff-application/commodityCodeBestMatch";
+                    window.location.href =  response.getResponseHeader("redirectPath");
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     // alert(jqXHR.status)
