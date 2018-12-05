@@ -69,11 +69,11 @@ trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
       //      }
 
       "rendered with an error" must {
-
-        "show an error summary" in {
-          val doc = asDocument(createView(form.withError(error)))
-          assertRenderedById(doc, "error-summary-heading")
-        }
+        // TODO error test must be done at client side as all the test are made with javascript
+        //        "show an error summary" in {
+        //          val doc = asDocument(createView(form.withError(error)))
+        //          assertRenderedById(doc, "error-summary-heading")
+        //        }
 
         // TODO Add this once we know what data is used in the form
         //        "show an error in the value field's label" in {
@@ -91,9 +91,9 @@ trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
   }
 
   def singleFileUploadPage(createView: Form[String] => HtmlFormat.Appendable,
-                             messageKeyPrefix: String,
-                             expectedFormAction: String,
-                             expectedHintKey: Option[String] = None): Unit = {
+                           messageKeyPrefix: String,
+                           expectedFormAction: String,
+                           expectedHintKey: Option[String] = None): Unit = {
 
     "behave like a page with a file upload field" when {
 

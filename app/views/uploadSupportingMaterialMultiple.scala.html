@@ -28,7 +28,6 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-
     @helpers.form(action = UploadSupportingMaterialMultipleController.onSubmit(mode),
          'enctype -> "multipart/form-data",
          'id -> "upload-files-form") {
@@ -38,7 +37,6 @@
         <div id="error-dialog"></div>
 
         @components.heading("uploadSupportingMaterialMultiple.heading")
-
 
         <p>@messages("uploadSupportingMaterialMultiple.upload.title")</p>
         <ul class="bullets">
@@ -54,7 +52,8 @@
                     <li>docx</li>
                     <li>xlsx</li>
                     <li>xls</li>
-                    <li>pneg</li>
+                    <li>png</li>
+                    <li>jpg</li>
                     <li>jpeg</li>
                     <li>txt</li>
                 </ul>
@@ -66,7 +65,7 @@
             @components.input_file(
                 field = form("multiple-file-input"),
                 label = messages("uploadSupportingMaterialMultiple.label"),
-                accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.pneg,.png,.jpeg,.txt"),
+                accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt"),
                 multiple = true
             )
 

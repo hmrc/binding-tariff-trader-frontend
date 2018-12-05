@@ -35,10 +35,10 @@
                 contentType: false,
                 processData: false,
                 success: function (data, status, jqXHR) {
-                    // alert('File upload successful')
+                    window.location.href =  data.redirect;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // alert(jqXHR.status)
+                     // alert(jqXHR.status)
                 }
             });
         };
@@ -173,10 +173,12 @@
 
         function beforeSubmit(e) {
 
+            if (e.preventDefault) e.preventDefault();
+
             // Validate and prevent submition in case of invalid files
             var errorList = fileList.validate();
             if (errorList.length > 0) {
-                if (e.preventDefault) e.preventDefault();
+
                 fileList.showErrors(errorList);
                 $(window).scrollTop(0);
                 return false;
