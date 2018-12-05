@@ -34,11 +34,11 @@
                 cache: false,
                 contentType: false,
                 processData: false,
-                success: function (data, status, jqXHR) {
-                    window.location.href =  data.redirect;
+                success: function (data, status, response) {
+                    window.location.href =  "/binding-tariff-application/commodityCodeBestMatch";
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                     // alert(jqXHR.status)
+                    // alert(jqXHR.status)
                 }
             });
         };
@@ -178,7 +178,6 @@
             // Validate and prevent submition in case of invalid files
             var errorList = fileList.validate();
             if (errorList.length > 0) {
-
                 fileList.showErrors(errorList);
                 $(window).scrollTop(0);
                 return false;
