@@ -114,8 +114,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       // Then
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      status(result) mustBe ACCEPTED
+      header(LOCATION, result) mustBe Some(onwardRoute.url)
 
       val cache = theCacheSaved
       cache.getEntry[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage) mustBe Some(Seq(FileAttachment("id", "file-name", "type", file.file.length())))
@@ -131,8 +131,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       // Then
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      status(result) mustBe ACCEPTED
+      header(LOCATION, result) mustBe Some(onwardRoute.url)
       verifyZeroInteractions(fileService)
     }
 

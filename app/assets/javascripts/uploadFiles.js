@@ -32,13 +32,7 @@ var fileList = (function () {
             contentType: false,
             processData: false,
             success: function (data, status, response) {
-                alert(JSON.stringify(data))
-                alert(JSON.stringify(status))
-                alert(JSON.stringify(response))
-                alert(response.getAllResponseHeaders())
-                alert(response.getResponseHeader("Location"));
-
-              //  window.location.href = response.getResponseHeader("Location");
+                window.location.href = response.getResponseHeader("Location");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // alert(jqXHR.status)

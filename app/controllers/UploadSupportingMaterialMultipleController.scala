@@ -71,11 +71,11 @@ class UploadSupportingMaterialMultipleController @Inject()(
           val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
           val nextPage = navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers)
           dataCacheConnector.save(updatedAnswers.cacheMap)
-            .map(_ =>  SeeOther(nextPage.url).withHeaders(LOCATION -> nextPage.url) )
+            .map(_ => Accepted("accepted").withHeaders(LOCATION -> nextPage.url) )
 
         case _ =>
           val url = navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers).url
-          successful(SeeOther(url).withHeaders(LOCATION -> url))
+          successful( Accepted("accepted").withHeaders(LOCATION -> url) )
       }
     }
 
