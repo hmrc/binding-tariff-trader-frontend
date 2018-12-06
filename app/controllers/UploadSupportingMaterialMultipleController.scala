@@ -28,7 +28,7 @@ import pages.{CommodityCodeBestMatchPage, UploadSupportingMaterialMultiplePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.Files
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{Action, AnyContent, Call, MultipartFormData}
+import play.api.mvc.{Action, AnyContent, MultipartFormData}
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
@@ -71,11 +71,11 @@ class UploadSupportingMaterialMultipleController @Inject()(
           val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
           val nextPage = navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers)
           dataCacheConnector.save(updatedAnswers.cacheMap)
-            .map(_ => Ok("success").withHeaders("redirectPath" -> nextPage.url))
+            .map(_ =>  SeeOther(nextPage.url).withHeaders(LOCATION -> nextPage.url) )
 
         case _ =>
           val url = navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers).url
-          successful(Ok("success").withHeaders("redirectPath" -> url))
+          successful(SeeOther(url).withHeaders(LOCATION -> url))
       }
     }
 
