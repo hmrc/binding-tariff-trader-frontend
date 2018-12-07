@@ -25,8 +25,7 @@ class UploadSupportingMaterialMultipleFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("uploadSupportingMaterialMultiple.error.required")
-        .verifying(maxLength(100, "uploadSupportingMaterialMultiple.error.length"))
+      "multiple-file-input" -> text()
     )
 
 }

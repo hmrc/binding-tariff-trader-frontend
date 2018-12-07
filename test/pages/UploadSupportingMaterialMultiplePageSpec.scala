@@ -16,6 +16,7 @@
 
 package pages
 
+import models.FileAttachment
 import pages.behaviours.PageBehaviours
 
 
@@ -23,10 +24,10 @@ class UploadSupportingMaterialMultiplePageSpec extends PageBehaviours {
 
   "UploadSupportingMaterialMultiplePage" must {
 
-    beRetrievable[String](UploadSupportingMaterialMultiplePage)
+    beRetrievable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
 
-    beSettable[String](UploadSupportingMaterialMultiplePage)
+    beSettable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
 
-    beRemovable[String](UploadSupportingMaterialMultiplePage)
+    beRemovable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
   }
 }

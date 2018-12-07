@@ -19,12 +19,12 @@ package models
 case class NewCaseRequest
 (
   application: Application,
-  attachments: Seq[String] = Seq.empty
+  attachments: Seq[Attachment] = Seq.empty
 )
 
 case class Case
 (
   reference: String,
   application: Application,
-  attachments: Seq[String] = Seq.empty
+  attachments: Seq[Attachment] = Seq.empty
 )

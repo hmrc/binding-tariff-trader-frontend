@@ -17,17 +17,17 @@
 package controllers
 
 import com.google.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
+import config.FrontendAppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import utils.CheckYourAnswersHelper
-import viewmodels.AnswerSection
-import views.html.check_your_answers
 import models.NormalMode
 import navigation.Navigator
 import pages.DeclarationPage
-import config.FrontendAppConfig
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import utils.CheckYourAnswersHelper
+import viewmodels.AnswerSection
+import views.html.check_your_answers
 
 import scala.concurrent.Future
 
@@ -57,17 +57,13 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
           checkYourAnswersHelper.previousCommodityCode,
           checkYourAnswersHelper.confidentialInformation,
           checkYourAnswersHelper.describeYourItem,
+          checkYourAnswersHelper.uploadSupportingMaterialMultiple,
           checkYourAnswersHelper.commodityCodeDigits,
           checkYourAnswersHelper.whenToSendSample,
           checkYourAnswersHelper.returnSamples,
           checkYourAnswersHelper.commodityCodeRulingReference,
           checkYourAnswersHelper.legalChallenge,
-          checkYourAnswersHelper.legalChallengeDetails
-        ).flatten
-      ),
-      AnswerSection(
-        Some("supportingInformationDetails.checkYourAnswersHeading"),
-        Seq(
+          checkYourAnswersHelper.legalChallengeDetails,
           checkYourAnswersHelper.supportingInformationDetails
         ).flatten
       )

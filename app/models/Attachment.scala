@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(label: Option[String] = None)(implicit messages: Messages)
+package models
 
-<div class="section">
-    <button id="submit" class="button">
-        @if(label.nonEmpty) {
-            @label
-        } else {
-            @messages("site.continue")
-        }
-    </button>
-</div>
+import java.time.ZonedDateTime
+
+import play.api.libs.json.{Json, OFormat}
+
+case class Attachment
+(
+  application: Boolean = true,
+  public: Boolean = false,
+  url: String,
+  mimeType: String,
+  timestamp: ZonedDateTime = ZonedDateTime.now()
+)
+
+object Attachment {
+  implicit val format: OFormat[Attachment] = Json.format[Attachment]
+}

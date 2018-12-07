@@ -26,7 +26,7 @@ import scala.concurrent.Future
 @Singleton
 class CasesService @Inject()(connector: BindingTariffClassificationConnector){
 
-  def createCase(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
+  def create(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
     connector.createCase(c)
   }
 

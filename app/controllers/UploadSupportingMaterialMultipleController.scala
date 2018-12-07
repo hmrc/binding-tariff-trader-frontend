@@ -16,61 +16,67 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.UploadSupportingMaterialMultipleFormProvider
-import models.Mode
-import pages.{CommodityCodeBestMatchPage, UploadSupportingMaterialMultiplePage}
+import javax.inject.Inject
+import models.FileAttachment.format
+import models.{FileAttachment, Mode}
 import navigation.Navigator
-import play.api.mvc.{Action, AnyContent}
+import pages.{CommodityCodeBestMatchPage, UploadSupportingMaterialMultiplePage}
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.Files
+import play.api.libs.Files.TemporaryFile
+import play.api.mvc.{Action, AnyContent, MultipartFormData}
+import service.FileService
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.Future.{sequence, successful}
 
 class UploadSupportingMaterialMultipleController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: UploadSupportingMaterialMultipleFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                                            appConfig: FrontendAppConfig,
+                                                            override val messagesApi: MessagesApi,
+                                                            dataCacheConnector: DataCacheConnector,
+                                                            navigator: Navigator,
+                                                            identify: IdentifierAction,
+                                                            getData: DataRetrievalAction,
+                                                            requireData: DataRequiredAction,
+                                                            formProvider: UploadSupportingMaterialMultipleFormProvider,
+                                                            fileService: FileService
+                                                          ) extends FrontendController with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.get(UploadSupportingMaterialMultiplePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
+    val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
+
+    Ok(uploadSupportingMaterialMultiple(appConfig, form, existingFiles, mode))
+  }
+
+
+  def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
+    .async(parse.multipartFormData) { implicit request =>
+
+      val files: Seq[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.files.filter(_.filename.nonEmpty)
+
+      sequence(files.map(fileService.upload(_))).flatMap {
+
+        case savedFiles: Seq[FileAttachment] if savedFiles.nonEmpty =>
+          val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
+          val updatedFiles = existingFiles ++ savedFiles
+          val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
+          val nextPage = navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers)
+          dataCacheConnector.save(updatedAnswers.cacheMap)
+            .map(_ => Accepted("accepted").withHeaders(LOCATION -> nextPage.url) )
+
+        case _ =>
+          val url = navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers).url
+          successful( Accepted("accepted").withHeaders(LOCATION -> url) )
       }
+    }
 
-      Ok(uploadSupportingMaterialMultiple(appConfig, preparedForm, mode))
-  }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(uploadSupportingMaterialMultiple(appConfig, formWithErrors, mode))),
-        value => {
-          val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, value)
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers))
-          )
-        }
-      )
-  }
 }

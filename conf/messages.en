@@ -38,6 +38,7 @@ site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
 site.continue = Continue
+site.upload_continue = Upload and continue
 site.service_name = Binding Tariff Application
 site.textarea.char_limit = (Limit is {0} characters)
 
@@ -151,9 +152,16 @@ confidentialInformation.checkYourAnswersLabel = Confidential information about y
 confidentialInformation.error.field1.required = Enter confidential information
 confidentialInformation.error.field1.length = Confidential information must be 100 characters or less
 
-uploadSupportingMaterialMultiple.title = uploadSupportingMaterialMultiple
-uploadSupportingMaterialMultiple.heading = uploadSupportingMaterialMultiple
-uploadSupportingMaterialMultiple.checkYourAnswersLabel = uploadSupportingMaterialMultiple
+uploadSupportingMaterialMultiple.title = Upload photographs, manuals, brochures and other supporting material
+uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, brochures and other supporting material
+uploadSupportingMaterialMultiple.label = Choose documents
+uploadSupportingMaterialMultiple.upload.title =  You can upload:
+uploadSupportingMaterialMultiple.upload.restrictionFiles = up to 10 files
+uploadSupportingMaterialMultiple.upload.restrictionSize =  maximum individual file size of 10MB
+uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file type can I upload?
+uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
+uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
+uploadSupportingMaterialMultiple.checkYourAnswersLabel = Upload photographs, manuals, brochures and other supporting material
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
 
@@ -232,7 +240,6 @@ supportingInformation.error.required = Select enter any other information to sup
 supportingInformationDetails.title = Provide supporting information
 supportingInformationDetails.heading = Provide supporting information
 supportingInformationDetails.checkYourAnswersLabel = Supporting information
-supportingInformationDetails.checkYourAnswersHeading = Other information
 supportingInformationDetails.error.required = Enter supporting information
 supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less
 

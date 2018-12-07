@@ -60,6 +60,16 @@ trait ModelGenerators {
       } yield ConfidentialInformation(field1)
     }
 
+  implicit lazy val arbitraryUploadSupportingMaterialMultiple: Arbitrary[Seq[FileAttachment]] =
+    Arbitrary {
+      for {
+        id <- arbitrary[String]
+        name <- arbitrary[String]
+        mimeType <- arbitrary[String]
+        size <- arbitrary[Long]
+      } yield Seq(FileAttachment(id, name, mimeType, size))
+    }
+
   implicit lazy val arbitraryDescribeYourItem: Arbitrary[DescribeYourItem] =
     Arbitrary {
       for {

@@ -1,4 +1,8 @@
+
 $(document).ready(function() {
+
+
+    uploadFileNameSpace.initialize("upload-files-form","multiple-file-input","list-of-files-table");
 
   // =====================================================
   // Initialise show-hide-content

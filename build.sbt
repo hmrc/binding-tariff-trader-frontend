@@ -32,7 +32,7 @@ lazy val root = (project in file("."))
     // concatenate js
     Concat.groups := Seq(
       "javascripts/bindingtarifftraderfrontend-app.js" ->
-        group(Seq("javascripts/show-hide-content.js", "javascripts/bindingtarifftraderfrontend.js"))
+        group(Seq("javascripts/show-hide-content.js", "javascripts/bindingtarifftraderfrontend.js", "javascripts/uploadFiles.js"))
     ),
     // prevent removal of unused code which generates warning errors due to use of third-party libs
     UglifyKeys.compressOptions := Seq("unused=false", "dead_code=false"),

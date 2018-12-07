@@ -16,10 +16,10 @@
 
 package controllers
 
-import play.api.test.Helpers._
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeIdentifierAction}
 import navigation.FakeNavigator
 import play.api.mvc.Call
+import play.api.test.Helpers._
 import viewmodels.AnswerSection
 import views.html.check_your_answers
 
@@ -45,8 +45,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
 
       val expectedSections = Seq(
         AnswerSection(Some("Applicant details"), Seq()),
-        AnswerSection(Some("Information about your item"), Seq()),
-        AnswerSection(Some("Other information"), Seq())
+        AnswerSection(Some("Information about your item"), Seq())
       )
 
       contentAsString(result) mustBe check_your_answers(frontendAppConfig, expectedSections)(fakeRequest, messages).toString

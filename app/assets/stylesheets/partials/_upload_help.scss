@@ -1,0 +1,136 @@
+.draganddroptable {
+  margin-bottom: 40px;
+  font-size: 16px;
+}
+
+.file-list__file div {
+  display: table-cell;
+  vertical-align: middle;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.file-list__file {
+  border: 1px solid #cdcfd0;
+  padding: 1em;
+  font-size: 16px;
+  margin-bottom: 0.75em;
+  display: table;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.file-list__name {
+  width: 70%;
+}
+
+.file-list__size {
+  width: 15%;
+}
+
+.file-list__action {
+  text-align: right;
+  width: 15%;
+}
+
+.file-list__file-error {
+  border: 3px solid #df3034;
+}
+
+.file-list__file-error .file-list__status {
+  padding-top: 0.5em;
+  color: #df3034;
+  float: left;
+  text-align: left;
+  width: 80%;
+}
+.file-list__file-error div {
+  display: inline-block;
+}
+details summary {
+  display: inline-block;
+  color: #005ea5;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: .2631578947em;
+}
+
+.indent {
+  font-family: "nta",Arial,sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 14px;
+  line-height: 1.1428571429;
+  border-left: .5263157895em solid #DEE0E2;
+  display: block;
+  margin: .4210526316em 0 .8421052632em;
+  overflow: hidden;
+  padding: .2105263158em .4210526316em;
+}
+
+.content__body p {
+  font-family: "nta", Arial, sans-serif;
+  font-size: 19px;
+  line-height: 1.3157894737;
+  font-weight: 400;
+  text-transform: none;
+  margin: .6315789474em 0;
+}
+
+.dropzone {
+  border: 3px dashed #bdc0c2;
+  background-color: #fff;
+  width: auto;
+  color: #000000;
+  text-align: center;
+  padding: 30px 20px;
+  margin: 40px 0;
+  text-align: left;
+}
+
+.form-label, .form-label-bold {
+  display: block;
+  color: #0b0c0c;
+  padding-bottom: 2px;
+}
+.fileinput-button {
+  position: relative;
+  overflow: hidden;
+  background: #dee0e2;
+}
+
+.button--table {
+  background-color: #f8f8f8;
+  position: relative;
+  display: -moz-inline-stack;
+  display: inline-block;
+  padding: .526315em .789473em .263157em;
+  border: none;
+  border-radius: 0;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  -webkit-appearance: none;
+  -webkit-box-shadow: 0 2px 0 #d2d2d2;
+  box-shadow: 0 2px 0 #d2d2d2;
+  font-size: 1em;
+  line-height: 1.25;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  cursor: pointer;
+  color: #0b0c0c;
+  border-bottom: 1px solid #000;
+  -webkit-box-shadow: 0 0 0 #f8f8f8;
+  box-shadow: 0 0 0 #f8f8f8;
+}
+
+.fileinput-button input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  -ms-filter: 'alpha(opacity=0)';
+  direction: ltr;
+  cursor: pointer;
+}

@@ -15,32 +15,72 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
 @import models.Mode
+@import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@(appConfig: FrontendAppConfig, form: Form[_], existing: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("uploadSupportingMaterialMultiple.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = UploadSupportingMaterialMultipleController.onSubmit(mode), 'autoComplete -> "off") {
+    @helpers.form(action = UploadSupportingMaterialMultipleController.onSubmit(mode),
+         'enctype -> "multipart/form-data",
+         'id -> "upload-files-form") {
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        <div id="error-dialog"></div>
 
         @components.heading("uploadSupportingMaterialMultiple.heading")
 
-        @components.input_text(
-          field = form("value"),
-          label = messages("uploadSupportingMaterialMultiple.heading"),
-          labelClass=Some("visually-hidden")
-        )
+        <p>@messages("uploadSupportingMaterialMultiple.upload.title")</p>
+        <ul class="bullets">
+            <li>@messages("uploadSupportingMaterialMultiple.upload.restrictionFiles")</li>
+            <li>@messages("uploadSupportingMaterialMultiple.upload.restrictionSize")</li>
+        </ul>
+        <details id="upload--restrictions" class="">
+            <summary role="button" aria-expanded="false"> @messages("uploadSupportingMaterialMultiple.upload.typeOfFiles.title") </summary>
+            <div class="indent" id="details-content-1">
+                <ul class="list list-bullet">
+                    <li>pdf</li>
+                    <li>doc</li>
+                    <li>docx</li>
+                    <li>xlsx</li>
+                    <li>xls</li>
+                    <li>png</li>
+                    <li>jpg</li>
+                    <li>jpeg</li>
+                    <li>txt</li>
+                </ul>
 
-        @components.submit_button()
+            </div>
+        </details>
+
+        <div class="js-visible mt-3">
+            @components.input_file(
+                field = form("multiple-file-input"),
+                label = messages("uploadSupportingMaterialMultiple.label"),
+                accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt"),
+                multiple = true
+            )
+
+            <div id="list-of-files-table" class="draganddroptable"></div>
+        </div>
+
+        <div class="notice js-hidden my-3">
+            <i class="icon icon-important">
+                <span class="visually-hidden">@messages("uploadSupportingMaterialMultiple.jsDisabled.title")</span>
+            </i>
+            <strong class="bold-small">
+                @messages("uploadSupportingMaterialMultiple.jsDisabled.label")
+            </strong>
+        </div>
+
+        @components.submit_button(Some(messages("site.upload_continue")))
     }
 }
