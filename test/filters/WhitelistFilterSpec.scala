@@ -44,22 +44,21 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
 
       "when the underlying config value is not there" in {
 
-        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) {
-          (otherConfig, destination, excluded) =>
+        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) { (otherConfig, destination, excluded) =>
 
-            whenever(!otherConfig.contains("filters.whitelist.ips")) {
+          whenever(!otherConfig.contains("filters.whitelist.ips")) {
 
-              val config = Configuration(
-                (otherConfig +
-                  ("filters.whitelist.destination" -> destination) +
-                  ("filters.whitelist.excluded"    -> excluded)
-                ).toSeq: _*
-              )
+            val config = Configuration(
+              (otherConfig +
+                ("filters.whitelist.destination" -> destination) +
+                ("filters.whitelist.excluded"    -> excluded)
+              ).toSeq: _*
+            )
 
-              assertThrows[ConfigException] {
-                new WhitelistFilter(config, mockMaterializer)
-              }
+            assertThrows[ConfigException] {
+              new WhitelistFilter(config, mockMaterializer)
             }
+          }
         }
       }
     }
@@ -68,21 +67,18 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
 
       "when the underlying config value is empty" in {
 
-        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) {
-          (otherConfig, destination, excluded) =>
+        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) { (otherConfig, destination, excluded) =>
+          val config = Configuration(
+            (otherConfig +
+              ("filters.whitelist.destination" -> destination) +
+              ("filters.whitelist.excluded"    -> excluded) +
+              ("filters.whitelist.ips"         -> "")
+            ).toSeq: _*
+          )
 
-            val config = Configuration(
-              (otherConfig +
-                ("filters.whitelist.destination" -> destination) +
-                ("filters.whitelist.excluded"    -> excluded) +
-                ("filters.whitelist.ips"         -> "")
-              ).toSeq: _*
-            )
-
-            val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
-
-            whitelistFilter.whitelist mustBe empty
-          }
+          val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
+          whitelistFilter.whitelist mustBe empty
+        }
       }
     }
 
@@ -92,22 +88,20 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
 
         val gen = Gen.nonEmptyListOf(Gen.alphaNumStr suchThat (_.nonEmpty))
 
-        forAll(gen, otherConfigGen, arbitrary[String], arbitrary[String]) {
-          (ips, otherConfig, destination, excluded) =>
+        forAll(gen, otherConfigGen, arbitrary[String], arbitrary[String]) { (ips, otherConfig, destination, excluded) =>
 
-            val ipString = ips.mkString(",")
+          val ipString = ips.mkString(",")
 
-            val config = Configuration(
-              (otherConfig +
-                ("filters.whitelist.destination" -> destination) +
-                ("filters.whitelist.excluded"    -> excluded) +
-                ("filters.whitelist.ips"         -> ipString)
-              ).toSeq: _*
-            )
+          val config = Configuration(
+            (otherConfig +
+              ("filters.whitelist.destination" -> destination) +
+              ("filters.whitelist.excluded"    -> excluded) +
+              ("filters.whitelist.ips"         -> ipString)
+            ).toSeq: _*
+          )
 
-            val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
-
-            whitelistFilter.whitelist must contain theSameElementsAs ips
+          val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
+          whitelistFilter.whitelist must contain theSameElementsAs ips
         }
       }
     }
@@ -119,42 +113,39 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
 
       "when the underlying config value is not there" in {
 
-        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) {
-          (otherConfig, destination, excluded) =>
+        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) { (otherConfig, destination, excluded) =>
 
-            whenever(!otherConfig.contains("filters.whitelist.destination")) {
+          whenever(!otherConfig.contains("filters.whitelist.destination")) {
 
-              val config = Configuration(
-                (otherConfig +
-                  ("filters.whitelist.ips"      -> destination) +
-                  ("filters.whitelist.excluded" -> excluded)
-                  ).toSeq: _*
-              )
+            val config = Configuration(
+              (otherConfig +
+                ("filters.whitelist.ips"      -> destination) +
+                ("filters.whitelist.excluded" -> excluded)
+                ).toSeq: _*
+            )
 
-              assertThrows[ConfigException] {
-                new WhitelistFilter(config, mockMaterializer)
-              }
+            assertThrows[ConfigException] {
+              new WhitelistFilter(config, mockMaterializer)
             }
+          }
         }
       }
     }
 
     "must return a Call to the destination" in {
 
-      forAll(otherConfigGen, arbitrary[String], arbitrary[String], arbitrary[String]) {
-        (otherConfig, ips, destination, excluded) =>
+      forAll(otherConfigGen, arbitrary[String], arbitrary[String], arbitrary[String]) { (otherConfig, _, destination, excluded) =>
 
-          val config = Configuration(
-            (otherConfig +
-              ("filters.whitelist.ips"         -> destination) +
-              ("filters.whitelist.excluded"    -> excluded) +
-              ("filters.whitelist.destination" -> destination)
-              ).toSeq: _*
-          )
+        val config = Configuration(
+          (otherConfig +
+            ("filters.whitelist.ips"         -> destination) +
+            ("filters.whitelist.excluded"    -> excluded) +
+            ("filters.whitelist.destination" -> destination)
+            ).toSeq: _*
+        )
 
-          val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
-
-          whitelistFilter.destination mustEqual Call("GET", destination)
+        val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
+        whitelistFilter.destination mustEqual Call("GET", destination)
       }
     }
   }
@@ -165,22 +156,21 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
 
       "when the underlying config value is not there" in {
 
-        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) {
-          (otherConfig, destination, excluded) =>
+        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) { (otherConfig, destination, excluded) =>
 
-            whenever(!otherConfig.contains("filters.whitelist.excluded")) {
+          whenever(!otherConfig.contains("filters.whitelist.excluded")) {
 
-              val config = Configuration(
-                (otherConfig +
-                  ("filters.whitelist.destination" -> destination) +
-                  ("filters.whitelist.ips"    -> excluded)
-                  ).toSeq: _*
-              )
+            val config = Configuration(
+              (otherConfig +
+                ("filters.whitelist.destination" -> destination) +
+                ("filters.whitelist.ips"    -> excluded)
+                ).toSeq: _*
+            )
 
-              assertThrows[ConfigException] {
-                new WhitelistFilter(config, mockMaterializer)
-              }
+            assertThrows[ConfigException] {
+              new WhitelistFilter(config, mockMaterializer)
             }
+          }
         }
       }
     }
@@ -191,24 +181,22 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
 
         val gen = Gen.nonEmptyListOf(Gen.alphaNumStr suchThat (_.nonEmpty))
 
-        forAll(gen, otherConfigGen, arbitrary[String], arbitrary[String]) {
-          (excludedPaths, otherConfig, destination, ips) =>
+        forAll(gen, otherConfigGen, arbitrary[String], arbitrary[String]) { (excludedPaths, otherConfig, destination, ips) =>
 
-            val excludedPathString = excludedPaths.mkString(",")
+          val excludedPathString = excludedPaths.mkString(",")
 
-            val config = Configuration(
-              (otherConfig +
-                ("filters.whitelist.destination" -> destination) +
-                ("filters.whitelist.excluded"    -> excludedPathString) +
-                ("filters.whitelist.ips"         -> ips)
-                ).toSeq: _*
-            )
+          val config = Configuration(
+            (otherConfig +
+              ("filters.whitelist.destination" -> destination) +
+              ("filters.whitelist.excluded"    -> excludedPathString) +
+              ("filters.whitelist.ips"         -> ips)
+              ).toSeq: _*
+          )
 
-            val expectedCalls = excludedPaths.map(Call("GET", _))
+          val expectedCalls = excludedPaths.map(Call("GET", _))
 
-            val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
-
-            whitelistFilter.excludedPaths must contain theSameElementsAs expectedCalls
+          val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
+          whitelistFilter.excludedPaths must contain theSameElementsAs expectedCalls
         }
       }
     }
