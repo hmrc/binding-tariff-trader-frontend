@@ -18,6 +18,10 @@ package models
 
 import play.api.libs.json.Json
 
+/*
+  All sizes are stored as KiloBytes
+ */
+
 case class FileAttachment(id: String, name: String, mimeType: String, size: Long)
 
 object FileAttachment {
