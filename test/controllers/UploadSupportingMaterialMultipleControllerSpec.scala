@@ -98,7 +98,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       contentAsString(result) mustBe viewAsString(form, files)
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "respond with accepted and add next page on the location header  when valid data is submitted" in {
       // Given A Form
       val file = TemporaryFile("example-file.txt")
       val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"), ref = file)
@@ -121,7 +121,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       cache.getEntry[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage) mustBe Some(Seq(FileAttachment("id", "file-name", "type", file.file.length())))
     }
 
-    "redirect to the next page when no data is submitted" in {
+    "respond with accepted and add next page on the location header when no data is submitted" in {
       // Given A Form
       val filePart = FilePart[TemporaryFile](key = "file", "", contentType = Some("application/octet-stream"), ref = TemporaryFile())
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
