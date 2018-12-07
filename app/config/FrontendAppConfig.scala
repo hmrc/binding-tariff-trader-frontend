@@ -59,12 +59,4 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
     routes.LanguageSwitchController.switchToLanguage(lang)
   }
 
-  lazy val whitelistDestination: String = getString("whitelist.destination")
-  lazy val whitelistedIps: Seq[String] = {
-    getString("whitelist.allowedIps")
-      .split(",")
-      .map(_.trim)
-      .filter(_.nonEmpty)
-  }
-
 }
