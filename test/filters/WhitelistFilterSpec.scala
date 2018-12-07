@@ -113,13 +113,13 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
 
       "when the underlying config value is not there" in {
 
-        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) { (otherConfig, destination, excluded) =>
+        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) { (otherConfig, ips, excluded) =>
 
           whenever(!otherConfig.contains("filters.whitelist.destination")) {
 
             val config = Configuration(
               (otherConfig +
-                ("filters.whitelist.ips"      -> destination) +
+                ("filters.whitelist.ips"      -> ips) +
                 ("filters.whitelist.excluded" -> excluded)
                 ).toSeq: _*
             )
@@ -134,11 +134,11 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
 
     "must return a Call to the destination" in {
 
-      forAll(otherConfigGen, arbitrary[String], arbitrary[String], arbitrary[String]) { (otherConfig, _, destination, excluded) =>
+      forAll(otherConfigGen, arbitrary[String], arbitrary[String], arbitrary[String]) { (otherConfig, ips, destination, excluded) =>
 
         val config = Configuration(
           (otherConfig +
-            ("filters.whitelist.ips"         -> destination) +
+            ("filters.whitelist.ips"         -> ips) +
             ("filters.whitelist.excluded"    -> excluded) +
             ("filters.whitelist.destination" -> destination)
             ).toSeq: _*
@@ -156,14 +156,14 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
 
       "when the underlying config value is not there" in {
 
-        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) { (otherConfig, destination, excluded) =>
+        forAll(otherConfigGen, arbitrary[String], arbitrary[String]) { (otherConfig, destination, ips) =>
 
           whenever(!otherConfig.contains("filters.whitelist.excluded")) {
 
             val config = Configuration(
               (otherConfig +
                 ("filters.whitelist.destination" -> destination) +
-                ("filters.whitelist.ips"    -> excluded)
+                ("filters.whitelist.ips"         -> ips)
                 ).toSeq: _*
             )
 
