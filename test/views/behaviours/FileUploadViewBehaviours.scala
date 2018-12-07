@@ -60,27 +60,7 @@ trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
         }
       }
 
-      // TODO Add this once we know what data is used in the form
-      //      "rendered with a valid form" must {
-      //        "include the form's value in the value input" in {
-      //          val doc = asDocument(createView(form.fill(answer)))
-      //          doc.getElementById("multiple-file-input").attr("value") mustBe answer
-      //        }
-      //      }
-
       "rendered with an error" must {
-        // TODO error test must be done at client side as all the test are made with javascript
-        //        "show an error summary" in {
-        //          val doc = asDocument(createView(form.withError(error)))
-        //          assertRenderedById(doc, "error-summary-heading")
-        //        }
-
-        // TODO Add this once we know what data is used in the form
-        //        "show an error in the value field's label" in {
-        //          val doc = asDocument(createView(form.withError(error)))
-        //          val errorSpan = doc.getElementsByClass("error-message").first
-        //          errorSpan.text mustBe messages(errorMessage)
-        //        }
 
         "show an error prefix in the browser title" in {
           val doc = asDocument(createView(form.withError(error)))
@@ -112,27 +92,12 @@ trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
         }
       }
 
-      // TODO Add this once we know what data is used in the form
-      //      "rendered with a valid form" must {
-      //        "include the form's value in the value input" in {
-      //          val doc = asDocument(createView(form.fill(answer)))
-      //          doc.getElementById("multiple-file-input").attr("value") mustBe answer
-      //        }
-      //      }
-
       "rendered with an error" must {
 
         "show an error summary" in {
           val doc = asDocument(createView(form.withError(error)))
           assertRenderedById(doc, "error-summary-heading")
         }
-
-        // TODO Add this once we know what data is used in the form
-        //        "show an error in the value field's label" in {
-        //          val doc = asDocument(createView(form.withError(error)))
-        //          val errorSpan = doc.getElementsByClass("error-message").first
-        //          errorSpan.text mustBe messages(errorMessage)
-        //        }
 
         "show an error prefix in the browser title" in {
           val doc = asDocument(createView(form.withError(error)))
