@@ -31,8 +31,6 @@ import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
-import util.WiremockTestServer
-
 
 class BindingTariffClassificationConnectorSpec extends UnitSpec
   with WiremockTestServer with MockitoSugar with WithFakeApplication {

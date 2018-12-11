@@ -32,7 +32,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import util.WiremockTestServer
 
 class BindingTariffFilestoreConnectorSpec
   extends UnitSpec

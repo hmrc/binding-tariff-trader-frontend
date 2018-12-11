@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package util
+package connectors
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.configureFor
 import org.scalatest.BeforeAndAfterEach
 import uk.gov.hmrc.play.test.UnitSpec
 
