@@ -52,12 +52,6 @@ lazy val root = (project in file("."))
   )
   .configs(IntegrationTest)
   .settings(inConfig(TemplateItTest)(Defaults.itSettings): _*)
-//  .settings(
-//    Keys.fork in IntegrationTest := false,
-//    unmanagedSourceDirectories in IntegrationTest := Seq((baseDirectory in IntegrationTest).value / "it"),
-//    addTestReportOption(IntegrationTest, "int-test-reports"),
-//    testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
-//    parallelExecution in IntegrationTest := false)
   .settings(
     Keys.fork in IntegrationTest := false,
     unmanagedSourceDirectories in IntegrationTest := Seq(
