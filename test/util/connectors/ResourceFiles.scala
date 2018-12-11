@@ -20,8 +20,9 @@ import scala.io.Source
 
 trait ResourceFiles {
 
-  def fromFile(path: String): String = {
-    Source.fromFile(path).getLines().mkString
+  protected def fromResource(path: String): String = {
+    val url = getClass.getClassLoader.getResource(path)
+    Source.fromURL(url, "UTF-8").getLines().mkString
   }
 
 }
