@@ -32,6 +32,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import util.WiremockTestServer
 
 class BindingTariffFilestoreConnectorSpec
   extends UnitSpec
@@ -57,7 +58,7 @@ class BindingTariffFilestoreConnectorSpec
           .willReturn(
             aResponse()
               .withStatus(Status.ACCEPTED)
-              .withBody(fromFile("test/resources/binding-tariff-filestore_upload-response.json"))
+              .withBody(fromFile("test/unit/resources/binding-tariff-filestore_upload-response.json"))
           )
       )
 
@@ -76,7 +77,7 @@ class BindingTariffFilestoreConnectorSpec
           .willReturn(
             aResponse()
               .withStatus(Status.OK)
-              .withBody(fromFile("test/resources/binding-tariff-filestore_upload-response.json"))
+              .withBody(fromFile("test/unit/resources/binding-tariff-filestore_upload-response.json"))
           )
       )
 
@@ -93,7 +94,7 @@ class BindingTariffFilestoreConnectorSpec
           .willReturn(
             aResponse()
               .withStatus(Status.ACCEPTED)
-              .withBody(fromFile("test/resources/binding-tariff-filestore_upload-response.json"))
+              .withBody(fromFile("test/unit/resources/binding-tariff-filestore_upload-response.json"))
           )
       )
 
