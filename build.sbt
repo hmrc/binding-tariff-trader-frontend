@@ -22,9 +22,9 @@ lazy val root = (project in file("."))
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(true),
+    retrieveManaged := true,
     parallelExecution in Test := false,
     fork in Test := false,
-    retrieveManaged := true,
     resolvers ++= Seq(
       Resolver.bintrayRepo("hmrc", "releases"),
       Resolver.jcenterRepo
