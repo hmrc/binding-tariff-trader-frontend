@@ -57,7 +57,7 @@ class BindingTariffFilestoreConnectorSpec
           .willReturn(
             aResponse()
               .withStatus(Status.ACCEPTED)
-              .withBody(fromFile("test/unit/resources/binding-tariff-filestore_upload-response.json"))
+              .withBody(fromResource("binding-tariff-filestore_upload-response.json"))
           )
       )
 
@@ -76,7 +76,7 @@ class BindingTariffFilestoreConnectorSpec
           .willReturn(
             aResponse()
               .withStatus(Status.OK)
-              .withBody(fromFile("test/unit/resources/binding-tariff-filestore_upload-response.json"))
+              .withBody(fromResource("binding-tariff-filestore_upload-response.json"))
           )
       )
 
@@ -93,7 +93,7 @@ class BindingTariffFilestoreConnectorSpec
           .willReturn(
             aResponse()
               .withStatus(Status.ACCEPTED)
-              .withBody(fromFile("test/unit/resources/binding-tariff-filestore_upload-response.json"))
+              .withBody(fromResource("binding-tariff-filestore_upload-response.json"))
           )
       )
 

@@ -46,7 +46,8 @@ lazy val root = (project in file("."))
   .settings(
     unmanagedSourceDirectories in Test := Seq(
       (baseDirectory in Test).value / "test/unit",
-      (baseDirectory in Test).value / "test/util"
+      (baseDirectory in Test).value / "test/util",
+      (baseDirectory in Test).value / "test/resources"
     ),
     addTestReportOption(Test, "test-reports")
   )
@@ -56,7 +57,8 @@ lazy val root = (project in file("."))
     Keys.fork in IntegrationTest := false,
     unmanagedSourceDirectories in IntegrationTest := Seq(
       (baseDirectory in IntegrationTest).value / "test/it",
-      (baseDirectory in Test).value / "test/util"
+      (baseDirectory in IntegrationTest).value / "test/util",
+      (baseDirectory in IntegrationTest).value / "test/resources"
     ),
     addTestReportOption(IntegrationTest, "int-test-reports"),
     testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
