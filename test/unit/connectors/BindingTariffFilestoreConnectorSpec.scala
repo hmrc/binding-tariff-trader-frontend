@@ -33,9 +33,8 @@ import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class BindingTariffFilestoreConnectorSpec
-  extends UnitSpec
-    with WithFakeApplication with WiremockTestServer with MockitoSugar with BeforeAndAfterEach with ResourceFiles {
+class BindingTariffFilestoreConnectorSpec extends UnitSpec with WithFakeApplication
+  with WiremockTestServer with MockitoSugar with BeforeAndAfterEach with ResourceFiles {
 
   private val config = mock[FrontendAppConfig]
   private val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
@@ -103,5 +102,7 @@ class BindingTariffFilestoreConnectorSpec
         mimeType = "text/plain"
       )
     }
+
   }
+
 }
