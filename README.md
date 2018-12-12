@@ -19,7 +19,8 @@ The Front-end microrservice for the BTI Application journey on GOV.UK
 4) Start Auth Using `sm --start AUTH -f`
 5) Start Auth Login Stub `sm --start AUTH_LOGIN_STUB -f`
 6) Start Auth Login API `sm --start AUTH_LOGIN_API -f`
-7) Start User Details `sm --start USER_DETAILS -f`
+7) Start Auth Identity verification `sm --start IDENTITY_VERIFICATION -f`
+8) Start User Details `sm --start USER_DETAILS -f`
 
 
 ##### Running With SBT
