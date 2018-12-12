@@ -33,8 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthConnector, config: FrontendAppConfig)
                                              (implicit ec: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
 
-
-  lazy val requiredEnrolment = Enrolment(config.authEnrolment)
+  private lazy val requiredEnrolment = Enrolment(config.authEnrolment)
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
@@ -50,11 +49,11 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
       }.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
     } recover {
       case _: NoActiveSession => Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
-      case _: InsufficientEnrolments => redirectToUnauthorised
-      case _: InsufficientConfidenceLevel => redirectToUnauthorised
-      case _: UnsupportedAuthProvider => redirectToUnauthorised
-      case _: UnsupportedAffinityGroup => redirectToUnauthorised
-      case _: UnsupportedCredentialRole => redirectToUnauthorised
+      case _: InsufficientEnrolments |
+           _: InsufficientConfidenceLevel |
+           _: UnsupportedAuthProvider |
+           _: UnsupportedAffinityGroup |
+           _: UnsupportedCredentialRole => redirectToUnauthorised
     }
   }
 
