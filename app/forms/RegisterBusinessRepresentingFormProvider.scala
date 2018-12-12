@@ -16,22 +16,29 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
+import models.RegisterBusinessRepresenting
 import play.api.data.Form
 import play.api.data.Forms._
-import models.RegisterBusinessRepresenting
 
 class RegisterBusinessRepresentingFormProvider @Inject() extends Mappings {
 
-   def apply(): Form[RegisterBusinessRepresenting] = Form(
-     mapping(
-      "field1" -> text("registerBusinessRepresenting.error.field1.required")
-        .verifying(maxLength(100, "registerBusinessRepresenting.error.field1.length")),
-      "field2" -> text("registerBusinessRepresenting.error.field2.required")
-        .verifying(maxLength(100, "registerBusinessRepresenting.error.field2.length"))
-     )(RegisterBusinessRepresenting.apply)(RegisterBusinessRepresenting.unapply)
-   )
+  def apply(): Form[RegisterBusinessRepresenting] = Form(
+    mapping(
+      "eoriNumber" -> text("registerBusinessRepresenting.error.eoriNumber.required")
+        .verifying(maxLength(100, "registerBusinessRepresenting.error.eoriNumber.length")),
+      "businessName" -> text("registerBusinessRepresenting.error.businessName.required")
+        .verifying(maxLength(100, "registerBusinessRepresenting.error.businessName.length")),
+      "addressLine1" -> text("registerBusinessRepresenting.error.addressLine1.required")
+        .verifying(maxLength(100, "registerBusinessRepresenting.error.addressLine1.length")),
+      "town" -> text("registerBusinessRepresenting.error.town.required")
+        .verifying(maxLength(100, "registerBusinessRepresenting.error.town.length")),
+      "postCode" -> text("registerBusinessRepresenting.error.postCode.required")
+        .verifying(maxLength(100, "registerBusinessRepresenting.error.postCode.length")),
+      "country" -> text("registerBusinessRepresenting.error.country.required")
+        .verifying(maxLength(100, "registerBusinessRepresenting.error.country.length"))
+    )(RegisterBusinessRepresenting.apply)(RegisterBusinessRepresenting.unapply)
+  )
 
 }
