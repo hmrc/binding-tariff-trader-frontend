@@ -20,6 +20,7 @@ import connectors.BindingTariffFilestoreConnector
 import javax.inject.{Inject, Singleton}
 import models._
 import models.response.FilestoreResponse
+import play.api.Logger
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import uk.gov.hmrc.http.HeaderCarrier
@@ -39,18 +40,36 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
     connector.get(file).map(toFileAttachment(file.size))
   }
 
+  /*
+  * Publishes the file IF it has been successfully scanned.
+  * */
   def publish(file: FileAttachment)(implicit headerCarrier: HeaderCarrier): Future[SubmittedFileAttachment] = {
     connector.get(file).flatMap { r: FilestoreResponse =>
       r.scanStatus match {
-        case Some(ScanStatus.READY) => connector.publish(file).map(toPublishedAttachment(file.size))
-        case Some(ScanStatus.FAILED) => successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Quarantined"))
-        case _ => successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Unscanned"))
+        case Some(ScanStatus.READY) =>
+          // If the file has been scanned and marked as safe
+          connector.publish(file).map(toPublishedAttachment(file.size))
+
+        case Some(ScanStatus.FAILED) => // If the file has been quarantined by the virus scanner
+          Logger.warn(s"File could not be published as it was [Quarantined]. It will be lost.")
+          successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Quarantined"))
+
+        case _ => // If the file is not scanned yet.
+          Logger.warn(s"File could not be published as it was [Un-scanned]. It will be lost.")
+          successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Unscanned"))
       }
     }
   }
 
   def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[SubmittedFileAttachment]] = {
-    sequence(files.map(publish(_)))
+    sequence(
+      files.map(
+        file => publish(file)
+          .recover({
+            case throwable: Throwable => UnpublishedFileAttachment(file.id, file.name, file.mimeType, file.size, throwable.getMessage)
+          })
+      )
+    )
   }
 
   private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
