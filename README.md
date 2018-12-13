@@ -15,7 +15,7 @@ The Front-end microrservice for the BTI Application journey on GOV.UK
 
 1) Start Mongo `sm --start MONGO`
 2) Start Assets Frontend Using `sm --start ASSETS_FRONTEND -r 3.2.2`
-3) Start [Binding Tariff Classification](https://github.com/hmrc/binding-tariff-classification) Using `sm --start BINDING_TARIFF_CLASSIFICATION -f`
+3) Start [Binding Tariff Classification](https://github.com/hmrc/binding-tariff-classification) Using `sm --start BINDING_TARIFF_CLASSIFICATION -r`
 4) Start Auth Using `sm --start AUTH -r`
 5) Start Auth Login Stub `sm --start AUTH_LOGIN_STUB -r`
 6) Start Auth Login API `sm --start AUTH_LOGIN_API -r`
