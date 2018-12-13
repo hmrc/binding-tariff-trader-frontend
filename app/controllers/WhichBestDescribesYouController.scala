@@ -27,7 +27,7 @@ import forms.WhichBestDescribesYouFormProvider
 import models.{Enumerable, Mode}
 import navigation.Navigator
 import views.html.whichBestDescribesYou
-import models.WhichBestDescribesYou.{Option1, Option2}
+import models.WhichBestDescribesYou.{BusinessOwner, BusinessRepresentative}
 import pages.{RegisterBusinessRepresentingPage, SelectApplicationTypePage, WhichBestDescribesYouPage}
 import play.api.mvc.{Action, AnyContent}
 
@@ -62,12 +62,12 @@ class WhichBestDescribesYouController @Inject()(
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(whichBestDescribesYou(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(WhichBestDescribesYouPage, value)
+      selectedOption => {
+        val updatedAnswers = request.userAnswers.set(WhichBestDescribesYouPage, selectedOption)
 
-        val redirectedPage = value match {
-          case Option1 => SelectApplicationTypePage
-          case Option2 => RegisterBusinessRepresentingPage
+        val redirectedPage = selectedOption match {
+          case BusinessOwner => SelectApplicationTypePage
+          case BusinessRepresentative => RegisterBusinessRepresentingPage
         }
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(

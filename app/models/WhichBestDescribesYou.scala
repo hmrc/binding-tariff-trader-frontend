@@ -24,11 +24,11 @@ sealed trait WhichBestDescribesYou extends Page
 
 object WhichBestDescribesYou {
 
-  case object Option1 extends WithName("option1") with WhichBestDescribesYou
-  case object Option2 extends WithName("option2") with WhichBestDescribesYou
+  case object BusinessOwner extends WithName("option1") with WhichBestDescribesYou
+  case object BusinessRepresentative extends WithName("option2") with WhichBestDescribesYou
 
   val values: Set[WhichBestDescribesYou] = Set(
-    Option1, Option2
+    BusinessOwner, BusinessRepresentative
   )
 
   val options: Set[RadioOption] = values.map {
@@ -45,8 +45,8 @@ object WhichBestDescribesYou {
 
   implicit object WhichBestDescribesYouReads extends Reads[WhichBestDescribesYou] {
     override def reads(json: JsValue): JsResult[WhichBestDescribesYou] = json match {
-      case JsString(Option1.toString) => JsSuccess(Option1)
-      case JsString(Option2.toString) => JsSuccess(Option2)
+      case JsString(BusinessOwner.toString) => JsSuccess(BusinessOwner)
+      case JsString(BusinessRepresentative.toString) => JsSuccess(BusinessRepresentative)
       case _                          => JsError("Unknown whichBestDescribesYou")
     }
   }
