@@ -265,7 +265,6 @@ confirmation.sendingSamples.address = HM Revenue and Customs<br> Tariff Classifi
 confirmation.paragraph5.sendingSamples.link = Apply for another commodity code ruling
 confirmation.refValue = GB{0}
 
-
 confirmation.yourRefNumber = Your reference number
 confirmation.paragragh.confirmationEmail = We have sent your confirmation email to
 confirmation.download.link.PDF = Download a PDF of the application
