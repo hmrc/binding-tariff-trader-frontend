@@ -47,8 +47,10 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
         Some("registeredAddressForEori.checkYourAnswersLabel"),
         Seq(
           checkYourAnswersHelper.registeredAddressForEori,
+          checkYourAnswersHelper.enterContactDetails,
           checkYourAnswersHelper.whichBestDescribesYou,
-          checkYourAnswersHelper.enterContactDetails
+          checkYourAnswersHelper.registerBusinessRepresenting,
+          checkYourAnswersHelper.uploadWrittenAuthorisation
         ).flatten
       ),
       AnswerSection(
