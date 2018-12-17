@@ -73,8 +73,7 @@ class SupportingInformationController @Inject()(
           }
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+            _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
           )
         }
       )

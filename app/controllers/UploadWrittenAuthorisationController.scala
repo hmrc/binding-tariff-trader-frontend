@@ -27,13 +27,14 @@ import pages._
 import play.api.data.FormError
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{Action, MultipartFormData}
+import play.api.mvc.{Action, AnyContent, MultipartFormData, Result}
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadWrittenAuthorisation
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.Future.successful
 
 class UploadWrittenAuthorisationController @Inject()(
                                                       appConfig: FrontendAppConfig,
@@ -49,36 +50,44 @@ class UploadWrittenAuthorisationController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-      val uploadedFile = request.userAnswers.get(UploadWrittenAuthorisationPage)
-
-      Ok(uploadWrittenAuthorisation(appConfig, form, uploadedFile, mode))
+    val uploadedFile = request.userAnswers.get(UploadWrittenAuthorisationPage)
+    Ok(uploadWrittenAuthorisation(appConfig, form, uploadedFile, mode))
   }
 
   def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
-    .async(parse.multipartFormData) {
+    .async(parse.multipartFormData) { implicit request =>
 
-      implicit request =>
+      val letterOfAuthority = request.body.file("letter-of-authority").filter(_.filename.nonEmpty)
 
-        val letterOfAuthority = request.body.file("letter-of-authority").filter(_.filename.nonEmpty)
+      def badRequest(errorKey: String, errorMessage: String): Future[Result] = {
+        successful(
+          BadRequest(
+            uploadWrittenAuthorisation(
+              appConfig,
+              form.copy(errors = Seq(FormError(errorKey, errorMessage))),
+              None,
+              mode
+            )
+          )
+        )
+      }
 
-        letterOfAuthority match {
-          case Some(file) =>
-            fileService.upload(file) flatMap {
-              case fileAttachment: FileAttachment =>
-                val updatedAnswers = request.userAnswers.set(UploadWrittenAuthorisationPage, fileAttachment)
-                dataCacheConnector.save(updatedAnswers.cacheMap)
-                  .map(_ => Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(request.userAnswers)))
-              case _ =>
-                Future.successful(BadRequest(uploadWrittenAuthorisation(appConfig, form.copy(errors = Seq(FormError("upload-error", "File upload has failed. Try again"))), None, mode)))
-            }
-          case None =>
-            request.userAnswers.get(UploadWrittenAuthorisationPage) match {
-              case Some(u) => Future.successful(Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(request.userAnswers)))
-              case _ => Future.successful(BadRequest(uploadWrittenAuthorisation(appConfig, form.copy(errors = Seq(FormError("select-file", "You must select a file"))), None, mode)))
-            }
-        }
+      letterOfAuthority match {
+        case Some(file) =>
+          fileService.upload(file) flatMap {
+            case fileAttachment: FileAttachment =>
+              val updatedAnswers = request.userAnswers.set(UploadWrittenAuthorisationPage, fileAttachment)
+              dataCacheConnector.save(updatedAnswers.cacheMap)
+                .map(_ => Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(request.userAnswers)))
+            case _ => badRequest("upload-error", "File upload has failed. Try again")
+          }
+        case _ =>
+          request.userAnswers.get(UploadWrittenAuthorisationPage) match {
+            case Some(_) => successful(Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(request.userAnswers)))
+            case _ => badRequest("select-file", "You must select a file")
+          }
+      }
     }
 }
