@@ -47,36 +47,35 @@ class SimilarItemCommodityCodeController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.get(SimilarItemCommodityCodePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+    val preparedForm = request.userAnswers.get(SimilarItemCommodityCodePage) match {
+      case None => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(similarItemCommodityCode(appConfig, preparedForm, mode))
+    Ok(similarItemCommodityCode(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(similarItemCommodityCode(appConfig, formWithErrors, mode))),
-        value => {
-          val updatedAnswers = request.userAnswers.set(SimilarItemCommodityCodePage, value)
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        Future.successful(BadRequest(similarItemCommodityCode(appConfig, formWithErrors, mode))),
+      value => {
+        val updatedAnswers = request.userAnswers.set(SimilarItemCommodityCodePage, value)
 
-          val redirectedPage = value match {
-            case Yesawaresimilarcode => CommodityCodeRulingReferencePage
-            case Nonotaware => LegalChallengePage
-          }
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
-          )
+        val redirectedPage = value match {
+          case Yesawaresimilarcode => CommodityCodeRulingReferencePage
+          case Nonotaware => LegalChallengePage
         }
-      )
+
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ =>
+            Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+        )
+      }
+    )
   }
+
 }
