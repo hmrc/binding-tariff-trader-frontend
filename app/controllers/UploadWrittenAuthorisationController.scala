@@ -25,7 +25,7 @@ import models.{FileAttachment, Mode}
 import navigation.Navigator
 import pages._
 import play.api.data.FormError
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.{Action, AnyContent, MultipartFormData, Result}
 import service.FileService
@@ -59,29 +59,31 @@ class UploadWrittenAuthorisationController @Inject()(
   def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
     .async(parse.multipartFormData) { implicit request =>
 
-      val letterOfAuthority = request.body.file("letter-of-authority").filter(_.filename.nonEmpty)
-
       def badRequest(errorKey: String, errorMessage: String): Future[Result] = {
         successful(
           BadRequest(
-            uploadWrittenAuthorisation(
-              appConfig,
-              form.copy(errors = Seq(FormError(errorKey, errorMessage))),
-              None,
-              mode
-            )
+            uploadWrittenAuthorisation(appConfig, form.copy(errors = Seq(FormError(errorKey, errorMessage))), None, mode)
           )
         )
       }
 
+      def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]) = {
+        fileService.upload(validFile) flatMap {
+          case fileAttachment: FileAttachment =>
+            val updatedAnswers = request.userAnswers.set(UploadWrittenAuthorisationPage, fileAttachment)
+            dataCacheConnector.save(updatedAnswers.cacheMap)
+              .map(_ => Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(request.userAnswers)))
+          case _ => badRequest("upload-error", "File upload has failed. Try again")
+        }
+      }
+
+      val letterOfAuthority = request.body.file("letter-of-authority").filter(_.filename.nonEmpty)
+
       letterOfAuthority match {
         case Some(file) =>
-          fileService.upload(file) flatMap {
-            case fileAttachment: FileAttachment =>
-              val updatedAnswers = request.userAnswers.set(UploadWrittenAuthorisationPage, fileAttachment)
-              dataCacheConnector.save(updatedAnswers.cacheMap)
-                .map(_ => Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(request.userAnswers)))
-            case _ => badRequest("upload-error", "File upload has failed. Try again")
+          valid(file) match {
+            case Right(validFile) => uploadFile(validFile)
+            case Left(errorMessage) => badRequest("file-error", errorMessage)
           }
         case _ =>
           request.userAnswers.get(UploadWrittenAuthorisationPage) match {
@@ -90,4 +92,14 @@ class UploadWrittenAuthorisationController @Inject()(
           }
       }
     }
+
+  private val maxFileSize = 10485760
+
+  private def valid(file: MultipartFormData.FilePart[TemporaryFile])
+  : Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
+
+    if (file.ref.file.length() > maxFileSize) Left(messagesApi("uploadWrittenAuthorisation.error.size"))
+    else Right(file)
+
+  }
 }
