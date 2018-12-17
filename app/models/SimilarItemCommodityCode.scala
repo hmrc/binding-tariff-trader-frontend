@@ -24,16 +24,13 @@ sealed trait SimilarItemCommodityCode extends Page
 
 object SimilarItemCommodityCode {
 
-  case object Yesawaresimilarcode extends WithName("yesAwareSimilarCode") with SimilarItemCommodityCode
-  case object Nonotaware extends WithName("noNotAware") with SimilarItemCommodityCode
+  case object Yes extends WithName("yesAwareSimilarCode") with SimilarItemCommodityCode
+  case object No extends WithName("noNotAware") with SimilarItemCommodityCode
 
-  val values: Set[SimilarItemCommodityCode] = Set(
-    Yesawaresimilarcode, Nonotaware
-  )
+  val values: Set[SimilarItemCommodityCode] = Set(Yes, No)
 
   val options: Set[RadioOption] = values.map {
-    value =>
-      RadioOption("similarItemCommodityCode", value.toString)
+    value => RadioOption("similarItemCommodityCode", value.toString)
   }
 
   implicit val enumerable: Enumerable[SimilarItemCommodityCode] =
@@ -45,9 +42,9 @@ object SimilarItemCommodityCode {
 
   implicit object SimilarItemCommodityCodeReads extends Reads[SimilarItemCommodityCode] {
     override def reads(json: JsValue): JsResult[SimilarItemCommodityCode] = json match {
-      case JsString(Yesawaresimilarcode.toString) => JsSuccess(Yesawaresimilarcode)
-      case JsString(Nonotaware.toString) => JsSuccess(Nonotaware)
-      case _                          => JsError("Unknown similarItemCommodityCode")
+      case JsString(Yes.toString) => JsSuccess(Yes)
+      case JsString(No.toString) => JsSuccess(No)
+      case _ => JsError("Unknown similarItemCommodityCode")
     }
   }
 }

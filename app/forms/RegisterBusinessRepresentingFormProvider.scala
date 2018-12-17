@@ -21,7 +21,7 @@ import javax.inject.Inject
 import models.RegisterBusinessRepresenting
 import play.api.data.Forms._
 import play.api.data.validation.{Constraint, Invalid, Valid}
-import play.api.data.{Form}
+import play.api.data.Form
 
 class RegisterBusinessRepresentingFormProvider @Inject() extends Mappings {
 

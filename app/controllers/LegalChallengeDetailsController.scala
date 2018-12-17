@@ -49,8 +49,8 @@ class LegalChallengeDetailsController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(LegalChallengeDetailsPage) match {
-      case None => form
       case Some(value) => form.fill(value)
+      case _ => form
     }
 
     Ok(legalChallengeDetails(appConfig, preparedForm, mode))

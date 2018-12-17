@@ -24,16 +24,13 @@ sealed trait WhenToSendSample extends Page
 
 object WhenToSendSample {
 
-  case object Yesprovidesample extends WithName("yesProvideSample") with WhenToSendSample
-  case object Notsendingsample extends WithName("notSendingSample") with WhenToSendSample
+  case object Yes extends WithName("yesProvideSample") with WhenToSendSample
+  case object No extends WithName("notSendingSample") with WhenToSendSample
 
-  val values: Set[WhenToSendSample] = Set(
-    Yesprovidesample, Notsendingsample
-  )
+  val values: Set[WhenToSendSample] = Set(Yes, No)
 
   val options: Set[RadioOption] = values.map {
-    value =>
-      RadioOption("whenToSendSample", value.toString)
+    value => RadioOption("whenToSendSample", value.toString)
   }
 
   implicit val enumerable: Enumerable[WhenToSendSample] =
@@ -45,9 +42,9 @@ object WhenToSendSample {
 
   implicit object WhenToSendSampleReads extends Reads[WhenToSendSample] {
     override def reads(json: JsValue): JsResult[WhenToSendSample] = json match {
-      case JsString(Yesprovidesample.toString) => JsSuccess(Yesprovidesample)
-      case JsString(Notsendingsample.toString) => JsSuccess(Notsendingsample)
-      case _                          => JsError("Unknown whenToSendSample")
+      case JsString(Yes.toString) => JsSuccess(Yes)
+      case JsString(No.toString) => JsSuccess(No)
+      case _ => JsError("Unknown whenToSendSample")
     }
   }
 }

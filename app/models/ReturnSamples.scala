@@ -23,16 +23,13 @@ sealed trait ReturnSamples
 
 object ReturnSamples {
 
-  case object Yesreturnsamples extends WithName("yesReturnSamples") with ReturnSamples
-  case object Nodontreturnsamples extends WithName("noDontReturnSamples") with ReturnSamples
+  case object Yes extends WithName("yesReturnSamples") with ReturnSamples
+  case object No extends WithName("noDontReturnSamples") with ReturnSamples
 
-  val values: Set[ReturnSamples] = Set(
-    Yesreturnsamples, Nodontreturnsamples
-  )
+  val values: Set[ReturnSamples] = Set(Yes, No)
 
   val options: Set[RadioOption] = values.map {
-    value =>
-      RadioOption("returnSamples", value.toString)
+    value => RadioOption("returnSamples", value.toString)
   }
 
   implicit val enumerable: Enumerable[ReturnSamples] =
@@ -44,9 +41,9 @@ object ReturnSamples {
 
   implicit object ReturnSamplesReads extends Reads[ReturnSamples] {
     override def reads(json: JsValue): JsResult[ReturnSamples] = json match {
-      case JsString(Yesreturnsamples.toString) => JsSuccess(Yesreturnsamples)
-      case JsString(Nodontreturnsamples.toString) => JsSuccess(Nodontreturnsamples)
-      case _                          => JsError("Unknown returnSamples")
+      case JsString(Yes.toString) => JsSuccess(Yes)
+      case JsString(No.toString) => JsSuccess(No)
+      case _ => JsError("Unknown returnSamples")
     }
   }
 }
