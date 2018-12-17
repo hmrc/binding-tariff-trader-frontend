@@ -44,7 +44,7 @@ class RegisterBusinessRepresentingViewSpec extends QuestionViewBehaviours[Regist
       createViewUsingForm,
       messageKeyPrefix,
       routes.RegisterBusinessRepresentingController.onSubmit(NormalMode).url,
-      "field1", "field2"
+      "eoriNumber", "businessName", "addressLine1", "town", "postCode", "country"
     )
   }
 }

@@ -1,0 +1,89 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+@import uk.gov.hmrc.play.views.html._
+@import controllers.routes._
+@import models.Mode
+@import views.ViewUtils._
+
+@(appConfig: FrontendAppConfig, form: Form[_], file: Option[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    title = s"${errorPrefix(form)} ${messages("uploadWrittenAuthorisation.title")}",
+    appConfig = appConfig,
+    bodyClasses = None) {
+
+    @helpers.form(action = UploadWrittenAuthorisationController.onSubmit(mode), 'enctype -> "multipart/form-data", 'autoComplete -> "off") {
+
+        @components.back_link()
+
+        @components.error_summary(form.errors)
+
+        @components.heading("uploadWrittenAuthorisation.heading")
+
+        <div class="form-group">
+            <fieldset>
+                <p>To complete an application for another business or organisation you will need to provide proof of authorisation.</p>
+                <div aria-label="Information">
+                    <p> We will accept a document dated in the last 12 months, for example: </p>
+                    <ul class="list list-bullet">
+                        <li>a digital document, for example a word document</li>
+                        <li>a scanned letter from the trader</li>
+                        <li>a copy of an email from the trader</li>
+                    </ul>
+                </div>
+            </fieldset>
+        </div>
+
+        <p>@messages("uploadWrittenAuthorisation.upload.title")</p>
+        <ul class="bullets">
+            <li>@messages("uploadWrittenAuthorisation.upload.restrictionSize")</li>
+        </ul>
+        <details id="upload--restrictions" class="">
+            <summary role="button" aria-expanded="false"> @messages("uploadSupportingMaterialMultiple.upload.typeOfFiles.title") </summary>
+            <div class="indent" id="details-content-1">
+                <ul class="list list-bullet">
+                    <li>pdf</li>
+                    <li>doc</li>
+                    <li>docx</li>
+                    <li>png</li>
+                    <li>jpg</li>
+                    <li>jpeg</li>
+                    <li>txt</li>
+                </ul>
+            </div>
+        </details>
+
+        <div class="mt-3">
+                @components.input_file(
+                    field = form("letter-of-authority"),
+                    label = if(file.isDefined){ messages("uploadWrittenAuthorisation.label.replace")} else { messages("uploadWrittenAuthorisation.label")},
+                    accept = Some(".pdf,.doc,.docx,.png,.jpeg,.jpg,.txt")
+                )
+        </div>
+
+        @if(file.isDefined){
+          <div class="file-list__file" id="lettter-of-authority">
+              <div class="file-list__name"><span> @file.get.name </span></div>
+              <div class="file-list__size"> @file.get.size Bytes </div>
+          </div>
+
+        }
+
+        @components.submit_button(Some(messages("site.upload_continue")))
+    }
+}

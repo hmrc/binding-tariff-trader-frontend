@@ -34,6 +34,8 @@ class Navigator @Inject()() {
 
     RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(NormalMode)),
 
+    UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(NormalMode)),
+
     InformationAboutYourItemPage -> (_ => routes.InformationAboutYourItemController.onPageLoad(NormalMode)),
 
     PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),

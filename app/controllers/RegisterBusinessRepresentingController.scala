@@ -25,7 +25,7 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.RegisterBusinessRepresentingFormProvider
 import models.Mode
-import pages.RegisterBusinessRepresentingPage
+import pages.{RegisterBusinessRepresentingPage, UploadWrittenAuthorisationPage}
 import navigation.Navigator
 import play.api.mvc.{Action, AnyContent}
 import views.html.registerBusinessRepresenting
@@ -64,7 +64,7 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
         val updatedAnswers = request.userAnswers.set(RegisterBusinessRepresentingPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(RegisterBusinessRepresentingPage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(UploadWrittenAuthorisationPage, mode)(updatedAnswers))
         )
       }
     )

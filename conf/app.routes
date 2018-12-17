@@ -98,3 +98,8 @@ GET        /check-your-answers                          controllers.CheckYourAns
 POST       /check-your-answers                          controllers.CheckYourAnswersController.onSubmit()
 
 GET        /confirmation                                controllers.ConfirmationController.onPageLoad()
+
+GET        /uploadWrittenAuthorisation                        controllers.UploadWrittenAuthorisationController.onPageLoad(mode: Mode = NormalMode)
+POST       /uploadWrittenAuthorisation                        controllers.UploadWrittenAuthorisationController.onSubmit(mode: Mode = NormalMode)
+GET        /changeUploadWrittenAuthorisation                  controllers.UploadWrittenAuthorisationController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeUploadWrittenAuthorisation                  controllers.UploadWrittenAuthorisationController.onSubmit(mode: Mode = CheckMode)

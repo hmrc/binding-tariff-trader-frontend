@@ -16,17 +16,17 @@
 
 package controllers
 
-import play.api.data.Form
-import play.api.libs.json.Json
-import uk.gov.hmrc.http.cache.client.CacheMap
-import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import play.api.test.Helpers._
 import forms.RegisterBusinessRepresentingFormProvider
 import models.{NormalMode, RegisterBusinessRepresenting}
+import navigation.FakeNavigator
 import pages.RegisterBusinessRepresentingPage
+import play.api.data.Form
+import play.api.libs.json.Json
 import play.api.mvc.Call
+import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.registerBusinessRepresenting
 
 class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
@@ -52,16 +52,32 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(RegisterBusinessRepresentingPage.toString -> Json.toJson(RegisterBusinessRepresenting("value 1", "value 2")))
+      val validData = Map(RegisterBusinessRepresentingPage.toString ->
+        Json.toJson(RegisterBusinessRepresenting(
+          "validEori123",
+          "valid-business-name",
+          "valid-address-line",
+          "valid-town",
+          "valid-post-code",
+          "valid-country")
+        )
+      )
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(RegisterBusinessRepresenting("value 1", "value 2")))
+      contentAsString(result) mustBe viewAsString(form.fill(RegisterBusinessRepresenting("validEori123", "valid-business-name", "valid-address-line", "valid-town", "valid-post-code", "valid-country")))
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("field1", "value 1"), ("field2", "value 2"))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(
+        ("eoriNumber", "validEori123"),
+        ("businessName", "valid-business-name"),
+        ("addressLine1", "valid-address-line"),
+        ("town", "valid-town"),
+        ("postCode", "valid-pc"),
+        ("country", "valid-country")
+      )
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -87,7 +103,15 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("field1", "value 1"), ("field2", "value 2"))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(
+        ("eoriNumber", "validEori123"),
+        ("businessName", "valid-business-name"),
+        ("addressLine1", "valid-address-line"),
+        ("town", "valid-town"),
+        ("postCode", "valid-post-code"),
+        ("country", "valid-country")
+      )
+
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER

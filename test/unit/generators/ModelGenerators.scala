@@ -70,6 +70,16 @@ trait ModelGenerators {
       } yield Seq(FileAttachment(id, name, mimeType, size))
     }
 
+  implicit lazy val arbitraryUploadWrittenAuthorisation: Arbitrary[FileAttachment] =
+    Arbitrary {
+      for {
+        id <- arbitrary[String]
+        name <- arbitrary[String]
+        mimeType <- arbitrary[String]
+        size <- arbitrary[Long]
+      } yield FileAttachment(id, name, mimeType, size)
+    }
+
   implicit lazy val arbitraryDescribeYourItem: Arbitrary[DescribeYourItem] =
     Arbitrary {
       for {
@@ -104,7 +114,11 @@ trait ModelGenerators {
       for {
         field1 <- arbitrary[String]
         field2 <- arbitrary[String]
-      } yield RegisterBusinessRepresenting(field1, field2)
+        field3 <- arbitrary[String]
+        field4 <- arbitrary[String]
+        field5 <- arbitrary[String]
+        field6 <- arbitrary[String]
+      } yield RegisterBusinessRepresenting(field1, field2, field3, field4, field5, field6)
     }
 
   implicit lazy val arbitrarySelectApplicationType: Arbitrary[SelectApplicationType] =
