@@ -48,8 +48,8 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(RegisterBusinessRepresentingPage) match {
-      case None => form
       case Some(value) => form.fill(value)
+      case _ => form
     }
 
     Ok(registerBusinessRepresenting(appConfig, preparedForm, mode))

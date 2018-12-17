@@ -28,7 +28,7 @@ import models.{Enumerable, Mode}
 import pages.{CommodityCodeBestMatchPage, CommodityCodeDigitsPage, WhenToSendSamplePage}
 import navigation.Navigator
 import views.html.commodityCodeBestMatch
-import models.CommodityCodeBestMatch.{Nohaventfoundcommoditycode, Yesfoundcommoditycode}
+import models.CommodityCodeBestMatch.{No, Yes}
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -66,8 +66,8 @@ class CommodityCodeBestMatchController @Inject()(
         val updatedAnswers = request.userAnswers.set(CommodityCodeBestMatchPage, value)
 
         val redirectedPage = value match {
-          case Yesfoundcommoditycode => CommodityCodeDigitsPage
-          case Nohaventfoundcommoditycode => WhenToSendSamplePage
+          case Yes => CommodityCodeDigitsPage
+          case No => WhenToSendSamplePage
         }
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(

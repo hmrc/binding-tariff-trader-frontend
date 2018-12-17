@@ -27,13 +27,10 @@ object WhichBestDescribesYou {
   case object BusinessOwner extends WithName("option1") with WhichBestDescribesYou
   case object BusinessRepresentative extends WithName("option2") with WhichBestDescribesYou
 
-  val values: Set[WhichBestDescribesYou] = Set(
-    BusinessOwner, BusinessRepresentative
-  )
+  val values: Set[WhichBestDescribesYou] = Set(BusinessOwner, BusinessRepresentative)
 
   val options: Set[RadioOption] = values.map {
-    value =>
-      RadioOption("whichBestDescribesYou", value.toString)
+    value => RadioOption("whichBestDescribesYou", value.toString)
   }
 
   implicit val enumerable: Enumerable[WhichBestDescribesYou] =

@@ -28,7 +28,7 @@ import models.{Enumerable, Mode}
 import pages.{CommodityCodeRulingReferencePage, LegalChallengePage, SimilarItemCommodityCodePage}
 import navigation.Navigator
 import views.html.similarItemCommodityCode
-import models.SimilarItemCommodityCode.{Nonotaware, Yesawaresimilarcode}
+import models.SimilarItemCommodityCode.{No, Yes}
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -66,8 +66,8 @@ class SimilarItemCommodityCodeController @Inject()(
         val updatedAnswers = request.userAnswers.set(SimilarItemCommodityCodePage, value)
 
         val redirectedPage = value match {
-          case Yesawaresimilarcode => CommodityCodeRulingReferencePage
-          case Nonotaware => LegalChallengePage
+          case Yes => CommodityCodeRulingReferencePage
+          case No => LegalChallengePage
         }
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
