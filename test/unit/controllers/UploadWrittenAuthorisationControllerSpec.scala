@@ -95,7 +95,7 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
-      given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(concurrent.Future(FileAttachment("id", "file-name", "type", 0)))
+      given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(Future.successful(FileAttachment("id", "file-name", "type", 0)))
 
       val savedCacheMap = mock[CacheMap]
       given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
