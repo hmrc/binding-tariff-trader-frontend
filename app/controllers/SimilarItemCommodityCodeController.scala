@@ -50,8 +50,8 @@ class SimilarItemCommodityCodeController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(SimilarItemCommodityCodePage) match {
-      case None => form
       case Some(value) => form.fill(value)
+      case _ => form
     }
 
     Ok(similarItemCommodityCode(appConfig, preparedForm, mode))
@@ -71,8 +71,7 @@ class SimilarItemCommodityCodeController @Inject()(
         }
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ =>
-            Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
         )
       }
     )
