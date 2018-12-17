@@ -43,28 +43,27 @@ import scala.concurrent.Future
 
 class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with MockitoSugar with BeforeAndAfterEach {
 
-  def onwardRoute = Call("GET", "/foo")
+  private def onwardRoute = Call("GET", "/foo")
 
   private val fileService = mock[FileService]
   private val cacheConnector = mock[DataCacheConnector]
 
-  override protected def beforeEach(): Unit = {
+  override protected def afterEach(): Unit = {
     super.beforeEach()
     reset(fileService)
   }
 
-  val formProvider = new UploadWrittenAuthorisationFormProvider()
-  val form = formProvider()
+  private val formProvider = new UploadWrittenAuthorisationFormProvider()
+  private val form = formProvider()
 
-
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new UploadWrittenAuthorisationController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
       dataRetrievalAction, new DataRequiredActionImpl, formProvider, fileService)
 
-  def viewAsString(form: Form[_] = form, file: Option[FileAttachment] = None) =
+  private def viewAsString(form: Form[_] = form, file: Option[FileAttachment] = None): String =
     uploadWrittenAuthorisation(frontendAppConfig, form, file, NormalMode)(fakeRequest, messages).toString
 
-  val testAnswer = "answer"
+  private val testAnswer = "answer"
 
   "UploadWrittenAuthorisation Controller" must {
 
@@ -108,7 +107,6 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(onwardRoute.url)
     }
-
 
     "redirect to the next page when no data is submitted but existing file in data cache" in {
 
@@ -154,5 +152,7 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
+
   }
+
 }
