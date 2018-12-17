@@ -30,4 +30,5 @@ class UnauthorisedController @Inject()(val appConfig: FrontendAppConfig,
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(unauthorised(appConfig))
   }
+
 }
