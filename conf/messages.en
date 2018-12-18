@@ -66,12 +66,12 @@ registeredAddressForEori.error.field2.length = Address line 1 must be 70 charact
 registeredAddressForEori.error.field3.length = Town or city must be 35 characters or less
 registeredAddressForEori.error.field4.length = Postcode must be 9 characters or less
 
-whichBestDescribesYou.title = Which of these best describes you?
-whichBestDescribesYou.heading = Which of these best describes you?
-whichBestDescribesYou.businessOwner = I am an employee or owner of the business or organisation
-whichBestDescribesYou.businessRepresentative = I am a representative applying for a different business or organisation
-whichBestDescribesYou.checkYourAnswersLabel = Which of these best describes you?
-whichBestDescribesYou.error.required = Select which of these best describes you?
+whichBestDescribesYou.title = Who is this application for?
+whichBestDescribesYou.heading = Who is this application for?
+whichBestDescribesYou.businessOwner = The business or organisation that I own or work for
+whichBestDescribesYou.businessRepresentative = A different business or organisation that I am representing
+whichBestDescribesYou.checkYourAnswersLabel = Who is this application for?
+whichBestDescribesYou.error.required = Select who is this application for?
 
 selectApplicationType.title = Select application type
 selectApplicationType.heading = Select application type
