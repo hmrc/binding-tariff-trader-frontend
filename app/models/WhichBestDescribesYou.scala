@@ -24,8 +24,8 @@ sealed trait WhichBestDescribesYou extends Page
 
 object WhichBestDescribesYou {
 
-  case object BusinessOwner extends WithName("option1") with WhichBestDescribesYou
-  case object BusinessRepresentative extends WithName("option2") with WhichBestDescribesYou
+  case object BusinessOwner extends WithName("businessOwner") with WhichBestDescribesYou
+  case object BusinessRepresentative extends WithName("businessRepresentative") with WhichBestDescribesYou
 
   val values: Set[WhichBestDescribesYou] = Set(BusinessOwner, BusinessRepresentative)
 
