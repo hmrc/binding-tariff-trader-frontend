@@ -25,7 +25,7 @@ import models.{FileAttachment, Mode}
 import navigation.Navigator
 import pages._
 import play.api.data.FormError
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.{Action, AnyContent, MultipartFormData, Result}
 import service.FileService
@@ -83,23 +83,22 @@ class UploadWrittenAuthorisationController @Inject()(
         case Some(file) =>
           valid(file) match {
             case Right(validFile) => uploadFile(validFile)
-            case Left(errorMessage) => badRequest("file-error", errorMessage)
+            case Left(errorMessage) => badRequest("letter-of-authority", errorMessage)
           }
         case _ =>
           request.userAnswers.get(UploadWrittenAuthorisationPage) match {
             case Some(_) => successful(Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(request.userAnswers)))
-            case _ => badRequest("select-file", "You must select a file")
+            case _ => badRequest("letter-of-authority", "You must select a file")
           }
       }
     }
 
   private val maxFileSize = 10485760
-
   private def valid(file: MultipartFormData.FilePart[TemporaryFile])
   : Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
 
-    if (file.ref.file.length() > maxFileSize) Left(messagesApi("uploadWrittenAuthorisation.error.size"))
-    else Right(file)
+    if (file.ref.file.length() > maxFileSize){Left(messagesApi("uploadWrittenAuthorisation.error.size"))}
+    else{Right(file)}
 
   }
 }
