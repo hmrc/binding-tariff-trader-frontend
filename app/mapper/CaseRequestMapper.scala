@@ -23,6 +23,25 @@ import pages._
 @Singleton
 class CaseRequestMapper {
 
+  def buildAgentDetails(answers: UserAnswers): Option[AgentDetails] = {
+    val whichBestDescribeYou: Option[WhichBestDescribesYou] = answers.get(WhichBestDescribesYouPage)
+
+    if (whichBestDescribeYou.get != WhichBestDescribesYou.BusinessRepresentative) { None }
+
+    val details: RegisterBusinessRepresenting = answers.get(RegisterBusinessRepresentingPage).get
+    Some(AgentDetails(
+      EORIDetails(
+        details.eoriNumber,
+        details.businessName,
+        details.addressLine1,
+        "", // Line 2 empty
+        "", // Line 3 empty
+        details.postCode,
+        details.country
+      )
+    ))
+  }
+
   def map(answers: UserAnswers): NewCaseRequest = {
 
     val confidentialInfo: Option[ConfidentialInformation] = answers.get(ConfidentialInformationPage)
@@ -38,10 +57,12 @@ class CaseRequestMapper {
     val contact = contactDetails.map(toContact).get
     val holder: EORIDetails = registeredAddressForEori.map(toHolder).get
 
+    val agentDetails = buildAgentDetails(answers)
+
     val app = Application(
       holder = holder,
       contact = contact,
-      agent = None, // TODO Unimplemented
+      agent = agentDetails,
       offline = false,
       goodName = describeYourItem.map(_.field1).getOrElse("N/A"),
       goodDescription = describeYourItem.map(_.field2).getOrElse("N/A"),

@@ -17,9 +17,9 @@
 package models
 
 object oCase {
-
+  val fileAttachment = Attachment(url= "http", mimeType = "mimeType" )
   val eoriDetailsExample = EORIDetails("eori", "trader-name", "line1", "line2", "line3", "postcode", "country")
-  val eoriAgentDetailsExample = EORIDetails("eori", "agent-name", "line1", "line2", "line3", "postcode", "country")
+  val eoriAgentDetailsExample = AgentDetails( EORIDetails("eori", "agent-name", "line1", "line2", "line3", "postcode", "country"), fileAttachment)
   val contactExample = Contact("name", "email", Some("phone"))
   val btiApplicationExample = Application(
     "BTI",
