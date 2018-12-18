@@ -60,9 +60,10 @@ class UploadWrittenAuthorisationController @Inject()(
     .async(parse.multipartFormData) { implicit request =>
 
       def badRequest(errorKey: String, errorMessage: String): Future[Result] = {
+        val storedLetter = request.userAnswers.get(UploadWrittenAuthorisationPage)
         successful(
           BadRequest(
-            uploadWrittenAuthorisation(appConfig, form.copy(errors = Seq(FormError(errorKey, errorMessage))), None, mode)
+            uploadWrittenAuthorisation(appConfig, form.copy(errors = Seq(FormError(errorKey, errorMessage))), storedLetter, mode)
           )
         )
       }
@@ -83,12 +84,12 @@ class UploadWrittenAuthorisationController @Inject()(
         case Some(file) =>
           valid(file) match {
             case Right(validFile) => uploadFile(validFile)
-            case Left(errorMessage) => badRequest("letter-of-authority", errorMessage)
+            case Left(errorMessage) => badRequest("validation-error", errorMessage)
           }
         case _ =>
           request.userAnswers.get(UploadWrittenAuthorisationPage) match {
             case Some(_) => successful(Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(request.userAnswers)))
-            case _ => badRequest("letter-of-authority", "You must select a file")
+            case _ => badRequest("letter-of-authority", messagesApi("uploadWrittenAuthorisation.error.selectFile"))
           }
       }
     }

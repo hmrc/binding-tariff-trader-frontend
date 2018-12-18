@@ -287,6 +287,7 @@ uploadWrittenAuthorisation.heading = Upload written authorisation from your clie
 uploadWrittenAuthorisation.label = Choose document
 uploadWrittenAuthorisation.label.replace = Replace document
 uploadWrittenAuthorisation.checkYourAnswersLabel =  Written authorisation
+uploadWrittenAuthorisation.error.selectFile = You must select a file
 uploadWrittenAuthorisation.error.size = Your document will not upload because it's bigger than 10MB
 uploadWrittenAuthorisation.error.required = Enter uploadWrittenAuthorisation
 uploadWrittenAuthorisation.error.length = UploadWrittenAuthorisation must be 100 characters or less
