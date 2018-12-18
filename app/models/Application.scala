@@ -22,7 +22,7 @@ case class Application
   `type`: String = "BTI",
   holder: EORIDetails,
   contact: Contact,
-  agent: Option[EORIDetails],
+  agent: Option[AgentDetails] = None,
   offline: Boolean,
   goodName: String,
   goodDescription: String,
@@ -45,6 +45,12 @@ case class EORIDetails
   addressLine3: String,
   postcode: String,
   country: String
+)
+
+case class AgentDetails
+(
+  eoriDetails: EORIDetails,
+  letterOfAuthorisation: Option[Attachment] = None
 )
 
 case class Contact
