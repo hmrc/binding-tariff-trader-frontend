@@ -68,8 +68,8 @@ registeredAddressForEori.error.field4.length = Postcode must be 9 characters or 
 
 whichBestDescribesYou.title = Which of these best describes you?
 whichBestDescribesYou.heading = Which of these best describes you?
-whichBestDescribesYou.option1 = I am an employee or owner of the business or organisation
-whichBestDescribesYou.option2 = I am a representative applying for a different business or organisation
+whichBestDescribesYou.businessOwner = I am an employee or owner of the business or organisation
+whichBestDescribesYou.businessRepresentative = I am a representative applying for a different business or organisation
 whichBestDescribesYou.checkYourAnswersLabel = Which of these best describes you?
 whichBestDescribesYou.error.required = Select which of these best describes you?
 
