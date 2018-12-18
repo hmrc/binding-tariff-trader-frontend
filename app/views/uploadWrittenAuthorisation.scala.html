@@ -79,9 +79,8 @@
         @if(file.isDefined){
           <div class="file-list__file" id="lettter-of-authority">
               <div class="file-list__name"><span> @file.get.name </span></div>
-              <div class="file-list__size"> @file.get.size Bytes </div>
+              <div class="file-list__size"> @humanReadableSize(file.get.size) </div>
           </div>
-
         }
 
         @components.submit_button(Some(messages("site.upload_continue")))
