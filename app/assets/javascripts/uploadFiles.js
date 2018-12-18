@@ -195,8 +195,7 @@ var uploadControls = (function () {
                 return;
             }
 
-            var myForm = document.getElementById(formId);
-            myForm.addEventListener("submit", beforeSubmit);
+            document.getElementById(formId).addEventListener("submit", beforeSubmit);
 
             var multipleFileInput = document.getElementById(inputFileId);
 
