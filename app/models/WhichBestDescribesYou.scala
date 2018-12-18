@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json._
 import viewmodels.RadioOption
-import pages.Page
+import pages.{Page, WhichBestDescribesYouPage}
 
 sealed trait WhichBestDescribesYou extends Page
 
@@ -46,5 +46,12 @@ object WhichBestDescribesYou {
       case JsString(BusinessRepresentative.toString) => JsSuccess(BusinessRepresentative)
       case _                          => JsError("Unknown whichBestDescribesYou")
     }
+  }
+
+  def isBusinessRepresentative(answers: UserAnswers) = {
+    answers.get(WhichBestDescribesYouPage)
+      .filter(_.isInstanceOf[WhichBestDescribesYou.BusinessRepresentative.type])
+      .isDefined
+
   }
 }

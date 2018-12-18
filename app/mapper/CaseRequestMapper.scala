@@ -17,29 +17,31 @@
 package mapper
 
 import javax.inject.Singleton
+import models.WhichBestDescribesYou.isBusinessRepresentative
 import models._
 import pages._
 
 @Singleton
 class CaseRequestMapper {
 
+
   def buildAgentDetails(answers: UserAnswers): Option[AgentDetails] = {
-    val whichBestDescribeYou: Option[WhichBestDescribesYou] = answers.get(WhichBestDescribesYouPage)
-
-    if (whichBestDescribeYou.get != WhichBestDescribesYou.BusinessRepresentative) { None }
-
-    val details: RegisterBusinessRepresenting = answers.get(RegisterBusinessRepresentingPage).get
-    Some(AgentDetails(
-      EORIDetails(
-        details.eoriNumber,
-        details.businessName,
-        details.addressLine1,
-        "", // Line 2 empty
-        "", // Line 3 empty
-        details.postCode,
-        details.country
-      )
-    ))
+    if (isBusinessRepresentative(answers)){
+      val details: RegisterBusinessRepresenting = answers.get(RegisterBusinessRepresentingPage).get
+      Some(AgentDetails(
+        EORIDetails(
+          details.eoriNumber,
+          details.businessName,
+          details.addressLine1,
+          "", // Line 2 empty
+          "", // Line 3 empty
+          details.postCode,
+          details.country
+        )
+      ))
+    }else{
+      None
+    }
   }
 
   def map(answers: UserAnswers): NewCaseRequest = {

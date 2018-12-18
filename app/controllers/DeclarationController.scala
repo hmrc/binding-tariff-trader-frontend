@@ -23,9 +23,10 @@ import controllers.actions._
 import javax.inject.Inject
 import mapper.CaseRequestMapper
 import models.Confirmation.format
+import models.WhichBestDescribesYou.isBusinessRepresentative
 import models._
 import navigation.Navigator
-import pages.{ConfirmationPage, UploadSupportingMaterialMultiplePage, UploadWrittenAuthorisationPage}
+import pages.{ConfirmationPage, UploadSupportingMaterialMultiplePage, UploadWrittenAuthorisationPage, WhichBestDescribesYouPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
 import service.{CasesService, FileService}
@@ -78,9 +79,14 @@ class DeclarationController @Inject()(
 
   private def getPublishedLetter(answers: UserAnswers)
                                 (implicit headerCarrier: HeaderCarrier) = {
-    answers.get(UploadWrittenAuthorisationPage)
-      .map(fileService.publish(_).map(Some(_)))
-      .getOrElse(Future.successful(None))
+
+    if (isBusinessRepresentative(answers)) {
+      answers.get(UploadWrittenAuthorisationPage)
+        .map(fileService.publish(_).map(Some(_)))
+        .getOrElse(Future.successful(None))
+    } else {
+      Future.successful(None)
+    }
   }
 
   private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment], letter: Option[SubmittedFileAttachment])
