@@ -112,15 +112,15 @@ trait ModelGenerators {
   implicit lazy val arbitraryRegisterBusinessRepresenting: Arbitrary[RegisterBusinessRepresenting] =
     Arbitrary {
       for {
-        field1 <- arbitrary[String]
-        field2 <- arbitrary[String]
-        field3 <- arbitrary[String]
-        field4 <- arbitrary[String]
-        field5 <- arbitrary[String]
-        field6 <- arbitrary[String]
-      } yield RegisterBusinessRepresenting(field1, field2, field3, field4, field5, field6)
+        eoriNumber <- arbitrary[String]
+        businessName <- arbitrary[String]
+        addressLine1 <- arbitrary[String]
+        town <- arbitrary[String]
+        postCode <- arbitrary[String]
+        country <- arbitrary[String]
+      } yield RegisterBusinessRepresenting(eoriNumber, businessName, addressLine1, town, postCode, country)
     }
-
+ 
   implicit lazy val arbitrarySelectApplicationType: Arbitrary[SelectApplicationType] =
     Arbitrary {
       Gen.oneOf(SelectApplicationType.values.toSeq)
