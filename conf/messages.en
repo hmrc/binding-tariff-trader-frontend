@@ -219,7 +219,7 @@ similarItemCommodityCode.yesAwareSimilarCode = Yes - I am aware of a similar com
 similarItemCommodityCode.noNotAware = No - I am not aware of a similar commodity code ruling
 similarItemCommodityCode.checkYourAnswersLabel = Are you aware of a similar item that already has a commodity code ruling?
 similarItemCommodityCode.error.required = Select if you are aware of a similar item that already has a commodity code ruling
-similarItemCommodityCode.listItem1 = if your business operates in other countries and you're aware that they have a commodity code ruling, it is useful for us to know to align rulings
+similarItemCommodityCode.listItem1 = if your business operates in other countries and you''re aware that they have a commodity code ruling, it is useful for us to know to align rulings
 similarItemCommodityCode.listItem2 = if you know of a similar item that has a commodity code ruling, it can help us to classify your goods
 
 commodityCodeRulingReference.title = Commodity code ruling reference number
@@ -234,7 +234,7 @@ legalChallenge.yesLegalChallenge = Yes - I am aware of a legal challenge
 legalChallenge.noLegalChallenge = No - I am not aware of a legal challenge
 legalChallenge.checkYourAnswersLabel = Are you aware of any legal challenge relating to the classification of the item?
 legalChallenge.error.required = Select if you are aware of any legal challenge relating to the classification of the item
-legalChallenge.paragraph = This refers to any court rulings or administrative proceedings on your item's tariff classification. This helps the classification team avoid any contradictions in rulings.
+legalChallenge.paragraph = This refers to any court rulings or administrative proceedings on your item''s tariff classification. This helps the classification team avoid any contradictions in rulings.
 
 legalChallengeDetails.title = Provide details of any legal or administrative challenge
 legalChallengeDetails.heading = Provide details of any legal or administrative challenge
@@ -288,7 +288,7 @@ uploadWrittenAuthorisation.label = Choose document
 uploadWrittenAuthorisation.label.replace = Replace document
 uploadWrittenAuthorisation.checkYourAnswersLabel =  Written authorisation
 uploadWrittenAuthorisation.error.selectFile = You must select a file
-uploadWrittenAuthorisation.error.size = Your document will not upload because it's bigger than 10MB
+uploadWrittenAuthorisation.error.size = Your document will not upload because it''s bigger than 10MB
 uploadWrittenAuthorisation.error.required = Enter uploadWrittenAuthorisation
 uploadWrittenAuthorisation.error.length = UploadWrittenAuthorisation must be 100 characters or less
 uploadWrittenAuthorisation.upload.title =  You can upload:
