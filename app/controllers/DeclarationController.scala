@@ -78,19 +78,19 @@ class DeclarationController @Inject()(
   }
 
   private def getPublishedLetter(answers: UserAnswers)
-                                (implicit headerCarrier: HeaderCarrier) = {
+                                (implicit headerCarrier: HeaderCarrier): Future[Option[SubmittedFileAttachment]] = {
 
     if (isBusinessRepresentative(answers)) {
       answers.get(UploadWrittenAuthorisationPage)
-        .map(fileService.publish(_).map(Some(_)))
-        .getOrElse(Future.successful(None))
+        .map( fileService.publish(_).map(Some(_)) )
+        .getOrElse(successful(None))
     } else {
-      Future.successful(None)
+      successful(None)
     }
   }
 
-  private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment]
-                         , letter: Option[SubmittedFileAttachment], answers: UserAnswers)
+  private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment],
+                         letter: Option[SubmittedFileAttachment], answers: UserAnswers)
                         (implicit headerCarrier: HeaderCarrier): Future[Case] = {
 
     val request = appendAttachments(newCaseRequest, attachments, letter, answers)
@@ -102,7 +102,7 @@ class DeclarationController @Inject()(
   }
 
   private def appendAttachments(caseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment],
-                                letter: Option[SubmittedFileAttachment], answers: UserAnswers) = {
+                                letter: Option[SubmittedFileAttachment], answers: UserAnswers): NewCaseRequest = {
 
     val published: Seq[Attachment] = attachments
       .filter(_.isInstanceOf[PublishedFileAttachment])
@@ -110,15 +110,17 @@ class DeclarationController @Inject()(
       .map(f => Attachment(url = f.url, mimeType = f.mimeType))
 
     if (isBusinessRepresentative(answers)) {
-      val letterOfAuth: Option[Attachment] = letter.filter(_.isInstanceOf[PublishedFileAttachment])
+      val letterOfAuth: Option[Attachment] = letter
+        .filter(_.isInstanceOf[PublishedFileAttachment])
         .map(_.asInstanceOf[PublishedFileAttachment])
         .map(f => Attachment(url = f.url, mimeType = f.mimeType))
 
       val agentDetails = caseRequest.application.agent.map(_.copy(letterOfAuthorisation = letterOfAuth))
       val application = caseRequest.application.copy(agent = agentDetails)
       caseRequest.copy(application = application, attachments = published)
+    } else {
+      caseRequest.copy(attachments = published)
     }
-
-    caseRequest.copy(attachments = published)
   }
+
 }
