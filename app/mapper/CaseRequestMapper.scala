@@ -24,21 +24,22 @@ import pages._
 @Singleton
 class CaseRequestMapper {
 
-  def buildAgentDetails(answers: UserAnswers): Option[AgentDetails] = {
-    if (isBusinessRepresentative(answers)){
-      val details: RegisterBusinessRepresenting = answers.get(RegisterBusinessRepresentingPage).get
-      Some(AgentDetails(
-        EORIDetails(
-          details.eoriNumber,
-          details.businessName,
-          details.addressLine1,
-          details.town, // Line 2 empty
-          "", // Line 3 empty
-          details.postCode,
-          details.country
+  def buildAgentDetails: UserAnswers => Option[AgentDetails] = { answers: UserAnswers =>
+    if (isBusinessRepresentative(answers)) {
+      answers.get(RegisterBusinessRepresentingPage).map { details: RegisterBusinessRepresenting =>
+        AgentDetails(
+          EORIDetails(
+            details.eoriNumber,
+            details.businessName,
+            details.addressLine1,
+            details.town, // Line 2 empty
+            "", // Line 3 empty
+            details.postCode,
+            details.country
+          )
         )
-      ))
-    }else{
+      }
+    } else {
       None
     }
   }
@@ -80,7 +81,7 @@ class CaseRequestMapper {
     NewCaseRequest(app)
   }
 
-  def toHolder: RegisteredAddressForEori => EORIDetails = { details =>
+  def toHolder: RegisteredAddressForEori => EORIDetails = { details: RegisteredAddressForEori =>
     EORIDetails(
       "", // TODO: Hard Coded
       details.field1,
@@ -92,7 +93,7 @@ class CaseRequestMapper {
     )
   }
 
-  def toContact: EnterContactDetails => Contact = { details =>
+  def toContact: EnterContactDetails => Contact = { details: EnterContactDetails =>
     Contact(
       name = details.field1,
       email = details.field2,

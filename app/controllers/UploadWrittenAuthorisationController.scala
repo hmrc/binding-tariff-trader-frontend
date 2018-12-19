@@ -95,11 +95,12 @@ class UploadWrittenAuthorisationController @Inject()(
     }
 
   private val maxFileSize = 10485760
-  private def valid(file: MultipartFormData.FilePart[TemporaryFile])
-  : Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
-
-    if (file.ref.file.length() > maxFileSize){Left(messagesApi("uploadWrittenAuthorisation.error.size"))}
-    else{Right(file)}
-
+  private def valid(file: MultipartFormData.FilePart[TemporaryFile]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
+    if (file.ref.file.length() > maxFileSize) {
+      Left(messagesApi("uploadWrittenAuthorisation.error.size"))
+    } else {
+      Right(file)
+    }
   }
+
 }

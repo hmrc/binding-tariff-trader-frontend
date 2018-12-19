@@ -26,8 +26,8 @@ class CaseRequestMapperTest extends UnitSpec {
 
   private val mapper = new CaseRequestMapper()
 
-
   "Mapper" should {
+
     "Map Mandatory Fields" in {
       // When
       val response = mapper.map(mandatoryAnswers())
@@ -39,7 +39,7 @@ class CaseRequestMapperTest extends UnitSpec {
 
       val holder: EORIDetails = application.holder
       holder.eori shouldBe ""
-      holder.traderName shouldBe "Trader Name"
+      holder.businessName shouldBe "Trader Business Name"
       holder.addressLine1 shouldBe "Address Line 1"
       holder.addressLine2 shouldBe "Address Line 2"
       holder.postcode shouldBe "Post Code"
@@ -77,7 +77,7 @@ class CaseRequestMapperTest extends UnitSpec {
 
       val holder: EORIDetails = application.holder
       holder.eori shouldBe ""
-      holder.traderName shouldBe "Trader Name"
+      holder.businessName shouldBe "Trader Business Name"
       holder.addressLine1 shouldBe "Address Line 1"
       holder.addressLine2 shouldBe "Address Line 2"
       holder.postcode shouldBe "Post Code"
@@ -90,7 +90,7 @@ class CaseRequestMapperTest extends UnitSpec {
 
       val agent: AgentDetails = application.agent.get
       agent.eoriDetails.eori shouldBe "Eori"
-      agent.eoriDetails.traderName shouldBe "Trader Name"
+      agent.eoriDetails.businessName shouldBe "Agent Business Name"
       agent.eoriDetails.addressLine1 shouldBe "Address Line 1"
       agent.eoriDetails.addressLine2 shouldBe "Town"
       agent.eoriDetails.postcode shouldBe "Post Code"
@@ -120,7 +120,7 @@ class CaseRequestMapperTest extends UnitSpec {
         Map(
           RegisteredAddressForEoriPage.toString -> js(
             RegisteredAddressForEori(
-              "Trader Name",
+              "Trader Business Name",
               "Address Line 1",
               "Address Line 2",
               "Post Code",
@@ -146,7 +146,7 @@ class CaseRequestMapperTest extends UnitSpec {
           RegisterBusinessRepresentingPage.toString -> js(
             RegisterBusinessRepresenting(
               "Eori",
-              "Trader Name",
+              "Agent Business Name",
               "Address Line 1",
               "Town",
               "Post Code",
@@ -179,7 +179,7 @@ class CaseRequestMapperTest extends UnitSpec {
         Map(
           RegisteredAddressForEoriPage.toString -> js(
             RegisteredAddressForEori(
-              "Trader Name",
+              "Trader Business Name",
               "Address Line 1",
               "Address Line 2",
               "Post Code",

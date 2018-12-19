@@ -37,21 +37,19 @@ object WhichBestDescribesYou {
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 
   implicit object WhichBestDescribesYouWrites extends Writes[WhichBestDescribesYou] {
-    def writes(whichBestDescribesYou: WhichBestDescribesYou) = Json.toJson(whichBestDescribesYou.toString)
+    def writes(whichBestDescribesYou: WhichBestDescribesYou): JsValue = Json.toJson(whichBestDescribesYou.toString)
   }
 
   implicit object WhichBestDescribesYouReads extends Reads[WhichBestDescribesYou] {
     override def reads(json: JsValue): JsResult[WhichBestDescribesYou] = json match {
       case JsString(BusinessOwner.toString) => JsSuccess(BusinessOwner)
       case JsString(BusinessRepresentative.toString) => JsSuccess(BusinessRepresentative)
-      case _                          => JsError("Unknown whichBestDescribesYou")
+      case _ => JsError("Unknown whichBestDescribesYou")
     }
   }
 
-  def isBusinessRepresentative(answers: UserAnswers) = {
-    answers.get(WhichBestDescribesYouPage)
-      .filter(_.isInstanceOf[WhichBestDescribesYou.BusinessRepresentative.type])
-      .isDefined
-
+  def isBusinessRepresentative(answers: UserAnswers): Boolean = {
+    answers.get(WhichBestDescribesYouPage).exists(_.isInstanceOf[WhichBestDescribesYou.BusinessRepresentative.type])
   }
+
 }

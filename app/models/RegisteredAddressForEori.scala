@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json._
 
-case class RegisteredAddressForEori (field1: String, field2: String, field3: String, field4: String, field5: String)
+case class RegisteredAddressForEori(field1: String, field2: String, field3: String, field4: String, field5: String)
 
 object RegisteredAddressForEori {
   implicit val format = Json.format[RegisteredAddressForEori]
