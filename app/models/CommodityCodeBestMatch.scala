@@ -24,16 +24,13 @@ sealed trait CommodityCodeBestMatch extends Page
 
 object CommodityCodeBestMatch {
 
-  case object Yesfoundcommoditycode extends WithName("yesFoundCommodityCode") with CommodityCodeBestMatch
-  case object Nohaventfoundcommoditycode extends WithName("noHaventFoundCommodityCode") with CommodityCodeBestMatch
+  case object Yes extends WithName("yesFoundCommodityCode") with CommodityCodeBestMatch
+  case object No extends WithName("noHaventFoundCommodityCode") with CommodityCodeBestMatch
 
-  val values: Set[CommodityCodeBestMatch] = Set(
-    Yesfoundcommoditycode, Nohaventfoundcommoditycode
-  )
+  val values: Set[CommodityCodeBestMatch] = Set(Yes, No)
 
   val options: Set[RadioOption] = values.map {
-    value =>
-      RadioOption("commodityCodeBestMatch", value.toString)
+    value => RadioOption("commodityCodeBestMatch", value.toString)
   }
 
   implicit val enumerable: Enumerable[CommodityCodeBestMatch] =
@@ -45,9 +42,9 @@ object CommodityCodeBestMatch {
 
   implicit object CommodityCodeBestMatchReads extends Reads[CommodityCodeBestMatch] {
     override def reads(json: JsValue): JsResult[CommodityCodeBestMatch] = json match {
-      case JsString(Yesfoundcommoditycode.toString) => JsSuccess(Yesfoundcommoditycode)
-      case JsString(Nohaventfoundcommoditycode.toString) => JsSuccess(Nohaventfoundcommoditycode)
-      case _                          => JsError("Unknown commodityCodeBestMatch")
+      case JsString(Yes.toString) => JsSuccess(Yes)
+      case JsString(No.toString) => JsSuccess(No)
+      case _ => JsError("Unknown commodityCodeBestMatch")
     }
   }
 }

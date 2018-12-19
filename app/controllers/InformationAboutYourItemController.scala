@@ -28,7 +28,7 @@ import models.{Enumerable, Mode}
 import pages.InformationAboutYourItemPage
 import navigation.Navigator
 import views.html.informationAboutYourItem
-import models.InformationAboutYourItem.{No, Yesihaveinfo}
+import models.InformationAboutYourItem.{No, Yes}
 import pages.{ConfidentialInformationPage, DescribeYourItemPage}
 import play.api.mvc.{Action, AnyContent}
 
@@ -51,8 +51,8 @@ class InformationAboutYourItemController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(InformationAboutYourItemPage) match {
-      case None => form
       case Some(value) => form.fill(value)
+      case _ => form
     }
 
     Ok(informationAboutYourItem(appConfig, preparedForm, mode))
@@ -67,7 +67,7 @@ class InformationAboutYourItemController @Inject()(
         val updatedAnswers = request.userAnswers.set(InformationAboutYourItemPage, value)
 
         val redirectedPage = value match {
-          case Yesihaveinfo => ConfidentialInformationPage
+          case Yes => ConfidentialInformationPage
           case No => DescribeYourItemPage
         }
 

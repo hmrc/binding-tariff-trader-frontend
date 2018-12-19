@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json._
+import javax.inject.Inject
 
-case class RegisterBusinessRepresenting(eoriNumber: String, businessName: String, addressLine1: String, town: String, postCode: String, country: String)
+import forms.mappings.Mappings
+import play.api.data.Form
 
-object RegisterBusinessRepresenting {
-  implicit val format = Json.format[RegisterBusinessRepresenting]
+class UploadWrittenAuthorisationFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[String] =
+    Form(
+      "file-input" -> text()
+    )
 }

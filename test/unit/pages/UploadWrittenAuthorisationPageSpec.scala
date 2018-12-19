@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json._
+import models.FileAttachment
+import pages.behaviours.PageBehaviours
 
-case class RegisterBusinessRepresenting(eoriNumber: String, businessName: String, addressLine1: String, town: String, postCode: String, country: String)
 
-object RegisterBusinessRepresenting {
-  implicit val format = Json.format[RegisterBusinessRepresenting]
+class UploadWrittenAuthorisationPageSpec extends PageBehaviours {
+
+  "UploadWrittenAuthorisationPage" must {
+
+    beRetrievable[FileAttachment](UploadWrittenAuthorisationPage)
+
+    beSettable[FileAttachment](UploadWrittenAuthorisationPage)
+
+    beRemovable[FileAttachment](UploadWrittenAuthorisationPage)
+  }
 }

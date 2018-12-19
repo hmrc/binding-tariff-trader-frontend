@@ -28,7 +28,7 @@ import models.{Enumerable, Mode}
 import pages.{ReturnSamplesPage, SimilarItemCommodityCodePage, WhenToSendSamplePage}
 import navigation.Navigator
 import views.html.whenToSendSample
-import models.WhenToSendSample.{Notsendingsample, Yesprovidesample}
+import models.WhenToSendSample.{No, Yes}
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -66,8 +66,8 @@ class WhenToSendSampleController @Inject()(
         val updatedAnswers = request.userAnswers.set(WhenToSendSamplePage, value)
 
         val redirectedPage = value match {
-          case Yesprovidesample => ReturnSamplesPage
-          case Notsendingsample => SimilarItemCommodityCodePage
+          case Yes => ReturnSamplesPage
+          case No => SimilarItemCommodityCodePage
         }
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(

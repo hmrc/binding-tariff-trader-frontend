@@ -14,12 +14,27 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json._
+import forms.behaviours.StringFieldBehaviours
+import play.api.data.FormError
 
-case class RegisterBusinessRepresenting(eoriNumber: String, businessName: String, addressLine1: String, town: String, postCode: String, country: String)
+class UploadWrittenAuthorisationFormProviderSpec extends StringFieldBehaviours {
 
-object RegisterBusinessRepresenting {
-  implicit val format = Json.format[RegisterBusinessRepresenting]
+  val requiredKey = "uploadWrittenAuthorisation.error.required"
+  val lengthKey = "uploadWrittenAuthorisation.error.length"
+  val maxLength = 100
+
+  val form = new UploadWrittenAuthorisationFormProvider()()
+
+  ".file-input" must {
+
+    val fieldName = "file-input"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+  }
 }

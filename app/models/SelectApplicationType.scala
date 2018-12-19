@@ -47,7 +47,7 @@ object SelectApplicationType {
     override def reads(json: JsValue): JsResult[SelectApplicationType] = json match {
       case JsString(Newcommodity.toString) => JsSuccess(Newcommodity)
       case JsString(Previouscommodity.toString) => JsSuccess(Previouscommodity)
-      case _                          => JsError("Unknown selectApplicationType")
+      case _ => JsError("Unknown selectApplicationType")
     }
   }
 }

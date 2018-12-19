@@ -24,16 +24,13 @@ sealed trait InformationAboutYourItem extends Page
 
 object InformationAboutYourItem {
 
-  case object Yesihaveinfo extends WithName("yesIHaveInfo") with InformationAboutYourItem
+  case object Yes extends WithName("yesIHaveInfo") with InformationAboutYourItem
   case object No extends WithName("no") with InformationAboutYourItem
 
-  val values: Set[InformationAboutYourItem] = Set(
-    Yesihaveinfo, No
-  )
+  val values: Set[InformationAboutYourItem] = Set(Yes, No)
 
   val options: Set[RadioOption] = values.map {
-    value =>
-      RadioOption("informationAboutYourItem", value.toString)
+    value => RadioOption("informationAboutYourItem", value.toString)
   }
 
   implicit val enumerable: Enumerable[InformationAboutYourItem] =
@@ -45,9 +42,9 @@ object InformationAboutYourItem {
 
   implicit object InformationAboutYourItemReads extends Reads[InformationAboutYourItem] {
     override def reads(json: JsValue): JsResult[InformationAboutYourItem] = json match {
-      case JsString(Yesihaveinfo.toString) => JsSuccess(Yesihaveinfo)
+      case JsString(Yes.toString) => JsSuccess(Yes)
       case JsString(No.toString) => JsSuccess(No)
-      case _                          => JsError("Unknown informationAboutYourItem")
+      case _ => JsError("Unknown informationAboutYourItem")
     }
   }
 }

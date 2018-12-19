@@ -35,14 +35,38 @@
 
         @components.heading("registerBusinessRepresenting.heading")
 
+        <div role="note" aria-label="Information" class="application-notice info-notice">
+            <p>The details you enter must match the exact format of their registered EORI address</p>
+        </div>
+
         @components.input_text(
-            field = form("field1"),
-            label = messages("registerBusinessRepresenting.field1")
+            field = form("eoriNumber"),
+            label = messages("registerBusinessRepresenting.eoriNumber")
         )
 
         @components.input_text(
-            field = form("field2"),
-            label = messages("registerBusinessRepresenting.field2")
+            field = form("businessName"),
+            label = messages("registerBusinessRepresenting.businessName")
+        )
+
+        @components.input_text(
+            field = form("addressLine1"),
+            label = messages("registerBusinessRepresenting.addressLine1")
+        )
+
+        @components.input_text(
+            field = form("town"),
+            label = messages("registerBusinessRepresenting.town")
+        )
+
+        @components.input_text(
+            field = form("postCode"),
+            label = messages("registerBusinessRepresenting.postCode")
+        )
+
+        @components.input_text(
+            field = form("country"),
+            label = messages("registerBusinessRepresenting.country")
         )
 
         @components.submit_button()

@@ -27,13 +27,10 @@ object LegalChallenge {
   case object Yeslegalchallenge extends WithName("yesLegalChallenge") with LegalChallenge
   case object Nolegalchallenge extends WithName("noLegalChallenge") with LegalChallenge
 
-  val values: Set[LegalChallenge] = Set(
-    Yeslegalchallenge, Nolegalchallenge
-  )
+  val values: Set[LegalChallenge] = Set(Yeslegalchallenge, Nolegalchallenge)
 
   val options: Set[RadioOption] = values.map {
-    value =>
-      RadioOption("legalChallenge", value.toString)
+    value => RadioOption("legalChallenge", value.toString)
   }
 
   implicit val enumerable: Enumerable[LegalChallenge] =
@@ -47,7 +44,7 @@ object LegalChallenge {
     override def reads(json: JsValue): JsResult[LegalChallenge] = json match {
       case JsString(Yeslegalchallenge.toString) => JsSuccess(Yeslegalchallenge)
       case JsString(Nolegalchallenge.toString) => JsSuccess(Nolegalchallenge)
-      case _                          => JsError("Unknown legalChallenge")
+      case _ => JsError("Unknown legalChallenge")
     }
   }
 }

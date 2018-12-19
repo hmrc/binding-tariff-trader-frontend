@@ -16,22 +16,48 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
-import play.api.data.Form
-import play.api.data.Forms._
+import javax.inject.Inject
 import models.RegisterBusinessRepresenting
+import play.api.data.Forms._
+import play.api.data.validation.{Constraint, Invalid, Valid}
+import play.api.data.Form
 
 class RegisterBusinessRepresentingFormProvider @Inject() extends Mappings {
 
-   def apply(): Form[RegisterBusinessRepresenting] = Form(
-     mapping(
-      "field1" -> text("registerBusinessRepresenting.error.field1.required")
-        .verifying(maxLength(100, "registerBusinessRepresenting.error.field1.length")),
-      "field2" -> text("registerBusinessRepresenting.error.field2.required")
-        .verifying(maxLength(100, "registerBusinessRepresenting.error.field2.length"))
-     )(RegisterBusinessRepresenting.apply)(RegisterBusinessRepresenting.unapply)
-   )
+  private val businessMaxLength = 100
+  private val addressMaxLength = 70
+  private val townMaxLength = 35
+  private val postCodeMaxLength = 9
+  private val countryMaxLength = 60
+
+  def apply(): Form[RegisterBusinessRepresenting] = Form(
+    mapping(
+      "eoriNumber" ->   text("registerBusinessRepresenting.error.eoriNumber.required")
+        .verifying(FormConstraints.eoriCodeConstraint),
+      "businessName" -> text("registerBusinessRepresenting.error.businessName.required")
+        .verifying(maxLength(businessMaxLength, "registerBusinessRepresenting.error.businessName.length")),
+      "addressLine1" -> text("registerBusinessRepresenting.error.addressLine1.required")
+        .verifying(maxLength(addressMaxLength, "registerBusinessRepresenting.error.addressLine1.length")),
+      "town" -> text("registerBusinessRepresenting.error.town.required")
+        .verifying(maxLength(townMaxLength, "registerBusinessRepresenting.error.town.length")),
+      "postCode" -> text("registerBusinessRepresenting.error.postCode.required")
+        .verifying(maxLength(postCodeMaxLength, "registerBusinessRepresenting.error.postCode.length")),
+      "country" -> text("registerBusinessRepresenting.error.country.required")
+        .verifying(maxLength(countryMaxLength, "registerBusinessRepresenting.error.country.length"))
+    )(RegisterBusinessRepresenting.apply)(RegisterBusinessRepresenting.unapply)
+  )
+
+  object FormConstraints {
+
+    private val eoriCodeRegex = "^[a-zA-Z0-9]{1,17}"
+    private val eoriCodeError = "registerBusinessRepresenting.error.eoriNumber.format"
+
+    val eoriCodeConstraint: Constraint[String] = Constraint("constraints.eoriFormat")({
+      case s: String if s.isEmpty => Valid
+      case s: String if s.matches(eoriCodeRegex) => Valid
+      case _: String => Invalid(eoriCodeError)
+    })
+  }
 
 }

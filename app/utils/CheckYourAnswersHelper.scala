@@ -23,6 +23,10 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
+    x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name , false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
+  }
+
   def supportingInformationDetails: Option[AnswerRow] = userAnswers.get(SupportingInformationDetailsPage) map {
     x => AnswerRow("supportingInformationDetails.checkYourAnswersLabel", s"$x", false, routes.SupportingInformationDetailsController.onPageLoad(CheckMode).url)
   }
@@ -88,7 +92,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {
-    x => AnswerRow("registerBusinessRepresenting.checkYourAnswersLabel", Seq(x.field1, x.field2), false, routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
+    x =>
+      AnswerRow("registerBusinessRepresenting.checkYourAnswersLabel",
+        Seq(x.eoriNumber, x.businessName, x.addressLine1, x.town, x.postCode, x.country),
+        false,
+        routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
   }
 
   def selectApplicationType: Option[AnswerRow] = userAnswers.get(SelectApplicationTypePage) map {

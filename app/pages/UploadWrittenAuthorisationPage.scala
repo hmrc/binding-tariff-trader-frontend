@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json._
+import models.FileAttachment
 
-case class RegisterBusinessRepresenting(eoriNumber: String, businessName: String, addressLine1: String, town: String, postCode: String, country: String)
+case object UploadWrittenAuthorisationPage extends QuestionPage[FileAttachment] {
 
-object RegisterBusinessRepresenting {
-  implicit val format = Json.format[RegisterBusinessRepresenting]
+  override def toString: String = "uploadWrittenAuthorisation"
 }

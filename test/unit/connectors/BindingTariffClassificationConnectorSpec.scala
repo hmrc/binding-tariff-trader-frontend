@@ -16,6 +16,7 @@
 
 package connectors
 
+import akka.actor.ActorSystem
 import com.github.tomakehurst.wiremock.client.WireMock._
 import config.FrontendAppConfig
 import models.oCase
@@ -36,10 +37,10 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
   with WiremockTestServer with MockitoSugar with WithFakeApplication {
 
   private val configuration = mock[FrontendAppConfig]
-
+  private val actorSystem = ActorSystem.create("test")
   private val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
   private val auditConnector = new DefaultAuditConnector(fakeApplication.configuration, fakeApplication.injector.instanceOf[Environment])
-  private val client = new DefaultHttpClient(fakeApplication.configuration, auditConnector, wsClient)
+  private val client = new DefaultHttpClient(fakeApplication.configuration, auditConnector, wsClient, actorSystem)
   private implicit val hc = HeaderCarrier()
 
   private val connector = new BindingTariffClassificationConnector(configuration, client)

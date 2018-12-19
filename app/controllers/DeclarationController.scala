@@ -23,9 +23,10 @@ import controllers.actions._
 import javax.inject.Inject
 import mapper.CaseRequestMapper
 import models.Confirmation.format
+import models.WhichBestDescribesYou.isBusinessRepresentative
 import models._
 import navigation.Navigator
-import pages.{ConfirmationPage, UploadSupportingMaterialMultiplePage}
+import pages.{ConfirmationPage, UploadSupportingMaterialMultiplePage, UploadWrittenAuthorisationPage, WhichBestDescribesYouPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
 import service.{CasesService, FileService}
@@ -57,7 +58,7 @@ class DeclarationController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
-    val newCaseRequest = mapper.map(answers)
+  val newCaseRequest = mapper.map(answers)
     auditService.auditBTIApplicationSubmission(newCaseRequest)
 
     val attachments: Seq[FileAttachment] = answers
@@ -66,7 +67,8 @@ class DeclarationController @Inject()(
 
     for {
       att: Seq[SubmittedFileAttachment] <- fileService.publish(attachments)
-      c: Case <- createCase(newCaseRequest, att)
+      letter <- getPublishedLetter(answers)
+      c: Case <- createCase(newCaseRequest, att, letter)
       _ = auditService.auditBTIApplicationSubmissionSuccessful(c)
       userAnswers = answers.set(ConfirmationPage, Confirmation(c.reference))
       _ <- dataCacheConnector.save(userAnswers.cacheMap)
@@ -75,14 +77,22 @@ class DeclarationController @Inject()(
 
   }
 
-  private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment])
-                        (implicit headerCarrier: HeaderCarrier): Future[Case] = {
-    val published: Seq[Attachment] = attachments
-      .filter(_.isInstanceOf[PublishedFileAttachment])
-      .map(_.asInstanceOf[PublishedFileAttachment])
-      .map(f => Attachment(url = f.url, mimeType = f.mimeType))
+  private def getPublishedLetter(answers: UserAnswers)
+                                (implicit headerCarrier: HeaderCarrier) = {
 
-    val request = newCaseRequest.copy(attachments = published)
+    if (isBusinessRepresentative(answers)) {
+      answers.get(UploadWrittenAuthorisationPage)
+        .map(fileService.publish(_).map(Some(_)))
+        .getOrElse(Future.successful(None))
+    } else {
+      Future.successful(None)
+    }
+  }
+
+  private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment], letter: Option[SubmittedFileAttachment])
+                        (implicit headerCarrier: HeaderCarrier): Future[Case] = {
+
+    val request = appendAttachments(newCaseRequest, attachments, letter)
 
     caseService.create(request).recover { case e: Throwable =>
       auditService.auditBTIApplicationSubmissionFailed(newCaseRequest, e.getMessage)
@@ -90,4 +100,18 @@ class DeclarationController @Inject()(
     }
   }
 
+  private def appendAttachments(caseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment], letter: Option[SubmittedFileAttachment]) = {
+    val published: Seq[Attachment] = attachments
+      .filter(_.isInstanceOf[PublishedFileAttachment])
+      .map(_.asInstanceOf[PublishedFileAttachment])
+      .map(f => Attachment(url = f.url, mimeType = f.mimeType))
+
+    val letterOfAuth = letter.filter(_.isInstanceOf[PublishedFileAttachment])
+      .map(_.asInstanceOf[PublishedFileAttachment])
+      .map(f => Attachment(url = f.url, mimeType = f.mimeType))
+
+    val agentDetails = caseRequest.application.agent.map(_.copy(letterOfAuthorisation = letterOfAuth))
+    val application = caseRequest.application.copy(agent = agentDetails)
+    caseRequest.copy(application = application, attachments = published)
+  }
 }
