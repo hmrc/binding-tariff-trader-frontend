@@ -24,7 +24,6 @@ import pages._
 @Singleton
 class CaseRequestMapper {
 
-
   def buildAgentDetails(answers: UserAnswers): Option[AgentDetails] = {
     if (isBusinessRepresentative(answers)){
       val details: RegisterBusinessRepresenting = answers.get(RegisterBusinessRepresentingPage).get
@@ -33,7 +32,7 @@ class CaseRequestMapper {
           details.eoriNumber,
           details.businessName,
           details.addressLine1,
-          "", // Line 2 empty
+          details.town, // Line 2 empty
           "", // Line 3 empty
           details.postCode,
           details.country
@@ -66,7 +65,7 @@ class CaseRequestMapper {
       contact = contact,
       agent = agentDetails,
       offline = false,
-      goodName = describeYourItem.map(_.field1).getOrElse("N/A"),
+      goodName = describeYourItem.map(_.field1).getOrElse("CaseRequestMapperTestN/A"),
       goodDescription = describeYourItem.map(_.field2).getOrElse("N/A"),
       confidentialInformation = confidentialInfo.map(_.field1),
       otherInformation = supportingInformationDetails,

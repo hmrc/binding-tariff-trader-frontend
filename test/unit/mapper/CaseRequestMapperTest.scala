@@ -88,7 +88,15 @@ class CaseRequestMapperTest extends UnitSpec {
       contact.email shouldBe "Email"
       contact.phone shouldBe None
 
-      application.agent shouldBe None // TODO Implement This
+      val agent: AgentDetails = application.agent.get
+      agent.eoriDetails.eori shouldBe "Eori"
+      agent.eoriDetails.traderName shouldBe "Trader Name"
+      agent.eoriDetails.addressLine1 shouldBe "Address Line 1"
+      agent.eoriDetails.addressLine2 shouldBe "Town"
+      agent.eoriDetails.postcode shouldBe "Post Code"
+      agent.eoriDetails.country shouldBe "Country"
+
+      application.agent shouldBe Some(agent)
       application.offline shouldBe false
       application.goodName shouldBe "Good Name"
       application.goodDescription shouldBe "Good Description"
@@ -132,6 +140,19 @@ class CaseRequestMapperTest extends UnitSpec {
               "Good Description"
             )
           ),
+          WhichBestDescribesYouPage.toString -> js(
+            WhichBestDescribesYou.BusinessRepresentative
+          ),
+          RegisterBusinessRepresentingPage.toString -> js(
+            RegisterBusinessRepresenting(
+              "Eori",
+              "Trader Name",
+              "Address Line 1",
+              "Town",
+              "Post Code",
+              "Country"
+            )
+          ),
           ConfidentialInformationPage.toString -> js(
             ConfidentialInformation(
               "Confidential Info"
@@ -149,7 +170,6 @@ class CaseRequestMapperTest extends UnitSpec {
         )
       )
     )
-
   }
 
   def mandatoryAnswers(): UserAnswers = {
