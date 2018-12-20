@@ -115,7 +115,7 @@ informationAboutYourItem.listItem1 = any confidential information you do not wan
 informationAboutYourItem.listItem2 = a detailed description of your item to help to determine its classfication
 informationAboutYourItem.listItem3 = photographs, manuals, technical specifications and other information to support your description and help to speed up the application
 informationAboutYourItem.listItem4 = a commodity code if you have found one
-informationAboutYourItem.listItem5 = a sample if it is needed
+informationAboutYourItem.listItem5 = a sample if needed
 
 previousCommodityCode.title = What is the reference number for the BTI ruling you want to renew?
 previousCommodityCode.heading = What is the reference number for the BTI ruling you want to renew?
