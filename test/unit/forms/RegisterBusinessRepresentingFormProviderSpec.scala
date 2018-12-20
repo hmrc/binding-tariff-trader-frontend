@@ -23,11 +23,39 @@ class RegisterBusinessRepresentingFormProviderSpec extends StringFieldBehaviours
 
   val form = new RegisterBusinessRepresentingFormProvider()()
 
-  ".field1" must {
+  ".eoriNumber" must {
 
-    val fieldName = "field1"
-    val requiredKey = "registerBusinessRepresenting.error.field1.required"
-    val lengthKey = "registerBusinessRepresenting.error.field1.length"
+    val fieldName = "eoriNumber"
+    val requiredKey = "registerBusinessRepresenting.error.eoriNumber.required"
+    val lengthKey = "registerBusinessRepresenting.error.eoriNumber.format"
+
+    "pass when a valid eori is inserted" in {
+      val validEori = "GB123456789000000"
+      val result = form.bind(Map(fieldName -> validEori)).apply(fieldName)
+      result.errors shouldBe empty
+      result.value.value shouldBe validEori
+    }
+
+    "fail when eori format is not correct" in {
+      val invalidEori = "GB1234567890000001234"
+      val result = form.bind(Map(fieldName -> invalidEori)).apply(fieldName)
+      result.errors.size shouldBe 1
+      result.errors(0).message shouldBe "registerBusinessRepresenting.error.eoriNumber.format"
+    }
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+
+
+  ".businessName" must {
+
+    val fieldName = "businessName"
+    val requiredKey = "registerBusinessRepresenting.error.businessName.required"
+    val lengthKey = "registerBusinessRepresenting.error.businessName.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(
@@ -50,12 +78,12 @@ class RegisterBusinessRepresentingFormProviderSpec extends StringFieldBehaviours
     )
   }
 
-  ".field2" must {
+  ".addressLine1" must {
 
-    val fieldName = "field2"
-    val requiredKey = "registerBusinessRepresenting.error.field2.required"
-    val lengthKey = "registerBusinessRepresenting.error.field2.length"
-    val maxLength = 100
+    val fieldName = "addressLine1"
+    val requiredKey = "registerBusinessRepresenting.error.addressLine1.required"
+    val lengthKey = "registerBusinessRepresenting.error.addressLine1.length"
+    val maxLength = 70
 
     behave like fieldThatBindsValidData(
       form,
@@ -76,4 +104,86 @@ class RegisterBusinessRepresentingFormProviderSpec extends StringFieldBehaviours
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
+  ".town" must {
+
+    val fieldName = "town"
+    val requiredKey = "registerBusinessRepresenting.error.town.required"
+    val lengthKey = "registerBusinessRepresenting.error.town.length"
+    val maxLength = 35
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+
+  ".postCode" must {
+
+    val fieldName = "postCode"
+    val requiredKey = "registerBusinessRepresenting.error.postCode.required"
+    val lengthKey = "registerBusinessRepresenting.error.postCode.length"
+    val maxLength = 9
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+
+  ".country" must {
+
+    val fieldName = "country"
+    val requiredKey = "registerBusinessRepresenting.error.country.required"
+    val lengthKey = "registerBusinessRepresenting.error.country.length"
+    val maxLength = 60
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+
 }

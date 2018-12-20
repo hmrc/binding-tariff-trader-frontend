@@ -18,36 +18,38 @@ package models
 
 import play.api.libs.json._
 import viewmodels.RadioOption
-import pages.Page
+import pages.{Page, WhichBestDescribesYouPage}
 
 sealed trait WhichBestDescribesYou extends Page
 
 object WhichBestDescribesYou {
 
-  case object Option1 extends WithName("option1") with WhichBestDescribesYou
-  case object Option2 extends WithName("option2") with WhichBestDescribesYou
+  case object BusinessOwner extends WithName("businessOwner") with WhichBestDescribesYou
+  case object BusinessRepresentative extends WithName("businessRepresentative") with WhichBestDescribesYou
 
-  val values: Set[WhichBestDescribesYou] = Set(
-    Option1, Option2
-  )
+  val values: Set[WhichBestDescribesYou] = Set(BusinessOwner, BusinessRepresentative)
 
   val options: Set[RadioOption] = values.map {
-    value =>
-      RadioOption("whichBestDescribesYou", value.toString)
+    value => RadioOption("whichBestDescribesYou", value.toString)
   }
 
   implicit val enumerable: Enumerable[WhichBestDescribesYou] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 
   implicit object WhichBestDescribesYouWrites extends Writes[WhichBestDescribesYou] {
-    def writes(whichBestDescribesYou: WhichBestDescribesYou) = Json.toJson(whichBestDescribesYou.toString)
+    def writes(whichBestDescribesYou: WhichBestDescribesYou): JsValue = Json.toJson(whichBestDescribesYou.toString)
   }
 
   implicit object WhichBestDescribesYouReads extends Reads[WhichBestDescribesYou] {
     override def reads(json: JsValue): JsResult[WhichBestDescribesYou] = json match {
-      case JsString(Option1.toString) => JsSuccess(Option1)
-      case JsString(Option2.toString) => JsSuccess(Option2)
-      case _                          => JsError("Unknown whichBestDescribesYou")
+      case JsString(BusinessOwner.toString) => JsSuccess(BusinessOwner)
+      case JsString(BusinessRepresentative.toString) => JsSuccess(BusinessRepresentative)
+      case _ => JsError("Unknown whichBestDescribesYou")
     }
   }
+
+  def isBusinessRepresentative(answers: UserAnswers): Boolean = {
+    answers.get(WhichBestDescribesYouPage).exists(_.isInstanceOf[WhichBestDescribesYou.BusinessRepresentative.type])
+  }
+
 }

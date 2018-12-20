@@ -17,11 +17,32 @@
 package mapper
 
 import javax.inject.Singleton
+import models.WhichBestDescribesYou.isBusinessRepresentative
 import models._
 import pages._
 
 @Singleton
 class CaseRequestMapper {
+
+  def buildAgentDetails: UserAnswers => Option[AgentDetails] = { answers: UserAnswers =>
+    if (isBusinessRepresentative(answers)) {
+      answers.get(RegisterBusinessRepresentingPage).map { details: RegisterBusinessRepresenting =>
+        AgentDetails(
+          EORIDetails(
+            details.eoriNumber,
+            details.businessName,
+            details.addressLine1,
+            details.town, // Line 2 empty
+            "", // Line 3 empty
+            details.postCode,
+            details.country
+          )
+        )
+      }
+    } else {
+      None
+    }
+  }
 
   def map(answers: UserAnswers): NewCaseRequest = {
 
@@ -38,12 +59,14 @@ class CaseRequestMapper {
     val contact = contactDetails.map(toContact).get
     val holder: EORIDetails = registeredAddressForEori.map(toHolder).get
 
+    val agentDetails = buildAgentDetails(answers)
+
     val app = Application(
       holder = holder,
       contact = contact,
-      agent = None, // TODO Unimplemented
+      agent = agentDetails,
       offline = false,
-      goodName = describeYourItem.map(_.field1).getOrElse("N/A"),
+      goodName = describeYourItem.map(_.field1).getOrElse("CaseRequestMapperTestN/A"),
       goodDescription = describeYourItem.map(_.field2).getOrElse("N/A"),
       confidentialInformation = confidentialInfo.map(_.field1),
       otherInformation = supportingInformationDetails,
@@ -58,7 +81,7 @@ class CaseRequestMapper {
     NewCaseRequest(app)
   }
 
-  def toHolder: RegisteredAddressForEori => EORIDetails = { details =>
+  def toHolder: RegisteredAddressForEori => EORIDetails = { details: RegisteredAddressForEori =>
     EORIDetails(
       "", // TODO: Hard Coded
       details.field1,
@@ -70,7 +93,7 @@ class CaseRequestMapper {
     )
   }
 
-  def toContact: EnterContactDetails => Contact = { details =>
+  def toContact: EnterContactDetails => Contact = { details: EnterContactDetails =>
     Contact(
       name = details.field1,
       email = details.field2,

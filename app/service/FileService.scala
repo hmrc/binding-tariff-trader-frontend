@@ -51,11 +51,11 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
           connector.publish(file).map(toPublishedAttachment(file.size))
 
         case Some(ScanStatus.FAILED) => // If the file has been quarantined by the virus scanner
-          Logger.warn(s"File could not be published as it was [Quarantined]. It will be lost.")
+          Logger.warn("File could not be published as it was [Quarantined]. It will be lost.")
           successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Quarantined"))
 
         case _ => // If the file is not scanned yet.
-          Logger.warn(s"File could not be published as it was [Un-scanned]. It will be lost.")
+          Logger.warn("File could not be published as it was [Un-scanned]. It will be lost.")
           successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Unscanned"))
       }
     }

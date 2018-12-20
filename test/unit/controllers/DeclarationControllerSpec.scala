@@ -26,7 +26,7 @@ import controllers.actions._
 import mapper.CaseRequestMapper
 import models._
 import navigation.FakeNavigator
-import org.mockito.ArgumentMatchers.{any, anyString, refEq}
+import org.mockito.ArgumentMatchers.{any, refEq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
@@ -51,15 +51,12 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
   private val mapper = mock[CaseRequestMapper]
   private val newCaseReq = mock[NewCaseRequest]
   private val attachment = mock[FileAttachment]
-  private val attachments = Seq(attachment)
   private val publishedAttachment = mock[PublishedFileAttachment]
   private val unpublishedAttachment = mock[UnpublishedFileAttachment]
   private val createdCase = mock[Case]
   private val auditService = mock[AuditService]
   private val casesService = mock[CasesService]
   private val fileService = mock[FileService]
-
-  private val fieldsToBeExcludedWhenComparingHeaderCarriers = List("requestChain", "nsStamp")
 
   private implicit val mat: Materializer = app.materializer
 
@@ -82,10 +79,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
 
   private def givenTheCaseCreateFails(): Unit = {
     when(casesService.create(any[NewCaseRequest])(any[HeaderCarrier])).thenReturn(failed(error))
-  }
-
-  private def givenTheAttachmentPublishFails(): Unit = {
-    when(fileService.publish(any[Seq[FileAttachment]])(any[HeaderCarrier])).thenReturn(failed(error))
   }
 
   private def givenTheAttachmentPublishesNone(): Unit = {
@@ -137,31 +130,25 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
 
       val c = controller(extractDataFromCache)
       val req = fakeRequest
-      val expectedHeaderCarrier = c.hc(req)
 
       await(c.onSubmit(NormalMode)(req))
 
-      verify(auditService, times(1)).auditBTIApplicationSubmission(any[NewCaseRequest])(any[HeaderCarrier])
       verify(auditService, times(1)).auditBTIApplicationSubmissionSuccessful(refEq(createdCase))(any[HeaderCarrier])
-      verify(auditService, never).auditBTIApplicationSubmissionFailed(any[NewCaseRequest], anyString)(any[HeaderCarrier])
 
       verifyNoMoreInteractions(auditService)
     }
 
-    "send the expected explicit audit events when the BTI application failed to be submitted" in {
+    "not send the expected explicit audit events when the BTI application failed to be submitted" in {
       givenTheCaseCreateFails()
 
       val c = controller(extractDataFromCache)
       val req = fakeRequest
-      val expectedHeaderCarrier = c.hc(req)
 
       val caught = intercept[error.type] {
         await(c.onSubmit(NormalMode)(req))
       }
       caught mustBe error
 
-      verify(auditService, times(1)).auditBTIApplicationSubmission(any[NewCaseRequest])(any[HeaderCarrier])
-      verify(auditService, times(1)).auditBTIApplicationSubmissionFailed(any[NewCaseRequest], refEq(error.getMessage))(any[HeaderCarrier])
       verify(auditService, never).auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier])
 
       verifyNoMoreInteractions(auditService)

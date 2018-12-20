@@ -47,8 +47,8 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
 
     val preparedForm = request.userAnswers.flatMap(_.get(RegisteredAddressForEoriPage)) match {
-      case None => form
       case Some(value) => form.fill(value)
+      case _ => form
     }
 
     Ok(registeredAddressForEori(appConfig, preparedForm, mode))

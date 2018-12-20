@@ -16,6 +16,7 @@
 
 package connectors
 
+import akka.actor.ActorSystem
 import com.github.tomakehurst.wiremock.client.WireMock._
 import config.FrontendAppConfig
 import models.FileAttachment
@@ -37,9 +38,10 @@ class BindingTariffFilestoreConnectorSpec extends UnitSpec with WithFakeApplicat
   with WiremockTestServer with MockitoSugar with BeforeAndAfterEach with ResourceFiles {
 
   private val config = mock[FrontendAppConfig]
+  private val actorSystem = ActorSystem.create("test")
   private val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
   private val auditConnector = new DefaultAuditConnector(fakeApplication.configuration, fakeApplication.injector.instanceOf[Environment])
-  private val hmrcWsClient = new DefaultHttpClient(fakeApplication.configuration, auditConnector, wsClient)
+  private val hmrcWsClient = new DefaultHttpClient(fakeApplication.configuration, auditConnector, wsClient, actorSystem)
   private implicit val headers: HeaderCarrier = HeaderCarrier()
 
   private val connector = new BindingTariffFilestoreConnector(config, wsClient, hmrcWsClient)

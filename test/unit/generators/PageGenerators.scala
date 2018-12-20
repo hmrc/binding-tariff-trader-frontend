@@ -21,6 +21,9 @@ import pages._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryUploadWrittenAuthorisationPage: Arbitrary[UploadWrittenAuthorisationPage.type] =
+    Arbitrary(UploadWrittenAuthorisationPage)
+
   implicit lazy val arbitrarySupportingInformationDetailsPage: Arbitrary[SupportingInformationDetailsPage.type] =
     Arbitrary(SupportingInformationDetailsPage)
 
