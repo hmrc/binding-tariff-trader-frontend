@@ -29,6 +29,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 @Singleton
 class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
 
+  // TODO: TxM would like also the upscan file reference for each
   def auditBTIApplicationSubmissionSuccessful(c: Case)(implicit hc: HeaderCarrier): Unit = {
     auditConnector.sendExplicitAudit(BTIApplicationSubmission, toJson(c))
   }
@@ -37,5 +38,5 @@ class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
 
 object AuditPayloadType {
 
-  val BTIApplicationSubmission           = "BindingTariffApplication"
+  val BTIApplicationSubmission = "BindingTariffApplicationSubmission"
 }
