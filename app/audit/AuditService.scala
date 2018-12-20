@@ -16,39 +16,21 @@
 
 package audit
 
-import javax.inject.{Inject, Singleton}
 import audit.AuditPayloadType._
-import audit.model.CaseRequestAuditPayload
-import models.{Case, NewCaseRequest}
-import play.api.libs.json.JsValue
+import javax.inject.{Inject, Singleton}
+import models.Case
 import play.api.libs.json.Json.toJson
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
-import utils.JsonFormatters.{caseFormat, newCaseRequestAuditPayload}
+import utils.JsonFormatters.caseFormat
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
 
-  def auditBTIApplicationSubmission(req: NewCaseRequest)
-                                   (implicit hc: HeaderCarrier): Unit = {
-    sendExplicitAuditEvent(auditEventType = BTIApplicationSubmission, toJson(CaseRequestAuditPayload(req)))
-  }
-
-  def auditBTIApplicationSubmissionFailed(req: NewCaseRequest, error: String)
-                                         (implicit hc: HeaderCarrier): Unit = {
-    sendExplicitAuditEvent(BTIApplicationSubmissionFailed, toJson(CaseRequestAuditPayload(req, Some(error))))
-  }
-
-  def auditBTIApplicationSubmissionSuccessful(c: Case)
-                                             (implicit hc: HeaderCarrier): Unit = {
-    sendExplicitAuditEvent(BTIApplicationSubmissionSuccessful, toJson(c))
-  }
-
-  private def sendExplicitAuditEvent(auditEventType: String, auditPayload: JsValue)
-                                    (implicit hc : uk.gov.hmrc.http.HeaderCarrier): Unit = {
-    auditConnector.sendExplicitAudit(auditType = auditEventType, detail = auditPayload)
+  def auditBTIApplicationSubmissionSuccessful(c: Case)(implicit hc: HeaderCarrier): Unit = {
+    auditConnector.sendExplicitAudit(BTIApplicationSubmission, toJson(c))
   }
 
 }
@@ -56,6 +38,4 @@ class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
 object AuditPayloadType {
 
   val BTIApplicationSubmission           = "BindingTariffApplication"
-  val BTIApplicationSubmissionSuccessful = "BindingTariffApplicationSubmissionSuccessful"
-  val BTIApplicationSubmissionFailed     = "BindingTariffApplicationSubmissionFailed"
 }

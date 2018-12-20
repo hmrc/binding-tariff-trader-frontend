@@ -58,8 +58,7 @@ class DeclarationController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
-  val newCaseRequest = mapper.map(answers)
-    auditService.auditBTIApplicationSubmission(newCaseRequest)
+    val newCaseRequest = mapper.map(answers)
 
     val attachments: Seq[FileAttachment] = answers
       .get(UploadSupportingMaterialMultiplePage)
@@ -92,13 +91,7 @@ class DeclarationController @Inject()(
   private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment],
                          letter: Option[SubmittedFileAttachment], answers: UserAnswers)
                         (implicit headerCarrier: HeaderCarrier): Future[Case] = {
-
-    val request = appendAttachments(newCaseRequest, attachments, letter, answers)
-
-    caseService.create(request).recover { case e: Throwable =>
-      auditService.auditBTIApplicationSubmissionFailed(newCaseRequest, e.getMessage)
-      throw e
-    }
+    caseService.create(appendAttachments(newCaseRequest, attachments, letter, answers))
   }
 
   private def appendAttachments(caseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment],
