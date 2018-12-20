@@ -121,16 +121,6 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
       )
     }
 
-    "Handle Exceptions from Get where all fail" in {
-      given(connector.get(filePublishing1)).willReturn(Future.failed(new RuntimeException("Some Error")))
-      given(connector.get(filePublishing2)).willReturn(Future.failed(new RuntimeException("Some Error")))
-
-      await(service.publish(Seq(filePublishing1, filePublishing2))) shouldBe Seq(
-        UnpublishedFileAttachment("id1", "filename1", "type", 0, "Some Error"),
-        UnpublishedFileAttachment("id2", "filename2", "type", 0, "Some Error")
-      )
-    }
-
     "Handle Exceptions from Publish" in {
       val connectorResponse1 = FilestoreResponse("id1", "filename1", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
       val connectorResponse2 = FilestoreResponse("id2", "filename2", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
@@ -143,21 +133,6 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
       await(service.publish(Seq(filePublishing1, filePublishing2))) shouldBe Seq(
         UnpublishedFileAttachment("id1", "filename1", "type", 0, "Some Error"),
         PublishedFileAttachment("id2", "filename2", "type", 0, "url")
-      )
-    }
-
-    "Handle Exceptions from Publish where all fail" in {
-      val connectorResponse1 = FilestoreResponse("id1", "filename1", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
-      val connectorResponse2 = FilestoreResponse("id2", "filename2", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
-      given(connector.get(filePublishing1)).willReturn(Future.successful(connectorResponse1))
-      given(connector.get(filePublishing2)).willReturn(Future.successful(connectorResponse2))
-
-      given(connector.publish(refEq(filePublishing1))(any[HeaderCarrier])).willReturn(Future.failed(new RuntimeException("Some Error")))
-      given(connector.publish(refEq(filePublishing2))(any[HeaderCarrier])).willReturn(Future.failed(new RuntimeException("Some Error")))
-
-      await(service.publish(Seq(filePublishing1, filePublishing2))) shouldBe Seq(
-        UnpublishedFileAttachment("id1", "filename1", "type", 0, "Some Error"),
-        UnpublishedFileAttachment("id2", "filename2", "type", 0, "Some Error")
       )
     }
 
