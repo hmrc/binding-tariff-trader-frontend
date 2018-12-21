@@ -16,7 +16,6 @@
 
 package utils
 
-import audit.model.CaseRequestAuditPayload
 import models._
 import play.api.libs.json._
 
@@ -29,7 +28,6 @@ object JsonFormatters {
   implicit val applicationFormat: OFormat[Application] = Json.format[Application]
   implicit val caseFormat: OFormat[Case] = Json.format[Case]
   implicit val newCaseRequestFormat: OFormat[NewCaseRequest] = Json.format[NewCaseRequest]
-  implicit val newCaseRequestAuditPayload: OFormat[CaseRequestAuditPayload] = Json.format[CaseRequestAuditPayload]
 }
 
 object EnumJson {
