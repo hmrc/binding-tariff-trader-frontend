@@ -26,8 +26,7 @@
   scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages)
 
 @import layouts.{govuk_template => hmrcGovUkTemplate}
-@import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
-@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers, layouts => uiLayouts}
 
 @head = {
     @uiLayouts.head(
@@ -37,14 +36,12 @@
     <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")' />
 }
 
-@headerNavLinks = {}
-
 @insideHeader = {
     @uiLayouts.header_nav(
       navTitle = Some(messages("site.service_name")),
       navTitleLink = None,
       showBetaLink = false,
-      navLinks = Some(headerNavLinks))
+      navLinks = None)
 }
 
 @afterHeader = {}
