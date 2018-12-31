@@ -46,6 +46,8 @@ GET        /describeYourItem                            controllers.DescribeYour
 POST       /describeYourItem                            controllers.DescribeYourItemController.onSubmit(mode: Mode = NormalMode)
 GET        /changeDescribeYourItem                      controllers.DescribeYourItemController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeDescribeYourItem                      controllers.DescribeYourItemController.onSubmit(mode: Mode = CheckMode)
+GET        /acceptItemInformationList                   controllers.AcceptItemInformationListController.onPageLoad()
+POST       /acceptItemInformationList                   controllers.AcceptItemInformationListController.onSubmit()
 GET        /confidentialInformation                     controllers.ConfidentialInformationController.onPageLoad(mode: Mode = NormalMode)
 POST       /confidentialInformation                     controllers.ConfidentialInformationController.onSubmit(mode: Mode = NormalMode)
 GET        /changeConfidentialInformation               controllers.ConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)

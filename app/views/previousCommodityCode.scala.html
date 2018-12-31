@@ -35,20 +35,21 @@
 
         @components.heading("previousCommodityCode.heading")
 
+        <div class="form-group">
+            <details>
+                <summary><span class="summary">@messages("previousCommodityCode.details.summary")</span></summary>
+                <div class="panel panel-border-narrow">
+                    <p>@messages("previousCommodityCode.details.contentParagraph")</p>
+                </div>
+            </details>
+        </div>
+
         @components.input_text(
             field = form("field1"),
             label = messages("previousCommodityCode.field1")
         )
 
-        <details>
-          <summary><span class="summary">@messages("previousCommodityCode.details.summary")</span></summary>
-          <div class="panel panel-border-narrow">
-            <p>@messages("previousCommodityCode.details.contentParagraph")</p>
-          </div>
-        </details>
 
-        <h2 class="heading-medium">@messages("previousCommodityCode.heading2")</h2>
-        <p>@messages("previousCommodityCode.paragraph.changes")</p>
 
         @components.submit_button()
     }

@@ -117,27 +117,32 @@ enterContactDetails.error.field1.length = Full name must be 100 characters or le
 enterContactDetails.error.field2.length = Email address must be 100 characters or less
 enterContactDetails.error.field3.length = Direct telephone number must be 20 characters or less
 
-informationAboutYourItem.title = Provide information about your item
-informationAboutYourItem.heading = Provide information about your item
+acceptItemInformationList.title = Provide information about your item
+acceptItemInformationList.heading = Provide information about your item
+acceptItemInformationList.askfor.heading = You will be asked to supply where appropriate:
+acceptItemInformationList.askfor.item1 = any confidential information you do not want to be published on the commodity code rulings website
+acceptItemInformationList.askfor.item2 = a detailed description of your item to help to determine its classification
+acceptItemInformationList.askfor.item3 = photographs, manuals and other information to support your description and help to speed up the application
+acceptItemInformationList.askfor.item4 = a commodity code if you have found one
+acceptItemInformationList.askfor.item5 = a sample if it is needed
+
+informationAboutYourItem.title =Confidential information
+informationAboutYourItem.heading = Confidential information
 informationAboutYourItem.legend = Is there any information about your item that you do not want to be published?
+informationAboutYourItem.legend.paragraph =  This can also include images and brochures that you do not want to be published on the commodity code rulings website.
 informationAboutYourItem.yesIHaveInfo = Yes
 informationAboutYourItem.no = No
 informationAboutYourItem.checkYourAnswersLabel = Information about your item
 informationAboutYourItem.error.required = Select yes or no
-informationAboutYourItem.listItem1 = any confidential information you do not want to be published on the BTI ruling website
-informationAboutYourItem.listItem2 = a detailed description of your item to help to determine its classfication
-informationAboutYourItem.listItem3 = photographs, manuals, technical specifications and other information to support your description and help to speed up the application
-informationAboutYourItem.listItem4 = a commodity code if you have found one
-informationAboutYourItem.listItem5 = a sample if needed
 
-previousCommodityCode.title = What is the reference number for the BTI ruling you want to renew?
-previousCommodityCode.heading = What is the reference number for the BTI ruling you want to renew?
-previousCommodityCode.field1 = BTI ruling reference number
-previousCommodityCode.checkYourAnswersLabel = BTI ruling reference number 
+previousCommodityCode.title = What is the reference number for the commodity code ruling you want to renew?
+previousCommodityCode.heading = What is the reference number for the commodity code ruling you want to renew?
+previousCommodityCode.field1 = Commodity code ruling reference number
+previousCommodityCode.checkYourAnswersLabel = Commodity code ruling reference number
 previousCommodityCode.error.field1.required = Enter previous BTI ruling reference number
 previousCommodityCode.error.field1.length = Previous BTI ruling must be 100 characters or less
 previousCommodityCode.details.summary = What is my BTI ruling reference number?
-previousCommodityCode.details.contentParagraph = This reference number was supplied on the document when you were given your original BTI ruling.
+previousCommodityCode.details.contentParagraph = This reference number was supplied on the certificate when you were given your original commodity code ruling. This was known as a BTI ruling for applications before January 2019.
 
 describeYourItem.title = Describe your item
 describeYourItem.heading = Describe your item
@@ -226,9 +231,9 @@ similarItemCommodityCode.listItem2 = if you know of a similar item that has a BT
 
 commodityCodeRulingReference.title = What are the reference numbers of the similar BTI rulings?
 commodityCodeRulingReference.heading = What are the reference numbers of the similar BTI rulings?
+commodityCodeRulingReference.label = You can include multiple reference numbers and an explanation
 commodityCodeRulingReference.whatis =  What is a BTI ruling reference
 commodityCodeRulingReference.whatis.paragraph = This reference number is supplied on the certificate when the BTI ruling is issued.
-commodityCodeRulingReference.hint = You can include multiple reference numbers and an explanation
 commodityCodeRulingReference.checkYourAnswersLabel = BTI ruling reference number
 commodityCodeRulingReference.error.required = Enter the BTI ruling reference number
 commodityCodeRulingReference.error.length = BTI ruling reference number must be 100 characters or less
