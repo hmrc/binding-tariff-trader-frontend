@@ -168,6 +168,12 @@ confidentialInformation.checkYourAnswersLabel = Confidential information about y
 confidentialInformation.error.field1.required = Enter confidential information
 confidentialInformation.error.field1.length = Confidential information must be 100 characters or less
 
+askForUploadSupportingMaterial.title = Have you any photographs, manuals, brochures or technical specifications to upload?
+askForUploadSupportingMaterial.heading = Have you any photographs, manuals, brochures or technical specifications to upload?
+askForUploadSupportingMaterial.checkYourAnswersLabel =  Have you any photographs, manuals, brochures or technical specifications to upload?
+askForUploadSupportingMaterial.label = Providing extra information about your item can speed up your application.
+askForUploadSupportingMaterial.error.required = Select yes or no 
+
 uploadSupportingMaterialMultiple.title = Upload photographs, manuals, brochures or technical specifications
 uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, brochures or technical specifications
 uploadSupportingMaterialMultiple.label = Choose documents

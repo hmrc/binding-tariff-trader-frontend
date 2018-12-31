@@ -36,6 +36,8 @@ class Navigator @Inject()() {
 
     UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(NormalMode)),
 
+    AcceptItemInformationPage -> (_ => routes.AcceptItemInformationListController.onPageLoad()),
+
     InformationAboutYourItemPage -> (_ => routes.InformationAboutYourItemController.onPageLoad(NormalMode)),
 
     PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
@@ -43,6 +45,8 @@ class Navigator @Inject()() {
     ConfidentialInformationPage -> (_ => routes.ConfidentialInformationController.onPageLoad(NormalMode)),
 
     DescribeYourItemPage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode)),
+
+    AskForUploadSupportingMaterialPage -> (_ => routes.AskForUploadSupportingMaterialController.onPageLoad(NormalMode)),
 
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
 
@@ -70,9 +74,7 @@ class Navigator @Inject()() {
 
     DeclarationPage -> (_ => routes.DeclarationController.onPageLoad(NormalMode)),
 
-    ConfirmationPage -> (_ => routes.ConfirmationController.onPageLoad()),
-
-    AcceptItemInformationPage -> (_ => routes.AcceptItemInformationListController.onPageLoad())
+    ConfirmationPage -> (_ => routes.ConfirmationController.onPageLoad())
 
   )
 
