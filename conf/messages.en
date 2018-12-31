@@ -39,7 +39,7 @@ site.no = No
 site.yes = Yes
 site.continue = Continue
 site.upload_continue = Upload and continue
-site.service_name = Binding Tariff Application
+site.service_name = Apply for a binding tariff information ruling
 site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
@@ -73,8 +73,8 @@ whichBestDescribesYou.businessRepresentative = A different business or organisat
 whichBestDescribesYou.checkYourAnswersLabel = Who is this application for?
 whichBestDescribesYou.error.required = Select who this application is for
 
-selectApplicationType.title = Is this a new application or a renewal of a previous BTI ruling?
-selectApplicationType.heading = Is this a new application or a renewal of a previous BTI ruling?
+selectApplicationType.title = Is this a new application or a renewal of a previous goods classification ruling?
+selectApplicationType.heading = Is this a new application or a renewal of a previous goods classification ruling?
 selectApplicationType.newCommodity = I want to make a new application
 selectApplicationType.previousCommodity = I want to renew a previous ruling
 selectApplicationType.checkYourAnswersLabel = Is this a new application or a renewal of a previous BTI ruling?
@@ -104,6 +104,7 @@ registerBusinessRepresenting.error.country.length = Country must be 60 character
 
 enterContactDetails.title = Who is the contact for this application?
 enterContactDetails.heading = Who is the contact for this application?
+enterContactDetails.paragraph = The contact details will only be used for the purpose of this application
 enterContactDetails.field1 = Full name
 enterContactDetails.field2 = Email address
 enterContactDetails.field3 = Telephone number (optional)
@@ -196,8 +197,9 @@ whenToSendSample.notSendingSample = No
 whenToSendSample.checkYourAnswersLabel = Are you sending a sample to the classification team?
 whenToSendSample.error.required = Select yes or no
 whenToSendSample.first.paragraph = We usually ask for samples of:
-whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for the classification team to contact you if one is needed.
+whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for the classification team to contact you if one is needed
 whenToSendSample.third.paragraph = <a href="https://www.gov.uk/guidance/binding-tariff-information-rulings#samples">Get more information about samples, this will open in a new window</a>
+whenToSendSample.fourth.paragraph = The address for samples will be provided at the end of the application.
 whenToSendSample.listItem1 = textiles
 whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
@@ -205,6 +207,9 @@ whenToSendSample.legend = Are you sending a sample?
 
 returnSamples.title = Would you like the samples returned?
 returnSamples.heading = Would you like the samples returned?
+returnSamples.listItem1 = Samples will be retured where possible
+returnSamples.listItem2 = In some cases samples may be damaged during testing
+returnSamples.listItem3 = Postage and packaging costs need to be paid upfront to return the samples
 returnSamples.yesReturnSamples = Yes
 returnSamples.noDontReturnSamples = No
 returnSamples.checkYourAnswersLabel = Would you like the samples returned?
@@ -221,6 +226,9 @@ similarItemCommodityCode.listItem2 = if you know of a similar item that has a BT
 
 commodityCodeRulingReference.title = What are the reference numbers of the similar BTI rulings?
 commodityCodeRulingReference.heading = What are the reference numbers of the similar BTI rulings?
+commodityCodeRulingReference.whatis =  What is a BTI ruling reference
+commodityCodeRulingReference.whatis.paragraph = This reference number is supplied on the certificate when the BTI ruling is issued.
+commodityCodeRulingReference.hint = You can include multiple reference numbers and an explanation
 commodityCodeRulingReference.checkYourAnswersLabel = BTI ruling reference number
 commodityCodeRulingReference.error.required = Enter the BTI ruling reference number
 commodityCodeRulingReference.error.length = BTI ruling reference number must be 100 characters or less

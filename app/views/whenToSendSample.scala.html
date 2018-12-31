@@ -37,6 +37,8 @@
         @components.heading("whenToSendSample.heading")
 
         <div class="form-group">
+            <p>@messages("whenToSendSample.second.paragraph")</p>
+
             <p>@messages("whenToSendSample.first.paragraph")</p>
         
             <ul class="list list-bullet">
@@ -45,11 +47,14 @@
                 <li>@messages("whenToSendSample.listItem3")</li>
             </ul>
     
-            <p>@messages("whenToSendSample.second.paragraph")</p>
+
             <p>@Html(messages("whenToSendSample.third.paragraph"))</p>
         </div>
 
         <h2 class="heading-medium">@messages("whenToSendSample.legend")</h2>
+
+        <p>@messages("whenToSendSample.fourth.paragraph")</p>
+
         @components.input_radio(
             field = form("value"),
             legend = messages("whenToSendSample.legend"),

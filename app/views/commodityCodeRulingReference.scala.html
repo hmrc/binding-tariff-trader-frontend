@@ -35,10 +35,23 @@
 
         @components.heading("commodityCodeRulingReference.heading")
 
+        <div class="form-group">
+            <details class="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                    @messages("commodityCodeRulingReference.whatis")
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                @messages("commodityCodeRulingReference.whatis.paragraph")
+                </div>
+            </details>
+        </div>
+
+
         @components.input_textarea(
           field = form("value"),
-          label = messages("commodityCodeRulingReference.heading"),
-          labelClass=Some("visually-hidden")
+          label = messages("commodityCodeRulingReference.hint")
         )
 
         @components.submit_button()

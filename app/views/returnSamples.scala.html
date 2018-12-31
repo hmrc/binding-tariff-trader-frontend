@@ -36,6 +36,13 @@
 
         @components.heading("returnSamples.heading")
 
+        <ul class="list list-bullet">
+            <li>@messages("returnSamples.listItem1")</li>
+            <li>@messages("returnSamples.listItem2")</li>
+            <li>@messages("returnSamples.listItem3")</li>
+        </ul>
+
+
         @components.input_radio(
             field = form("value"),
             legend = messages("returnSamples.heading"),
