@@ -50,6 +50,8 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val bindingTariffFileStoreUrl: String = baseUrl("binding-tariff-filestore")
   lazy val authEnrolment = loadConfig("auth.enrolment")
 
+  lazy val btiUkWebsite = loadConfig("urls.btiUkWebsite")
+
   lazy val languageTranslationEnabled = runModeConfiguration.getBoolean("microservice.services.features.welsh-translation").getOrElse(true)
 
   def languageMap: Map[String, Lang] = Map(

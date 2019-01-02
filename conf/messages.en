@@ -289,8 +289,8 @@ declaration.heading = Declaration
 declaration.checkYourAnswersLabel = Declaration
 declaration.paragraph = By submitting the application you are acknowledging that:
 declaration.listItem1 = the information is correct and up to date to the best of your knowledge
-declaration.listItem2 = supporting data, information, images and brochures provided on the application can be stored on a database and published on a <a href="http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_home.jsp?Lang=en"> UK website </a>
-declaration.listItem3 = information supplied after the application is submitted can also be stored on a database and published on a <a href="http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_home.jsp?Lang=en"> UK website </a>
+declaration.listItem2 = supporting data, information, images and brochures provided on the application can be stored on a database and published on a <a href="{0}" target="_blank"> UK website </a>
+declaration.listItem3 = information supplied after the application is submitted can also be stored on a database and published on a <a href="{0}" target="_blank"> UK website </a>
 declaration.listItem4 = anything you have told us that is confidential will not be published
 declaration.listItem5 = if you are sending samples, they may be damaged during laboratory tests
 
