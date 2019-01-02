@@ -31,8 +31,8 @@ import scala.concurrent.Future.successful
 
 class BeforeYouStartController @Inject()(appConfig: FrontendAppConfig,
                                          override val messagesApi: MessagesApi,
-                                         identify: IdentifierAction,
                                          navigator: Navigator,
+                                         identify: IdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction
                                         ) extends FrontendController with I18nSupport {

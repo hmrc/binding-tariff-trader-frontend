@@ -37,12 +37,12 @@ class AcceptItemInformationListController @Inject()(appConfig: FrontendAppConfig
                                                     requireData: DataRequiredAction
                                                    ) extends FrontendController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad : Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
       Ok(acceptItemInformationList(appConfig))
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+  def onSubmit : Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
     successful(Redirect(navigator.nextPage(InformationAboutYourItemPage, NormalMode)(request.userAnswers.get)))
 
