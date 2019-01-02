@@ -63,8 +63,8 @@ unauthorised.heading = You can’t access this service with this account
 eori.number = EORI number
 eori.details = EORI details
 
-registeredAddressForEori.title = What are the registered details associated with this EORI number?
-registeredAddressForEori.heading = What are the registered details associated with this EORI number?
+registeredAddressForEori.title = What are the registered details associated with this EORI?
+registeredAddressForEori.heading = What are the registered details associated with this EORI?
 registeredAddressForEori.businessName = Business or organisation name
 registeredAddressForEori.addressLine1 = Address line 1
 registeredAddressForEori.townCity = Town or city

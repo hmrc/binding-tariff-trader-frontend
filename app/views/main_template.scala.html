@@ -34,13 +34,18 @@
     }
 }
 
+@content = {
+    @layouts.article(mainContent, false, Some("grid-row column-two-thirds"))
+}
+
+
 @govuk_wrapper(appConfig = appConfig,
                title = title,
                mainClass = mainClass,
                bodyClasses = bodyClasses,
                sidebar = sidebar,
                contentHeader = contentHeader,
-               mainContent = layouts.article(mainContent),
+               mainContent = content,
                serviceInfoContent = serviceInfoContent,
                scriptElem = scriptElem
 )
