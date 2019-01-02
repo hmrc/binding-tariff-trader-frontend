@@ -29,17 +29,20 @@
 
     @helpers.form(action = DeclarationController.onSubmit(mode), 'autoComplete -> "off") {
 
+        @components.back_link()
+
         @components.heading("declaration.heading")
 
-        <p>@messages("declaration.paragraph")</p>
+        <h2 class="heading-medium"> @messages("declaration.paragraph") </h2>
 
         <ul class="list list-bullet">
           <li>@messages("declaration.listItem1")</li>
           <li>@messages("declaration.listItem2")</li>
           <li>@messages("declaration.listItem3")</li>
           <li>@messages("declaration.listItem4")</li>
+          <li>@messages("declaration.listItem5")</li>
         </ul>
 
-        @components.submit_button()
+        @components.submit_button(Some(messages("site.submit")))
     }
 }
