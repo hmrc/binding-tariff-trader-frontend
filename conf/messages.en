@@ -21,15 +21,28 @@ error.number = Please enter a valid number
 error.required = Enter a value
 error.summary.title = There is a problem
 
-index.title = Binding Tariff Application
-index.heading = Binding Tariff Application
-index.guidance = Welcome to the Binding Tariff Application Journey
+index.title = What would you like to do?
+index.heading = What would you like to do?
+index.home = Home
+
+beforeYouStart.title = Before you start
+beforeYouStart.heading = Before you start
+beforeYouStart.paragraph1 = You will need:
+beforeYouStart.paragraph1.item1 = your registered EORI address
+beforeYouStart.paragraph1.item2 = detailed information about your goods
+beforeYouStart.paragraph1.item3 = photographs, manuals and brochures where appropriate
+beforeYouStart.paragraph1.item4 = samples if needed
+beforeYouStart.paragraph2 = To apply for another business or organisation you will also need:
+beforeYouStart.paragraph2.item1 = written authorisation from them dated within the last 12 months
+beforeYouStart.paragraph2.item2 = their EORI number
+beforeYouStart.paragraph2.item3 = their registered EORI address
+
 
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
 
-site.start = Start
+site.start = Start application
 site.back = Back
 site.delete = Remove
 site.edit = Change

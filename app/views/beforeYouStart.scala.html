@@ -19,17 +19,31 @@
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("index.title"),
+    title = messages("beforeYouStart.title"),
     appConfig = appConfig,
     bodyClasses = None) {
 
-    <br/><br/>
-    <div class="page-info">@messages("index.home")</div>
+    @components.heading("beforeYouStart.heading")
 
-    @components.heading("index.heading")
+    <p>@messages("beforeYouStart.paragraph1")</p>
+
+    <ul class="list list-bullet">
+        <li>@messages("beforeYouStart.paragraph1.item1")</li>
+        <li>@messages("beforeYouStart.paragraph1.item2")</li>
+        <li>@messages("beforeYouStart.paragraph1.item3")</li>
+        <li>@messages("beforeYouStart.paragraph1.item4")</li>
+    </ul>
+
+    <p>@messages("beforeYouStart.paragraph2")</p>
+
+    <ul class="list list-bullet">
+        <li>@messages("beforeYouStart.paragraph2.item1")</li>
+        <li>@messages("beforeYouStart.paragraph2.item2")</li>
+        <li>@messages("beforeYouStart.paragraph2.item3")</li>
+    </ul>
 
     @components.button_link(
-        messages("site.start"),
-        "/binding-tariff-application/beforeYouStart"
+        messages("site.continue"),
+        "/binding-tariff-application/registeredAddressForEori"
     )
 }

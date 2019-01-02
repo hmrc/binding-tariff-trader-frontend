@@ -10,6 +10,7 @@ GET        /                                            controllers.IndexControl
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
+GET        /beforeYouStart                              controllers.BeforeYouStartController.onPageLoad()
 GET        /registeredAddressForEori                    controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = NormalMode)
 POST       /registeredAddressForEori                    controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = NormalMode)
 GET        /changeRegisteredAddressForEori              controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = CheckMode)
