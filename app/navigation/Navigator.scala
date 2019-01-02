@@ -26,7 +26,7 @@ import play.api.mvc.Call
 class Navigator @Inject()() {
 
   private val routeMap: Map[Page, UserAnswers => Call] = Map(
-    RegisteredAddressForEoriPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
+    RegisteredAddressForEoriPage -> (_ => routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)),
 
     EnterContactDetailsPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
 

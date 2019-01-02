@@ -15,6 +15,10 @@
  *@
 
 @import config.FrontendAppConfig
+@import uk.gov.hmrc.play.views.html._
+@import controllers.routes._
+@import models.Mode
+@import views.ViewUtils._
 
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
@@ -23,27 +27,29 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @components.heading("beforeYouStart.heading")
+    @helpers.form(action = BeforeYouStartController.onSubmit(), 'autoComplete -> "off") {
 
-    <p>@messages("beforeYouStart.paragraph1")</p>
 
-    <ul class="list list-bullet">
-        <li>@messages("beforeYouStart.paragraph1.item1")</li>
-        <li>@messages("beforeYouStart.paragraph1.item2")</li>
-        <li>@messages("beforeYouStart.paragraph1.item3")</li>
-        <li>@messages("beforeYouStart.paragraph1.item4")</li>
-    </ul>
+        @components.heading("beforeYouStart.heading")
 
-    <p>@messages("beforeYouStart.paragraph2")</p>
+        <p>@messages("beforeYouStart.paragraph1")</p>
 
-    <ul class="list list-bullet">
-        <li>@messages("beforeYouStart.paragraph2.item1")</li>
-        <li>@messages("beforeYouStart.paragraph2.item2")</li>
-        <li>@messages("beforeYouStart.paragraph2.item3")</li>
-    </ul>
+        <ul class="list list-bullet">
+            <li>@messages("beforeYouStart.paragraph1.item1")</li>
+            <li>@messages("beforeYouStart.paragraph1.item2")</li>
+            <li>@messages("beforeYouStart.paragraph1.item3")</li>
+            <li>@messages("beforeYouStart.paragraph1.item4")</li>
+        </ul>
 
-    @components.button_link(
-        messages("site.continue"),
-        "/binding-tariff-application/registeredAddressForEori"
-    )
+        <p>@messages("beforeYouStart.paragraph2")</p>
+
+        <ul class="list list-bullet">
+            <li>@messages("beforeYouStart.paragraph2.item1")</li>
+            <li>@messages("beforeYouStart.paragraph2.item2")</li>
+            <li>@messages("beforeYouStart.paragraph2.item3")</li>
+        </ul>
+
+        @components.submit_button()
+    }
+
 }
