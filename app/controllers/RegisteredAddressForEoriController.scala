@@ -23,7 +23,7 @@ import forms.RegisteredAddressForEoriFormProvider
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.RegisteredAddressForEoriPage
+import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -63,7 +63,7 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
         val updatedAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId)).set(RegisteredAddressForEoriPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(RegisteredAddressForEoriPage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(EnterContactDetailsPage, mode)(updatedAnswers))
         )
       }
     )

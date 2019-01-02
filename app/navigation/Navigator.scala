@@ -28,7 +28,9 @@ class Navigator @Inject()() {
   private val routeMap: Map[Page, UserAnswers => Call] = Map(
     RegisteredAddressForEoriPage -> (_ => routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)),
 
-    EnterContactDetailsPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
+    EnterContactDetailsPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
+
+    WhichBestDescribesYouPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
 
     SelectApplicationTypePage -> (_ => routes.SelectApplicationTypeController.onPageLoad(NormalMode)),
 

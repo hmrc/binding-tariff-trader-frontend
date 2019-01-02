@@ -25,7 +25,7 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.EnterContactDetailsFormProvider
 import models.Mode
-import pages.EnterContactDetailsPage
+import pages.{EnterContactDetailsPage, WhichBestDescribesYouPage}
 import navigation.Navigator
 import play.api.mvc.{Action, AnyContent}
 import views.html.enterContactDetails
@@ -64,7 +64,7 @@ class EnterContactDetailsController @Inject()(appConfig: FrontendAppConfig,
         val updatedAnswers = request.userAnswers.set(EnterContactDetailsPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(EnterContactDetailsPage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(WhichBestDescribesYouPage, mode)(updatedAnswers))
         )
       }
     )
