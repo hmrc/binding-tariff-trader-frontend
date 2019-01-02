@@ -23,7 +23,7 @@ import forms.PreviousCommodityCodeFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{InformationAboutYourItemPage, PreviousCommodityCodePage}
+import pages.{AcceptItemInformationPage, PreviousCommodityCodePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -64,7 +64,7 @@ class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
         val updatedAnswers = request.userAnswers.set(PreviousCommodityCodePage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(InformationAboutYourItemPage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(AcceptItemInformationPage, mode)(updatedAnswers))
         )
       }
     )

@@ -25,11 +25,10 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.InformationAboutYourItemFormProvider
 import models.{Enumerable, Mode}
-import pages.InformationAboutYourItemPage
+import pages.{ConfidentialInformationPage, DescribeYourItemPage, InformationAboutYourItemPage}
 import navigation.Navigator
 import views.html.informationAboutYourItem
 import models.InformationAboutYourItem.{No, Yes}
-import pages.{ConfidentialInformationPage, DescribeYourItemPage}
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext.Implicits.global

@@ -29,9 +29,12 @@ beforeYouStart.title = Before you start
 beforeYouStart.heading = Before you start
 beforeYouStart.paragraph1 = You will need:
 beforeYouStart.paragraph1.item1 = your registered EORI address
-beforeYouStart.paragraph1.item2 = detailed information about your goods
-beforeYouStart.paragraph1.item3 = photographs, manuals and brochures where appropriate
-beforeYouStart.paragraph1.item4 = samples if needed
+beforeYouStart.paragraph1.item2 = a breakdown of your item''s ingedients or parts
+beforeYouStart.paragraph1.item3 = how it is made
+beforeYouStart.paragraph1.item4 = what it is used for and how it works
+beforeYouStart.paragraph1.item5 = how it is packaged
+beforeYouStart.paragraph1.item6 = to upload photographs, manuals and brochures where appropriate
+beforeYouStart.paragraph1.item7 = samples if needed
 beforeYouStart.paragraph2 = To apply for another business or organisation you will also need:
 beforeYouStart.paragraph2.item1 = written authorisation from them dated within the last 12 months
 beforeYouStart.paragraph2.item2 = their EORI number
@@ -122,7 +125,7 @@ enterContactDetails.paragraph = The contact details will only be used for the pu
 enterContactDetails.field1 = Full name
 enterContactDetails.field2 = Email address
 enterContactDetails.field3 = Telephone number (optional)
-enterContactDetails.checkYourAnswersLabel = Contact details
+enterContactDetails.checkYourAnswersLabel = Application contact details
 enterContactDetails.error.field1.required = Enter your full name
 enterContactDetails.error.field2.required = Enter an email address
 enterContactDetails.error.field3.required = Enter a telephone number
@@ -213,7 +216,7 @@ commodityCodeDigits.heading = What is the commodity code you think matches your 
 commodityCodeDigits.checkYourAnswersLabel = Commodity code
 commodityCodeDigits.error.required = Enter a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
-commodityCodeDigits.label = Entering at least the first 2 numbers of this code could speed up your application.
+commodityCodeDigits.label = Entering at least the first 2 numbers of this code can help to speed up your application
 
 whenToSendSample.title = Samples
 whenToSendSample.heading = Samples
@@ -222,8 +225,8 @@ whenToSendSample.notSendingSample = No
 whenToSendSample.checkYourAnswersLabel = Are you sending a sample to the classification team?
 whenToSendSample.error.required = Select yes or no
 whenToSendSample.first.paragraph = We usually ask for samples of:
-whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for the classification team to contact you if one is needed
-whenToSendSample.third.paragraph = <a href="https://www.gov.uk/guidance/binding-tariff-information-rulings#samples">Get more information about samples, this will open in a new window</a>
+whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for the classification team to contact you if one is needed.
+whenToSendSample.third.paragraph = <a href="https://www.gov.uk/guidance/binding-tariff-information-rulings#samples" target="_blank">Get more information about samples, this will open in a new window</a>
 whenToSendSample.fourth.paragraph = The address for samples will be provided at the end of the application.
 whenToSendSample.listItem1 = textiles
 whenToSendSample.listItem2 = shoes
@@ -278,9 +281,9 @@ supportingInformation.noInformation = No
 supportingInformation.checkYourAnswersLabel = Enter any other information to support the application
 supportingInformation.error.required = Select yes or no
 
-supportingInformationDetails.title = Provide supporting information
-supportingInformationDetails.heading = Provide supporting information
-supportingInformationDetails.checkYourAnswersLabel = Supporting information
+supportingInformationDetails.title = What is the supporting information you want to provide?
+supportingInformationDetails.heading = What is the supporting information you want to provide?
+supportingInformationDetails.checkYourAnswersLabel = What is the supporting information you want to provide?
 supportingInformationDetails.error.required = Enter supporting information
 supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less
 
