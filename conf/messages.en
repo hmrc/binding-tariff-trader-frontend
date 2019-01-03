@@ -73,7 +73,7 @@ registeredAddressForEori.addressLine1 = Address line 1
 registeredAddressForEori.townCity = Town or city
 registeredAddressForEori.postcode = Postcode
 registeredAddressForEori.country = Country
-registeredAddressForEori.checkYourAnswersLabel = Applicant details
+registeredAddressForEori.checkYourAnswersLabel = Applicant''s registered details
 registeredAddressForEori.error.field1.required = Enter a business or organisation name
 registeredAddressForEori.error.field2.required = Enter address line 1
 registeredAddressForEori.error.field3.required = Enter a town or city
@@ -87,14 +87,14 @@ whichBestDescribesYou.title = Who is this application for?
 whichBestDescribesYou.heading = Who is this application for?
 whichBestDescribesYou.businessOwner = The business or organisation that I own or work for
 whichBestDescribesYou.businessRepresentative = A different business or organisation that I am representing
-whichBestDescribesYou.checkYourAnswersLabel = Who is this application for?
+whichBestDescribesYou.checkYourAnswersLabel = This application is for
 whichBestDescribesYou.error.required = Select who this application is for
 
 selectApplicationType.title = Is this a new application or a renewal of a previous goods classification ruling?
 selectApplicationType.heading = Is this a new application or a renewal of a previous goods classification ruling?
 selectApplicationType.newCommodity = I want to make a new application
 selectApplicationType.previousCommodity = I want to renew a previous ruling
-selectApplicationType.checkYourAnswersLabel = Is this a new application or a renewal of a previous BTI ruling?
+selectApplicationType.checkYourAnswersLabel = Application type
 selectApplicationType.error.required = Select application type
 
 registerBusinessRepresenting.title = What are the registered details of the business or organisation you''re representing?
@@ -105,7 +105,7 @@ registerBusinessRepresenting.addressLine1 = Address line 1
 registerBusinessRepresenting.town = Town or city
 registerBusinessRepresenting.postCode = Postcode
 registerBusinessRepresenting.country = Country
-registerBusinessRepresenting.checkYourAnswersLabel =  What are the registered details of the business or organisation you''re representing?
+registerBusinessRepresenting.checkYourAnswersLabel =  Trader registered details
 registerBusinessRepresenting.error.eoriNumber.required = Enter their EORI number
 registerBusinessRepresenting.error.eoriNumber.format = Enter their EORI number in the correct format 
 registerBusinessRepresenting.error.businessName.required = Enter their business or organisation name
@@ -149,13 +149,13 @@ informationAboutYourItem.legend = Is there any information about your item that 
 informationAboutYourItem.legend.paragraph =  This can also include images and brochures that you do not want to be published on the commodity code rulings website.
 informationAboutYourItem.yesIHaveInfo = Yes
 informationAboutYourItem.no = No
-informationAboutYourItem.checkYourAnswersLabel = Information about your item
+informationAboutYourItem.checkYourAnswersLabel = Do you have confidential information?
 informationAboutYourItem.error.required = Select yes or no
 
 previousCommodityCode.title = What is the reference number for the commodity code ruling you want to renew?
 previousCommodityCode.heading = What is the reference number for the commodity code ruling you want to renew?
 previousCommodityCode.field1 = Commodity code ruling reference number
-previousCommodityCode.checkYourAnswersLabel = Commodity code ruling reference number
+previousCommodityCode.checkYourAnswersLabel = Renew commodity code ruling number
 previousCommodityCode.error.field1.required = Enter previous BTI ruling reference number
 previousCommodityCode.error.field1.length = Previous BTI ruling must be 100 characters or less
 previousCommodityCode.details.summary = What is my BTI ruling reference number?
@@ -187,7 +187,7 @@ confidentialInformation.error.field1.length = Confidential information must be 1
 
 askForUploadSupportingMaterial.title = Have you any photographs, manuals, brochures or technical specifications to upload?
 askForUploadSupportingMaterial.heading = Have you any photographs, manuals, brochures or technical specifications to upload?
-askForUploadSupportingMaterial.checkYourAnswersLabel =  Have you any photographs, manuals, brochures or technical specifications to upload?
+askForUploadSupportingMaterial.checkYourAnswersLabel =  Do you have files to upload?
 askForUploadSupportingMaterial.label = Providing extra information about your item can speed up your application.
 askForUploadSupportingMaterial.error.required = Select yes or no 
 
@@ -200,7 +200,7 @@ uploadSupportingMaterialMultiple.upload.restrictionSize =  maximum individual fi
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file type can I upload?
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
-uploadSupportingMaterialMultiple.checkYourAnswersLabel = Upload photographs, manuals, brochures and other supporting material
+uploadSupportingMaterialMultiple.checkYourAnswersLabel = Uploaded files
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
 
@@ -208,7 +208,7 @@ commodityCodeBestMatch.title = Have you found a commodity code that you think ma
 commodityCodeBestMatch.heading = Have you found a commodity code that you think matches your item?
 commodityCodeBestMatch.yesFoundCommodityCode = Yes
 commodityCodeBestMatch.noHaventFoundCommodityCode = No
-commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code that you think matches your item?
+commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code?
 commodityCodeBestMatch.error.required = Select yes or no
 
 commodityCodeDigits.title = What is the commodity code you think matches your item?
@@ -222,7 +222,7 @@ whenToSendSample.title = Samples
 whenToSendSample.heading = Samples
 whenToSendSample.yesProvideSample = Yes
 whenToSendSample.notSendingSample = No
-whenToSendSample.checkYourAnswersLabel = Are you sending a sample to the classification team?
+whenToSendSample.checkYourAnswersLabel = Are you sending a sample?
 whenToSendSample.error.required = Select yes or no
 whenToSendSample.first.paragraph = We usually ask for samples of:
 whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for the classification team to contact you if one is needed.
@@ -271,6 +271,7 @@ legalChallenge.paragraph = Examples of this include court rulings or when a comm
 
 legalChallengeDetails.title = What are the problems with the classification of your item?
 legalChallengeDetails.heading = What are the problems with the classification of your item?
+legalChallengeDetails.checkYourAnswersLabel = Problems with the classification of your item
 legalChallengeDetails.error.required = Enter details of any problems with the classification of your item
 legalChallengeDetails.error.length = Details of any problems with classification must be 100 characters or less
 
@@ -327,3 +328,6 @@ uploadWrittenAuthorisation.error.length = UploadWrittenAuthorisation must be 100
 uploadWrittenAuthorisation.upload.title =  You can upload:
 uploadWrittenAuthorisation.upload.restrictionSize =  maximum file size of 10MB
 uploadWrittenAuthorisation.upload.typeOfFiles.title = What file type can I upload?
+
+checkYourAnswers.applicantRegisteredSection = Applicant details
+checkYourAnswers.informationAboutYourItemSection = Information about your item
