@@ -10,6 +10,8 @@ GET        /                                            controllers.IndexControl
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
+GET        /beforeYouStart                              controllers.BeforeYouStartController.onPageLoad()
+POST       /beforeYouStart                              controllers.BeforeYouStartController.onSubmit()
 GET        /registeredAddressForEori                    controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = NormalMode)
 POST       /registeredAddressForEori                    controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = NormalMode)
 GET        /changeRegisteredAddressForEori              controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = CheckMode)
@@ -46,10 +48,16 @@ GET        /describeYourItem                            controllers.DescribeYour
 POST       /describeYourItem                            controllers.DescribeYourItemController.onSubmit(mode: Mode = NormalMode)
 GET        /changeDescribeYourItem                      controllers.DescribeYourItemController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeDescribeYourItem                      controllers.DescribeYourItemController.onSubmit(mode: Mode = CheckMode)
+GET        /acceptItemInformationList                   controllers.AcceptItemInformationListController.onPageLoad()
+POST       /acceptItemInformationList                   controllers.AcceptItemInformationListController.onSubmit()
 GET        /confidentialInformation                     controllers.ConfidentialInformationController.onPageLoad(mode: Mode = NormalMode)
 POST       /confidentialInformation                     controllers.ConfidentialInformationController.onSubmit(mode: Mode = NormalMode)
 GET        /changeConfidentialInformation               controllers.ConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeConfidentialInformation               controllers.ConfidentialInformationController.onSubmit(mode: Mode = CheckMode)
+GET        /askForUploadSupportingMaterial              controllers.AskForUploadSupportingMaterialController.onPageLoad(mode: Mode = NormalMode)
+POST       /askForUploadSupportingMaterial              controllers.AskForUploadSupportingMaterialController.onSubmit(mode: Mode = NormalMode)
+GET        /changeAskForUploadSupportingMaterial        controllers.AskForUploadSupportingMaterialController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeAskForUploadSupportingMaterial        controllers.AskForUploadSupportingMaterialController.onSubmit(mode: Mode = CheckMode)
 GET        /uploadSupportingMaterialMultiple            controllers.UploadSupportingMaterialMultipleController.onPageLoad(mode: Mode = NormalMode)
 POST       /uploadSupportingMaterialMultiple            controllers.UploadSupportingMaterialMultipleController.onSubmit(mode: Mode = NormalMode)
 GET        /changeUploadSupportingMaterialMultiple      controllers.UploadSupportingMaterialMultipleController.onPageLoad(mode: Mode = CheckMode)

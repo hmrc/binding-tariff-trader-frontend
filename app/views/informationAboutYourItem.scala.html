@@ -1,5 +1,5 @@
 @*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,16 +36,10 @@
 
         @components.heading("informationAboutYourItem.heading")
 
-        <ul class="list list-bullet">
-            <li>@messages("informationAboutYourItem.listItem1")</li>
-            <li>@messages("informationAboutYourItem.listItem2")</li>
-            <li>@messages("informationAboutYourItem.listItem3")</li>
-            <li>@messages("informationAboutYourItem.listItem4")</li>
-            <li>@messages("informationAboutYourItem.listItem5")</li>
-        </ul>
-
-        <h2 class="heading-medium">@messages("informationAboutYourItem.legend")</h2>
-        <p>You can also reference images and brochures that you do not want to be published.</p>
+        <div class="form-group">
+            <h2 class="heading-medium">@messages("informationAboutYourItem.legend")</h2>
+            <p>@messages("informationAboutYourItem.legend.paragraph")</p>
+        </div>
 
         @components.input_radio(
             field = form("value"),

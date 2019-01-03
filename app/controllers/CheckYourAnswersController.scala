@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
 
     val sections = Seq(
       AnswerSection(
-        Some("registeredAddressForEori.checkYourAnswersLabel"),
+        Some("checkYourAnswers.applicantRegisteredSection"),
         Seq(
           checkYourAnswersHelper.registeredAddressForEori,
           checkYourAnswersHelper.enterContactDetails,
@@ -54,15 +54,20 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
         ).flatten
       ),
       AnswerSection(
-        Some("informationAboutYourItem.checkYourAnswersLabel"),
+        Some("checkYourAnswers.informationAboutYourItemSection"),
         Seq(
+          checkYourAnswersHelper.selectApplicationType,
           checkYourAnswersHelper.previousCommodityCode,
+          checkYourAnswersHelper.informationAboutYourItem,
           checkYourAnswersHelper.confidentialInformation,
           checkYourAnswersHelper.describeYourItem,
+          checkYourAnswersHelper.askForUploadSupportingMaterial,
           checkYourAnswersHelper.uploadSupportingMaterialMultiple,
+          checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,
           checkYourAnswersHelper.whenToSendSample,
           checkYourAnswersHelper.returnSamples,
+          checkYourAnswersHelper.similarItemCommodityCode,
           checkYourAnswersHelper.commodityCodeRulingReference,
           checkYourAnswersHelper.legalChallenge,
           checkYourAnswersHelper.legalChallengeDetails,

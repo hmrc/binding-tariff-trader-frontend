@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,10 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.InformationAboutYourItemFormProvider
 import models.{Enumerable, Mode}
-import pages.InformationAboutYourItemPage
+import pages.{ConfidentialInformationPage, DescribeYourItemPage, InformationAboutYourItemPage}
 import navigation.Navigator
 import views.html.informationAboutYourItem
 import models.InformationAboutYourItem.{No, Yes}
-import pages.{ConfidentialInformationPage, DescribeYourItemPage}
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext.Implicits.global

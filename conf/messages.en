@@ -21,15 +21,31 @@ error.number = Please enter a valid number
 error.required = Enter a value
 error.summary.title = There is a problem
 
-index.title = Binding Tariff Application
-index.heading = Binding Tariff Application
-index.guidance = Welcome to the Binding Tariff Application Journey
+index.title = What would you like to do?
+index.heading = What would you like to do?
+index.home = Home
+
+beforeYouStart.title = Before you start
+beforeYouStart.heading = Before you start
+beforeYouStart.paragraph1 = You will need:
+beforeYouStart.paragraph1.item1 = your registered EORI address
+beforeYouStart.paragraph1.item2 = a breakdown of your item''s ingedients or parts
+beforeYouStart.paragraph1.item3 = how it is made
+beforeYouStart.paragraph1.item4 = what it is used for and how it works
+beforeYouStart.paragraph1.item5 = how it is packaged
+beforeYouStart.paragraph1.item6 = to upload photographs, manuals and brochures where appropriate
+beforeYouStart.paragraph1.item7 = samples if needed
+beforeYouStart.paragraph2 = To apply for another business or organisation you will also need:
+beforeYouStart.paragraph2.item1 = written authorisation from them dated within the last 12 months
+beforeYouStart.paragraph2.item2 = their EORI number
+beforeYouStart.paragraph2.item3 = their registered EORI address
+
 
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
 
-site.start = Start
+site.start = Start application
 site.back = Back
 site.delete = Remove
 site.edit = Change
@@ -38,8 +54,9 @@ site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
 site.continue = Continue
+site.submit = Submit
 site.upload_continue = Upload and continue
-site.service_name = Binding Tariff Application
+site.service_name = Apply for a binding tariff information ruling
 site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
@@ -49,14 +66,14 @@ unauthorised.heading = You can’t access this service with this account
 eori.number = EORI number
 eori.details = EORI details
 
-registeredAddressForEori.title = What are the registered details associated with this EORI number?
-registeredAddressForEori.heading = What are the registered details associated with this EORI number?
+registeredAddressForEori.title = What are the registered details associated with this EORI?
+registeredAddressForEori.heading = What are the registered details associated with this EORI?
 registeredAddressForEori.businessName = Business or organisation name
 registeredAddressForEori.addressLine1 = Address line 1
 registeredAddressForEori.townCity = Town or city
 registeredAddressForEori.postcode = Postcode
 registeredAddressForEori.country = Country
-registeredAddressForEori.checkYourAnswersLabel = Applicant details
+registeredAddressForEori.checkYourAnswersLabel = Applicant''s registered details
 registeredAddressForEori.error.field1.required = Enter a business or organisation name
 registeredAddressForEori.error.field2.required = Enter address line 1
 registeredAddressForEori.error.field3.required = Enter a town or city
@@ -70,14 +87,14 @@ whichBestDescribesYou.title = Who is this application for?
 whichBestDescribesYou.heading = Who is this application for?
 whichBestDescribesYou.businessOwner = The business or organisation that I own or work for
 whichBestDescribesYou.businessRepresentative = A different business or organisation that I am representing
-whichBestDescribesYou.checkYourAnswersLabel = Who is this application for?
+whichBestDescribesYou.checkYourAnswersLabel = This application is for
 whichBestDescribesYou.error.required = Select who this application is for
 
-selectApplicationType.title = Is this a new application or a renewal of a previous BTI ruling?
-selectApplicationType.heading = Is this a new application or a renewal of a previous BTI ruling?
+selectApplicationType.title = Is this a new application or a renewal of a previous goods classification ruling?
+selectApplicationType.heading = Is this a new application or a renewal of a previous goods classification ruling?
 selectApplicationType.newCommodity = I want to make a new application
 selectApplicationType.previousCommodity = I want to renew a previous ruling
-selectApplicationType.checkYourAnswersLabel = Is this a new application or a renewal of a previous BTI ruling?
+selectApplicationType.checkYourAnswersLabel = Application type
 selectApplicationType.error.required = Select application type
 
 registerBusinessRepresenting.title = What are the registered details of the business or organisation you''re representing?
@@ -88,7 +105,7 @@ registerBusinessRepresenting.addressLine1 = Address line 1
 registerBusinessRepresenting.town = Town or city
 registerBusinessRepresenting.postCode = Postcode
 registerBusinessRepresenting.country = Country
-registerBusinessRepresenting.checkYourAnswersLabel =  What are the registered details of the business or organisation you''re representing?
+registerBusinessRepresenting.checkYourAnswersLabel =  Trader registered details
 registerBusinessRepresenting.error.eoriNumber.required = Enter their EORI number
 registerBusinessRepresenting.error.eoriNumber.format = Enter their EORI number in the correct format 
 registerBusinessRepresenting.error.businessName.required = Enter their business or organisation name
@@ -104,10 +121,11 @@ registerBusinessRepresenting.error.country.length = Country must be 60 character
 
 enterContactDetails.title = Who is the contact for this application?
 enterContactDetails.heading = Who is the contact for this application?
+enterContactDetails.paragraph = The contact details will only be used for the purpose of this application
 enterContactDetails.field1 = Full name
 enterContactDetails.field2 = Email address
 enterContactDetails.field3 = Telephone number (optional)
-enterContactDetails.checkYourAnswersLabel = Contact details
+enterContactDetails.checkYourAnswersLabel = Application contact details
 enterContactDetails.error.field1.required = Enter your full name
 enterContactDetails.error.field2.required = Enter an email address
 enterContactDetails.error.field3.required = Enter a telephone number
@@ -116,27 +134,32 @@ enterContactDetails.error.field1.length = Full name must be 100 characters or le
 enterContactDetails.error.field2.length = Email address must be 100 characters or less
 enterContactDetails.error.field3.length = Direct telephone number must be 20 characters or less
 
-informationAboutYourItem.title = Provide information about your item
-informationAboutYourItem.heading = Provide information about your item
+acceptItemInformationList.title = Provide information about your item
+acceptItemInformationList.heading = Provide information about your item
+acceptItemInformationList.askfor.heading = You will be asked to supply where appropriate:
+acceptItemInformationList.askfor.item1 = any confidential information you do not want to be published on the commodity code rulings website
+acceptItemInformationList.askfor.item2 = a detailed description of your item to help to determine its classification
+acceptItemInformationList.askfor.item3 = photographs, manuals and other information to support your description and help to speed up the application
+acceptItemInformationList.askfor.item4 = a commodity code if you have found one
+acceptItemInformationList.askfor.item5 = a sample if it is needed
+
+informationAboutYourItem.title =Confidential information
+informationAboutYourItem.heading = Confidential information
 informationAboutYourItem.legend = Is there any information about your item that you do not want to be published?
+informationAboutYourItem.legend.paragraph =  This can also include images and brochures that you do not want to be published on the commodity code rulings website.
 informationAboutYourItem.yesIHaveInfo = Yes
 informationAboutYourItem.no = No
-informationAboutYourItem.checkYourAnswersLabel = Information about your item
+informationAboutYourItem.checkYourAnswersLabel = Do you have confidential information?
 informationAboutYourItem.error.required = Select yes or no
-informationAboutYourItem.listItem1 = any confidential information you do not want to be published on the BTI ruling website
-informationAboutYourItem.listItem2 = a detailed description of your item to help to determine its classfication
-informationAboutYourItem.listItem3 = photographs, manuals, technical specifications and other information to support your description and help to speed up the application
-informationAboutYourItem.listItem4 = a commodity code if you have found one
-informationAboutYourItem.listItem5 = a sample if needed
 
-previousCommodityCode.title = What is the reference number for the BTI ruling you want to renew?
-previousCommodityCode.heading = What is the reference number for the BTI ruling you want to renew?
-previousCommodityCode.field1 = BTI ruling reference number
-previousCommodityCode.checkYourAnswersLabel = BTI ruling reference number 
+previousCommodityCode.title = What is the reference number for the commodity code ruling you want to renew?
+previousCommodityCode.heading = What is the reference number for the commodity code ruling you want to renew?
+previousCommodityCode.field1 = Commodity code ruling reference number
+previousCommodityCode.checkYourAnswersLabel = Renew commodity code ruling number
 previousCommodityCode.error.field1.required = Enter previous BTI ruling reference number
 previousCommodityCode.error.field1.length = Previous BTI ruling must be 100 characters or less
 previousCommodityCode.details.summary = What is my BTI ruling reference number?
-previousCommodityCode.details.contentParagraph = This reference number was supplied on the document when you were given your original BTI ruling.
+previousCommodityCode.details.contentParagraph = This reference number was supplied on the certificate when you were given your original commodity code ruling. This was known as a BTI ruling for applications before January 2019.
 
 describeYourItem.title = Describe your item
 describeYourItem.heading = Describe your item
@@ -162,6 +185,12 @@ confidentialInformation.checkYourAnswersLabel = Confidential information about y
 confidentialInformation.error.field1.required = Enter confidential information
 confidentialInformation.error.field1.length = Confidential information must be 100 characters or less
 
+askForUploadSupportingMaterial.title = Have you any photographs, manuals, brochures or technical specifications to upload?
+askForUploadSupportingMaterial.heading = Have you any photographs, manuals, brochures or technical specifications to upload?
+askForUploadSupportingMaterial.checkYourAnswersLabel =  Do you have files to upload?
+askForUploadSupportingMaterial.label = Providing extra information about your item can speed up your application.
+askForUploadSupportingMaterial.error.required = Select yes or no 
+
 uploadSupportingMaterialMultiple.title = Upload photographs, manuals, brochures or technical specifications
 uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, brochures or technical specifications
 uploadSupportingMaterialMultiple.label = Choose documents
@@ -171,7 +200,7 @@ uploadSupportingMaterialMultiple.upload.restrictionSize =  maximum individual fi
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file type can I upload?
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
-uploadSupportingMaterialMultiple.checkYourAnswersLabel = Upload photographs, manuals, brochures and other supporting material
+uploadSupportingMaterialMultiple.checkYourAnswersLabel = Uploaded files
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
 
@@ -179,7 +208,7 @@ commodityCodeBestMatch.title = Have you found a commodity code that you think ma
 commodityCodeBestMatch.heading = Have you found a commodity code that you think matches your item?
 commodityCodeBestMatch.yesFoundCommodityCode = Yes
 commodityCodeBestMatch.noHaventFoundCommodityCode = No
-commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code that you think matches your item?
+commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code?
 commodityCodeBestMatch.error.required = Select yes or no
 
 commodityCodeDigits.title = What is the commodity code you think matches your item?
@@ -187,17 +216,18 @@ commodityCodeDigits.heading = What is the commodity code you think matches your 
 commodityCodeDigits.checkYourAnswersLabel = Commodity code
 commodityCodeDigits.error.required = Enter a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
-commodityCodeDigits.label = Entering at least the first 2 numbers of this code could speed up your application.
+commodityCodeDigits.label = Entering at least the first 2 numbers of this code can help to speed up your application
 
 whenToSendSample.title = Samples
 whenToSendSample.heading = Samples
 whenToSendSample.yesProvideSample = Yes
 whenToSendSample.notSendingSample = No
-whenToSendSample.checkYourAnswersLabel = Are you sending a sample to the classification team?
+whenToSendSample.checkYourAnswersLabel = Are you sending a sample?
 whenToSendSample.error.required = Select yes or no
 whenToSendSample.first.paragraph = We usually ask for samples of:
 whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for the classification team to contact you if one is needed.
-whenToSendSample.third.paragraph = <a href="https://www.gov.uk/guidance/binding-tariff-information-rulings#samples">Get more information about samples, this will open in a new window</a>
+whenToSendSample.third.paragraph = <a href="https://www.gov.uk/guidance/binding-tariff-information-rulings#samples" target="_blank">Get more information about samples, this will open in a new window</a>
+whenToSendSample.fourth.paragraph = The address for samples will be provided at the end of the application.
 whenToSendSample.listItem1 = textiles
 whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
@@ -205,6 +235,9 @@ whenToSendSample.legend = Are you sending a sample?
 
 returnSamples.title = Would you like the samples returned?
 returnSamples.heading = Would you like the samples returned?
+returnSamples.listItem1 = Samples will be retured where possible
+returnSamples.listItem2 = In some cases samples may be damaged during testing
+returnSamples.listItem3 = Postage and packaging costs need to be paid upfront to return the samples
 returnSamples.yesReturnSamples = Yes
 returnSamples.noDontReturnSamples = No
 returnSamples.checkYourAnswersLabel = Would you like the samples returned?
@@ -221,6 +254,9 @@ similarItemCommodityCode.listItem2 = if you know of a similar item that has a BT
 
 commodityCodeRulingReference.title = What are the reference numbers of the similar BTI rulings?
 commodityCodeRulingReference.heading = What are the reference numbers of the similar BTI rulings?
+commodityCodeRulingReference.label = You can include multiple reference numbers and an explanation
+commodityCodeRulingReference.whatis =  What is a BTI ruling reference
+commodityCodeRulingReference.whatis.paragraph = This reference number is supplied on the certificate when the BTI ruling is issued.
 commodityCodeRulingReference.checkYourAnswersLabel = BTI ruling reference number
 commodityCodeRulingReference.error.required = Enter the BTI ruling reference number
 commodityCodeRulingReference.error.length = BTI ruling reference number must be 100 characters or less
@@ -235,6 +271,7 @@ legalChallenge.paragraph = Examples of this include court rulings or when a comm
 
 legalChallengeDetails.title = What are the problems with the classification of your item?
 legalChallengeDetails.heading = What are the problems with the classification of your item?
+legalChallengeDetails.checkYourAnswersLabel = Problems with the classification of your item
 legalChallengeDetails.error.required = Enter details of any problems with the classification of your item
 legalChallengeDetails.error.length = Details of any problems with classification must be 100 characters or less
 
@@ -245,9 +282,9 @@ supportingInformation.noInformation = No
 supportingInformation.checkYourAnswersLabel = Enter any other information to support the application
 supportingInformation.error.required = Select yes or no
 
-supportingInformationDetails.title = Provide supporting information
-supportingInformationDetails.heading = Provide supporting information
-supportingInformationDetails.checkYourAnswersLabel = Supporting information
+supportingInformationDetails.title = What is the supporting information you want to provide?
+supportingInformationDetails.heading = What is the supporting information you want to provide?
+supportingInformationDetails.checkYourAnswersLabel = What is the supporting information you want to provide?
 supportingInformationDetails.error.required = Enter supporting information
 supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less
 
@@ -256,9 +293,10 @@ declaration.heading = Declaration
 declaration.checkYourAnswersLabel = Declaration
 declaration.paragraph = By submitting the application you are acknowledging that:
 declaration.listItem1 = the information is correct and up to date to the best of your knowledge
-declaration.listItem2 = any supporting information and data provided on the application, or supplied after the application is submitted, can be stored on a database and published on a UK website.  This includes photographs, images, brochures and any other supporting information
-declaration.listItem3 = information provided in the confidential information section will not be published
-declaration.listItem4 = any samples you provide may be damaged during laboratory tests
+declaration.listItem2 = supporting data, information, images and brochures provided on the application can be stored on a database and published on a <a href="http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_home.jsp?Lang=en" target="_blank"> UK website </a>
+declaration.listItem3 = information supplied after the application is submitted can also be stored on a database and published on a <a href="http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_home.jsp?Lang=en" target="_blank"> UK website </a>
+declaration.listItem4 = anything you have told us that is confidential will not be published
+declaration.listItem5 = if you are sending samples, they may be damaged during laboratory tests
 
 confirmation.title = Application complete
 confirmation.heading = Application complete
@@ -290,3 +328,6 @@ uploadWrittenAuthorisation.error.length = UploadWrittenAuthorisation must be 100
 uploadWrittenAuthorisation.upload.title =  You can upload:
 uploadWrittenAuthorisation.upload.restrictionSize =  maximum file size of 10MB
 uploadWrittenAuthorisation.upload.typeOfFiles.title = What file type can I upload?
+
+checkYourAnswers.applicantRegisteredSection = Applicant details
+checkYourAnswers.informationAboutYourItemSection = Information about your item

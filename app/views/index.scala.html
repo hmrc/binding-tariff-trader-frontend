@@ -1,5 +1,5 @@
 @*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,13 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @components.heading("index.heading")
+    <br/><br/>
+    <div class="page-info">@messages("index.home")</div>
 
-    <p>@messages("index.guidance")</p>
+    @components.heading("index.heading")
 
     @components.button_link(
         messages("site.start"),
-        "/binding-tariff-application/registeredAddressForEori"
+        "/binding-tariff-application/beforeYouStart"
     )
 }

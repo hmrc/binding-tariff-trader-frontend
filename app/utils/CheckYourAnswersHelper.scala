@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,10 @@ import pages._
 import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+
+  def askForUploadSupportingMaterial: Option[AnswerRow] = userAnswers.get(AskForUploadSupportingMaterialPage) map {
+    x => AnswerRow("askForUploadSupportingMaterial.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.AskForUploadSupportingMaterialController.onPageLoad(CheckMode).url)
+  }
 
   def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
     x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name , false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)

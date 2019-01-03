@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,10 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.SelectApplicationTypeFormProvider
 import models.{Enumerable, Mode}
-import pages.SelectApplicationTypePage
+import pages.{AcceptItemInformationPage, PreviousCommodityCodePage, SelectApplicationTypePage}
 import navigation.Navigator
 import views.html.selectApplicationType
 import models.SelectApplicationType.{Newcommodity, Previouscommodity}
-import pages.{InformationAboutYourItemPage, PreviousCommodityCodePage}
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -67,7 +66,7 @@ class SelectApplicationTypeController @Inject()(
         val updatedAnswers = request.userAnswers.set(SelectApplicationTypePage, value)
 
         val redirectedPage = value match {
-          case Newcommodity => InformationAboutYourItemPage
+          case Newcommodity => AcceptItemInformationPage
           case Previouscommodity => PreviousCommodityCodePage
         }
 

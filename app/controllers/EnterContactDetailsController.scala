@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.EnterContactDetailsFormProvider
 import models.Mode
-import pages.EnterContactDetailsPage
+import pages.{EnterContactDetailsPage, WhichBestDescribesYouPage}
 import navigation.Navigator
 import play.api.mvc.{Action, AnyContent}
 import views.html.enterContactDetails
@@ -64,7 +64,7 @@ class EnterContactDetailsController @Inject()(appConfig: FrontendAppConfig,
         val updatedAnswers = request.userAnswers.set(EnterContactDetailsPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(EnterContactDetailsPage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(WhichBestDescribesYouPage, mode)(updatedAnswers))
         )
       }
     )

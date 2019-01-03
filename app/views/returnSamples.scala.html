@@ -1,5 +1,5 @@
 @*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,13 @@
         @components.error_summary(form.errors)
 
         @components.heading("returnSamples.heading")
+
+        <ul class="list list-bullet">
+            <li>@messages("returnSamples.listItem1")</li>
+            <li>@messages("returnSamples.listItem2")</li>
+            <li>@messages("returnSamples.listItem3")</li>
+        </ul>
+
 
         @components.input_radio(
             field = form("value"),

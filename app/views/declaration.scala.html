@@ -1,5 +1,5 @@
 @*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,17 +29,20 @@
 
     @helpers.form(action = DeclarationController.onSubmit(mode), 'autoComplete -> "off") {
 
+        @components.back_link()
+
         @components.heading("declaration.heading")
 
-        <p>@messages("declaration.paragraph")</p>
+        <h2 class="heading-medium"> @messages("declaration.paragraph") </h2>
 
         <ul class="list list-bullet">
           <li>@messages("declaration.listItem1")</li>
-          <li>@messages("declaration.listItem2")</li>
-          <li>@messages("declaration.listItem3")</li>
+          <li>@Html(messages("declaration.listItem2"))</li>
+          <li>@Html(messages("declaration.listItem3"))</li>
           <li>@messages("declaration.listItem4")</li>
+          <li>@messages("declaration.listItem5")</li>
         </ul>
 
-        @components.submit_button()
+        @components.submit_button(Some(messages("site.submit")))
     }
 }

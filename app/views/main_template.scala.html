@@ -1,5 +1,5 @@
 @*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,13 +34,18 @@
     }
 }
 
+@content = {
+    @layouts.article(mainContent, false, Some("grid-row column-two-thirds"))
+}
+
+
 @govuk_wrapper(appConfig = appConfig,
                title = title,
                mainClass = mainClass,
                bodyClasses = bodyClasses,
                sidebar = sidebar,
                contentHeader = contentHeader,
-               mainContent = layouts.article(mainContent),
+               mainContent = content,
                serviceInfoContent = serviceInfoContent,
                scriptElem = scriptElem
 )
