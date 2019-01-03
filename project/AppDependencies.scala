@@ -7,7 +7,7 @@ object AppDependencies {
   val compile = Seq(
     "commons-validator" % "commons-validator"                 % "1.6",
     play.sbt.PlayImport.ws,
-    "uk.gov.hmrc"       %% "bootstrap-play-25"                % "4.4.0",
+    "uk.gov.hmrc"       %% "bootstrap-play-25"                % "4.6.0",
     "uk.gov.hmrc"       %% "govuk-template"                   % "5.26.0-play-25",
     "uk.gov.hmrc"       %% "http-caching-client"              % "8.0.0",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"    % "0.2.0",
@@ -21,7 +21,7 @@ object AppDependencies {
   lazy val scope: String = "test,it"
 
   val test = Seq(
-    "com.github.tomakehurst"     % "wiremock"               % "2.19.0"            % scope,
+    "com.github.tomakehurst"     % "wiremock"               % "2.20.0"            % scope,
     "com.typesafe.play"         %% "play-test"              % PlayVersion.current % scope,
     "org.mockito"                % "mockito-core"           % "2.23.4"            % scope,
     "org.pegdown"                % "pegdown"                % "1.6.0"             % scope,
