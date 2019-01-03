@@ -61,7 +61,8 @@ class ReactiveMongoRepository(config: Configuration, mongo: () => DefaultDB)
         result
       }
     } recover {
-      case e => Logger.error("Failed to set TTL index", e)
+      case e =>
+        Logger.error("Failed to set TTL index", e)
         false
     }
   }
