@@ -22,10 +22,14 @@ import controllers.actions._
 import javax.inject.Inject
 import models.Confirmation
 import pages.ConfirmationPage
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.confirmation
+
+import scala.concurrent.Future
+import scala.concurrent.Future.successful
 
 class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                        override val messagesApi: MessagesApi,
@@ -35,13 +39,20 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                        dataCacheConnector: DataCacheConnector
                                       ) extends FrontendController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    request.userAnswers.get(ConfirmationPage) match {
-      case Some(c: Confirmation) =>
-        dataCacheConnector.remove(request.userAnswers.cacheMap)
-        // TODO: this `Ok` needs to be mapped from the `Future` above
+  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+
+    def show(c: Confirmation): Future[Result] = {
+      dataCacheConnector.remove(request.userAnswers.cacheMap).map { b: Boolean =>
+        if (!b) {
+          Logger.warn("Session entry failed to be removed from the cache")
+        }
         Ok(confirmation(appConfig, c))
-      case _ => Redirect(routes.SessionExpiredController.onPageLoad())
+      }
+    }
+
+    request.userAnswers.get(ConfirmationPage) match {
+      case Some(c: Confirmation) => show(c)
+      case _ => successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
 
   }
