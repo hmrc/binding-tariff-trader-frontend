@@ -42,9 +42,11 @@ class MongoCacheConnector @Inject()(val sessionRepository: SessionRepository) ex
   def remove(cacheMap: CacheMap): Future[Boolean] = {
     sessionRepository().remove(cacheMap)
   }
+
 }
 
 trait DataCacheConnector {
+
   def save[A](cacheMap: CacheMap): Future[CacheMap]
 
   def fetch(cacheId: String): Future[Option[CacheMap]]
@@ -52,4 +54,5 @@ trait DataCacheConnector {
   def getEntry[A](cacheId: String, key: String)(implicit fmt: Format[A]): Future[Option[A]]
 
   def remove(cacheMap: CacheMap): Future[Boolean]
+
 }

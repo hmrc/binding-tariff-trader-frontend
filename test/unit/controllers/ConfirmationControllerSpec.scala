@@ -27,12 +27,14 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.confirmation
 
+import scala.concurrent.Future
+
 class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private val cache = mock[DataCacheConnector]
   private val cacheMap = mock[CacheMap]
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
     new ConfirmationController(
       frontendAppConfig,
       messagesApi,
@@ -41,18 +43,22 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
       new DataRequiredActionImpl,
       cache
     )
+  }
 
-  def viewAsString() = confirmation(frontendAppConfig, Confirmation("ref"))(fakeRequest, messages).toString
+  private def viewAsString: String = {
+    confirmation(frontendAppConfig, Confirmation("ref"))(fakeRequest, messages).toString
+  }
 
   "Confirmation Controller" must {
 
     "return OK and the correct view for a GET" in {
+      given(cache.remove(cacheMap)).willReturn(Future.successful(true))
       given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref")))
 
       val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
 
       status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString()
+      contentAsString(result) mustBe viewAsString
       verify(cache).remove(cacheMap)
     }
 
@@ -64,9 +70,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some("/binding-tariff-application/this-service-has-been-reset")
     }
+
   }
+
 }
-
-
-
-

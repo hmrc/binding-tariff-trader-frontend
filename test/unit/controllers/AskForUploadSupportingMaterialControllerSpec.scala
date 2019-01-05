@@ -31,16 +31,27 @@ import views.html.askForUploadSupportingMaterial
 
 class AskForUploadSupportingMaterialControllerSpec extends ControllerSpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
+  private def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AskForUploadSupportingMaterialFormProvider()
-  val form = formProvider()
+  private val formProvider = new AskForUploadSupportingMaterialFormProvider()
+  private val form = formProvider()
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new AskForUploadSupportingMaterialController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): AskForUploadSupportingMaterialController = {
+    new AskForUploadSupportingMaterialController(
+      frontendAppConfig,
+      messagesApi,
+      FakeDataCacheConnector,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl,
+      formProvider
+    )
+  }
 
-  def viewAsString(form: Form[_] = form) = askForUploadSupportingMaterial(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  private def viewAsString(form: Form[_] = form): String = {
+    askForUploadSupportingMaterial(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  }
 
   "AskForUploadSupportingMaterial Controller" must {
 
@@ -93,5 +104,7 @@ class AskForUploadSupportingMaterialControllerSpec extends ControllerSpecBase {
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
+
   }
+
 }

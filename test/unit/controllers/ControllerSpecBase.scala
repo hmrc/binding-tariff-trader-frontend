@@ -29,4 +29,5 @@ trait ControllerSpecBase extends SpecBase {
   def getEmptyCacheMap = new FakeDataRetrievalAction(Some(emptyCacheMap))
 
   def dontGetAnyData = new FakeDataRetrievalAction(None)
+
 }
