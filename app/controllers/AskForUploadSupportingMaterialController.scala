@@ -27,6 +27,7 @@ import forms.AskForUploadSupportingMaterialFormProvider
 import models.Mode
 import pages._
 import navigation.Navigator
+import play.api.mvc.{Action, AnyContent}
 import views.html.askForUploadSupportingMaterial
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -42,35 +43,32 @@ class AskForUploadSupportingMaterialController @Inject()(appConfig: FrontendAppC
                                          formProvider: AskForUploadSupportingMaterialFormProvider
                                          ) extends FrontendController with I18nSupport {
 
-  val form: Form[Boolean] = formProvider()
+  private lazy val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.get(AskForUploadSupportingMaterialPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
+    val preparedForm = request.userAnswers.get(AskForUploadSupportingMaterialPage) match {
+      case Some(value) => form.fill(value)
+      case _ => form
+    }
+
+    Ok(askForUploadSupportingMaterial(appConfig, preparedForm, mode))
+  }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        Future.successful(BadRequest(askForUploadSupportingMaterial(appConfig, formWithErrors, mode))),
+      value => {
+        val updatedAnswers = request.userAnswers.set(AskForUploadSupportingMaterialPage, value)
+        val nextPage = if (value) UploadSupportingMaterialMultiplePage else CommodityCodeBestMatchPage
+
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ => Redirect(navigator.nextPage(nextPage, mode)(updatedAnswers))
+        )
       }
-
-      Ok(askForUploadSupportingMaterial(appConfig, preparedForm, mode))
+    )
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(askForUploadSupportingMaterial(appConfig, formWithErrors, mode))),
-        value => {
-          val updatedAnswers = request.userAnswers.set(AskForUploadSupportingMaterialPage, value)
-
-          val nextPage = if (value) UploadSupportingMaterialMultiplePage else CommodityCodeBestMatchPage
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(nextPage, mode)(updatedAnswers))
-          )
-        }
-      )
-  }
 }

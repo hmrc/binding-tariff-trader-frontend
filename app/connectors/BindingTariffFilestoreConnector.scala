@@ -37,7 +37,7 @@ import scala.concurrent.Future
 @Singleton
 class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig, ws: WSClient, http: HttpClient) {
 
-  lazy val filestoreAPIRoot = s"${configuration.bindingTariffFileStoreUrl}/binding-tariff-filestore"
+  private lazy val filestoreAPIRoot = s"${configuration.bindingTariffFileStoreUrl}/binding-tariff-filestore"
 
   def upload(file: MultipartFormData.FilePart[TemporaryFile])
             (implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
@@ -55,11 +55,11 @@ class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig
 
   }
 
-  def get(file: FileAttachment)(implicit headers: HeaderCarrier): Future[FilestoreResponse] = {
+  def get(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
     http.GET[FilestoreResponse](s"$filestoreAPIRoot/file/${file.id}")
   }
 
-  def publish(file: FileAttachment)(implicit headers: HeaderCarrier): Future[FilestoreResponse] = {
+  def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
     http.POSTEmpty[FilestoreResponse](s"$filestoreAPIRoot/file/${file.id}/publish")
   }
 

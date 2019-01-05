@@ -36,39 +36,43 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
     connector.upload(f).map(toFileAttachment(f.ref.file.length))
   }
 
-  def refresh(file: FileAttachment)(implicit headerCarrier: HeaderCarrier): Future[FileAttachment] = {
+  def refresh(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FileAttachment] = {
     connector.get(file).map(toFileAttachment(file.size))
   }
 
   /*
-  * Publishes the file IF it has been successfully scanned.
-  * */
-  def publish(file: FileAttachment)(implicit headerCarrier: HeaderCarrier): Future[SubmittedFileAttachment] = {
-    connector.get(file).flatMap { r: FilestoreResponse =>
-      r.scanStatus match {
-        case Some(ScanStatus.READY) =>
-          // If the file has been scanned and marked as safe
-          connector.publish(file).map(toPublishedAttachment(file.size))
+   * Publishes the file IF it has been successfully scanned.
+   **/
+  def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[SubmittedFileAttachment] = {
 
-        case Some(ScanStatus.FAILED) => // If the file has been quarantined by the virus scanner
-          Logger.warn("File could not be published as it was [Quarantined]. It will be lost.")
-          successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Quarantined"))
+    import ScanStatus._
 
-        case _ => // If the file is not scanned yet.
-          Logger.warn("File could not be published as it was [Un-scanned]. It will be lost.")
-          successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Unscanned"))
-      }
+    connector.get(file).flatMap {
+
+      case r if r.scanStatus.contains(READY) =>
+        // If the file has been scanned and marked as safe
+        connector.publish(file).map(toPublishedAttachment(file.size))
+
+      case r if r.scanStatus.contains(FAILED) =>
+        // If the file has been quarantined by the virus scanner
+        Logger.warn("File could not be published as it was [Quarantined]. It will be lost.")
+        successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Quarantined"))
+
+      case r =>
+        // If the file has not been scanned yet.
+        Logger.warn("File could not be published as it was [Un-scanned]. It will be lost.")
+        successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Unscanned"))
     }
+
   }
 
   def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[SubmittedFileAttachment]] = {
     sequence(
-      files.map(
-        file => publish(file)
-          .recover({
-            case throwable: Throwable => UnpublishedFileAttachment(file.id, file.name, file.mimeType, file.size, throwable.getMessage)
-          })
-      )
+      files.map { f: FileAttachment =>
+        publish(f).recover {
+          case t: Throwable => UnpublishedFileAttachment(f.id, f.name, f.mimeType, f.size, t.getMessage)
+        }
+      }
     )
   }
 

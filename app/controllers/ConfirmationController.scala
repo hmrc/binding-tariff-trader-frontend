@@ -39,6 +39,7 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
     request.userAnswers.get(ConfirmationPage) match {
       case Some(c: Confirmation) =>
         dataCacheConnector.remove(request.userAnswers.cacheMap)
+        // TODO: this `Ok` needs to be mapped from the `Future` above
         Ok(confirmation(appConfig, c))
       case _ => Redirect(routes.SessionExpiredController.onPageLoad())
     }

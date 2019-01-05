@@ -97,16 +97,19 @@ class DeclarationController @Inject()(
   private def appendAttachments(caseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment],
                                 letter: Option[SubmittedFileAttachment], answers: UserAnswers): NewCaseRequest = {
 
+    def toPublishedFileAttachment: SubmittedFileAttachment => Attachment = { att =>
+      val f = att.asInstanceOf[PublishedFileAttachment]
+      Attachment(url = f.url, mimeType = f.mimeType)
+    }
+
     val published: Seq[Attachment] = attachments
       .filter(_.isInstanceOf[PublishedFileAttachment])
-      .map(_.asInstanceOf[PublishedFileAttachment])
-      .map(f => Attachment(url = f.url, mimeType = f.mimeType))
+      .map(toPublishedFileAttachment)
 
     if (isBusinessRepresentative(answers)) {
       val letterOfAuth: Option[Attachment] = letter
         .filter(_.isInstanceOf[PublishedFileAttachment])
-        .map(_.asInstanceOf[PublishedFileAttachment])
-        .map(f => Attachment(url = f.url, mimeType = f.mimeType))
+        .map(toPublishedFileAttachment)
 
       val agentDetails = caseRequest.application.agent.map(_.copy(letterOfAuthorisation = letterOfAuth))
       val application = caseRequest.application.copy(agent = agentDetails)

@@ -43,13 +43,13 @@ class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
                                       formProvider: PreviousCommodityCodeFormProvider
                                       ) extends FrontendController with I18nSupport {
 
-  val form = formProvider()
+  private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(PreviousCommodityCodePage) match {
-      case None => form
       case Some(value) => form.fill(value)
+      case _ => form
     }
 
     Ok(previousCommodityCode(appConfig, preparedForm, mode))

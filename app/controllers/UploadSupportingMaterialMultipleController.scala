@@ -48,7 +48,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
                                                             fileService: FileService
                                                           ) extends FrontendController with I18nSupport {
 
-  val form = formProvider()
+  private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -71,7 +71,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
           val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
           val nextPage = navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers)
           dataCacheConnector.save(updatedAnswers.cacheMap)
-            .map(_ => Accepted("accepted").withHeaders(LOCATION -> nextPage.url) )
+            .map( _ => Accepted("accepted").withHeaders(LOCATION -> nextPage.url) )
 
         case _ =>
           val url = navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers).url

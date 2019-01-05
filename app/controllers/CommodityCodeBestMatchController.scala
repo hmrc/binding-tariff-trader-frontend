@@ -45,13 +45,13 @@ class CommodityCodeBestMatchController @Inject()(
                                         formProvider: CommodityCodeBestMatchFormProvider
                                       ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
-  val form = formProvider()
+  private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(CommodityCodeBestMatchPage) match {
-      case None => form
       case Some(value) => form.fill(value)
+      case _ => form
     }
 
     Ok(commodityCodeBestMatch(appConfig, preparedForm, mode))

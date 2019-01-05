@@ -28,7 +28,7 @@ import models.{Enumerable, Mode}
 import pages.{LegalChallengeDetailsPage, LegalChallengePage, SupportingInformationPage}
 import navigation.Navigator
 import views.html.legalChallenge
-import models.LegalChallenge.{Nolegalchallenge, Yeslegalchallenge}
+import models.LegalChallenge.{No, Yes}
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -45,7 +45,7 @@ class LegalChallengeController @Inject()(
                                         formProvider: LegalChallengeFormProvider
                                       ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
-  val form = formProvider()
+  private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -66,8 +66,8 @@ class LegalChallengeController @Inject()(
         val updatedAnswers = request.userAnswers.set(LegalChallengePage, value)
 
         val redirectedPage = value match {
-          case Yeslegalchallenge => LegalChallengeDetailsPage
-          case Nolegalchallenge => SupportingInformationPage
+          case Yes => LegalChallengeDetailsPage
+          case No => SupportingInformationPage
         }
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(

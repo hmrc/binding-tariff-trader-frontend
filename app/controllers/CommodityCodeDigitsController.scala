@@ -44,13 +44,13 @@ class CommodityCodeDigitsController @Inject()(
                                         formProvider: CommodityCodeDigitsFormProvider
                                       ) extends FrontendController with I18nSupport {
 
-  val form = formProvider()
+  private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(CommodityCodeDigitsPage) match {
-      case None => form
       case Some(value) => form.fill(value)
+      case _ => form
     }
 
     Ok(commodityCodeDigits(appConfig, preparedForm, mode))

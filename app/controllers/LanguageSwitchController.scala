@@ -23,7 +23,7 @@ import play.api.mvc.{Action, AnyContent, Call, Controller}
 import config.FrontendAppConfig
 import uk.gov.hmrc.play.language.LanguageUtils
 
-// TODO, upstream this into play-language
+// TODO: upstream this into the Play framework
 class LanguageSwitchController @Inject() (
                                            configuration: Configuration,
                                            appConfig: FrontendAppConfig,
@@ -36,18 +36,19 @@ class LanguageSwitchController @Inject() (
 
   private def languageMap: Map[String, Lang] = appConfig.languageMap
 
-  def switchToLanguage(language: String): Action[AnyContent] = Action {
-    implicit request =>
-      val enabled = isWelshEnabled
-      val lang = if (enabled) {
-        languageMap.getOrElse(language, LanguageUtils.getCurrentLang)
-      } else {
-        Lang("en")
-      }
-      val redirectURL = request.headers.get(REFERER).getOrElse(fallbackURL)
-      Redirect(redirectURL).withLang(Lang.apply(lang.code)).flashing(LanguageUtils.FlashWithSwitchIndicator)
+  def switchToLanguage(language: String): Action[AnyContent] = Action { implicit request =>
+    val enabled = isWelshEnabled
+    val lang = if (enabled) {
+      languageMap.getOrElse(language, LanguageUtils.getCurrentLang)
+    } else {
+      Lang("en")
+    }
+    val redirectURL = request.headers.get(REFERER).getOrElse(fallbackURL)
+    Redirect(redirectURL).withLang(Lang.apply(lang.code)).flashing(LanguageUtils.FlashWithSwitchIndicator)
   }
 
-  private def isWelshEnabled: Boolean =
+  private def isWelshEnabled: Boolean = {
     configuration.getBoolean("microservice.services.features.welsh-translation").getOrElse(true)
+  }
+
 }

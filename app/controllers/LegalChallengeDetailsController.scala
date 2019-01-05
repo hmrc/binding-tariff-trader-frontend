@@ -44,7 +44,7 @@ class LegalChallengeDetailsController @Inject()(
                                         formProvider: LegalChallengeDetailsFormProvider
                                       ) extends FrontendController with I18nSupport {
 
-  val form = formProvider()
+  private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 

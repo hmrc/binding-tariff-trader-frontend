@@ -24,10 +24,10 @@ sealed trait LegalChallenge extends Page
 
 object LegalChallenge {
 
-  case object Yeslegalchallenge extends WithName("yesLegalChallenge") with LegalChallenge
-  case object Nolegalchallenge extends WithName("noLegalChallenge") with LegalChallenge
+  case object Yes extends WithName("yesLegalChallenge") with LegalChallenge
+  case object No extends WithName("noLegalChallenge") with LegalChallenge
 
-  val values: Set[LegalChallenge] = Set(Yeslegalchallenge, Nolegalchallenge)
+  val values: Set[LegalChallenge] = Set(Yes, No)
 
   val options: Set[RadioOption] = values.map {
     value => RadioOption("legalChallenge", value.toString)
@@ -42,8 +42,8 @@ object LegalChallenge {
 
   implicit object LegalChallengeReads extends Reads[LegalChallenge] {
     override def reads(json: JsValue): JsResult[LegalChallenge] = json match {
-      case JsString(Yeslegalchallenge.toString) => JsSuccess(Yeslegalchallenge)
-      case JsString(Nolegalchallenge.toString) => JsSuccess(Nolegalchallenge)
+      case JsString(Yes.toString) => JsSuccess(Yes)
+      case JsString(No.toString) => JsSuccess(No)
       case _ => JsError("Unknown legalChallenge")
     }
   }

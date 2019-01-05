@@ -37,9 +37,8 @@ class BeforeYouStartController @Inject()(appConfig: FrontendAppConfig,
                                          requireData: DataRequiredAction
                                         ) extends FrontendController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify) {
-    implicit request =>
-      Ok(beforeYouStart(appConfig))
+  def onPageLoad: Action[AnyContent] = identify { implicit request =>
+    Ok(beforeYouStart(appConfig))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData).async { implicit request =>

@@ -42,7 +42,7 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                                    formProvider: RegisteredAddressForEoriFormProvider
                                                   ) extends FrontendController with I18nSupport {
 
-  val form = formProvider()
+  private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
 

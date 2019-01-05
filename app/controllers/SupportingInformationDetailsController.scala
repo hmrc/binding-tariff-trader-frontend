@@ -44,13 +44,13 @@ class SupportingInformationDetailsController @Inject()(
                                         formProvider: SupportingInformationDetailsFormProvider
                                       ) extends FrontendController with I18nSupport {
 
-  val form = formProvider()
+  private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(SupportingInformationDetailsPage) match {
-      case None => form
       case Some(value) => form.fill(value)
+      case _ => form
     }
 
     Ok(supportingInformationDetails(appConfig, preparedForm, mode))

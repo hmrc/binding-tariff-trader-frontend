@@ -32,7 +32,7 @@ class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppC
 
   def createCase(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
     val url = s"${configuration.bindingTariffClassificationUrl}/cases"
-    client.POST[NewCaseRequest, Case](url, body = c)
+    client.POST[NewCaseRequest, Case](url = url, body = c)
   }
 
 }
