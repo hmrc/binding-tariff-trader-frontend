@@ -17,15 +17,15 @@
 package controllers.actions
 
 import com.google.inject.Inject
-import play.api.mvc.{ActionBuilder, ActionFunction, Request, Result}
-import play.api.mvc.Results._
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import config.FrontendAppConfig
 import controllers.routes
 import models.requests.IdentifierRequest
-import uk.gov.hmrc.http.UnauthorizedException
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.mvc.Results._
+import play.api.mvc.{ActionBuilder, ActionFunction, Request, Result}
+import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.retrieve.Retrievals
+import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthConnector, config: FrontendAppConfig)
                                              (implicit ec: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
 
-  private lazy val requiredEnrolment = Enrolment(config.authEnrolment)
+  private lazy val enrolment: Option[Enrolment] = config.authEnrolment.map(Enrolment(_))
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
@@ -43,7 +43,7 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
       Redirect(routes.UnauthorisedController.onPageLoad())
     }
 
-    authorised(requiredEnrolment and AuthProviders(AuthProvider.GovernmentGateway)).retrieve(Retrievals.internalId) {
+    authorise().retrieve(Retrievals.internalId) {
       _.map {
         internalId => block(IdentifierRequest(request, internalId))
       }.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
@@ -54,6 +54,14 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
            _: UnsupportedAuthProvider |
            _: UnsupportedAffinityGroup |
            _: UnsupportedCredentialRole => redirectToUnauthorised
+    }
+  }
+
+  private def authorise(): AuthorisedFunction = {
+    if (enrolment.isDefined) {
+      authorised(enrolment.get and AuthProviders(GovernmentGateway))
+    } else {
+      authorised(AuthProviders(GovernmentGateway))
     }
   }
 

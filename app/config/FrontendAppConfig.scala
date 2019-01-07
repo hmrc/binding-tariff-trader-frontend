@@ -17,11 +17,12 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
-import play.api.{Configuration, Environment}
-import play.api.i18n.Lang
 import controllers.routes
+import org.apache.commons.lang3.StringUtils.isNoneBlank
 import play.api.Mode.Mode
+import play.api.i18n.Lang
 import play.api.mvc.Call
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.config.ServicesConfig
 
 @Singleton
@@ -48,7 +49,7 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val loginContinueUrl = loadConfig("urls.loginContinue")
   lazy val bindingTariffClassificationUrl: String = baseUrl("binding-tariff-classification")
   lazy val bindingTariffFileStoreUrl: String = baseUrl("binding-tariff-filestore")
-  lazy val authEnrolment = loadConfig("auth.enrolment")
+  lazy val authEnrolment: Option[String] = Some(loadConfig("auth.enrolment")).filter(isNoneBlank(_))
 
   lazy val languageTranslationEnabled = runModeConfiguration.getBoolean("microservice.services.features.welsh-translation").getOrElse(true)
 
