@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 /*
   All sizes are stored as KiloBytes
@@ -25,31 +25,13 @@ import play.api.libs.json.Json
 case class FileAttachment(id: String, name: String, mimeType: String, size: Long)
 
 object FileAttachment {
-  implicit val format = Json.format[FileAttachment]
+  implicit val format: OFormat[FileAttachment] = Json.format[FileAttachment]
 }
-
 
 case class PublishedFileAttachment
 (
-  override val id: String,
-  override val name: String,
-  override val mimeType: String,
-  override val size: Long,
-  url: String
-) extends SubmittedFileAttachment
-
-case class UnpublishedFileAttachment
-(
-  override val id: String,
-  override val name: String,
-  override val mimeType: String,
-  override val size: Long,
-  reason: String
-) extends SubmittedFileAttachment
-
-sealed trait SubmittedFileAttachment {
-  val id: String
-  val name: String
-  val mimeType: String
-  val size: Long
-}
+  id: String,
+  name: String,
+  mimeType: String,
+  size: Long
+)

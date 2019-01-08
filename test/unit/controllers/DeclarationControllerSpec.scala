@@ -52,7 +52,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
   private val newCaseReq = mock[NewCaseRequest]
   private val attachment = mock[FileAttachment]
   private val publishedAttachment = mock[PublishedFileAttachment]
-  private val unpublishedAttachment = mock[UnpublishedFileAttachment]
   private val createdCase = mock[Case]
   private val auditService = mock[AuditService]
   private val casesService = mock[CasesService]
@@ -81,10 +80,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
     when(casesService.create(any[NewCaseRequest])(any[HeaderCarrier])).thenReturn(failed(error))
   }
 
-  private def givenTheAttachmentPublishesNone(): Unit = {
-    when(fileService.publish(any[Seq[FileAttachment]])(any[HeaderCarrier])).thenReturn(successful(Seq(unpublishedAttachment)))
-  }
-
   private def givenTheAttachmentPublishSucceeds(): Unit = {
     when(fileService.publish(any[Seq[FileAttachment]])(any[HeaderCarrier])).thenReturn(successful(Seq(publishedAttachment)))
   }
@@ -108,16 +103,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
     "return OK and the correct view for a POST" in {
       givenTheCaseCreatesSuccessfully()
       givenTheAttachmentPublishSucceeds()
-
-      val result = await(controller(extractDataFromCache).onSubmit(NormalMode)(fakeRequest))
-
-      result.header.status mustBe Status.SEE_OTHER
-      result.header.headers(LOCATION) mustBe "/foo"
-    }
-
-    "return OK and the correct view for a POST with failed attachments" in {
-      givenTheCaseCreatesSuccessfully()
-      givenTheAttachmentPublishesNone()
 
       val result = await(controller(extractDataFromCache).onSubmit(NormalMode)(fakeRequest))
 

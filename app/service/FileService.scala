@@ -27,7 +27,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.Future.{sequence, successful}
+import scala.concurrent.Future.sequence
 
 @Singleton
 class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
@@ -40,48 +40,27 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
     connector.get(file).map(toFileAttachment(file.size))
   }
 
-  /*
-   * Publishes the file IF it has been successfully scanned.
-   **/
-  def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[SubmittedFileAttachment] = {
-
-    import ScanStatus._
-
-    connector.get(file).flatMap {
-
-      case r if r.scanStatus.contains(READY) =>
-        // If the file has been scanned and marked as safe
-        connector.publish(file).map(toPublishedAttachment(file.size))
-
-      case r if r.scanStatus.contains(FAILED) =>
-        // If the file has been quarantined by the virus scanner
-        Logger.warn("File could not be published as it was [Quarantined]. It will be lost.")
-        successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Quarantined"))
-
-      case r =>
-        // If the file has not been scanned yet.
-        Logger.warn("File could not be published as it was [Un-scanned]. It will be lost.")
-        successful(UnpublishedFileAttachment(r.id, r.fileName, r.mimeType, file.size, "Unscanned"))
-    }
-
+  def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[PublishedFileAttachment] = {
+    connector.publish(file).map(toPublishedAttachment(file.size))
   }
 
-  def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[SubmittedFileAttachment]] = {
+  def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[PublishedFileAttachment]] = {
     sequence(
       files.map { f: FileAttachment =>
-        publish(f).recover {
-          case t: Throwable => UnpublishedFileAttachment(f.id, f.name, f.mimeType, f.size, t.getMessage)
+        publish(f).map(Some(_)).recover {
+          case t: Throwable => Logger.error(s"Failed to publish file [${f.id}].", t)
+            None
         }
       }
-    )
+    ).map(_.filter(_.isDefined).map(_.get))
   }
 
   private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
     r => FileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
-  private def toPublishedAttachment(size: Long): FilestoreResponse => SubmittedFileAttachment = {
-    r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size, r.url.get)
+  private def toPublishedAttachment(size: Long): FilestoreResponse => PublishedFileAttachment = {
+    r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
 }
