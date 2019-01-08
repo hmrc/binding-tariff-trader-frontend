@@ -65,7 +65,7 @@ class DeclarationController @Inject()(
       .getOrElse(Seq.empty)
 
     for {
-      att: Seq[SubmittedFileAttachment] <- fileService.publish(attachments)
+      att: Seq[PublishedFileAttachment] <- fileService.publish(attachments)
       letter <- getPublishedLetter(answers)
       c: Case <- createCase(newCaseRequest, att, letter, answers)
       _ = auditService.auditBTIApplicationSubmissionSuccessful(c)
@@ -77,45 +77,35 @@ class DeclarationController @Inject()(
   }
 
   private def getPublishedLetter(answers: UserAnswers)
-                                (implicit headerCarrier: HeaderCarrier): Future[Option[SubmittedFileAttachment]] = {
+                                (implicit headerCarrier: HeaderCarrier): Future[Option[PublishedFileAttachment]] = {
 
     if (isBusinessRepresentative(answers)) {
       answers.get(UploadWrittenAuthorisationPage)
-        .map( fileService.publish(_).map(Some(_)) )
+        .map(fileService.publish(_).map(Some(_)))
         .getOrElse(successful(None))
     } else {
       successful(None)
     }
   }
 
-  private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment],
-                         letter: Option[SubmittedFileAttachment], answers: UserAnswers)
+  private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[PublishedFileAttachment],
+                         letter: Option[PublishedFileAttachment], answers: UserAnswers)
                         (implicit headerCarrier: HeaderCarrier): Future[Case] = {
     caseService.create(appendAttachments(newCaseRequest, attachments, letter, answers))
   }
 
-  private def appendAttachments(caseRequest: NewCaseRequest, attachments: Seq[SubmittedFileAttachment],
-                                letter: Option[SubmittedFileAttachment], answers: UserAnswers): NewCaseRequest = {
-
-    def toPublishedFileAttachment: SubmittedFileAttachment => Attachment = { att =>
-      val f = att.asInstanceOf[PublishedFileAttachment]
-      Attachment(url = f.url, mimeType = f.mimeType)
-    }
-
-    val published: Seq[Attachment] = attachments
-      .filter(_.isInstanceOf[PublishedFileAttachment])
-      .map(toPublishedFileAttachment)
+  private def appendAttachments(caseRequest: NewCaseRequest, attachments: Seq[PublishedFileAttachment],
+                                letter: Option[PublishedFileAttachment], answers: UserAnswers): NewCaseRequest = {
+    def toAttachment: PublishedFileAttachment => Attachment = file => Attachment(file.id)
 
     if (isBusinessRepresentative(answers)) {
-      val letterOfAuth: Option[Attachment] = letter
-        .filter(_.isInstanceOf[PublishedFileAttachment])
-        .map(toPublishedFileAttachment)
+      val letterOfAuth: Option[Attachment] = letter.map(toAttachment)
 
       val agentDetails = caseRequest.application.agent.map(_.copy(letterOfAuthorisation = letterOfAuth))
       val application = caseRequest.application.copy(agent = agentDetails)
-      caseRequest.copy(application = application, attachments = published)
+      caseRequest.copy(application = application, attachments = attachments.map(toAttachment))
     } else {
-      caseRequest.copy(attachments = published)
+      caseRequest.copy(attachments = attachments.map(toAttachment))
     }
   }
 

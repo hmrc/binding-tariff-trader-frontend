@@ -22,10 +22,9 @@ import play.api.libs.json.{Json, OFormat}
 
 case class Attachment
 (
+  id: String,
   application: Boolean = true,
   public: Boolean = false,
-  url: String,
-  mimeType: String,
   timestamp: ZonedDateTime = ZonedDateTime.now()
 )
 
