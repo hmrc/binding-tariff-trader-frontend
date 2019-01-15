@@ -35,14 +35,10 @@
 
         @components.heading("previousCommodityCode.heading")
 
-        <div class="form-group">
-            <details>
-                <summary><span class="summary">@messages("previousCommodityCode.details.summary")</span></summary>
-                <div class="panel panel-border-narrow">
-                    <p>@messages("previousCommodityCode.details.contentParagraph")</p>
-                </div>
-            </details>
+        <div role="note" aria-label="Information" class="application-notice info-notice">
+            <p> @messages("previousCommodityCode.details.contentParagraph") </p>
         </div>
+
 
         @components.input_text(
             field = form("field1"),
