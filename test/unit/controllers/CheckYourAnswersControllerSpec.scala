@@ -44,7 +44,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
       status(result) mustBe OK
 
       val expectedSections = Seq(
-        AnswerSection(Some("Applicant details"), Seq()),
+        AnswerSection(Some("Application details"), Seq()),
         AnswerSection(Some("Information about your item"), Seq())
       )
 
