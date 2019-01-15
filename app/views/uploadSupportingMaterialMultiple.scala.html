@@ -42,24 +42,8 @@
         <ul class="bullets">
             <li>@messages("uploadSupportingMaterialMultiple.upload.restrictionFiles")</li>
             <li>@messages("uploadSupportingMaterialMultiple.upload.restrictionSize")</li>
+            <li>@messages("uploadSupportingMaterialMultiple.upload.typeOfFiles")</li>
         </ul>
-        <details id="upload--restrictions" class="">
-            <summary role="button" aria-expanded="false"> @messages("uploadSupportingMaterialMultiple.upload.typeOfFiles.title") </summary>
-            <div class="indent" id="details-content-1">
-                <ul class="list list-bullet">
-                    <li>pdf</li>
-                    <li>doc</li>
-                    <li>docx</li>
-                    <li>xlsx</li>
-                    <li>xls</li>
-                    <li>png</li>
-                    <li>jpg</li>
-                    <li>jpeg</li>
-                    <li>txt</li>
-                </ul>
-
-            </div>
-        </details>
 
         <div class="js-visible mt-3">
             @components.input_file(

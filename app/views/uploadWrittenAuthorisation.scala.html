@@ -37,13 +37,12 @@
 
         <div class="form-group">
             <fieldset>
-                <p>To complete an application for another business or organisation you will need to provide proof of authorisation.</p>
                 <div aria-label="Information">
                     <p> We will accept a document dated in the last 12 months, for example: </p>
                     <ul class="list list-bullet">
                         <li>a digital document, for example a word document</li>
-                        <li>a scanned letter from the trader</li>
-                        <li>a copy of an email from the trader</li>
+                        <li>a scanned letter </li>
+                        <li>a copy of an email </li>
                     </ul>
                 </div>
             </fieldset>
@@ -52,29 +51,14 @@
         <p>@messages("uploadWrittenAuthorisation.upload.title")</p>
         <ul class="bullets">
             <li>@messages("uploadWrittenAuthorisation.upload.restrictionSize")</li>
+            <li>@messages("uploadWrittenAuthorisation.upload.typeOfFiles")</li>
         </ul>
-        <details id="upload--restrictions" class="">
-            <summary role="button" aria-expanded="false"> @messages("uploadWrittenAuthorisation.upload.typeOfFiles.title") </summary>
-            <div class="indent" id="details-content-1">
-                <ul class="list list-bullet">
-                    <li>pdf</li>
-                    <li>doc</li>
-                    <li>docx</li>
-                    <li>xlsx</li>
-                    <li>xls</li>
-                    <li>png</li>
-                    <li>jpg</li>
-                    <li>jpeg</li>
-                    <li>txt</li>
-                </ul>
-            </div>
-        </details>
 
         <div class="mt-3">
                 @components.input_file(
                     field = form("letter-of-authority"),
                     label = if(file.isDefined){ messages("uploadWrittenAuthorisation.label.replace")} else { messages("uploadWrittenAuthorisation.label")},
-                    accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt")
+                    accept = Some(".pdf,.doc,.docx,.png,.jpeg,.jpg,.txt")
                 )
         </div>
 

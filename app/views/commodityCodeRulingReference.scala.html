@@ -35,14 +35,7 @@
 
         @components.heading("commodityCodeRulingReference.heading")
 
-        <div class="form-group">
-            <details>
-                <summary><span class="summary">@messages("commodityCodeRulingReference.whatis")</span></summary>
-                <div class="panel panel-border-narrow">
-                    <p>@messages("commodityCodeRulingReference.whatis.paragraph")</p>
-                </div>
-            </details>
-        </div>
+        <p>@messages("commodityCodeRulingReference.whatis")</p>
 
         @components.input_textarea(
           field = form("value"),
