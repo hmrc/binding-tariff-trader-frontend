@@ -54,7 +54,7 @@ class BindingTariffFilestoreConnectorSpec extends UnitSpec with WithFakeApplicat
   "Connector" should {
     "Upload" in {
       stubFor(
-        post("/binding-tariff-filestore/file")
+        post("/file")
           .willReturn(
             aResponse()
               .withStatus(Status.ACCEPTED)
@@ -73,7 +73,7 @@ class BindingTariffFilestoreConnectorSpec extends UnitSpec with WithFakeApplicat
 
     "Get" in {
       stubFor(
-        get("/binding-tariff-filestore/file/id")
+        get("/file/id")
           .willReturn(
             aResponse()
               .withStatus(Status.OK)
@@ -90,7 +90,7 @@ class BindingTariffFilestoreConnectorSpec extends UnitSpec with WithFakeApplicat
 
     "Publish" in {
       stubFor(
-        post("/binding-tariff-filestore/file/id/publish")
+        post("/file/id/publish")
           .willReturn(
             aResponse()
               .withStatus(Status.ACCEPTED)
