@@ -51,7 +51,6 @@ class CheckYourAnsCheckYourAnswersControllerwersControllerSpec extends Controlle
 
       )
 
-      val expect  = contentAsString(result)
       contentAsString(result) mustBe check_your_answers(frontendAppConfig, expectedSections)(fakeRequest, messages).toString
     }
 
