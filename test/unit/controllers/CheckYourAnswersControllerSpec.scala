@@ -44,10 +44,14 @@ class CheckYourAnsCheckYourAnswersControllerwersControllerSpec extends Controlle
       status(result) mustBe OK
 
       val expectedSections = Seq(
-        AnswerSection(Some("Application details"), Seq()),
-        AnswerSection(Some("Information about your item"), Seq())
+        AnswerSection(Some("Application details"), Seq.empty),
+        AnswerSection(Some("Applying for another business, organisation or individual"), Seq.empty),
+        AnswerSection(Some("Information about your item"), Seq.empty),
+        AnswerSection(Some("Other information"), Seq.empty)
+
       )
 
+      val expect  = contentAsString(result)
       contentAsString(result) mustBe check_your_answers(frontendAppConfig, expectedSections)(fakeRequest, messages).toString
     }
 
