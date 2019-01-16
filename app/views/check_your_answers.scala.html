@@ -25,7 +25,6 @@
 @main_template(
     title = messages("checkYourAnswers.title"),
     appConfig = appConfig,
-    mainClass = Some("full-width"),
     bodyClasses = None) {
 
     @helpers.form(action = CheckYourAnswersController.onSubmit(), 'autoComplete -> "off") {

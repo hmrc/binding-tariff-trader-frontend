@@ -23,7 +23,7 @@ import play.api.test.Helpers._
 import viewmodels.AnswerSection
 import views.html.check_your_answers
 
-class CheckYourAnswersControllerSpec extends ControllerSpecBase {
+class CheckYourAnsCheckYourAnswersControllerwersControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
 
@@ -44,8 +44,11 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
       status(result) mustBe OK
 
       val expectedSections = Seq(
-        AnswerSection(Some("Application details"), Seq()),
-        AnswerSection(Some("Information about your item"), Seq())
+        AnswerSection(Some("Application details"), Seq.empty),
+        AnswerSection(Some("Applying for another business, organisation or individual"), Seq.empty),
+        AnswerSection(Some("Information about your item"), Seq.empty),
+        AnswerSection(Some("Other information"), Seq.empty)
+
       )
 
       contentAsString(result) mustBe check_your_answers(frontendAppConfig, expectedSections)(fakeRequest, messages).toString

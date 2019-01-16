@@ -48,7 +48,12 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
         Seq(
           checkYourAnswersHelper.registeredAddressForEori,
           checkYourAnswersHelper.enterContactDetails,
-          checkYourAnswersHelper.whichBestDescribesYou,
+          checkYourAnswersHelper.whichBestDescribesYou
+        ).flatten
+      ),
+      AnswerSection(
+        Some("checkYourAnswers.applicantOtherBusiness"),
+        Seq(
           checkYourAnswersHelper.registerBusinessRepresenting,
           checkYourAnswersHelper.uploadWrittenAuthorisation
         ).flatten
@@ -70,7 +75,12 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
           checkYourAnswersHelper.similarItemCommodityCode,
           checkYourAnswersHelper.commodityCodeRulingReference,
           checkYourAnswersHelper.legalChallenge,
-          checkYourAnswersHelper.legalChallengeDetails,
+          checkYourAnswersHelper.legalChallengeDetails
+        ).flatten
+      ),AnswerSection(
+        Some("checkYourAnswers.otherInformation"),
+        Seq(
+          checkYourAnswersHelper.supportingInformation,
           checkYourAnswersHelper.supportingInformationDetails
         ).flatten
       )
