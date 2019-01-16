@@ -105,7 +105,7 @@ registerBusinessRepresenting.heading = What are the registered details of the bu
 registerBusinessRepresenting.note = The details you enter must match the exact format of their registered EORI address
 registerBusinessRepresenting.eoriNumber = EORI number
 registerBusinessRepresenting.eoriNumber.hint = The number starts with a country code, for example GB for Great Britain, and is then followed by up to 15 characters.
-registerBusinessRepresenting.businessName = Business, organisation or individual's name
+registerBusinessRepresenting.businessName = Business, organisation or individual''s name
 registerBusinessRepresenting.addressLine1 = Address line 1
 registerBusinessRepresenting.town = Town or city
 registerBusinessRepresenting.postCode = Postcode
@@ -158,9 +158,9 @@ informationAboutYourItem.error.required = Select yes if you have information tha
 
 previousCommodityCode.title = Enter reference number of ruling to renew - GOV.UK
 previousCommodityCode.heading = What is the reference number for the ruling you want to renew?
-previousCommodityCode.field1 = Binding Tariff Information reference number
+previousCommodityCode.field1 = Ruling reference number
 previousCommodityCode.checkYourAnswersLabel = Renewal reference number
-previousCommodityCode.error.field1.required = Ruling reference number
+previousCommodityCode.error.field1.required = Enter ruling reference number
 previousCommodityCode.error.field1.length = Previous Binding Tariff Information ruling must be 100 characters or less
 previousCommodityCode.details.summary = What is my Binding Tariff Information ruling reference number?
 previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling. 
@@ -333,4 +333,6 @@ uploadWrittenAuthorisation.upload.restrictionSize = a maximum file size of 10MB
 uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg and txt files
 
 checkYourAnswers.applicantRegisteredSection = Application details
+checkYourAnswers.applicantOtherBusiness = Applying for another business, organisation or individual
 checkYourAnswers.informationAboutYourItemSection = Information about your item
+checkYourAnswers.otherInformation = Other information
