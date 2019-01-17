@@ -35,14 +35,14 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   }
 
   private lazy val contactHost = runModeConfiguration.getString("contact-frontend.host").getOrElse("")
-  private val contactFormServiceIdentifier = "bindingtarifftraderfrontend"
+  private val contactFormServiceIdentifier = "BindingTariffApplication"
 
   lazy val analyticsToken = loadConfig("google-analytics.token")
   lazy val analyticsHost = loadConfig("google-analytics.host")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  lazy val betaFeedbackUrl = s"$contactHost/contact/beta-feedback"
-  lazy val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated"
+  lazy val betaFeedbackUrl = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
+  lazy val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
 
   lazy val authUrl = baseUrl("auth")
   lazy val loginUrl = loadConfig("urls.login")
