@@ -16,6 +16,7 @@
 
 package utils
 
+import audit.CaseAuditPayload
 import models._
 import play.api.libs.json._
 

@@ -18,7 +18,7 @@ package audit
 
 import audit.AuditPayloadType._
 import javax.inject.{Inject, Singleton}
-import models.{Case, CaseAuditPayload}
+import models.{Application, Case}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import utils.JsonFormatters.caseAuditPayloadFormat
@@ -35,6 +35,12 @@ class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
   }
 
 }
+
+case class CaseAuditPayload
+(
+  caseReference: String,
+  application: Application
+)
 
 object AuditPayloadType {
 
