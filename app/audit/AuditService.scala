@@ -18,11 +18,10 @@ package audit
 
 import audit.AuditPayloadType._
 import javax.inject.{Inject, Singleton}
-import models.Case
-import play.api.libs.json.Json.toJson
+import models.{Case, CaseAuditPayload}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
-import utils.JsonFormatters.caseFormat
+import utils.JsonFormatters.caseAuditPayloadFormat
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -31,7 +30,8 @@ class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
 
   // TODO: TxM would like also the upscan file reference for each
   def auditBTIApplicationSubmissionSuccessful(c: Case)(implicit hc: HeaderCarrier): Unit = {
-    auditConnector.sendExplicitAudit(BTIApplicationSubmission, toJson(c))
+    val payload = CaseAuditPayload(caseReference = c.reference, application = c.application)
+    auditConnector.sendExplicitAudit(auditType = BTIApplicationSubmission, detail = payload)
   }
 
 }

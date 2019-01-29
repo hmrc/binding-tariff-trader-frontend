@@ -28,3 +28,9 @@ case class Case
   application: Application,
   attachments: Seq[Attachment] = Seq.empty
 )
+
+case class CaseAuditPayload
+(
+  caseReference: String,
+  application: Application
+)

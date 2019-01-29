@@ -16,37 +16,35 @@
 
 package audit
 
+import audit.AuditPayloadType.BTIApplicationSubmission
 import models._
-import org.mockito.ArgumentMatchers.{any, refEq}
 import org.mockito.Mockito.verify
 import org.scalatest.mockito.MockitoSugar
-import play.api.libs.json.{JsValue, Writes}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.JsonFormatters
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class AuditServiceTest extends UnitSpec with MockitoSugar {
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-  private val writes: Writes[Case] = mock[Writes[Case]]
-  private val connector: DefaultAuditConnector = mock[DefaultAuditConnector]
+  private val auditConnector: DefaultAuditConnector = mock[DefaultAuditConnector]
 
-  private val service = new AuditService(connector)
+  private val service = new AuditService(auditConnector)
 
-  "Service 'audit application success'" should {
+  "BTI application submission auditing" should {
+
     val aCase = oCase.btiCaseExample
-    val json: JsValue = JsonFormatters.caseFormat.writes(aCase)
+    val auditJson = CaseAuditPayload(caseReference = aCase.reference, application = aCase.application)
 
-    "Delegate to connector" in {
+    "call the audit connector as expected " in {
+
+      import utils.JsonFormatters.caseAuditPayloadFormat
+
       service.auditBTIApplicationSubmissionSuccessful(aCase)
 
-      verify(connector).sendExplicitAudit(
-        refEq(AuditPayloadType.BTIApplicationSubmission.toString),
-        refEq(json)
-      )(any[HeaderCarrier], any[ExecutionContext], any[Writes[JsValue]])
+      verify(auditConnector).sendExplicitAudit(BTIApplicationSubmission, auditJson)(hc, global, caseAuditPayloadFormat)
     }
   }
 
