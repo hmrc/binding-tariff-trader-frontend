@@ -28,6 +28,7 @@ The Front-end microrservice for the BTI Application journey on GOV.UK
 Run `sbt run` to boot the app
 
 Go to http://localhost:9000/binding-tariff-application/
+
 You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisation` and Submit.
 
 ##### Running with Service Manager
@@ -35,6 +36,7 @@ You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisati
 Run `sm --start BINDING_TARIFF_TRADER_FRONTEND -r`
 
 Go to http://localhost:9582/binding-tariff-application/
+
 You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisation` and Submit.
 
 ### Testing
