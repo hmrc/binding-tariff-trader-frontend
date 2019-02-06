@@ -16,6 +16,9 @@
 
 package service
 
+import java.io.File
+import java.nio.file.Files
+
 import connectors.BindingTariffFilestoreConnector
 import models.response.FilestoreResponse
 import models.{FileAttachment, PublishedFileAttachment, ScanStatus}
@@ -24,8 +27,10 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.MessagesApi
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
+import play.api.mvc.MultipartFormData.FilePart
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -34,7 +39,9 @@ import scala.concurrent.Future.{failed, successful}
 class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
   private val connector = mock[BindingTariffFilestoreConnector]
-  private val service = new FileService(connector)
+  private val messagesApi = mock[MessagesApi]
+
+  private val service = new FileService(connector, messagesApi)
   private implicit val headers: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeEach(): Unit = {
@@ -99,5 +106,92 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
 
       await(service.publish(Seq(filePublishing1, filePublishing2))) shouldBe Seq.empty
     }
+  }
+
+  "Validate file type" should {
+
+    "Allow a valid text file" in {
+      val file = createFileOfType("txt", "text/plain")
+      service.validate(file) shouldBe Right(file)
+    }
+
+    "Allow a valid pdf file" in {
+      val file = createFileOfType("pdf", "application/pdf")
+      service.validate(file) shouldBe Right(file)
+    }
+
+    "Allow a valid ms-word file" in {
+      val file = createFileOfType("doc", "application/msword")
+      service.validate(file) shouldBe Right(file)
+    }
+
+    "Allow a valid ms-excel file" in {
+      val file = createFileOfType("xls", "application/vnd.ms-excel")
+      service.validate(file) shouldBe Right(file)
+    }
+
+    "Allow a valid png image file" in {
+      val file = createFileOfType("xls", "image/png")
+      service.validate(file) shouldBe Right(file)
+    }
+
+    "Allow a valid jpeg image file" in {
+      val file = createFileOfType("xls", "image/jpeg")
+      service.validate(file) shouldBe Right(file)
+    }
+
+    "Allow a valid openwxml document file" in {
+      val file = createFileOfType("doc", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+      service.validate(file) shouldBe Right(file)
+    }
+
+    "Allow a valid openwxml spreadsheet file" in {
+      val file = createFileOfType("xls", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+      service.validate(file) shouldBe Right(file)
+    }
+
+    "Reject invalid file type" in {
+      val file = createFileOfType("mp3", "audio/mpeg")
+      given(messagesApi.apply("uploadWrittenAuthorisation.error.fileType")).willReturn("some error message")
+      service.validate(file) shouldBe Left("some error message")
+    }
+
+  }
+
+  "Validate file size" should {
+
+    "Allow a small file" in {
+      val file = createFileOfSize(10)
+      service.validate(file) shouldBe Right(file)
+    }
+
+    "Reject large file" in {
+      val file = createFileOfSize(110000000)
+      given(messagesApi.apply("uploadWrittenAuthorisation.error.size")).willReturn("some error message")
+      service.validate(file) shouldBe Left("some error message")
+    }
+  }
+
+  private def createFileOfType(extension: String, mimeType: String) = {
+    createFile(extension, mimeType, 10)
+  }
+
+  private def createFileOfSize(numBytes: Int) = {
+    createFile("txt", "text/plain", numBytes)
+  }
+
+  private def createFile(extension: String, mimeType: String, numBytes: Int) = {
+    val filename = "example." + extension
+    val file = new TemporaryFile(createTemporaryFile(numBytes))
+    val filePart = FilePart[TemporaryFile](key = "file-key", filename, contentType = Some(mimeType), ref = file)
+    val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
+    form.file("file-key").get
+  }
+
+  private def createTemporaryFile(size: Int): File = {
+    val temporaryFile: File = File.createTempFile("test-", null)
+    temporaryFile.deleteOnExit()
+    Files.write(temporaryFile.toPath, Array.fill(size)('A'.toByte))
+    temporaryFile
   }
 }

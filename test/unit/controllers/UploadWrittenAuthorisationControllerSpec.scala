@@ -92,10 +92,11 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
       //Given
       val file = TemporaryFile("example-file.txt")
       val filePart = FilePart[TemporaryFile](key = "letter-of-authority", "file.txt", contentType = Some("text/plain"), ref = file)
-      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
+      val form: MultipartFormData[TemporaryFile] = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
       given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(Future.successful(FileAttachment("id", "file-name", "type", 0)))
+      given(fileService.validate(any[MultipartFormData.FilePart[TemporaryFile]])).willReturn(Right(form.file("letter-of-authority").get))
 
       val savedCacheMap = mock[CacheMap]
       given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
@@ -142,6 +143,8 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
       val filePart = FilePart[TemporaryFile](key = "letter-of-authority", "example-file.mp3", contentType = Some("audio/mpeg"), ref = file)
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
+
+      given(fileService.validate(any[MultipartFormData.FilePart[TemporaryFile]])).willReturn(Left("bad file"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 

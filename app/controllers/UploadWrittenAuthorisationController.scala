@@ -82,7 +82,7 @@ class UploadWrittenAuthorisationController @Inject()(
 
       letterOfAuthority match {
         case Some(file) =>
-          valid(file) match {
+          fileService.validate(file) match {
             case Right(validFile) => uploadFile(validFile)
             case Left(errorMessage) => badRequest("validation-error", errorMessage)
           }
@@ -94,38 +94,4 @@ class UploadWrittenAuthorisationController @Inject()(
       }
     }
 
-  private val maxFileSize = 10485760
-  private val allowedTypes = Set(
-    "application/pdf",
-    "application/msword",
-    "application/vnd.ms-excel",
-    "image/png",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "image/jpeg",
-    "text/plain"
-  )
-
-  private def valid(file: MultipartFormData.FilePart[TemporaryFile]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
-
-    val error = validFileSize(file).orElse(validFileType(file))
-    error.fold(Right(file): Either[String, MultipartFormData.FilePart[TemporaryFile]]) {
-      Left(_)
-    }
-  }
-
-  private def validFileSize(file: MultipartFormData.FilePart[TemporaryFile]): Option[String] = {
-    if (file.ref.file.length() > maxFileSize)
-      Some(messagesApi("uploadWrittenAuthorisation.error.size"))
-    else
-      None
-  }
-
-  private def validFileType(file: MultipartFormData.FilePart[TemporaryFile]): Option[String] = {
-
-    if (file.contentType.exists(t => allowedTypes.contains(t)))
-      None
-    else
-      Some(messagesApi("uploadWrittenAuthorisation.error.fileType"))
-  }
 }

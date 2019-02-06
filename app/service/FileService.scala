@@ -21,6 +21,7 @@ import javax.inject.{Inject, Singleton}
 import models._
 import models.response.FilestoreResponse
 import play.api.Logger
+import play.api.i18n.MessagesApi
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import uk.gov.hmrc.http.HeaderCarrier
@@ -30,7 +31,7 @@ import scala.concurrent.Future
 import scala.concurrent.Future.sequence
 
 @Singleton
-class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
+class FileService @Inject()(connector: BindingTariffFilestoreConnector, messagesApi: MessagesApi) {
 
   def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
     connector.upload(f).map(toFileAttachment(f.ref.file.length))
@@ -55,6 +56,19 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
     ).map(_.filter(_.isDefined).map(_.get))
   }
 
+  def validate(file: MultipartFormData.FilePart[TemporaryFile]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
+
+    file match {
+      case f if hasWrongSize (f) => Left(messagesApi("uploadWrittenAuthorisation.error.size"))
+      case f if hasWrongContentType (f) => Left(messagesApi("uploadWrittenAuthorisation.error.fileType"))
+      case _ => Right(file)
+    }
+
+  }
+  private def hasWrongSize : MultipartFormData.FilePart[TemporaryFile] => Boolean = { file  => file.ref.file.length() > maxFileSize}
+  private def hasWrongContentType : MultipartFormData.FilePart[TemporaryFile] => Boolean = {file  => file.contentType.filter(allowedTypes.contains).isEmpty}
+
+
   private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
     r => FileAttachment(r.id, r.fileName, r.mimeType, size)
   }
@@ -63,4 +77,15 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector) {
     r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
+  private val maxFileSize = 10485760
+  private val allowedTypes = Set(
+    "application/pdf",
+    "application/msword",
+    "application/vnd.ms-excel",
+    "image/png",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "image/jpeg",
+    "text/plain"
+  )
 }
