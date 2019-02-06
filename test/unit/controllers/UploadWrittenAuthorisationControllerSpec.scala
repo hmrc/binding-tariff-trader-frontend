@@ -136,6 +136,18 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
       status(result) mustBe BAD_REQUEST
     }
 
+    "return a Bad Request when invalid file type is submitted" in {
+
+      val file = TemporaryFile("example-file.mp3")
+      val filePart = FilePart[TemporaryFile](key = "letter-of-authority", "example-file.mp3", contentType = Some("audio/mpeg"), ref = file)
+      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
+      val postRequest = fakeRequest.withBody(form)
+
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      status(result) mustBe BAD_REQUEST
+    }
+
     "redirect to Session Expired for a GET if no existing data is found" in {
       val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
 
