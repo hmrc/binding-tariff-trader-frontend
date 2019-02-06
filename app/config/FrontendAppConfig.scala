@@ -51,6 +51,9 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val bindingTariffFileStoreUrl: String = baseUrl("binding-tariff-filestore")
   lazy val authEnrolment: Option[String] = Some(loadConfig("auth.enrolment")).filter(isNoneBlank(_))
 
+  lazy val fileUploadMaxSize = loadConfig("fileupload.maxSize").toInt
+  lazy val fileUploadMimeTypes = loadConfig("fileupload.mimeTypes")
+
   lazy val languageTranslationEnabled = runModeConfiguration.getBoolean("microservice.services.features.welsh-translation").getOrElse(true)
 
   def languageMap: Map[String, Lang] = Map(

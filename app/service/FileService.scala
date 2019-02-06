@@ -16,6 +16,7 @@
 
 package service
 
+import config.FrontendAppConfig
 import connectors.BindingTariffFilestoreConnector
 import javax.inject.{Inject, Singleton}
 import models._
@@ -31,7 +32,7 @@ import scala.concurrent.Future
 import scala.concurrent.Future.sequence
 
 @Singleton
-class FileService @Inject()(connector: BindingTariffFilestoreConnector, messagesApi: MessagesApi) {
+class FileService @Inject()(connector: BindingTariffFilestoreConnector, messagesApi: MessagesApi, configuration: FrontendAppConfig) {
 
   def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
     connector.upload(f).map(toFileAttachment(f.ref.file.length))
@@ -65,8 +66,8 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
     }
 
   }
-  private def hasWrongSize : MultipartFormData.FilePart[TemporaryFile] => Boolean = { file  => file.ref.file.length() > maxFileSize}
-  private def hasWrongContentType : MultipartFormData.FilePart[TemporaryFile] => Boolean = {file  => file.contentType.filter(allowedTypes.contains).isEmpty}
+  private def hasWrongSize : MultipartFormData.FilePart[TemporaryFile] => Boolean = { _.ref.file.length > configuration.fileUploadMaxSize }
+  private def hasWrongContentType : MultipartFormData.FilePart[TemporaryFile] => Boolean = { _.contentType.filter(allowedTypes.contains).isEmpty }
 
 
   private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
@@ -77,15 +78,5 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
     r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
-  private val maxFileSize = 10485760
-  private val allowedTypes = Set(
-    "application/pdf",
-    "application/msword",
-    "application/vnd.ms-excel",
-    "image/png",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "image/jpeg",
-    "text/plain"
-  )
+  private lazy val allowedTypes = configuration.fileUploadMimeTypes.split(",").map(_.trim).toSet
 }

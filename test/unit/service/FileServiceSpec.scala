@@ -19,6 +19,7 @@ package service
 import java.io.File
 import java.nio.file.Files
 
+import config.FrontendAppConfig
 import connectors.BindingTariffFilestoreConnector
 import models.response.FilestoreResponse
 import models.{FileAttachment, PublishedFileAttachment, ScanStatus}
@@ -40,8 +41,13 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
 
   private val connector = mock[BindingTariffFilestoreConnector]
   private val messagesApi = mock[MessagesApi]
+  private val configuration = mock[FrontendAppConfig]
 
-  private val service = new FileService(connector, messagesApi)
+  private val fileSizeSmall = 10
+  private val fileSizeMax = 1000
+  private val fileSizeLarge = 1100
+
+  private val service = new FileService(connector, messagesApi, configuration)
   private implicit val headers: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeEach(): Unit = {
@@ -108,7 +114,10 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
     }
   }
 
+
   "Validate file type" should {
+
+    given(configuration.fileUploadMimeTypes).willReturn("text/plain, application/pdf,image/png")
 
     "Allow a valid text file" in {
       val file = createFileOfType("txt", "text/plain")
@@ -120,33 +129,8 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
       service.validate(file) shouldBe Right(file)
     }
 
-    "Allow a valid ms-word file" in {
-      val file = createFileOfType("doc", "application/msword")
-      service.validate(file) shouldBe Right(file)
-    }
-
-    "Allow a valid ms-excel file" in {
-      val file = createFileOfType("xls", "application/vnd.ms-excel")
-      service.validate(file) shouldBe Right(file)
-    }
-
     "Allow a valid png image file" in {
       val file = createFileOfType("xls", "image/png")
-      service.validate(file) shouldBe Right(file)
-    }
-
-    "Allow a valid jpeg image file" in {
-      val file = createFileOfType("xls", "image/jpeg")
-      service.validate(file) shouldBe Right(file)
-    }
-
-    "Allow a valid openwxml document file" in {
-      val file = createFileOfType("doc", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-      service.validate(file) shouldBe Right(file)
-    }
-
-    "Allow a valid openwxml spreadsheet file" in {
-      val file = createFileOfType("xls", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
       service.validate(file) shouldBe Right(file)
     }
 
@@ -160,20 +144,22 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
 
   "Validate file size" should {
 
+    given(configuration.fileUploadMaxSize).willReturn(fileSizeMax)
+
     "Allow a small file" in {
-      val file = createFileOfSize(10)
+      val file = createFileOfSize(fileSizeSmall)
       service.validate(file) shouldBe Right(file)
     }
 
     "Reject large file" in {
-      val file = createFileOfSize(110000000)
+      val file = createFileOfSize(fileSizeLarge)
       given(messagesApi.apply("uploadWrittenAuthorisation.error.size")).willReturn("some error message")
       service.validate(file) shouldBe Left("some error message")
     }
   }
 
   private def createFileOfType(extension: String, mimeType: String) = {
-    createFile(extension, mimeType, 10)
+    createFile(extension, mimeType, fileSizeSmall)
   }
 
   private def createFileOfSize(numBytes: Int) = {
@@ -189,7 +175,7 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
   }
 
   private def createTemporaryFile(size: Int): File = {
-    val temporaryFile: File = File.createTempFile("test-", null)
+    val temporaryFile: File = File.createTempFile("test-", ".tmp")
     temporaryFile.deleteOnExit()
     Files.write(temporaryFile.toPath, Array.fill(size)('A'.toByte))
     temporaryFile
