@@ -49,8 +49,9 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
   def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[PublishedFileAttachment]] = {
     sequence(
       files.map { f: FileAttachment =>
-        publish(f).map(Some(_)).recover {
-          case t: Throwable => Logger.error(s"Failed to publish file [${f.id}].", t)
+        publish(f).map(Option(_)).recover {
+          case t: Throwable =>
+            Logger.error(s"Failed to publish file [${f.id}].", t)
             None
         }
       }
@@ -58,19 +59,20 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
   }
 
   def validate(file: MultipartFormData.FilePart[TemporaryFile]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
-
-    file match {
-      case f if hasWrongSize (f) => Left(messagesApi("uploadWrittenAuthorisation.error.size"))
-      case f if hasWrongContentType (f) => Left(messagesApi("uploadWrittenAuthorisation.error.fileType"))
-      case _ => Right(file)
-    }
-
+    if (hasInvalidSize(file)) Left(messagesApi("uploadWrittenAuthorisation.error.size"))
+    else if (hasInvalidContentType(file)) Left(messagesApi("uploadWrittenAuthorisation.error.fileType"))
+    else Right(file)
   }
-  private def hasWrongSize : MultipartFormData.FilePart[TemporaryFile] => Boolean = {
+
+  private def hasInvalidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = {
     _.ref.file.length > configuration.fileUploadMaxSize
   }
-  private def hasWrongContentType : MultipartFormData.FilePart[TemporaryFile] => Boolean = {
-    _.contentType.filter(configuration.fileUploadMimeTypes).isEmpty
+
+  private def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
+    f.contentType match {
+      case Some(c: String) => !configuration.fileUploadMimeTypes.contains(c)
+      case _ => true
+    }
   }
 
   private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
@@ -80,4 +82,5 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
   private def toPublishedAttachment(size: Long): FilestoreResponse => PublishedFileAttachment = {
     r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size)
   }
+
 }
