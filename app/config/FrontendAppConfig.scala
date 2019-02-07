@@ -52,7 +52,7 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val authEnrolment: Option[String] = Some(loadConfig("auth.enrolment")).filter(isNoneBlank(_))
 
   lazy val fileUploadMaxSize = loadConfig("fileupload.maxSize").toInt
-  lazy val fileUploadMimeTypes = loadConfig("fileupload.mimeTypes")
+  lazy val fileUploadMimeTypes = loadConfig("fileupload.mimeTypes").split(",").map(_.trim).toSet
 
   lazy val languageTranslationEnabled = runModeConfiguration.getBoolean("microservice.services.features.welsh-translation").getOrElse(true)
 

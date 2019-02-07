@@ -66,9 +66,12 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
     }
 
   }
-  private def hasWrongSize : MultipartFormData.FilePart[TemporaryFile] => Boolean = { _.ref.file.length > configuration.fileUploadMaxSize }
-  private def hasWrongContentType : MultipartFormData.FilePart[TemporaryFile] => Boolean = { _.contentType.filter(allowedTypes.contains).isEmpty }
-
+  private def hasWrongSize : MultipartFormData.FilePart[TemporaryFile] => Boolean = {
+    _.ref.file.length > configuration.fileUploadMaxSize
+  }
+  private def hasWrongContentType : MultipartFormData.FilePart[TemporaryFile] => Boolean = {
+    _.contentType.filter(configuration.fileUploadMimeTypes).isEmpty
+  }
 
   private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
     r => FileAttachment(r.id, r.fileName, r.mimeType, size)
@@ -77,6 +80,4 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
   private def toPublishedAttachment(size: Long): FilestoreResponse => PublishedFileAttachment = {
     r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size)
   }
-
-  private lazy val allowedTypes = configuration.fileUploadMimeTypes.split(",").map(_.trim).toSet
 }

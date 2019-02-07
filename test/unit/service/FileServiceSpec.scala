@@ -117,7 +117,7 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
 
   "Validate file type" should {
 
-    given(configuration.fileUploadMimeTypes).willReturn("text/plain, application/pdf,image/png")
+    given(configuration.fileUploadMimeTypes).willReturn(Set("text/plain", "application/pdf" , "image/png"))
 
     "Allow a valid text file" in {
       val file = createFileOfType("txt", "text/plain")
