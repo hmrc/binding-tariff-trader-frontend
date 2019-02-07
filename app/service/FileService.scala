@@ -70,7 +70,7 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
 
   private def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
     f.contentType match {
-      case Some(c: String) => !configuration.fileUploadMimeTypes.contains(c)
+      case Some(c: String) if configuration.fileUploadMimeTypes.contains(c) => false
       case _ => true
     }
   }
