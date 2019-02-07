@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.UploadWrittenAuthorisationFormProvider
 import models.{FileAttachment, NormalMode}
 import navigation.FakeNavigator
-import org.mockito.ArgumentMatchers.{any, refEq}
+import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
@@ -37,6 +37,7 @@ import service.FileService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.uploadWrittenAuthorisation
+import org.scalatest.Matchers._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -92,10 +93,11 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
       //Given
       val file = TemporaryFile("example-file.txt")
       val filePart = FilePart[TemporaryFile](key = "letter-of-authority", "file.txt", contentType = Some("text/plain"), ref = file)
-      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
+      val form: MultipartFormData[TemporaryFile] = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
       given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(Future.successful(FileAttachment("id", "file-name", "type", 0)))
+      given(fileService.validate(any[MultipartFormData.FilePart[TemporaryFile]])).willReturn(Right(form.file("letter-of-authority").get))
 
       val savedCacheMap = mock[CacheMap]
       given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
@@ -134,6 +136,22 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe BAD_REQUEST
+    }
+
+    "return a Bad Request when invalid file type is submitted" in {
+
+      val file = TemporaryFile("example-file.mp3")
+      val filePart = FilePart[TemporaryFile](key = "letter-of-authority", "example-file.mp3", contentType = Some("audio/mpeg"), ref = file)
+      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
+      val postRequest = fakeRequest.withBody(form)
+
+      given(fileService.validate(any[MultipartFormData.FilePart[TemporaryFile]])).willReturn(Left("some error message about bad file"))
+
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      status(result) mustBe BAD_REQUEST
+
+      contentAsString(result) should include ("some error message about bad file")
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

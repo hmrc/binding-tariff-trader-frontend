@@ -82,7 +82,7 @@ class UploadWrittenAuthorisationController @Inject()(
 
       letterOfAuthority match {
         case Some(file) =>
-          valid(file) match {
+          fileService.validate(file) match {
             case Right(validFile) => uploadFile(validFile)
             case Left(errorMessage) => badRequest("validation-error", errorMessage)
           }
@@ -93,14 +93,5 @@ class UploadWrittenAuthorisationController @Inject()(
           }
       }
     }
-
-  private val maxFileSize = 10485760
-  private def valid(file: MultipartFormData.FilePart[TemporaryFile]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
-    if (file.ref.file.length() > maxFileSize) {
-      Left(messagesApi("uploadWrittenAuthorisation.error.size"))
-    } else {
-      Right(file)
-    }
-  }
 
 }

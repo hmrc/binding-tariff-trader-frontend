@@ -326,6 +326,7 @@ uploadWrittenAuthorisation.label.replace = Replace file
 uploadWrittenAuthorisation.checkYourAnswersLabel =  Written authorisation
 uploadWrittenAuthorisation.error.selectFile = You must select a file, you cannot continue without uploading written authorisation
 uploadWrittenAuthorisation.error.size = Your document will not upload because it''s bigger than 10MB
+uploadWrittenAuthorisation.error.fileType = Your document will not upload because it''s not a valid file type
 uploadWrittenAuthorisation.error.required = Enter uploadWrittenAuthorisation
 uploadWrittenAuthorisation.error.length = must be 100 characters or less
 uploadWrittenAuthorisation.upload.title =  You can upload:
