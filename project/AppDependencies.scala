@@ -11,19 +11,19 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "govuk-template"                   % "5.27.0-play-25",
     "uk.gov.hmrc"       %% "http-caching-client"              % "8.0.0",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"    % "0.2.0",
-    "uk.gov.hmrc"       %% "play-health"                      % "3.10.0-play-25",
+    "uk.gov.hmrc"       %% "play-health"                      % "3.11.0-play-25",
     "uk.gov.hmrc"       %% "play-language"                    % "3.4.0",
     "uk.gov.hmrc"       %% "play-ui"                          % "7.31.0-play-25",
     "uk.gov.hmrc"       %% "play-reactivemongo"               % "6.2.0",
     "uk.gov.hmrc"       %% "play-whitelist-filter"            % "2.0.0"
   )
 
-  lazy val scope: String = "test,it"
+  private lazy val scope: String = "test,it"
 
   val test = Seq(
     "com.github.tomakehurst"     % "wiremock"               % "2.21.0"            % scope,
     "com.typesafe.play"         %% "play-test"              % PlayVersion.current % scope,
-    "org.mockito"                % "mockito-core"           % "2.23.4"            % scope,
+    "org.mockito"                % "mockito-core"           % "2.24.0"            % scope,
     "org.pegdown"                % "pegdown"                % "1.6.0"             % scope,
     "org.jsoup"                  % "jsoup"                  % "1.11.3"            % scope,
     "org.scalacheck"            %% "scalacheck"             % "1.14.0"            % scope,
