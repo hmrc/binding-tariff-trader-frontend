@@ -20,7 +20,6 @@ import javax.inject.{Inject, Singleton}
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.libs.json.{JsValue, Json}
 import play.api.{Configuration, Logger}
-import play.modules.reactivemongo.MongoDbConnection
 import reactivemongo.api.DefaultDB
 import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
@@ -77,11 +76,12 @@ class ReactiveMongoRepository(config: Configuration, mongo: () => DefaultDB)
     }
   }
 
-  def get(id: String): Future[Option[CacheMap]] =
+  def get(id: String): Future[Option[CacheMap]] = {
     collection.find(byId(id)).one[CacheMap]
+  }
 
   def remove(cm: CacheMap): Future[Boolean] = {
-    collection.remove(byId(cm.id)).map(_.ok)
+    collection.delete().one(byId(cm.id)).map(_.ok)
   }
 
   private def byId(value: String) = {
@@ -90,11 +90,9 @@ class ReactiveMongoRepository(config: Configuration, mongo: () => DefaultDB)
 }
 
 @Singleton
-class SessionRepository @Inject()(config: Configuration) {
+class SessionRepository @Inject()(config: Configuration, mongoDbProvider: MongoDbProvider) {
 
-  class DbConnection extends MongoDbConnection
-
-  private lazy val sessionRepository = new ReactiveMongoRepository(config, new DbConnection().db)
+  private lazy val sessionRepository = new ReactiveMongoRepository(config, mongoDbProvider.mongo)
 
   def apply(): ReactiveMongoRepository = sessionRepository
 }
