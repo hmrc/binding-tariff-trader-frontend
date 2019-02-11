@@ -19,7 +19,7 @@ package repositories
 import com.google.inject.ImplementedBy
 import javax.inject.{Inject, Singleton}
 import play.modules.reactivemongo.ReactiveMongoComponent
-import reactivemongo.api.{DB, DefaultDB}
+import reactivemongo.api.DefaultDB
 
 @ImplementedBy(classOf[MongoDb])
 trait MongoDbProvider {

@@ -25,6 +25,7 @@ import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import reactivemongo.play.json.ImplicitBSONHandlers._
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.cache.client.CacheMap.formats
 import uk.gov.hmrc.mongo.ReactiveRepository
 import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
 
@@ -55,10 +56,9 @@ class ReactiveMongoRepository(config: Configuration, mongo: () => DefaultDB)
   private def createIndex(field: String, indexName: String, ttl: Int): Future[Boolean] = {
     collection.indexesManager.ensure(Index(Seq((field, IndexType.Ascending)), Some(indexName),
       options = BSONDocument(expireAfterSeconds -> ttl))) map {
-      result => {
+      result =>
         Logger.debug(s"set [$indexName] with value $ttl -> result : $result")
         result
-      }
     } recover {
       case e =>
         Logger.error("Failed to set TTL index", e)
