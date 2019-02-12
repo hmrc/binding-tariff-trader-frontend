@@ -1,19 +1,18 @@
 @*
- * Copyright 2019 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *@
-
+* Copyright 2019 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
 @import config.FrontendAppConfig
 
 @(appConfig: FrontendAppConfig, confirmation: Confirmation)(implicit request: Request[_], messages: Messages)
@@ -23,33 +22,33 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-	  <div class="govuk-box-highlight">
-			@components.heading("confirmation.heading", "heading-xlarge")
-      <p class="font-large">
-    		@messages("confirmation.yourRefNumber")<br>
-        <span id="confirmation-reference" class="bold">@messages("confirmation.refValue", confirmation.reference)</span>
-      </p>
-	  </div>
+    <div class="govuk-box-highlight">
+        @components.heading("confirmation.heading", "heading-xlarge")
+        <p class="font-large">
+            @messages("confirmation.yourRefNumber") <br>
+            <span id="confirmation-reference" class="bold">@messages("confirmation.refValue", confirmation.reference)</span>
+        </p>
+    </div>
 
-	  <p>@messages("confirmation.paragragh.confirmationEmail")</p>
-		<ul class="list">
-		  <li><a href="#">@messages("confirmation.download.link.PDF")</a></li>
-		  <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
-		</ul>
+    <p>@messages("confirmation.paragragh.confirmationEmail")</p>
+    <ul class="list">
+        <li><a href="#">@messages("confirmation.download.link.PDF")</a></li>
+        <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
+    </ul>
 
 
-		<h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
+    <h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
 
-        @components.icon_important("confirmation.sendingSamples.important")
+    @components.icon_important("confirmation.sendingSamples.important")
 
-        <p>@messages("confirmation.paragraph0.sendingSamples")</p>
+    <p>@messages("confirmation.paragraph0.sendingSamples")</p>
 
-		<p>@messages("confirmation.paragraph1.sendingSamples") @messages("confirmation.refValue", confirmation.reference) .
-		@messages("confirmation.paragraph2.sendingSamples")</p>
+    <p>@messages("confirmation.paragraph1.sendingSamples") @messages("confirmation.refValue", confirmation.reference) .
+        @messages("confirmation.paragraph2.sendingSamples")</p>
 
-		<address>
-			@Html(messages("confirmation.sendingSamples.address"))
-		</address>
+    <address>
+    @Html(messages("confirmation.sendingSamples.address"))
+    </address>
 
     <h2 class="heading-medium">@messages("confirmation.heading2.whatNext")</h2>
     <p>
