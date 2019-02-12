@@ -115,7 +115,7 @@ registerBusinessRepresenting.postCode = Postcode
 registerBusinessRepresenting.country = Country
 registerBusinessRepresenting.checkYourAnswersLabel =  Their registered details
 registerBusinessRepresenting.error.eoriNumber.required = Enter their EORI number
-registerBusinessRepresenting.error.eoriNumber.format = Enter their EORI number in the correct format 
+registerBusinessRepresenting.error.eoriNumber.format = Enter their EORI number in the correct format
 registerBusinessRepresenting.error.businessName.required = Enter a business, organisation or individual''s name
 registerBusinessRepresenting.error.addressLine1.required = Enter address line 1
 registerBusinessRepresenting.error.town.required = Enter a town or city
@@ -155,7 +155,7 @@ informationAboutYourItem.heading = Is there any confidential information about y
 informationAboutYourItem.paragraph = This can include photographs, manuals, brochures or technical specifications.
 informationAboutYourItem.yesIHaveInfo = Yes
 informationAboutYourItem.no = No
-informationAboutYourItem.checkYourAnswersLabel =  Information not to be published
+informationAboutYourItem.checkYourAnswersLabel = Confidential information
 informationAboutYourItem.error.required = Select yes if you have information that you do not want to be published 
 
 previousCommodityCode.title = Enter reference number of ruling to renew - GOV.UK
@@ -177,7 +177,7 @@ describeYourItem.error.field1.required = Enter item name
 describeYourItem.error.field2.required = Enter a detailed description of your item
 describeYourItem.error.field1.length = Item name must be 100 characters or less
 describeYourItem.error.field2.length = Describe your item in detail must be 100 characters or less
-describeYourItem.pullOut.paragraph = The more detailed your description, the faster we will be able to classify your item. Information entered on this page might be used as part of the published ruling. 
+describeYourItem.pullOut.paragraph = The more detailed your description, the faster we will be able to classify your item. Information entered on this page might be used as part of the published ruling.
 describeYourItem.paragraph.includes = This may include:
 describeYourItem.listItem1 = what it is used for
 describeYourItem.listItem2 = what it is made from including all materials, parts or ingredients
@@ -189,14 +189,14 @@ confidentialInformation.title = Enter information not to be published- GOV.UK
 confidentialInformation.heading = What is the confidential information that you do not want us to publish?
 confidentialInformation.field1 = Confidential information
 confidentialInformation.hint = Include the file names of any confidential photographs, manuals, brochures or technical specifications you are going to upload.
-confidentialInformation.checkYourAnswersLabel = Details to remain unpublished
+confidentialInformation.checkYourAnswersLabel = Confidential information details
 confidentialInformation.error.field1.required = Enter information that you do not want to be published
 confidentialInformation.error.field1.length = Information must be 100 characters or less
 
 askForUploadSupportingMaterial.title = Do you have files to upload? - GOV.UK
 askForUploadSupportingMaterial.heading = Do you want to upload any photographs, manuals, brochures or technical specifications?
-askForUploadSupportingMaterial.checkYourAnswersLabel =  Do you have files to upload?
-askForUploadSupportingMaterial.label = Providing more information means we will be able to classify your item faster. 
+askForUploadSupportingMaterial.checkYourAnswersLabel = Do you want to upload files?
+askForUploadSupportingMaterial.label = Providing more information means we will be able to classify your item faster.
 askForUploadSupportingMaterial.error.required = Select yes if you have files to upload
 
 uploadSupportingMaterialMultiple.title = Upload files - GOV.UK
@@ -271,7 +271,7 @@ legalChallenge.title = Problems with the classification of the item - GOV.UK
 legalChallenge.heading = Do you know if there have been any problems classifying the item?
 legalChallenge.yesLegalChallenge = Yes
 legalChallenge.noLegalChallenge = No
-legalChallenge.checkYourAnswersLabel = Are you aware of any problems with the classification of the item?
+legalChallenge.checkYourAnswersLabel = Do you know of any problems with the classification of the item?
 legalChallenge.error.required = Select if you are aware of any problems with the item''s classification
 legalChallenge.paragraph = This includes court rulings and when a commodity code is being reviewed. This helps us align with other rulings.
 
@@ -282,15 +282,15 @@ legalChallengeDetails.error.required = Enter any problems with the classificatio
 legalChallengeDetails.error.length = Details of any problems with classification must be 100 characters or less
 
 supportingInformation.title = Other information to support this application - GOV.UK
-supportingInformation.heading = Do you need to enter any other information to support this application? 
+supportingInformation.heading = Do you need to enter any other information to support this application?
 supportingInformation.yesInformation = Yes
 supportingInformation.noInformation = No
-supportingInformation.checkYourAnswersLabel = Supporting information 
+supportingInformation.checkYourAnswersLabel = Do you have supporting information?
 supportingInformation.error.required = Select yes if you want to enter any supporting information
 
 supportingInformationDetails.title = Enter supporting information - GOV.UK
 supportingInformationDetails.heading = What is the information you want to provide?
-supportingInformationDetails.checkYourAnswersLabel = Do you have supporting information?
+supportingInformationDetails.checkYourAnswersLabel = Supporting information
 supportingInformationDetails.error.required = Enter supporting information
 supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less
 
