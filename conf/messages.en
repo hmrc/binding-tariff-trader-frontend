@@ -244,8 +244,7 @@ whenToSendSample.legend = Are you sending a sample?
 
 returnSamples.title = Returning Samples - GOV.UK
 returnSamples.heading = Would you like the samples returned?
-returnSamples.first.paragraph = Samples will be retured where possible.In some cases samples may be damaged during testing.
-returnSamples.second.paragraph = Postage and packaging costs need to be paid upfront to return the samples.
+returnSamples.first.paragraph = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
 returnSamples.yesReturnSamples = Yes
 returnSamples.noDontReturnSamples = No
 returnSamples.checkYourAnswersLabel = Would you like the sample returned?
