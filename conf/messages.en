@@ -256,8 +256,9 @@ similarItemCommodityCode.yesAwareSimilarCode = Yes
 similarItemCommodityCode.noNotAware = No
 similarItemCommodityCode.checkYourAnswersLabel = Do you know of a similar item that already has a ruling?
 similarItemCommodityCode.error.required = Select yes if you know of a similar item that has a ruling
-similarItemCommodityCode.listItem1 = If your business or organisation operates in other countries and you're aware that they have a ruling, it is useful for us to know to align the rulings
-similarItemCommodityCode.listItem2 = If you know of a similar item that has a ruling, it can help us to classify your goods
+similarItemCommodityCode.bodyText = It can help us classify your goods and align with other rulings if:
+similarItemCommodityCode.listItem1 = your business or organisation operates in other countries and you have a ruling for that country
+similarItemCommodityCode.listItem2 = you know of a similar item with a ruling
 
 commodityCodeRulingReference.title = Enter the details of the similar rulings - GOV.UK
 commodityCodeRulingReference.heading = What are the details and reference numbers of the similar rulings?
