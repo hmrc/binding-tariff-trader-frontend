@@ -295,14 +295,14 @@ supportingInformationDetails.error.required = Enter supporting information
 supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less
 
 declaration.title = Declaration - GOV.UK
-declaration.heading = Declaration
+declaration.heading = Apply for a ruling
 declaration.checkYourAnswersLabel = Declaration
-declaration.paragraph = By submitting the application you are acknowledging that:
-declaration.listItem1 = the information is correct and up to date to the best of your knowledge
-declaration.listItem2 = supporting data, information and uploaded files provided on the application can be stored on a database and published on the <a href="http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_home.jsp?Lang=en" target="_blank"> Binding Tariff Information website </a>
-declaration.listItem3 = information supplied after the application is submitted can also be stored on a database and published on the <a href="http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_home.jsp?Lang=en" target="_blank"> Binding Tariff Information website </a>
-declaration.listItem4 = anything you have told us that is confidential will not be published
-declaration.listItem5 = if you are sending samples, they may be damaged during laboratory tests
+declaration.paragraph0 = By applying for a Binding Tariff Information ruling, you confirm that the information you provided is correct and complete to the best of your knowledge.
+declaration.paragraph1 = You agree that HMRC can:
+declaration.listItem1 = store the information you provided or may provide after you send your application
+declaration.listItem2 = publish information that is not confidential on the Binding Tariff Information rulings website
+declaration.paragraph2 = You understand that your samples may be damaged during testing.
+declaration.submit = Accept and apply for a ruling
 
 confirmation.title = Application complete - GOV.UK
 confirmation.heading = Application complete
