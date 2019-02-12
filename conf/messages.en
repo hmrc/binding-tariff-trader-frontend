@@ -188,6 +188,7 @@ describeYourItem.listItem5 = how it is packaged, including all materials
 confidentialInformation.title = Enter information not to be published- GOV.UK
 confidentialInformation.heading = What is the confidential information that you do not want us to publish?
 confidentialInformation.field1 = Confidential information
+confidentialInformation.hint = Include the file names of any confidential photographs, manuals, brochures or technical specifications you are going to upload.
 confidentialInformation.checkYourAnswersLabel = Details to remain unpublished
 confidentialInformation.error.field1.required = Enter information that you do not want to be published
 confidentialInformation.error.field1.length = Information must be 100 characters or less
