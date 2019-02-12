@@ -72,7 +72,7 @@ eori.number = EORI number
 eori.details = EORI details
 
 registeredAddressForEori.title = Registered EORI details - GOV.UK
-registeredAddressForEori.heading = What are the registered address details associated with EORI number GB6723190?
+registeredAddressForEori.heading = What is the registered name and address for EORI number GB6723190?
 registeredAddressForEori.note = The details you enter must match the exact format of the registered EORI address
 registeredAddressForEori.businessName = Business, organisation or individual''s name
 registeredAddressForEori.addressLine1 = Address line 1
