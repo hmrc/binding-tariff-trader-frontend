@@ -143,12 +143,12 @@ enterContactDetails.error.field3.length = Direct telephone number must be 20 cha
 
 acceptItemInformationList.title = Information about your item - GOV.UK
 acceptItemInformationList.heading = Information you must provide about your item to get the correct commodity code
-acceptItemInformationList.askfor.heading = You will be asked to supply where appropriate:
-acceptItemInformationList.askfor.item1 = any confidential information you do not want to be published on the Binding Tariff Information rulings website
-acceptItemInformationList.askfor.item2 = a detailed description of your item to help to determine its classification
-acceptItemInformationList.askfor.item3 = photographs, manuals, ingredients lists or technical specifications to support your description and help to speed up the application
-acceptItemInformationList.askfor.item4 = a commodity code if you have found one
-acceptItemInformationList.askfor.item5 = a sample if it is needed
+acceptItemInformationList.important = You will be able to tell us if any of the information is confidential. We will not publish any confidential information on the rulings website.
+acceptItemInformationList.askfor.paragraph0 = You must provide a detailed description of your item. The more detailed the description, the faster we will be able to classify your item.
+acceptItemInformationList.askfor.paragraph1 = You can upload photographs, manuals, brochures or technical specifications that support your description.
+acceptItemInformationList.askfor.paragraph2 = You can let us know if you:
+acceptItemInformationList.askfor.item1 = think you have found the correct commodity code
+acceptItemInformationList.askfor.item2 = need to send samples
 
 informationAboutYourItem.title = Information not to be published - GOV.UK
 informationAboutYourItem.heading = Is there any confidential information about your item that you do not want us to publish?

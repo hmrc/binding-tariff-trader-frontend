@@ -33,14 +33,22 @@
 
         @components.heading("acceptItemInformationList.heading")
 
-        <p>@messages("acceptItemInformationList.askfor.heading")</p>
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Warning</span>
+            </i>
+            <strong class="bold-small">
+            @messages("acceptItemInformationList.important")
+            </strong>
+        </div>
+
+        <p>@messages("acceptItemInformationList.askfor.paragraph0")</p>
+        <p>@messages("acceptItemInformationList.askfor.paragraph1")</p>
+        <p>@messages("acceptItemInformationList.askfor.paragraph2")</p>
 
         <ul class="list list-bullet">
             <li>@messages("acceptItemInformationList.askfor.item1")</li>
             <li>@messages("acceptItemInformationList.askfor.item2")</li>
-            <li>@messages("acceptItemInformationList.askfor.item3")</li>
-            <li>@messages("acceptItemInformationList.askfor.item4")</li>
-            <li>@messages("acceptItemInformationList.askfor.item5")</li>
         </ul>
 
         @components.submit_button()
