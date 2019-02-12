@@ -161,6 +161,7 @@ informationAboutYourItem.error.required = Select yes if you have information tha
 previousCommodityCode.title = Enter reference number of ruling to renew - GOV.UK
 previousCommodityCode.heading = What is the reference number for the ruling you want to renew?
 previousCommodityCode.field1 = Ruling reference number
+previousCommodityCode.field1.hint = The reference number, for example GB12345678, is on the ruling certificate.
 previousCommodityCode.checkYourAnswersLabel = Renewal reference number
 previousCommodityCode.error.field1.required = Enter ruling reference number
 previousCommodityCode.error.field1.length = Previous Binding Tariff Information ruling must be 100 characters or less
