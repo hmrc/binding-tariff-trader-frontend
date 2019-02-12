@@ -262,8 +262,7 @@ similarItemCommodityCode.listItem2 = you know of a similar item with a ruling
 
 commodityCodeRulingReference.title = Enter the details of the similar rulings - GOV.UK
 commodityCodeRulingReference.heading = What are the details and reference numbers of the similar rulings?
-commodityCodeRulingReference.label = You can include multiple reference numbers and an explanation
-commodityCodeRulingReference.whatis = The reference number is supplied on the certificate when the ruling is issued.
+commodityCodeRulingReference.hint = The reference number, for example GB12345678 and FR12345678, is on the ruling certificate. You can include more than one reference number.
 commodityCodeRulingReference.checkYourAnswersLabel = Ruling reference number
 commodityCodeRulingReference.error.required = Enter the ruling reference number and explanation
 commodityCodeRulingReference.error.length = Ruling reference number must be 100 characters or less
