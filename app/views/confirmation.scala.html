@@ -37,20 +37,25 @@
 		  <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
 		</ul>
 
-		<h2 class="heading-medium">@messages("confirmation.heading2.whatNext")</h2>
-		<p>@Html(messages("confirmation.paragraph.whatNext"))</p>
 
 		<h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
-		<p>@messages("confirmation.paragraph1.sendingSamples") @messages("confirmation.refValue", confirmation.reference)</p>
-		<p>@messages("confirmation.paragraph2.sendingSamples")</p>
 
-		<p><a href="https://www.gov.uk/guidance/binding-tariff-information-rulings#samples">@messages("confirmation.paragraph3.sendingSamples.link")</a></p>
+        @components.icon_important("confirmation.sendingSamples.important")
 
-		<p>@messages("confirmation.paragraph4.sendingSamples")</p>
+        <p>@messages("confirmation.paragraph0.sendingSamples")</p>
+
+		<p>@messages("confirmation.paragraph1.sendingSamples") @messages("confirmation.refValue", confirmation.reference) .
+		@messages("confirmation.paragraph2.sendingSamples")</p>
 
 		<address>
 			@Html(messages("confirmation.sendingSamples.address"))
 		</address>
 
-		<p><a href="#">@messages("confirmation.paragraph5.sendingSamples.link")</a></p>
+    <h2 class="heading-medium">@messages("confirmation.heading2.whatNext")</h2>
+    <p>
+        @Html(messages("confirmation.paragraph.whatNext0")) <br/>
+        @Html(messages("confirmation.paragraph.whatNext1"))
+    </p>
+
+    <p><a href="#">@messages("confirmation.paragraph5.sendingSamples.link")</a></p>
 }
