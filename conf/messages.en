@@ -226,7 +226,6 @@ commodityCodeDigits.heading = What is the commodity code you found for your item
 commodityCodeDigits.checkYourAnswersLabel = Commodity code
 commodityCodeDigits.error.required = Enter a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
-commodityCodeDigits.label = Entering at least the first 2 numbers of this code can help to speed up your application
 
 whenToSendSample.title = Samples - GOV.UK
 whenToSendSample.heading = Samples
