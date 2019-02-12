@@ -27,25 +27,23 @@ index.home = Home
 
 beforeYouStart.title = Before you start - GOV.UK
 beforeYouStart.heading = Information you need to apply for a ruling
-beforeYouStart.paragraph0 = Collect this information before you start. You will not be able to save this application and return to it later.
 beforeYouStart.subheading0 = About you
-beforeYouStart.subsection0.paragraph0 = You need your registered EORI address.
 beforeYouStart.subheading1 = About the item
-beforeYouStart.subsection0.paragraph1 = You need your registered EORI address.
+beforeYouStart.subheading2 = To apply for another business or organisation
 
-beforeYouStart.paragraph1 = Before you start, make sure that you are able to provide:
-beforeYouStart.paragraph1.item1 = your registered EORI address
-beforeYouStart.paragraph1.item2 = a breakdown of your item''s ingredients or parts
-beforeYouStart.paragraph1.item3 = to know how it is made
-beforeYouStart.paragraph1.item4 = to know what it is used for and how it works
-beforeYouStart.paragraph1.item5 = to know how it is packaged
-beforeYouStart.paragraph1.item6 = to upload photographs, manuals or technical specifications where appropriate
-beforeYouStart.paragraph1.item7 = to send a sample where appropriate 
-beforeYouStart.paragraph2 = To apply for another business or organisation you will also need:
-beforeYouStart.paragraph2.item1 = written authorisation from them dated within the last 12 months
-beforeYouStart.paragraph2.item2 = their EORI number
-beforeYouStart.paragraph2.item3 = their registered EORI address
-beforeYouStart.paragraph3 = If you are renewing a ruling, you will need your previous ruling reference number.
+beforeYouStart.paragraph0 = Collect this information before you start. You will not be able to save this application and return to it later.
+beforeYouStart.paragraph1 = You need your registered EORI address.
+beforeYouStart.paragraph2 = You need to know:
+beforeYouStart.paragraph2.item1 = how it is made including a list of ingredients or parts
+beforeYouStart.paragraph2.item2 = what it is used for and how it works
+beforeYouStart.paragraph2.item3 = how it is packaged
+beforeYouStart.paragraph3 = If relevant, you'll also need to:
+beforeYouStart.paragraph3.item1 = upload photographs, manuals, brochures or technical specifications
+beforeYouStart.paragraph3.item2 = send a sample
+beforeYouStart.paragraph4 = You need:
+beforeYouStart.paragraph4.item1 = written authorisation from within the last 12 months
+beforeYouStart.paragraph4.item2 = their EORI number
+beforeYouStart.paragraph4.item3 = their registered EORI address
 
 
 session_expired.title = For your security, this service has been reset
