@@ -22,12 +22,17 @@ error.required = Enter a value
 error.summary.title = There is a problem
 
 index.title = BTI home - GOV.UK
-index.heading = What would you like to do?
+index.heading = Apply for a BTI ruling
 index.home = Home
 
 beforeYouStart.title = Before you start - GOV.UK
-beforeYouStart.heading = Before you start
-beforeYouStart.paragraph0 = You will not be able to save this application and return to it later.
+beforeYouStart.heading = Information you need to apply for a ruling
+beforeYouStart.paragraph0 = Collect this information before you start. You will not be able to save this application and return to it later.
+beforeYouStart.subheading0 = About you
+beforeYouStart.subsection0.paragraph0 = You need your registered EORI address.
+beforeYouStart.subheading1 = About the item
+beforeYouStart.subsection0.paragraph1 = You need your registered EORI address.
+
 beforeYouStart.paragraph1 = Before you start, make sure that you are able to provide:
 beforeYouStart.paragraph1.item1 = your registered EORI address
 beforeYouStart.paragraph1.item2 = a breakdown of your item''s ingredients or parts
@@ -125,8 +130,7 @@ registerBusinessRepresenting.error.postCode.length = Postcode must be 9 characte
 registerBusinessRepresenting.error.country.length = Country must be 60 characters or less
 
 enterContactDetails.title = Contact details - GOV.UK
-enterContactDetails.heading = Who is the contact for this application?
-enterContactDetails.paragraph = The contact details will only be used for the purpose of this application
+enterContactDetails.heading = What are the details of who we could contact for this application?
 enterContactDetails.field1 = Full name
 enterContactDetails.field2 = Email address
 enterContactDetails.field3 = Telephone number (optional)
@@ -140,7 +144,7 @@ enterContactDetails.error.field2.length = Email address must be 100 characters o
 enterContactDetails.error.field3.length = Direct telephone number must be 20 characters or less
 
 acceptItemInformationList.title = Information about your item - GOV.UK
-acceptItemInformationList.heading = Provide information about your item
+acceptItemInformationList.heading = Information you must provide about your item to get the correct commodity code
 acceptItemInformationList.askfor.heading = You will be asked to supply where appropriate:
 acceptItemInformationList.askfor.item1 = any confidential information you do not want to be published on the Binding Tariff Information rulings website
 acceptItemInformationList.askfor.item2 = a detailed description of your item to help to determine its classification
@@ -149,8 +153,8 @@ acceptItemInformationList.askfor.item4 = a commodity code if you have found one
 acceptItemInformationList.askfor.item5 = a sample if it is needed
 
 informationAboutYourItem.title = Information not to be published - GOV.UK
-informationAboutYourItem.heading = Is there any information about your item that you do not want to be published?
-informationAboutYourItem.paragraph = This can also include uploaded images and files that you do not want to be published on the Binding Tariff Information rulings website.
+informationAboutYourItem.heading = Is there any confidential information about your item that you do not want us to publish?
+informationAboutYourItem.paragraph = This can include photographs, manuals, brochures or technical specifications.
 informationAboutYourItem.yesIHaveInfo = Yes
 informationAboutYourItem.no = No
 informationAboutYourItem.checkYourAnswersLabel =  Information not to be published
@@ -166,37 +170,37 @@ previousCommodityCode.details.summary = What is my Binding Tariff Information ru
 previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling. 
 
 describeYourItem.title = Describe your item - GOV.UK
-describeYourItem.heading = Describe your item in detail
+describeYourItem.heading = Detailed description of your item
 describeYourItem.field1 = Item name
-describeYourItem.field2 = Item description
+describeYourItem.field2 = Description
 describeYourItem.checkYourAnswersLabel = Item description
 describeYourItem.error.field1.required = Enter item name
 describeYourItem.error.field2.required = Enter a detailed description of your item
 describeYourItem.error.field1.length = Item name must be 100 characters or less
 describeYourItem.error.field2.length = Describe your item in detail must be 100 characters or less
-describeYourItem.pullOut.paragraph = Include as much information as you can to prevent any delays to your application. Information entered on this page might be used as part of the published ruling. 
-describeYourItem.paragraph.includes = Describe your item, this may include:
+describeYourItem.pullOut.paragraph = The more detailed your description, the faster we will be able to classify your item. Information entered on this page might be used as part of the published ruling. 
+describeYourItem.paragraph.includes = This may include:
 describeYourItem.listItem1 = what it is used for
 describeYourItem.listItem2 = what it is made from including all materials, parts or ingredients
 describeYourItem.listItem3 = how it is made, including all manufacturing processes
 describeYourItem.listItem4 = how it works
-describeYourItem.listItem4 = how it is packaged, including all materials
+describeYourItem.listItem5 = how it is packaged, including all materials
 
 confidentialInformation.title = Enter information not to be published- GOV.UK
-confidentialInformation.heading = What is the information that you do not want to be published?
-confidentialInformation.field1 = This information will not be published on the Binding Tariff Information ruling website
+confidentialInformation.heading = What is the confidential information that you do not want us to publish?
+confidentialInformation.field1 = Confidential information
 confidentialInformation.checkYourAnswersLabel = Details to remain unpublished
 confidentialInformation.error.field1.required = Enter information that you do not want to be published
 confidentialInformation.error.field1.length = Information must be 100 characters or less
 
 askForUploadSupportingMaterial.title = Do you have files to upload? - GOV.UK
-askForUploadSupportingMaterial.heading = Have you any photographs, manuals, ingredients lists or technical specifications to upload?
+askForUploadSupportingMaterial.heading = Do you want to upload any photographs, manuals, brochures or technical specifications?
 askForUploadSupportingMaterial.checkYourAnswersLabel =  Do you have files to upload?
-askForUploadSupportingMaterial.label = Providing extra information about your item can speed up your application.
+askForUploadSupportingMaterial.label = Providing more information means we will be able to classify your item faster. 
 askForUploadSupportingMaterial.error.required = Select yes if you have files to upload
 
 uploadSupportingMaterialMultiple.title = Upload files - GOV.UK
-uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, ingredients lists or technical specifications
+uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, brochures or technical specifications
 uploadSupportingMaterialMultiple.label = Upload files
 uploadSupportingMaterialMultiple.upload.title =  You can upload:
 uploadSupportingMaterialMultiple.upload.restrictionFiles = more than one file at a time, up to 10 files
@@ -210,14 +214,14 @@ uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterial
 uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
 
 commodityCodeBestMatch.title = Have you found a commodity code? - GOV.UK
-commodityCodeBestMatch.heading = Have you found a commodity code that you think matches your item?
+commodityCodeBestMatch.heading = Have you found a commodity code for your item?
 commodityCodeBestMatch.yesFoundCommodityCode = Yes
 commodityCodeBestMatch.noHaventFoundCommodityCode = No
 commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code?
 commodityCodeBestMatch.error.required = Select yes if you have found a commodity code
 
 commodityCodeDigits.title = Enter the commodity code - GOV.UK
-commodityCodeDigits.heading = What is the commodity code you think matches your item?
+commodityCodeDigits.heading = What is the commodity code you found for your item?
 commodityCodeDigits.checkYourAnswersLabel = Commodity code
 commodityCodeDigits.error.required = Enter a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
@@ -230,9 +234,9 @@ whenToSendSample.notSendingSample = No
 whenToSendSample.checkYourAnswersLabel = Are you sending a sample?
 whenToSendSample.error.required = Select yes if you will be sending a sample
 whenToSendSample.first.paragraph = We usually ask for samples of:
-whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for the Customs Duty Liability Team to contact you if one is needed.
+whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for HMRC to contact you if one is needed.
 whenToSendSample.third.paragraph = <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#check-if-you-need-to-provide-a-sample" target="_blank">Get more information about samples, this will open in a new window</a>
-whenToSendSample.fourth.paragraph = The address for samples will be provided at the end of the application.
+whenToSendSample.fourth.paragraph = We will let you know where to send your sample at the end of the application.
 whenToSendSample.listItem1 = textiles
 whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
@@ -248,7 +252,7 @@ returnSamples.checkYourAnswersLabel = Would you like the sample returned?
 returnSamples.error.required = Select yes if you would like the sample returned
 
 similarItemCommodityCode.title = Similar item with a ruling - GOV.UK
-similarItemCommodityCode.heading = Do you know of a similar item that already has a Binding Tariff Information ruling?
+similarItemCommodityCode.heading = Do you know of a similar item that already has a BTI ruling?
 similarItemCommodityCode.yesAwareSimilarCode = Yes
 similarItemCommodityCode.noNotAware = No
 similarItemCommodityCode.checkYourAnswersLabel = Do you know of a similar item that already has a ruling?
@@ -265,28 +269,28 @@ commodityCodeRulingReference.error.required = Enter the ruling reference number 
 commodityCodeRulingReference.error.length = Ruling reference number must be 100 characters or less
 
 legalChallenge.title = Problems with the classification of the item - GOV.UK
-legalChallenge.heading = Are you aware of any problems with the classification of the item?
+legalChallenge.heading = Do you know if there have been any problems classifying the item?
 legalChallenge.yesLegalChallenge = Yes
 legalChallenge.noLegalChallenge = No
 legalChallenge.checkYourAnswersLabel = Are you aware of any problems with the classification of the item?
 legalChallenge.error.required = Select if you are aware of any problems with the item''s classification
-legalChallenge.paragraph = Examples of this include court rulings or when a commodity code is under review in any country. This helps the Customs Duty Liability Team to avoid any contradictions in rulings.
+legalChallenge.paragraph = This includes court rulings and when a commodity code is being reviewed. This helps us align with other rulings.
 
 legalChallengeDetails.title = Enter problems with the classification of the item - GOV.UK
-legalChallengeDetails.heading = What are the problems with the classification of your item?
+legalChallengeDetails.heading = What are the problems with classifying your item?
 legalChallengeDetails.checkYourAnswersLabel = Problems with the classification of the item
 legalChallengeDetails.error.required = Enter any problems with the classification of your item
 legalChallengeDetails.error.length = Details of any problems with classification must be 100 characters or less
 
 supportingInformation.title = Other information to support this application - GOV.UK
-supportingInformation.heading = Do you want to enter any other information to support this application? 
+supportingInformation.heading = Do you need to enter any other information to support this application? 
 supportingInformation.yesInformation = Yes
 supportingInformation.noInformation = No
 supportingInformation.checkYourAnswersLabel = Supporting information 
 supportingInformation.error.required = Select yes if you want to enter any supporting information
 
 supportingInformationDetails.title = Enter supporting information - GOV.UK
-supportingInformationDetails.heading = What is the supporting information you want to provide?
+supportingInformationDetails.heading = What is the information you want to provide?
 supportingInformationDetails.checkYourAnswersLabel = Do you have supporting information?
 supportingInformationDetails.error.required = Enter supporting information
 supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less
