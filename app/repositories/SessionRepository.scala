@@ -18,33 +18,37 @@ package repositories
 
 import javax.inject.{Inject, Singleton}
 import org.joda.time.{DateTime, DateTimeZone}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{Format, JsValue, Json, OFormat}
 import play.api.{Configuration, Logger}
-import play.modules.reactivemongo.MongoDbConnection
 import reactivemongo.api.DefaultDB
 import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import reactivemongo.play.json.ImplicitBSONHandlers._
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.http.cache.client.CacheMap.formats
 import uk.gov.hmrc.mongo.ReactiveRepository
 import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+
 case class DatedCacheMap(id: String,
                          data: Map[String, JsValue],
                          lastUpdated: DateTime = DateTime.now(DateTimeZone.UTC))
 
 object DatedCacheMap {
-  implicit val dateFormat = ReactiveMongoFormats.dateTimeFormats
-  implicit val formats = Json.format[DatedCacheMap]
+  implicit val dateFormat: Format[DateTime] = ReactiveMongoFormats.dateTimeFormats
+  implicit val formats: OFormat[DatedCacheMap] = Json.format[DatedCacheMap]
 
   def apply(cacheMap: CacheMap): DatedCacheMap = DatedCacheMap(cacheMap.id, cacheMap.data)
 }
 
 class ReactiveMongoRepository(config: Configuration, mongo: () => DefaultDB)
-  extends ReactiveRepository[DatedCacheMap, BSONObjectID](config.getString("appName").get, mongo, DatedCacheMap.formats) {
+  extends ReactiveRepository[DatedCacheMap, BSONObjectID](
+    collectionName = config.getString("appName").get,
+    mongo = mongo,
+    domainFormat = DatedCacheMap.formats) {
 
   val fieldName = "lastUpdated"
   val createdIndexName = "userAnswersExpiry"
@@ -56,10 +60,9 @@ class ReactiveMongoRepository(config: Configuration, mongo: () => DefaultDB)
   private def createIndex(field: String, indexName: String, ttl: Int): Future[Boolean] = {
     collection.indexesManager.ensure(Index(Seq((field, IndexType.Ascending)), Some(indexName),
       options = BSONDocument(expireAfterSeconds -> ttl))) map {
-      result => {
+      result =>
         Logger.debug(s"set [$indexName] with value $ttl -> result : $result")
         result
-      }
     } recover {
       case e =>
         Logger.error("Failed to set TTL index", e)
@@ -77,11 +80,12 @@ class ReactiveMongoRepository(config: Configuration, mongo: () => DefaultDB)
     }
   }
 
-  def get(id: String): Future[Option[CacheMap]] =
-    collection.find(byId(id)).one[CacheMap]
+  def get(id: String): Future[Option[CacheMap]] = {
+    collection.find(byId(id), Option.empty[BSONDocument]).one[CacheMap]
+  }
 
   def remove(cm: CacheMap): Future[Boolean] = {
-    collection.remove(byId(cm.id)).map(_.ok)
+    collection.delete().one(byId(cm.id)).map(_.ok)
   }
 
   private def byId(value: String) = {
@@ -90,11 +94,9 @@ class ReactiveMongoRepository(config: Configuration, mongo: () => DefaultDB)
 }
 
 @Singleton
-class SessionRepository @Inject()(config: Configuration) {
+class SessionRepository @Inject()(config: Configuration, mongoDbProvider: MongoDbProvider) {
 
-  class DbConnection extends MongoDbConnection
-
-  private lazy val sessionRepository = new ReactiveMongoRepository(config, new DbConnection().db)
+  private lazy val sessionRepository = new ReactiveMongoRepository(config, mongoDbProvider.mongo)
 
   def apply(): ReactiveMongoRepository = sessionRepository
 }

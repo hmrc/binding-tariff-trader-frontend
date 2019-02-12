@@ -27,7 +27,7 @@ import scala.concurrent.Future
 class MongoCacheConnector @Inject()(val sessionRepository: SessionRepository) extends DataCacheConnector {
 
   def save[A](cacheMap: CacheMap): Future[CacheMap] = {
-    sessionRepository().upsert(cacheMap).map{_ => cacheMap}
+    sessionRepository().upsert(cacheMap).map {_ => cacheMap}
   }
 
   def fetch(cacheId: String): Future[Option[CacheMap]] =
