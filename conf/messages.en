@@ -325,7 +325,7 @@ confirmation.download.link.accessibleText = Download an accessible text file of 
 
 uploadWrittenAuthorisation.title = Upload written authorisation - GOV.UK
 uploadWrittenAuthorisation.heading = Upload written authorisation from the business, organisation or individual you''re representing
-uploadWrittenAuthorisation.label = Choose a file
+uploadWrittenAuthorisation.label = Upload a file
 uploadWrittenAuthorisation.label.replace = Replace file
 uploadWrittenAuthorisation.checkYourAnswersLabel =  Written authorisation
 uploadWrittenAuthorisation.error.selectFile = You must select a file, you cannot continue without uploading written authorisation
@@ -333,9 +333,11 @@ uploadWrittenAuthorisation.error.size = Your document will not upload because it
 uploadWrittenAuthorisation.error.fileType = Your document will not upload because it''s not a valid file type
 uploadWrittenAuthorisation.error.required = Enter uploadWrittenAuthorisation
 uploadWrittenAuthorisation.error.length = must be 100 characters or less
-uploadWrittenAuthorisation.upload.title =  You can upload:
+uploadWrittenAuthorisation.upload.title =  The authorisation must be:
 uploadWrittenAuthorisation.upload.restrictionSize = a maximum file size of 10MB
 uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg and txt files
+uploadWrittenAuthorisation.upload.timeLimit = from within the last 12 months
+uploadWrittenAuthorisation.upload.document = a digital document, a scanned letter or copy of an email from the business, organisation or individual
 
 checkYourAnswers.applicantRegisteredSection = Application details
 checkYourAnswers.applicantOtherBusiness = Applying for another business, organisation or individual
