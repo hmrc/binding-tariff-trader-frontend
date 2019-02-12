@@ -215,6 +215,7 @@ uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple
 
 commodityCodeBestMatch.title = Have you found a commodity code? - GOV.UK
 commodityCodeBestMatch.heading = Have you found a commodity code for your item?
+commodityCodeBestMatch.bodyText = Entering a commodity code, even just the first 2 numbers, means we will be able to classify your item faster.
 commodityCodeBestMatch.yesFoundCommodityCode = Yes
 commodityCodeBestMatch.noHaventFoundCommodityCode = No
 commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code?

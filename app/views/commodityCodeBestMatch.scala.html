@@ -35,6 +35,10 @@
 
         @components.heading("commodityCodeBestMatch.heading")
 
+        <p>
+            @messages("commodityCodeBestMatch.bodyText")
+        </p>
+
         @components.input_radio(
             field = form("value"),
             legend = messages("commodityCodeBestMatch.heading"),
