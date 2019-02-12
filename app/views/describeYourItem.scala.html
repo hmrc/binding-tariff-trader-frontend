@@ -22,6 +22,8 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+
+
 @main_template(
     title = s"${errorPrefix(form)} ${messages("describeYourItem.title")}",
     appConfig = appConfig,
@@ -35,29 +37,31 @@
 
         @components.heading("describeYourItem.heading")
 
-        <div class="panel panel-border-wide">
-          <p>@messages("describeYourItem.pullOut.paragraph")</p>
-        </div>
+        <p>@messages("describeYourItem.pullOut.paragraph")</p>
 
         @components.input_text(
             field = form("field1"),
             label = messages("describeYourItem.field1")
         )
 
-        <p>@messages("describeYourItem.paragraph.includes")</p>
-
-        <ul class="list list-bullet">
-            <li>@messages("describeYourItem.listItem1")</li>
-            <li>@messages("describeYourItem.listItem2")</li>
-            <li>@messages("describeYourItem.listItem3")</li>
-            <li>@messages("describeYourItem.listItem4")</li>
-        </ul>
-
         @components.input_textarea(
             field = form("field2"),
-            label = messages("describeYourItem.field2")
+            label = messages("describeYourItem.field2"),
+            htmlHint = Some(descriptionHint)
         )
 
         @components.submit_button()
     }
+}
+
+@descriptionHint = {
+    <p>@messages("describeYourItem.paragraph.includes")</p>
+
+    <ul class="list list-bullet">
+        <li>@messages("describeYourItem.listItem1")</li>
+        <li>@messages("describeYourItem.listItem2")</li>
+        <li>@messages("describeYourItem.listItem3")</li>
+        <li>@messages("describeYourItem.listItem4")</li>
+        <li>@messages("describeYourItem.listItem5")</li>
+    </ul>
 }
