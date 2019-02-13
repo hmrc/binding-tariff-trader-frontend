@@ -31,7 +31,7 @@
             <span class="form-hint">@hint</span>
         }
         @htmlHint.map { htmlHint =>
-            <span class="form-hint">@htmlHint</span>
+            <div class="form-hint">@htmlHint</div>
         }
         @field.errors.map { error =>
             <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>

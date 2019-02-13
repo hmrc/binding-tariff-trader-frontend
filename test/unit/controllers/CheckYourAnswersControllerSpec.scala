@@ -44,10 +44,10 @@ class CheckYourAnsCheckYourAnswersControllerwersControllerSpec extends Controlle
       status(result) mustBe OK
 
       val expectedSections = Seq(
-        AnswerSection(Some("Application details"), Seq.empty),
-        AnswerSection(Some("Applying for another business, organisation or individual"), Seq.empty),
+        AnswerSection(Some("Your details"), Seq.empty),
+        AnswerSection(Some("Details of the business, organisation or individual you represent"), Seq.empty),
         AnswerSection(Some("Information about your item"), Seq.empty),
-        AnswerSection(Some("Other information"), Seq.empty)
+        AnswerSection(Some("Other information about your item"), Seq.empty)
 
       )
 

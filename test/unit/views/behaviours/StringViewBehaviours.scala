@@ -35,7 +35,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
       case Some(l) => l
       case _ => getMessage(s"$messageKeyPrefix.heading") match {
         case Some(h) => h
-        case _ => "no label or value defined"
+        case _ => ""
       }
     }
   }
