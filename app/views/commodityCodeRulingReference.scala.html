@@ -35,11 +35,11 @@
 
         @components.heading("commodityCodeRulingReference.heading")
 
-        <p>@messages("commodityCodeRulingReference.whatis")</p>
 
         @components.input_textarea(
           field = form("value"),
-          label = messages("commodityCodeRulingReference.label")
+          label = "",
+          hint = Some(messages("commodityCodeRulingReference.hint"))
         )
 
         @components.submit_button()

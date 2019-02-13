@@ -37,7 +37,8 @@
 
         @components.input_textarea(
             field = form("field1"),
-            label = messages("confidentialInformation.field1")
+            label = messages("confidentialInformation.field1"),
+            hint = Some(messages("confidentialInformation.hint"))
         )
 
         @components.submit_button()
