@@ -13,7 +13,7 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"    % "0.2.0",
     "uk.gov.hmrc"       %% "play-health"                      % "3.11.0-play-25",
     "uk.gov.hmrc"       %% "play-language"                    % "3.4.0",
-    "uk.gov.hmrc"       %% "play-ui"                          % "7.31.0-play-25",
+    "uk.gov.hmrc"       %% "play-ui"                          % "7.32.0-play-25",
     "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.12.0-play-25",
     "uk.gov.hmrc"       %% "play-whitelist-filter"            % "2.0.0"
   )
