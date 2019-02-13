@@ -22,13 +22,13 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    <div class="govuk-box-highlight">
-        @components.heading("confirmation.heading", "heading-xlarge")
-        <p class="font-large">
-            @messages("confirmation.yourRefNumber") <br>
-            <span id="confirmation-reference" class="bold">@messages("confirmation.refValue", confirmation.reference)</span>
-        </p>
-    </div>
+	  <div class="govuk-box-highlight">
+			@components.heading("confirmation.heading", "heading-xlarge")
+      <span class="font-large">
+    		@messages("confirmation.yourRefNumber")<br>
+        <span id="confirmation-reference" class="font-large bold">@messages("confirmation.refValue", confirmation.reference)</span>
+      </span>
+	  </div>
 
     <p>@messages("confirmation.paragragh.confirmationEmail")</p>
     <ul class="list">
