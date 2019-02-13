@@ -50,6 +50,8 @@ class Navigator @Inject()() {
 
     AskForUploadSupportingMaterialPage -> (_ => routes.AskForUploadSupportingMaterialController.onPageLoad(NormalMode)),
 
+    SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
+
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
 
     CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)),

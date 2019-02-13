@@ -49,8 +49,7 @@
             @components.input_file(
                 field = form("multiple-file-input"),
                 label = messages("uploadSupportingMaterialMultiple.label"),
-                accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt"),
-                multiple = true
+                accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt")
             )
 
             <div id="list-of-files-table" class="draganddroptable"></div>
@@ -65,6 +64,10 @@
             </strong>
         </div>
 
-        @components.submit_button(Some(messages("site.upload_continue")))
+        <div class="section">
+            <button id="submit" class="button"> Upload </button>
+            <span style="position: relative;top: 9px;left: 14px;"> <a href="@routes.SupportingMaterialFileListController.onPageLoad(mode)">Cancel</a></span>
+        </div>
+
     }
 }

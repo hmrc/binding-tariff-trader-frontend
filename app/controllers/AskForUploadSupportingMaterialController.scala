@@ -62,7 +62,7 @@ class AskForUploadSupportingMaterialController @Inject()(appConfig: FrontendAppC
         Future.successful(BadRequest(askForUploadSupportingMaterial(appConfig, formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(AskForUploadSupportingMaterialPage, value)
-        val nextPage = if (value) UploadSupportingMaterialMultiplePage else CommodityCodeBestMatchPage
+        val nextPage = if (value) SupportingMaterialFileListPage else CommodityCodeBestMatchPage
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
           _ => Redirect(navigator.nextPage(nextPage, mode)(updatedAnswers))
