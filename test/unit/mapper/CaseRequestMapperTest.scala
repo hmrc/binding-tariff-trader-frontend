@@ -54,7 +54,7 @@ class CaseRequestMapperTest extends UnitSpec {
       application.offline shouldBe false
       application.goodName shouldBe "Good Name"
       application.goodDescription shouldBe "Good Description"
-      application.sampleToBeProvided shouldBe false
+      application.sampleToBeProvided shouldBe true
       application.sampleToBeReturned shouldBe false
 
       // Then optional Fields should be blank
@@ -100,8 +100,8 @@ class CaseRequestMapperTest extends UnitSpec {
       application.offline shouldBe false
       application.goodName shouldBe "Good Name"
       application.goodDescription shouldBe "Good Description"
-      application.sampleToBeProvided shouldBe false
-      application.sampleToBeReturned shouldBe false
+      application.sampleToBeProvided shouldBe true
+      application.sampleToBeReturned shouldBe true
 
       // Then optional Fields should be blank
       application.confidentialInformation shouldBe Some("Confidential Info")
@@ -166,7 +166,13 @@ class CaseRequestMapperTest extends UnitSpec {
           ),
           CommodityCodeRulingReferencePage.toString -> js("Related BTI Reference"),
           LegalChallengeDetailsPage.toString -> js("Known Legal Proceedings"),
-          CommodityCodeDigitsPage.toString -> js("Envisaged Commodity Code")
+          CommodityCodeDigitsPage.toString -> js("Envisaged Commodity Code"),
+          WhenToSendSamplePage.toString -> js(
+            WhenToSendSample.Yes
+          ),
+          ReturnSamplesPage.toString -> js(
+            ReturnSamples.Yes
+          )
         )
       )
     )
@@ -198,6 +204,9 @@ class CaseRequestMapperTest extends UnitSpec {
               "Good Name",
               "Good Description"
             )
+          ),
+          WhenToSendSamplePage.toString -> js(
+            WhenToSendSample.Yes
           )
         )
       )
