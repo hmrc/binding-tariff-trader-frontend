@@ -29,7 +29,7 @@ object AppDependencies {
     "org.scalacheck"            %% "scalacheck"             % "1.14.0"            % scope,
     "org.scalatest"             %% "scalatest"              % "3.0.4"             % scope,
     "org.scalatestplus.play"    %% "scalatestplus-play"     % "2.0.1"             % scope,
-    "uk.gov.hmrc"               %% "hmrctest"               % "3.4.0-play-25"     % scope
+    "uk.gov.hmrc"               %% "hmrctest"               % "3.5.0-play-25"     % scope
   )
 
   def apply(): Seq[ModuleID] = (compile ++ test).map(_ withSources())
