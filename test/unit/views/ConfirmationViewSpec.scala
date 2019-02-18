@@ -22,9 +22,11 @@ import views.html.confirmation
 
 class ConfirmationViewSpec extends ViewBehaviours {
 
-  val messageKeyPrefix = "confirmation"
+  private val messageKeyPrefix = "confirmation"
 
-  def createView = () => confirmation(frontendAppConfig, Confirmation("reference"))(fakeRequest, messages)
+  private val confirm = Confirmation("reference", "marisa@example.test")
+
+  def createView = () => confirmation(frontendAppConfig, confirm)(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)
@@ -32,6 +34,8 @@ class ConfirmationViewSpec extends ViewBehaviours {
     "with reference" in {
       val doc = asDocument(createView())
       doc.text() must include("GBreference")
+      doc.text() must include("We have sent your confirmation email to marisa@example.test")
     }
   }
+
 }

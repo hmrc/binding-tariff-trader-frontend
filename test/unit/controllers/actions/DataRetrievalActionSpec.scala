@@ -40,10 +40,10 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
         when(dataCacheConnector.fetch("id")) thenReturn Future(None)
         val action = new Harness(dataCacheConnector)
 
-        val futureResult = action.callTransform(new IdentifierRequest(fakeRequest, "id"))
+        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, "id"))
 
-        whenReady(futureResult) { result =>
-          result.userAnswers.isEmpty mustBe true
+        whenReady(futureResult) {
+          _.userAnswers.isEmpty mustBe true
         }
       }
     }
@@ -54,12 +54,13 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
         when(dataCacheConnector.fetch("id")) thenReturn Future(Some(new CacheMap("id", Map())))
         val action = new Harness(dataCacheConnector)
 
-        val futureResult = action.callTransform(new IdentifierRequest(fakeRequest, "id"))
+        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, "id"))
 
-        whenReady(futureResult) { result =>
-          result.userAnswers.isDefined mustBe true
+        whenReady(futureResult) {
+          _.userAnswers.isDefined mustBe true
         }
       }
     }
   }
+
 }

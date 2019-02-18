@@ -56,20 +56,27 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
   private val auditService = mock[AuditService]
   private val casesService = mock[CasesService]
   private val fileService = mock[FileService]
+  private val btiApp = mock[Application]
+  private val contact = mock[Contact]
 
   private implicit val mat: Materializer = app.materializer
 
   private lazy val error = new IllegalStateException("expected error")
 
-  override def beforeEach(): Unit = {
+  override protected def beforeEach(): Unit = {
     super.beforeEach()
-    reset(casesService, auditService)
+
     when(createdCase.reference).thenReturn("reference")
+    when(createdCase.application).thenReturn(btiApp)
+    when(btiApp.contact).thenReturn(contact)
+    when(contact.email).thenReturn("luigi@example.test")
+
     when(mapper.map(any[UserAnswers])).thenReturn(newCaseReq)
   }
 
-  override def afterEach(): Unit = {
+  override protected def afterEach(): Unit = {
     super.afterEach()
+    reset(casesService, auditService)
   }
 
   private def givenTheCaseCreatesSuccessfully(): Unit = {
@@ -119,7 +126,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
       await(c.onSubmit(NormalMode)(req))
 
       verify(auditService, times(1)).auditBTIApplicationSubmissionSuccessful(refEq(createdCase))(any[HeaderCarrier])
-
       verifyNoMoreInteractions(auditService)
     }
 
@@ -135,7 +141,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
       caught mustBe error
 
       verify(auditService, never).auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier])
-
       verifyNoMoreInteractions(auditService)
     }
 
