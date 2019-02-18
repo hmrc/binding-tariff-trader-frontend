@@ -22,7 +22,7 @@ import views.html.declaration
 
 class DeclarationViewSpec extends ViewBehaviours {
 
-  val messageKeyPrefix = "declaration"
+  private val messageKeyPrefix = "declaration"
 
   def createView = () => declaration(frontendAppConfig, NormalMode)(fakeRequest, messages)
 

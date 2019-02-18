@@ -37,8 +37,16 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase {
   private val form = formProvider()
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): EnterContactDetailsController = {
-    new EnterContactDetailsController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+    new EnterContactDetailsController(
+      frontendAppConfig,
+      messagesApi,
+      FakeDataCacheConnector,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl,
+      formProvider
+    )
   }
 
   private def viewAsString(form: Form[_] = form): String = {
