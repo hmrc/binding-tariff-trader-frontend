@@ -321,7 +321,7 @@ confirmation.paragraph.whatNext1 = You can sign in to check the status of your a
 confirmation.refValue = GB{0}
 
 confirmation.yourRefNumber = Your application reference
-confirmation.paragragh.confirmationEmail = We have sent your confirmation email to
+confirmation.paragragh.confirmationEmail = We have sent your confirmation email to {0}
 confirmation.download.link.PDF = Download a PDF of the application
 confirmation.download.link.accessibleText = Download an accessible text file of the application
 

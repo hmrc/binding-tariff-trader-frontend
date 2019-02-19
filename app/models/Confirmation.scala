@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.Json
 
-case class Confirmation(reference: String)
+case class Confirmation(reference: String, emailAddress: String)
 
 object Confirmation {
   implicit val format = Json.format[Confirmation]
