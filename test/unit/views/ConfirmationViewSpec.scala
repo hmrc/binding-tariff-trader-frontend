@@ -17,6 +17,7 @@
 package views
 
 import models.Confirmation
+import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.confirmation
 
@@ -24,9 +25,9 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "confirmation"
 
-  private val confirm = Confirmation("reference", "marisa@example.test")
+  private val confirm = Confirmation("reference", "marisa@example.test", sendingSamples = true)
 
-  def createView = () => confirmation(frontendAppConfig, confirm)(fakeRequest, messages)
+  def createView: () => Html = () => confirmation(frontendAppConfig, confirm)(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)

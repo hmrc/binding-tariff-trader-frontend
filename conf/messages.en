@@ -315,7 +315,8 @@ confirmation.paragraph3.sendingSamples.link = Get more information about samples
 confirmation.sendingSamples.address = HM Revenue and Customs<br> Tariff Classification Service<br> 10th Floor SE<br> Alexander House<br> 21 Victoria Avenue<br> Southend-on-Sea<br> Essex<br> SS99 1AA
 confirmation.homeLink = BTI home page
 confirmation.heading2.whatNext = What happens next
-confirmation.paragraph.whatNext0 = We will give you your ruling within 30 to 60 days of receiving your samples.
+confirmation.paragraph.whatNext0.sample = We will give you your ruling within 30 to 60 days of receiving your samples.
+confirmation.paragraph.whatNext0.nosample = We will give you your ruling within 30 to 60 days.
 confirmation.paragraph.whatNext1 = You can sign in to check the status of your application.
 
 confirmation.refValue = GB{0}
