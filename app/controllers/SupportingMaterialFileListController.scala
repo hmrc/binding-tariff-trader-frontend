@@ -19,16 +19,18 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import forms.UploadSupportingMaterialMultipleFormProvider
+import forms.SupportingMaterialFileListFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{CommodityCodeBestMatchPage, UploadSupportingMaterialMultiplePage}
+import pages._
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.supportingMaterialFileList
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.successful
 
 class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfig,
@@ -38,27 +40,36 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
                                                      identify: IdentifierAction,
                                                      getData: DataRetrievalAction,
                                                      requireData: DataRequiredAction,
-                                                     formProvider: UploadSupportingMaterialMultipleFormProvider
-                                           ) extends FrontendController with I18nSupport {
+                                                     formProvider: SupportingMaterialFileListFormProvider
+                                                    ) extends FrontendController with I18nSupport {
 
   private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
+    val existingFiles = request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
     Ok(supportingMaterialFileList(appConfig, form, existingFiles, mode))
   }
 
-  def onRemove(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def onRemove(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
+    val existingFiles = request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
     val removedFile = existingFiles.filter(_.id != fileId).seq
-    val answers: UserAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, removedFile)
+    val answers: UserAnswers = request.userAnswers.set(SupportingMaterialFileListPage, removedFile)
     dataCacheConnector.save(answers.cacheMap)
-    Ok(supportingMaterialFileList(appConfig, form, removedFile, mode))
+      .map(_ =>
+        Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode))
+      )
   }
 
-
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
-    successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, NormalMode)(request.userAnswers.getOrElse(UserAnswers(request.internalId)))))
+
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, Seq.empty, mode))),
+      {
+        case "Yes" => successful(Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
+        case "No" => successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers.get)))
+      }
+    )
   }
 }

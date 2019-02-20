@@ -54,22 +54,20 @@
             <fieldset  id="select-new-file">
 
                 <div class="multiple-choice">
-                    <input id="add-file-yes" name="add-file-choice" type="radio" value="true" />
+                    <input id="add-file-yes" name="add-file-choice" type="radio" value="Yes" />
                     <label class="block-label selection-button-radio" for="add-file-yes">  @messages("site.yes") </label>
                 </div>
 
                 <div class="multiple-choice">
-                    <input id="add-file-no" type="radio" name="add-file-choice" value="false" checked="checked" />
+                    <input id="add-file-no" type="radio" name="add-file-choice" value="No" checked="checked" />
                     <label class="block-label selection-button-radio" for="add-file-no">  @messages("site.no") </label>
                 </div>
 
             </fieldset>
         </div>
 
-
         <div class="section">
             <button id="submit" class="button"> Continue </button>
-            <span style="position: relative;top: 9px;left: 14px;"> <a href="@routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)">Add another</a></span>
         </div>
 
     }

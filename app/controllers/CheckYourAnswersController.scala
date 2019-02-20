@@ -67,7 +67,7 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
           checkYourAnswersHelper.confidentialInformation,
           checkYourAnswersHelper.describeYourItem,
           checkYourAnswersHelper.askForUploadSupportingMaterial,
-          checkYourAnswersHelper.uploadSupportingMaterialMultiple,
+          checkYourAnswersHelper.supportingMaterialFileList,
           checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,
           checkYourAnswersHelper.whenToSendSample,
@@ -77,7 +77,7 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
           checkYourAnswersHelper.legalChallenge,
           checkYourAnswersHelper.legalChallengeDetails
         ).flatten
-      ),AnswerSection(
+      ), AnswerSection(
         Some("checkYourAnswers.otherInformation"),
         Seq(
           checkYourAnswersHelper.supportingInformation,

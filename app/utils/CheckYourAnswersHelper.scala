@@ -24,11 +24,11 @@ import viewmodels.AnswerRow
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def askForUploadSupportingMaterial: Option[AnswerRow] = userAnswers.get(AskForUploadSupportingMaterialPage) map {
-    x => AnswerRow("askForUploadSupportingMaterial.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.AskForUploadSupportingMaterialController.onPageLoad(CheckMode).url)
+    x => AnswerRow("askForUploadSupportingMaterial.checkYourAnswersLabel", if (x) "site.yes" else "site.no", true, routes.AskForUploadSupportingMaterialController.onPageLoad(CheckMode).url)
   }
 
   def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
-    x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name , false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
+    x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name, false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
   }
 
   def supportingInformationDetails: Option[AnswerRow] = userAnswers.get(SupportingInformationDetailsPage) map {
@@ -75,8 +75,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     x => AnswerRow("confidentialInformation.checkYourAnswersLabel", s"${x.field1}", false, routes.ConfidentialInformationController.onPageLoad(CheckMode).url)
   }
 
-  def uploadSupportingMaterialMultiple: Option[AnswerRow] = userAnswers.get(UploadSupportingMaterialMultiplePage) map {
-    x => AnswerRow("uploadSupportingMaterialMultiple.checkYourAnswersLabel", x.map(_.name), false, routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode).url)
+  def supportingMaterialFileList: Option[AnswerRow] = userAnswers.get(SupportingMaterialFileListPage) map {
+    x => AnswerRow("supportingMaterialFileList.checkYourAnswersLabel", x.map(_.name), false, routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url)
   }
 
   def describeYourItem: Option[AnswerRow] = userAnswers.get(DescribeYourItemPage) map {

@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-case object UploadSupportingMaterialMultiplePage extends Page {
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-  override def toString: String = "uploadSupportingMaterialMultiple"
+class SupportingMaterialFileListFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[String] =
+    Form(
+      "add-file-choice" -> text()
+    )
+
 }

@@ -16,7 +16,9 @@
 
 package pages
 
-case object SupportingMaterialFileListPage extends Page {
+import models.FileAttachment
+
+case object SupportingMaterialFileListPage extends QuestionPage[Seq[FileAttachment]] {
 
   override def toString: String = "supportingMaterialFileListPage"
 }

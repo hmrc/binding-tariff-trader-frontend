@@ -196,7 +196,8 @@ askForUploadSupportingMaterial.label = Providing extra information about your it
 askForUploadSupportingMaterial.error.required = Select yes if you have files to upload
 
 supportingMaterialFileList.title = upload file list - GOV.UK
-supportingMaterialFileList.heading = You have uploaded {0} file/s
+supportingMaterialFileList.heading = You have uploaded {0} file
+supportingMaterialFileList.checkYourAnswersLabel = Uploaded files
 supportingMaterialFileList.label =  Do you want to upload another file?
 
 uploadSupportingMaterialMultiple.title = Upload files - GOV.UK
@@ -205,6 +206,7 @@ uploadSupportingMaterialMultiple.label = Upload files
 uploadSupportingMaterialMultiple.upload.title =  You can upload:
 uploadSupportingMaterialMultiple.upload.restrictionFiles = more than one file at a time, up to 10 files
 uploadSupportingMaterialMultiple.upload.restrictionSize =  a maximum individual file size of 10MB
+uploadSupportingMaterialMultiple.upload.selectFile = You must select a file
 uploadSupportingMaterialMultiple.upload.typeOfFiles =   pdf, doc, docx, png, jpg, jpeg and txt files
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file types can I upload?
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning

@@ -21,7 +21,7 @@
 @import views.ViewUtils._
 
 
-@(appConfig: FrontendAppConfig, form: Form[_], existing: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("uploadSupportingMaterialMultiple.title")}",
@@ -34,7 +34,7 @@
 
         @components.back_link()
 
-        <div id="error-dialog"></div>
+        @components.error_summary(form.errors)
 
         @components.heading("uploadSupportingMaterialMultiple.heading")
 
@@ -47,7 +47,7 @@
 
         <div class="js-visible mt-3">
             @components.input_file(
-                field = form("multiple-file-input"),
+                field = form("file-input"),
                 label = messages("uploadSupportingMaterialMultiple.label"),
                 accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt")
             )
