@@ -25,15 +25,17 @@ import models.FileAttachment.format
 import models.{FileAttachment, Mode}
 import navigation.Navigator
 import pages._
+import play.api.data.FormError
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.Files
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{Action, AnyContent, MultipartFormData}
+import play.api.mvc.{Action, AnyContent, MultipartFormData, Result}
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.concurrent.Future.{sequence, successful}
 
 class UploadSupportingMaterialMultipleController @Inject()(
@@ -59,16 +61,34 @@ class UploadSupportingMaterialMultipleController @Inject()(
   def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
     .async(parse.multipartFormData) { implicit request =>
 
+      def badRequest(errorKey: String, errorMessage: String): Future[Result] = {
+        val storedLetter = request.userAnswers.get(UploadWrittenAuthorisationPage)
+        successful(
+          BadRequest(
+            uploadSupportingMaterialMultiple(appConfig, form.copy(errors = Seq(FormError(errorKey, errorMessage))), Seq.empty, mode)
+          )
+        )
+      }
+
+      def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]) = {
+        fileService.upload(validFile) flatMap {
+          case fileAttachment: FileAttachment =>
+            val updatedAnswers = request.userAnswers.set(UploadWrittenAuthorisationPage, fileAttachment)
+            dataCacheConnector.save(updatedAnswers.cacheMap)
+              .map(_ => Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(request.userAnswers)))
+          case _ => badRequest("upload-error", "File upload has failed. Try again")
+        }
+      }
+
+
       val files: Seq[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.files.filter(_.filename.nonEmpty)
+
+      val file = request.body.file("upload-file")
 
       sequence(
         files.map(
-
           fileService.upload(_)
-
-
         )
-
       ).flatMap {
 
         case savedFiles: Seq[FileAttachment] if savedFiles.nonEmpty =>
@@ -80,31 +100,49 @@ class UploadSupportingMaterialMultipleController @Inject()(
         case _ =>
           successful(Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
       }
+
+      request.body.file("upload-file") match {
+        case Some(file) =>
+          validFile(file) match {
+            case Right(rightFile) => uploadFile(rightFile)
+            case Left(errorMessage) => badRequest("validation-error", errorMessage)
+          }
+        case _ =>
+          request.userAnswers.get(UploadWrittenAuthorisationPage) match {
+            case Some(_) => successful(Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(request.userAnswers)))
+            case _ => badRequest("letter-of-authority", messagesApi("uploadWrittenAuthorisation.error.selectFile"))
+          }
+      }
+
     }
 
-//
-//  private def validFile(file: MultipartFormData.FilePart[TemporaryFile]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
-//    file match {
-//      case f  if hasInvalidContentType(f) => Left(messagesApi("uploadSupporting.error.size"))
-//    }
-//  }
+
+  private def validFile(file: MultipartFormData.FilePart[TemporaryFile]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
+    file match {
+      case f if f.filename.isEmpty => Left(messagesApi("uploadSupporting.error.empty"))
+      case f if hasInvalidContentType(f) => Left(messagesApi("uploadSupporting.error.content"))
+      case f if hasValidSize(f) => Left(messagesApi("uploadSupporting.error.size"))
+      case _ => Right(file)
+    }
+  }
 
 
-//  private val validContentType = Seq("application/pdf, application/msword, application/vnd.ms-excel, " +
-//    "image/png, application/vnd.openxmlformats-officedocument.wordprocessingml.document," +
-//    " application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, image/jpeg, text/plain")
-//
-//  private def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
-//    f.contentType match {
-//      case Some(c: String) if validContentType.contains(c) => false
-//      case _ => true
-//    }
-//  }
-//
-//  private val maxFileSize = 10 * 1024 * 1024
-//  private def hasValidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
-//    f.ref.file.length() > maxFileSize
-//  }
+  private val validContentType = Seq("application/pdf, application/msword, application/vnd.ms-excel, " +
+    "image/png, application/vnd.openxmlformats-officedocument.wordprocessingml.document," +
+    " application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, image/jpeg, text/plain")
+
+  private def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
+    f.contentType match {
+      case Some(c: String) if validContentType.contains(c) => false
+      case _ => true
+    }
+  }
+
+  private val maxFileSize = 10 * 1024 * 1024
+
+  private def hasValidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
+    f.ref.file.length() > maxFileSize
+  }
 
 
 }

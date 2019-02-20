@@ -24,7 +24,7 @@
 @(appConfig: FrontendAppConfig, form: Form[_], files: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("uploadSupportingMaterialMultiple.title")}",
+    title = s"${errorPrefix(form)} ${messages("supportingMaterialFileList.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
@@ -34,7 +34,7 @@
 
         <div id="error-dialog"></div>
 
-        @components.heading("uploadSupportingMaterialMultiple.heading")
+        <h1 class="heading-xlarge">@messages("supportingMaterialFileList.heading", files.size)</h1>
 
         <div class="section">
             @for(file <- files) {
@@ -45,6 +45,27 @@
                 </div>
             }
         </div>
+
+        <div class="form-group">
+            <p>@messages("supportingMaterialFileList.label")</p>
+        </div>
+
+        <div class="form-group">
+            <fieldset  id="select-new-file">
+
+                <div class="multiple-choice">
+                    <input id="add-file-yes" name="add-file-choice" type="radio" value="true" />
+                    <label class="block-label selection-button-radio" for="add-file-yes">  @messages("site.yes") </label>
+                </div>
+
+                <div class="multiple-choice">
+                    <input id="add-file-no" type="radio" name="add-file-choice" value="false" checked="checked" />
+                    <label class="block-label selection-button-radio" for="add-file-no">  @messages("site.no") </label>
+                </div>
+
+            </fieldset>
+        </div>
+
 
         <div class="section">
             <button id="submit" class="button"> Continue </button>
