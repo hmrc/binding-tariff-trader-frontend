@@ -55,7 +55,7 @@
                             <td id="files-row-@{index}-title" class="w-50">  @file.name </td>
                             <td id="files-row-@{index}-size">  @humanReadableSize(file.size) </td>
                             <td id="files-row-@{index}-remove" class="w-15">
-                                <a id="remove-file" class="remove" href="@routes.SupportingMaterialFileListController.onRemove(file.id, mode)">Remove</a>
+                                <a id="files-row-@{index}-remove-file" class="remove" href="@routes.SupportingMaterialFileListController.onRemove(file.id, mode)">Remove</a>
                             </td>
                         </tr>
                     }
