@@ -18,7 +18,6 @@ package config
 
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
-import org.apache.commons.lang3.StringUtils.isNoneBlank
 import play.api.Mode.Mode
 import play.api.i18n.Lang
 import play.api.mvc.Call
@@ -49,7 +48,7 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val loginContinueUrl: String = loadConfig("urls.loginContinue")
   lazy val bindingTariffClassificationUrl: String = baseUrl("binding-tariff-classification")
   lazy val bindingTariffFileStoreUrl: String = baseUrl("binding-tariff-filestore")
-  lazy val authEnrolment: Option[String] = Some(loadConfig("auth.enrolment")).filter(isNoneBlank(_))
+  lazy val isCdsEnrolmentCheckEnabled: Boolean = getBoolean("cdsEnrolmentCheckEnabled")
 
   lazy val fileUploadMaxSize: Int = loadConfig("fileupload.maxSize").toInt
   lazy val fileUploadMimeTypes: Set[String] = loadConfig("fileupload.mimeTypes").split(",").map(_.trim).toSet

@@ -30,7 +30,7 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
   def pageWithTextFields(createView: Form[A] => HtmlFormat.Appendable,
                          messageKeyPrefix: String,
                          expectedFormAction: String,
-                         fields: String*) = {
+                         fields: String*): Unit = {
 
     "behave like a question page" when {
       "rendered" must {

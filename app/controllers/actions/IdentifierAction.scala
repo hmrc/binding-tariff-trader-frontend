@@ -22,18 +22,21 @@ import controllers.routes
 import models.requests.IdentifierRequest
 import play.api.mvc.Results._
 import play.api.mvc.{ActionBuilder, ActionFunction, Request, Result}
-import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals
+import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
+import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
+trait IdentifierAction extends ActionBuilder[IdentifierRequest] with ActionFunction[Request, IdentifierRequest] {
+  protected lazy val cdsEnrolment = "HMRC-CUS-ORG"
+}
+
 class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthConnector, config: FrontendAppConfig)
                                              (implicit ec: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
-
-  private lazy val enrolment: Option[Enrolment] = config.authEnrolment.map(Enrolment(_))
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
@@ -43,10 +46,18 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
       Redirect(routes.UnauthorisedController.onPageLoad())
     }
 
-    authorise().retrieve(Retrievals.internalId) {
-      _.map {
-        internalId => block(IdentifierRequest(request, internalId))
-      }.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
+    // TODO: remove fake EORI number when in public beta
+    def eoriNumber(enrolments: Enrolments): String = {
+      enrolments.getEnrolment(cdsEnrolment).flatMap(_.getIdentifier("EORINumber")) match {
+        case Some(eori) => eori.value
+        case _ if config.isCdsEnrolmentCheckEnabled => throw InsufficientEnrolments()
+        case _ => "GB6723190" // fake EORI number
+      }
+    }
+
+    authorise().retrieve(Retrievals.internalId and Retrievals.allEnrolments) {
+      case ~(Some(internalId: String), allEnrolments: Enrolments) => block(IdentifierRequest(request, internalId, eoriNumber(allEnrolments)))
+      case _ => throw new UnauthorizedException("Unable to retrieve internal Id")
     } recover {
       case _: NoActiveSession => Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
       case _: InsufficientEnrolments |
@@ -58,27 +69,10 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
   }
 
   private def authorise(): AuthorisedFunction = {
-    if (enrolment.isDefined) {
-      authorised(enrolment.get and AuthProviders(GovernmentGateway))
+    if (config.isCdsEnrolmentCheckEnabled) {
+      authorised(Enrolment(cdsEnrolment) and AuthProviders(GovernmentGateway))
     } else {
       authorised(AuthProviders(GovernmentGateway))
-    }
-  }
-
-}
-
-trait IdentifierAction extends ActionBuilder[IdentifierRequest] with ActionFunction[Request, IdentifierRequest]
-
-class SessionIdentifierAction @Inject()(config: FrontendAppConfig)
-                                       (implicit ec: ExecutionContext) extends IdentifierAction {
-
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
-
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
-
-    hc.sessionId match {
-      case Some(session) => block(IdentifierRequest(request, session.value))
-      case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
   }
 

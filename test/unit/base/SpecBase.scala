@@ -17,6 +17,7 @@
 package base
 
 import config.FrontendAppConfig
+import models.requests.OptionalDataRequest
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
 import play.api.i18n.{Messages, MessagesApi}
@@ -32,6 +33,8 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite {
   def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
 
   def fakeRequest = FakeRequest()
+
+  def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", "eori", None)
 
   def messages: Messages = messagesApi.preferred(fakeRequest)
 }

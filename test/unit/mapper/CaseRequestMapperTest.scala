@@ -25,12 +25,13 @@ import uk.gov.hmrc.play.test.UnitSpec
 class CaseRequestMapperTest extends UnitSpec {
 
   private val mapper = new CaseRequestMapper()
+  private val eori = "EORI-12345"
 
   "Mapper" should {
 
     "Map Mandatory Fields" in {
       // When
-      val response = mapper.map(mandatoryAnswers())
+      val response = mapper.map(eori, mandatoryAnswers())
 
       // Then Mandatory fields should be present
       response.attachments shouldBe Seq.empty
@@ -38,7 +39,7 @@ class CaseRequestMapperTest extends UnitSpec {
       val application = response.application
 
       val holder: EORIDetails = application.holder
-      holder.eori shouldBe ""
+      holder.eori shouldBe eori
       holder.businessName shouldBe "Trader Business Name"
       holder.addressLine1 shouldBe "Address Line 1"
       holder.addressLine2 shouldBe "Address Line 2"
@@ -50,7 +51,6 @@ class CaseRequestMapperTest extends UnitSpec {
       contact.email shouldBe "Email"
       contact.phone shouldBe Some("Phone")
 
-      application.agent shouldBe None // TODO Implement This
       application.offline shouldBe false
       application.goodName shouldBe "Good Name"
       application.goodDescription shouldBe "Good Description"
@@ -58,6 +58,7 @@ class CaseRequestMapperTest extends UnitSpec {
       application.sampleToBeReturned shouldBe false
 
       // Then optional Fields should be blank
+      application.agent shouldBe None
       application.confidentialInformation shouldBe None
       application.otherInformation shouldBe None
       application.reissuedBTIReference shouldBe None
@@ -68,7 +69,7 @@ class CaseRequestMapperTest extends UnitSpec {
 
     "Map Optional Fields" in {
       // When
-      val response = mapper.map(allAnswers())
+      val response = mapper.map(eori, allAnswers())
 
       // Then Mandatory fields should be present
       response.attachments shouldBe Seq.empty
@@ -76,7 +77,7 @@ class CaseRequestMapperTest extends UnitSpec {
       val application = response.application
 
       val holder: EORIDetails = application.holder
-      holder.eori shouldBe ""
+      holder.eori shouldBe eori
       holder.businessName shouldBe "Trader Business Name"
       holder.addressLine1 shouldBe "Address Line 1"
       holder.addressLine2 shouldBe "Address Line 2"
