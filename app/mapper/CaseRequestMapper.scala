@@ -56,6 +56,9 @@ class CaseRequestMapper {
     val commodityCodeDigits: Option[String] = answers.get(CommodityCodeDigitsPage)
     val supportingInformationDetails: Option[String] = answers.get(SupportingInformationDetailsPage)
 
+    val sampleProvided: Option[WhenToSendSample] = answers.get(WhenToSendSamplePage)
+    val returnSample: Option[ReturnSamples] = answers.get(ReturnSamplesPage)
+
     val contact = contactDetails.map(toContact).get
     val holder: EORIDetails = registeredAddressForEori.map(toHolder).get
 
@@ -74,8 +77,8 @@ class CaseRequestMapper {
       relatedBTIReference = commodityCodeRulingReference,
       knownLegalProceedings = legalChallengeDetails,
       envisagedCommodityCode = commodityCodeDigits,
-      sampleToBeProvided = false, // TODO Unimplemented
-      sampleToBeReturned = false // TODO Unimplemented
+      sampleToBeProvided = toSampleProvided(sampleProvided),
+      sampleToBeReturned = toReturnSample(returnSample)
     )
 
     NewCaseRequest(app)
@@ -99,6 +102,20 @@ class CaseRequestMapper {
       email = details.field2,
       phone = details.field3
     )
+  }
+
+  private def toSampleProvided: Option[WhenToSendSample] => Boolean = { op: Option[WhenToSendSample] =>
+    op.getOrElse(WhenToSendSample.No) match {
+      case WhenToSendSample.Yes => true
+      case _ => false
+    }
+  }
+
+  private def toReturnSample: Option[ReturnSamples] => Boolean = { op: Option[ReturnSamples] =>
+    op.getOrElse(ReturnSamples.No) match {
+      case ReturnSamples.Yes => true
+      case _ => false
+    }
   }
 
 }

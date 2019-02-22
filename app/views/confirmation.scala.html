@@ -23,34 +23,39 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-	  <div class="govuk-box-highlight">
-			@components.heading("confirmation.heading", "heading-xlarge")
-      <p class="font-large">
-    		@messages("confirmation.yourRefNumber")<br>
-        <span id="confirmation-reference" class="bold">@messages("confirmation.refValue", confirmation.reference)</span>
-      </p>
-	  </div>
+    <div class="govuk-box-highlight">
+        @components.heading("confirmation.heading", "heading-xlarge")
+        <span class="font-large">
+            @messages("confirmation.yourRefNumber") <br>
+            <span id="confirmation-reference" class="font-large bold">@messages("confirmation.refValue", confirmation.reference)</span>
+        </span>
+    </div>
 
-	  <p>@messages("confirmation.paragragh.confirmationEmail")</p>
-		<ul class="list">
-		  <li><a href="#">@messages("confirmation.download.link.PDF")</a></li>
-		  <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
-		</ul>
+    <p id="confirmation-email-message">@messages("confirmation.paragragh.confirmationEmail", confirmation.emailAddress)</p>
+    <ul class="list">
+        <li><a href="#">@messages("confirmation.download.link.PDF")</a></li>
+        <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
+    </ul>
 
-		<h2 class="heading-medium">@messages("confirmation.heading2.whatNext")</h2>
-		<p>@Html(messages("confirmation.paragraph.whatNext"))</p>
 
-		<h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
-		<p>@messages("confirmation.paragraph1.sendingSamples") @messages("confirmation.refValue", confirmation.reference)</p>
-		<p>@messages("confirmation.paragraph2.sendingSamples")</p>
+    <h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
 
-		<p><a href="https://www.gov.uk/guidance/binding-tariff-information-rulings#samples">@messages("confirmation.paragraph3.sendingSamples.link")</a></p>
+    @components.icon_important("confirmation.sendingSamples.important")
 
-		<p>@messages("confirmation.paragraph4.sendingSamples")</p>
+    <p>@messages("confirmation.paragraph0.sendingSamples")</p>
 
-		<address>
-			@Html(messages("confirmation.sendingSamples.address"))
-		</address>
+    <p>@messages("confirmation.paragraph1.sendingSamples") @messages("confirmation.refValue", confirmation.reference) .
+        @messages("confirmation.paragraph2.sendingSamples")</p>
 
-		<p><a href="#">@messages("confirmation.paragraph5.sendingSamples.link")</a></p>
+    <address>
+    @Html(messages("confirmation.sendingSamples.address"))
+    </address>
+
+    <h2 class="heading-medium">@messages("confirmation.heading2.whatNext")</h2>
+    <p>
+        @Html(messages("confirmation.paragraph.whatNext0")) <br/>
+        @Html(messages("confirmation.paragraph.whatNext1"))
+    </p>
+
+    <a href="@routes.IndexController.onPageLoad">@messages("confirmation.homeLink")</a>
 }

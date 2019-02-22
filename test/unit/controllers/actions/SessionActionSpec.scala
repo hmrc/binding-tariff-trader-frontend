@@ -26,7 +26,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class SessionActionSpec extends SpecBase {
 
   class Harness(action: IdentifierAction) extends Controller {
-    def onPageLoad() = action { request => Ok }
+    def onPageLoad() = action { _ => Ok }
   }
 
   "Session Action" when {
@@ -49,4 +49,5 @@ class SessionActionSpec extends SpecBase {
       }
     }
   }
+
 }

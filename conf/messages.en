@@ -22,25 +22,28 @@ error.required = Enter a value
 error.summary.title = There is a problem
 
 index.title = BTI home - GOV.UK
-index.heading = What would you like to do?
+index.heading = Apply for a BTI ruling
 index.home = Home
 
 beforeYouStart.title = Before you start - GOV.UK
-beforeYouStart.heading = Before you start
-beforeYouStart.paragraph0 = You will not be able to save this application and return to it later.
-beforeYouStart.paragraph1 = Before you start, make sure that you are able to provide:
-beforeYouStart.paragraph1.item1 = your registered EORI address
-beforeYouStart.paragraph1.item2 = a breakdown of your item''s ingredients or parts
-beforeYouStart.paragraph1.item3 = to know how it is made
-beforeYouStart.paragraph1.item4 = to know what it is used for and how it works
-beforeYouStart.paragraph1.item5 = to know how it is packaged
-beforeYouStart.paragraph1.item6 = to upload photographs, manuals or technical specifications where appropriate
-beforeYouStart.paragraph1.item7 = to send a sample where appropriate 
-beforeYouStart.paragraph2 = To apply for another business or organisation you will also need:
-beforeYouStart.paragraph2.item1 = written authorisation from them dated within the last 12 months
-beforeYouStart.paragraph2.item2 = their EORI number
-beforeYouStart.paragraph2.item3 = their registered EORI address
-beforeYouStart.paragraph3 = If you are renewing a ruling, you will need your previous ruling reference number.
+beforeYouStart.heading = Information you need to apply for a ruling
+beforeYouStart.subheading0 = About you
+beforeYouStart.subheading1 = About the item
+beforeYouStart.subheading2 = To apply for another business or organisation
+
+beforeYouStart.paragraph0 = Collect this information before you start. You will not be able to save this application and return to it later.
+beforeYouStart.paragraph1 = You need your registered EORI address.
+beforeYouStart.paragraph2 = You need to know:
+beforeYouStart.paragraph2.item1 = how it is made including a list of ingredients or parts
+beforeYouStart.paragraph2.item2 = what it is used for and how it works
+beforeYouStart.paragraph2.item3 = how it is packaged
+beforeYouStart.paragraph3 = If relevant, you'll also need to:
+beforeYouStart.paragraph3.item1 = upload photographs, manuals, brochures or technical specifications
+beforeYouStart.paragraph3.item2 = send a sample
+beforeYouStart.paragraph4 = You need:
+beforeYouStart.paragraph4.item1 = written authorisation from within the last 12 months
+beforeYouStart.paragraph4.item2 = their EORI number
+beforeYouStart.paragraph4.item3 = their registered EORI address
 
 
 session_expired.title = For your security, this service has been reset
@@ -61,22 +64,31 @@ site.upload_continue = Upload and continue
 site.service_name = Apply for a Binding Tariff Information ruling
 site.textarea.char_limit = (Limit is {0} characters)
 
-unauthorised.title = You can’t access this service with this account
-unauthorised.heading = You can’t access this service with this account
+unauthorised.title = Not registered for CDS
+unauthorised.heading = To apply for a Binding Information ruling you need to get access to CDS
+unauthorised.body1 = CDS is the replacement for Customs Handling Imports and Export Freight (CHIEF) system. You can use it to manage your customs interactions.
+unauthorised.body2_p1 = If you have an EORI number you can
+unauthorised.body2_link = get access to CDS
+unauthorised.body2_p2 = so that you can:
+unauthorised.body3 = process declarations for goods entering and leaving the UK or EU through ports and airports
+unauthorised.body4 = calculate and pay the correct duty and taxes
+unauthorised.body5 = complete customs information electronically
+unauthorised.body6_p1 = If you do not, you can
+unauthorised.body6_link = get an EORI number and get access here.
 
 ## Generic messages
 eori.number = EORI number
 eori.details = EORI details
 
 registeredAddressForEori.title = Registered EORI details - GOV.UK
-registeredAddressForEori.heading = What are the registered address details associated with EORI number GB6723190?
+registeredAddressForEori.heading = What is the registered name and address for EORI number GB6723190?
 registeredAddressForEori.note = The details you enter must match the exact format of the registered EORI address
 registeredAddressForEori.businessName = Business, organisation or individual''s name
 registeredAddressForEori.addressLine1 = Address line 1
 registeredAddressForEori.townCity = Town or city
 registeredAddressForEori.postcode = Postcode
 registeredAddressForEori.country = Country
-registeredAddressForEori.checkYourAnswersLabel = Applicant''s registered details
+registeredAddressForEori.checkYourAnswersLabel = Your registered details
 registeredAddressForEori.error.field1.required = Enter a business, organisation or individual''s name
 registeredAddressForEori.error.field2.required = Enter address line 1
 registeredAddressForEori.error.field3.required = Enter a town or city
@@ -90,7 +102,7 @@ whichBestDescribesYou.title = Who is this application for? - GOV.UK
 whichBestDescribesYou.heading = Who is this application for?
 whichBestDescribesYou.businessOwner = The business or organisation that I work for or own
 whichBestDescribesYou.businessRepresentative = A different business or organisation that I am representing
-whichBestDescribesYou.checkYourAnswersLabel = Application for
+whichBestDescribesYou.checkYourAnswersLabel = This application is for
 whichBestDescribesYou.error.required = Select who this application is for
 
 selectApplicationType.title = Application type - GOV.UK
@@ -112,7 +124,7 @@ registerBusinessRepresenting.postCode = Postcode
 registerBusinessRepresenting.country = Country
 registerBusinessRepresenting.checkYourAnswersLabel =  Their registered details
 registerBusinessRepresenting.error.eoriNumber.required = Enter their EORI number
-registerBusinessRepresenting.error.eoriNumber.format = Enter their EORI number in the correct format 
+registerBusinessRepresenting.error.eoriNumber.format = Enter their EORI number in the correct format
 registerBusinessRepresenting.error.businessName.required = Enter a business, organisation or individual''s name
 registerBusinessRepresenting.error.addressLine1.required = Enter address line 1
 registerBusinessRepresenting.error.town.required = Enter a town or city
@@ -125,12 +137,11 @@ registerBusinessRepresenting.error.postCode.length = Postcode must be 9 characte
 registerBusinessRepresenting.error.country.length = Country must be 60 characters or less
 
 enterContactDetails.title = Contact details - GOV.UK
-enterContactDetails.heading = Who is the contact for this application?
-enterContactDetails.paragraph = The contact details will only be used for the purpose of this application
+enterContactDetails.heading = What are the details of who we could contact for this application?
 enterContactDetails.field1 = Full name
 enterContactDetails.field2 = Email address
 enterContactDetails.field3 = Telephone number (optional)
-enterContactDetails.checkYourAnswersLabel = Application contact details
+enterContactDetails.checkYourAnswersLabel = Contact details
 enterContactDetails.error.field1.required = Enter your full name
 enterContactDetails.error.field2.required = Enter an email address
 enterContactDetails.error.field3.required = Enter a telephone number
@@ -140,25 +151,26 @@ enterContactDetails.error.field2.length = Email address must be 100 characters o
 enterContactDetails.error.field3.length = Direct telephone number must be 20 characters or less
 
 acceptItemInformationList.title = Information about your item - GOV.UK
-acceptItemInformationList.heading = Provide information about your item
-acceptItemInformationList.askfor.heading = You will be asked to supply where appropriate:
-acceptItemInformationList.askfor.item1 = any confidential information you do not want to be published on the Binding Tariff Information rulings website
-acceptItemInformationList.askfor.item2 = a detailed description of your item to help to determine its classification
-acceptItemInformationList.askfor.item3 = photographs, manuals, ingredients lists or technical specifications to support your description and help to speed up the application
-acceptItemInformationList.askfor.item4 = a commodity code if you have found one
-acceptItemInformationList.askfor.item5 = a sample if it is needed
+acceptItemInformationList.heading = Information you must provide about your item to get the correct commodity code
+acceptItemInformationList.important = You will be able to tell us if any of the information is confidential. We will not publish any confidential information on the rulings website.
+acceptItemInformationList.askfor.paragraph0 = You must provide a detailed description of your item. The more detailed the description, the faster we will be able to classify your item.
+acceptItemInformationList.askfor.paragraph1 = You can upload photographs, manuals, brochures or technical specifications that support your description.
+acceptItemInformationList.askfor.paragraph2 = You can let us know if you:
+acceptItemInformationList.askfor.item1 = think you have found the correct commodity code
+acceptItemInformationList.askfor.item2 = need to send samples
 
 informationAboutYourItem.title = Information not to be published - GOV.UK
-informationAboutYourItem.heading = Is there any information about your item that you do not want to be published?
-informationAboutYourItem.paragraph = This can also include uploaded images and files that you do not want to be published on the Binding Tariff Information rulings website.
+informationAboutYourItem.heading = Is there any confidential information about your item that you do not want us to publish?
+informationAboutYourItem.paragraph = This can include photographs, manuals, brochures or technical specifications.
 informationAboutYourItem.yesIHaveInfo = Yes
 informationAboutYourItem.no = No
-informationAboutYourItem.checkYourAnswersLabel =  Information not to be published
+informationAboutYourItem.checkYourAnswersLabel = Confidential information
 informationAboutYourItem.error.required = Select yes if you have information that you do not want to be published 
 
 previousCommodityCode.title = Enter reference number of ruling to renew - GOV.UK
 previousCommodityCode.heading = What is the reference number for the ruling you want to renew?
 previousCommodityCode.field1 = Ruling reference number
+previousCommodityCode.field1.hint = The reference number, for example GB12345678, is on the ruling certificate.
 previousCommodityCode.checkYourAnswersLabel = Renewal reference number
 previousCommodityCode.error.field1.required = Enter ruling reference number
 previousCommodityCode.error.field1.length = Previous Binding Tariff Information ruling must be 100 characters or less
@@ -166,26 +178,27 @@ previousCommodityCode.details.summary = What is my Binding Tariff Information ru
 previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling. 
 
 describeYourItem.title = Describe your item - GOV.UK
-describeYourItem.heading = Describe your item in detail
+describeYourItem.heading = Detailed description of your item
 describeYourItem.field1 = Item name
-describeYourItem.field2 = Item description
+describeYourItem.field2 = Description
 describeYourItem.checkYourAnswersLabel = Item description
 describeYourItem.error.field1.required = Enter item name
 describeYourItem.error.field2.required = Enter a detailed description of your item
 describeYourItem.error.field1.length = Item name must be 100 characters or less
 describeYourItem.error.field2.length = Describe your item in detail must be 100 characters or less
-describeYourItem.pullOut.paragraph = Include as much information as you can to prevent any delays to your application. Information entered on this page might be used as part of the published ruling. 
-describeYourItem.paragraph.includes = Describe your item, this may include:
+describeYourItem.pullOut.paragraph = The more detailed your description, the faster we will be able to classify your item. Information entered on this page might be used as part of the published ruling.
+describeYourItem.paragraph.includes = This may include:
 describeYourItem.listItem1 = what it is used for
 describeYourItem.listItem2 = what it is made from including all materials, parts or ingredients
 describeYourItem.listItem3 = how it is made, including all manufacturing processes
 describeYourItem.listItem4 = how it works
-describeYourItem.listItem4 = how it is packaged, including all materials
+describeYourItem.listItem5 = how it is packaged, including all materials
 
 confidentialInformation.title = Enter information not to be published- GOV.UK
-confidentialInformation.heading = What is the information that you do not want to be published?
-confidentialInformation.field1 = This information will not be published on the Binding Tariff Information ruling website
-confidentialInformation.checkYourAnswersLabel = Details to remain unpublished
+confidentialInformation.heading = What is the confidential information that you do not want us to publish?
+confidentialInformation.field1 = Confidential information
+confidentialInformation.hint = Include the file names of any confidential photographs, manuals, brochures or technical specifications you are going to upload.
+confidentialInformation.checkYourAnswersLabel = Confidential information details
 confidentialInformation.error.field1.required = Enter information that you do not want to be published
 confidentialInformation.error.field1.length = Information must be 100 characters or less
 
@@ -203,7 +216,7 @@ supportingMaterialFileList.indications.bullet4 = images of the item
 supportingMaterialFileList.indications.bullet5 = images of packaging
 
 uploadSupportingMaterialMultiple.title = Upload files - GOV.UK
-uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, ingredients lists or technical specifications
+uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, brochures or technical specifications
 uploadSupportingMaterialMultiple.label = Upload files
 uploadSupportingMaterialMultiple.upload.title =  You can upload:
 uploadSupportingMaterialMultiple.upload.restrictionFiles = one file at a time, up to 10 files
@@ -217,18 +230,18 @@ uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterial
 uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
 
 commodityCodeBestMatch.title = Have you found a commodity code? - GOV.UK
-commodityCodeBestMatch.heading = Have you found a commodity code that you think matches your item?
+commodityCodeBestMatch.heading = Have you found a commodity code for your item?
+commodityCodeBestMatch.bodyText = Entering a commodity code, even just the first 2 numbers, means we will be able to classify your item faster.
 commodityCodeBestMatch.yesFoundCommodityCode = Yes
 commodityCodeBestMatch.noHaventFoundCommodityCode = No
 commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code?
 commodityCodeBestMatch.error.required = Select yes if you have found a commodity code
 
 commodityCodeDigits.title = Enter the commodity code - GOV.UK
-commodityCodeDigits.heading = What is the commodity code you think matches your item?
+commodityCodeDigits.heading = What is the commodity code you found for your item?
 commodityCodeDigits.checkYourAnswersLabel = Commodity code
 commodityCodeDigits.error.required = Enter a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
-commodityCodeDigits.label = Entering at least the first 2 numbers of this code can help to speed up your application
 
 whenToSendSample.title = Samples - GOV.UK
 whenToSendSample.heading = Samples
@@ -237,9 +250,9 @@ whenToSendSample.notSendingSample = No
 whenToSendSample.checkYourAnswersLabel = Are you sending a sample?
 whenToSendSample.error.required = Select yes if you will be sending a sample
 whenToSendSample.first.paragraph = We usually ask for samples of:
-whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for the Customs Duty Liability Team to contact you if one is needed.
-whenToSendSample.third.paragraph = <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#check-if-you-need-to-provide-a-sample" target="_blank">Get more information about samples, this will open in a new window</a>
-whenToSendSample.fourth.paragraph = The address for samples will be provided at the end of the application.
+whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for HMRC to contact you if one is needed.
+whenToSendSample.third.paragraph = <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#check-if-you-need-to-provide-a-sample" target="_blank">Get more information about samples (opens in a new window or tab)</a>
+whenToSendSample.fourth.paragraph = We will let you know where to send your sample at the end of the application.
 whenToSendSample.listItem1 = textiles
 whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
@@ -247,89 +260,90 @@ whenToSendSample.legend = Are you sending a sample?
 
 returnSamples.title = Returning Samples - GOV.UK
 returnSamples.heading = Would you like the samples returned?
-returnSamples.first.paragraph = Samples will be retured where possible.In some cases samples may be damaged during testing.
-returnSamples.second.paragraph = Postage and packaging costs need to be paid upfront to return the samples.
+returnSamples.first.paragraph = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
 returnSamples.yesReturnSamples = Yes
 returnSamples.noDontReturnSamples = No
 returnSamples.checkYourAnswersLabel = Would you like the sample returned?
 returnSamples.error.required = Select yes if you would like the sample returned
 
 similarItemCommodityCode.title = Similar item with a ruling - GOV.UK
-similarItemCommodityCode.heading = Do you know of a similar item that already has a Binding Tariff Information ruling?
+similarItemCommodityCode.heading = Do you know of a similar item that already has a BTI ruling?
 similarItemCommodityCode.yesAwareSimilarCode = Yes
 similarItemCommodityCode.noNotAware = No
 similarItemCommodityCode.checkYourAnswersLabel = Do you know of a similar item that already has a ruling?
 similarItemCommodityCode.error.required = Select yes if you know of a similar item that has a ruling
-similarItemCommodityCode.listItem1 = If your business or organisation operates in other countries and you're aware that they have a ruling, it is useful for us to know to align the rulings
-similarItemCommodityCode.listItem2 = If you know of a similar item that has a ruling, it can help us to classify your goods
+similarItemCommodityCode.bodyText = It can help us classify your goods and align with other rulings if:
+similarItemCommodityCode.listItem1 = your business or organisation operates in other countries and you have a ruling for that country
+similarItemCommodityCode.listItem2 = you know of a similar item with a ruling
 
 commodityCodeRulingReference.title = Enter the details of the similar rulings - GOV.UK
 commodityCodeRulingReference.heading = What are the details and reference numbers of the similar rulings?
-commodityCodeRulingReference.label = You can include multiple reference numbers and an explanation
-commodityCodeRulingReference.whatis = The reference number is supplied on the certificate when the ruling is issued.
+commodityCodeRulingReference.hint = The reference number, for example GB12345678 and FR12345678, is on the ruling certificate. You can include more than one reference number.
 commodityCodeRulingReference.checkYourAnswersLabel = Ruling reference number
 commodityCodeRulingReference.error.required = Enter the ruling reference number and explanation
 commodityCodeRulingReference.error.length = Ruling reference number must be 100 characters or less
 
 legalChallenge.title = Problems with the classification of the item - GOV.UK
-legalChallenge.heading = Are you aware of any problems with the classification of the item?
+legalChallenge.heading = Do you know if there have been any problems classifying the item?
 legalChallenge.yesLegalChallenge = Yes
 legalChallenge.noLegalChallenge = No
-legalChallenge.checkYourAnswersLabel = Are you aware of any problems with the classification of the item?
+legalChallenge.checkYourAnswersLabel = Do you know of any problems with the classification of the item?
 legalChallenge.error.required = Select if you are aware of any problems with the item''s classification
-legalChallenge.paragraph = Examples of this include court rulings or when a commodity code is under review in any country. This helps the Customs Duty Liability Team to avoid any contradictions in rulings.
+legalChallenge.paragraph = This includes court rulings and when a commodity code is being reviewed. This helps us align with other rulings.
 
 legalChallengeDetails.title = Enter problems with the classification of the item - GOV.UK
-legalChallengeDetails.heading = What are the problems with the classification of your item?
+legalChallengeDetails.heading = What are the problems with classifying your item?
 legalChallengeDetails.checkYourAnswersLabel = Problems with the classification of the item
 legalChallengeDetails.error.required = Enter any problems with the classification of your item
 legalChallengeDetails.error.length = Details of any problems with classification must be 100 characters or less
 
 supportingInformation.title = Other information to support this application - GOV.UK
-supportingInformation.heading = Do you want to enter any other information to support this application? 
+supportingInformation.heading = Do you need to enter any other information to support this application?
 supportingInformation.yesInformation = Yes
 supportingInformation.noInformation = No
-supportingInformation.checkYourAnswersLabel = Supporting information 
+supportingInformation.checkYourAnswersLabel = Do you have supporting information?
 supportingInformation.error.required = Select yes if you want to enter any supporting information
 
 supportingInformationDetails.title = Enter supporting information - GOV.UK
-supportingInformationDetails.heading = What is the supporting information you want to provide?
-supportingInformationDetails.checkYourAnswersLabel = Do you have supporting information?
+supportingInformationDetails.heading = What is the information you want to provide?
+supportingInformationDetails.checkYourAnswersLabel = Supporting information
 supportingInformationDetails.error.required = Enter supporting information
 supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less
 
-
 declaration.title = Declaration - GOV.UK
-declaration.heading = Declaration
+declaration.heading = Apply for a ruling
 declaration.checkYourAnswersLabel = Declaration
-declaration.paragraph = By submitting the application you are acknowledging that:
-declaration.listItem1 = the information is correct and up to date to the best of your knowledge
-declaration.listItem2 = supporting data, information and uploaded files provided on the application can be stored on a database and published on the <a href="http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_home.jsp?Lang=en" target="_blank"> Binding Tariff Information website </a>
-declaration.listItem3 = information supplied after the application is submitted can also be stored on a database and published on the <a href="http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_home.jsp?Lang=en" target="_blank"> Binding Tariff Information website </a>
-declaration.listItem4 = anything you have told us that is confidential will not be published
-declaration.listItem5 = if you are sending samples, they may be damaged during laboratory tests
+declaration.paragraph0 = By applying for a Binding Tariff Information ruling, you confirm that the information you provided is correct and complete to the best of your knowledge.
+declaration.paragraph1 = You agree that HMRC can:
+declaration.listItem1 = store the information you provided or may provide after you send your application
+declaration.listItem2 = publish information that is not confidential on the Binding Tariff Information rulings website
+declaration.paragraph2 = You understand that your samples may be damaged during testing.
+declaration.submit = Accept and apply for a ruling
 
 confirmation.title = Application complete - GOV.UK
 confirmation.heading = Application complete
-confirmation.heading2.whatNext = What happens next
-confirmation.paragraph.whatNext = The Customs Duty Liability Team will issue your Binding Tariff Information ruling within 30 to 60 days. You can find out the status of your application by checking your Binding Tariff Information ruling <a href="#">home page</a>.
-confirmation.heading2.sendingSamples = Sending samples
-confirmation.paragraph1.sendingSamples = You must label your sample with the application reference number:
-confirmation.paragraph2.sendingSamples = If you are sending samples the application will not be processed until they have been received.
+confirmation.heading2.sendingSamples = What you must do next
+confirmation.sendingSamples.important = Your application will not be processed until we get your samples.
+confirmation.paragraph0.sendingSamples = If you consider a sample to be hazardous, it is important you email tariff.classification@hmrc.gsi.gov.uk before you send them. We may not accept the sample for health and safety reasons.
+confirmation.paragraph1.sendingSamples = Label your samples with your application reference
+confirmation.paragraph2.sendingSamples = Send the samples to:
 confirmation.paragraph3.sendingSamples.link = Get more information about samples
-confirmation.paragraph4.sendingSamples = Send your samples to:
 confirmation.sendingSamples.address = HM Revenue and Customs<br> Tariff Classification Service<br> 10th Floor SE<br> Alexander House<br> 21 Victoria Avenue<br> Southend-on-Sea<br> Essex<br> SS99 1AA
-confirmation.paragraph5.sendingSamples.link = Apply for another Binding Tariff Information ruling
+confirmation.homeLink = BTI home page
+confirmation.heading2.whatNext = What happens next
+confirmation.paragraph.whatNext0 = We will give you your ruling within 30 to 60 days of receiving your samples.
+confirmation.paragraph.whatNext1 = You can sign in to check the status of your application.
+
 confirmation.refValue = GB{0}
 
-confirmation.yourRefNumber = Your reference number
-confirmation.paragragh.confirmationEmail = We have sent your confirmation email to
+confirmation.yourRefNumber = Your application reference
+confirmation.paragragh.confirmationEmail = We have sent your confirmation email to {0}
 confirmation.download.link.PDF = Download a PDF of the application
 confirmation.download.link.accessibleText = Download an accessible text file of the application
 
 uploadWrittenAuthorisation.title = Upload written authorisation - GOV.UK
 uploadWrittenAuthorisation.heading = Upload written authorisation from the business, organisation or individual you''re representing
-uploadWrittenAuthorisation.label = Choose a file
+uploadWrittenAuthorisation.label = Upload a file
 uploadWrittenAuthorisation.label.replace = Replace file
 uploadWrittenAuthorisation.checkYourAnswersLabel =  Written authorisation
 uploadWrittenAuthorisation.error.selectFile = You must select a file, you cannot continue without uploading written authorisation
@@ -337,11 +351,13 @@ uploadWrittenAuthorisation.error.size = Your document will not upload because it
 uploadWrittenAuthorisation.error.fileType = Your document will not upload because it''s not a valid file type
 uploadWrittenAuthorisation.error.required = Enter uploadWrittenAuthorisation
 uploadWrittenAuthorisation.error.length = must be 100 characters or less
-uploadWrittenAuthorisation.upload.title =  You can upload:
+uploadWrittenAuthorisation.upload.title =  The authorisation must be:
 uploadWrittenAuthorisation.upload.restrictionSize = a maximum file size of 10MB
 uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg and txt files
+uploadWrittenAuthorisation.upload.timeLimit = from within the last 12 months
+uploadWrittenAuthorisation.upload.document = a digital document, a scanned letter or copy of an email from the business, organisation or individual
 
-checkYourAnswers.applicantRegisteredSection = Application details
-checkYourAnswers.applicantOtherBusiness = Applying for another business, organisation or individual
+checkYourAnswers.applicantRegisteredSection = Your details
+checkYourAnswers.applicantOtherBusiness = Details of the business, organisation or individual you represent
 checkYourAnswers.informationAboutYourItemSection = Information about your item
-checkYourAnswers.otherInformation = Other information
+checkYourAnswers.otherInformation = Other information about your item

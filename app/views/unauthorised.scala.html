@@ -25,4 +25,22 @@
 
     @components.heading("unauthorised.heading")
 
+    <p>@messages("unauthorised.body1")</p>
+    <p>
+        @messages("unauthorised.body2_p1")
+        <a href="@appConfig.cdsSubscribeUrl">@messages("unauthorised.body2_link")</a>
+        @messages("unauthorised.body2_p2")
+    </p>
+
+    <ul class="list list-bullet">
+        <li>@messages("unauthorised.body3")</li>
+        <li>@messages("unauthorised.body4")</li>
+        <li>@messages("unauthorised.body5")</li>
+    </ul>
+
+    <p>
+        @messages("unauthorised.body6_p1")
+        <a href="@appConfig.cdsRegisterUrl">@messages("unauthorised.body6_link")</a>
+    </p>
+
 }

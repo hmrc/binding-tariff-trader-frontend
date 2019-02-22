@@ -33,16 +33,16 @@
 
         @components.heading("declaration.heading")
 
-        <h2 class="heading-medium"> @messages("declaration.paragraph") </h2>
+        <p>@messages("declaration.paragraph0")</p>
+        <p>@messages("declaration.paragraph1")</p>
 
         <ul class="list list-bullet">
           <li>@messages("declaration.listItem1")</li>
-          <li>@Html(messages("declaration.listItem2"))</li>
-          <li>@Html(messages("declaration.listItem3"))</li>
-          <li>@messages("declaration.listItem4")</li>
-          <li>@messages("declaration.listItem5")</li>
+          <li>@messages("declaration.listItem2")</li>
         </ul>
 
-        @components.submit_button(Some(messages("site.submit")))
+        <p>@messages("declaration.paragraph2")</p>
+
+        @components.submit_button(Some(messages("declaration.submit")))
     }
 }

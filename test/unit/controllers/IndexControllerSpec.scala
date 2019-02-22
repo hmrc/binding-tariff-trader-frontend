@@ -32,4 +32,5 @@ class IndexControllerSpec extends ControllerSpecBase {
       contentAsString(result) mustBe index(frontendAppConfig)(fakeRequest, messages).toString
     }
   }
+
 }

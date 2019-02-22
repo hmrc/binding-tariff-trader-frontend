@@ -38,21 +38,16 @@
         <div class="form-group">
             <fieldset>
                 <div aria-label="Information">
-                    <p> We will accept a document dated in the last 12 months, for example: </p>
+                    <p> @messages("uploadWrittenAuthorisation.upload.title") </p>
                     <ul class="list list-bullet">
-                        <li>a digital document, for example a word document</li>
-                        <li>a scanned letter </li>
-                        <li>a copy of an email </li>
+                        <li>@messages("uploadWrittenAuthorisation.upload.timeLimit")</li>
+                        <li>@messages("uploadWrittenAuthorisation.upload.document")</li>
+                        <li>@messages("uploadWrittenAuthorisation.upload.restrictionSize")</li>
+                        <li>@messages("uploadWrittenAuthorisation.upload.typeOfFiles")</li>
                     </ul>
                 </div>
             </fieldset>
         </div>
-
-        <p>@messages("uploadWrittenAuthorisation.upload.title")</p>
-        <ul class="bullets">
-            <li>@messages("uploadWrittenAuthorisation.upload.restrictionSize")</li>
-            <li>@messages("uploadWrittenAuthorisation.upload.typeOfFiles")</li>
-        </ul>
 
         <div class="mt-3">
                 @components.input_file(
