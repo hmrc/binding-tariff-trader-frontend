@@ -228,6 +228,7 @@ uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
+uploadSupportingMaterialMultiple.error.numberFiles = Reduce the number of files to a maximum of 10
 
 commodityCodeBestMatch.title = Have you found a commodity code? - GOV.UK
 commodityCodeBestMatch.heading = Have you found a commodity code for your item?
