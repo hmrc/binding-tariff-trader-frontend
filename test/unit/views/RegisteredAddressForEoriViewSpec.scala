@@ -53,6 +53,7 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
     "show the expected text" in {
       val text = asDocument(createViewUsingForm(form)).text()
 
+      text must include("Registered EORI details - GOV.UK")
       text must include("What is the registered name and address for EORI number eori-789012?")
       text must include("The details you enter must match the exact format of the registered EORI address")
       text must include("Business, organisation or individual's name")

@@ -62,7 +62,6 @@ site.continue = Continue
 site.submit = Submit
 site.upload_continue = Upload and continue
 site.service_name = Apply for a Binding Tariff Information ruling
-site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = Not registered for CDS
 unauthorised.heading = To apply for a Binding Information ruling you need to get access to CDS
