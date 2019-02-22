@@ -25,7 +25,7 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.DescribeYourItemFormProvider
 import models.Mode
-import pages.{AskForUploadSupportingMaterialPage, DescribeYourItemPage}
+import pages.{AskForUploadSupportingMaterialPage, DescribeYourItemPage, SupportingMaterialFileListPage}
 import navigation.Navigator
 import play.api.mvc.{Action, AnyContent}
 import views.html.describeYourItem
@@ -64,7 +64,7 @@ class DescribeYourItemController @Inject()(appConfig: FrontendAppConfig,
         val updatedAnswers = request.userAnswers.set(DescribeYourItemPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(AskForUploadSupportingMaterialPage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(SupportingMaterialFileListPage, mode)(updatedAnswers))
         )
       }
     )

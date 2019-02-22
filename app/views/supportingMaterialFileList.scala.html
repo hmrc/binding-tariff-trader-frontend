@@ -32,27 +32,45 @@
 
         @components.back_link()
 
-        <div id="error-dialog"></div>
+        @components.error_summary(form.errors)
 
-        <h1 class="heading-xlarge">@messages("supportingMaterialFileList.heading", files.size)</h1>
+        @components.heading("supportingMaterialFileList.heading")
+
+        <p>@messages("supportingMaterialFileList.indications")</p>
+        <ul class="list list-bullet">
+            <li>@messages("supportingMaterialFileList.indications.bullet1")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet2")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet3")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet4")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet5")</li>
+        </ul>
+
+        @*<h1 class="heading-xlarge">@messages("supportingMaterialFileList.heading", files.size, if(files.size != 1){"s"}else{""} )</h1>*@
 
         <div class="section">
-            @for(file <- files) {
-                <div class="file-list__file" id="file_id">
-                    <div class="file-list__name"><span> @file.name </span></div>
-                    <div class="file-list__size"> @humanReadableSize(file.size) </div>
-                    <div class="file-list__action"><a id="remove-file" class="remove" href="@routes.SupportingMaterialFileListController.onRemove(file.id, mode)">Remove</a></div>
-                </div>
-            }
+            <table id="files-table">
+                <tbody>
+                    @for((file: FileAttachment, index: Int) <- files.zipWithIndex) {
+                        <tr id="files-row-@{index}">
+                            <td id="files-row-@{index}-title" class="w-50">  @file.name </td>
+                            <td id="files-row-@{index}-size">  @humanReadableSize(file.size) </td>
+                            <td id="files-row-@{index}-remove" class="w-15">
+                                <a id="remove-file" class="remove" href="@routes.SupportingMaterialFileListController.onRemove(file.id, mode)">Remove</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
 
         <div class="form-group">
-            <p>@messages("supportingMaterialFileList.label")</p>
+            <h2 class="heading-large">
+                @if(files.isEmpty){@messages("supportingMaterialFileList.label.uploadFile")}else{@messages("supportingMaterialFileList.label.anotherFile")}
+            </h2>
         </div>
 
         <div class="form-group">
             <fieldset  id="select-new-file">
-
                 <div class="multiple-choice">
                     <input id="add-file-yes" name="add-file-choice" type="radio" value="Yes" />
                     <label class="block-label selection-button-radio" for="add-file-yes">  @messages("site.yes") </label>
@@ -62,7 +80,6 @@
                     <input id="add-file-no" type="radio" name="add-file-choice" value="No" checked="checked" />
                     <label class="block-label selection-button-radio" for="add-file-no">  @messages("site.no") </label>
                 </div>
-
             </fieldset>
         </div>
 

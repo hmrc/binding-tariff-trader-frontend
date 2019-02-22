@@ -196,22 +196,29 @@ askForUploadSupportingMaterial.label = Providing extra information about your it
 askForUploadSupportingMaterial.error.required = Select yes if you have files to upload
 
 supportingMaterialFileList.title = upload file list - GOV.UK
-supportingMaterialFileList.heading = You have uploaded {0} file
+supportingMaterialFileList.heading = Do you want to upload any supporting documents?
+supportingMaterialFileList.uploadFileCounter = You have uploaded {0} file{1}
 supportingMaterialFileList.checkYourAnswersLabel = Uploaded files
-supportingMaterialFileList.label =  Do you want to upload another file?
+supportingMaterialFileList.label.uploadFile =  Upload a file?
+supportingMaterialFileList.label.anotherFile =  Do you want to upload another file?
+supportingMaterialFileList.indications = The things we need to give you an accurate commodity code advice are:
+supportingMaterialFileList.indications.bullet1 = ingredients lists for food and drink items
+supportingMaterialFileList.indications.bullet2 = technical specifications
+supportingMaterialFileList.indications.bullet3 = lists of materials
+supportingMaterialFileList.indications.bullet4 = images of the item
+supportingMaterialFileList.indications.bullet5 = images of packaging
 
 uploadSupportingMaterialMultiple.title = Upload files - GOV.UK
 uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, ingredients lists or technical specifications
 uploadSupportingMaterialMultiple.label = Upload files
 uploadSupportingMaterialMultiple.upload.title =  You can upload:
-uploadSupportingMaterialMultiple.upload.restrictionFiles = more than one file at a time, up to 10 files
+uploadSupportingMaterialMultiple.upload.restrictionFiles = one file at a time, up to 10 files
 uploadSupportingMaterialMultiple.upload.restrictionSize =  a maximum individual file size of 10MB
 uploadSupportingMaterialMultiple.upload.selectFile = You must select a file
 uploadSupportingMaterialMultiple.upload.typeOfFiles =   pdf, doc, docx, png, jpg, jpeg and txt files
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file types can I upload?
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
-uploadSupportingMaterialMultiple.checkYourAnswersLabel = Uploaded files
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
 
@@ -296,6 +303,7 @@ supportingInformationDetails.heading = What is the supporting information you wa
 supportingInformationDetails.checkYourAnswersLabel = Do you have supporting information?
 supportingInformationDetails.error.required = Enter supporting information
 supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less
+
 
 declaration.title = Declaration - GOV.UK
 declaration.heading = Declaration
