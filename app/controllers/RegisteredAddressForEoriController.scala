@@ -21,7 +21,6 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisteredAddressForEoriFormProvider
 import javax.inject.Inject
-import models.requests.OptionalDataRequest
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
@@ -45,7 +44,7 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
 
   private lazy val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request: OptionalDataRequest[_] =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
 
     val preparedForm = request.userAnswers.flatMap(_.get(RegisteredAddressForEoriPage)) match {
       case Some(value) => form.fill(value)

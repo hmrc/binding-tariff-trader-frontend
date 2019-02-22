@@ -26,7 +26,7 @@ class FakeDataRetrievalAction(cacheMapToReturn: Option[CacheMap]) extends DataRe
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
     val userAnswers = cacheMapToReturn map (new UserAnswers(_))
-    Future.successful(OptionalDataRequest(request.request, request.identifier, userAnswers))
+    Future.successful(OptionalDataRequest(request.request, request.identifier, request.eoriNumber, userAnswers))
   }
 
 }
