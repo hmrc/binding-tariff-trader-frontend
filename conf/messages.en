@@ -202,7 +202,7 @@ confidentialInformation.checkYourAnswersLabel = Confidential information details
 confidentialInformation.error.field1.required = Enter information that you do not want to be published
 confidentialInformation.error.field1.length = Information must be 100 characters or less
 
-supportingMaterialFileList.title = upload file list - GOV.UK
+supportingMaterialFileList.title = Upload file list - GOV.UK
 supportingMaterialFileList.heading = Do you want to upload any supporting documents?
 supportingMaterialFileList.uploadFileCounter = You have uploaded {0} file{1}
 supportingMaterialFileList.checkYourAnswersLabel = Uploaded files
