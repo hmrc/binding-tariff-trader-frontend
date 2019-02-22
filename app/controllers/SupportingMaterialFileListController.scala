@@ -61,14 +61,14 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
       )
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, Seq.empty, mode))),
       {
         case true => successful(Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
-        case false => successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers.get)))
+        case false => successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers)))
       }
     )
   }

@@ -27,11 +27,11 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
-import pages.{SupportingMaterialFileListPage, UploadSupportingMaterialMultiplePage}
+import pages.SupportingMaterialFileListPage
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
-import play.api.libs.json.Json
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc.{Call, MultipartFormData}
 import play.api.test.Helpers._
@@ -107,6 +107,42 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val cache = theCacheSaved
       cache.getEntry[Seq[FileAttachment]](SupportingMaterialFileListPage) mustBe Some(Seq(FileAttachment("id", "file-name", "type", file.file.length())))
+    }
+
+    "respond with bad request if a file has wrong extension" in {
+      // Given A Form
+      val file = TemporaryFile("example-file.txt")
+      val filePart = FilePart[TemporaryFile](key = "file-input", "file.3gp", contentType = Some("video/3gpp"), ref = file)
+      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
+      val postRequest = fakeRequest.withBody(form)
+
+      given(fileService.validate(refEq(filePart))).willReturn(Left("message something went wrong"))
+
+      val savedCacheMap = mock[CacheMap]
+      given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
+
+      // When
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      // Then
+      status(result) mustBe BAD_REQUEST
+      contentAsString(result) should include("message something went wrong")
+    }
+
+    "respond with bad request if no file is selected" in {
+      // Given A Form
+      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq.empty, badParts = Seq.empty)
+      val postRequest = fakeRequest.withBody(form)
+
+      val savedCacheMap = mock[CacheMap]
+      given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
+
+      // When
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      // Then
+      status(result) mustBe BAD_REQUEST
+      contentAsString(result) should include("You must select a file")
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

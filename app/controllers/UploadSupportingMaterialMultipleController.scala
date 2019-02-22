@@ -82,19 +82,15 @@ class UploadSupportingMaterialMultipleController @Inject()(
       }
 
       def hasMaxFiles = {
-        request.userAnswers.get(SupportingMaterialFileListPage).map(_.size).getOrElse(0) >=  10
+        request.userAnswers.get(SupportingMaterialFileListPage).map(_.size).getOrElse(0) >= 10
       }
 
       request.body.file("file-input").filter(_.filename.nonEmpty) match {
-        case Some(file) =>
-          if (hasMaxFiles){
-            badRequest("validation-error", messagesApi("uploadSupportingMaterialMultiple.upload.restrictionFiles"))
-          }else {
-            fileService.validate(file) match {
-              case Right(rightFile) => uploadFile(rightFile)
-              case Left(errorMessage) => badRequest("validation-error", errorMessage)
-            }
-          }
+        case Some(_) if (hasMaxFiles) => badRequest("validation-error", messagesApi("uploadSupportingMaterialMultiple.upload.restrictionFiles"))
+        case Some(file) => fileService.validate(file) match {
+          case Right(rightFile) => uploadFile(rightFile)
+          case Left(errorMessage) => badRequest("validation-error", errorMessage)
+        }
         case _ =>
           badRequest("validation-error", messagesApi("uploadSupportingMaterialMultiple.upload.selectFile"))
       }
