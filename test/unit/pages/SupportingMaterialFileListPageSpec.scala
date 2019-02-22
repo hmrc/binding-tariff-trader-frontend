@@ -16,7 +16,18 @@
 
 package pages
 
-case object AskForUploadSupportingMaterialPage extends QuestionPage[Boolean] {
+import models.FileAttachment
+import pages.behaviours.PageBehaviours
 
-  override def toString: String = "askForUploadSupportingMaterial"
+
+class SupportingMaterialFileListPageSpec extends PageBehaviours {
+
+  "UploadSupportingMaterialMultiplePage" must {
+
+    beRetrievable[Seq[FileAttachment]](SupportingMaterialFileListPage)
+
+    beSettable[Seq[FileAttachment]](SupportingMaterialFileListPage)
+
+    beRemovable[Seq[FileAttachment]](SupportingMaterialFileListPage)
+  }
 }

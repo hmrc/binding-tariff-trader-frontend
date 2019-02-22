@@ -17,28 +17,27 @@
 package views
 
 import controllers.routes
-import forms.AskForUploadSupportingMaterialFormProvider
+import forms.SupportingMaterialFileListFormProvider
 import models.NormalMode
 import play.api.data.Form
 import views.behaviours.YesNoViewBehaviours
-import views.html.askForUploadSupportingMaterial
+import views.html.supportingMaterialFileList
 
-class AskForUploadSupportingMaterialViewSpec extends YesNoViewBehaviours {
+class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "askForUploadSupportingMaterial"
+  val messageKeyPrefix = "supportingMaterialFileList"
 
-  val form = new AskForUploadSupportingMaterialFormProvider()()
+  val form = new SupportingMaterialFileListFormProvider()()
 
-  def createView = () => askForUploadSupportingMaterial(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => supportingMaterialFileList(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => askForUploadSupportingMaterial(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => supportingMaterialFileList(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages)
 
-  "AskForUploadSupportingMaterial view" must {
+  "SupportingMaterialFileList view" must {
 
     behave like normalPage(createView, messageKeyPrefix)
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.AskForUploadSupportingMaterialController.onSubmit(NormalMode).url)
   }
 }

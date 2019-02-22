@@ -51,12 +51,12 @@ trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
           val doc = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
 
-          assertContainsLabel(doc, "multiple-file-input", expectedLabel(messageKeyPrefix), expectedHintText)
+          assertContainsLabel(doc, "file-input", expectedLabel(messageKeyPrefix), expectedHintText)
         }
 
         "contain an input for the value" in {
           val doc = asDocument(createView(form))
-          assertRenderedById(doc, "multiple-file-input")
+          assertRenderedById(doc, "file-input")
         }
       }
 

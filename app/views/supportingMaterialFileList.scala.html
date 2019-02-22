@@ -1,0 +1,91 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+@import controllers.routes._
+@import models.Mode
+@import uk.gov.hmrc.play.views.html._
+@import views.ViewUtils._
+
+
+@(appConfig: FrontendAppConfig, form: Form[_], files: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    title = s"${errorPrefix(form)} ${messages("supportingMaterialFileList.title")}",
+    appConfig = appConfig,
+    bodyClasses = None) {
+
+    @helpers.form(action = SupportingMaterialFileListController.onSubmit(mode), 'autoComplete -> "off") {
+
+        @components.back_link()
+
+        @components.error_summary(form.errors)
+
+        @components.heading("supportingMaterialFileList.heading")
+
+        <p>@messages("supportingMaterialFileList.indications")</p>
+        <ul class="list list-bullet">
+            <li>@messages("supportingMaterialFileList.indications.bullet1")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet2")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet3")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet4")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet5")</li>
+        </ul>
+
+        @*<h1 class="heading-xlarge">@messages("supportingMaterialFileList.heading", files.size, if(files.size != 1){"s"}else{""} )</h1>*@
+
+        <div class="section">
+            <table id="files-table">
+                <tbody>
+                    @for((file: FileAttachment, index: Int) <- files.zipWithIndex) {
+                        <tr id="files-row-@{index}">
+                            <td id="files-row-@{index}-title" class="w-50">  @file.name </td>
+                            <td id="files-row-@{index}-size">  @humanReadableSize(file.size) </td>
+                            <td id="files-row-@{index}-remove" class="w-15">
+                                <a id="files-row-@{index}-remove-file" class="remove" href="@routes.SupportingMaterialFileListController.onRemove(file.id, mode)">Remove</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group">
+            <h2 class="heading-large">
+                @if(files.isEmpty){@messages("supportingMaterialFileList.label.uploadFile")}else{@messages("supportingMaterialFileList.label.anotherFile")}
+            </h2>
+        </div>
+
+        <div class="form-group">
+            <fieldset  id="select-new-file">
+                <div class="multiple-choice">
+                    <input id="add-file-yes" name="add-file-choice" type="radio" value="true" />
+                    <label class="block-label selection-button-radio" for="add-file-yes">  @messages("site.yes") </label>
+                </div>
+
+                <div class="multiple-choice">
+                    <input id="add-file-no" type="radio" name="add-file-choice" value="false" checked="checked" />
+                    <label class="block-label selection-button-radio" for="add-file-no">  @messages("site.no") </label>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="section">
+            <button id="submit" class="button"> Continue </button>
+        </div>
+
+    }
+}

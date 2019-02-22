@@ -42,8 +42,8 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
     connector.get(file).map(toFileAttachment(file.size))
   }
 
-  def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[PublishedFileAttachment] = {
-    connector.publish(file).map(toPublishedAttachment(file.size))
+  private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
+    r => FileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
   def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[PublishedFileAttachment]] = {
@@ -58,10 +58,22 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
     ).map(_.filter(_.isDefined).map(_.get))
   }
 
+  def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[PublishedFileAttachment] = {
+    connector.publish(file).map(toPublishedAttachment(file.size))
+  }
+
+  private def toPublishedAttachment(size: Long): FilestoreResponse => PublishedFileAttachment = {
+    r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size)
+  }
+
   def validate(file: MultipartFormData.FilePart[TemporaryFile]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
-    if (hasInvalidSize(file)) Left(messagesApi("uploadWrittenAuthorisation.error.size"))
-    else if (hasInvalidContentType(file)) Left(messagesApi("uploadWrittenAuthorisation.error.fileType"))
-    else Right(file)
+    if (hasInvalidSize(file)) {
+      Left(messagesApi("uploadWrittenAuthorisation.error.size"))
+    } else if (hasInvalidContentType(file)) {
+      Left(messagesApi("uploadWrittenAuthorisation.error.fileType"))
+    } else {
+      Right(file)
+    }
   }
 
   private def hasInvalidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = {
@@ -73,14 +85,6 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
       case Some(c: String) if configuration.fileUploadMimeTypes.contains(c) => false
       case _ => true
     }
-  }
-
-  private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
-    r => FileAttachment(r.id, r.fileName, r.mimeType, size)
-  }
-
-  private def toPublishedAttachment(size: Long): FilestoreResponse => PublishedFileAttachment = {
-    r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
 }

@@ -21,20 +21,20 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import javax.inject.Inject
-import models.FileAttachment.format
 import models.{FileAttachment, Mode}
 import navigation.Navigator
-import pages.{CommodityCodeBestMatchPage, UploadSupportingMaterialMultiplePage}
+import pages._
+import play.api.data.FormError
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.Files
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{Action, AnyContent, MultipartFormData}
+import play.api.mvc.{Action, AnyContent, MultipartFormData, Result}
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future.{sequence, successful}
+import scala.concurrent.Future
+import scala.concurrent.Future.successful
 
 class UploadSupportingMaterialMultipleController @Inject()(
                                                             appConfig: FrontendAppConfig,
@@ -52,31 +52,49 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-    val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
-
-    Ok(uploadSupportingMaterialMultiple(appConfig, form, existingFiles, mode))
+    Ok(uploadSupportingMaterialMultiple(appConfig, form, mode))
   }
-
 
   def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
     .async(parse.multipartFormData) { implicit request =>
 
-      val files: Seq[MultipartFormData.FilePart[Files.TemporaryFile]] = request.body.files.filter(_.filename.nonEmpty)
-
-      sequence(files.map(fileService.upload(_))).flatMap {
-
-        case savedFiles: Seq[FileAttachment] if savedFiles.nonEmpty =>
-          val existingFiles = request.userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty)
-          val updatedFiles = existingFiles ++ savedFiles
-          val updatedAnswers = request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
-          val nextPage = navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers)
-          dataCacheConnector.save(updatedAnswers.cacheMap)
-            .map( _ => Accepted("accepted").withHeaders(LOCATION -> nextPage.url) )
-
-        case _ =>
-          val url = navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers).url
-          successful( Accepted("accepted").withHeaders(LOCATION -> url) )
+      def badRequest(errorKey: String, errorMessage: String): Future[Result] = {
+        successful(
+          BadRequest(
+            uploadSupportingMaterialMultiple(appConfig, form.copy(errors = Seq(FormError(errorKey, errorMessage))), mode)
+          )
+        )
       }
+
+      def saveAndRedirect(file: FileAttachment) = {
+        val updatedFiles = request.userAnswers.get(SupportingMaterialFileListPage)
+          .map(s => s ++ Seq(file)) getOrElse Seq(file)
+        val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, updatedFiles)
+        dataCacheConnector.save(updatedAnswers.cacheMap)
+          .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
+      }
+
+      def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]) = {
+        fileService.upload(validFile) flatMap {
+          case file: FileAttachment => saveAndRedirect(file)
+          case _ => badRequest("upload-error", "File upload has failed. Try again")
+        }
+      }
+
+      def hasMaxFiles = {
+        request.userAnswers.get(SupportingMaterialFileListPage).map(_.size).getOrElse(0) >= 10
+      }
+
+      request.body.file("file-input").filter(_.filename.nonEmpty) match {
+        case Some(_) if (hasMaxFiles) => badRequest("validation-error", messagesApi("uploadSupportingMaterialMultiple.upload.restrictionFiles"))
+        case Some(file) => fileService.validate(file) match {
+          case Right(rightFile) => uploadFile(rightFile)
+          case Left(errorMessage) => badRequest("validation-error", errorMessage)
+        }
+        case _ =>
+          badRequest("validation-error", messagesApi("uploadSupportingMaterialMultiple.upload.selectFile"))
+      }
+
     }
 
 }
