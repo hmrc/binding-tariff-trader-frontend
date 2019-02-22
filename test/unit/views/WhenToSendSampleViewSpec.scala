@@ -34,7 +34,7 @@ class WhenToSendSampleViewSpec extends ViewBehaviours {
   def createViewUsingForm = (form: Form[_]) => whenToSendSample(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "WhenToSendSample view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
   }

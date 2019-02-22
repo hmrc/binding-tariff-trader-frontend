@@ -34,7 +34,7 @@ class CommodityCodeBestMatchViewSpec extends ViewBehaviours {
   def createViewUsingForm = (form: Form[_]) => commodityCodeBestMatch(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "CommodityCodeBestMatch view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
   }

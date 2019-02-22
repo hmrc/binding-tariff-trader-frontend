@@ -25,6 +25,6 @@ class IndexViewSpec extends ViewBehaviours {
 
   "Index view" must {
 
-    behave like normalPage(view, "index")
+    behave like normalPage(view, "index")()
   }
 }

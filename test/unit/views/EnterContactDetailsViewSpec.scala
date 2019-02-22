@@ -36,7 +36,7 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
 
   "EnterContactDetails view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 

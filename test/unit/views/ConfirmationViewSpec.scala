@@ -31,7 +31,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
   }
 
   "Confirmation view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     "with reference" in {
       val text = asDocument(createView()).text()

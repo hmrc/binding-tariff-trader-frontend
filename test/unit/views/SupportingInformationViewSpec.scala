@@ -34,7 +34,7 @@ class SupportingInformationViewSpec extends ViewBehaviours {
   def createViewUsingForm = (form: Form[_]) => supportingInformation(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "SupportingInformation view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
   }

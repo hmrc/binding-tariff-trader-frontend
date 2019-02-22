@@ -39,7 +39,7 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
 
   "RegisteredAddressForEori view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix, "eori-789012")()
 
     behave like pageWithoutBackLink(createView)
 
