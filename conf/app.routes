@@ -54,21 +54,12 @@ GET         /confidentialInformation                             controllers.Con
 POST        /confidentialInformation                             controllers.ConfidentialInformationController.onSubmit(mode: Mode = NormalMode)
 GET         /changeConfidentialInformation                       controllers.ConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)
 POST        /changeConfidentialInformation                       controllers.ConfidentialInformationController.onSubmit(mode: Mode = CheckMode)
-GET         /askForUploadSupportingMaterial                      controllers.AskForUploadSupportingMaterialController.onPageLoad(mode: Mode = NormalMode)
-POST        /askForUploadSupportingMaterial                      controllers.AskForUploadSupportingMaterialController.onSubmit(mode: Mode = NormalMode)
-GET         /changeAskForUploadSupportingMaterial                controllers.AskForUploadSupportingMaterialController.onPageLoad(mode: Mode = CheckMode)
-POST        /changeAskForUploadSupportingMaterial                controllers.AskForUploadSupportingMaterialController.onSubmit(mode: Mode = CheckMode)
-
-
 GET         /supportingMaterialFileList                          controllers.SupportingMaterialFileListController.onPageLoad(mode: Mode = NormalMode)
 POST        /supportingMaterialFileList                          controllers.SupportingMaterialFileListController.onSubmit(mode: Mode = NormalMode)
 GET         /changeSupportingMaterialFileList                    controllers.SupportingMaterialFileListController.onPageLoad(mode: Mode = CheckMode)
 POST        /changeSupportingMaterialFileList                    controllers.SupportingMaterialFileListController.onSubmit(mode: Mode = CheckMode)
-
 GET         /removeUploadSupportingMaterialMultiple              controllers.SupportingMaterialFileListController.onRemove(id : String, mode: Mode = NormalMode)
 GET         /changeremoveUploadSupportingMaterialMultiple        controllers.SupportingMaterialFileListController.onRemove(id : String, mode: Mode = CheckMode)
-
-
 GET         /uploadSupportingMaterialMultiple                    controllers.UploadSupportingMaterialMultipleController.onPageLoad(mode: Mode = NormalMode)
 POST        /uploadSupportingMaterialMultiple                    controllers.UploadSupportingMaterialMultipleController.onSubmit(mode: Mode = NormalMode)
 GET         /changeUploadSupportingMaterialMultiple              controllers.UploadSupportingMaterialMultipleController.onPageLoad(mode: Mode = CheckMode)

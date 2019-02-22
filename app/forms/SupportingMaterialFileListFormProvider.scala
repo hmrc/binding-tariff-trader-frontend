@@ -22,9 +22,9 @@ import play.api.data.Form
 
 class SupportingMaterialFileListFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  def apply(): Form[Boolean] =
     Form(
-      "add-file-choice" -> text()
+      "add-file-choice" -> boolean()
     )
 
 }

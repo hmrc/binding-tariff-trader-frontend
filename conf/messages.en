@@ -189,12 +189,6 @@ confidentialInformation.checkYourAnswersLabel = Details to remain unpublished
 confidentialInformation.error.field1.required = Enter information that you do not want to be published
 confidentialInformation.error.field1.length = Information must be 100 characters or less
 
-askForUploadSupportingMaterial.title = Do you have files to upload? - GOV.UK
-askForUploadSupportingMaterial.heading = Have you any photographs, manuals, ingredients lists or technical specifications to upload?
-askForUploadSupportingMaterial.checkYourAnswersLabel =  Do you have files to upload?
-askForUploadSupportingMaterial.label = Providing extra information about your item can speed up your application.
-askForUploadSupportingMaterial.error.required = Select yes if you have files to upload
-
 supportingMaterialFileList.title = upload file list - GOV.UK
 supportingMaterialFileList.heading = Do you want to upload any supporting documents?
 supportingMaterialFileList.uploadFileCounter = You have uploaded {0} file{1}

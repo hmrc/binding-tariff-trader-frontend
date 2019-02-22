@@ -23,10 +23,6 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
-  def askForUploadSupportingMaterial: Option[AnswerRow] = userAnswers.get(AskForUploadSupportingMaterialPage) map {
-    x => AnswerRow("askForUploadSupportingMaterial.checkYourAnswersLabel", if (x) "site.yes" else "site.no", true, routes.AskForUploadSupportingMaterialController.onPageLoad(CheckMode).url)
-  }
-
   def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
     x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name, false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
   }

@@ -28,7 +28,7 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
-import pages.UploadSupportingMaterialMultiplePage
+import pages.{SupportingMaterialFileListPage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
@@ -104,25 +104,9 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       // Then
       status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
 
       val cache = theCacheSaved
-      cache.getEntry[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage) mustBe Some(Seq(FileAttachment("id", "file-name", "type", file.file.length())))
-    }
-
-    "respond with accepted and add next page on the location header when no data is submitted" in {
-      // Given A Form
-      val filePart = FilePart[TemporaryFile](key = "file-input", "", contentType = Some("application/octet-stream"), ref = TemporaryFile())
-      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
-      val postRequest = fakeRequest.withBody(form)
-
-      // When
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      // Then
-      status(result) mustBe SEE_OTHER
-      header(LOCATION, result) mustBe Some(onwardRoute.url)
-      verifyZeroInteractions(fileService)
+      cache.getEntry[Seq[FileAttachment]](SupportingMaterialFileListPage) mustBe Some(Seq(FileAttachment("id", "file-name", "type", file.file.length())))
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

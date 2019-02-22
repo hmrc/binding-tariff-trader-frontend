@@ -25,7 +25,7 @@ import controllers.actions._
 import config.FrontendAppConfig
 import forms.DescribeYourItemFormProvider
 import models.Mode
-import pages.{AskForUploadSupportingMaterialPage, DescribeYourItemPage, SupportingMaterialFileListPage}
+import pages.{DescribeYourItemPage, SupportingMaterialFileListPage}
 import navigation.Navigator
 import play.api.mvc.{Action, AnyContent}
 import views.html.describeYourItem
