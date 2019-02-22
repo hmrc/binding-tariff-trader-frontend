@@ -32,7 +32,9 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("registeredAddressForEori.heading", request.eoriNumber)
+        @components.heading(
+            headingKey = messages("registeredAddressForEori.heading", request.eoriNumber)
+        )
 
         <div role="note" aria-label="Information" class="application-notice info-notice">
             <p> @messages("registeredAddressForEori.note") </p>

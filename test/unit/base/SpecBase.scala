@@ -34,7 +34,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite {
 
   def fakeRequest = FakeRequest()
 
-  def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", "eori", None)
+  def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", "eori-789012", None)
 
   def messages: Messages = messagesApi.preferred(fakeRequest)
 }

@@ -71,7 +71,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
     when(btiApp.contact).thenReturn(contact)
     when(contact.email).thenReturn("luigi@example.test")
 
-    when(mapper.map(refEq("eori"), any[UserAnswers])).thenReturn(newCaseReq)
+    when(mapper.map(refEq("eori-789012"), any[UserAnswers])).thenReturn(newCaseReq)
   }
 
   override protected def afterEach(): Unit = {

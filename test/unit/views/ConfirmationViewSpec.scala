@@ -26,7 +26,9 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
   private val confirm = Confirmation("reference", "marisa@example.test")
 
-  def createView = () => confirmation(frontendAppConfig, confirm)(fakeRequest, messages)
+  private def createView = { () =>
+    confirmation(frontendAppConfig, confirm)(fakeRequest, messages)
+  }
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)
