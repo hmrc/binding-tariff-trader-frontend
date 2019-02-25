@@ -24,6 +24,9 @@ import pages._
 @Singleton
 class CaseRequestMapper {
 
+  // TODO: rather than failing on the first missing mandatory field, we should throw an error
+  // showing all expected fields missing.
+  // This can be done with the `cats` library (see "Validated")
   private def throwError(field: String) = {
     throw new IllegalStateException(s"Missing User Session Data: $field")
   }
