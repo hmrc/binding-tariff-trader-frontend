@@ -33,6 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait IdentifierAction extends ActionBuilder[IdentifierRequest] with ActionFunction[Request, IdentifierRequest] {
   protected lazy val cdsEnrolment = "HMRC-CUS-ORG"
+  protected lazy val fakeEoriNumber = "FK666333666"
 }
 
 class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthConnector, config: FrontendAppConfig)
@@ -51,7 +52,7 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
       enrolments.getEnrolment(cdsEnrolment).flatMap(_.getIdentifier("EORINumber")) match {
         case Some(eori) => eori.value
         case _ if config.isCdsEnrolmentCheckEnabled => throw InsufficientEnrolments()
-        case _ => "GB6723190" // fake EORI number
+        case _ => fakeEoriNumber // fake EORI number
       }
     }
 
