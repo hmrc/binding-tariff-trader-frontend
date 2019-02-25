@@ -14,6 +14,6 @@
  * limitations under the License.
  *@
 
-@(headingKey: String, headingSize: String = "heading-xlarge")(messageArgs: Any*)(implicit messages: Messages)
+@(headingMsg: String, headingSize: String = "heading-xlarge")
 
-<h1 class="@headingSize">@messages(headingKey, messageArgs)</h1>
+<h1 class="@headingSize">@headingMsg</h1>

@@ -33,7 +33,7 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("supportingInformationDetails.heading")()
+        @components.heading(messages("supportingInformationDetails.heading"))
 
         @components.input_textarea(
           field = form("value"),

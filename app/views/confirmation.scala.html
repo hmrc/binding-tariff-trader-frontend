@@ -24,7 +24,7 @@
     bodyClasses = None) {
 
     <div class="govuk-box-highlight">
-        @components.heading("confirmation.heading")()
+        @components.heading(messages("confirmation.heading"))
         <span class="font-large">
             @messages("confirmation.yourRefNumber") <br>
             <span id="confirmation-reference" class="font-large bold">@messages("confirmation.refValue", confirmation.reference)</span>
