@@ -29,6 +29,12 @@ class CaseRequestMapperTest extends UnitSpec {
 
   "Mapper" should {
 
+    "Fail when mandatory fields are missing" in {
+      intercept[IllegalStateException] {
+        mapper.map(userEori, missingGoodDetails())
+      }
+    }
+
     "Map Mandatory Fields" in {
       // When
       val response = mapper.map(userEori, mandatoryAnswers())
@@ -206,6 +212,35 @@ class CaseRequestMapperTest extends UnitSpec {
             DescribeYourItem(
               "Good Name",
               "Good Description"
+            )
+          ),
+          WhenToSendSamplePage.toString -> js(
+            WhenToSendSample.Yes
+          )
+        )
+      )
+    )
+  }
+
+  def missingGoodDetails(): UserAnswers = {
+    UserAnswers(
+      CacheMap(
+        "id",
+        Map(
+          RegisteredAddressForEoriPage.toString -> js(
+            RegisteredAddressForEori(
+              "Trader Business Name",
+              "Trader Address Line 1",
+              "Trader Town",
+              "Trader Post Code",
+              "Trader Country"
+            )
+          ),
+          EnterContactDetailsPage.toString -> js(
+            EnterContactDetails(
+              "Name",
+              "Email",
+              Some("Phone")
             )
           ),
           WhenToSendSamplePage.toString -> js(
