@@ -25,18 +25,21 @@ import views.html.registeredAddressForEori
 
 class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[RegisteredAddressForEori] {
 
-  val messageKeyPrefix = "registeredAddressForEori"
+  private val messageKeyPrefix = "registeredAddressForEori"
 
   override val form = new RegisteredAddressForEoriFormProvider()()
 
-  def createView = () => registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  private def createView = { () =>
+    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages)
+  }
 
-  def createViewUsingForm = (form: Form[_]) => registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
-
+  private def createViewUsingForm = { form: Form[_] =>
+    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages)
+  }
 
   "RegisteredAddressForEori view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix, "eori-789012")()
 
     behave like pageWithoutBackLink(createView)
 
@@ -46,6 +49,19 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
       routes.RegisteredAddressForEoriController.onSubmit(NormalMode).url,
       "field1", "field2", "field3", "field4", "field5"
     )
+
+    "show the expected text" in {
+      val text = asDocument(createViewUsingForm(form)).text()
+
+      text must include("Registered EORI details - GOV.UK")
+      text must include("What is the registered name and address for EORI number eori-789012?")
+      text must include("The details you enter must match the exact format of the registered EORI address")
+      text must include("Business, organisation or individual's name")
+      text must include("Address line 1")
+      text must include("Town or city")
+      text must include("Postcode")
+      text must include("Country")
+    }
   }
 
 }

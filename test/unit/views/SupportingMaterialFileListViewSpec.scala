@@ -16,7 +16,6 @@
 
 package views
 
-import controllers.routes
 import forms.SupportingMaterialFileListFormProvider
 import models.NormalMode
 import play.api.data.Form
@@ -35,7 +34,7 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
   "SupportingMaterialFileList view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 

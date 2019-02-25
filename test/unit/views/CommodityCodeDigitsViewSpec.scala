@@ -17,7 +17,6 @@
 package views
 
 import play.api.data.Form
-import controllers.routes
 import forms.CommodityCodeDigitsFormProvider
 import models.NormalMode
 import views.behaviours.StringViewBehaviours
@@ -34,7 +33,7 @@ class CommodityCodeDigitsViewSpec extends StringViewBehaviours {
   def createViewUsingForm = (form: Form[String]) => commodityCodeDigits(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "CommodityCodeDigits view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 

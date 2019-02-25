@@ -44,7 +44,7 @@ class CaseRequestMapper {
     }
   }
 
-  def map(answers: UserAnswers): NewCaseRequest = {
+  def map(eoriNumber: String, answers: UserAnswers): NewCaseRequest = {
 
     val confidentialInfo: Option[ConfidentialInformation] = answers.get(ConfidentialInformationPage)
     val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
@@ -60,7 +60,7 @@ class CaseRequestMapper {
     val returnSample: Option[ReturnSamples] = answers.get(ReturnSamplesPage)
 
     val contact = contactDetails.map(toContact).get
-    val holder: EORIDetails = registeredAddressForEori.map(toHolder).get
+    val holder: EORIDetails = registeredAddressForEori.map(toHolder(eoriNumber)).get
 
     val agentDetails = buildAgentDetails(answers)
 
@@ -84,9 +84,9 @@ class CaseRequestMapper {
     NewCaseRequest(app)
   }
 
-  def toHolder: RegisteredAddressForEori => EORIDetails = { details: RegisteredAddressForEori =>
+  def toHolder(eoriNumber: String): RegisteredAddressForEori => EORIDetails = { details: RegisteredAddressForEori =>
     EORIDetails(
-      "", // TODO: Hard Coded
+      eoriNumber,
       details.field1,
       details.field2,
       details.field3,

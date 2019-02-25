@@ -40,7 +40,7 @@ class RegisterBusinessRepresentingFormProviderSpec extends StringFieldBehaviours
       val invalidEori = "GB1234567890000001234"
       val result = form.bind(Map(fieldName -> invalidEori)).apply(fieldName)
       result.errors.size shouldBe 1
-      result.errors(0).message shouldBe "registerBusinessRepresenting.error.eoriNumber.format"
+      result.errors.head.message shouldBe "registerBusinessRepresenting.error.eoriNumber.format"
     }
 
     behave like mandatoryField(

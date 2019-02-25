@@ -34,7 +34,7 @@ class ReturnSamplesViewSpec extends ViewBehaviours {
   def createViewUsingForm = (form: Form[_]) => returnSamples(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "ReturnSamples view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
   }

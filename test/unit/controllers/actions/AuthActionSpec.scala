@@ -16,7 +16,7 @@
 
 package controllers.actions
 
-import play.api.mvc.Controller
+import play.api.mvc.{Controller, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -30,80 +30,107 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class AuthActionSpec extends SpecBase {
 
-  class Harness(authAction: IdentifierAction) extends Controller {
+  private class Harness(authAction: IdentifierAction) extends Controller {
     def onPageLoad() = authAction { _ => Ok }
   }
 
   "Auth Action" when {
+
     "the user hasn't logged in" must {
       "redirect the user to log in " in {
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new MissingBearerToken), frontendAppConfig)
-        val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result: Future[Result] = handleAuthError(MissingBearerToken())
+
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).get must startWith(frontendAppConfig.loginUrl)
+        redirectLocation(result).get must beTheLoginPage
       }
     }
 
     "the user's session has expired" must {
       "redirect the user to log in " in {
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new BearerTokenExpired), frontendAppConfig)
-        val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result: Future[Result] = handleAuthError(BearerTokenExpired())
+
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).get must startWith(frontendAppConfig.loginUrl)
+        redirectLocation(result).get must beTheLoginPage
+      }
+    }
+
+    "the user's credentials are invalid" must {
+      "redirect the user to log in " in {
+        val result: Future[Result] = handleAuthError(InvalidBearerToken())
+
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).get must beTheLoginPage
+      }
+    }
+
+    "the user's session cannot be found" must {
+      "redirect the user to log in " in {
+        val result: Future[Result] = handleAuthError(SessionRecordNotFound())
+
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).get must beTheLoginPage
       }
     }
 
     "the user doesn't have sufficient enrolments" must {
       "redirect the user to the unauthorised page" in {
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new InsufficientEnrolments), frontendAppConfig)
-        val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result: Future[Result] = handleAuthError(InsufficientEnrolments())
+
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
+        redirectLocation(result) mustBe unauthorisedLocation
       }
     }
 
     "the user doesn't have sufficient confidence level" must {
       "redirect the user to the unauthorised page" in {
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new InsufficientConfidenceLevel), frontendAppConfig)
-        val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result: Future[Result] = handleAuthError(InsufficientConfidenceLevel())
+
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
+        redirectLocation(result) mustBe unauthorisedLocation
       }
     }
 
     "the user used an unaccepted auth provider" must {
       "redirect the user to the unauthorised page" in {
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new UnsupportedAuthProvider), frontendAppConfig)
-        val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result: Future[Result] = handleAuthError(UnsupportedAuthProvider())
+
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
+        redirectLocation(result) mustBe unauthorisedLocation
       }
     }
 
     "the user has an unsupported affinity group" must {
       "redirect the user to the unauthorised page" in {
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new UnsupportedAffinityGroup), frontendAppConfig)
-        val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result: Future[Result] = handleAuthError(UnsupportedAffinityGroup())
+
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
+        redirectLocation(result) mustBe unauthorisedLocation
       }
     }
 
     "the user has an unsupported credential role" must {
       "redirect the user to the unauthorised page" in {
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new UnsupportedCredentialRole), frontendAppConfig)
-        val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result: Future[Result] = handleAuthError(UnsupportedCredentialRole())
+
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
+        redirectLocation(result) mustBe unauthorisedLocation
       }
     }
+
+  }
+
+  private def unauthorisedLocation = {
+    Some(routes.UnauthorisedController.onPageLoad().url)
+  }
+
+  private def beTheLoginPage = {
+    startWith(frontendAppConfig.loginUrl)
+  }
+
+  private def handleAuthError(exc: AuthorisationException): Future[Result] = {
+    val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(exc), frontendAppConfig)
+    val controller = new Harness(authAction)
+    controller.onPageLoad()(fakeRequest)
   }
 
 }

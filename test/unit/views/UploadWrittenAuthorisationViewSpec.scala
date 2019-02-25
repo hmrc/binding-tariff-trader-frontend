@@ -33,7 +33,7 @@ class UploadWrittenAuthorisationViewSpec extends StringViewBehaviours {
   def createViewUsingForm = (form: Form[String]) => uploadWrittenAuthorisation(frontendAppConfig, form, None, NormalMode)(fakeRequest, messages)
 
   "UploadWrittenAuthorisation view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
   }

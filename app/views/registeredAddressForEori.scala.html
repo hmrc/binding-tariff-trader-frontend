@@ -18,9 +18,10 @@
 @import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
 @import models.{Mode, RegisteredAddressForEori}
+@import models.requests.OptionalDataRequest
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: OptionalDataRequest[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("registeredAddressForEori.title")}",
@@ -31,7 +32,7 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("registeredAddressForEori.heading")
+        @components.heading( messages("registeredAddressForEori.heading", request.eoriNumber) )
 
         <div role="note" aria-label="Information" class="application-notice info-notice">
             <p> @messages("registeredAddressForEori.note") </p>

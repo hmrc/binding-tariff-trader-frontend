@@ -34,7 +34,7 @@ class WhichBestDescribesYouViewSpec extends ViewBehaviours {
   def createViewUsingForm = (form: Form[_]) => whichBestDescribesYou(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "WhichBestDescribesYou view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
   }

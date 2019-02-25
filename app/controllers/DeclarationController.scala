@@ -25,6 +25,7 @@ import mapper.CaseRequestMapper
 import models.Confirmation.format
 import models.WhichBestDescribesYou.isBusinessRepresentative
 import models._
+import models.requests.OptionalDataRequest
 import navigation.Navigator
 import pages.{ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -55,10 +56,10 @@ class DeclarationController @Inject()(
     Ok(declaration(appConfig, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
 
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
-  val newCaseRequest = mapper.map(answers)
+    val newCaseRequest = mapper.map(request.eoriNumber, answers)
 
     val attachments: Seq[FileAttachment] = answers
       .get(SupportingMaterialFileListPage)

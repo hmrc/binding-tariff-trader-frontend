@@ -31,22 +31,26 @@ import views.html.registeredAddressForEori
 
 class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
+  private def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new RegisteredAddressForEoriFormProvider()
-  val form = formProvider()
+  private lazy val formProvider = new RegisteredAddressForEoriFormProvider()
+  private lazy val form = formProvider()
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) = {
     new RegisteredAddressForEoriController(
       frontendAppConfig,
-      messagesApi, FakeDataCacheConnector,
+      messagesApi,
+      FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
       formProvider
     )
+  }
 
-  def viewAsString(form: Form[_] = form) = registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  private def viewAsString(form: Form[_] = form): String = {
+    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages).toString
+  }
 
   "RegisteredAddressForEori Controller" must {
 

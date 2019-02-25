@@ -36,7 +36,7 @@ class ConfidentialInformationViewSpec extends QuestionViewBehaviours[Confidentia
 
   "ConfidentialInformation view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 
