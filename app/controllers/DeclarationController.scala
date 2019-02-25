@@ -59,7 +59,7 @@ class DeclarationController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
 
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
-    val newCaseRequest = mapper.map(request.eoriNumber, answers)
+    val newCaseRequest = mapper.map(request.userEoriNumber, answers)
 
     val attachments: Seq[FileAttachment] = answers
       .get(SupportingMaterialFileListPage)
