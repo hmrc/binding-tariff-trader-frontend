@@ -26,8 +26,10 @@ class ConfirmationViewSpec extends ViewBehaviours {
   private val messageKeyPrefix = "confirmation"
 
   private val confirm = Confirmation("reference", "marisa@example.test", sendingSamples = true)
+  private val confirmNoSample = Confirmation("referenceNoSample", "marisa.nosample@example.test", sendingSamples = false)
 
   def createView: () => Html = () => confirmation(frontendAppConfig, confirm)(fakeRequest, messages)
+  def createViewNoSamples: () => Html = () => confirmation(frontendAppConfig, confirmNoSample)(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)
@@ -37,7 +39,19 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       text must include("GBreference")
       text must include("We have sent your confirmation email to marisa@example.test")
+      text must include("Your application will not be processed until we get your samples")
+      text must include("21 Victoria Avenue")
+      text must include("We will give you your ruling within 30 to 60 days of receiving your samples")
+    }
+
+    "not display sample related text when no samples are sent" in {
+      val text = asDocument(createViewNoSamples()).text()
+
+      text must include("GBreferenceNoSample")
+      text must include("We have sent your confirmation email to marisa.nosample@example.test")
+      text must not include("Your application will not be processed until we get your samples")
+      text must not include("21 Victoria Avenue")
+      text must include("We will give you your ruling within 30 to 60 days.")
     }
   }
-
 }
