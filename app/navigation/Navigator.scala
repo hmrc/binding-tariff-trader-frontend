@@ -37,7 +37,7 @@ class Navigator @Inject()() {
     PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
     ConfidentialInformationPage -> (_ => routes.ConfidentialInformationController.onPageLoad(NormalMode)),
     DescribeYourItemPage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode)),
-    AskForUploadSupportingMaterialPage -> (_ => routes.AskForUploadSupportingMaterialController.onPageLoad(NormalMode)),
+    SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
     CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)),
     CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(NormalMode)),

@@ -26,7 +26,7 @@ import models.Confirmation.format
 import models.WhichBestDescribesYou.isBusinessRepresentative
 import models._
 import navigation.Navigator
-import pages.{ConfirmationPage, UploadSupportingMaterialMultiplePage, UploadWrittenAuthorisationPage}
+import pages.{ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
 import service.{CasesService, FileService}
@@ -58,10 +58,10 @@ class DeclarationController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
-    val newCaseRequest = mapper.map(answers)
+  val newCaseRequest = mapper.map(answers)
 
     val attachments: Seq[FileAttachment] = answers
-      .get(UploadSupportingMaterialMultiplePage)
+      .get(SupportingMaterialFileListPage)
       .getOrElse(Seq.empty)
 
     for {

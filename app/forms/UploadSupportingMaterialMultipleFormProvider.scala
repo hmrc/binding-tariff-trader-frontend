@@ -16,16 +16,15 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
 
 class UploadSupportingMaterialMultipleFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "multiple-file-input" -> text()
+      "file-input" -> text()
     )
 
 }

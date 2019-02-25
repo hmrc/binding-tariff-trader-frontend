@@ -21,7 +21,7 @@
 @import views.ViewUtils._
 
 
-@(appConfig: FrontendAppConfig, form: Form[_], existing: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("uploadSupportingMaterialMultiple.title")}",
@@ -34,7 +34,7 @@
 
         @components.back_link()
 
-        <div id="error-dialog"></div>
+        @components.error_summary(form.errors)
 
         @components.heading("uploadSupportingMaterialMultiple.heading")
 
@@ -47,10 +47,9 @@
 
         <div class="js-visible mt-3">
             @components.input_file(
-                field = form("multiple-file-input"),
+                field = form("file-input"),
                 label = messages("uploadSupportingMaterialMultiple.label"),
-                accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt"),
-                multiple = true
+                accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt")
             )
 
             <div id="list-of-files-table" class="draganddroptable"></div>
@@ -65,6 +64,10 @@
             </strong>
         </div>
 
-        @components.submit_button(Some(messages("site.upload_continue")))
+        <div class="section">
+            <button id="submit" class="button"> Upload </button>
+            <span style="position: relative;top: 9px;left: 14px;"> <a href="@routes.SupportingMaterialFileListController.onPageLoad(mode)">Cancel</a></span>
+        </div>
+
     }
 }

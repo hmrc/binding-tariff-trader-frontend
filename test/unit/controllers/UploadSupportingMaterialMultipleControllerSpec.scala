@@ -27,11 +27,11 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
-import pages.UploadSupportingMaterialMultiplePage
+import pages.SupportingMaterialFileListPage
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
-import play.api.libs.json.Json
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc.{Call, MultipartFormData}
 import play.api.test.Helpers._
@@ -66,10 +66,9 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       fileService
     )
 
-  private def viewAsString(form: Form[_] = form, existingFiles: Seq[FileAttachment] = Seq.empty): String = uploadSupportingMaterialMultiple(
+  private def viewAsString(form: Form[_] = form): String = uploadSupportingMaterialMultiple(
     frontendAppConfig,
     form,
-    existingFiles,
     NormalMode
   )(fakeRequest, messages).toString
 
@@ -87,24 +86,14 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       contentAsString(result) mustBe viewAsString()
     }
 
-    "populate the view correctly on a GET when the question has previously been answered" in {
-      val files = Seq(FileAttachment("id", "file-name", "type", 1L))
-
-      val validData = Map(UploadSupportingMaterialMultiplePage.toString -> Json.toJson(files))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
-
-      contentAsString(result) mustBe viewAsString(form, files)
-    }
-
     "respond with accepted and add next page on the location header  when valid data is submitted" in {
       // Given A Form
       val file = TemporaryFile("example-file.txt")
-      val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"), ref = file)
+      val filePart = FilePart[TemporaryFile](key = "file-input", "file.txt", contentType = Some("text/plain"), ref = file)
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
+      given(fileService.validate(refEq(filePart))).willReturn(Right(filePart))
       given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(concurrent.Future(FileAttachment("id", "file-name", "type", 0)))
 
       val savedCacheMap = mock[CacheMap]
@@ -114,26 +103,46 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       // Then
-      status(result) mustBe ACCEPTED
-      header(LOCATION, result) mustBe Some(onwardRoute.url)
+      status(result) mustBe SEE_OTHER
 
       val cache = theCacheSaved
-      cache.getEntry[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage) mustBe Some(Seq(FileAttachment("id", "file-name", "type", file.file.length())))
+      cache.getEntry[Seq[FileAttachment]](SupportingMaterialFileListPage) mustBe Some(Seq(FileAttachment("id", "file-name", "type", file.file.length())))
     }
 
-    "respond with accepted and add next page on the location header when no data is submitted" in {
+    "respond with bad request if a file has wrong extension" in {
       // Given A Form
-      val filePart = FilePart[TemporaryFile](key = "file", "", contentType = Some("application/octet-stream"), ref = TemporaryFile())
+      val file = TemporaryFile("example-file.txt")
+      val filePart = FilePart[TemporaryFile](key = "file-input", "file.3gp", contentType = Some("video/3gpp"), ref = file)
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
+
+      given(fileService.validate(refEq(filePart))).willReturn(Left("message something went wrong"))
+
+      val savedCacheMap = mock[CacheMap]
+      given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
 
       // When
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       // Then
-      status(result) mustBe ACCEPTED
-      header(LOCATION, result) mustBe Some(onwardRoute.url)
-      verifyZeroInteractions(fileService)
+      status(result) mustBe BAD_REQUEST
+      contentAsString(result) should include("message something went wrong")
+    }
+
+    "respond with bad request if no file is selected" in {
+      // Given A Form
+      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq.empty, badParts = Seq.empty)
+      val postRequest = fakeRequest.withBody(form)
+
+      val savedCacheMap = mock[CacheMap]
+      given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
+
+      // When
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      // Then
+      status(result) mustBe BAD_REQUEST
+      contentAsString(result) should include("You must select a file")
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -144,7 +153,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"), ref = TemporaryFile("example-file.txt"))
+      val filePart = FilePart[TemporaryFile](key = "file-input", "file.txt", contentType = Some("text/plain"), ref = TemporaryFile("example-file.txt"))
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)

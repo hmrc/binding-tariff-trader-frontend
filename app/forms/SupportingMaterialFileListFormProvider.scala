@@ -16,15 +16,15 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
 
-class AskForUploadSupportingMaterialFormProvider @Inject() extends Mappings {
+class SupportingMaterialFileListFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("askForUploadSupportingMaterial.error.required")
+      "add-file-choice" -> boolean()
     )
+
 }

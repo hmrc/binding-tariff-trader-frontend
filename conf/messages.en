@@ -64,8 +64,17 @@ site.upload_continue = Upload and continue
 site.service_name = Apply for a Binding Tariff Information ruling
 site.textarea.char_limit = (Limit is {0} characters)
 
-unauthorised.title = You can’t access this service with this account
-unauthorised.heading = You can’t access this service with this account
+unauthorised.title = Not registered for CDS
+unauthorised.heading = To apply for a Binding Information ruling you need to get access to CDS
+unauthorised.body1 = CDS is the replacement for Customs Handling Imports and Export Freight (CHIEF) system. You can use it to manage your customs interactions.
+unauthorised.body2_p1 = If you have an EORI number you can
+unauthorised.body2_link = get access to CDS
+unauthorised.body2_p2 = so that you can:
+unauthorised.body3 = process declarations for goods entering and leaving the UK or EU through ports and airports
+unauthorised.body4 = calculate and pay the correct duty and taxes
+unauthorised.body5 = complete customs information electronically
+unauthorised.body6_p1 = If you do not, you can
+unauthorised.body6_link = get an EORI number and get access here.
 
 ## Generic messages
 eori.number = EORI number
@@ -193,25 +202,33 @@ confidentialInformation.checkYourAnswersLabel = Confidential information details
 confidentialInformation.error.field1.required = Enter information that you do not want to be published
 confidentialInformation.error.field1.length = Information must be 100 characters or less
 
-askForUploadSupportingMaterial.title = Do you have files to upload? - GOV.UK
-askForUploadSupportingMaterial.heading = Do you want to upload any photographs, manuals, brochures or technical specifications?
-askForUploadSupportingMaterial.checkYourAnswersLabel = Do you want to upload files?
-askForUploadSupportingMaterial.label = Providing more information means we will be able to classify your item faster.
-askForUploadSupportingMaterial.error.required = Select yes if you have files to upload
+supportingMaterialFileList.title = Upload file list - GOV.UK
+supportingMaterialFileList.heading = Do you want to upload any supporting documents?
+supportingMaterialFileList.uploadFileCounter = You have uploaded {0} file{1}
+supportingMaterialFileList.checkYourAnswersLabel = Uploaded files
+supportingMaterialFileList.label.uploadFile =  Upload a file?
+supportingMaterialFileList.label.anotherFile =  Do you want to upload another file?
+supportingMaterialFileList.indications = The things we need to give you an accurate commodity code advice are:
+supportingMaterialFileList.indications.bullet1 = ingredients lists for food and drink items
+supportingMaterialFileList.indications.bullet2 = technical specifications
+supportingMaterialFileList.indications.bullet3 = lists of materials
+supportingMaterialFileList.indications.bullet4 = images of the item
+supportingMaterialFileList.indications.bullet5 = images of packaging
 
 uploadSupportingMaterialMultiple.title = Upload files - GOV.UK
 uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, brochures or technical specifications
 uploadSupportingMaterialMultiple.label = Upload files
 uploadSupportingMaterialMultiple.upload.title =  You can upload:
-uploadSupportingMaterialMultiple.upload.restrictionFiles = more than one file at a time, up to 10 files
+uploadSupportingMaterialMultiple.upload.restrictionFiles = one file at a time, up to 10 files
 uploadSupportingMaterialMultiple.upload.restrictionSize =  a maximum individual file size of 10MB
+uploadSupportingMaterialMultiple.upload.selectFile = You must select a file
 uploadSupportingMaterialMultiple.upload.typeOfFiles =   pdf, doc, docx, png, jpg, jpeg and txt files
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file types can I upload?
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
-uploadSupportingMaterialMultiple.checkYourAnswersLabel = Uploaded files
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
+uploadSupportingMaterialMultiple.error.numberFiles = Reduce the number of files to a maximum of 10
 
 commodityCodeBestMatch.title = Have you found a commodity code? - GOV.UK
 commodityCodeBestMatch.heading = Have you found a commodity code for your item?
