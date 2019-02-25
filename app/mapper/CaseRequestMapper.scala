@@ -24,33 +24,19 @@ import pages._
 @Singleton
 class CaseRequestMapper {
 
-  def buildAgentDetails: UserAnswers => Option[AgentDetails] = { answers: UserAnswers =>
-    if (isBusinessRepresentative(answers)) {
-      answers.get(RegisterBusinessRepresentingPage).map { details: RegisterBusinessRepresenting =>
-        AgentDetails(
-          EORIDetails(
-            details.eoriNumber,
-            details.businessName,
-            details.addressLine1,
-            details.town, // Line 2 empty
-            "", // Line 3 empty
-            details.postCode,
-            details.country
-          )
-        )
-      }
-    } else {
-      None
-    }
+  // TODO: rather than failing on the first missing mandatory field, we should throw an error
+  // showing all expected fields missing.
+  // This can be done with the `cats` library (see "Validated")
+  private def throwError(field: String) = {
+    throw new IllegalStateException(s"Missing User Session Data: $field")
   }
 
-  def map(eoriNumber: String, answers: UserAnswers): NewCaseRequest = {
+  def map(userEori: String, answers: UserAnswers): NewCaseRequest = {
 
     val confidentialInfo: Option[ConfidentialInformation] = answers.get(ConfidentialInformationPage)
     val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
     val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
     val previousCommodityCode: Option[PreviousCommodityCode] = answers.get(PreviousCommodityCodePage)
-    val registeredAddressForEori: Option[RegisteredAddressForEori] = answers.get(RegisteredAddressForEoriPage)
     val commodityCodeRulingReference: Option[String] = answers.get(CommodityCodeRulingReferencePage)
     val legalChallengeDetails: Option[String] = answers.get(LegalChallengeDetailsPage)
     val commodityCodeDigits: Option[String] = answers.get(CommodityCodeDigitsPage)
@@ -59,18 +45,21 @@ class CaseRequestMapper {
     val sampleProvided: Option[WhenToSendSample] = answers.get(WhenToSendSamplePage)
     val returnSample: Option[ReturnSamples] = answers.get(ReturnSamplesPage)
 
-    val contact = contactDetails.map(toContact).get
-    val holder: EORIDetails = registeredAddressForEori.map(toHolder(eoriNumber)).get
+    val contact = contactDetails.map(toContact).getOrElse(throwError("contact details"))
 
-    val agentDetails = buildAgentDetails(answers)
+    val agentDetails: Option[AgentDetails] = buildAgentDetails(userEori)(answers)
+    val holderDetails: EORIDetails = buildHolderDetails(userEori)(answers)
+
+    val goodName = describeYourItem.map(_.field1).getOrElse(throwError("good name"))
+    val goodDescription = describeYourItem.map(_.field2).getOrElse(throwError("good description"))
 
     val app = Application(
-      holder = holder,
+      holder = holderDetails,
       contact = contact,
       agent = agentDetails,
       offline = false,
-      goodName = describeYourItem.map(_.field1).getOrElse("CaseRequestMapperTestN/A"),
-      goodDescription = describeYourItem.map(_.field2).getOrElse("N/A"),
+      goodName = goodName,
+      goodDescription = goodDescription,
       confidentialInformation = confidentialInfo.map(_.field1),
       otherInformation = supportingInformationDetails,
       reissuedBTIReference = previousCommodityCode.map(_.field1),
@@ -84,19 +73,51 @@ class CaseRequestMapper {
     NewCaseRequest(app)
   }
 
-  def toHolder(eoriNumber: String): RegisteredAddressForEori => EORIDetails = { details: RegisteredAddressForEori =>
+  private def buildHolderDetails(userEori: String): UserAnswers => EORIDetails = { answers: UserAnswers =>
+    val maybeEoriDetails = if (isBusinessRepresentative(answers)) {
+      answers.get(RegisterBusinessRepresentingPage).map(buildTraderEoriDetails(userEori)(_))
+    } else {
+      answers.get(RegisteredAddressForEoriPage).map(buildEoriDetailsFromCurrentUser(userEori)(_))
+    }
+
+    maybeEoriDetails.getOrElse(throwError("holder EORI details"))
+  }
+
+  private def buildAgentDetails(userEori: String): UserAnswers => Option[AgentDetails] = { answers: UserAnswers =>
+    if (isBusinessRepresentative(answers)) {
+      answers.get(RegisteredAddressForEoriPage).map { details: RegisteredAddressForEori =>
+        AgentDetails(buildEoriDetailsFromCurrentUser(userEori)(details))
+      }
+    } else {
+      None
+    }
+  }
+
+  private def buildTraderEoriDetails(eoriNumber: String): RegisterBusinessRepresenting => EORIDetails = { details: RegisterBusinessRepresenting =>
     EORIDetails(
-      eoriNumber,
-      details.field1,
-      details.field2,
-      details.field3,
-      "", // TODO: Missing From model
-      details.field4,
-      details.field5
+      details.eoriNumber,
+      details.businessName,
+      details.addressLine1,
+      details.town,
+      "", // address line 3 empty
+      details.postCode,
+      details.country
     )
   }
 
-  def toContact: EnterContactDetails => Contact = { details: EnterContactDetails =>
+  private def buildEoriDetailsFromCurrentUser(eoriNumber: String): RegisteredAddressForEori => EORIDetails = { details: RegisteredAddressForEori =>
+    EORIDetails(
+      eoriNumber,
+      details.field1, // business name
+      details.field2, // address line 1
+      details.field3, // address line 2 (town)
+      "",             // address line 3 empty
+      details.field4, // post code
+      details.field5  // country
+    )
+  }
+
+  private def toContact: EnterContactDetails => Contact = { details: EnterContactDetails =>
     Contact(
       name = details.field1,
       email = details.field2,
