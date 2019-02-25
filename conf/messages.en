@@ -227,6 +227,7 @@ uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
+uploadSupportingMaterialMultiple.error.numberFiles = Reduce the number of files to a maximum of 10
 
 commodityCodeBestMatch.title = Have you found a commodity code? - GOV.UK
 commodityCodeBestMatch.heading = Have you found a commodity code for your item?
@@ -330,7 +331,8 @@ confirmation.paragraph3.sendingSamples.link = Get more information about samples
 confirmation.sendingSamples.address = HM Revenue and Customs<br> Tariff Classification Service<br> 10th Floor SE<br> Alexander House<br> 21 Victoria Avenue<br> Southend-on-Sea<br> Essex<br> SS99 1AA
 confirmation.homeLink = BTI home page
 confirmation.heading2.whatNext = What happens next
-confirmation.paragraph.whatNext0 = We will give you your ruling within 30 to 60 days of receiving your samples.
+confirmation.paragraph.whatNext0.sample = We will give you your ruling within 30 to 60 days of receiving your samples.
+confirmation.paragraph.whatNext0.nosample = We will give you your ruling within 30 to 60 days.
 confirmation.paragraph.whatNext1 = You can sign in to check the status of your application.
 
 confirmation.refValue = GB{0}

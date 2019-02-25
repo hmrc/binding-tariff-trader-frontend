@@ -70,7 +70,7 @@ class DeclarationController @Inject()(
       letter <- getPublishedLetter(answers)
       c: Case <- createCase(newCaseRequest, att, letter, answers)
       _ = auditService.auditBTIApplicationSubmissionSuccessful(c)
-      userAnswers = answers.set(ConfirmationPage, Confirmation(c.reference, c.application.contact.email))
+      userAnswers = answers.set(ConfirmationPage, Confirmation(c))
       _ <- dataCacheConnector.save(userAnswers.cacheMap)
       res: Result <- successful(Redirect(navigator.nextPage(ConfirmationPage, mode)(userAnswers)))
     } yield res
