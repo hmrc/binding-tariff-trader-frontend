@@ -47,13 +47,16 @@ class CaseRequestMapper {
     val agentDetails: Option[AgentDetails] = buildAgentDetails(userEori)(answers)
     val holderDetails: EORIDetails = buildHolderDetails(userEori)(answers)
 
+    val goodName = describeYourItem.map(_.field1).getOrElse(throwError("good name"))
+    val goodDescription = describeYourItem.map(_.field2).getOrElse(throwError("good description"))
+
     val app = Application(
       holder = holderDetails,
       contact = contact,
       agent = agentDetails,
       offline = false,
-      goodName = describeYourItem.map(_.field1).getOrElse("N/A"),
-      goodDescription = describeYourItem.map(_.field2).getOrElse("N/A"),
+      goodName = goodName,
+      goodDescription = goodDescription,
       confidentialInformation = confidentialInfo.map(_.field1),
       otherInformation = supportingInformationDetails,
       reissuedBTIReference = previousCommodityCode.map(_.field1),
