@@ -20,6 +20,7 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import controllers.routes
 import models.requests.IdentifierRequest
+import play.api.Logger
 import play.api.mvc.Results._
 import play.api.mvc.{ActionBuilder, ActionFunction, Request, Result}
 import uk.gov.hmrc.auth.core._
@@ -52,7 +53,9 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
       enrolments.getEnrolment(cdsEnrolment).flatMap(_.getIdentifier("EORINumber")) match {
         case Some(eori) => eori.value
         case _ if config.isCdsEnrolmentCheckEnabled => throw InsufficientEnrolments()
-        case _ => fakeEoriNumber // fake EORI number
+        case _ =>
+          Logger.warn("User without EORI number. Using a fake EORI number as we are in private beta.")
+          fakeEoriNumber
       }
     }
 
