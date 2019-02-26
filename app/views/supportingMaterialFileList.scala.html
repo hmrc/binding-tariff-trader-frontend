@@ -34,39 +34,30 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("supportingMaterialFileList.heading"))
+        @if(files.isEmpty) {
+            @components.heading(messages("supportingMaterialFileList.heading"))
+        }else{
+            <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter", files.size)</h1>
+            @components.show_file_table(files, mode)
+        }
 
-        <p>@messages("supportingMaterialFileList.indications")</p>
-        <ul class="list list-bullet">
-            <li>@messages("supportingMaterialFileList.indications.bullet1")</li>
-            <li>@messages("supportingMaterialFileList.indications.bullet2")</li>
-            <li>@messages("supportingMaterialFileList.indications.bullet3")</li>
-            <li>@messages("supportingMaterialFileList.indications.bullet4")</li>
-            <li>@messages("supportingMaterialFileList.indications.bullet5")</li>
-        </ul>
-
-        @*<h1 class="heading-xlarge">@messages("supportingMaterialFileList.heading", files.size, if(files.size != 1){"s"}else{""} )</h1>*@
-
-        <div class="section">
-            <table id="files-table">
-                <tbody>
-                    @for((file: FileAttachment, index: Int) <- files.zipWithIndex) {
-                        <tr id="files-row-@{index}">
-                            <td id="files-row-@{index}-title" class="w-50">  @file.name </td>
-                            <td id="files-row-@{index}-size">  @humanReadableSize(file.size) </td>
-                            <td id="files-row-@{index}-remove" class="w-15">
-                                <a id="files-row-@{index}-remove-file" class="remove" href="@routes.SupportingMaterialFileListController.onRemove(file.id, mode)">Remove</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div class="form-group">
+            <p>@messages("supportingMaterialFileList.indications")</p>
+            <ul class="list list-bullet">
+                <li>@messages("supportingMaterialFileList.indications.bullet1")</li>
+                <li>@messages("supportingMaterialFileList.indications.bullet2")</li>
+                <li>@messages("supportingMaterialFileList.indications.bullet3")</li>
+                <li>@messages("supportingMaterialFileList.indications.bullet4")</li>
+                <li>@messages("supportingMaterialFileList.indications.bullet5")</li>
+            </ul>
         </div>
 
         <div class="form-group">
-            <h2 class="heading-large">
-                @if(files.isEmpty){@messages("supportingMaterialFileList.label.uploadFile")}else{@messages("supportingMaterialFileList.label.anotherFile")}
-            </h2>
+            @if(files.nonEmpty){
+                <h2 class="heading-large">
+                    @messages("supportingMaterialFileList.label.anotherFile")
+                </h2>
+            }
         </div>
 
         <div class="form-group">
