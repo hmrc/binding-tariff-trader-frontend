@@ -204,10 +204,9 @@ confidentialInformation.error.field1.length = Information must be 100 characters
 
 supportingMaterialFileList.title = Upload file list - GOV.UK
 supportingMaterialFileList.heading = Do you want to upload any supporting documents?
-supportingMaterialFileList.uploadFileCounter = You have uploaded {0} file{1}
+supportingMaterialFileList.uploadFileCounter = You have uploaded {0} supporting documents
 supportingMaterialFileList.checkYourAnswersLabel = Uploaded files
-supportingMaterialFileList.label.uploadFile =  Upload a file?
-supportingMaterialFileList.label.anotherFile =  Do you want to upload another file?
+supportingMaterialFileList.label.anotherFile =  Do you want to upload another document?
 supportingMaterialFileList.indications = The things we need to give you an accurate commodity code advice are:
 supportingMaterialFileList.indications.bullet1 = ingredients lists for food and drink items
 supportingMaterialFileList.indications.bullet2 = technical specifications

@@ -71,8 +71,16 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     x => AnswerRow("confidentialInformation.checkYourAnswersLabel", s"${x.field1}", false, routes.ConfidentialInformationController.onPageLoad(CheckMode).url)
   }
 
-  def supportingMaterialFileList: Option[AnswerRow] = userAnswers.get(SupportingMaterialFileListPage) map {
-    x => AnswerRow("supportingMaterialFileList.checkYourAnswersLabel", x.map(_.name), false, routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url)
+  def supportingMaterialFileList: Option[AnswerRow] = {
+
+    def contructRow: Seq[String] => AnswerRow = { content =>
+      AnswerRow("supportingMaterialFileList.checkYourAnswersLabel", content, false, routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url)
+    }
+
+    userAnswers.get(SupportingMaterialFileListPage) map {
+      case filenames if filenames.nonEmpty => contructRow(filenames.map(_.name))
+      case _ => contructRow(Seq("no files attached"))
+    }
   }
 
   def describeYourItem: Option[AnswerRow] = userAnswers.get(DescribeYourItemPage) map {
