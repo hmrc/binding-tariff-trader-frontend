@@ -34,7 +34,7 @@ class InformationAboutYourItemViewSpec extends ViewBehaviours {
   def createViewUsingForm = (form: Form[_]) => informationAboutYourItem(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "InformationAboutYourItem view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
   }

@@ -40,7 +40,7 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
     )(fakeRequest, messages)
 
   "UploadSupportingMaterialMultiple view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 

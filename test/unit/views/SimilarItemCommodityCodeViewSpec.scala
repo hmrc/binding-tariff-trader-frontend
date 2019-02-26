@@ -34,7 +34,7 @@ class SimilarItemCommodityCodeViewSpec extends ViewBehaviours {
   def createViewUsingForm = (form: Form[_]) => similarItemCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "SimilarItemCommodityCode view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
   }

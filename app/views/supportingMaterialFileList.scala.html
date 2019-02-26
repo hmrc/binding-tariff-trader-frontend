@@ -35,7 +35,7 @@
         @components.error_summary(form.errors)
 
         @if(files.isEmpty) {
-            @components.heading("supportingMaterialFileList.heading")
+            @components.heading(messages("supportingMaterialFileList.heading"))
         }else{
             <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter", files.size)</h1>
             @components.show_file_table(files, mode)

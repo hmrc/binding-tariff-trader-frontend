@@ -25,6 +25,6 @@ class UnauthorisedViewSpec extends ViewBehaviours {
 
   "Unauthorised view" must {
 
-    behave like normalPage(view, "unauthorised")
+    behave like normalPage(view, "unauthorised")()
   }
 }

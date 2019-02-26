@@ -36,7 +36,7 @@ class DescribeYourItemViewSpec extends QuestionViewBehaviours[DescribeYourItem] 
 
   "DescribeYourItem view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 

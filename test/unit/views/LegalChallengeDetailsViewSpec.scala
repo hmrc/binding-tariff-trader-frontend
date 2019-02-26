@@ -34,7 +34,7 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
   def createViewUsingForm = (form: Form[String]) => legalChallengeDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "LegalChallengeDetails view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 
