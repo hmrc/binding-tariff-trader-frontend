@@ -21,16 +21,18 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SupportingMaterialFileListFormProvider
 import javax.inject.Inject
+import models.requests.DataRequest
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.supportingMaterialFileList
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
 class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfig,
@@ -56,25 +58,28 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
     val removedFile = existingFiles.filter(_.id != fileId).seq
     val answers: UserAnswers = request.userAnswers.set(SupportingMaterialFileListPage, removedFile)
     dataCacheConnector.save(answers.cacheMap)
-      .map(_ =>
-        Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode))
-      )
+      .map( _ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)) )
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def redirectNext(userAnswers: UserAnswers) = {
+    def redirectNext(userAnswers: UserAnswers): Result = {
       Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(userAnswers))
     }
 
-    def defaultCachePageAndRedirect = {
+    def defaultCachePageAndRedirect: Future[Result] = {
 
-      request.userAnswers.get(SupportingMaterialFileListPage) match {
-        case Some(_) => successful(redirectNext(request.userAnswers))
-        case None =>
-          val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(_ => redirectNext(updatedAnswers))
+      def saveNoFiles(request: DataRequest[AnyContent]): Future[UserAnswers] = {
+        val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(_ => updatedAnswers)
       }
+
+      val updatedAnswers: Future[UserAnswers] = request.userAnswers.get(SupportingMaterialFileListPage) match {
+        case None => saveNoFiles(request)
+        case _ => successful(request.userAnswers)
+      }
+
+      updatedAnswers.map(redirectNext)
     }
 
     form.bindFromRequest().fold(
@@ -86,4 +91,5 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
       }
     )
   }
+
 }
