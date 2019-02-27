@@ -73,13 +73,13 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def supportingMaterialFileList: Option[AnswerRow] = {
 
-    def contructRow: Seq[String] => AnswerRow = { content =>
+    def constructRow: Seq[String] => AnswerRow = { content =>
       AnswerRow("supportingMaterialFileList.checkYourAnswersLabel", content, false, routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url)
     }
 
     userAnswers.get(SupportingMaterialFileListPage) map {
-      case filenames if filenames.nonEmpty => contructRow(filenames.map(_.name))
-      case _ => contructRow(Seq("no files attached"))
+      case filenames if filenames.nonEmpty => constructRow(filenames.map(_.name))
+      case _ => constructRow(Seq("No files attached"))
     }
   }
 
