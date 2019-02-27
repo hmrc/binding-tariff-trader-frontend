@@ -63,15 +63,26 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
+    def redirectNext(userAnswers: UserAnswers) = {
+      Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(userAnswers))
+    }
+
+    def defaultCachePageAndRedirect = {
+
+      request.userAnswers.get(SupportingMaterialFileListPage) match {
+        case Some(_) => successful(redirectNext(request.userAnswers))
+        case None =>
+          val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
+          dataCacheConnector.save(updatedAnswers.cacheMap).map(_ => redirectNext(updatedAnswers))
+      }
+    }
+
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, Seq.empty, mode))),
       {
         case true => successful(Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
-        case false =>
-          val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ => Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers)))
+        case false => defaultCachePageAndRedirect
       }
     )
   }
