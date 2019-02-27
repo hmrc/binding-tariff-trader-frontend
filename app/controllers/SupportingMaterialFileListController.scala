@@ -63,23 +63,18 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def redirectNext(userAnswers: UserAnswers): Result = {
-      Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(userAnswers))
-    }
-
     def defaultCachePageAndRedirect: Future[Result] = {
 
-      def saveNoFiles(request: DataRequest[AnyContent]): Future[UserAnswers] = {
-        val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(_ => updatedAnswers)
-      }
-
       val updatedAnswers: Future[UserAnswers] = request.userAnswers.get(SupportingMaterialFileListPage) match {
-        case None => saveNoFiles(request)
+        case None =>
+          val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
+          dataCacheConnector.save(updatedAnswers.cacheMap).map(_ => updatedAnswers)
         case _ => successful(request.userAnswers)
       }
 
-      updatedAnswers.map(redirectNext)
+      updatedAnswers.map { userAnswers =>
+        Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(userAnswers))
+      }
     }
 
     form.bindFromRequest().fold(
