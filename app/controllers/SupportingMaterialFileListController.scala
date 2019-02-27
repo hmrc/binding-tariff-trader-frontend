@@ -26,11 +26,12 @@ import navigation.Navigator
 import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.supportingMaterialFileList
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
 class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfig,
@@ -56,24 +57,22 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
     val removedFile = existingFiles.filter(_.id != fileId).seq
     val answers: UserAnswers = request.userAnswers.set(SupportingMaterialFileListPage, removedFile)
     dataCacheConnector.save(answers.cacheMap)
-      .map(_ =>
-        Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode))
-      )
+      .map( _ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)) )
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def redirectNext(userAnswers: UserAnswers) = {
-      Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(userAnswers))
-    }
+    def defaultCachePageAndRedirect: Future[Result] = {
 
-    def defaultCachePageAndRedirect = {
-
-      request.userAnswers.get(SupportingMaterialFileListPage) match {
-        case Some(_) => successful(redirectNext(request.userAnswers))
+      val updatedAnswers: Future[UserAnswers] = request.userAnswers.get(SupportingMaterialFileListPage) match {
         case None =>
           val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(_ => redirectNext(updatedAnswers))
+          dataCacheConnector.save(updatedAnswers.cacheMap).map(_ => updatedAnswers)
+        case _ => successful(request.userAnswers)
+      }
+
+      updatedAnswers.map { userAnswers =>
+        Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(userAnswers))
       }
     }
 
@@ -86,4 +85,5 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
       }
     )
   }
+
 }
