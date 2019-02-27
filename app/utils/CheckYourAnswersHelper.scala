@@ -19,10 +19,9 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
-import play.api.i18n.MessagesApi
 import viewmodels.AnswerRow
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers, messagesApi: MessagesApi) {
+class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
     x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name, false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
@@ -74,12 +73,14 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, messagesApi: MessagesApi)
 
   def supportingMaterialFileList: Option[AnswerRow] = {
 
-    val content: Seq[String] = userAnswers.get(SupportingMaterialFileListPage) match {
-      case Some(filenames) if filenames.nonEmpty => filenames.map(_.name)
-      case _ => Seq(messagesApi.apply("supportingMaterialFileList.noFilesAttached"))
+    def constructRow: Seq[String] => AnswerRow = { content =>
+      AnswerRow("supportingMaterialFileList.checkYourAnswersLabel", content, false, routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url)
     }
 
-    Some(AnswerRow("supportingMaterialFileList.checkYourAnswersLabel", content, false, routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url))
+    userAnswers.get(SupportingMaterialFileListPage) map {
+      case filenames if filenames.nonEmpty => constructRow(filenames.map(_.name))
+      case _ => constructRow(Seq("No files attached"))
+    }
   }
 
   def describeYourItem: Option[AnswerRow] = userAnswers.get(DescribeYourItemPage) map {

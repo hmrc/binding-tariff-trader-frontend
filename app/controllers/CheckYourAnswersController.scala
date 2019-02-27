@@ -40,7 +40,7 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
 
   def onPageLoad(): Action[AnyContent] = (authenticate andThen getData andThen requireData) { implicit request =>
 
-    val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, messagesApi)
+    val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
 
     val sections = Seq(
       AnswerSection(

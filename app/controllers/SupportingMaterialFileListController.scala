@@ -68,11 +68,10 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
         successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, Seq.empty, mode))),
       {
         case true => successful(Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
-        case false => {
-          dataCacheConnector.fetch(SupportingMaterialFileListPage)
-
-          successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers)))
-        }
+        case false =>
+          val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
+          dataCacheConnector.save(updatedAnswers.cacheMap).map(
+            _ => Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers)))
       }
     )
   }
