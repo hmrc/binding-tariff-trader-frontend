@@ -68,7 +68,11 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
         successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, Seq.empty, mode))),
       {
         case true => successful(Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
-        case false => successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers)))
+        case false => {
+          dataCacheConnector.fetch(SupportingMaterialFileListPage)
+
+          successful(Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(request.userAnswers)))
+        }
       }
     )
   }

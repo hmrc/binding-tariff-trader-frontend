@@ -17,10 +17,11 @@
 package controllers
 
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeIdentifierAction}
+import models.CheckMode
 import navigation.FakeNavigator
 import play.api.mvc.Call
 import play.api.test.Helpers._
-import viewmodels.AnswerSection
+import viewmodels.{AnswerRow, AnswerSection}
 import views.html.check_your_answers
 
 class CheckYourAnswersControllerSpec extends ControllerSpecBase {
@@ -43,10 +44,12 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
       val result = controller().onPageLoad()(fakeRequest)
       status(result) mustBe OK
 
+      val fileAnswer = AnswerRow("supportingMaterialFileList.checkYourAnswersLabel", "No files attached", false, routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url)
+
       val expectedSections = Seq(
         AnswerSection(Some("Your details"), Seq.empty),
         AnswerSection(Some("Details of the business, organisation or individual you represent"), Seq.empty),
-        AnswerSection(Some("Information about your item"), Seq.empty),
+        AnswerSection(Some("Information about your item"), Seq(fileAnswer)),
         AnswerSection(Some("Other information about your item"), Seq.empty)
       )
 

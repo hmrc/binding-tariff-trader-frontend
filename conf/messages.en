@@ -212,6 +212,9 @@ supportingMaterialFileList.indications.bullet2 = technical specifications
 supportingMaterialFileList.indications.bullet3 = lists of materials
 supportingMaterialFileList.indications.bullet4 = images of the item
 supportingMaterialFileList.indications.bullet5 = images of packaging
+supportingMaterialFileList.noFilesAttached = No files attached
+
+
 
 uploadSupportingMaterialMultiple.title = Upload files - GOV.UK
 uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, brochures or technical specifications
