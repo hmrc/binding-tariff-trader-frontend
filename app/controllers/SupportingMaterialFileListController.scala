@@ -21,7 +21,6 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SupportingMaterialFileListFormProvider
 import javax.inject.Inject
-import models.requests.DataRequest
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages._
