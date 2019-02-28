@@ -16,17 +16,16 @@
 
 package pages
 
-import models.WhenToSendSample
 import pages.behaviours.PageBehaviours
 
 class WhenToSendSamplePageSpec extends PageBehaviours {
 
-  "YourLocation" must {
+  "WhenToSendSamplePage" must {
 
-    beRetrievable[WhenToSendSample](WhenToSendSamplePage)
+    beRetrievable[Boolean](WhenToSendSamplePage)
 
-    beSettable[WhenToSendSample](WhenToSendSamplePage)
+    beSettable[Boolean](WhenToSendSamplePage)
 
-    beRemovable[WhenToSendSample](WhenToSendSamplePage)
+    beRemovable[Boolean](WhenToSendSamplePage)
   }
 }
