@@ -40,11 +40,10 @@
             <p>@messages("informationAboutYourItem.paragraph")</p>
         </div>
 
-        @components.input_radio(
+        @components.input_yes_no(
             field = form("value"),
-            legend = messages("informationAboutYourItem.legend"),
-            legendClass = Some("visually-hidden"),
-            inputs = InformationAboutYourItem.options.toSeq
+            label = messages("informationAboutYourItem.heading"),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button()

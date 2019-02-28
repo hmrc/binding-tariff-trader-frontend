@@ -16,20 +16,19 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.InformationAboutYourItemFormProvider
+import javax.inject.Inject
 import models.{Enumerable, Mode}
-import pages.{ConfidentialInformationPage, DescribeYourItemPage, InformationAboutYourItemPage}
 import navigation.Navigator
-import views.html.informationAboutYourItem
-import models.InformationAboutYourItem.{No, Yes}
+import pages.{ConfidentialInformationPage, DescribeYourItemPage, InformationAboutYourItemPage}
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.informationAboutYourItem
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -66,8 +65,8 @@ class InformationAboutYourItemController @Inject()(
         val updatedAnswers = request.userAnswers.set(InformationAboutYourItemPage, value)
 
         val redirectedPage = value match {
-          case Yes => ConfidentialInformationPage
-          case No => DescribeYourItemPage
+          case true => ConfidentialInformationPage
+          case false => DescribeYourItemPage
         }
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(

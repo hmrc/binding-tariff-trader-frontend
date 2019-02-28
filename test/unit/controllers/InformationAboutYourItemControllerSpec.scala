@@ -16,18 +16,17 @@
 
 package controllers
 
-import play.api.data.Form
-import play.api.libs.json.JsString
-import uk.gov.hmrc.http.cache.client.CacheMap
-import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import play.api.test.Helpers._
 import forms.InformationAboutYourItemFormProvider
 import models.NormalMode
-import models.InformationAboutYourItem
+import navigation.FakeNavigator
 import pages.InformationAboutYourItemPage
+import play.api.data.Form
+import play.api.libs.json.JsBoolean
 import play.api.mvc.Call
+import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.informationAboutYourItem
 
 class InformationAboutYourItemControllerSpec extends ControllerSpecBase {
@@ -53,16 +52,16 @@ class InformationAboutYourItemControllerSpec extends ControllerSpecBase {
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(InformationAboutYourItemPage.toString -> JsString(InformationAboutYourItem.values.head.toString))
+      val validData = Map(InformationAboutYourItemPage.toString -> JsBoolean(Boolean.box(true)))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(InformationAboutYourItem.values.head))
+      contentAsString(result) mustBe viewAsString(form.fill(true))
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", InformationAboutYourItem.options.head.value))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -88,7 +87,7 @@ class InformationAboutYourItemControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", InformationAboutYourItem.options.head.value))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER

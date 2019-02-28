@@ -92,7 +92,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def informationAboutYourItem: Option[AnswerRow] = userAnswers.get(InformationAboutYourItemPage) map {
-    x => AnswerRow("informationAboutYourItem.checkYourAnswersLabel", s"informationAboutYourItem.$x", true, routes.InformationAboutYourItemController.onPageLoad(CheckMode).url)
+    x => AnswerRow("informationAboutYourItem.checkYourAnswersLabel", yesNoAnswer(x), true, routes.InformationAboutYourItemController.onPageLoad(CheckMode).url)
   }
 
   def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {

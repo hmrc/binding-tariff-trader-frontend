@@ -16,17 +16,15 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
-import models.InformationAboutYourItem
 
 class InformationAboutYourItemFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[InformationAboutYourItem] =
+  def apply(): Form[Boolean] =
     Form(
-      "value" -> enumerable[InformationAboutYourItem]("informationAboutYourItem.error.required")
+      "value" -> boolean("informationAboutYourItem.error.required")
     )
 
 }
