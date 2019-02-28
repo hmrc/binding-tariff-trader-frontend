@@ -16,14 +16,14 @@
 
 package views
 
-import play.api.data.Form
+import controllers.routes
 import forms.InformationAboutYourItemFormProvider
 import models.NormalMode
-import models.InformationAboutYourItem
-import views.behaviours.ViewBehaviours
+import play.api.data.Form
+import views.behaviours.YesNoViewBehaviours
 import views.html.informationAboutYourItem
 
-class InformationAboutYourItemViewSpec extends ViewBehaviours {
+class InformationAboutYourItemViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "informationAboutYourItem"
 
@@ -37,29 +37,7 @@ class InformationAboutYourItemViewSpec extends ViewBehaviours {
     behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
-  }
 
-  "InformationAboutYourItem view" when {
-    "rendered" must {
-      "contain radio buttons for the value" in {
-        val doc = asDocument(createViewUsingForm(form))
-        for (option <- InformationAboutYourItem.options) {
-          assertContainsRadioButton(doc, option.id, "value", option.value, false)
-        }
-      }
-    }
-
-    for(option <- InformationAboutYourItem.options) {
-      s"rendered with a value of '${option.value}'" must {
-        s"have the '${option.value}' radio button selected" in {
-          val doc = asDocument(createViewUsingForm(form.bind(Map("value" -> s"${option.value}"))))
-          assertContainsRadioButton(doc, option.id, "value", option.value, true)
-
-          for(unselectedOption <- InformationAboutYourItem.options.filterNot(o => o == option)) {
-            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
-          }
-        }
-      }
-    }
+    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.InformationAboutYourItemController.onSubmit(NormalMode).url)
   }
 }

@@ -85,9 +85,9 @@ trait ModelGenerators {
       } yield PreviousCommodityCode(field1)
     }
 
-  implicit lazy val arbitraryInformationAboutYourItem: Arbitrary[InformationAboutYourItem] =
+  implicit lazy val arbitraryInformationAboutYourItem: Arbitrary[Boolean] =
     Arbitrary {
-      Gen.oneOf(InformationAboutYourItem.values.toSeq)
+      Gen.oneOf(Seq(true,false))
     }
 
   implicit lazy val arbitraryEnterContactDetails: Arbitrary[EnterContactDetails] =

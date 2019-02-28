@@ -16,9 +16,8 @@
 
 package pages
 
-import models.InformationAboutYourItem
 
-case object InformationAboutYourItemPage extends QuestionPage[InformationAboutYourItem] {
+case object InformationAboutYourItemPage extends QuestionPage[Boolean] {
 
   override def toString: String = "informationAboutYourItem"
 }
