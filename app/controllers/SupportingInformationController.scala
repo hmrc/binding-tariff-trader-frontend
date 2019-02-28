@@ -28,7 +28,6 @@ import models.{Enumerable, Mode}
 import pages.{CheckYourAnswersPage, SupportingInformationDetailsPage, SupportingInformationPage}
 import navigation.Navigator
 import views.html.supportingInformation
-import models.SupportingInformation.{No, Yes}
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -66,8 +65,8 @@ class SupportingInformationController @Inject()(
         val updatedAnswers = request.userAnswers.set(SupportingInformationPage, value)
 
         val redirectedPage = value match {
-          case Yes => SupportingInformationDetailsPage
-          case No => CheckYourAnswersPage
+          case true => SupportingInformationDetailsPage
+          case false => CheckYourAnswersPage
         }
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(

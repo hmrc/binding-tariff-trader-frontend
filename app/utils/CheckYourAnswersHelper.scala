@@ -32,7 +32,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def supportingInformation: Option[AnswerRow] = userAnswers.get(SupportingInformationPage) map {
-    x => AnswerRow("supportingInformation.checkYourAnswersLabel", s"supportingInformation.$x", true, routes.SupportingInformationController.onPageLoad(CheckMode).url)
+    x => AnswerRow("supportingInformation.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SupportingInformationController.onPageLoad(CheckMode).url)
   }
 
   def legalChallengeDetails: Option[AnswerRow] = userAnswers.get(LegalChallengeDetailsPage) map {

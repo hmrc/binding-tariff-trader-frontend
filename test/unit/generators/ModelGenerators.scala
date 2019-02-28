@@ -23,11 +23,6 @@ import org.scalacheck.{Arbitrary, Gen}
 trait ModelGenerators {
 
 
-  implicit lazy val arbitrarySupportInformation: Arbitrary[SupportingInformation] =
-    Arbitrary {
-      Gen.oneOf(SupportingInformation.values.toSeq)
-    }
-
   implicit lazy val arbitrarySimilarItemCommodityCode: Arbitrary[SimilarItemCommodityCode] =
     Arbitrary {
       Gen.oneOf(SimilarItemCommodityCode.values.toSeq)
