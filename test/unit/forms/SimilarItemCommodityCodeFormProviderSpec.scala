@@ -16,24 +16,23 @@
 
 package forms
 
-import forms.behaviours.OptionFieldBehaviours
-import models.SimilarItemCommodityCode
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class SimilarItemCommodityCodeFormProviderSpec extends OptionFieldBehaviours {
+class SimilarItemCommodityCodeFormProviderSpec extends BooleanFieldBehaviours {
+
+  val requiredKey = "similarItemCommodityCode.error.required"
+  val invalidKey = "error.boolean"
 
   val form = new SimilarItemCommodityCodeFormProvider()()
-
   ".value" must {
 
     val fieldName = "value"
-    val requiredKey = "similarItemCommodityCode.error.required"
 
-    behave like optionsField[SimilarItemCommodityCode](
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = SimilarItemCommodityCode.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(
