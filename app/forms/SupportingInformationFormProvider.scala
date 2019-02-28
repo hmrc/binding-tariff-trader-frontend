@@ -20,13 +20,12 @@ import javax.inject.Inject
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import models.SupportingInformation
 
 class SupportingInformationFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[SupportingInformation] =
+  def apply(): Form[Boolean] =
     Form(
-      "value" -> enumerable[SupportingInformation]("supportingInformation.error.required")
+      "value" -> boolean("supportingInformation.error.required")
     )
 
 }
