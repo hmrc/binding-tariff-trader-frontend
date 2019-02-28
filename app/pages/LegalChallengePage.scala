@@ -16,9 +16,7 @@
 
 package pages
 
-import models.LegalChallenge
-
-case object LegalChallengePage extends QuestionPage[LegalChallenge] {
+case object LegalChallengePage extends QuestionPage[Boolean] {
 
   override def toString: String = "legalChallenge"
 }

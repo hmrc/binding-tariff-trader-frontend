@@ -16,17 +16,18 @@
 
 package pages
 
-import models.LegalChallenge
 import pages.behaviours.PageBehaviours
 
 class LegalChallengePageSpec extends PageBehaviours {
 
-  "YourLocation" must {
+  "LegalChallengePage" must {
 
-    beRetrievable[LegalChallenge](LegalChallengePage)
+    beRetrievable[Boolean](LegalChallengePage)
 
-    beSettable[LegalChallenge](LegalChallengePage)
+    beSettable[Boolean](LegalChallengePage)
 
-    beRemovable[LegalChallenge](LegalChallengePage)
+    beRemovable[Boolean](LegalChallengePage)
   }
+
+
 }

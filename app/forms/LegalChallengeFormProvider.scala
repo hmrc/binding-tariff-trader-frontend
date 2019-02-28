@@ -16,17 +16,16 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
-import models.LegalChallenge
 
 class LegalChallengeFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[LegalChallenge] =
+  def apply(): Form[Boolean] =
     Form(
-      "value" -> enumerable[LegalChallenge]("legalChallenge.error.required")
+      "value" -> boolean("legalChallenge.error.required")
     )
+
 
 }

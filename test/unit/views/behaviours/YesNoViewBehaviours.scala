@@ -16,7 +16,7 @@
 
 package views.behaviours
 
-import play.api.data.{Form, FormError}
+import play.api.data.Form
 import play.twirl.api.HtmlFormat
 
 trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
@@ -31,7 +31,7 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
           val doc = asDocument(createView(form))
           val legends = doc.getElementsByTag("legend")
           legends.size mustBe 1
-          legends.first.text mustBe messages(s"$messageKeyPrefix.label")
+          legends.first.text mustBe messages(s"$messageKeyPrefix.heading")
         }
 
         "contain an input for the value" in {
