@@ -16,17 +16,15 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
-import models.CommodityCodeBestMatch
 
 class CommodityCodeBestMatchFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[CommodityCodeBestMatch] =
+  def apply(): Form[Boolean] =
     Form(
-      "value" -> enumerable[CommodityCodeBestMatch]("commodityCodeBestMatch.error.required")
+      "value" -> boolean("commodityCodeBestMatch.error.required")
     )
 
 }

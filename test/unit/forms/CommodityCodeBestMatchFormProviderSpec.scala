@@ -16,24 +16,23 @@
 
 package forms
 
-import forms.behaviours.OptionFieldBehaviours
-import models.CommodityCodeBestMatch
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class CommodityCodeBestMatchFormProviderSpec extends OptionFieldBehaviours {
+class CommodityCodeBestMatchFormProviderSpec extends BooleanFieldBehaviours {
 
   val form = new CommodityCodeBestMatchFormProvider()()
+  val requiredKey = "commodityCodeBestMatch.error.required"
+  val invalidKey = "error.boolean"
 
   ".value" must {
 
     val fieldName = "value"
-    val requiredKey = "commodityCodeBestMatch.error.required"
 
-    behave like optionsField[CommodityCodeBestMatch](
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = CommodityCodeBestMatch.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(

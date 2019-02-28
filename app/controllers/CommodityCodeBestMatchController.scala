@@ -16,34 +16,33 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.CommodityCodeBestMatchFormProvider
+import javax.inject.Inject
 import models.{Enumerable, Mode}
-import pages.{CommodityCodeBestMatchPage, CommodityCodeDigitsPage, WhenToSendSamplePage}
 import navigation.Navigator
-import views.html.commodityCodeBestMatch
-import models.CommodityCodeBestMatch.{No, Yes}
+import pages.{CommodityCodeBestMatchPage, CommodityCodeDigitsPage, WhenToSendSamplePage}
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.commodityCodeBestMatch
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CommodityCodeBestMatchController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: CommodityCodeBestMatchFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                                  appConfig: FrontendAppConfig,
+                                                  override val messagesApi: MessagesApi,
+                                                  dataCacheConnector: DataCacheConnector,
+                                                  navigator: Navigator,
+                                                  identify: IdentifierAction,
+                                                  getData: DataRetrievalAction,
+                                                  requireData: DataRequiredAction,
+                                                  formProvider: CommodityCodeBestMatchFormProvider
+                                                ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 
@@ -66,8 +65,8 @@ class CommodityCodeBestMatchController @Inject()(
         val updatedAnswers = request.userAnswers.set(CommodityCodeBestMatchPage, value)
 
         val redirectedPage = value match {
-          case Yes => CommodityCodeDigitsPage
-          case No => WhenToSendSamplePage
+          case true => CommodityCodeDigitsPage
+          case false => WhenToSendSamplePage
         }
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(

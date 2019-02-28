@@ -16,18 +16,17 @@
 
 package pages
 
-import models.CommodityCodeBestMatch
 import pages.behaviours.PageBehaviours
 
 class CommodityCodeBestMatchPageSpec extends PageBehaviours {
 
-  "YourLocation" must {
+  "CommodityCodeBestMatchPage" must {
 
-    beRetrievable[CommodityCodeBestMatch](CommodityCodeBestMatchPage)
+    beRetrievable[ Boolean ](CommodityCodeBestMatchPage)
 
-    beSettable[CommodityCodeBestMatch](CommodityCodeBestMatchPage)
+    beSettable[ Boolean ](CommodityCodeBestMatchPage)
 
-    beRemovable[CommodityCodeBestMatch](CommodityCodeBestMatchPage)
+    beRemovable[ Boolean ](CommodityCodeBestMatchPage)
   }
 
 }
