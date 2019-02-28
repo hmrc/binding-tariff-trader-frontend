@@ -16,24 +16,25 @@
 
 package forms
 
-import forms.behaviours.OptionFieldBehaviours
-import models.WhenToSendSample
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class WhenToSendSampleFormProviderSpec extends OptionFieldBehaviours {
+class WhenToSendSampleFormProviderSpec extends BooleanFieldBehaviours {
 
   val form = new WhenToSendSampleFormProvider()()
+
+  val requiredKey = "whenToSendSample.error.required"
+  val invalidKey = "error.boolean"
+
 
   ".value" must {
 
     val fieldName = "value"
-    val requiredKey = "whenToSendSample.error.required"
 
-    behave like optionsField[WhenToSendSample](
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = WhenToSendSample.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(
@@ -42,4 +43,5 @@ class WhenToSendSampleFormProviderSpec extends OptionFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

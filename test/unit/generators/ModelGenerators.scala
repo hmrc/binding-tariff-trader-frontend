@@ -33,11 +33,6 @@ trait ModelGenerators {
       Gen.oneOf(ReturnSamples.values.toSeq)
     }
 
-  implicit lazy val arbitraryWhenToSendSample: Arbitrary[WhenToSendSample] =
-    Arbitrary {
-      Gen.oneOf(WhenToSendSample.values.toSeq)
-    }
-
   implicit lazy val arbitraryConfidentialInformation: Arbitrary[ConfidentialInformation] =
     Arbitrary {
       for {

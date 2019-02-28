@@ -16,9 +16,7 @@
 
 package pages
 
-import models.WhenToSendSample
-
-case object WhenToSendSamplePage extends QuestionPage[WhenToSendSample] {
+case object WhenToSendSamplePage extends QuestionPage[Boolean] {
 
   override def toString: String = "whenToSendSample"
 }
