@@ -24,6 +24,7 @@ import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import pages.ConfirmationPage
 import play.api.test.Helpers._
+import service.PdfService
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.confirmation
 
@@ -33,6 +34,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private val cache = mock[DataCacheConnector]
   private val cacheMap = mock[CacheMap]
+  private val pdfService = mock[PdfService]
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
     new ConfirmationController(
@@ -41,7 +43,8 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
-      cache
+      cache,
+      pdfService
     )
   }
 

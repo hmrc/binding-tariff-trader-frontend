@@ -25,6 +25,7 @@ import pages.ConfirmationPage
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
+import service.PdfService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.confirmation
 
@@ -37,7 +38,8 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
-                                       dataCacheConnector: DataCacheConnector
+                                       dataCacheConnector: DataCacheConnector,
+                                       pdfService: PdfService
                                       ) extends FrontendController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -57,5 +59,41 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
     }
 
   }
+
+  def pdf: Action[AnyContent] = (identify).async { implicit request =>
+
+    def generatePdf(): Future[Result] = {
+      pdfService.getPdf().map {
+        response =>
+          response.status match {
+            case OK => Ok(response.bodyAsBytes.toArray).as("application/pdf")
+              .withHeaders("Content-Disposition" -> s"attachment; filename=result.pdf")
+            case _ => BadRequest(response.body)
+
+          }
+      }
+    }
+
+
+    generatePdf()
+
+//    request.userAnswers.get(ConfirmationPage) match {
+//      case Some(c: Confirmation) => generatePdf(c)
+//      case _ => successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+//    }
+
+  }
+
+  //  def pdf = {
+  //
+  //    pdfService.getPdf()
+  //      .map { response =>
+  //        response.status match {
+  //          case OK => Ok(response.bodyAsBytes.toArray).as("application/pdf")
+  //            .withHeaders("Content-Disposition" -> s"attachment; filename=result.pdf")
+  //          case _ => BadRequest(response.body)
+  //        }
+  //      }
+  //  }
 
 }

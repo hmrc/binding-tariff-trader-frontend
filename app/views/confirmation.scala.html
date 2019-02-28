@@ -15,6 +15,7 @@
  *@
 
 @import config.FrontendAppConfig
+@import controllers.routes._
 
 @(appConfig: FrontendAppConfig, confirmation: Confirmation)(implicit request: Request[_], messages: Messages)
 
@@ -33,7 +34,7 @@
 
     <p id="confirmation-email-message">@messages("confirmation.paragragh.confirmationEmail", confirmation.emailAddress)</p>
     <ul class="list">
-        <li><a href="#">@messages("confirmation.download.link.PDF")</a></li>
+        <li><a href=href="@routes.ConfirmationController.pdf>@messages("confirmation.download.link.PDF")</a></li>
         <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
     </ul>
 
