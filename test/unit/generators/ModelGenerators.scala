@@ -28,9 +28,9 @@ trait ModelGenerators {
       Gen.oneOf(SupportingInformation.values.toSeq)
     }
 
-  implicit lazy val arbitraryLegalChallenge: Arbitrary[LegalChallenge] =
+  implicit lazy val arbitraryLegalChallenge: Arbitrary[Boolean] =
     Arbitrary {
-      Gen.oneOf(LegalChallenge.values.toSeq)
+      Gen.oneOf(Seq(true,false))
     }
 
   implicit lazy val arbitrarySimilarItemCommodityCode: Arbitrary[SimilarItemCommodityCode] =

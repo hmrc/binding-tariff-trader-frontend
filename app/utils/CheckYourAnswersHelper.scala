@@ -40,7 +40,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def legalChallenge: Option[AnswerRow] = userAnswers.get(LegalChallengePage) map {
-    x => AnswerRow("legalChallenge.checkYourAnswersLabel", s"legalChallenge.$x", true, routes.LegalChallengeController.onPageLoad(CheckMode).url)
+    x => AnswerRow("legalChallenge.checkYourAnswersLabel",  yesNoAnswer(x) , true, routes.LegalChallengeController.onPageLoad(CheckMode).url)
   }
 
   def commodityCodeRulingReference: Option[AnswerRow] = userAnswers.get(CommodityCodeRulingReferencePage) map {
@@ -118,5 +118,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map {
     x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", Seq(x.field1, x.field2, x.field3, x.field4, x.field5), false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }
+
+  private def yesNoAnswer(x: Boolean) = if (x) "Yes" else "No"
 
 }

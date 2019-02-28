@@ -28,7 +28,6 @@ import models.{Enumerable, Mode}
 import pages.{LegalChallengeDetailsPage, LegalChallengePage, SupportingInformationPage}
 import navigation.Navigator
 import views.html.legalChallenge
-import models.LegalChallenge.{No, Yes}
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -66,8 +65,8 @@ class LegalChallengeController @Inject()(
         val updatedAnswers = request.userAnswers.set(LegalChallengePage, value)
 
         val redirectedPage = value match {
-          case Yes => LegalChallengeDetailsPage
-          case No => SupportingInformationPage
+          case true => LegalChallengeDetailsPage
+          case false => SupportingInformationPage
         }
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
