@@ -16,17 +16,16 @@
 
 package pages
 
-import models.SimilarItemCommodityCode
 import pages.behaviours.PageBehaviours
 
 class SimilarItemCommodityCodePageSpec extends PageBehaviours {
 
-  "YourLocation" must {
+  "SimilarItemCommodityCodePage" must {
 
-    beRetrievable[SimilarItemCommodityCode](SimilarItemCommodityCodePage)
+    beRetrievable[Boolean](SimilarItemCommodityCodePage)
 
-    beSettable[SimilarItemCommodityCode](SimilarItemCommodityCodePage)
+    beSettable[Boolean](SimilarItemCommodityCodePage)
 
-    beRemovable[SimilarItemCommodityCode](SimilarItemCommodityCodePage)
+    beRemovable[Boolean](SimilarItemCommodityCodePage)
   }
 }

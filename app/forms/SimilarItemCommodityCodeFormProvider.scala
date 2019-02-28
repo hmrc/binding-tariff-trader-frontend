@@ -16,17 +16,15 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
-import models.SimilarItemCommodityCode
 
 class SimilarItemCommodityCodeFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[SimilarItemCommodityCode] =
+  def apply(): Form[Boolean] =
     Form(
-      "value" -> enumerable[SimilarItemCommodityCode]("similarItemCommodityCode.error.required")
+      "value" -> boolean("similarItemCommodityCode.error.required")
     )
 
 }

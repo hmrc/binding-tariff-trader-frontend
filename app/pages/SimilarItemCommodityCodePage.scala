@@ -16,9 +16,7 @@
 
 package pages
 
-import models.SimilarItemCommodityCode
-
-case object SimilarItemCommodityCodePage extends QuestionPage[SimilarItemCommodityCode] {
+case object SimilarItemCommodityCodePage extends QuestionPage[Boolean] {
 
   override def toString: String = "similarItemCommodityCode"
 }
