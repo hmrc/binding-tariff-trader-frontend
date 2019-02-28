@@ -17,7 +17,6 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
-@import models.WhenToSendSample
 @import models.Mode
 @import views.ViewUtils._
 
@@ -55,11 +54,10 @@
 
         <p>@messages("whenToSendSample.fourth.paragraph")</p>
 
-        @components.input_radio(
+        @components.input_yes_no(
             field = form("value"),
-            legend = messages("whenToSendSample.legend"),
-            legendClass = Some("visually-hidden"),
-            inputs = WhenToSendSample.options.toSeq
+            label = messages("whenToSendSample.heading"),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button()
