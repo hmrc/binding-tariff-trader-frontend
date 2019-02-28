@@ -16,7 +16,6 @@
 
 package pages
 
-import models.InformationAboutYourItem
 
 case object InformationAboutYourItemPage extends QuestionPage[Boolean] {
 

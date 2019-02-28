@@ -16,7 +16,6 @@
 
 package pages
 
-import models.InformationAboutYourItem
 import pages.behaviours.PageBehaviours
 
 class InformationAboutYourItemPageSpec extends PageBehaviours {
