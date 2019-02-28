@@ -17,7 +17,7 @@
 package views
 
 import controllers.routes
-import forms.removeMeFormProvider
+import forms.LegalChallengeFormProvider
 import models.NormalMode
 import play.api.data.Form
 import views.behaviours.YesNoViewBehaviours
@@ -27,15 +27,15 @@ class LegalChallengeViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "legalChallenge"
 
-  val form = new removeMeFormProvider()()
+  val form = new LegalChallengeFormProvider()()
 
   def createView = () => legalChallenge(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm = (form: Form[_]) => legalChallenge(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  "removeMe view" must {
+  "LegalChallenge view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 
