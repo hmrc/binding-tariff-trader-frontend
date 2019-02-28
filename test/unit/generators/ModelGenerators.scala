@@ -28,11 +28,6 @@ trait ModelGenerators {
       Gen.oneOf(SupportingInformation.values.toSeq)
     }
 
-  implicit lazy val arbitraryLegalChallenge: Arbitrary[Boolean] =
-    Arbitrary {
-      Gen.oneOf(Seq(true,false))
-    }
-
   implicit lazy val arbitrarySimilarItemCommodityCode: Arbitrary[SimilarItemCommodityCode] =
     Arbitrary {
       Gen.oneOf(SimilarItemCommodityCode.values.toSeq)
@@ -46,11 +41,6 @@ trait ModelGenerators {
   implicit lazy val arbitraryWhenToSendSample: Arbitrary[WhenToSendSample] =
     Arbitrary {
       Gen.oneOf(WhenToSendSample.values.toSeq)
-    }
-
-  implicit lazy val arbitraryCommodityCodeBestMatch: Arbitrary[CommodityCodeBestMatch] =
-    Arbitrary {
-      Gen.oneOf(CommodityCodeBestMatch.values.toSeq)
     }
 
   implicit lazy val arbitraryConfidentialInformation: Arbitrary[ConfidentialInformation] =

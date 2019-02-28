@@ -64,7 +64,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def commodityCodeBestMatch: Option[AnswerRow] = userAnswers.get(CommodityCodeBestMatchPage) map {
-    x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", s"commodityCodeBestMatch.$x", true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
+    x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", yesNoAnswer(x) , true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
   }
 
   def confidentialInformation: Option[AnswerRow] = userAnswers.get(ConfidentialInformationPage) map {
@@ -119,6 +119,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", Seq(x.field1, x.field2, x.field3, x.field4, x.field5), false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }
 
-  private def yesNoAnswer(x: Boolean) = if (x) "Yes" else "No"
+  private def yesNoAnswer(x: Boolean) = if (x) "site.yes" else "site.no"
 
 }
