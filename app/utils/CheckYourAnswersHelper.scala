@@ -48,7 +48,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def similarItemCommodityCode: Option[AnswerRow] = userAnswers.get(SimilarItemCommodityCodePage) map {
-    x => AnswerRow("similarItemCommodityCode.checkYourAnswersLabel", s"similarItemCommodityCode.$x", true, routes.SimilarItemCommodityCodeController.onPageLoad(CheckMode).url)
+    x => AnswerRow("similarItemCommodityCode.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SimilarItemCommodityCodeController.onPageLoad(CheckMode).url)
   }
 
   def returnSamples: Option[AnswerRow] = userAnswers.get(ReturnSamplesPage) map {

@@ -28,11 +28,6 @@ trait ModelGenerators {
       Gen.oneOf(SupportingInformation.values.toSeq)
     }
 
-  implicit lazy val arbitrarySimilarItemCommodityCode: Arbitrary[SimilarItemCommodityCode] =
-    Arbitrary {
-      Gen.oneOf(SimilarItemCommodityCode.values.toSeq)
-    }
-
   implicit lazy val arbitraryReturnSamples: Arbitrary[ReturnSamples] =
     Arbitrary {
       Gen.oneOf(ReturnSamples.values.toSeq)

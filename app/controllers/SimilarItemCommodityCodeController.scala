@@ -16,20 +16,19 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.SimilarItemCommodityCodeFormProvider
+import javax.inject.Inject
 import models.{Enumerable, Mode}
-import pages.{CommodityCodeRulingReferencePage, LegalChallengePage, SimilarItemCommodityCodePage}
 import navigation.Navigator
-import views.html.similarItemCommodityCode
-import models.SimilarItemCommodityCode.{No, Yes}
+import pages.{CommodityCodeRulingReferencePage, LegalChallengePage, SimilarItemCommodityCodePage}
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.similarItemCommodityCode
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -66,8 +65,8 @@ class SimilarItemCommodityCodeController @Inject()(
         val updatedAnswers = request.userAnswers.set(SimilarItemCommodityCodePage, value)
 
         val redirectedPage = value match {
-          case Yes => CommodityCodeRulingReferencePage
-          case No => LegalChallengePage
+          case true => CommodityCodeRulingReferencePage
+          case false => LegalChallengePage
         }
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
