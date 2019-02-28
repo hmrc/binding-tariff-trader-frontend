@@ -46,14 +46,14 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
   }
 
   private def viewAsString: String = {
-    confirmation(frontendAppConfig, Confirmation("ref", "marisa@example.test"))(fakeRequest, messages).toString
+    confirmation(frontendAppConfig, Confirmation("ref", "marisa@example.test", sendingSamples = true))(fakeRequest, messages).toString
   }
 
   "Confirmation Controller" must {
 
     "return OK and the correct view for a GET" in {
       given(cache.remove(cacheMap)).willReturn(Future.successful(true))
-      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "marisa@example.test")))
+      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "marisa@example.test", sendingSamples = true)))
 
       val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
 

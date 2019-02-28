@@ -16,10 +16,12 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
-case class Confirmation(reference: String, emailAddress: String)
+case class Confirmation(reference: String, emailAddress: String, sendingSamples: Boolean)
 
 object Confirmation {
-  implicit val format = Json.format[Confirmation]
+  implicit val format: OFormat[Confirmation] = Json.format[Confirmation]
+
+  def apply(c: Case): Confirmation = new Confirmation(c.reference, c.application.contact.email, c.application.sampleToBeProvided)
 }

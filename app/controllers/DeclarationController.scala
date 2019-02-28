@@ -25,8 +25,9 @@ import mapper.CaseRequestMapper
 import models.Confirmation.format
 import models.WhichBestDescribesYou.isBusinessRepresentative
 import models._
+import models.requests.OptionalDataRequest
 import navigation.Navigator
-import pages.{ConfirmationPage, UploadSupportingMaterialMultiplePage, UploadWrittenAuthorisationPage}
+import pages.{ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
 import service.{CasesService, FileService}
@@ -55,13 +56,13 @@ class DeclarationController @Inject()(
     Ok(declaration(appConfig, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
 
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
-    val newCaseRequest = mapper.map(answers)
+    val newCaseRequest = mapper.map(request.userEoriNumber, answers)
 
     val attachments: Seq[FileAttachment] = answers
-      .get(UploadSupportingMaterialMultiplePage)
+      .get(SupportingMaterialFileListPage)
       .getOrElse(Seq.empty)
 
     for {
@@ -69,7 +70,7 @@ class DeclarationController @Inject()(
       letter <- getPublishedLetter(answers)
       c: Case <- createCase(newCaseRequest, att, letter, answers)
       _ = auditService.auditBTIApplicationSubmissionSuccessful(c)
-      userAnswers = answers.set(ConfirmationPage, Confirmation(c.reference, c.application.contact.email))
+      userAnswers = answers.set(ConfirmationPage, Confirmation(c))
       _ <- dataCacheConnector.save(userAnswers.cacheMap)
       res: Result <- successful(Redirect(navigator.nextPage(ConfirmationPage, mode)(userAnswers)))
     } yield res

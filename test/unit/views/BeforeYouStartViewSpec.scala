@@ -26,7 +26,7 @@ class BeforeYouStartViewSpec extends ViewBehaviours {
   def createView = () => beforeYouStart(frontendAppConfig)(fakeRequest, messages)
 
   "BeforeYouStart view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithoutBackLink(createView)
   }

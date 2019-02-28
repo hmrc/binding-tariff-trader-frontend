@@ -25,12 +25,19 @@ import uk.gov.hmrc.play.test.UnitSpec
 class CaseRequestMapperTest extends UnitSpec {
 
   private val mapper = new CaseRequestMapper()
+  private val userEori = "EORI-12345"
 
   "Mapper" should {
 
+    "Fail when mandatory fields are missing" in {
+      intercept[IllegalStateException] {
+        mapper.map(userEori, missingGoodDetails())
+      }
+    }
+
     "Map Mandatory Fields" in {
       // When
-      val response = mapper.map(mandatoryAnswers())
+      val response = mapper.map(userEori, mandatoryAnswers())
 
       // Then Mandatory fields should be present
       response.attachments shouldBe Seq.empty
@@ -38,19 +45,18 @@ class CaseRequestMapperTest extends UnitSpec {
       val application = response.application
 
       val holder: EORIDetails = application.holder
-      holder.eori shouldBe ""
+      holder.eori shouldBe userEori
       holder.businessName shouldBe "Trader Business Name"
-      holder.addressLine1 shouldBe "Address Line 1"
-      holder.addressLine2 shouldBe "Address Line 2"
-      holder.postcode shouldBe "Post Code"
-      holder.country shouldBe "Country"
+      holder.addressLine1 shouldBe "Trader Address Line 1"
+      holder.addressLine2 shouldBe "Trader Town"
+      holder.postcode shouldBe "Trader Post Code"
+      holder.country shouldBe "Trader Country"
 
       val contact: Contact = application.contact
       contact.name shouldBe "Name"
       contact.email shouldBe "Email"
       contact.phone shouldBe Some("Phone")
 
-      application.agent shouldBe None // TODO Implement This
       application.offline shouldBe false
       application.goodName shouldBe "Good Name"
       application.goodDescription shouldBe "Good Description"
@@ -58,6 +64,7 @@ class CaseRequestMapperTest extends UnitSpec {
       application.sampleToBeReturned shouldBe false
 
       // Then optional Fields should be blank
+      application.agent shouldBe None
       application.confidentialInformation shouldBe None
       application.otherInformation shouldBe None
       application.reissuedBTIReference shouldBe None
@@ -68,7 +75,7 @@ class CaseRequestMapperTest extends UnitSpec {
 
     "Map Optional Fields" in {
       // When
-      val response = mapper.map(allAnswers())
+      val response = mapper.map(userEori, allAnswers())
 
       // Then Mandatory fields should be present
       response.attachments shouldBe Seq.empty
@@ -76,12 +83,12 @@ class CaseRequestMapperTest extends UnitSpec {
       val application = response.application
 
       val holder: EORIDetails = application.holder
-      holder.eori shouldBe ""
+      holder.eori shouldBe "Trader Eori"
       holder.businessName shouldBe "Trader Business Name"
-      holder.addressLine1 shouldBe "Address Line 1"
-      holder.addressLine2 shouldBe "Address Line 2"
-      holder.postcode shouldBe "Post Code"
-      holder.country shouldBe "Country"
+      holder.addressLine1 shouldBe "Trader Address Line 1"
+      holder.addressLine2 shouldBe "Trader Town"
+      holder.postcode shouldBe "Trader Post Code"
+      holder.country shouldBe "Trader Country"
 
       val contact: Contact = application.contact
       contact.name shouldBe "Name"
@@ -89,12 +96,12 @@ class CaseRequestMapperTest extends UnitSpec {
       contact.phone shouldBe None
 
       val agent: AgentDetails = application.agent.get
-      agent.eoriDetails.eori shouldBe "Eori"
+      agent.eoriDetails.eori shouldBe userEori
       agent.eoriDetails.businessName shouldBe "Agent Business Name"
-      agent.eoriDetails.addressLine1 shouldBe "Address Line 1"
-      agent.eoriDetails.addressLine2 shouldBe "Town"
-      agent.eoriDetails.postcode shouldBe "Post Code"
-      agent.eoriDetails.country shouldBe "Country"
+      agent.eoriDetails.addressLine1 shouldBe "Agent Address Line 1"
+      agent.eoriDetails.addressLine2 shouldBe "Agent Town"
+      agent.eoriDetails.postcode shouldBe "Agent Post Code"
+      agent.eoriDetails.country shouldBe "Agent Country"
 
       application.agent shouldBe Some(agent)
       application.offline shouldBe false
@@ -113,6 +120,7 @@ class CaseRequestMapperTest extends UnitSpec {
     }
   }
 
+  // agent filling the form
   def allAnswers(): UserAnswers = {
     UserAnswers(
       CacheMap(
@@ -120,11 +128,11 @@ class CaseRequestMapperTest extends UnitSpec {
         Map(
           RegisteredAddressForEoriPage.toString -> js(
             RegisteredAddressForEori(
-              "Trader Business Name",
-              "Address Line 1",
-              "Address Line 2",
-              "Post Code",
-              "Country"
+              "Agent Business Name",
+              "Agent Address Line 1",
+              "Agent Town",
+              "Agent Post Code",
+              "Agent Country"
             )
           ),
           EnterContactDetailsPage.toString -> js(
@@ -145,12 +153,12 @@ class CaseRequestMapperTest extends UnitSpec {
           ),
           RegisterBusinessRepresentingPage.toString -> js(
             RegisterBusinessRepresenting(
-              "Eori",
-              "Agent Business Name",
-              "Address Line 1",
-              "Town",
-              "Post Code",
-              "Country"
+              "Trader Eori",
+              "Trader Business Name",
+              "Trader Address Line 1",
+              "Trader Town",
+              "Trader Post Code",
+              "Trader Country"
             )
           ),
           ConfidentialInformationPage.toString -> js(
@@ -178,6 +186,7 @@ class CaseRequestMapperTest extends UnitSpec {
     )
   }
 
+  // trader filling the form
   def mandatoryAnswers(): UserAnswers = {
     UserAnswers(
       CacheMap(
@@ -186,10 +195,10 @@ class CaseRequestMapperTest extends UnitSpec {
           RegisteredAddressForEoriPage.toString -> js(
             RegisteredAddressForEori(
               "Trader Business Name",
-              "Address Line 1",
-              "Address Line 2",
-              "Post Code",
-              "Country"
+              "Trader Address Line 1",
+              "Trader Town",
+              "Trader Post Code",
+              "Trader Country"
             )
           ),
           EnterContactDetailsPage.toString -> js(
@@ -203,6 +212,35 @@ class CaseRequestMapperTest extends UnitSpec {
             DescribeYourItem(
               "Good Name",
               "Good Description"
+            )
+          ),
+          WhenToSendSamplePage.toString -> js(
+            WhenToSendSample.Yes
+          )
+        )
+      )
+    )
+  }
+
+  def missingGoodDetails(): UserAnswers = {
+    UserAnswers(
+      CacheMap(
+        "id",
+        Map(
+          RegisteredAddressForEoriPage.toString -> js(
+            RegisteredAddressForEori(
+              "Trader Business Name",
+              "Trader Address Line 1",
+              "Trader Town",
+              "Trader Post Code",
+              "Trader Country"
+            )
+          ),
+          EnterContactDetailsPage.toString -> js(
+            EnterContactDetails(
+              "Name",
+              "Email",
+              Some("Phone")
             )
           ),
           WhenToSendSamplePage.toString -> js(

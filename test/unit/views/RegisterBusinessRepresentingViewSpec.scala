@@ -36,7 +36,7 @@ class RegisterBusinessRepresentingViewSpec extends QuestionViewBehaviours[Regist
 
   "RegisterBusinessRepresenting view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 

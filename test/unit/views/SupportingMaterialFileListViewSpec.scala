@@ -16,25 +16,27 @@
 
 package views
 
-import forms.UploadWrittenAuthorisationFormProvider
+import forms.SupportingMaterialFileListFormProvider
 import models.NormalMode
 import play.api.data.Form
-import views.behaviours.StringViewBehaviours
-import views.html.uploadWrittenAuthorisation
+import views.behaviours.YesNoViewBehaviours
+import views.html.supportingMaterialFileList
 
-class UploadWrittenAuthorisationViewSpec extends StringViewBehaviours {
+class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "uploadWrittenAuthorisation"
+  val messageKeyPrefix = "supportingMaterialFileList"
 
-  val form = new UploadWrittenAuthorisationFormProvider()()
+  val form = new SupportingMaterialFileListFormProvider()()
 
-  def createView = () => uploadWrittenAuthorisation(frontendAppConfig, form, None, NormalMode)(fakeRequest, messages)
+  def createView = () => supportingMaterialFileList(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) => uploadWrittenAuthorisation(frontendAppConfig, form, None, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => supportingMaterialFileList(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages)
 
-  "UploadWrittenAuthorisation view" must {
+  "SupportingMaterialFileList view" must {
+
     behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
+
   }
 }

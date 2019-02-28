@@ -16,7 +16,6 @@
 
 package views
 
-import controllers.routes
 import forms.CommodityCodeRulingReferenceFormProvider
 import models.NormalMode
 import play.api.data.Form
@@ -34,7 +33,7 @@ class CommodityCodeRulingReferenceViewSpec extends StringViewBehaviours {
   def createViewUsingForm = (form: Form[String]) => commodityCodeRulingReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "CommodityCodeRulingReference view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 

@@ -16,9 +16,7 @@
 
 package pages
 
-import models.FileAttachment
-
-case object UploadSupportingMaterialMultiplePage extends QuestionPage[Seq[FileAttachment]] {
+case object UploadSupportingMaterialMultiplePage extends Page {
 
   override def toString: String = "uploadSupportingMaterialMultiple"
 }

@@ -18,7 +18,6 @@ package config
 
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
-import org.apache.commons.lang3.StringUtils.isNoneBlank
 import play.api.Mode.Mode
 import play.api.i18n.Lang
 import play.api.mvc.Call
@@ -37,24 +36,28 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   private lazy val contactHost = runModeConfiguration.getString("contact-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "BindingTariffApplication"
 
-  lazy val analyticsToken = loadConfig("google-analytics.token")
-  lazy val analyticsHost = loadConfig("google-analytics.host")
+  lazy val analyticsToken: String = loadConfig("google-analytics.token")
+  lazy val analyticsHost: String = loadConfig("google-analytics.host")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   lazy val betaFeedbackUrl = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
   lazy val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
 
-  lazy val authUrl = baseUrl("auth")
-  lazy val loginUrl = loadConfig("urls.login")
-  lazy val loginContinueUrl = loadConfig("urls.loginContinue")
+  lazy val authUrl: String = baseUrl("auth")
+  lazy val loginUrl: String = loadConfig("urls.login")
+  lazy val loginContinueUrl: String = loadConfig("urls.loginContinue")
   lazy val bindingTariffClassificationUrl: String = baseUrl("binding-tariff-classification")
   lazy val bindingTariffFileStoreUrl: String = baseUrl("binding-tariff-filestore")
-  lazy val authEnrolment: Option[String] = Some(loadConfig("auth.enrolment")).filter(isNoneBlank(_))
+  lazy val isCdsEnrolmentCheckEnabled: Boolean = getBoolean("cdsEnrolmentCheckEnabled")
 
-  lazy val fileUploadMaxSize = loadConfig("fileupload.maxSize").toInt
-  lazy val fileUploadMimeTypes = loadConfig("fileupload.mimeTypes").split(",").map(_.trim).toSet
+  lazy val fileUploadMaxSize: Int = loadConfig("fileupload.maxSize").toInt
+  lazy val fileUploadMimeTypes: Set[String] = loadConfig("fileupload.mimeTypes").split(",").map(_.trim).toSet
 
-  lazy val languageTranslationEnabled = runModeConfiguration.getBoolean("microservice.services.features.welsh-translation").getOrElse(true)
+  lazy val languageTranslationEnabled: Boolean = runModeConfiguration.getBoolean("microservice.services.features.welsh-translation").getOrElse(true)
+
+  lazy val cdsUrl: String = loadConfig("customs-frontend.host")
+  lazy val cdsSubscribeUrl: String = s"$cdsUrl/customs/subscribe-for-cds"
+  lazy val cdsRegisterUrl: String = s"$cdsUrl/customs/register-for-cds"
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),

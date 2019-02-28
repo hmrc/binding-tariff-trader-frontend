@@ -34,7 +34,7 @@ class SelectApplicationTypeViewSpec extends ViewBehaviours {
   def createViewUsingForm = (form: Form[_]) => selectApplicationType(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "SelectApplicationType view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
   }

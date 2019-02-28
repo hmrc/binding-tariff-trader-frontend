@@ -27,7 +27,7 @@ class DeclarationViewSpec extends ViewBehaviours {
   def createView = () => declaration(frontendAppConfig, NormalMode)(fakeRequest, messages)
 
   "Declaration view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
   }
 
 }

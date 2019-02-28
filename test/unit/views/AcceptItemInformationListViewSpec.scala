@@ -26,7 +26,7 @@ class AcceptItemInformationListViewSpec extends ViewBehaviours {
   def createView = () => acceptItemInformationList(frontendAppConfig)(fakeRequest, messages)
 
   "AcceptItemInformationList view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
   }

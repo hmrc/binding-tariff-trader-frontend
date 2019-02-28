@@ -36,7 +36,7 @@ class PreviousCommodityCodeViewSpec extends QuestionViewBehaviours[PreviousCommo
 
   "PreviousCommodityCode view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 

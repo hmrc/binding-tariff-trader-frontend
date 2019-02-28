@@ -30,18 +30,17 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
 
   val form = new UploadSupportingMaterialMultipleFormProvider()()
 
-  def createView: () => HtmlFormat.Appendable = () => uploadSupportingMaterialMultiple(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable = () => uploadSupportingMaterialMultiple(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
     (form: Form[String]) => uploadSupportingMaterialMultiple(
       frontendAppConfig,
       form,
-      Seq.empty,
       NormalMode
     )(fakeRequest, messages)
 
   "UploadSupportingMaterialMultiple view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 
