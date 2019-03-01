@@ -64,7 +64,7 @@ class SimilarItemCommodityCodeController @Inject()(
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(similarItemCommodityCode(appConfig, formWithErrors, mode))),
-      value => applyAnswer(value, mode)
+      value => submitAnswer(value, mode)
     )
   }
 

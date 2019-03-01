@@ -45,9 +45,9 @@ class WhenToSendSampleController @Inject()(
 
   private lazy val form = formProvider()
 
-  override val page = WhenToSendSamplePage
-  override val pageDetails = ReturnSamplesPage
-  override val nextPage = SimilarItemCommodityCodePage
+  override val page: QuestionPage[Boolean] = WhenToSendSamplePage
+  override val pageDetails: QuestionPage[ReturnSamples] = ReturnSamplesPage
+  override val nextPage: Page = SimilarItemCommodityCodePage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -64,7 +64,7 @@ class WhenToSendSampleController @Inject()(
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(whenToSendSample(appConfig, formWithErrors, mode))),
-      value => applyAnswer(value, mode)
+      value => submitAnswer(value, mode)
     )
   }
 

@@ -23,7 +23,7 @@ import forms.LegalChallengeFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{LegalChallengeDetailsPage, LegalChallengePage, SupportingInformationPage}
+import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -45,9 +45,9 @@ class LegalChallengeController @Inject()(
 
   private lazy val form = formProvider()
 
-  override protected val page = LegalChallengePage
-  override protected val pageDetails = LegalChallengeDetailsPage
-  override protected val nextPage = SupportingInformationPage
+  override protected val page: QuestionPage[Boolean] = LegalChallengePage
+  override protected val pageDetails: QuestionPage[String] = LegalChallengeDetailsPage
+  override protected val nextPage: Page = SupportingInformationPage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -63,7 +63,7 @@ class LegalChallengeController @Inject()(
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) => Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, mode))),
-      value => applyAnswer(value, mode)
+      value => submitAnswer(value, mode)
     )
 
   }

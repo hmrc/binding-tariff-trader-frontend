@@ -45,9 +45,9 @@ class SupportingInformationController @Inject()(
 
   private lazy val form = formProvider()
 
-  override val page = SupportingInformationPage
-  override val pageDetails = SupportingInformationDetailsPage
-  override val nextPage = CheckYourAnswersPage
+  override val page: QuestionPage[Boolean] = SupportingInformationPage
+  override val pageDetails: QuestionPage[String] = SupportingInformationDetailsPage
+  override val nextPage: Page = CheckYourAnswersPage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -64,7 +64,7 @@ class SupportingInformationController @Inject()(
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(supportingInformation(appConfig, formWithErrors, mode))),
-      value => applyAnswer(value, mode)
+      value => submitAnswer(value, mode)
     )
 
   }

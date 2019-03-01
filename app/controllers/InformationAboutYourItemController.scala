@@ -46,9 +46,9 @@ class InformationAboutYourItemController @Inject()(
   private lazy val form = formProvider()
 
 
-  override val page = InformationAboutYourItemPage
-  override val pageDetails = ConfidentialInformationPage
-  override val nextPage = DescribeYourItemPage
+  override val page: QuestionPage[Boolean] = InformationAboutYourItemPage
+  override val pageDetails: QuestionPage[ConfidentialInformation] = ConfidentialInformationPage
+  override val nextPage: Page = DescribeYourItemPage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -65,7 +65,7 @@ class InformationAboutYourItemController @Inject()(
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(informationAboutYourItem(appConfig, formWithErrors, mode))),
-      value => applyAnswer(value, mode)
+      value => submitAnswer(value, mode)
     )
   }
 
