@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,24 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package service
+@import config.FrontendAppConfig
+@import uk.gov.hmrc.play.views.html._
+@import controllers.routes._
+@import models.ReturnSamples
+@import models.Mode
+@import views.ViewUtils._
 
-import connectors.BindingTariffClassificationConnector
-import javax.inject.{Inject, Singleton}
-import models.{Case, NewCaseRequest}
-import uk.gov.hmrc.http.HeaderCarrier
+@(c: Case)(implicit request: Request[_], messages: Messages)
 
-import scala.concurrent.Future
+<img src="https://www.ggf.org.uk/wp-content/uploads/2017/11/hmrc-logo-57ada7ce66804-6.jpg" width="225" height="150">
+<H1>Application for a goods classification ruling</H1>
+<br/>
+<p>The Case is @c.reference</p>
 
-@Singleton
-class CasesService @Inject()(connector: BindingTariffClassificationConnector){
-
-  def create(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
-    connector.createCase(c)
-  }
-  def get(reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] = {
-    connector.findCase(reference)
-  }
-}

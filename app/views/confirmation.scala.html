@@ -34,7 +34,7 @@
 
     <p id="confirmation-email-message">@messages("confirmation.paragragh.confirmationEmail", confirmation.emailAddress)</p>
     <ul class="list">
-        <li><a href=href="@routes.ConfirmationController.pdf>@messages("confirmation.download.link.PDF")</a></li>
+        <li><a href="@routes.ConfirmationController.pdf(confirmation.reference)">@messages("confirmation.download.link.PDF")</a></li>
         <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
     </ul>
 

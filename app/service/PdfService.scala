@@ -18,18 +18,25 @@ package service
 
 import connectors.PdfGeneratorServiceConnector
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.http.Status
+import play.api.mvc.Results
 
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class PdfService @Inject()(connector: PdfGeneratorServiceConnector) {
 
+  def generatePdf(filename: String, htmlContent: String) = {
 
-  val sampleHtml = "<body>\n  <img src=\"https://www.ggf.org.uk/wp-content/uploads/2017/11/hmrc-logo-57ada7ce66804-6.jpg\" alt=\"\" width=\"225\" height=\"150\">\n  <h1>This is the heading</h1>\n\n  <p>Some text here. Some text here. Some text here. Some text here. Some text here. </p>\n  <p>Some text here. Some text here. Some text here. Some text here. Some text here. </p>\n  <p>Some text here. Some text here. Some text here. Some text here. Some text here. </p>\n  <p>Some text here. Some text here. Some text here. Some text here. Some text here. </p>\n\n</body>"
+    connector.generatePdf(htmlContent).map {
+      response =>
+        response.status match {
+          case Status.OK => Results.Ok(response.bodyAsBytes.toArray)
+            .as("application/pdf")
+            .withHeaders("Content-Disposition" -> s"attachment; filename=$filename")
+          case _ => Results.BadRequest(response.body)
+        }
+    }
 
-  def getPdf() = {
-    connector.generatePdf(sampleHtml)
   }
-
 }

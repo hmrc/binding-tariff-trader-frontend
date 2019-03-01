@@ -20,14 +20,16 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import javax.inject.Inject
-import models.Confirmation
+import models.{Case, Confirmation}
 import pages.ConfirmationPage
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
-import service.PdfService
+import service.{CasesService, PdfService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.confirmation
+import utils.CheckYourAnswersHelper
+import viewmodels.AnswerSection
+import views.html.{check_your_answers, confirmation, confirmationPdf}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -39,7 +41,8 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
                                        dataCacheConnector: DataCacheConnector,
-                                       pdfService: PdfService
+                                       pdfService: PdfService,
+                                       caseService: CasesService
                                       ) extends FrontendController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -60,40 +63,13 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
 
   }
 
-  def pdf: Action[AnyContent] = (identify).async { implicit request =>
+  def pdf(reference: String): Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
-    def generatePdf(): Future[Result] = {
-      pdfService.getPdf().map {
-        response =>
-          response.status match {
-            case OK => Ok(response.bodyAsBytes.toArray).as("application/pdf")
-              .withHeaders("Content-Disposition" -> s"attachment; filename=result.pdf")
-            case _ => BadRequest(response.body)
+    caseService.get(reference).flatMap {
+      case Some(c: Case) => pdfService.generatePdf(s"confirmation_$reference.pdf", confirmationPdf(c).toString())
 
-          }
-      }
+      // TODO - what if case not found?
+      case _ => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
     }
-
-
-    generatePdf()
-
-//    request.userAnswers.get(ConfirmationPage) match {
-//      case Some(c: Confirmation) => generatePdf(c)
-//      case _ => successful(Redirect(routes.SessionExpiredController.onPageLoad()))
-//    }
-
   }
-
-  //  def pdf = {
-  //
-  //    pdfService.getPdf()
-  //      .map { response =>
-  //        response.status match {
-  //          case OK => Ok(response.bodyAsBytes.toArray).as("application/pdf")
-  //            .withHeaders("Content-Disposition" -> s"attachment; filename=result.pdf")
-  //          case _ => BadRequest(response.body)
-  //        }
-  //      }
-  //  }
-
 }
