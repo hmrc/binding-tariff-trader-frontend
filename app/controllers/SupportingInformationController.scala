@@ -61,12 +61,11 @@ class SupportingInformationController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(supportingInformation(appConfig, formWithErrors, mode))),
-      value => submitAnswer(value, mode)
-    )
+    def badRequest = {
+      (formWithErrors: Form[_]) => Future.successful(BadRequest(supportingInformation(appConfig, formWithErrors, mode)))
+    }
 
+    form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
   }
 
 }
