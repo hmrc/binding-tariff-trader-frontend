@@ -69,7 +69,7 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
       case Some(c: Case) => pdfService.generatePdf(s"confirmation_$reference.pdf", confirmationPdf(c).toString())
 
       // TODO - what if case not found?
-      case _ => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
+      case _ => throw new Exception("Problem !!!")//successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
     }
   }
 }

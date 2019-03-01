@@ -21,10 +21,60 @@
 @import models.Mode
 @import views.ViewUtils._
 
-@(c: Case)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
 
-<img src="https://www.ggf.org.uk/wp-content/uploads/2017/11/hmrc-logo-57ada7ce66804-6.jpg" width="225" height="150">
-<H1>Application for a goods classification ruling</H1>
-<br/>
-<p>The Case is @c.reference</p>
+
+<p>[appConfig: FrontendAppConfig, Case @c.reference ]</p>
+
+
+ @main_template(
+  title = messages("confirmation.title"),
+  appConfig = appConfig,
+  bodyClasses = None) {
+
+  <div class="govuk-box-highlight">
+   @components.heading(messages("confirmation.heading"))
+   <span class="font-large">
+    @messages("confirmation.yourRefNumber") <br>
+    <span id="confirmation-reference" class="font-large bold">@messages("confirmation.refValue", confirmation.reference)</span>
+   </span>
+  </div>
+
+  <p id="confirmation-email-message">@messages("confirmation.paragragh.confirmationEmail", confirmation.emailAddress)</p>
+  <ul class="list">
+   <li><a href="@routes.ConfirmationController.pdf(confirmation.reference)">@messages("confirmation.download.link.PDF")</a></li>
+   <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
+  </ul>
+
+  @if(confirmation.sendingSamples) {
+   <h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
+
+   @components.icon_important("confirmation.sendingSamples.important")
+
+   <p>@messages("confirmation.paragraph0.sendingSamples")</p>
+
+   <p>@messages("confirmation.paragraph1.sendingSamples") @messages("confirmation.refValue", confirmation.reference) .
+    @messages("confirmation.paragraph2.sendingSamples")</p>
+
+   <address>
+   @Html(messages("confirmation.sendingSamples.address"))
+   </address>
+  }
+
+  <h2 class="heading-medium">@messages("confirmation.heading2.whatNext")</h2>
+  <p>
+   @if(confirmation.sendingSamples){
+    @Html(messages("confirmation.paragraph.whatNext0.sample"))
+   } else {
+    @Html(messages("confirmation.paragraph.whatNext0.nosample"))
+   }
+   <br/>
+   @Html(messages("confirmation.paragraph.whatNext1"))
+  </p>
+
+  <a href="@routes.IndexController.onPageLoad">@messages("confirmation.homeLink")</a>
+ }
+
+
+
 
