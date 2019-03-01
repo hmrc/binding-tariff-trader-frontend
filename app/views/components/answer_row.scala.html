@@ -19,11 +19,11 @@
 @(row: AnswerRow)(implicit messages: Messages)
 
 <li>
-    <div class="cya-question">@messages(row.label)</div>
-    <div class="cya-answer">
-    @if(row.answerIsMessageKey){
+    <div id="question.@row.label" class="cya-question">@messages(row.label)</div>
+    <div id="answer.@row.label" class="cya-answer">
+    @if(row.answerIsMessageKey) {
         @messages(row.answer)
-    } else{
+    } else {
         <p class="pre-wrap">@row.answer</p>
     }
     </div>

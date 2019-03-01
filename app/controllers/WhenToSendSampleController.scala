@@ -16,35 +16,38 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.WhenToSendSampleFormProvider
-import models.{Enumerable, Mode}
-import pages.{ReturnSamplesPage, SimilarItemCommodityCodePage, WhenToSendSamplePage}
+import javax.inject.Inject
+import models.{Mode, ReturnSamples}
 import navigation.Navigator
-import views.html.whenToSendSample
+import pages._
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.whenToSendSample
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class WhenToSendSampleController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: WhenToSendSampleFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                            appConfig: FrontendAppConfig,
+                                            override val messagesApi: MessagesApi,
+                                            override val dataCacheConnector: DataCacheConnector,
+                                            override val navigator: Navigator,
+                                            identify: IdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            formProvider: WhenToSendSampleFormProvider
+                                          ) extends FrontendController with I18nSupport with YesNoBehaviour[ReturnSamples] {
 
   private lazy val form = formProvider()
+
+  override val page: QuestionPage[Boolean] = WhenToSendSamplePage
+  override val pageDetails: QuestionPage[ReturnSamples] = ReturnSamplesPage
+  override val nextPage: Page = SimilarItemCommodityCodePage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -58,22 +61,11 @@ class WhenToSendSampleController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(whenToSendSample(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(WhenToSendSamplePage, value)
+    def badRequest = {
+      (formWithErrors: Form[_]) => Future.successful(BadRequest(whenToSendSample(appConfig, formWithErrors, mode)))
+    }
 
-        val redirectedPage = value match {
-          case true => ReturnSamplesPage
-          case false => SimilarItemCommodityCodePage
-        }
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
-        )
-      }
-    )
+    form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
   }
 
 }

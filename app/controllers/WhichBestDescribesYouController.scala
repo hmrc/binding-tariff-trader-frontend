@@ -16,34 +16,34 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.WhichBestDescribesYouFormProvider
+import javax.inject.Inject
+import models.WhichBestDescribesYou.{BusinessOwner, BusinessRepresentative}
 import models.{Enumerable, Mode}
 import navigation.Navigator
+import pages._
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, Results}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.whichBestDescribesYou
-import models.WhichBestDescribesYou.{BusinessOwner, BusinessRepresentative}
-import pages.{RegisterBusinessRepresentingPage, SelectApplicationTypePage, WhichBestDescribesYouPage}
-import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class WhichBestDescribesYouController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: WhichBestDescribesYouFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                                 appConfig: FrontendAppConfig,
+                                                 override val messagesApi: MessagesApi,
+                                                 dataCacheConnector: DataCacheConnector,
+                                                 navigator: Navigator,
+                                                 identify: IdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 formProvider: WhichBestDescribesYouFormProvider
+                                               ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 
@@ -63,16 +63,24 @@ class WhichBestDescribesYouController @Inject()(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(whichBestDescribesYou(appConfig, formWithErrors, mode))),
       selectedOption => {
-        val updatedAnswers = request.userAnswers.set(WhichBestDescribesYouPage, selectedOption)
 
-        val redirectedPage = selectedOption match {
-          case BusinessOwner => SelectApplicationTypePage
-          case BusinessRepresentative => RegisterBusinessRepresentingPage
+        selectedOption match {
+          case BusinessRepresentative =>
+
+            val updatedAnswers = request.userAnswers.set(WhichBestDescribesYouPage, selectedOption)
+            dataCacheConnector.save(updatedAnswers.cacheMap).map(
+              _ => Results.Redirect(navigator.nextPage(RegisterBusinessRepresentingPage, mode)(updatedAnswers))
+            )
+
+          case BusinessOwner =>
+
+            val updatedAnswers = request.userAnswers.set(WhichBestDescribesYouPage, selectedOption)
+              .remove(RegisterBusinessRepresentingPage).remove(UploadWrittenAuthorisationPage)
+
+            dataCacheConnector.save(updatedAnswers.cacheMap).map(
+              _ => Results.Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(updatedAnswers))
+            )
         }
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
-        )
       }
     )
   }
