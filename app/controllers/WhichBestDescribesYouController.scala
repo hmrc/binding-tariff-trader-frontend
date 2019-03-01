@@ -22,9 +22,10 @@ import controllers.actions._
 import forms.WhichBestDescribesYouFormProvider
 import javax.inject.Inject
 import models.WhichBestDescribesYou.{BusinessOwner, BusinessRepresentative}
-import models.{Enumerable, Mode}
+import models.requests.DataRequest
+import models.{Enumerable, Mode, UserAnswers, WhichBestDescribesYou}
 import navigation.Navigator
-import pages._
+import pages.{DataPage, _}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Results}
@@ -57,32 +58,35 @@ class WhichBestDescribesYouController @Inject()(
     Ok(whichBestDescribesYou(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
+
+    def update(o: WhichBestDescribesYou): UserAnswers = {
+      o match {
+        case BusinessRepresentative =>
+          request.userAnswers.set(WhichBestDescribesYouPage, o)
+        case BusinessOwner =>
+          request.userAnswers.set(WhichBestDescribesYouPage, o)
+            .remove(RegisterBusinessRepresentingPage)
+            .remove(UploadWrittenAuthorisationPage)
+      }
+    }
+
+    def nextPage: WhichBestDescribesYou => DataPage[_] = {
+      case BusinessRepresentative => RegisterBusinessRepresentingPage
+      case BusinessOwner => SelectApplicationTypePage
+    }
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(whichBestDescribesYou(appConfig, formWithErrors, mode))),
       selectedOption => {
-
-        selectedOption match {
-          case BusinessRepresentative =>
-
-            val updatedAnswers = request.userAnswers.set(WhichBestDescribesYouPage, selectedOption)
-            dataCacheConnector.save(updatedAnswers.cacheMap).map(
-              _ => Results.Redirect(navigator.nextPage(RegisterBusinessRepresentingPage, mode)(updatedAnswers))
-            )
-
-          case BusinessOwner =>
-
-            val updatedAnswers = request.userAnswers.set(WhichBestDescribesYouPage, selectedOption)
-              .remove(RegisterBusinessRepresentingPage).remove(UploadWrittenAuthorisationPage)
-
-            dataCacheConnector.save(updatedAnswers.cacheMap).map(
-              _ => Results.Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(updatedAnswers))
-            )
-        }
+        val updatedAnswers = update(selectedOption)
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ => Results.Redirect(navigator.nextPage(nextPage(selectedOption), mode)(updatedAnswers))
+        )
       }
     )
+
   }
 
 }

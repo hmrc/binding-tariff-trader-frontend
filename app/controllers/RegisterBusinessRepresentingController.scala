@@ -62,7 +62,7 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
     }
 
     def isCheckMode = {
-      CheckMode == mode
+      mode == CheckMode
     }
 
     form.bindFromRequest().fold(
