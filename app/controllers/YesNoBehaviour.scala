@@ -21,22 +21,23 @@ import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
 import pages.{Page, QuestionPage}
-import play.api.i18n.I18nSupport
 import play.api.mvc.{Result, Results}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-abstract class YesNoController[A](dataCacheConnector: DataCacheConnector, navigator: Navigator)
-  extends FrontendController with I18nSupport {
+trait YesNoBehaviour[A] {
+
+  protected val dataCacheConnector: DataCacheConnector
+  protected val navigator: Navigator
 
   protected val page: QuestionPage[Boolean]
   protected val pageDetails: QuestionPage[A]
   protected val nextPage: Page
 
   def applyAnswer(value: Boolean, mode: Mode)
-                 (implicit request: DataRequest[_]): Future[Result] =
+                 (implicit request: DataRequest[_]): Future[Result] = {
+
     value match {
       case true =>
 
@@ -52,4 +53,5 @@ abstract class YesNoController[A](dataCacheConnector: DataCacheConnector, naviga
           _ => Results.Redirect(navigator.nextPage(nextPage, mode)(updatedAnswers))
         )
     }
+  }
 }

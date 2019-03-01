@@ -25,8 +25,9 @@ import models.Mode
 import navigation.Navigator
 import pages.{LegalChallengeDetailsPage, LegalChallengePage, SupportingInformationPage}
 import play.api.data.Form
-import play.api.i18n.MessagesApi
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.legalChallenge
 
 import scala.concurrent.Future
@@ -34,19 +35,19 @@ import scala.concurrent.Future
 class LegalChallengeController @Inject()(
                                           appConfig: FrontendAppConfig,
                                           override val messagesApi: MessagesApi,
-                                          dataCacheConnector: DataCacheConnector,
-                                          navigator: Navigator,
+                                          override val dataCacheConnector: DataCacheConnector,
+                                          override val navigator: Navigator,
                                           identify: IdentifierAction,
                                           getData: DataRetrievalAction,
                                           requireData: DataRequiredAction,
                                           formProvider: LegalChallengeFormProvider
-                                        ) extends YesNoController[String](dataCacheConnector, navigator) {
+                                        ) extends FrontendController with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
 
-  override val page = LegalChallengePage
-  override val pageDetails = LegalChallengeDetailsPage
-  override val nextPage = SupportingInformationPage
+  override protected val page = LegalChallengePage
+  override protected val pageDetails = LegalChallengeDetailsPage
+  override protected val nextPage = SupportingInformationPage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 

@@ -58,7 +58,9 @@ class Navigator @Inject()() {
     LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(CheckMode)),
     CommodityCodeRulingReferencePage -> (_ => routes.CommodityCodeRulingReferenceController.onPageLoad(CheckMode)),
     ConfidentialInformationPage -> (_ => routes.ConfidentialInformationController.onPageLoad(CheckMode)),
-    CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(CheckMode))
+    CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(CheckMode)),
+    ReturnSamplesPage -> (_ => routes.ReturnSamplesController.onPageLoad(CheckMode)),
+    SupportingInformationDetailsPage -> (_ => routes.SupportingInformationDetailsController.onPageLoad(CheckMode))
   )
 
   def nextPage(page: Page, mode: Mode): UserAnswers => Call = mode match {

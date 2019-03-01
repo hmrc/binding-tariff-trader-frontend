@@ -25,8 +25,9 @@ import models.{ConfidentialInformation, Mode}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.MessagesApi
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.informationAboutYourItem
 
 import scala.concurrent.Future
@@ -34,13 +35,13 @@ import scala.concurrent.Future
 class InformationAboutYourItemController @Inject()(
                                                     appConfig: FrontendAppConfig,
                                                     override val messagesApi: MessagesApi,
-                                                    dataCacheConnector: DataCacheConnector,
-                                                    navigator: Navigator,
+                                                    override val dataCacheConnector: DataCacheConnector,
+                                                    override val navigator: Navigator,
                                                     identify: IdentifierAction,
                                                     getData: DataRetrievalAction,
                                                     requireData: DataRequiredAction,
                                                     formProvider: InformationAboutYourItemFormProvider
-                                                  ) extends YesNoController[ConfidentialInformation](dataCacheConnector, navigator) {
+                                                  ) extends FrontendController with I18nSupport with YesNoBehaviour[ConfidentialInformation] {
 
   private lazy val form = formProvider()
 

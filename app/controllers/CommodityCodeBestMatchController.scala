@@ -25,8 +25,9 @@ import models.Mode
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.MessagesApi
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.commodityCodeBestMatch
 
 import scala.concurrent.Future
@@ -34,13 +35,13 @@ import scala.concurrent.Future
 class CommodityCodeBestMatchController @Inject()(
                                                   appConfig: FrontendAppConfig,
                                                   override val messagesApi: MessagesApi,
-                                                  dataCacheConnector: DataCacheConnector,
-                                                  navigator: Navigator,
+                                                  override val dataCacheConnector: DataCacheConnector,
+                                                  override val navigator: Navigator,
                                                   identify: IdentifierAction,
                                                   getData: DataRetrievalAction,
                                                   requireData: DataRequiredAction,
                                                   formProvider: CommodityCodeBestMatchFormProvider
-                                                ) extends YesNoController[String](dataCacheConnector, navigator) {
+                                                ) extends FrontendController with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
 
