@@ -16,34 +16,34 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.SelectApplicationTypeFormProvider
-import models.{Enumerable, Mode}
-import pages.{AcceptItemInformationPage, PreviousCommodityCodePage, SelectApplicationTypePage}
-import navigation.Navigator
-import views.html.selectApplicationType
+import javax.inject.Inject
 import models.SelectApplicationType.{Newcommodity, Previouscommodity}
-import play.api.mvc.{Action, AnyContent}
+import models.{Enumerable, Mode}
+import navigation.Navigator
+import pages.{AcceptItemInformationPage, PreviousCommodityCodePage, SelectApplicationTypePage}
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, Results}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.selectApplicationType
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SelectApplicationTypeController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: SelectApplicationTypeFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                                 appConfig: FrontendAppConfig,
+                                                 override val messagesApi: MessagesApi,
+                                                 dataCacheConnector: DataCacheConnector,
+                                                 navigator: Navigator,
+                                                 identify: IdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 formProvider: SelectApplicationTypeFormProvider
+                                               ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 
@@ -63,16 +63,21 @@ class SelectApplicationTypeController @Inject()(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(selectApplicationType(appConfig, formWithErrors, mode))),
       value => {
-        val updatedAnswers = request.userAnswers.set(SelectApplicationTypePage, value)
+        value match {
+          case Previouscommodity =>
 
-        val redirectedPage = value match {
-          case Newcommodity => AcceptItemInformationPage
-          case Previouscommodity => PreviousCommodityCodePage
+            val updatedAnswers = request.userAnswers.set(SelectApplicationTypePage, value)
+            dataCacheConnector.save(updatedAnswers.cacheMap).map(
+              _ => Results.Redirect(navigator.nextPage(PreviousCommodityCodePage, mode)(updatedAnswers))
+            )
+
+          case Newcommodity =>
+
+            val updatedAnswers = request.userAnswers.set(SelectApplicationTypePage, value).remove(PreviousCommodityCodePage)
+            dataCacheConnector.save(updatedAnswers.cacheMap).map(
+              _ => Results.Redirect(navigator.nextPage(AcceptItemInformationPage, mode)(updatedAnswers))
+            )
         }
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
-        )
       }
     )
   }

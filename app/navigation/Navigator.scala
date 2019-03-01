@@ -19,7 +19,7 @@ package navigation
 import controllers.routes
 import javax.inject.{Inject, Singleton}
 import models._
-import pages.{CommodityCodeRulingReferencePage, _}
+import pages.{CommodityCodeRulingReferencePage, UploadWrittenAuthorisationPage, _}
 import play.api.mvc.Call
 
 @Singleton
@@ -60,7 +60,10 @@ class Navigator @Inject()() {
     ConfidentialInformationPage -> (_ => routes.ConfidentialInformationController.onPageLoad(CheckMode)),
     CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(CheckMode)),
     ReturnSamplesPage -> (_ => routes.ReturnSamplesController.onPageLoad(CheckMode)),
-    SupportingInformationDetailsPage -> (_ => routes.SupportingInformationDetailsController.onPageLoad(CheckMode))
+    SupportingInformationDetailsPage -> (_ => routes.SupportingInformationDetailsController.onPageLoad(CheckMode)),
+    PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(CheckMode)),
+    RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode)),
+    UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode))
   )
 
   def nextPage(page: Page, mode: Mode): UserAnswers => Call = mode match {
