@@ -21,16 +21,14 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.CommodityCodeBestMatchFormProvider
 import javax.inject.Inject
-import models.{Enumerable, Mode}
+import models.Mode
 import navigation.Navigator
-import pages.{CommodityCodeBestMatchPage, CommodityCodeDigitsPage, WhenToSendSamplePage}
+import pages._
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.commodityCodeBestMatch
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CommodityCodeBestMatchController @Inject()(
@@ -42,9 +40,13 @@ class CommodityCodeBestMatchController @Inject()(
                                                   getData: DataRetrievalAction,
                                                   requireData: DataRequiredAction,
                                                   formProvider: CommodityCodeBestMatchFormProvider
-                                                ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                                ) extends YesNoController[String](dataCacheConnector, navigator) {
 
   private lazy val form = formProvider()
+
+  override val page = CommodityCodeBestMatchPage
+  override val pageDetails = CommodityCodeDigitsPage
+  override val nextPage = WhenToSendSamplePage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -61,18 +63,7 @@ class CommodityCodeBestMatchController @Inject()(
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(CommodityCodeBestMatchPage, value)
-
-        val redirectedPage = value match {
-          case true => CommodityCodeDigitsPage
-          case false => WhenToSendSamplePage
-        }
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
-        )
-      }
+      value => applyAnswer(value, mode)
     )
   }
 

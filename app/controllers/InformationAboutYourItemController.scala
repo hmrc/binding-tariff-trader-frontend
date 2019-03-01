@@ -21,30 +21,33 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.InformationAboutYourItemFormProvider
 import javax.inject.Inject
-import models.{Enumerable, Mode}
+import models.{ConfidentialInformation, Mode}
 import navigation.Navigator
-import pages.{ConfidentialInformationPage, DescribeYourItemPage, InformationAboutYourItemPage}
+import pages._
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.informationAboutYourItem
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class InformationAboutYourItemController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: InformationAboutYourItemFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                                    appConfig: FrontendAppConfig,
+                                                    override val messagesApi: MessagesApi,
+                                                    dataCacheConnector: DataCacheConnector,
+                                                    navigator: Navigator,
+                                                    identify: IdentifierAction,
+                                                    getData: DataRetrievalAction,
+                                                    requireData: DataRequiredAction,
+                                                    formProvider: InformationAboutYourItemFormProvider
+                                                  ) extends YesNoController[ConfidentialInformation](dataCacheConnector, navigator) {
 
   private lazy val form = formProvider()
+
+
+  override val page = InformationAboutYourItemPage
+  override val pageDetails = ConfidentialInformationPage
+  override val nextPage = DescribeYourItemPage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -61,18 +64,7 @@ class InformationAboutYourItemController @Inject()(
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(informationAboutYourItem(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(InformationAboutYourItemPage, value)
-
-        val redirectedPage = value match {
-          case true => ConfidentialInformationPage
-          case false => DescribeYourItemPage
-        }
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
-        )
-      }
+      value => applyAnswer(value, mode)
     )
   }
 
