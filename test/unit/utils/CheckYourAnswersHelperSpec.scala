@@ -24,7 +24,7 @@ import org.scalatest.mockito.MockitoSugar
 import pages._
 import uk.gov.hmrc.play.test.UnitSpec
 
-class CheckYourAnswersSpec extends UnitSpec with MockitoSugar {
+class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
 
   private val userAnswers = mock[UserAnswers]
   private val checkHelper = new CheckYourAnswersHelper(userAnswers)
