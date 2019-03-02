@@ -17,7 +17,6 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
-@import models.SupportingInformation
 @import models.Mode
 @import views.ViewUtils._
 
@@ -36,11 +35,10 @@
 
         @components.heading(messages("supportingInformation.heading"))
 
-        @components.input_radio(
+        @components.input_yes_no(
             field = form("value"),
-            legend = messages("supportingInformation.heading"),
-            legendClass = Some("visually-hidden"),
-            inputs = SupportingInformation.options.toSeq
+            label = messages("supportingInformation.heading"),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button()

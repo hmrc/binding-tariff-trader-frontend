@@ -16,36 +16,39 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.InformationAboutYourItemFormProvider
-import models.{Enumerable, Mode}
-import pages.{ConfidentialInformationPage, DescribeYourItemPage, InformationAboutYourItemPage}
+import javax.inject.Inject
+import models.{ConfidentialInformation, Mode}
 import navigation.Navigator
-import views.html.informationAboutYourItem
-import models.InformationAboutYourItem.{No, Yes}
+import pages._
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.{commodityCodeBestMatch, informationAboutYourItem}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class InformationAboutYourItemController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: InformationAboutYourItemFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                                    appConfig: FrontendAppConfig,
+                                                    override val messagesApi: MessagesApi,
+                                                    override val dataCacheConnector: DataCacheConnector,
+                                                    override val navigator: Navigator,
+                                                    identify: IdentifierAction,
+                                                    getData: DataRetrievalAction,
+                                                    requireData: DataRequiredAction,
+                                                    formProvider: InformationAboutYourItemFormProvider
+                                                  ) extends FrontendController with I18nSupport with YesNoBehaviour[ConfidentialInformation] {
 
   private lazy val form = formProvider()
+
+
+  override val page: QuestionPage[Boolean] = InformationAboutYourItemPage
+  override val pageDetails: QuestionPage[ConfidentialInformation] = ConfidentialInformationPage
+  override val nextPage: Page = DescribeYourItemPage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -59,22 +62,12 @@ class InformationAboutYourItemController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(informationAboutYourItem(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(InformationAboutYourItemPage, value)
+    def badRequest = {
+      (formWithErrors: Form[_]) => Future.successful(BadRequest(informationAboutYourItem(appConfig, formWithErrors, mode)))
+    }
 
-        val redirectedPage = value match {
-          case Yes => ConfidentialInformationPage
-          case No => DescribeYourItemPage
-        }
+    form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
 
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
-        )
-      }
-    )
   }
 
 }

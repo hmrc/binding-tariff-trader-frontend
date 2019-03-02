@@ -26,6 +26,7 @@ import play.api.test.Helpers._
 import forms.WhichBestDescribesYouFormProvider
 import models.NormalMode
 import models.WhichBestDescribesYou
+import models.WhichBestDescribesYou.{BusinessOwner, BusinessRepresentative}
 import pages.WhichBestDescribesYouPage
 import play.api.mvc.Call
 import views.html.whichBestDescribesYou
@@ -61,14 +62,24 @@ class WhichBestDescribesYouControllerSpec extends ControllerSpecBase {
       contentAsString(result) mustBe viewAsString(form.fill(WhichBestDescribesYou.values.head))
     }
 
-    "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", WhichBestDescribesYou.options.head.value))
+    "redirect to the next page when BusinessOwner is submitted" in {
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", BusinessOwner))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(onwardRoute.url)
     }
+
+    "redirect to the next page when BusinessRepresentative is submitted" in {
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", BusinessRepresentative))
+
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(onwardRoute.url)
+    }
+
 
     "return a Bad Request and errors when invalid data is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))

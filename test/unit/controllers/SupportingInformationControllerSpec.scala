@@ -17,7 +17,7 @@
 package controllers
 
 import play.api.data.Form
-import play.api.libs.json.JsString
+import play.api.libs.json.JsBoolean
 import uk.gov.hmrc.http.cache.client.CacheMap
 import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
@@ -25,7 +25,6 @@ import controllers.actions._
 import play.api.test.Helpers._
 import forms.SupportingInformationFormProvider
 import models.NormalMode
-import models.SupportingInformation
 import pages.SupportingInformationPage
 import play.api.mvc.Call
 import views.html.supportingInformation
@@ -53,16 +52,25 @@ class SupportingInformationControllerSpec extends ControllerSpecBase {
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(SupportingInformationPage.toString -> JsString(SupportingInformation.values.head.toString))
+      val validData = Map(SupportingInformationPage.toString -> JsBoolean(true))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(SupportingInformation.values.head))
+      contentAsString(result) mustBe viewAsString(form.fill(true))
     }
 
-    "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", SupportingInformation.options.head.value))
+    "redirect to the next page when Yes is submitted" in {
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
+
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(onwardRoute.url)
+    }
+
+    "redirect to the next page when No  is submitted" in {
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "false"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -88,7 +96,7 @@ class SupportingInformationControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", SupportingInformation.options.head.value))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER

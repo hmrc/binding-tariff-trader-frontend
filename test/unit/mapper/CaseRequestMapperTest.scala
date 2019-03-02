@@ -175,9 +175,7 @@ class CaseRequestMapperTest extends UnitSpec {
           CommodityCodeRulingReferencePage.toString -> js("Related BTI Reference"),
           LegalChallengeDetailsPage.toString -> js("Known Legal Proceedings"),
           CommodityCodeDigitsPage.toString -> js("Envisaged Commodity Code"),
-          WhenToSendSamplePage.toString -> js(
-            WhenToSendSample.Yes
-          ),
+          WhenToSendSamplePage.toString -> js(true),
           ReturnSamplesPage.toString -> js(
             ReturnSamples.Yes
           )
@@ -214,9 +212,7 @@ class CaseRequestMapperTest extends UnitSpec {
               "Good Description"
             )
           ),
-          WhenToSendSamplePage.toString -> js(
-            WhenToSendSample.Yes
-          )
+          WhenToSendSamplePage.toString -> js(true)
         )
       )
     )
@@ -243,9 +239,7 @@ class CaseRequestMapperTest extends UnitSpec {
               Some("Phone")
             )
           ),
-          WhenToSendSamplePage.toString -> js(
-            WhenToSendSample.Yes
-          )
+          WhenToSendSamplePage.toString -> js(true)
         )
       )
     )

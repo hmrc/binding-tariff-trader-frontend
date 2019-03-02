@@ -16,24 +16,24 @@
 
 package forms
 
-import forms.behaviours.OptionFieldBehaviours
-import models.LegalChallenge
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class LegalChallengeFormProviderSpec extends OptionFieldBehaviours {
+class LegalChallengeFormProviderSpec extends BooleanFieldBehaviours {
+
+  val requiredKey = "legalChallenge.error.required"
+  val invalidKey = "error.boolean"
 
   val form = new LegalChallengeFormProvider()()
 
   ".value" must {
 
     val fieldName = "value"
-    val requiredKey = "legalChallenge.error.required"
 
-    behave like optionsField[LegalChallenge](
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = LegalChallenge.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(

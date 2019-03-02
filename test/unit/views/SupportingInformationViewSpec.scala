@@ -16,14 +16,14 @@
 
 package views
 
+import controllers.routes
 import play.api.data.Form
 import forms.SupportingInformationFormProvider
 import models.NormalMode
-import models.SupportingInformation
-import views.behaviours.ViewBehaviours
+import views.behaviours.{ViewBehaviours, YesNoViewBehaviours}
 import views.html.supportingInformation
 
-class SupportingInformationViewSpec extends ViewBehaviours {
+class SupportingInformationViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "supportingInformation"
 
@@ -37,29 +37,8 @@ class SupportingInformationViewSpec extends ViewBehaviours {
     behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
+
+    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.SupportingInformationController.onSubmit(NormalMode).url)
   }
 
-  "SupportingInformation view" when {
-    "rendered" must {
-      "contain radio buttons for the value" in {
-        val doc = asDocument(createViewUsingForm(form))
-        for (option <- SupportingInformation.options) {
-          assertContainsRadioButton(doc, option.id, "value", option.value, false)
-        }
-      }
-    }
-
-    for(option <- SupportingInformation.options) {
-      s"rendered with a value of '${option.value}'" must {
-        s"have the '${option.value}' radio button selected" in {
-          val doc = asDocument(createViewUsingForm(form.bind(Map("value" -> s"${option.value}"))))
-          assertContainsRadioButton(doc, option.id, "value", option.value, true)
-
-          for(unselectedOption <- SupportingInformation.options.filterNot(o => o == option)) {
-            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
-          }
-        }
-      }
-    }
-  }
 }

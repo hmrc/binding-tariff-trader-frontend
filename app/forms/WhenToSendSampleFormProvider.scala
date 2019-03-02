@@ -20,13 +20,12 @@ import javax.inject.Inject
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import models.WhenToSendSample
 
 class WhenToSendSampleFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[WhenToSendSample] =
+  def apply(): Form[Boolean] =
     Form(
-      "value" -> enumerable[WhenToSendSample]("whenToSendSample.error.required")
+      "value" -> boolean("whenToSendSample.error.required")
     )
 
 }

@@ -44,7 +44,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[SupportingInformationPage.type]
-        value <- arbitrary[SupportingInformation].map(Json.toJson(_))
+        value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -56,11 +56,20 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
+
   implicit lazy val arbitraryLegalChallengeUserAnswersEntry: Arbitrary[(LegalChallengePage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[LegalChallengePage.type]
-        value <- arbitrary[LegalChallenge].map(Json.toJson(_))
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryCommodityCodeBestMatchUserAnswersEntry: Arbitrary[(CommodityCodeBestMatchPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[CommodityCodeBestMatchPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -76,7 +85,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[SimilarItemCommodityCodePage.type]
-        value <- arbitrary[SimilarItemCommodityCode].map(Json.toJson(_))
+        value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -92,7 +101,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[WhenToSendSamplePage.type]
-        value <- arbitrary[WhenToSendSample].map(Json.toJson(_))
+        value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -104,13 +113,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryCommodityCodeBestMatchUserAnswersEntry: Arbitrary[(CommodityCodeBestMatchPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[CommodityCodeBestMatchPage.type]
-        value <- arbitrary[CommodityCodeBestMatch].map(Json.toJson(_))
-      } yield (page, value)
-    }
+
 
   implicit lazy val arbitraryUploadSupportingMaterialMultipleUserAnswersEntry: Arbitrary[(UploadSupportingMaterialMultiplePage.type, JsValue)] =
     Arbitrary {
@@ -148,7 +151,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[InformationAboutYourItemPage.type]
-        value <- arbitrary[InformationAboutYourItem].map(Json.toJson(_))
+        value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }
 

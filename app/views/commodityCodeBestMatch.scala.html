@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 @import controllers.routes._
-@import models.{CommodityCodeBestMatch, Mode}
+@import models.Mode
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
@@ -37,11 +37,10 @@
 
         <p>@messages("commodityCodeBestMatch.bodyText")</p>
 
-        @components.input_radio(
+        @components.input_yes_no(
             field = form("value"),
-            legend = messages("commodityCodeBestMatch.heading"),
-            legendClass = Some("visually-hidden"),
-            inputs = CommodityCodeBestMatch.options.toSeq
+            label = messages("commodityCodeBestMatch.heading"),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button()

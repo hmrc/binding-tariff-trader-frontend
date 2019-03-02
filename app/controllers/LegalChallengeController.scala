@@ -16,36 +16,38 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.LegalChallengeFormProvider
-import models.{Enumerable, Mode}
-import pages.{LegalChallengeDetailsPage, LegalChallengePage, SupportingInformationPage}
+import javax.inject.Inject
+import models.Mode
 import navigation.Navigator
-import views.html.legalChallenge
-import models.LegalChallenge.{No, Yes}
+import pages._
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.{informationAboutYourItem, legalChallenge}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class LegalChallengeController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: LegalChallengeFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                          appConfig: FrontendAppConfig,
+                                          override val messagesApi: MessagesApi,
+                                          override val dataCacheConnector: DataCacheConnector,
+                                          override val navigator: Navigator,
+                                          identify: IdentifierAction,
+                                          getData: DataRetrievalAction,
+                                          requireData: DataRequiredAction,
+                                          formProvider: LegalChallengeFormProvider
+                                        ) extends FrontendController with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
+
+  override protected val page: QuestionPage[Boolean] = LegalChallengePage
+  override protected val pageDetails: QuestionPage[String] = LegalChallengeDetailsPage
+  override protected val nextPage: Page = SupportingInformationPage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -59,22 +61,11 @@ class LegalChallengeController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(LegalChallengePage, value)
+    def badRequest = {
+      (formWithErrors: Form[_]) => Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, mode)))
+    }
 
-        val redirectedPage = value match {
-          case Yes => LegalChallengeDetailsPage
-          case No => SupportingInformationPage
-        }
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
-        )
-      }
-    )
+    form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
 
   }
 

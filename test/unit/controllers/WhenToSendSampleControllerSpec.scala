@@ -17,7 +17,7 @@
 package controllers
 
 import play.api.data.Form
-import play.api.libs.json.JsString
+import play.api.libs.json.JsBoolean
 import uk.gov.hmrc.http.cache.client.CacheMap
 import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
@@ -25,7 +25,6 @@ import controllers.actions._
 import play.api.test.Helpers._
 import forms.WhenToSendSampleFormProvider
 import models.NormalMode
-import models.WhenToSendSample
 import pages.WhenToSendSamplePage
 import play.api.mvc.Call
 import views.html.whenToSendSample
@@ -53,16 +52,16 @@ class WhenToSendSampleControllerSpec extends ControllerSpecBase {
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(WhenToSendSamplePage.toString -> JsString(WhenToSendSample.values.head.toString))
+      val validData = Map(WhenToSendSamplePage.toString -> JsBoolean(true))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(WhenToSendSample.values.head))
+      contentAsString(result) mustBe viewAsString(form.fill(true))
     }
 
-    "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", WhenToSendSample.options.head.value))
+    "redirect to the next page when Yes is submitted" in {
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -70,6 +69,14 @@ class WhenToSendSampleControllerSpec extends ControllerSpecBase {
       redirectLocation(result) mustBe Some(onwardRoute.url)
     }
 
+    "redirect to the next page when No  is submitted" in {
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "false"))
+
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(onwardRoute.url)
+    }
     "return a Bad Request and errors when invalid data is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
@@ -88,7 +95,7 @@ class WhenToSendSampleControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", WhenToSendSample.options.head.value))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value","true"))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER

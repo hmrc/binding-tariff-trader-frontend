@@ -16,9 +16,7 @@
 
 package pages
 
-import models.CommodityCodeBestMatch
-
-case object CommodityCodeBestMatchPage extends QuestionPage[CommodityCodeBestMatch] {
+case object CommodityCodeBestMatchPage extends QuestionPage[Boolean] {
 
   override def toString: String = "commodityCodeBestMatch"
 }

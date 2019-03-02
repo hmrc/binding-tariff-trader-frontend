@@ -16,32 +16,32 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.RegisterBusinessRepresentingFormProvider
-import models.Mode
-import pages.{RegisterBusinessRepresentingPage, UploadWrittenAuthorisationPage}
+import javax.inject.Inject
+import models.{CheckMode, Mode}
 import navigation.Navigator
+import pages.{CheckYourAnswersPage, RegisterBusinessRepresentingPage, UploadWrittenAuthorisationPage}
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.registerBusinessRepresenting
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppConfig,
-                                      override val messagesApi: MessagesApi,
-                                      dataCacheConnector: DataCacheConnector,
-                                      navigator: Navigator,
-                                      identify: IdentifierAction,
-                                      getData: DataRetrievalAction,
-                                      requireData: DataRequiredAction,
-                                      formProvider: RegisterBusinessRepresentingFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                                       override val messagesApi: MessagesApi,
+                                                       dataCacheConnector: DataCacheConnector,
+                                                       navigator: Navigator,
+                                                       identify: IdentifierAction,
+                                                       getData: DataRetrievalAction,
+                                                       requireData: DataRequiredAction,
+                                                       formProvider: RegisterBusinessRepresentingFormProvider
+                                                      ) extends FrontendController with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -57,15 +57,23 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
+    def hasLetterOfAuth = {
+      request.userAnswers.get(UploadWrittenAuthorisationPage).isDefined
+    }
+
+    def isCheckMode = {
+      mode == CheckMode
+    }
+
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(registerBusinessRepresenting(appConfig, formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(RegisterBusinessRepresentingPage, value)
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(UploadWrittenAuthorisationPage, mode)(updatedAnswers))
-        )
+        dataCacheConnector.save(updatedAnswers.cacheMap).map { _ =>
+          val nextPage = if (isCheckMode && hasLetterOfAuth) CheckYourAnswersPage else UploadWrittenAuthorisationPage
+          Redirect(navigator.nextPage(nextPage, mode)(updatedAnswers))
+        }
       }
     )
   }

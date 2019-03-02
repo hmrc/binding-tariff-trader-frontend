@@ -16,34 +16,35 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.WhichBestDescribesYouFormProvider
-import models.{Enumerable, Mode}
-import navigation.Navigator
-import views.html.whichBestDescribesYou
+import javax.inject.Inject
 import models.WhichBestDescribesYou.{BusinessOwner, BusinessRepresentative}
-import pages.{RegisterBusinessRepresentingPage, SelectApplicationTypePage, WhichBestDescribesYouPage}
-import play.api.mvc.{Action, AnyContent}
+import models.requests.DataRequest
+import models.{Enumerable, Mode, UserAnswers, WhichBestDescribesYou}
+import navigation.Navigator
+import pages.{DataPage, _}
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, Results}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.whichBestDescribesYou
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class WhichBestDescribesYouController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: WhichBestDescribesYouFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                                 appConfig: FrontendAppConfig,
+                                                 override val messagesApi: MessagesApi,
+                                                 dataCacheConnector: DataCacheConnector,
+                                                 navigator: Navigator,
+                                                 identify: IdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 formProvider: WhichBestDescribesYouFormProvider
+                                               ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 
@@ -57,24 +58,35 @@ class WhichBestDescribesYouController @Inject()(
     Ok(whichBestDescribesYou(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
+
+    def update(o: WhichBestDescribesYou): UserAnswers = {
+      o match {
+        case BusinessRepresentative =>
+          request.userAnswers.set(WhichBestDescribesYouPage, o)
+        case BusinessOwner =>
+          request.userAnswers.set(WhichBestDescribesYouPage, o)
+            .remove(RegisterBusinessRepresentingPage)
+            .remove(UploadWrittenAuthorisationPage)
+      }
+    }
+
+    def nextPage: WhichBestDescribesYou => DataPage[_] = {
+      case BusinessRepresentative => RegisterBusinessRepresentingPage
+      case BusinessOwner => SelectApplicationTypePage
+    }
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(whichBestDescribesYou(appConfig, formWithErrors, mode))),
       selectedOption => {
-        val updatedAnswers = request.userAnswers.set(WhichBestDescribesYouPage, selectedOption)
-
-        val redirectedPage = selectedOption match {
-          case BusinessOwner => SelectApplicationTypePage
-          case BusinessRepresentative => RegisterBusinessRepresentingPage
-        }
-
+        val updatedAnswers = update(selectedOption)
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(redirectedPage, mode)(updatedAnswers))
+          _ => Results.Redirect(navigator.nextPage(nextPage(selectedOption), mode)(updatedAnswers))
         )
       }
     )
+
   }
 
 }

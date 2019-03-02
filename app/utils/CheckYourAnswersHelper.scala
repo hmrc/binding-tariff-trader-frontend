@@ -32,7 +32,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def supportingInformation: Option[AnswerRow] = userAnswers.get(SupportingInformationPage) map {
-    x => AnswerRow("supportingInformation.checkYourAnswersLabel", s"supportingInformation.$x", true, routes.SupportingInformationController.onPageLoad(CheckMode).url)
+    x => AnswerRow("supportingInformation.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SupportingInformationController.onPageLoad(CheckMode).url)
   }
 
   def legalChallengeDetails: Option[AnswerRow] = userAnswers.get(LegalChallengeDetailsPage) map {
@@ -40,7 +40,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def legalChallenge: Option[AnswerRow] = userAnswers.get(LegalChallengePage) map {
-    x => AnswerRow("legalChallenge.checkYourAnswersLabel", s"legalChallenge.$x", true, routes.LegalChallengeController.onPageLoad(CheckMode).url)
+    x => AnswerRow("legalChallenge.checkYourAnswersLabel",  yesNoAnswer(x) , true, routes.LegalChallengeController.onPageLoad(CheckMode).url)
   }
 
   def commodityCodeRulingReference: Option[AnswerRow] = userAnswers.get(CommodityCodeRulingReferencePage) map {
@@ -48,7 +48,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def similarItemCommodityCode: Option[AnswerRow] = userAnswers.get(SimilarItemCommodityCodePage) map {
-    x => AnswerRow("similarItemCommodityCode.checkYourAnswersLabel", s"similarItemCommodityCode.$x", true, routes.SimilarItemCommodityCodeController.onPageLoad(CheckMode).url)
+    x => AnswerRow("similarItemCommodityCode.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SimilarItemCommodityCodeController.onPageLoad(CheckMode).url)
   }
 
   def returnSamples: Option[AnswerRow] = userAnswers.get(ReturnSamplesPage) map {
@@ -56,7 +56,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def whenToSendSample: Option[AnswerRow] = userAnswers.get(WhenToSendSamplePage) map {
-    x => AnswerRow("whenToSendSample.checkYourAnswersLabel", s"whenToSendSample.$x", true, routes.WhenToSendSampleController.onPageLoad(CheckMode).url)
+    x => AnswerRow("whenToSendSample.checkYourAnswersLabel", yesNoAnswer(x) , true, routes.WhenToSendSampleController.onPageLoad(CheckMode).url)
   }
 
   def commodityCodeDigits: Option[AnswerRow] = userAnswers.get(CommodityCodeDigitsPage) map {
@@ -64,7 +64,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def commodityCodeBestMatch: Option[AnswerRow] = userAnswers.get(CommodityCodeBestMatchPage) map {
-    x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", s"commodityCodeBestMatch.$x", true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
+    x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", yesNoAnswer(x) , true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
   }
 
   def confidentialInformation: Option[AnswerRow] = userAnswers.get(ConfidentialInformationPage) map {
@@ -92,7 +92,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def informationAboutYourItem: Option[AnswerRow] = userAnswers.get(InformationAboutYourItemPage) map {
-    x => AnswerRow("informationAboutYourItem.checkYourAnswersLabel", s"informationAboutYourItem.$x", true, routes.InformationAboutYourItemController.onPageLoad(CheckMode).url)
+    x => AnswerRow("informationAboutYourItem.checkYourAnswersLabel", yesNoAnswer(x), true, routes.InformationAboutYourItemController.onPageLoad(CheckMode).url)
   }
 
   def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
@@ -118,5 +118,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map {
     x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", Seq(x.field1, x.field2, x.field3, x.field4, x.field5), false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }
+
+  private def yesNoAnswer(x: Boolean) = if (x) "site.yes" else "site.no"
 
 }

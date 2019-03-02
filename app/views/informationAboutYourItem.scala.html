@@ -17,7 +17,6 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
-@import models.InformationAboutYourItem
 @import models.Mode
 @import views.ViewUtils._
 
@@ -40,11 +39,10 @@
             <p>@messages("informationAboutYourItem.paragraph")</p>
         </div>
 
-        @components.input_radio(
+        @components.input_yes_no(
             field = form("value"),
-            legend = messages("informationAboutYourItem.legend"),
-            legendClass = Some("visually-hidden"),
-            inputs = InformationAboutYourItem.options.toSeq
+            label = messages("informationAboutYourItem.heading"),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button()

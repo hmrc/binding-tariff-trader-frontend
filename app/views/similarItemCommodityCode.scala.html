@@ -17,7 +17,6 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
-@import models.SimilarItemCommodityCode
 @import models.Mode
 @import views.ViewUtils._
 
@@ -43,11 +42,10 @@
             <li>@messages("similarItemCommodityCode.listItem2")</li>
         </ul>
 
-        @components.input_radio(
+        @components.input_yes_no(
             field = form("value"),
-            legend = messages("similarItemCommodityCode.heading"),
-            legendClass = Some("visually-hidden"),
-            inputs = SimilarItemCommodityCode.options.toSeq
+            label = messages("similarItemCommodityCode.heading"),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button()

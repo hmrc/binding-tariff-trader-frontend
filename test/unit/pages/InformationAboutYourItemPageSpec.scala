@@ -16,17 +16,16 @@
 
 package pages
 
-import models.InformationAboutYourItem
 import pages.behaviours.PageBehaviours
 
 class InformationAboutYourItemPageSpec extends PageBehaviours {
 
-  "YourLocation" must {
+  "InformationAboutYourItemPage" must {
 
-    beRetrievable[InformationAboutYourItem](InformationAboutYourItemPage)
+    beRetrievable[Boolean](InformationAboutYourItemPage)
 
-    beSettable[InformationAboutYourItem](InformationAboutYourItemPage)
+    beSettable[Boolean](InformationAboutYourItemPage)
 
-    beRemovable[InformationAboutYourItem](InformationAboutYourItemPage)
+    beRemovable[Boolean](InformationAboutYourItemPage)
   }
 }

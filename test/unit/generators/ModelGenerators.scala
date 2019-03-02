@@ -23,34 +23,9 @@ import org.scalacheck.{Arbitrary, Gen}
 trait ModelGenerators {
 
 
-  implicit lazy val arbitrarySupportInformation: Arbitrary[SupportingInformation] =
-    Arbitrary {
-      Gen.oneOf(SupportingInformation.values.toSeq)
-    }
-
-  implicit lazy val arbitraryLegalChallenge: Arbitrary[LegalChallenge] =
-    Arbitrary {
-      Gen.oneOf(LegalChallenge.values.toSeq)
-    }
-
-  implicit lazy val arbitrarySimilarItemCommodityCode: Arbitrary[SimilarItemCommodityCode] =
-    Arbitrary {
-      Gen.oneOf(SimilarItemCommodityCode.values.toSeq)
-    }
-
   implicit lazy val arbitraryReturnSamples: Arbitrary[ReturnSamples] =
     Arbitrary {
       Gen.oneOf(ReturnSamples.values.toSeq)
-    }
-
-  implicit lazy val arbitraryWhenToSendSample: Arbitrary[WhenToSendSample] =
-    Arbitrary {
-      Gen.oneOf(WhenToSendSample.values.toSeq)
-    }
-
-  implicit lazy val arbitraryCommodityCodeBestMatch: Arbitrary[CommodityCodeBestMatch] =
-    Arbitrary {
-      Gen.oneOf(CommodityCodeBestMatch.values.toSeq)
     }
 
   implicit lazy val arbitraryConfidentialInformation: Arbitrary[ConfidentialInformation] =
@@ -95,9 +70,9 @@ trait ModelGenerators {
       } yield PreviousCommodityCode(field1)
     }
 
-  implicit lazy val arbitraryInformationAboutYourItem: Arbitrary[InformationAboutYourItem] =
+  implicit lazy val arbitraryInformationAboutYourItem: Arbitrary[Boolean] =
     Arbitrary {
-      Gen.oneOf(InformationAboutYourItem.values.toSeq)
+      Gen.oneOf(Seq(true,false))
     }
 
   implicit lazy val arbitraryEnterContactDetails: Arbitrary[EnterContactDetails] =

@@ -26,6 +26,7 @@ import play.api.test.Helpers._
 import forms.SelectApplicationTypeFormProvider
 import models.NormalMode
 import models.SelectApplicationType
+import models.SelectApplicationType.{Newcommodity, Previouscommodity}
 import pages.SelectApplicationTypePage
 import play.api.mvc.Call
 import views.html.selectApplicationType
@@ -61,14 +62,24 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
       contentAsString(result) mustBe viewAsString(form.fill(SelectApplicationType.values.head))
     }
 
-    "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", SelectApplicationType.options.head.value))
+    "redirect to the next page when new commodity data is submitted" in {
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value",Newcommodity))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(onwardRoute.url)
     }
+
+    "redirect to the next page when previous commodity data is submitted" in {
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value",Previouscommodity))
+
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(onwardRoute.url)
+    }
+
 
     "return a Bad Request and errors when invalid data is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
