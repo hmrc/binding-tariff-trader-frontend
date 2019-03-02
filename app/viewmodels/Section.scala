@@ -16,4 +16,8 @@
 
 package viewmodels
 
-trait Section
+trait Section {
+  def isEmpty: Boolean
+}
+
+

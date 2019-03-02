@@ -20,4 +20,6 @@ case class RepeaterAnswerSection (headingKey: String,
                                   relevanceRow: AnswerRow,
                                   rows: Seq[RepeaterAnswerRow],
                                   addLinkKey: String,
-                                  addLinkUrl: String) extends Section
+                                  addLinkUrl: String) extends Section {
+  override def isEmpty: Boolean = rows.isEmpty
+}

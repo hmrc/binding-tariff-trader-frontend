@@ -31,7 +31,7 @@
 
         @components.heading(messages("checkYourAnswers.heading"))
 
-        @for(section <- answerSections){
+        @for(section <- answerSections if !section.isEmpty){
             @{
                 section match {
                     case a: AnswerSection => components.answer_section(a)
