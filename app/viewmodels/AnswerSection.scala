@@ -16,6 +16,6 @@
 
 package viewmodels
 
-case class AnswerSection(headingKey: Option[String], rows: Seq[AnswerRow]) extends Section {
-  override def isEmpty: Boolean = rows.isEmpty
+case class AnswerSection(headingKey: Option[String], rows: Seq[AnswerRow]) {
+  def containsAnswers: Boolean = rows.nonEmpty
 }

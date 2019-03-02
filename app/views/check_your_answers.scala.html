@@ -18,9 +18,9 @@
 @import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
 @import views.ViewUtils._
-@import viewmodels.{Section, AnswerSection, RepeaterAnswerSection}
+@import viewmodels.AnswerSection
 
-@(appConfig: FrontendAppConfig, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, answerSections: Seq[AnswerSection])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("checkYourAnswers.title"),
@@ -31,13 +31,8 @@
 
         @components.heading(messages("checkYourAnswers.heading"))
 
-        @for(section <- answerSections if !section.isEmpty){
-            @{
-                section match {
-                    case a: AnswerSection => components.answer_section(a)
-                    case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-                }
-            }
+        @for(section <- answerSections if section.containsAnswers) {
+            @components.answer_section(section)
         }
 
         @components.submit_button()

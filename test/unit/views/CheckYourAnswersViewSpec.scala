@@ -24,14 +24,17 @@ import views.html.check_your_answers
 class CheckYourAnswersViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "checkYourAnswers"
+  private val traderAnswer = "Answer by the trader"
+  private val agentAnswer = "Answer by the agent"
+  private val agentAnswerForTrader = "Answer by the agent on behalf of trader"
 
   private val traderAnswers = Seq(
-    AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", "Trader Details", false, "url"))),
+    AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", traderAnswer, false, "url"))),
     AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq.empty)
   )
   private val agentAnswers = Seq(
-    AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", "Agent Details", false, "url"))),
-    AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq(AnswerRow("label", "Trader Details By Agent", false, "url")))
+    AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", agentAnswer, false, "url"))),
+    AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq(AnswerRow("label", agentAnswerForTrader, false, "url")))
   )
 
   private def createTraderView: () => Html = () => check_your_answers(frontendAppConfig, traderAnswers)(fakeRequest, messages)
@@ -45,7 +48,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       val text = asDocument(createTraderView()).text()
 
       text must include("Your details")
-      text must include("Trader Details")
+      text must include(traderAnswer)
       text must not include("Details of the business, organisation or individual you represent")
     }
 
@@ -53,9 +56,9 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       val text = asDocument(createAgentView()).text()
 
       text must include("Your details")
-      text must include("Trader Details")
+      text must include(agentAnswer)
       text must include("Details of the business, organisation or individual you represent")
-      text must include("Trader Details By Agent")
+      text must include(agentAnswerForTrader)
     }
   }
 }
