@@ -17,8 +17,8 @@
 package controllers
 
 import connectors.DataCacheConnector
-import models.Mode
 import models.requests.DataRequest
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.{Page, QuestionPage}
 import play.api.mvc.{Result, Results}
@@ -35,23 +35,15 @@ trait YesNoBehaviour[A] {
   protected val pageDetails: QuestionPage[A]
   protected val nextPage: Page
 
-  def applyAnswer(value: Boolean, mode: Mode)
-                 (implicit request: DataRequest[_]): Future[Result] = {
+  def submitAnswer(answer: Boolean, mode: Mode)
+                  (implicit request: DataRequest[_]): Future[Result] = {
 
-    value match {
-      case true =>
+    val updatedAnswers: UserAnswers = request.userAnswers.set(page, answer)
+    val answers = if (answer) updatedAnswers else updatedAnswers.remove(pageDetails)
+    val next = if (answer) pageDetails else nextPage
 
-        val updatedAnswers = request.userAnswers.set[Boolean](page, value)
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Results.Redirect(navigator.nextPage(pageDetails, mode)(updatedAnswers))
-        )
-
-      case false =>
-
-        val updatedAnswers = request.userAnswers.set(page, value).remove(pageDetails)
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Results.Redirect(navigator.nextPage(nextPage, mode)(updatedAnswers))
-        )
-    }
+    dataCacheConnector.save(answers.cacheMap).map(
+      _ => Results.Redirect(navigator.nextPage(next, mode)(answers))
+    )
   }
 }

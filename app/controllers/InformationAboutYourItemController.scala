@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.informationAboutYourItem
+import views.html.{commodityCodeBestMatch, informationAboutYourItem}
 
 import scala.concurrent.Future
 
@@ -46,9 +46,9 @@ class InformationAboutYourItemController @Inject()(
   private lazy val form = formProvider()
 
 
-  override val page = InformationAboutYourItemPage
-  override val pageDetails = ConfidentialInformationPage
-  override val nextPage = DescribeYourItemPage
+  override val page: QuestionPage[Boolean] = InformationAboutYourItemPage
+  override val pageDetails: QuestionPage[ConfidentialInformation] = ConfidentialInformationPage
+  override val nextPage: Page = DescribeYourItemPage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -62,11 +62,12 @@ class InformationAboutYourItemController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(informationAboutYourItem(appConfig, formWithErrors, mode))),
-      value => applyAnswer(value, mode)
-    )
+    def badRequest = {
+      (formWithErrors: Form[_]) => Future.successful(BadRequest(informationAboutYourItem(appConfig, formWithErrors, mode)))
+    }
+
+    form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
+
   }
 
 }

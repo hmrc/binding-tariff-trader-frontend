@@ -45,9 +45,9 @@ class CommodityCodeBestMatchController @Inject()(
 
   private lazy val form = formProvider()
 
-  override val page = CommodityCodeBestMatchPage
-  override val pageDetails = CommodityCodeDigitsPage
-  override val nextPage = WhenToSendSamplePage
+  override val page: QuestionPage[Boolean] = CommodityCodeBestMatchPage
+  override val pageDetails: QuestionPage[String] = CommodityCodeDigitsPage
+  override val nextPage: Page = WhenToSendSamplePage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -61,11 +61,11 @@ class CommodityCodeBestMatchController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode))),
-      value => applyAnswer(value, mode)
-    )
+    def badRequest = {
+      (formWithErrors: Form[_]) => Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode)))
+    }
+
+    form.bindFromRequest().fold( badRequest, submitAnswer(_, mode))
   }
 
 }
