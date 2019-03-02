@@ -66,10 +66,20 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
   def pdf(reference: String): Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
     caseService.get(reference).flatMap {
-      case Some(c: Case) => pdfService.generatePdf(s"confirmation_$reference.pdf", confirmationPdf(c).toString())
+      case Some(c: Case) => pdfService.generatePdf(s"confirmation_$reference.pdf", confirmationPdf(appConfig, c).toString())
 
       // TODO - what if case not found?
-      case _ => throw new Exception("Problem !!!")//successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
+      case _ => throw new Exception("Problem !!!")
+    }
+  }
+
+  def pdfCheck(reference: String): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+
+    caseService.get(reference).map {
+      case Some(c: Case) => Ok(confirmationPdf(appConfig, c))
+
+      // TODO - what if case not found?
+      case _ => throw new Exception("Problem !!!")
     }
   }
 }

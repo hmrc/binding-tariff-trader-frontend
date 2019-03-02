@@ -113,3 +113,4 @@ POST        /check-your-answers                                  controllers.Che
 
 GET         /confirmation                                        controllers.ConfirmationController.onPageLoad()
 GET         /confirmation/pdf/:reference                         controllers.ConfirmationController.pdf(reference: String)
+GET         /confirmation/pdfCheck/:reference                    controllers.ConfirmationController.pdfCheck(reference: String)

@@ -20,60 +20,79 @@
 @import models.ReturnSamples
 @import models.Mode
 @import views.ViewUtils._
+@import utils.Dates
 
 @(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
 
 
-<p>[appConfig: FrontendAppConfig, Case @c.reference ]</p>
+<html>
+    <head>
+        <link rel='stylesheet' href='http://localhost:9032/assets/3.2.2/stylesheets/application.min.css' />
+    </head>
+    <body>
+
+        <main id="wrapper" role="main" >
+            <div class="centered-content">
 
 
- @main_template(
-  title = messages("confirmation.title"),
-  appConfig = appConfig,
-  bodyClasses = None) {
+                <img src="@routes.Assets.versioned("images/hmrc-logo.jpg")" width="150" height="100">
+                <h1 class="heading-large">Application for a goods classification ruling</h1>
 
-  <div class="govuk-box-highlight">
-   @components.heading(messages("confirmation.heading"))
-   <span class="font-large">
-    @messages("confirmation.yourRefNumber") <br>
-    <span id="confirmation-reference" class="font-large bold">@messages("confirmation.refValue", confirmation.reference)</span>
-   </span>
-  </div>
+                <p>Application submitted on: @Dates.format(c.createdDate)</p>
+                <p>Application reference number: GB@c.reference</p>
 
-  <p id="confirmation-email-message">@messages("confirmation.paragragh.confirmationEmail", confirmation.emailAddress)</p>
-  <ul class="list">
-   <li><a href="@routes.ConfirmationController.pdf(confirmation.reference)">@messages("confirmation.download.link.PDF")</a></li>
-   <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
-  </ul>
+                <h2 class="heading-medium">Applicant details</h2>
+                <ul role="list" class="govuk-check-your-answers cya-questions-long section">
+                    <li>
+                        <div class="cya-question">EORI number</div>
+                        <div class="cya-answer">@c.application.holder.eori</div>
+                    </li>
+                    <li>
+                        <div class="cya-question">Registered company address</div>
+                        <div class="cya-answer">
+                            <p class="pre-wrap">
+                                @c.application.holder.businessName <br/>
+                                @c.application.holder.addressLine1 <br/>
+                                @c.application.holder.addressLine2 <br/>
+                                @c.application.holder.postcode
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="cya-question">Applicant contact details </div>
+                        <div class="cya-answer">
+                            <p class="pre-wrap">
+                                @c.application.contact.name <br/>
+                                @c.application.contact.email <br/>
+                                @c.application.contact.phone
+                            </p>
+                        </div>
+                    </li>
+                </ul>
 
-  @if(confirmation.sendingSamples) {
-   <h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
+                @if(c.application.agent.isDefined) {
+                    <h2 class="heading-medium">Applying for</h2>
+                }
+                <h2 class="heading-medium">Application type</h2>
+                <ul role="list" class="govuk-check-your-answers cya-questions-long section">
+                    <li>
+                        <div class="cya-question">@c.application.`type`</div>
+                        <div class="cya-answer">@c.application.holder.eori</div>
+                    </li>
+                </ul>
 
-   @components.icon_important("confirmation.sendingSamples.important")
 
-   <p>@messages("confirmation.paragraph0.sendingSamples")</p>
+                <h2 class="heading-medium">Information about your item</h2>
 
-   <p>@messages("confirmation.paragraph1.sendingSamples") @messages("confirmation.refValue", confirmation.reference) .
-    @messages("confirmation.paragraph2.sendingSamples")</p>
+            </div>
 
-   <address>
-   @Html(messages("confirmation.sendingSamples.address"))
-   </address>
-  }
+        </main>
 
-  <h2 class="heading-medium">@messages("confirmation.heading2.whatNext")</h2>
-  <p>
-   @if(confirmation.sendingSamples){
-    @Html(messages("confirmation.paragraph.whatNext0.sample"))
-   } else {
-    @Html(messages("confirmation.paragraph.whatNext0.nosample"))
-   }
-   <br/>
-   @Html(messages("confirmation.paragraph.whatNext1"))
-  </p>
+    </body>
 
-  <a href="@routes.IndexController.onPageLoad">@messages("confirmation.homeLink")</a>
- }
+</html>
+
+
 
 
 
