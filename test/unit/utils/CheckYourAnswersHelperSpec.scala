@@ -16,7 +16,7 @@
 
 package utils
 
-import models.SelectApplicationType.Newcommodity
+import models.SelectApplicationType.NewCommodity
 import models.WhichBestDescribesYou.BusinessOwner
 import models._
 import org.mockito.BDDMockito.given
@@ -126,7 +126,7 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
       }
 
       "return a row with the correct answer for SelectApplicationTypePage" in {
-        given(userAnswers.get(SelectApplicationTypePage)).willReturn(Option(Newcommodity))
+        given(userAnswers.get(SelectApplicationTypePage)).willReturn(Option(NewCommodity))
         checkHelper.selectApplicationType.get.answer shouldBe "selectApplicationType.newCommodity"
       }
 
