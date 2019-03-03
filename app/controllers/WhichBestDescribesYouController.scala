@@ -25,7 +25,7 @@ import models.WhichBestDescribesYou.{BusinessOwner, BusinessRepresentative}
 import models.requests.DataRequest
 import models.{Enumerable, Mode, UserAnswers, WhichBestDescribesYou}
 import navigation.Navigator
-import pages.{DataPage, _}
+import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Results}
@@ -71,7 +71,7 @@ class WhichBestDescribesYouController @Inject()(
       }
     }
 
-    def nextPage: WhichBestDescribesYou => DataPage[_] = {
+    def nextPage: WhichBestDescribesYou => Page = {
       case BusinessRepresentative => RegisterBusinessRepresentingPage
       case BusinessOwner => SelectApplicationTypePage
     }

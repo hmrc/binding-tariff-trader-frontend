@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-package models.requests
+package viewmodels
 
-import play.api.mvc.{Request, WrappedRequest}
-import models.UserAnswers
-
-case class OptionalDataRequest[A] (request: Request[A], internalId: String, userEoriNumber: String, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
-
-case class DataRequest[A] (request: Request[A], internalId: String, eoriNumber: String, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+case class RepeatedAnswerRow(answer: String, changeUrl: String, deleteUrl: String)

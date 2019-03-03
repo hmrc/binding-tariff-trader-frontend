@@ -52,8 +52,8 @@ class WhenToSendSampleController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(WhenToSendSamplePage) match {
-      case None => form
       case Some(value) => form.fill(value)
+      case _ => form
     }
 
     Ok(whenToSendSample(appConfig, preparedForm, mode))
@@ -61,8 +61,8 @@ class WhenToSendSampleController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def badRequest = {
-      (formWithErrors: Form[_]) => Future.successful(BadRequest(whenToSendSample(appConfig, formWithErrors, mode)))
+    def badRequest = { formWithErrors: Form[_] =>
+      Future.successful(BadRequest(whenToSendSample(appConfig, formWithErrors, mode)))
     }
 
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))

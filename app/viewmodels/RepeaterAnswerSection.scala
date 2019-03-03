@@ -18,6 +18,6 @@ package viewmodels
 
 case class RepeaterAnswerSection (headingKey: String,
                                   relevanceRow: AnswerRow,
-                                  rows: Seq[RepeaterAnswerRow],
+                                  rows: Seq[RepeatedAnswerRow],
                                   addLinkKey: String,
                                   addLinkUrl: String) extends Section

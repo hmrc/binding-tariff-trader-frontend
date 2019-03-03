@@ -68,7 +68,7 @@ class UploadWrittenAuthorisationController @Inject()(
         )
       }
 
-      def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]) = {
+      def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]): Future[Result] = {
         fileService.upload(validFile) flatMap {
           case fileAttachment: FileAttachment =>
             val updatedAnswers = request.userAnswers.set(UploadWrittenAuthorisationPage, fileAttachment)

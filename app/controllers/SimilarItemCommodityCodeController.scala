@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.{legalChallenge, similarItemCommodityCode}
+import views.html.similarItemCommodityCode
 
 import scala.concurrent.Future
 
@@ -60,8 +60,8 @@ class SimilarItemCommodityCodeController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def badRequest = {
-      (formWithErrors: Form[_]) => Future.successful(BadRequest(similarItemCommodityCode(appConfig, formWithErrors, mode)))
+    def badRequest = { formWithErrors: Form[_] =>
+      Future.successful(BadRequest(similarItemCommodityCode(appConfig, formWithErrors, mode)))
     }
 
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))

@@ -57,11 +57,11 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def hasLetterOfAuth = {
+    def hasLetterOfAuth: Boolean = {
       request.userAnswers.get(UploadWrittenAuthorisationPage).isDefined
     }
 
-    def isCheckMode = {
+    def isCheckMode: Boolean = {
       mode == CheckMode
     }
 
