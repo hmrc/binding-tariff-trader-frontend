@@ -28,15 +28,15 @@ object ReturnSamples {
 
   val values: Set[ReturnSamples] = Set(Yes, No)
 
-  val options: Set[RadioOption] = values.map {
-    value => RadioOption("returnSamples", value.toString)
+  val options: Set[RadioOption] = values.map { value =>
+    RadioOption("returnSamples", value.toString)
   }
 
   implicit val enumerable: Enumerable[ReturnSamples] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 
   implicit object ReturnSamplesWrites extends Writes[ReturnSamples] {
-    def writes(returnSamples: ReturnSamples) = Json.toJson(returnSamples.toString)
+    def writes(returnSamples: ReturnSamples): JsValue = Json.toJson(returnSamples.toString)
   }
 
   implicit object ReturnSamplesReads extends Reads[ReturnSamples] {

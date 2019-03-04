@@ -26,23 +26,31 @@ import play.api.test.Helpers._
 import forms.SelectApplicationTypeFormProvider
 import models.NormalMode
 import models.SelectApplicationType
-import models.SelectApplicationType.{Newcommodity, Previouscommodity}
+import models.SelectApplicationType.{NewCommodity, PreviousCommodity}
 import pages.SelectApplicationTypePage
 import play.api.mvc.Call
 import views.html.selectApplicationType
 
 class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
+  private def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new SelectApplicationTypeFormProvider()
-  val form = formProvider()
+  private val formProvider = new SelectApplicationTypeFormProvider()
+  private val form = formProvider()
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new SelectApplicationTypeController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): SelectApplicationTypeController = {
+    new SelectApplicationTypeController(
+      frontendAppConfig,
+      messagesApi,
+      FakeDataCacheConnector,
+      new FakeNavigator(onwardRoute), FakeIdentifierAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl, formProvider)
+  }
 
-  def viewAsString(form: Form[_] = form) = selectApplicationType(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  private def viewAsString(form: Form[_] = form): String = {
+    selectApplicationType(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  }
 
   "SelectApplicationType Controller" must {
 
@@ -63,7 +71,7 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when new commodity data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value",Newcommodity))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", NewCommodity))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -72,7 +80,7 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when previous commodity data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value",Previouscommodity))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", PreviousCommodity))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 

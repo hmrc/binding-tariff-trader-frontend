@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.{informationAboutYourItem, legalChallenge}
+import views.html.legalChallenge
 
 import scala.concurrent.Future
 
@@ -61,8 +61,8 @@ class LegalChallengeController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def badRequest = {
-      (formWithErrors: Form[_]) => Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, mode)))
+    def badRequest = { formWithErrors: Form[_] =>
+      Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, mode)))
     }
 
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))

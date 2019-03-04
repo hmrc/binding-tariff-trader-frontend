@@ -24,29 +24,28 @@ sealed trait SelectApplicationType extends Page
 
 object SelectApplicationType {
 
-  case object Newcommodity extends WithName("newCommodity") with SelectApplicationType
-  case object Previouscommodity extends WithName("previousCommodity") with SelectApplicationType
+  case object NewCommodity extends WithName("newCommodity") with SelectApplicationType
+  case object PreviousCommodity extends WithName("previousCommodity") with SelectApplicationType
 
   val values: Set[SelectApplicationType] = Set(
-    Newcommodity, Previouscommodity
+    NewCommodity, PreviousCommodity
   )
 
-  val options: Set[RadioOption] = values.map {
-    value =>
-      RadioOption("selectApplicationType", value.toString)
+  val options: Set[RadioOption] = values.map { value =>
+    RadioOption("selectApplicationType", value.toString)
   }
 
   implicit val enumerable: Enumerable[SelectApplicationType] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 
   implicit object SelectApplicationTypeWrites extends Writes[SelectApplicationType] {
-    def writes(selectApplicationType: SelectApplicationType) = Json.toJson(selectApplicationType.toString)
+    def writes(selectApplicationType: SelectApplicationType): JsValue = Json.toJson(selectApplicationType.toString)
   }
 
   implicit object SelectApplicationTypeReads extends Reads[SelectApplicationType] {
     override def reads(json: JsValue): JsResult[SelectApplicationType] = json match {
-      case JsString(Newcommodity.toString) => JsSuccess(Newcommodity)
-      case JsString(Previouscommodity.toString) => JsSuccess(Previouscommodity)
+      case JsString(NewCommodity.toString) => JsSuccess(NewCommodity)
+      case JsString(PreviousCommodity.toString) => JsSuccess(PreviousCommodity)
       case _ => JsError("Unknown selectApplicationType")
     }
   }

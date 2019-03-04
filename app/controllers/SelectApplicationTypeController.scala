@@ -21,10 +21,10 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SelectApplicationTypeFormProvider
 import javax.inject.Inject
-import models.SelectApplicationType.{Newcommodity, Previouscommodity}
-import models.{Enumerable, Mode}
+import models.SelectApplicationType.{NewCommodity, PreviousCommodity}
+import models._
 import navigation.Navigator
-import pages.{AcceptItemInformationPage, PreviousCommodityCodePage, SelectApplicationTypePage}
+import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Results}
@@ -59,25 +59,26 @@ class SelectApplicationTypeController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
+    def update(o: SelectApplicationType): UserAnswers = {
+      o match {
+        case PreviousCommodity => request.userAnswers.set(SelectApplicationTypePage, o)
+        case NewCommodity => request.userAnswers.set(SelectApplicationTypePage, o).remove(PreviousCommodityCodePage)
+      }
+    }
+
+    def nextPage: SelectApplicationType => Page = {
+      case PreviousCommodity => PreviousCommodityCodePage
+      case NewCommodity => AcceptItemInformationPage
+    }
+
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(selectApplicationType(appConfig, formWithErrors, mode))),
-      value => {
-        value match {
-          case Previouscommodity =>
-
-            val updatedAnswers = request.userAnswers.set(SelectApplicationTypePage, value)
-            dataCacheConnector.save(updatedAnswers.cacheMap).map(
-              _ => Results.Redirect(navigator.nextPage(PreviousCommodityCodePage, mode)(updatedAnswers))
-            )
-
-          case Newcommodity =>
-
-            val updatedAnswers = request.userAnswers.set(SelectApplicationTypePage, value).remove(PreviousCommodityCodePage)
-            dataCacheConnector.save(updatedAnswers.cacheMap).map(
-              _ => Results.Redirect(navigator.nextPage(AcceptItemInformationPage, mode)(updatedAnswers))
-            )
-        }
+      selectedOption => {
+        val updatedAnswers = update(selectedOption)
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ => Results.Redirect(navigator.nextPage(nextPage(selectedOption), mode)(updatedAnswers))
+        )
       }
     )
   }

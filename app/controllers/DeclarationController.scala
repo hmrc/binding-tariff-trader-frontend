@@ -101,7 +101,6 @@ class DeclarationController @Inject()(
 
     if (isBusinessRepresentative(answers)) {
       val letterOfAuth: Option[Attachment] = letter.map(toAttachment)
-
       val agentDetails = caseRequest.application.agent.map(_.copy(letterOfAuthorisation = letterOfAuth))
       val application = caseRequest.application.copy(agent = agentDetails)
       caseRequest.copy(application = application, attachments = attachments.map(toAttachment))

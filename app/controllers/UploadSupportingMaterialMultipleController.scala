@@ -66,7 +66,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
         )
       }
 
-      def saveAndRedirect(file: FileAttachment) = {
+      def saveAndRedirect(file: FileAttachment): Future[Result] = {
         val updatedFiles = request.userAnswers.get(SupportingMaterialFileListPage)
           .map(s => s ++ Seq(file)) getOrElse Seq(file)
         val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, updatedFiles)
@@ -74,14 +74,14 @@ class UploadSupportingMaterialMultipleController @Inject()(
           .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
       }
 
-      def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]) = {
+      def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]): Future[Result] = {
         fileService.upload(validFile) flatMap {
           case file: FileAttachment => saveAndRedirect(file)
           case _ => badRequest("upload-error", "File upload has failed. Try again")
         }
       }
 
-      def hasMaxFiles = {
+      def hasMaxFiles: Boolean = {
         request.userAnswers.get(SupportingMaterialFileListPage).map(_.size).getOrElse(0) >= 10
       }
 
