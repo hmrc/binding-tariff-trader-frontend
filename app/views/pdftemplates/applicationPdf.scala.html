@@ -1,0 +1,256 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+@import uk.gov.hmrc.play.views.html._
+@import controllers.routes._
+@import models.ReturnSamples
+@import models.Mode
+@import views.ViewUtils._
+@import utils.Dates
+
+@(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
+
+
+@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
+    val protocol = if(req.secure) "https" else "http"
+    s"$protocol://${req.host}${routes.Assets.versioned(path)}"
+}
+
+<html>
+    <head>
+        <link href="@createLink("stylesheets/application.min.css")" rel="stylesheet" type="text/css"/>
+        <style>
+                table {
+                    width: 100%;
+                }
+
+                td {
+                    width: 50%;
+                    vertical-align: top;
+                }
+        </style>
+    </head>
+    <body>
+
+        <main id="wrapper" role="main" >
+            <div class="centered-content">
+
+
+                <img src="@createLink("images/hmrc-logo.jpg")" width="150" height="100">
+                <h1 class="heading-large">Application for a goods classification ruling</h1>
+
+                <p>Application submitted on: @Dates.format(c.createdDate)</p>
+                <p>Application reference number: GB@c.reference</p>
+
+
+                <h2 class="heading-medium">Applicant details</h2>
+                <table>
+                    <tr>
+                        <td>EORI number</td>
+                        <td>@c.application.holder.eori</td>
+                    </tr>
+                    <tr>
+                        <td>Registered company name</td>
+                        <td>@c.application.holder.businessName</td>
+                    </tr>
+                    <tr>
+                        <td>Registered company address</td>
+                        <td>
+                            @c.application.holder.addressLine1 <br/>
+                            @c.application.holder.addressLine2 <br/>
+                            @c.application.holder.postcode
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Applicant contact details</td>
+                        <td>
+                            @c.application.contact.name <br/>
+                            @c.application.contact.email <br/>
+                            @c.application.contact.phone
+                        </td>
+                    </tr>
+                </table>
+
+                @if(c.application.agent.isDefined) {
+                    @defining(c.application.agent.get) { agentDetails: AgentDetails =>
+                        <h2 class="heading-medium">Applying for</h2>
+                        <table>
+                            <tr>
+                                <td>EORI number</td>
+                                <td>@agentDetails.eoriDetails.eori</td>
+                            </tr>
+                            <tr>
+                                <td>Registered company name</td>
+                                <td>@agentDetails.eoriDetails.businessName</td>
+                            </tr>
+                            <tr>
+                                <td>Registered company address</td>
+                                <td>
+                                    @agentDetails.eoriDetails.addressLine1 <br/>
+                                    @agentDetails.eoriDetails.addressLine2 <br/>
+                                    @agentDetails.eoriDetails.postcode
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                }
+
+                <h2 class="heading-medium">Application type</h2>
+                <table>
+                    <tr>
+                    @if(c.application.reissuedBTIReference.isDefined) {
+                        <td>BTI re-issue</td>
+                        <td>@c.application.reissuedBTIReference.get</td>
+                    } else {
+                        <td>New</td>
+                    }
+                    </tr>
+                </table>
+
+                <h2 class="heading-medium">Information about your item</h2>
+                <table>
+                    <tr>
+                        <td>Confidential information</td>
+                        @if(c.application.confidentialInformation.isDefined) {
+                            <td>@c.application.confidentialInformation.get</td>
+                        } else {
+                            <td>No</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Item description</td>
+                        <td>
+                            @c.application.goodName <br/>
+                            @c.application.goodDescription
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Uploaded documents</td>
+                        @if(c.attachments.isEmpty) {
+                            <td>None</td>
+                        } else {
+                            <td>Some - TODO list them!!!</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Are you providing a sample?</td>
+                        @if(c.application.sampleToBeProvided) {
+                            <td>Yes</td>
+                        } else {
+                            <td>No</td>
+                        }
+                    </tr>
+                    @if(c.application.sampleToBeProvided) {
+                        <tr>
+                            <td>Should the sample be returned?</td>
+                            @if(c.application.sampleToBeReturned) {
+                                <td>Yes</td>
+                            } else {
+                                <td>No</td>
+                            }
+                        </tr>
+                    }
+                    <tr>
+                        <td>Are you aware of a similar BTI ruling?</td>
+                        @if(c.application.relatedBTIReference.isDefined) {
+                            <td>Yes</td>
+                        } else {
+                            <td>No</td>
+                        }
+                    </tr>
+                    @if(c.application.relatedBTIReference.isDefined) {
+                        <tr>
+                            <td>BTI reference number</td>
+                            <td>@c.application.relatedBTIReference.get</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>Are you aware of any problems with the item’s classification?</td>
+                        @if(c.application.knownLegalProceedings.isDefined) {
+                            <td>Yes</td>
+                        } else {
+                            <td>No</td>
+                        }
+                    </tr>
+                    @if(c.application.knownLegalProceedings.isDefined) {
+                        <tr>
+                            <td>Legal problems</td>
+                            <td>@c.application.knownLegalProceedings.get</td>
+                        </tr>
+                    }
+                </table>
+
+                <h2 class="heading-medium">Other supporting information</h2>
+                <table>
+                    <tr>
+                        <td>Other information to support your application</td>
+                        @if(c.application.otherInformation.isDefined) {
+                            <td>@c.application.otherInformation.get</td>
+                        } else {
+                            <td>None</td>
+                        }
+                    </tr>
+                </table>
+
+                <br/>
+
+                <h2 class="heading-medium">What happens next</h2>
+
+                <p>
+                    The classification team will issue your Binding Tariff Information
+                    ruling by email within 30 days unless you:
+                </p>
+                <ul class="list list-bullet">
+                    <li>are sending samples</li>
+                    <li>are asked for more information to support your application</li>
+                </ul>
+                <p>
+                    You can find out the status of your application by signing into your
+                    account through GOV.UK Binding Tariff Information (Notice 600).
+                </p>
+
+                <h2 class="heading-medium">Sending samples</h2>
+                <p>
+                    You must label your sample with the application reference number
+                    (GB@c.reference).
+                </p>
+                <p>
+                    If you are sending samples the application will not be processed
+                    until they have been received.
+                </p>
+                <p>
+                    Get more information about samples on GOV.UK Binding Tariff
+                    Information (Notice 600).
+                </p>
+
+                <h2 class="heading-medium">Send your samples to</h2>
+                <address>
+                @Html(messages("confirmation.sendingSamples.address"))
+                </address>
+            </div>
+
+        </main>
+
+    </body>
+
+</html>
+
+
+
+
+
+

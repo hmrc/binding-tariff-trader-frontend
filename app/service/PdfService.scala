@@ -19,14 +19,15 @@ package service
 import connectors.PdfGeneratorServiceConnector
 import javax.inject.{Inject, Singleton}
 import play.api.http.Status
-import play.api.mvc.Results
+import play.api.mvc.{Result, Results}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @Singleton
 class PdfService @Inject()(connector: PdfGeneratorServiceConnector) {
 
-  def generatePdf(filename: String, htmlContent: String) = {
+  def generatePdf(filename: String, htmlContent: String): Future[Result] = {
 
     connector.generatePdf(htmlContent).map {
       response =>

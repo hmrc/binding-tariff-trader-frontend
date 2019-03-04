@@ -16,6 +16,7 @@
 
 package models
 
+import java.time.Instant
 import java.util.UUID
 
 object oCase {
@@ -40,7 +41,7 @@ object oCase {
     sampleToBeProvided = false,
     sampleToBeReturned = false
   )
-  val btiCaseExample = Case("ref", btiApplicationExample, Seq.empty)
+  val btiCaseExample = Case("ref", Instant.now(), btiApplicationExample, Seq.empty)
   val newBtiCaseExample = NewCaseRequest(btiApplicationExample, Seq.empty)
 
 }

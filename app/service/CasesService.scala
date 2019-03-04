@@ -20,16 +20,27 @@ import connectors.BindingTariffClassificationConnector
 import javax.inject.{Inject, Singleton}
 import models.{Case, NewCaseRequest}
 import uk.gov.hmrc.http.HeaderCarrier
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
 @Singleton
-class CasesService @Inject()(connector: BindingTariffClassificationConnector){
+class CasesService @Inject()(connector: BindingTariffClassificationConnector) {
 
   def create(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
     connector.createCase(c)
   }
-  def get(reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] = {
-    connector.findCase(reference)
+
+  def getCaseForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] = {
+
+    connector.findCase(reference).map {
+      case Some(c) if caseBelongsToUser(c, userEori) => Some(c)
+      case _ => None
+    }
+  }
+
+  private def caseBelongsToUser(c: Case, eoriNumber: String): Boolean = {
+    c.application.agent.map(agent => agent.eoriDetails.eori == eoriNumber)
+      .getOrElse(c.application.holder.eori == eoriNumber)
   }
 }
