@@ -18,7 +18,7 @@ package service
 
 import connectors.PdfGeneratorServiceConnector
 import javax.inject.{Inject, Singleton}
-import play.api.http.Status
+import play.api.http.Status._
 import play.api.mvc.{Result, Results}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,7 +32,7 @@ class PdfService @Inject()(connector: PdfGeneratorServiceConnector) {
     connector.generatePdf(htmlContent).map {
       response =>
         response.status match {
-          case Status.OK => Results.Ok(response.bodyAsBytes.toArray)
+          case OK => Results.Ok(response.bodyAsBytes.toArray)
             .as("application/pdf")
             .withHeaders("Content-Disposition" -> s"attachment; filename=$filename")
           case _ => Results.BadRequest(response.body)

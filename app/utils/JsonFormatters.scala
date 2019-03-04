@@ -30,6 +30,7 @@ object JsonFormatters {
   implicit val caseFormat: OFormat[Case] = Json.format[Case]
   implicit val newCaseRequestFormat: OFormat[NewCaseRequest] = Json.format[NewCaseRequest]
   implicit val caseAuditPayloadFormat: OFormat[CaseAuditPayload] = Json.format[CaseAuditPayload]
+  implicit val fileMetaDataFormat: OFormat[FileMetadata] = Json.format[FileMetadata]
 }
 
 object EnumJson {

@@ -17,50 +17,50 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import javax.inject.Inject
-import models.Case
-import models.requests.OptionalDataRequest
+import models.{Case, FileMetadata}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import service.{CasesService, PdfService}
+import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.pdftemplates.applicationPdf
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                                       override val messagesApi: MessagesApi,
                                       identify: IdentifierAction,
-                                      getData: DataRetrievalAction,
-                                      requireData: DataRequiredAction,
-                                      dataCacheConnector: DataCacheConnector,
                                       pdfService: PdfService,
-                                      caseService: CasesService
-                                      ) extends FrontendController with I18nSupport {
+                                      caseService: CasesService,
+                                      fileService: FileService
+                                     ) extends FrontendController with I18nSupport {
 
+  def application(reference: String): Action[AnyContent] = identify.async { implicit request =>
 
-  def application(reference: String): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
+    val userEori = request.eoriNumber
 
-    val userEori = request.userEoriNumber
-
-    caseService.getCaseForUser(userEori, reference).flatMap {
-      case Some(c: Case) => pdfService.generatePdf(s"confirmation_$reference.pdf", applicationPdf(appConfig, c).toString())
-
-      // TODO - what if case not found?
+    caseService.getCaseForUser(userEori, reference) flatMap {
+      case Some(c: Case) =>
+        for (
+          fileMetadata <- fileService.getAttachmentMetadata(c);
+          html = applicationPdf(appConfig, c, fileMetadata).toString();
+          pdf <- pdfService.generatePdf(s"confirmation_$reference.pdf", html)
+        ) yield pdf
+      // TODO - should this be a "case not found" exception (e.g. a 404)?
       case _ => throw new Exception("Problem !!!")
     }
   }
 
-
   // TODO delete this handler - for testing only!!!
-  def applicationPreview(reference: String): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
+  def applicationPreview(reference: String): Action[AnyContent] = identify.async { implicit request =>
 
-    val userEori = request.userEoriNumber
+    val userEori = request.eoriNumber
 
-    caseService.getCaseForUser(userEori, reference).map {
-      case Some(c: Case) => Ok(applicationPdf(appConfig, c))
-
+    caseService.getCaseForUser(userEori, reference) map {
+      case Some(c: Case) =>
+        Ok(applicationPdf(appConfig, c, Seq(FileMetadata("id1", "somefile.doc", "application/pdf"),
+          FileMetadata("id2", "anotherfile.doc", "application/pdf"))))
       // TODO - what if case not found?
       case _ => throw new Exception("Problem !!!")
     }

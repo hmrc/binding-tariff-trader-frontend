@@ -17,12 +17,12 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
-@import models.ReturnSamples
+@import models.{ReturnSamples, FileMetadata}
 @import models.Mode
 @import views.ViewUtils._
 @import utils.Dates
 
-@(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FileMetadata])(implicit request: Request[_], messages: Messages)
 
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
@@ -143,7 +143,11 @@
                         @if(c.attachments.isEmpty) {
                             <td>None</td>
                         } else {
-                            <td>Some - TODO list them!!!</td>
+                            <td>
+                            @for(row <- attachments) {
+                                @row.fileName <br/>
+                            }
+                            </td>
                         }
                     </tr>
                     <tr>
