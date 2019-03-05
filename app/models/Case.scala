@@ -30,4 +30,9 @@ case class Case
   createdDate: Instant,
   application: Application,
   attachments: Seq[Attachment] = Seq.empty
-)
+) {
+  def hasEoriNumber(eoriNumber: String): Boolean = {
+    application.holder.eori == eoriNumber ||
+      application.agent.exists(_.eoriDetails.eori == eoriNumber)
+  }
+}

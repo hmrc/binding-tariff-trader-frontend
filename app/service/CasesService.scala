@@ -34,13 +34,9 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector) {
   def getCaseForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] = {
 
     connector.findCase(reference).map {
-      case Some(c) if caseBelongsToUser(c, userEori) => Some(c)
+      case Some(c) if c.hasEoriNumber(userEori) => Some(c)
       case _ => None
     }
   }
 
-  private def caseBelongsToUser(c: Case, eoriNumber: String): Boolean = {
-    c.application.agent.map(agent => agent.eoriDetails.eori == eoriNumber || c.application.holder.eori == eoriNumber)
-      .getOrElse(c.application.holder.eori == eoriNumber)
-  }
 }
