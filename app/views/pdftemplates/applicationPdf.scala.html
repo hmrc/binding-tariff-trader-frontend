@@ -171,7 +171,7 @@
                 </tr>
                 <tr>
                     <td>@messages("pdf.application.section.aboutItem.uploadeDocuments")</td>
-                    <td id="application.attachments">@if(c.attachments.isEmpty) {@messages("site.none")} else {
+                    <td id="application.attachments">@if(attachments.isEmpty) {@messages("site.none")} else {
                         @for(row <- attachments) {
                             @row.fileName <br/>
                         }
