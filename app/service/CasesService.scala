@@ -40,7 +40,7 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector) {
   }
 
   private def caseBelongsToUser(c: Case, eoriNumber: String): Boolean = {
-    c.application.agent.map(agent => agent.eoriDetails.eori == eoriNumber)
+    c.application.agent.map(agent => agent.eoriDetails.eori == eoriNumber || c.application.holder.eori == eoriNumber)
       .getOrElse(c.application.holder.eori == eoriNumber)
   }
 }

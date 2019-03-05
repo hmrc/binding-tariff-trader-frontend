@@ -42,7 +42,7 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
     connector.get(file).map(toFileAttachment(file.size))
   }
 
-  def getAttachmentMetadata(c: Case)(implicit hc: HeaderCarrier): Future[Seq[FileMetadata]] = {
+  def getAttachmentMetadata(c: Case)(implicit hc: HeaderCarrier): Future[Seq[FilestoreResponse]] = {
     connector.getFileMetadata(c.attachments)
   }
 

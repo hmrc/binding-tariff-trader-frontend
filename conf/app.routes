@@ -113,5 +113,4 @@ POST        /check-your-answers                                  controllers.Che
 
 GET         /confirmation                                        controllers.ConfirmationController.onPageLoad()
 
-GET         /pdf/application/:reference                         controllers.PdfDownloadController.application(reference: String)
-GET         /pdf/applicationPreview/:reference                    controllers.PdfDownloadController.applicationPreview(reference: String)
+GET         /pdf/application/:reference                          controllers.PdfDownloadController.application(reference: String)

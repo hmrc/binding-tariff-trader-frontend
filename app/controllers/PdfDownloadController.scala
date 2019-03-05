@@ -19,7 +19,8 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
-import models.{Case, FileMetadata}
+import models.Case
+import models.response.FilestoreResponse
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import service.{CasesService, FileService, PdfService}
@@ -38,31 +39,15 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
 
   def application(reference: String): Action[AnyContent] = identify.async { implicit request =>
 
-    val userEori = request.eoriNumber
-
-    caseService.getCaseForUser(userEori, reference) flatMap {
+    caseService.getCaseForUser(request.eoriNumber, reference) flatMap {
       case Some(c: Case) =>
-        for (
-          fileMetadata <- fileService.getAttachmentMetadata(c);
-          html = applicationPdf(appConfig, c, fileMetadata).toString();
-          pdf <- pdfService.generatePdf(s"confirmation_$reference.pdf", html)
-        ) yield pdf
-      // TODO - should this be a "case not found" exception (e.g. a 404)?
-      case _ => throw new Exception("Problem !!!")
-    }
-  }
-
-  // TODO delete this handler - for testing only!!!
-  def applicationPreview(reference: String): Action[AnyContent] = identify.async { implicit request =>
-
-    val userEori = request.eoriNumber
-
-    caseService.getCaseForUser(userEori, reference) map {
-      case Some(c: Case) =>
-        Ok(applicationPdf(appConfig, c, Seq(FileMetadata("id1", "somefile.doc", "application/pdf"),
-          FileMetadata("id2", "anotherfile.doc", "application/pdf"))))
-      // TODO - what if case not found?
-      case _ => throw new Exception("Problem !!!")
+        fileService.getAttachmentMetadata(c) flatMap { f =>
+          pdfService.generatePdf(
+            s"confirmation_$reference.pdf",
+            applicationPdf(appConfig, c, f)
+          )
+        }
+      case _ => throw new Exception(s"Case ($reference) not found for user ${request.eoriNumber}")
     }
   }
 }
