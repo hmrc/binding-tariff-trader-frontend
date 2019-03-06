@@ -16,19 +16,16 @@
 
 package connectors
 
-import akka.actor.ActorSystem
 import com.github.tomakehurst.wiremock.client.WireMock._
 import config.FrontendAppConfig
+import models.BinaryFile
 import org.mockito.BDDMockito.given
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
-import play.api.Environment
 import play.api.http.Status
-import play.api.libs.ws.{WSClient, WSResponse}
+import play.api.libs.ws.WSClient
 import play.twirl.api.Html
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
 class PdfGeneratorServiceConnectorSpec extends UnitSpec with WithFakeApplication
@@ -36,10 +33,7 @@ class PdfGeneratorServiceConnectorSpec extends UnitSpec with WithFakeApplication
 
   private val config = mock[FrontendAppConfig]
   private val pdfTemplate = mock[Html]
-  private val actorSystem = ActorSystem.create("test")
   private val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
-  private val auditConnector = new DefaultAuditConnector(fakeApplication.configuration, fakeApplication.injector.instanceOf[Environment])
-  private val hmrcWsClient = new DefaultHttpClient(fakeApplication.configuration, auditConnector, wsClient, actorSystem)
   private implicit val headers: HeaderCarrier = HeaderCarrier()
 
   private val connector = new PdfGeneratorServiceConnector(config, wsClient)
@@ -52,17 +46,37 @@ class PdfGeneratorServiceConnectorSpec extends UnitSpec with WithFakeApplication
   "Connector" should {
 
     "Generate Pdf" in {
+      val expectedContent = "Some content".getBytes
       stubFor(
         post("/pdf-generator-service/generate")
           .willReturn(
             aResponse()
               .withStatus(Status.OK)
+              .withBody(expectedContent)
           )
       )
 
-      val response: WSResponse = await(connector.generatePdf(pdfTemplate))
+      val response: BinaryFile = await(connector.generatePdf(pdfTemplate))
 
-      response.status shouldBe(Status.OK)
+      response.contentType shouldBe "application/pdf"
+      response.content shouldBe expectedContent
+    }
+
+    "throw exception when call fails" in {
+
+      stubFor(
+        post("/pdf-generator-service/generate")
+          .willReturn(
+            aResponse()
+              .withStatus(Status.SERVICE_UNAVAILABLE)
+          )
+      )
+
+      val caught: Exception = intercept[Exception] {
+        await(connector.generatePdf(pdfTemplate))
+      }
+
+      caught.getMessage contains "Error calling PdfGeneratorService"
     }
   }
 

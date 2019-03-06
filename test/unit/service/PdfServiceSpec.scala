@@ -16,14 +16,11 @@
 
 package service
 
-import akka.util.ByteString
 import connectors.PdfGeneratorServiceConnector
 import models.BinaryFile
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
-import play.api.http.Status
-import play.api.libs.ws.WSResponse
 import play.twirl.api.Html
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -31,38 +28,21 @@ import scala.concurrent.Future
 
 class PdfServiceSpec extends UnitSpec with MockitoSugar {
 
-  private val pdfResponse = mock[WSResponse]
   private val pdfHtml = mock[Html]
   private val connector = mock[PdfGeneratorServiceConnector]
+  private val connectorResponse = BinaryFile("application/pdf", "Some content".getBytes)
 
   private val service = new PdfService(connector)
 
   "Service 'Generate Pdf'" should {
 
     "delegate to connector" in {
-      given(connector.generatePdf(any[Html])).willReturn(Future.successful(pdfResponse))
-      given(pdfResponse.status).willReturn(Status.OK)
-      val byteString = ByteString()
-      given(pdfResponse.bodyAsBytes).willReturn(byteString)
+      given(connector.generatePdf(any[Html])).willReturn(Future.successful(connectorResponse))
 
       val file: BinaryFile = await(service.generatePdf(pdfHtml))
 
-      file.contentType shouldBe "application/pdf"
-      file.content shouldBe byteString.toArray
+      file shouldBe connectorResponse
     }
-
-    "throw exception when connector fails" in {
-
-      given(connector.generatePdf(any[Html])).willReturn(Future.successful(pdfResponse))
-      given(pdfResponse.status).willReturn(Status.BAD_REQUEST)
-
-      val caught: Exception = intercept[Exception] {
-        await(service.generatePdf(pdfHtml))
-      }
-
-      caught.getMessage contains "Error calling PdfGeneratorService"
-    }
-
   }
 
 }
