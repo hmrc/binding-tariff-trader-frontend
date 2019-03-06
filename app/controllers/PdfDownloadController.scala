@@ -37,16 +37,15 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                                      ) extends FrontendController with I18nSupport {
 
   def application(reference: String): Action[AnyContent] = identify.async { implicit request =>
-
-    caseService.getCaseForUser(request.eoriNumber, reference) flatMap {
-      c: Case =>
-        fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
-          pdfService.generatePdf(applicationPdf(appConfig, c, attachmentData)).map({ binaryFile =>
-            Results.Ok(binaryFile.content)
-              .as(binaryFile.contentType)
-              .withHeaders("Content-Disposition" -> s"filename=confirmation_$reference.pdf")
-          })
+    caseService.getCaseForUser(request.eoriNumber, reference) flatMap { c: Case =>
+      fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
+        pdfService.generatePdf(applicationPdf(appConfig, c, attachmentData)).map { binaryFile =>
+          Results.Ok(binaryFile.content)
+            .as(binaryFile.contentType)
+            .withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=confirmation_$reference.pdf")
         }
+      }
     }
   }
+
 }

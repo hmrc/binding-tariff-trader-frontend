@@ -29,4 +29,5 @@ class PdfService @Inject()(connector: PdfGeneratorServiceConnector) {
   def generatePdf(htmlContent: Html): Future[PdfFile] = {
     connector.generatePdf(htmlContent)
   }
+
 }
