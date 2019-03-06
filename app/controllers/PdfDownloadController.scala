@@ -42,7 +42,7 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
         pdfService.generatePdf(applicationPdf(appConfig, c, attachmentData)).map { binaryFile =>
           Results.Ok(binaryFile.content)
             .as(binaryFile.contentType)
-            .withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=confirmation_$reference.pdf")
+            .withHeaders(CONTENT_DISPOSITION -> s"filename=confirmation_$reference.pdf")
         }
       }
     }
