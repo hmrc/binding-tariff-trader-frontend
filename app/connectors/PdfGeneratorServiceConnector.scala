@@ -33,12 +33,11 @@ class PdfGeneratorServiceConnector @Inject()(configuration: FrontendAppConfig, w
   private lazy val url = s"${configuration.pdfGeneratorUrl}/pdf-generator-service/generate"
 
   def generatePdf(html: Html): Future[PdfFile] = {
-    ws.url(url).post(Map("html" -> Seq(html.toString))) flatMap  {
-      response =>
-        response.status match {
-          case OK => successful(PdfFile(content = response.bodyAsBytes.toArray))
-          case _ => failed(new RuntimeException(s"Error calling pdf-generator-service - ${response.body}"))
-        }
+    ws.url(url).post(Map("html" -> Seq(html.toString))) flatMap  { response =>
+      response.status match {
+        case OK => successful(PdfFile(content = response.bodyAsBytes.toArray))
+        case _ => failed(new RuntimeException(s"Error calling pdf-generator-service - ${response.body}"))
+      }
     }
   }
 
