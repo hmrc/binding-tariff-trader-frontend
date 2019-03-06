@@ -16,14 +16,21 @@
 
 package models
 
-import models.CaseStatus.CaseStatus
+import java.time.Instant
 
-object CaseStatus extends Enumeration {
-  type CaseStatus = Value
-  val DRAFT, NEW, OPEN, SUPPRESSED, REFERRED, REJECTED, CANCELLED, SUSPENDED, COMPLETED, REVOKED, ANNULLED = Value
-}
-
-case class Status
+case class Decision
 (
-  status: CaseStatus
+  bindingCommodityCode: String,
+  effectiveStartDate: Option[Instant] = None,
+  effectiveEndDate: Option[Instant] = None,
+  justification: String,
+  goodsDescription: String,
+  methodSearch: Option[String] = None,
+  methodCommercialDenomination: Option[String] = None,
+  methodExclusion: Option[String] = None,
+  appeal: Option[Appeal] = None,
+  review: Option[Review] = None,
+  cancellation: Option[Cancellation] = None
 )
+
+

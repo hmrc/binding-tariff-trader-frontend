@@ -361,3 +361,38 @@ checkYourAnswers.applicantRegisteredSection = Your details
 checkYourAnswers.applicantOtherBusiness = Details of the business, organisation or individual you represent
 checkYourAnswers.informationAboutYourItemSection = Information about your item
 checkYourAnswers.otherInformation = Other information about your item
+
+case.tabs.applications = Applications
+
+case.tabs.applications.notSubmitted = No applications submitted
+
+case.tabs.applications.table.reference = Reference
+case.tabs.applications.table.itemName = Item name
+case.tabs.applications.table.dateSubmitted = Date submitted
+case.tabs.applications.table.status = Status
+case.tabs.applications.table.download = Download Application
+
+case.application.status.inProgress = In progress
+case.application.status.rejected = Rejected
+case.application.status.infoRequested = Info requested
+case.application.status.completed = Completed
+
+case.application.downloadPdf = Download PDF
+
+case.tabs.rulings = Rulings
+
+case.tabs.rulings.noRulings = No BTI Rulings
+
+case.tabs.rulings.table.reference = reference
+case.tabs.rulings.table.itemName = Item name
+case.tabs.rulings.table.commodityCode = Commodity code
+case.tabs.rulings.table.startDate = Start date
+case.tabs.rulings.table.endDate = End date
+case.tabs.rulings.table.status = Status
+case.tabs.rulings.table.downloadBTI = Download BTI
+
+case.ruling.status.cancelled = Cancelled
+case.ruling.status.active = Active
+case.ruling.status.expired = Expired
+
+case.ruling.downloadPdf = Download PDF

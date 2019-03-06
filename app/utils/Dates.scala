@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package models
+package utils
 
-import models.CaseStatus.CaseStatus
+import java.time.{Instant, LocalDateTime, ZoneOffset}
+import java.time.format.DateTimeFormatter
 
-object CaseStatus extends Enumeration {
-  type CaseStatus = Value
-  val DRAFT, NEW, OPEN, SUPPRESSED, REFERRED, REJECTED, CANCELLED, SUSPENDED, COMPLETED, REVOKED, ANNULLED = Value
+object Dates {
+
+  val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+
+  def format(instant: Instant) : String = {
+    formatter.format(LocalDateTime.ofInstant(instant, ZoneOffset.UTC))
+  }
+
+  def format(instant: Option[Instant]) : String = {
+    instant.map( in => formatter.format(LocalDateTime.ofInstant(in , ZoneOffset.UTC))).getOrElse("None")
+  }
+
 }
-
-case class Status
-(
-  status: CaseStatus
-)

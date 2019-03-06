@@ -22,6 +22,13 @@ import play.api.libs.json._
 
 object JsonFormatters {
 
+  implicit val reviewStatusFormat: Format[ReviewStatus.Value] = EnumJson.format(ReviewStatus)
+  implicit val reviewFormat: Format[Review] = Json.format[Review]
+  implicit val cancellationStatusFormat: Format[CancelReason.Value] = EnumJson.format(CancelReason)
+  implicit val cancellationFormat: Format[Cancellation] = Json.format[Cancellation]
+  implicit val appealStatusFormat: Format[AppealStatus.Value] = EnumJson.format(AppealStatus)
+  implicit val appealFormat: Format[Appeal] = Json.format[Appeal]
+  implicit val decisionFormat: Format[Decision] = Json.format[Decision]
   implicit val caseStatusFormat: Format[CaseStatus.Value] = EnumJson.format(CaseStatus)
   implicit val contactFormat: OFormat[Contact] = Json.format[Contact]
   implicit val eoriDetailsFormat: OFormat[EORIDetails] = Json.format[EORIDetails]

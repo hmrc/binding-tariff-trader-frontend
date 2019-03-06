@@ -16,14 +16,10 @@
 
 package models
 
-import models.CaseStatus.CaseStatus
+import models.CancelReason.CancelReason
 
-object CaseStatus extends Enumeration {
-  type CaseStatus = Value
-  val DRAFT, NEW, OPEN, SUPPRESSED, REFERRED, REJECTED, CANCELLED, SUSPENDED, COMPLETED, REVOKED, ANNULLED = Value
-}
-
-case class Status
+case class Cancellation
 (
-  status: CaseStatus
+  reason: CancelReason,
+  applicationForExtendedUse: Boolean = false
 )

@@ -22,6 +22,7 @@
   contentHeader: Option[Html] = None,
   bodyClasses: Option[String] = None,
   mainClass: Option[String] = None,
+  contentClass : Option[String] = Some("grid-row column-two-thirds"),
   scriptElem: Option[Html] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @import uk.gov.hmrc.play.views.html.layouts
@@ -35,7 +36,7 @@
 }
 
 @content = {
-    @layouts.article(mainContent, false, Some("grid-row column-two-thirds"))
+    @layouts.article(mainContent, false, contentClass)
 }
 
 

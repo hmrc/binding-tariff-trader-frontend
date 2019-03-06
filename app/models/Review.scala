@@ -16,14 +16,10 @@
 
 package models
 
-import models.CaseStatus.CaseStatus
+import models.ReviewStatus.ReviewStatus
 
-object CaseStatus extends Enumeration {
-  type CaseStatus = Value
-  val DRAFT, NEW, OPEN, SUPPRESSED, REFERRED, REJECTED, CANCELLED, SUSPENDED, COMPLETED, REVOKED, ANNULLED = Value
-}
 
-case class Status
+case class Review
 (
-  status: CaseStatus
+  status: ReviewStatus
 )

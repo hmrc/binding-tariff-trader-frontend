@@ -16,14 +16,7 @@
 
 package models
 
-import models.CaseStatus.CaseStatus
-
-object CaseStatus extends Enumeration {
-  type CaseStatus = Value
-  val DRAFT, NEW, OPEN, SUPPRESSED, REFERRED, REJECTED, CANCELLED, SUSPENDED, COMPLETED, REVOKED, ANNULLED = Value
+object AppealStatus extends Enumeration {
+  type AppealStatus = Value
+  val IN_PROGRESS, ALLOWED, DISMISSED = Value
 }
-
-case class Status
-(
-  status: CaseStatus
-)

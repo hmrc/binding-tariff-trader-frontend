@@ -1,0 +1,132 @@
+.tabs {
+
+  table a:link {
+    color: #005ea5;
+  }
+
+  h3 {
+    display: block;
+    font-size: 1.17em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+  }
+
+  ul {
+    &.tabs__list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      float: left;
+      width: 100%;
+      border-bottom: 1px solid #bfc1c3;
+    }
+
+    li {
+      &.tabs__list-item {
+        margin-left: 25px;
+
+        &:before {
+          content: "— ";
+          margin-left: -25px;
+          padding-right: 5px;
+        }
+
+        a, span {
+          display: inline-block;
+          padding-top: 10px;
+          padding-bottom: 10px;
+        }
+      }
+
+
+      &.tabs__list-item {
+        margin-left: 0;
+
+        &:before {
+          display: none;
+        }
+
+        a, span {
+          text-align: center;
+          color: #0b0c0c;
+          text-decoration: none;
+
+          &.tabs__tab {
+            margin-right: 5px;
+            padding-right: 20px;
+            padding-left: 20px;
+            float: left;
+            background-color: #f8f8f8;
+          }
+
+          &.tabs__tab[aria-selected="true"] {
+            margin-top: -5px;
+            margin-bottom: -1px;
+            padding: 14px 19px 16px 19px;
+            border: 1px solid #bfc1c3;
+            border-bottom: 0;
+            background-color: #fff;
+          }
+        }
+      }
+    }
+  }
+
+  .tabs__panel__content {
+    padding: 30px 20px 30px 20px;
+
+  }
+
+  .tabs__panel {
+    border: 1px solid #bfc1c3;
+    border-top: 0;
+    float: left;
+    width: 100%;
+
+    h2 {
+      margin-top: 0;
+    }
+
+    form {
+      .form-group:last-child {
+        margin-bottom: 30px;
+      }
+    }
+
+    nav {
+      &.pager {
+        padding-bottom: 1em;
+      }
+    }
+
+    table {
+
+      margin-bottom: 30px;
+
+      thead {
+        th {
+          font-size: 19px;
+        }
+      }
+
+      tbody {
+        td {
+          font-size: 19px;
+
+          a {
+            //font-family: Helvetica, Arial;
+            font-weight: 400;
+
+            &.button--secondary {
+              line-height: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

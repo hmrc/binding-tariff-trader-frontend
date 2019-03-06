@@ -15,20 +15,27 @@
  *@
 
 @import config.FrontendAppConfig
+@import utils.Dates
+@import views.CaseDetailTab.CaseDetailTab
+@import views.CaseDetailTab
 
-@(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, activeTab : CaseDetailTab, view : Html)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("index.title"),
     appConfig = appConfig,
+    contentClass = Some("column-full"),
     bodyClasses = None) {
-
-    <br/><br/>
 
     @components.heading(messages("index.heading"))
 
-    @components.button_link(
-        messages("site.start"),
-        "/binding-tariff-application/beforeYouStart"
-    )
+    @components.button_link( messages("site.start"), routes.BeforeYouStartController.onPageLoad.url)
+
+    <div class="tabs mb-5">
+        @components.case_tabs(activeTab)
+        <div class="content">
+              @view
+        </div>
+    </div>
+
 }
