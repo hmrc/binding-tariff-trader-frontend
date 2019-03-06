@@ -27,8 +27,8 @@
         <p class="pre-wrap">@row.answer</p>
     }
     </div>
-    <div id="change.button.@row.label" class="cya-change">
-        <a href='@row.changeUrl'>
+    <div class="cya-change">
+        <a href='@row.changeUrl' id="change.button.@row.label">
             <span aria-hidden="true">@messages("site.edit")</span>
             <span class="visually-hidden">@messages("site.hidden-edit", messages(row.label))</span>
         </a>
