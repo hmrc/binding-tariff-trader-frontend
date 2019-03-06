@@ -16,15 +16,25 @@
 
 package views
 
+import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.index
 
 class IndexViewSpec extends ViewBehaviours {
 
-  def view = () => index(frontendAppConfig)(fakeRequest, messages)
+  def applicationView = () => index(frontendAppConfig, CaseDetailTab.APPLICATION, Html.apply("expected-content"))(fakeRequest, messages)
 
-  "Index view" must {
+  def rulingView = () => index(frontendAppConfig, CaseDetailTab.RULING, Html.apply("expected-content"))(fakeRequest, messages)
 
-    behave like normalPage(view, "index")()
+  "Load application view" must {
+
+    behave like normalPage(applicationView, "index")()
+
+  }
+
+  "Load rulings view" must {
+
+    behave like normalPage(rulingView, "index")()
+
   }
 }

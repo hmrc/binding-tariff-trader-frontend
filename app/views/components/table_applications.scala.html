@@ -19,15 +19,15 @@
 @(cases: Seq[Case])(implicit messages: Messages)
 
 @if(cases.isEmpty){
-    <div  class="tabs__panel">
+    <div id="application-list-empty" class="tabs__panel">
         <div class="bold-small my-3 pl-1">
             @messages("case.tabs.applications.notSubmitted")
         </div>
     </div>
 }else{
-    <div class="tabs__panel">
+    <div id="application-list" class="tabs__panel">
         <div class="tabs__panel__content">
-            <table id="application-list-table">
+            <table id="applications-list-table">
                 <thead>
                     <tr>
                         <th scope="col">@messages("case.tabs.applications.table.reference")</th>
