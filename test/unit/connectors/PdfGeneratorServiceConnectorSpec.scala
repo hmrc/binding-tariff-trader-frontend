@@ -18,7 +18,7 @@ package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import config.FrontendAppConfig
-import models.BinaryFile
+import models.PdfFile
 import org.mockito.BDDMockito.given
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
@@ -56,7 +56,7 @@ class PdfGeneratorServiceConnectorSpec extends UnitSpec with WithFakeApplication
           )
       )
 
-      val response: BinaryFile = await(connector.generatePdf(pdfTemplate))
+      val response: PdfFile = await(connector.generatePdf(pdfTemplate))
 
       response.contentType shouldBe "application/pdf"
       response.content shouldBe expectedContent

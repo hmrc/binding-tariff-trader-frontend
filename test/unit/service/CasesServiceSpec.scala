@@ -62,22 +62,25 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
       val traderCase = oCase.btiCaseExample.copy(application = oCase.btiApplicationExample.copy(agent = None))
       given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(traderCase)))
 
-      await(service.getCaseForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe Some(traderCase)
+      await(service.getCaseForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe traderCase
     }
 
     "return case for agent for both agent and trader" in {
       val agentCase = oCase.btiCaseExample
       given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
 
-      await(service.getCaseForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe Some(agentCase)
-      await(service.getCaseForUser(agentEori, caseRef)(HeaderCarrier())) shouldBe Some(agentCase)
+      await(service.getCaseForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe agentCase
+      await(service.getCaseForUser(agentEori, caseRef)(HeaderCarrier())) shouldBe agentCase
     }
 
     "not return case for another EORI" in {
       val someCase = oCase.btiCaseExample
       given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
 
-      await(service.getCaseForUser("someEORT", caseRef)(HeaderCarrier())) shouldBe None
+      val caught = intercept[RuntimeException] {
+        await(service.getCaseForUser("someEORT", caseRef)(HeaderCarrier()))
+      }
+      caught.getMessage shouldBe "Case not found"
     }
 
     "propagate any error" in {

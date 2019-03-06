@@ -39,7 +39,7 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
   def application(reference: String): Action[AnyContent] = identify.async { implicit request =>
 
     caseService.getCaseForUser(request.eoriNumber, reference) flatMap {
-      case Some(c: Case) =>
+      c: Case =>
         fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
           pdfService.generatePdf(applicationPdf(appConfig, c, attachmentData)).map({ binaryFile =>
             Results.Ok(binaryFile.content)
@@ -47,7 +47,6 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
               .withHeaders("Content-Disposition" -> s"attachment; filename=confirmation_$reference.pdf")
           })
         }
-      case _ => throw new Exception(s"Case ($reference) not found for user ${request.eoriNumber}")
     }
   }
 }

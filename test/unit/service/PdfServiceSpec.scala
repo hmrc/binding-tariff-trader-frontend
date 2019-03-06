@@ -17,7 +17,7 @@
 package service
 
 import connectors.PdfGeneratorServiceConnector
-import models.BinaryFile
+import models.PdfFile
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
@@ -30,7 +30,7 @@ class PdfServiceSpec extends UnitSpec with MockitoSugar {
 
   private val pdfHtml = mock[Html]
   private val connector = mock[PdfGeneratorServiceConnector]
-  private val connectorResponse = BinaryFile("application/pdf", "Some content".getBytes)
+  private val connectorResponse = PdfFile("Some content".getBytes)
 
   private val service = new PdfService(connector)
 
@@ -39,7 +39,7 @@ class PdfServiceSpec extends UnitSpec with MockitoSugar {
     "delegate to connector" in {
       given(connector.generatePdf(any[Html])).willReturn(Future.successful(connectorResponse))
 
-      val file: BinaryFile = await(service.generatePdf(pdfHtml))
+      val file: PdfFile = await(service.generatePdf(pdfHtml))
 
       file shouldBe connectorResponse
     }

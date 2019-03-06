@@ -18,25 +18,26 @@ package connectors
 
 import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
-import models.BinaryFile
+import models.PdfFile
 import play.api.http.Status.OK
 import play.api.libs.ws.WSClient
 import play.twirl.api.Html
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.Future.{failed, successful}
 
 @Singleton
 class PdfGeneratorServiceConnector @Inject()(configuration: FrontendAppConfig, ws: WSClient) {
 
   private lazy val url = s"${configuration.pdfGeneratorUrl}/pdf-generator-service/generate"
 
-  def generatePdf(html: Html): Future[BinaryFile] = {
-    ws.url(url).post(Map("html" -> Seq(html.toString))) map {
+  def generatePdf(html: Html): Future[PdfFile] = {
+    ws.url(url).post(Map("html" -> Seq(html.toString))) flatMap  {
       response =>
         response.status match {
-          case OK => BinaryFile(contentType = "application/pdf", content = response.bodyAsBytes.toArray)
-          case _ => throw new Exception(s"Error calling PdfGeneratorService $response")
+          case OK => successful(PdfFile(content = response.bodyAsBytes.toArray))
+          case _ => failed(new RuntimeException(s"Error calling pdf-generator-service - ${response.body}"))
         }
     }
   }

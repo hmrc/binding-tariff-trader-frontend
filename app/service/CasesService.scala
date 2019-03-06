@@ -31,8 +31,10 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector) {
     connector.createCase(c)
   }
 
-  def getCaseForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] = {
-    connector.findCase(reference).map(_.filter(_.hasEoriNumber(userEori)))
+  def getCaseForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Case] = {
+    connector.findCase(reference).map(_.filter(_.hasEoriNumber(userEori))) flatMap {
+      case Some(c) => Future.successful(c)
+      case _ => Future.failed(new RuntimeException("Case not found"))
+    }
   }
-
 }

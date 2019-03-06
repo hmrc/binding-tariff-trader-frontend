@@ -16,6 +16,6 @@
 
 package models
 
-case class BinaryFile(contentType: String, content: Array[Byte])
+case class PdfFile(content: Array[Byte], contentType: String = "application/pdf")
 
 

@@ -18,7 +18,7 @@ package service
 
 import connectors.PdfGeneratorServiceConnector
 import javax.inject.{Inject, Singleton}
-import models.BinaryFile
+import models.PdfFile
 import play.twirl.api.Html
 
 import scala.concurrent.Future
@@ -26,7 +26,7 @@ import scala.concurrent.Future
 @Singleton
 class PdfService @Inject()(connector: PdfGeneratorServiceConnector) {
 
-  def generatePdf(htmlContent: Html): Future[BinaryFile] = {
+  def generatePdf(htmlContent: Html): Future[PdfFile] = {
     connector.generatePdf(htmlContent)
   }
 }
