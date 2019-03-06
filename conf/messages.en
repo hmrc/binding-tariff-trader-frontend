@@ -79,6 +79,7 @@ unauthorised.body6_link = get an EORI number and get access here.
 ## Generic messages
 eori.number = EORI number
 eori.details = EORI details
+caseReference.format = {0}
 
 registeredAddressForEori.title = Registered EORI details - GOV.UK
 registeredAddressForEori.heading = What is the registered name and address for EORI number {0}?
@@ -334,8 +335,6 @@ confirmation.heading2.whatNext = What happens next
 confirmation.paragraph.whatNext0.sample = We will give you your ruling within 30 to 60 days of receiving your samples.
 confirmation.paragraph.whatNext0.nosample = We will give you your ruling within 30 to 60 days.
 confirmation.paragraph.whatNext1 = You can sign in to check the status of your application.
-
-confirmation.refValue = GB{0}
 
 confirmation.yourRefNumber = Your application reference
 confirmation.paragragh.confirmationEmail = We have sent your confirmation email to {0}

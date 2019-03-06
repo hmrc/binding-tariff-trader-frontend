@@ -85,8 +85,8 @@
                 </tr>
             </table>
 
-            <p>@messages("pdf.application.submitted"): @Dates.format(c.createdDate)</p>
-            <p>@messages("pdf.application.reference"): GB@c.reference</p>
+            <p id="application.submitted">@messages("pdf.application.submitted"): @Dates.format(c.createdDate)</p>
+            <p id="application.casereference">@messages("pdf.application.reference"): @messages("caseReference.format", c.reference)</p>
 
             @sectionHeading("pdf.application.section.applicant.heading")
             <table>

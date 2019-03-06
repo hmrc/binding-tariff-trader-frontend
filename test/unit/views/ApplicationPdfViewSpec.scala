@@ -19,6 +19,7 @@ package views
 import models.response.FilestoreResponse
 import models.{Case, oCase}
 import org.jsoup.nodes.Document
+import utils.Dates
 import views.html.pdftemplates.applicationPdf
 
 class ApplicationPdfViewSpec extends ViewSpecBase {
@@ -92,6 +93,8 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
   }
 
   private def containsCommonSections(doc: Document) = {
+    doc.getElementById("application.submitted").text() mustBe s"Application submitted on: ${Dates.format(oCase.btiCaseExample.createdDate)}"
+    doc.getElementById("application.casereference").text() mustBe s"Application reference number: ${oCase.btiCaseExample.reference}"
     assertRenderedById(doc, "pdf.application.section.applicant.heading")
     assertRenderedById(doc, "pdf.application.section.applicationType.heading")
     assertRenderedById(doc, "pdf.application.section.aboutItem.heading")

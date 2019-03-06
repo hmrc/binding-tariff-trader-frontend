@@ -28,7 +28,7 @@
         @components.heading(messages("confirmation.heading"))
         <span class="font-large">
             @messages("confirmation.yourRefNumber") <br>
-            <span id="confirmation-reference" class="font-large bold">@messages("confirmation.refValue", confirmation.reference)</span>
+            <span id="confirmation-reference" class="font-large bold">@messages("caseReference.format", confirmation.reference)</span>
         </span>
     </div>
 
@@ -45,7 +45,7 @@
 
         <p>@messages("confirmation.paragraph0.sendingSamples")</p>
 
-        <p>@messages("confirmation.paragraph1.sendingSamples") @messages("confirmation.refValue", confirmation.reference) .
+        <p>@messages("confirmation.paragraph1.sendingSamples") @messages("caseReference.format", confirmation.reference) .
             @messages("confirmation.paragraph2.sendingSamples")</p>
 
         <address>

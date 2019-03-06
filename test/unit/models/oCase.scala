@@ -41,7 +41,7 @@ object oCase {
     sampleToBeProvided = false,
     sampleToBeReturned = false
   )
-  val btiCaseExample = Case("ref", Instant.now(), btiApplicationExample, Seq.empty)
+  val btiCaseExample = Case("1234", Instant.now(), btiApplicationExample, Seq.empty)
   val newBtiCaseExample = NewCaseRequest(btiApplicationExample, Seq.empty)
 
 }
