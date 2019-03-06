@@ -18,11 +18,10 @@ package controllers
 
 import controllers.actions._
 import models.requests.IdentifierRequest
-import models.{Case, oCase}
+import models.{BinaryFile, Case, oCase}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
-import play.api.mvc.Result
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
@@ -35,7 +34,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
   private val pdfService = mock[PdfService]
   private val caseService = mock[CasesService]
   private val fileService = mock[FileService]
-  private val expectedResult = mock[Result]
+  private val expectedResult = BinaryFile("application/pdf", "Some content".getBytes)
   private val testCase = oCase.btiCaseExample
   private val caseRef = "123"
   private val userEori = "eori-789012"
@@ -62,7 +61,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
   }
 
   private def givenThePdfServiceGeneratesThePdf(): Unit = {
-    when(pdfService.generatePdf(any[String], any[Html])).thenReturn(successful(expectedResult))
+    when(pdfService.generatePdf(any[Html])).thenReturn(successful(expectedResult))
   }
 
   "PdfDownloadController Controller" must {
@@ -72,9 +71,11 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheFileServiceFindsTheAttachements()
       givenThePdfServiceGeneratesThePdf()
 
-      val result = await(controller().application(caseRef)(fakeIdentityRequest))
+      val result = controller().application(caseRef)(fakeIdentityRequest)
 
-      result mustBe expectedResult
+      status(result) mustBe OK
+      contentAsString(result) mustBe "Some content"
+      contentType(result) mustBe Some("application/pdf")
     }
 
     "error when case not found" in {

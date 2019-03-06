@@ -18,15 +18,14 @@ package service
 
 import akka.util.ByteString
 import connectors.PdfGeneratorServiceConnector
+import models.BinaryFile
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.libs.ws.WSResponse
-import play.api.mvc._
 import play.twirl.api.Html
 import uk.gov.hmrc.play.test.UnitSpec
-import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
@@ -43,27 +42,25 @@ class PdfServiceSpec extends UnitSpec with MockitoSugar {
     "delegate to connector" in {
       given(connector.generatePdf(any[Html])).willReturn(Future.successful(pdfResponse))
       given(pdfResponse.status).willReturn(Status.OK)
-      given(pdfResponse.bodyAsBytes).willReturn(ByteString())
+      val byteString = ByteString()
+      given(pdfResponse.bodyAsBytes).willReturn(byteString)
 
-      val result: Result = await(service.generatePdf("some.pdf", pdfHtml))
+      val file: BinaryFile = await(service.generatePdf(pdfHtml))
 
-      result.header.status shouldBe Status.OK
-      result.header.headers("Content-Disposition").toString shouldBe "attachment; filename=some.pdf"
-      result.body.contentType shouldBe Some("application/pdf")
+      file.contentType shouldBe "application/pdf"
+      file.content shouldBe byteString.toArray
     }
 
-    "connector fails" in {
-
-      val expectedBody = "some error message"
+    "throw exception when connector fails" in {
 
       given(connector.generatePdf(any[Html])).willReturn(Future.successful(pdfResponse))
       given(pdfResponse.status).willReturn(Status.BAD_REQUEST)
-      given(pdfResponse.body).willReturn(expectedBody)
 
-      val result: Result = await(service.generatePdf("some.pdf", pdfHtml))
+      val caught: Exception = intercept[Exception] {
+        await(service.generatePdf(pdfHtml))
+      }
 
-      result.header.status shouldBe Status.BAD_REQUEST
-      contentAsString(result) shouldBe expectedBody
+      caught.getMessage contains "Error calling PdfGeneratorService"
     }
 
   }

@@ -20,9 +20,8 @@ import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
 import models.Case
-import models.response.FilestoreResponse
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Results}
 import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.pdftemplates.applicationPdf
@@ -41,11 +40,12 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
 
     caseService.getCaseForUser(request.eoriNumber, reference) flatMap {
       case Some(c: Case) =>
-        fileService.getAttachmentMetadata(c) flatMap { f =>
-          pdfService.generatePdf(
-            s"confirmation_$reference.pdf",
-            applicationPdf(appConfig, c, f)
-          )
+        fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
+          pdfService.generatePdf(applicationPdf(appConfig, c, attachmentData)).map({ binaryFile =>
+            Results.Ok(binaryFile.content)
+              .as(binaryFile.contentType)
+              .withHeaders("Content-Disposition" -> s"attachment; filename=confirmation_$reference.pdf")
+          })
         }
       case _ => throw new Exception(s"Case ($reference) not found for user ${request.eoriNumber}")
     }

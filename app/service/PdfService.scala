@@ -18,8 +18,8 @@ package service
 
 import connectors.PdfGeneratorServiceConnector
 import javax.inject.{Inject, Singleton}
+import models.BinaryFile
 import play.api.http.Status._
-import play.api.mvc.{Result, Results}
 import play.twirl.api.Html
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -28,17 +28,14 @@ import scala.concurrent.Future
 @Singleton
 class PdfService @Inject()(connector: PdfGeneratorServiceConnector) {
 
-  def generatePdf(filename: String, htmlContent: Html): Future[Result] = {
+  def generatePdf(htmlContent: Html): Future[BinaryFile] = {
 
     connector.generatePdf(htmlContent).map {
       response =>
         response.status match {
-          case OK => Results.Ok(response.bodyAsBytes.toArray)
-            .as("application/pdf")
-            .withHeaders("Content-Disposition" -> s"attachment; filename=$filename")
-          case _ => Results.BadRequest(response.body)
+          case OK => BinaryFile(contentType = "application/pdf", content = response.bodyAsBytes.toArray)
+          case _ => throw new Exception(s"Error calling PdfGeneratorService $response")
         }
     }
-
   }
 }

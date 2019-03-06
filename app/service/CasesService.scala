@@ -32,7 +32,6 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector) {
   }
 
   def getCaseForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] = {
-
     connector.findCase(reference).map(_.filter(_.hasEoriNumber(userEori)))
   }
 
