@@ -34,8 +34,10 @@
 
     <p id="confirmation-email-message">@messages("confirmation.paragragh.confirmationEmail", confirmation.emailAddress)</p>
     <ul class="list">
-        <li><a href="@routes.PdfDownloadController.application(confirmation.reference)">@messages("confirmation.download.link.PDF")</a></li>
+        <li><a id="confirmation-pdf-link" href="@routes.PdfDownloadController.application(confirmation.reference)">@messages("confirmation.download.link.PDF")</a></li>
+        <!-- TODO implement functionality or remove
         <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
+        -->
     </ul>
 
     @if(confirmation.sendingSamples) {
