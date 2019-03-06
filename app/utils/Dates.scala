@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-package models
+package utils
 
-import java.time.Instant
+import java.time.format.DateTimeFormatter
+import java.time.{Instant, LocalDateTime, ZoneOffset}
 
-case class NewCaseRequest
-(
-  application: Application,
-  attachments: Seq[Attachment] = Seq.empty
-)
+object Dates {
 
-case class Case
-(
-  reference: String,
-  createdDate: Instant,
-  application: Application,
-  attachments: Seq[Attachment] = Seq.empty
-) {
-  def hasEoriNumber(eoriNumber: String): Boolean = {
-    application.holder.eori == eoriNumber ||
-      application.agent.exists(_.eoriDetails.eori == eoriNumber)
+  val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+
+  def format(instant: Instant) : String = {
+    formatter.format(LocalDateTime.ofInstant(instant, ZoneOffset.UTC))
   }
+
 }

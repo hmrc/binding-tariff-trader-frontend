@@ -16,23 +16,6 @@
 
 package models
 
-import java.time.Instant
+case class PdfFile(content: Array[Byte], contentType: String = "application/pdf")
 
-case class NewCaseRequest
-(
-  application: Application,
-  attachments: Seq[Attachment] = Seq.empty
-)
 
-case class Case
-(
-  reference: String,
-  createdDate: Instant,
-  application: Application,
-  attachments: Seq[Attachment] = Seq.empty
-) {
-  def hasEoriNumber(eoriNumber: String): Boolean = {
-    application.holder.eori == eoriNumber ||
-      application.agent.exists(_.eoriDetails.eori == eoriNumber)
-  }
-}

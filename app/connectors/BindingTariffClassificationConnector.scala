@@ -35,4 +35,8 @@ class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppC
     client.POST[NewCaseRequest, Case](url = url, body = c)
   }
 
+  def findCase(reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] = {
+    val url = s"${configuration.bindingTariffClassificationUrl}/cases/$reference"
+    client.GET[Option[Case]](url)
+  }
 }

@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package service
 
-import java.time.Instant
+import connectors.PdfGeneratorServiceConnector
+import javax.inject.{Inject, Singleton}
+import models.PdfFile
+import play.twirl.api.Html
 
-case class NewCaseRequest
-(
-  application: Application,
-  attachments: Seq[Attachment] = Seq.empty
-)
+import scala.concurrent.Future
 
-case class Case
-(
-  reference: String,
-  createdDate: Instant,
-  application: Application,
-  attachments: Seq[Attachment] = Seq.empty
-) {
-  def hasEoriNumber(eoriNumber: String): Boolean = {
-    application.holder.eori == eoriNumber ||
-      application.agent.exists(_.eoriDetails.eori == eoriNumber)
+@Singleton
+class PdfService @Inject()(connector: PdfGeneratorServiceConnector) {
+
+  def generatePdf(htmlContent: Html): Future[PdfFile] = {
+    connector.generatePdf(htmlContent)
   }
 }

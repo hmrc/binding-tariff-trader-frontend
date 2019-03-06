@@ -21,7 +21,7 @@ import akka.stream.scaladsl.{FileIO, Source}
 import akka.util.ByteString
 import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
-import models.FileAttachment
+import models.{Attachment, FileAttachment}
 import models.response.FilestoreResponse
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
@@ -59,6 +59,16 @@ class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig
 
   def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
     http.POSTEmpty[FilestoreResponse](s"${configuration.bindingTariffFileStoreUrl}/file/${file.id}/publish")
+  }
+
+  def getFileMetadata(attachments: Seq[Attachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[FilestoreResponse]] = {
+    if (attachments.isEmpty) {
+      Future.successful(Seq.empty)
+    } else {
+      val query = s"?${attachments.map(att => s"id=${att.id}").mkString("&")}"
+      val url = s"${configuration.bindingTariffFileStoreUrl}/file$query"
+      http.GET[Seq[FilestoreResponse]](url)
+    }
   }
 
 }

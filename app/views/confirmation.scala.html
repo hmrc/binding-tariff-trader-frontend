@@ -15,6 +15,7 @@
  *@
 
 @import config.FrontendAppConfig
+@import controllers.routes._
 
 @(appConfig: FrontendAppConfig, confirmation: Confirmation)(implicit request: Request[_], messages: Messages)
 
@@ -27,14 +28,13 @@
         @components.heading(messages("confirmation.heading"))
         <span class="font-large">
             @messages("confirmation.yourRefNumber") <br>
-            <span id="confirmation-reference" class="font-large bold">@messages("confirmation.refValue", confirmation.reference)</span>
+            <span id="confirmation-reference" class="font-large bold">@messages("caseReference.format", confirmation.reference)</span>
         </span>
     </div>
 
     <p id="confirmation-email-message">@messages("confirmation.paragragh.confirmationEmail", confirmation.emailAddress)</p>
     <ul class="list">
-        <li><a href="#">@messages("confirmation.download.link.PDF")</a></li>
-        <li><a href="#">@messages("confirmation.download.link.accessibleText")</a></li>
+        <li><a id="confirmation-pdf-link" href="@routes.PdfDownloadController.application(confirmation.reference)">@messages("confirmation.download.link.PDF")</a></li>
     </ul>
 
     @if(confirmation.sendingSamples) {
@@ -44,7 +44,7 @@
 
         <p>@messages("confirmation.paragraph0.sendingSamples")</p>
 
-        <p>@messages("confirmation.paragraph1.sendingSamples") @messages("confirmation.refValue", confirmation.reference) .
+        <p>@messages("confirmation.paragraph1.sendingSamples") @messages("caseReference.format", confirmation.reference) .
             @messages("confirmation.paragraph2.sendingSamples")</p>
 
         <address>

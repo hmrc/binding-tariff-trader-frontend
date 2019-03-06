@@ -16,12 +16,13 @@
 
 package models
 
+import java.time.Instant
 import java.util.UUID
 
 object oCase {
   val fileAttachment = Attachment(id = UUID.randomUUID().toString)
-  val eoriDetailsExample = EORIDetails("eori", "Trader Business Name", "line1", "line2", "line3", "postcode", "country")
-  val eoriAgentDetailsExample = AgentDetails(EORIDetails("eori", "Agent Business Name", "line1", "line2", "line3", "postcode", "country"), Some(fileAttachment))
+  val eoriDetailsExample = EORIDetails("eoriTrader", "Trader Business Name", "line1", "line2", "line3", "postcode", "country")
+  val eoriAgentDetailsExample = AgentDetails(EORIDetails("eoriAgent", "Agent Business Name", "line1", "line2", "line3", "postcode", "country"), Some(fileAttachment))
   val contactExample = Contact("name", "email", Some("phone"))
   val btiApplicationExample = Application(
     "BTI",
@@ -40,7 +41,7 @@ object oCase {
     sampleToBeProvided = false,
     sampleToBeReturned = false
   )
-  val btiCaseExample = Case("ref", btiApplicationExample, Seq.empty)
+  val btiCaseExample = Case("1234", Instant.now(), btiApplicationExample, Seq.empty)
   val newBtiCaseExample = NewCaseRequest(btiApplicationExample, Seq.empty)
 
 }
