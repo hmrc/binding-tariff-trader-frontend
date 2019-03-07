@@ -49,8 +49,36 @@ class CaseSpec extends WordSpec with MustMatchers {
       decisionWithEndDate(pastDate).hasExpiredDecision mustBe true
     }
 
+    "hasEori returns true for trader" in {
+      val traderCase = oCase.btiCaseExample.copy(application = oCase.btiApplicationExample.copy(agent = None))
+      traderCase.hasEoriNumber(traderCase.application.holder.eori) mustBe true
+    }
 
+    "hasEori returns true for agent" in {
+      val agentCase = oCase.btiCaseExample
+      agentCase.hasEoriNumber(agentCase.application.agent.get.eoriDetails.eori) mustBe true
+    }
 
+    "hasEori returns false for another user" in {
+      oCase.btiCaseExample.hasEoriNumber("????") mustBe false
+    }
 
+    "hasRuling returns false for case with no decision" in {
+      oCase.btiCaseExample.hasRuling mustBe false
+    }
+
+    "hasRuling returns false for case with decision but no end date" in {
+      val decision = oCase.btiCaseWithDecision.decision.map(_.copy(effectiveEndDate = None))
+      oCase.btiCaseWithDecision.copy(decision = decision).hasRuling mustBe false
+    }
+
+    "hasRuling returns false for case with decision but no start date" in {
+      val decision = oCase.btiCaseWithDecision.decision.map(_.copy(effectiveStartDate = None))
+      oCase.btiCaseWithDecision.copy(decision = decision).hasRuling mustBe false
+    }
+
+    "hasRuling returns true for case with decision" in {
+      oCase.btiCaseWithDecision.hasRuling mustBe true
+    }
   }
 }
