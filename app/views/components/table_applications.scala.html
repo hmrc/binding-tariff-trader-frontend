@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import utils.{Dates, Status}
+@import utils.Dates
 
 @import views.html.components.pagination
 @(cases: Paged[Case])(implicit messages: Messages)
@@ -26,7 +26,7 @@
         pluralName = messages("case.applications.pagination.plural"),
         pager = cases,
         containerClass = Some(containerClass),
-        onChange = page => controllers.routes.IndexController.loadApplications(page)
+        onChange = page => controllers.routes.IndexController.getApplications(page)
     )
 }
 

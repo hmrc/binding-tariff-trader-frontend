@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import utils.{Dates, Status}
+@import utils.Dates
 @import views.CaseDetailTab.CaseDetailTab
 @import views.CaseDetailTab
 
@@ -25,14 +25,14 @@
         @if(activeTab == CaseDetailTab.APPLICATION){
             <span class="tabs__tab" aria-selected="true">@messages("case.tabs.applications")</span>
         }else{
-            <a class="tabs__tab" href="@routes.IndexController.loadApplications()">@messages("case.tabs.applications")</a>
+            <a class="tabs__tab" href="@routes.IndexController.getApplications()">@messages("case.tabs.applications")</a>
         }
     </li>
     <li class="tabs__list-item" role="tab">
         @if(activeTab == CaseDetailTab.RULING){
             <span class="tabs__tab" aria-selected="true">@messages("case.tabs.rulings")</span>
         }else{
-            <a class="tabs__tab" href="@routes.IndexController.loadRulings()">@messages("case.tabs.rulings")</a>
+            <a class="tabs__tab" href="@routes.IndexController.getRulings()">@messages("case.tabs.rulings")</a>
         }
     </li>
 </ul>

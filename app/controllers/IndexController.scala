@@ -36,14 +36,14 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
                                 service: CasesService,
                                 val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
 
-  def loadApplications(page : Int): Action[AnyContent] = identify.async { implicit request =>
+  def getApplications(page : Int): Action[AnyContent] = identify.async { implicit request =>
 
     service.findApplicationsBy(request.eoriNumber, SearchPagination(page)) flatMap { pagedResult =>
       successful(Ok(index(appConfig, CaseDetailTab.APPLICATION, table_applications(pagedResult))))
     }
   }
 
-  def loadRulings(page : Int): Action[AnyContent] = identify.async { implicit request =>
+  def getRulings(page : Int): Action[AnyContent] = identify.async { implicit request =>
 
     service.findRulingsBy(request.eoriNumber, SearchPagination(page)) flatMap { pagedResult =>
       successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult) )))

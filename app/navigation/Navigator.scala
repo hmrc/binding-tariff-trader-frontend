@@ -67,7 +67,7 @@ class Navigator @Inject()() {
   )
 
   def nextPage(page: Page, mode: Mode): UserAnswers => Call = mode match {
-    case NormalMode => routeMap.getOrElse(page, _ => routes.IndexController.loadApplications())
+    case NormalMode => routeMap.getOrElse(page, _ => routes.IndexController.getApplications())
     case CheckMode => checkRouteMap.getOrElse(page, _ => routes.CheckYourAnswersController.onPageLoad())
   }
 

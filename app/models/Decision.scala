@@ -27,10 +27,7 @@ case class Decision
   goodsDescription: String,
   methodSearch: Option[String] = None,
   methodCommercialDenomination: Option[String] = None,
-  methodExclusion: Option[String] = None,
-  appeal: Option[Appeal] = None,
-  review: Option[Review] = None,
-  cancellation: Option[Cancellation] = None
+  methodExclusion: Option[String] = None
 )
 
 

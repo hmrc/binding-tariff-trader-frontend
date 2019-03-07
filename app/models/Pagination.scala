@@ -28,7 +28,7 @@ object Pagination {
 case class SearchPagination
 (
   override val page: Int = 1,
-  override val pageSize: Int = 10
+  override val pageSize: Int = 50
 ) extends Pagination
 
 case class NoPagination
