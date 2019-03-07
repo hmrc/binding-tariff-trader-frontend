@@ -108,7 +108,7 @@
 
             <div id="section-goods" class="box">
                 <p class="section-label">@messages("pdf.ruling.section.ruling.description.label")</p>
-                @d.goodsDescription
+                <p>@d.goodsDescription</p>
             </div>
 
             <div id="section-commercial" class="box">
@@ -116,17 +116,18 @@
                     <span class="section-label">@messages("pdf.ruling.section.ruling.commercialDenomination.label")</span>
                     <span>@messages("pdf.ruling.section.ruling.commercialDenomination.sublabel")</span>
                 </p>
-                @d.methodCommercialDenomination.getOrElse("")
+                <p>@d.methodCommercialDenomination.getOrElse("")</p>
             </div>
 
             <div id="section-justification" class="box">
                 <p class="section-label">@messages("pdf.ruling.section.ruling.justification.label")</p>
-                @d.justification
+                <p>@d.justification</p>
             </div>
 
-            <div class="box">
+            <br/><br/>
+            <div id="section-legal" class="box">
                 <p class="section-label">@messages("pdf.ruling.section.ruling.legalInformation.label")</p>
-                <span>@messages("pdf.ruling.section.ruling.legalInformation.text")</span>
+                <p>@messages("pdf.ruling.section.ruling.legalInformation.text")</p>
             </div>
 
         </div>
