@@ -28,7 +28,7 @@ object Dates {
   }
 
   def format(instant: Option[Instant]) : String = {
-    instant.map( in => formatter.format(LocalDateTime.ofInstant(in , ZoneOffset.UTC))).getOrElse("None")
+    instant.map(format).getOrElse("None")
   }
 
 }
