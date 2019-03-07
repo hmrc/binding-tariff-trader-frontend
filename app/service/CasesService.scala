@@ -18,7 +18,7 @@ package service
 
 import connectors.BindingTariffClassificationConnector
 import javax.inject.{Inject, Singleton}
-import models.{Case, CaseStatus, NewCaseRequest}
+import models._
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -31,16 +31,13 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector) {
     connector.createCase(c)
   }
 
-  def findApplicationsBy(eori: String)(implicit hc: HeaderCarrier): Future[Seq[Case]] = {
-    connector.findCasesByEori(eori)
+  def findApplicationsBy(eori: String, pagination: Pagination)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
+    connector.findCasesByEori(eori, pagination)
   }
 
-  private def hasRuling = { c: Case =>
-    Seq(CaseStatus.COMPLETED, CaseStatus.CANCELLED).contains(c.status) && c.decision.isDefined
-  }
-
-  def findRulingsBy(eori: String)(implicit hc: HeaderCarrier): Future[Seq[Case]] = {
-    connector.findCasesByEori(eori).map(_.filter(hasRuling))
+  private val rulingStatuses = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
+  def findRulingsBy(eori: String, pagination: Pagination)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
+    connector.findCasesBy(eori, rulingStatuses, pagination)
   }
 
 }

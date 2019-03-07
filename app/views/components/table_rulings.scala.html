@@ -16,18 +16,33 @@
 
 @import utils.{Dates,Status}
 
-@(cases: Seq[Case])(implicit messages: Messages)
+@import views.html.components.pagination
+@(cases: Paged[Case])(implicit messages: Messages)
+
+
+@paginate(containerClass : String) = {
+    @pagination(
+        id = "applications-pagination",
+        singularName = "application",
+        pluralName = "applications",
+        pager = cases,
+        containerClass = Some(containerClass),
+        onChange = page => controllers.routes.IndexController.loadRulings(page)
+    )
+}
 
 @if(cases.isEmpty){
     <div id="ruling-list-empty" class="tabs__panel">
         <div class="bold-small my-3 pl-1">
-            No BTI Rulings
-                @messages("case.tabs.rulings.noRulings")
+            @messages("case.tabs.rulings.noRulings")
         </div>
     </div>
 }else{
     <div class="tabs__panel">
         <div class="tabs__panel__content">
+
+            @paginate("mb-2")
+
             <table id="rulings-list-table">
                 <thead>
                     <tr>
@@ -41,9 +56,9 @@
                     </tr>
                 </thead>
                 <tbody id="rulings-list-body">
-                    @for((c: Case, index: Int) <- cases.zipWithIndex) {
+                    @for((c: Case, index: Int) <- cases.results.zipWithIndex) {
                         <tr id="rulings-list-row-@{index}">
-                            <td id="rulings-list-row-@{index}-refenrece">@c.reference</td>
+                            <td id="rulings-list-row-@{index}-reference">@c.reference</td>
                             <td id="rulings-list-row-@{index}-item_name">@c.application.goodName</td>
                             <td id="rulings-list-row-@{index}-commodity_code">@if(c.decision.isDefined){ @c.decision.get.bindingCommodityCode }</td>
                             <td id="rulings-list-row-@{index}-start_date">@if(c.decision.isDefined){ @Dates.format(c.decision.get.effectiveStartDate) }</td>
@@ -53,6 +68,7 @@
                                     case CaseStatus.CANCELLED => { <span class="color-red"> @messages("case.ruling.status.cancelled") </span> }
                                     case CaseStatus.COMPLETED if c.hasActiveDecision => { <span class="color-green"> @messages("case.ruling.status.active") </span> }
                                     case CaseStatus.COMPLETED if c.hasExpiredDecision =>{ @messages("case.ruling.status.expired") }
+                                    case _ => { @c.status }
                                 }
                             </td>
                             <td id="rulings-list-row-@{index}-download"><a href="#">@messages("case.ruling.downloadPdf")</a></td>
@@ -60,6 +76,9 @@
                     }
                 </tbody>
             </table>
+
+            @paginate("mt-2")
+
         </div>
     </div>
 }

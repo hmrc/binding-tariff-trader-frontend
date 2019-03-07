@@ -6,9 +6,9 @@ GET         /language/:lang                                      controllers.Lan
 
 GET         /this-service-has-been-reset                         controllers.SessionExpiredController.onPageLoad
 
-GET         /                                                    controllers.Default.redirect(to = controllers.routes.IndexController.loadApplications.url)
-GET         /applications                                        controllers.IndexController.loadApplications
-GET         /rulings                                             controllers.IndexController.loadRulings
+GET         /                                                    controllers.Default.redirect(to = controllers.routes.IndexController.loadApplications().url)
+GET         /applications                                        controllers.IndexController.loadApplications(page: Int ?= 1)
+GET         /rulings                                             controllers.IndexController.loadRulings(page: Int ?= 1)
 
 GET         /unauthorised                                        controllers.UnauthorisedController.onPageLoad
 

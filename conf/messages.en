@@ -364,7 +364,7 @@ checkYourAnswers.otherInformation = Other information about your item
 
 case.tabs.applications = Applications
 
-case.tabs.applications.notSubmitted = No applications submitted
+case.tabs.applications.notSubmitted = Submitted applications will appear here
 
 case.tabs.applications.table.reference = Reference
 case.tabs.applications.table.itemName = Item name
@@ -376,12 +376,13 @@ case.application.status.inProgress = In progress
 case.application.status.rejected = Rejected
 case.application.status.infoRequested = Info requested
 case.application.status.completed = Completed
+case.application.status.draft = Draft
 
 case.application.downloadPdf = Download PDF
 
 case.tabs.rulings = Rulings
 
-case.tabs.rulings.noRulings = No BTI Rulings
+case.tabs.rulings.noRulings = BTI Rulings will appear here
 
 case.tabs.rulings.table.reference = reference
 case.tabs.rulings.table.itemName = Item name

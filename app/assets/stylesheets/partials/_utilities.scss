@@ -49,6 +49,11 @@ label > .bold {
 
 // Margin Bottom
 
+
+.mb-2 {
+  margin-bottom: ($spacer * 0.5) !important;
+}
+
 .mb-5 {
   margin-bottom: ($spacer * 1.25) !important;
 }
@@ -94,4 +99,16 @@ Colors
 
 .color-red {
   color : #B10E1E;
+}
+
+
+/*
+====================================
+Layout
+====================================
+*/
+
+
+.align-right {
+  text-align: right;
 }

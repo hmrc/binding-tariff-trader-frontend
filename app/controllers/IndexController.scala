@@ -19,6 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
 import javax.inject.Inject
+import models.{Pagination, SearchPagination}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import service.CasesService
@@ -35,17 +36,17 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
                                 service: CasesService,
                                 val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
 
-  def loadApplications: Action[AnyContent] = identify.async { implicit request =>
+  def loadApplications(page : Int): Action[AnyContent] = identify.async { implicit request =>
 
-    service.findApplicationsBy(request.eoriNumber) flatMap { seq =>
-      successful(Ok(index(appConfig, CaseDetailTab.APPLICATION, table_applications(seq))))
+    service.findApplicationsBy(request.eoriNumber, SearchPagination(page)) flatMap { pagedResult =>
+      successful(Ok(index(appConfig, CaseDetailTab.APPLICATION, table_applications(pagedResult))))
     }
   }
 
-  def loadRulings: Action[AnyContent] = identify.async { implicit request =>
+  def loadRulings(page : Int): Action[AnyContent] = identify.async { implicit request =>
 
-    service.findRulingsBy(request.eoriNumber) flatMap { seq =>
-      successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(seq) )))
+    service.findRulingsBy(request.eoriNumber, SearchPagination(page)) flatMap { pagedResult =>
+      successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult) )))
     }
   }
 

@@ -17,6 +17,7 @@
 package controllers
 
 import controllers.actions.FakeIdentifierAction
+import models.{Case, Paged, Pagination, SearchPagination}
 import models.oCase._
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
@@ -29,52 +30,52 @@ import scala.concurrent.Future
 
 class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
-
   private val casesService = mock[CasesService]
-
 
   "Index Controller" must {
 
-
     "return the correct view for a load applications" in {
 
-      given(casesService.findApplicationsBy(any[String])(any[HeaderCarrier])).willReturn(Future.successful(Seq(btiCaseExample)))
+      given(casesService.findApplicationsBy(any[String], refEq(SearchPagination(1)))(any[HeaderCarrier])).willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
 
-      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).loadApplications()(fakeRequest)
+      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).loadApplications(page = 1)(fakeRequest)
 
       status(result) mustBe OK
-      contentAsString(result) must include ("applications-list-table")
+      contentAsString(result) must include("applications-list-table")
     }
 
     "return the correct view for a load rulings" in {
 
-      given(casesService.findRulingsBy(any[String])(any[HeaderCarrier])).willReturn(Future.successful(Seq(btiCaseWithDecision)))
+      given(casesService.findRulingsBy(any[String], refEq(SearchPagination(1)))(any[HeaderCarrier])).willReturn(Future.successful(Paged(Seq(btiCaseWithDecision), 1, 10, 0)))
 
-      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).loadRulings()(fakeRequest)
+      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).loadRulings(page = 1)(fakeRequest)
 
       status(result) mustBe OK
-      contentAsString(result) must include ("rulings-list-table")
-      contentAsString(result) must include ("")
+      contentAsString(result) must include("rulings-list-table")
+      contentAsString(result) must include("")
     }
 
 
-    "return 200 for a GET when no applications are found" in {
-      given(casesService.findApplicationsBy(any[String])(any[HeaderCarrier])).willReturn(Future.successful(Seq.empty))
+    "return 200 and show no results for a GET when no applications are found" in {
+      given(casesService.findApplicationsBy(any[String], refEq(SearchPagination(1)))(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq[Case](), 1, 10, 0)))
 
-      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).loadApplications()(fakeRequest)
+      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).loadApplications(page = 1)(fakeRequest)
 
       status(result) mustBe OK
-      contentAsString(result) must include ("application-list-empty")
+      contentAsString(result) must include("application-list-empty")
 
     }
 
-    "return 200 for a GET when no rulings are found" in {
-      given(casesService.findRulingsBy(any[String])(any[HeaderCarrier])).willReturn(Future.successful(Seq.empty))
+    "return 200 and show no results  for a GET when no rulings are found" in {
 
-      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).loadRulings()(fakeRequest)
+      given(casesService.findRulingsBy(any[String], refEq(SearchPagination(1)))(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq[Case](), 1, 10, 0)))
+
+      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).loadRulings(page = 1)(fakeRequest)
 
       status(result) mustBe OK
-      contentAsString(result) must include ("ruling-list-empty")
+      contentAsString(result) must include("ruling-list-empty")
     }
 
   }

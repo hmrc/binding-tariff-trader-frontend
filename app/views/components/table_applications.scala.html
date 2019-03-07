@@ -16,7 +16,19 @@
 
 @import utils.{Dates, Status}
 
-@(cases: Seq[Case])(implicit messages: Messages)
+@import views.html.components.pagination
+@(cases: Paged[Case])(implicit messages: Messages)
+
+@paginate(containerClass : String) = {
+    @pagination(
+        id = "applications-pagination",
+        singularName = "application",
+        pluralName = "applications",
+        pager = cases,
+        containerClass = Some(containerClass),
+        onChange = page => controllers.routes.IndexController.loadApplications(page)
+    )
+}
 
 @if(cases.isEmpty){
     <div id="application-list-empty" class="tabs__panel">
@@ -27,6 +39,9 @@
 }else{
     <div id="application-list" class="tabs__panel">
         <div class="tabs__panel__content">
+
+            @paginate("mb-2")
+
             <table id="applications-list-table">
                 <thead>
                     <tr>
@@ -38,7 +53,7 @@
                     </tr>
                 </thead>
                 <tbody id="application-list-body">
-                         @for((c: Case, index: Int) <- cases.zipWithIndex) {
+                         @for((c: Case, index: Int) <- cases.results.zipWithIndex) {
                         <tr id="application-list-row-@{index}">
                             <td id="application-list-row-@{index}-reference">@c.reference</td>
                             <td id="application-list-row-@{index}-item_name">@c.application.goodName</td>
@@ -48,7 +63,8 @@
                                     case CaseStatus.NEW | CaseStatus.OPEN | CaseStatus.SUSPENDED => { @messages("case.application.status.inProgress") }
                                     case CaseStatus.SUPPRESSED | CaseStatus.REJECTED => { @messages("case.application.status.rejected") }
                                     case CaseStatus.REFERRED => { <span class="color-red"> @messages("case.application.status.infoRequested") </span> }
-                                    case CaseStatus.COMPLETED => { <span class="color-green"> @messages("case.application.status.completed") </span> }
+                                    case CaseStatus.COMPLETED | CaseStatus.CANCELLED => { <span class="color-green"> @messages("case.application.status.completed") </span> }
+                                    case CaseStatus.DRAFT  => { @messages("case.application.status.draft") }
                                 }
                             </td>
                             <td id="application-list-row-@{index}-download"> <a href="#"> @messages("case.application.downloadPdf") </a> </td>
@@ -56,6 +72,9 @@
                     }
                 </tbody>
             </table>
+
+            @paginate("mt-2")
+
         </div>
     </div>
 }

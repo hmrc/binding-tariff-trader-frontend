@@ -19,7 +19,8 @@
 @import views.CaseDetailTab.CaseDetailTab
 @import views.CaseDetailTab
 
-@(appConfig: FrontendAppConfig, activeTab : CaseDetailTab, view : Html)(implicit request: Request[_], messages: Messages)
+@import views.html.components.pagination
+@(appConfig: FrontendAppConfig, activeTab : CaseDetailTab, viewTable : Html)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("index.title"),
@@ -34,7 +35,7 @@
     <div class="tabs mb-5">
         @components.case_tabs(activeTab)
         <div class="content">
-              @view
+            @viewTable
         </div>
     </div>
 
