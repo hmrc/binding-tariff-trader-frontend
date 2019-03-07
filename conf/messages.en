@@ -411,6 +411,9 @@ case.tabs.applications.table.dateSubmitted = Date submitted
 case.tabs.applications.table.status = Status
 case.tabs.applications.table.download = Download Application
 
+case.applications.pagination.singular = application
+case.applications.pagination.plural = applications
+
 case.application.status.inProgress = In progress
 case.application.status.rejected = Rejected
 case.application.status.infoRequested = Info requested
@@ -420,16 +423,18 @@ case.application.status.draft = Draft
 case.application.downloadPdf = Download PDF
 
 case.tabs.rulings = Rulings
+case.rulings.noRulings = BTI Rulings will appear here
 
-case.tabs.rulings.noRulings = BTI Rulings will appear here
+case.rulings.table.reference = reference
+case.rulings.table.itemName = Item name
+case.rulings.table.commodityCode = Commodity code
+case.rulings.table.startDate = Start date
+case.rulings.table.endDate = End date
+case.rulings.table.status = Status
+case.rulings.table.downloadBTI = Download BTI
 
-case.tabs.rulings.table.reference = reference
-case.tabs.rulings.table.itemName = Item name
-case.tabs.rulings.table.commodityCode = Commodity code
-case.tabs.rulings.table.startDate = Start date
-case.tabs.rulings.table.endDate = End date
-case.tabs.rulings.table.status = Status
-case.tabs.rulings.table.downloadBTI = Download BTI
+case.rulings.pagination.singular = ruling
+case.rulings.pagination.plural = rulings
 
 case.ruling.status.cancelled = Cancelled
 case.ruling.status.active = Active

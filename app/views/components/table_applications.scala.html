@@ -22,8 +22,8 @@
 @paginate(containerClass : String) = {
     @pagination(
         id = "applications-pagination",
-        singularName = "application",
-        pluralName = "applications",
+        singularName =  messages("case.applications.pagination.singular"),
+        pluralName = messages("case.applications.pagination.plural"),
         pager = cases,
         containerClass = Some(containerClass),
         onChange = page => controllers.routes.IndexController.loadApplications(page)
@@ -67,7 +67,9 @@
                                     case CaseStatus.DRAFT  => { @messages("case.application.status.draft") }
                                 }
                             </td>
-                            <td id="application-list-row-@{index}-download"> <a href="#"> @messages("case.application.downloadPdf") </a> </td>
+                            <td id="application-list-row-@{index}-download">
+                                <a id="application-list-row-@{index}-download-link" target="_blank" href="@routes.PdfDownloadController.application(c.reference)">@messages("case.application.downloadPdf")</a>
+                            </td>
                         </tr>
                     }
                 </tbody>
