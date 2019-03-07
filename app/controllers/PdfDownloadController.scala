@@ -24,7 +24,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Results}
 import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.pdftemplates.applicationPdf
+import views.html.pdftemplates.{applicationPdf, rulingPdf}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -51,7 +51,7 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
   def ruling(reference: String): Action[AnyContent] = identify.async { implicit request =>
     caseService.getCaseForUser(request.eoriNumber, reference) flatMap { c: Case =>
       fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
-        pdfService.generatePdf(applicationPdf(appConfig, c, attachmentData)).map { binaryFile =>
+        pdfService.generatePdf(rulingPdf(appConfig, c, attachmentData)).map { binaryFile =>
           Results.Ok(binaryFile.content)
             .as(binaryFile.contentType)
             .withHeaders(CONTENT_DISPOSITION -> s"filename=BTIRuling$reference.pdf")
