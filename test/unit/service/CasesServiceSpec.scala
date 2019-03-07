@@ -78,7 +78,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
       given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
 
       val caught = intercept[RuntimeException] {
-        await(service.getCaseForUser("someEORT", caseRef)(HeaderCarrier()))
+        await(service.getCaseForUser("someEORI", caseRef)(HeaderCarrier()))
       }
       caught.getMessage shouldBe "Case not found"
     }
@@ -88,7 +88,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
       given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willThrow(exception)
 
       val caught = intercept[RuntimeException] {
-        await(service.getCaseForUser("eort", caseRef)(HeaderCarrier()))
+        await(service.getCaseForUser("eori", caseRef)(HeaderCarrier()))
       }
       caught shouldBe exception
     }

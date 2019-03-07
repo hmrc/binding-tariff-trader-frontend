@@ -36,8 +36,7 @@ case class Case
 ) {
 
   def hasEoriNumber(eoriNumber: String): Boolean = {
-    application.holder.eori == eoriNumber ||
-      application.agent.exists(_.eoriDetails.eori == eoriNumber)
+    application.holder.eori == eoriNumber || application.agent.exists(_.eoriDetails.eori == eoriNumber)
   }
 
   def hasActiveDecision: Boolean = this.decision.flatMap(_.effectiveEndDate).exists(_.compareTo(Instant.now) >= 0)

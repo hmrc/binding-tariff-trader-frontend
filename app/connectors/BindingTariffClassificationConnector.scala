@@ -42,12 +42,12 @@ class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppC
   }
 
   def findCasesBy(eori: String, pagination: Pagination)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
-    val url = s"${configuration.bindingTariffClassificationUrl}/cases?eori=$eori&page=${pagination.page}&page_size=${pagination.pageSize}"
+    val url = s"${configuration.bindingTariffClassificationUrl}/cases?eori=$eori&sort_by=created-date&sort_direction=desc&page=${pagination.page}&page_size=${pagination.pageSize}"
     client.GET[Paged[Case]](url)
   }
 
   def findCasesBy(eori: String, status : Set[CaseStatus], pagination: Pagination)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
-    val url = s"${configuration.bindingTariffClassificationUrl}/cases?eori=$eori&status=${status.mkString(",")}&page=${pagination.page}&page_size=${pagination.pageSize}"
+    val url = s"${configuration.bindingTariffClassificationUrl}/cases?eori=$eori&status=${status.mkString(",")}&sort_by=decision-end-date&sort_direction=desc&page=${pagination.page}&page_size=${pagination.pageSize}"
     client.GET[Paged[Case]](url)
   }
 }
