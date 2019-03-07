@@ -20,12 +20,13 @@ import connectors.BindingTariffClassificationConnector
 import javax.inject.{Inject, Singleton}
 import models._
 import uk.gov.hmrc.http.HeaderCarrier
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class CasesService @Inject()(connector: BindingTariffClassificationConnector) {
+class CasesService @Inject()(connector: BindingTariffClassificationConnector){
 
   def create(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
     connector.createCase(c)
@@ -36,8 +37,15 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector) {
   }
 
   private val rulingStatuses = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
+
   def findRulingsBy(eori: String, pagination: Pagination)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
     connector.findCasesBy(eori, rulingStatuses, pagination)
   }
 
+  def getCaseForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Case] = {
+    connector.findCase(reference).map(_.filter(_.hasEoriNumber(userEori))) flatMap {
+      case Some(c) => Future.successful(c)
+      case _ => Future.failed(new RuntimeException("Case not found"))
+    }
+  }
 }

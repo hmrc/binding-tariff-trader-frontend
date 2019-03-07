@@ -1,0 +1,12 @@
+[
+  {
+    "id": "id1",
+    "fileName": "file-name1.txt",
+    "mimeType": "text/plain"
+  },
+  {
+    "id": "id2",
+    "fileName": "file-name2.txt",
+    "mimeType": "text/plain"
+  }
+]

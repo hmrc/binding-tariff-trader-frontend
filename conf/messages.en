@@ -37,7 +37,7 @@ beforeYouStart.paragraph2 = You need to know:
 beforeYouStart.paragraph2.item1 = how it is made including a list of ingredients or parts
 beforeYouStart.paragraph2.item2 = what it is used for and how it works
 beforeYouStart.paragraph2.item3 = how it is packaged
-beforeYouStart.paragraph3 = If relevant, you'll also need to:
+beforeYouStart.paragraph3 = If relevant, you''ll also need to:
 beforeYouStart.paragraph3.item1 = upload photographs, manuals, brochures or technical specifications
 beforeYouStart.paragraph3.item2 = send a sample
 beforeYouStart.paragraph4 = You need:
@@ -58,6 +58,7 @@ site.hidden-delete = Delete {0}
 site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
+site.none = None
 site.continue = Continue
 site.submit = Submit
 site.upload_continue = Upload and continue
@@ -78,6 +79,7 @@ unauthorised.body6_link = get an EORI number and get access here.
 ## Generic messages
 eori.number = EORI number
 eori.details = EORI details
+caseReference.format = {0}
 
 registeredAddressForEori.title = Registered EORI details - GOV.UK
 registeredAddressForEori.heading = What is the registered name and address for EORI number {0}?
@@ -108,7 +110,7 @@ selectApplicationType.title = Application type - GOV.UK
 selectApplicationType.heading = Is this a new application or a renewal of a previous ruling?
 selectApplicationType.newCommodity = This is a new application
 selectApplicationType.previousCommodity = This is a renewal of a previous ruling
-selectApplicationType.checkYourAnswersLabel = Application type
+selectApplicationType.checkYourAnswersLabel = Is this a new application or a renewal?
 selectApplicationType.error.required = Select application type
 
 registerBusinessRepresenting.title =  Registered EORI details - GOV.UK
@@ -204,9 +206,9 @@ confidentialInformation.error.field1.length = Information must be 100 characters
 supportingMaterialFileList.title = Upload file list - GOV.UK
 supportingMaterialFileList.heading = Do you want to upload any supporting documents?
 supportingMaterialFileList.uploadFileCounter = You have uploaded {0} supporting documents
-supportingMaterialFileList.checkYourAnswersLabel = Uploaded files
+supportingMaterialFileList.checkYourAnswersLabel = Uploaded documents
 supportingMaterialFileList.label.anotherFile =  Do you want to upload another document?
-supportingMaterialFileList.indications = The things we need to give you an accurate commodity code advice are:
+supportingMaterialFileList.indications = The things we need to give you an accurate commodity code are:
 supportingMaterialFileList.indications.bullet1 = ingredients lists for food and drink items
 supportingMaterialFileList.indications.bullet2 = technical specifications
 supportingMaterialFileList.indications.bullet3 = lists of materials
@@ -361,6 +363,43 @@ checkYourAnswers.applicantRegisteredSection = Your details
 checkYourAnswers.applicantOtherBusiness = Details of the business, organisation or individual you represent
 checkYourAnswers.informationAboutYourItemSection = Information about your item
 checkYourAnswers.otherInformation = Other information about your item
+
+
+pdf.application.title = Application for a goods classification ruling
+pdf.application.submitted = Application submitted on
+pdf.application.reference = Application reference number
+pdf.application.section.applicant.heading = Applicant details
+pdf.application.section.applicant.eori = EORI number
+pdf.application.section.applicant.companyName = Registered company name
+pdf.application.section.applicant.companyAddress = Registered company address
+pdf.application.section.applicant.contactDetails = Applicant contact details
+pdf.application.section.applyingFor.heading = Applying for
+pdf.application.section.applyingFor.eori = EORI number
+pdf.application.section.applyingFor.companyName = Registered company name
+pdf.application.section.applyingFor.companyAddress = Registered company address
+pdf.application.section.applicationType.heading = Application type
+pdf.application.section.applicationType.newApplication = New
+pdf.application.section.applicationType.reIssue = BTI re-issue
+pdf.application.section.aboutItem.heading = Information about your item
+pdf.application.section.aboutItem.confidentialInfo = Confidential information
+pdf.application.section.aboutItem.description = Item description
+pdf.application.section.aboutItem.uploadeDocuments = Uploaded documents
+pdf.application.section.aboutItem.sampleProvided = Are you providing a sample?
+pdf.application.section.aboutItem.sampleReturned = Should the sample be returned?
+pdf.application.section.aboutItem.similarRuling = Are you aware of a similar BTI ruling?
+pdf.application.section.aboutItem.similarRuling.BTIRef = BTI reference number
+pdf.application.section.aboutItem.legalProblems = Are you aware of any problems with the item’s classification?
+pdf.application.section.aboutItem.legalProblems.details = Legal problems
+pdf.application.section.other.heading = Other supporting information
+pdf.application.section.other.label = Other information to support your application
+pdf.application.footer.whatHappensNext.heading = What happens next
+pdf.application.footer.whatHappensNext.html = <p>The classification team will issue your Binding Tariff Information ruling by email within 30 days unless you:</p><ul><li>are sending samples</li><li>are asked for more information to support your application</li></ul><p>You can find out the status of your application by signing into your account through GOV.UK Binding Tariff Information (Notice 600).</p>
+pdf.application.footer.sendingSamples.heading = Sending samples
+pdf.application.footer.sendingSamples.html = <p>You must label your sample with the application reference number (GB@c.reference).</p><p>If you are sending samples the application will not be processed until they have been received.</p><p>Get more information about samples on GOV.UK Binding Tariff Information (Notice 600).</p>
+pdf.application.footer.sendingSamplesTo.heading = Send your samples to
+
+
+
 
 case.tabs.applications = Applications
 

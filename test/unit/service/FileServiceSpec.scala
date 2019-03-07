@@ -22,7 +22,7 @@ import java.nio.file.Files
 import config.FrontendAppConfig
 import connectors.BindingTariffFilestoreConnector
 import models.response.FilestoreResponse
-import models.{FileAttachment, PublishedFileAttachment, ScanStatus}
+import models._
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.reset
@@ -155,6 +155,17 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
       val file = createFileOfSize(fileSizeLarge)
       given(messagesApi.apply("uploadWrittenAuthorisation.error.size")).willReturn("some error message")
       service.validate(file) shouldBe Left("some error message")
+    }
+  }
+
+  "GetAttachmentMetadata" should {
+    val c: Case = mock[Case]
+    val connectorResponse = Seq(FilestoreResponse("id", "filename-updated", "type"))
+
+    "Delegate to connector" in {
+      given(connector.getFileMetadata(any[Seq[Attachment]])(any[HeaderCarrier])).willReturn(successful(connectorResponse))
+
+      await(service.getAttachmentMetadata(c)) shouldBe connectorResponse
     }
   }
 

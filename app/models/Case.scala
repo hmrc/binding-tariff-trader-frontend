@@ -35,6 +35,11 @@ case class Case
   attachments: Seq[Attachment] = Seq.empty
 ) {
 
+  def hasEoriNumber(eoriNumber: String): Boolean = {
+    application.holder.eori == eoriNumber ||
+      application.agent.exists(_.eoriDetails.eori == eoriNumber)
+  }
+
   def hasActiveDecision: Boolean = this.decision.flatMap(_.effectiveEndDate).exists(_.compareTo(Instant.now) >= 0)
 
   def hasExpiredDecision: Boolean = this.decision.flatMap(_.effectiveEndDate).exists(_.compareTo(Instant.now) < 0)

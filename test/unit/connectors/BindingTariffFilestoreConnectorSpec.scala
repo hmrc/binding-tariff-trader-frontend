@@ -19,7 +19,7 @@ package connectors
 import akka.actor.ActorSystem
 import com.github.tomakehurst.wiremock.client.WireMock._
 import config.FrontendAppConfig
-import models.FileAttachment
+import models.{Attachment, FileAttachment}
 import models.response.FilestoreResponse
 import org.mockito.BDDMockito.given
 import org.scalatest.BeforeAndAfterEach
@@ -103,6 +103,32 @@ class BindingTariffFilestoreConnectorSpec extends UnitSpec with WithFakeApplicat
         fileName = "file-name.txt",
         mimeType = "text/plain"
       )
+    }
+
+    "Get FileMetadata" in {
+      stubFor(
+        get("/file?id=id1&id=id2")
+          .willReturn(
+            aResponse()
+              .withStatus(Status.OK)
+              .withBody(fromResource("binding-tariff-filestore_filemetadata-response.json"))
+          )
+      )
+
+      await(connector.getFileMetadata(Seq(Attachment("id1"), Attachment("id2")))) shouldBe Seq(
+        FilestoreResponse(
+          id = "id1",
+          fileName = "file-name1.txt",
+          mimeType = "text/plain"),
+        FilestoreResponse(
+          id = "id2",
+          fileName = "file-name2.txt",
+          mimeType = "text/plain")
+      )
+    }
+
+    "Get FileMetadata returns no data" in {
+      await(connector.getFileMetadata(Seq.empty)) shouldBe Seq.empty
     }
 
   }
