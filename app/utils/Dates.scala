@@ -16,8 +16,8 @@
 
 package utils
 
-import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneOffset}
+import java.time.format.DateTimeFormatter
 
 object Dates {
 
@@ -25,6 +25,10 @@ object Dates {
 
   def format(instant: Instant) : String = {
     formatter.format(LocalDateTime.ofInstant(instant, ZoneOffset.UTC))
+  }
+
+  def format(instant: Option[Instant]) : String = {
+    instant.map(format).getOrElse("None")
   }
 
 }

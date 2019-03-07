@@ -362,6 +362,7 @@ checkYourAnswers.applicantOtherBusiness = Details of the business, organisation 
 checkYourAnswers.informationAboutYourItemSection = Information about your item
 checkYourAnswers.otherInformation = Other information about your item
 
+
 pdf.application.title = Application for a goods classification ruling
 pdf.application.submitted = Application submitted on
 pdf.application.reference = Application reference number
@@ -394,3 +395,47 @@ pdf.application.footer.whatHappensNext.html = <p>The classification team will is
 pdf.application.footer.sendingSamples.heading = Sending samples
 pdf.application.footer.sendingSamples.html = <p>You must label your sample with the application reference number (GB@c.reference).</p><p>If you are sending samples the application will not be processed until they have been received.</p><p>Get more information about samples on GOV.UK Binding Tariff Information (Notice 600).</p>
 pdf.application.footer.sendingSamplesTo.heading = Send your samples to
+
+
+
+
+case.tabs.applications = Applications
+
+case.tabs.applications.notSubmitted = Submitted applications will appear here
+
+case.tabs.applications.table.reference = Reference
+case.tabs.applications.table.itemName = Item name
+case.tabs.applications.table.dateSubmitted = Date submitted
+case.tabs.applications.table.status = Status
+case.tabs.applications.table.download = Download Application
+
+case.applications.pagination.singular = application
+case.applications.pagination.plural = applications
+
+case.application.status.inProgress = In progress
+case.application.status.rejected = Rejected
+case.application.status.infoRequested = Info requested
+case.application.status.completed = Completed
+case.application.status.draft = Draft
+
+case.application.downloadPdf = Download PDF
+
+case.tabs.rulings = Rulings
+case.rulings.noRulings = BTI Rulings will appear here
+
+case.rulings.table.reference = reference
+case.rulings.table.itemName = Item name
+case.rulings.table.commodityCode = Commodity code
+case.rulings.table.startDate = Start date
+case.rulings.table.endDate = End date
+case.rulings.table.status = Status
+case.rulings.table.downloadBTI = Download BTI
+
+case.rulings.pagination.singular = ruling
+case.rulings.pagination.plural = rulings
+
+case.ruling.status.cancelled = Cancelled
+case.ruling.status.active = Active
+case.ruling.status.expired = Expired
+
+case.ruling.downloadPdf = Download PDF

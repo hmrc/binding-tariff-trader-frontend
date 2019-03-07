@@ -16,14 +16,23 @@
 
 package models
 
-import models.CaseStatus.CaseStatus
-
-object CaseStatus extends Enumeration {
-  type CaseStatus = Value
-  val DRAFT, NEW, OPEN, SUPPRESSED, REFERRED, REJECTED, CANCELLED, SUSPENDED, COMPLETED, REVOKED, ANNULLED = Value
+trait Pagination {
+  val page: Int
+  val pageSize: Int
 }
 
-case class Status
+object Pagination {
+  val unlimited: Int = Integer.MAX_VALUE
+}
+
+case class SearchPagination
 (
-  status: CaseStatus
-)
+  override val page: Int = 1,
+  override val pageSize: Int = 50
+) extends Pagination
+
+case class NoPagination
+(
+  override val page: Int = 1,
+  override val pageSize: Int = Pagination.unlimited
+) extends Pagination
