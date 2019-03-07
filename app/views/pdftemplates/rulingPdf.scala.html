@@ -23,18 +23,13 @@
 @import views.ViewUtils._
 @import utils.Dates
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse])(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, d: Decision)(implicit request: Request[_], messages: Messages)
 
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
     val protocol = if(req.secure) "https" else "http"
     s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 }
-
-@sectionHeading(headerId: String) = {
-    <h2 id=@headerId>@messages(headerId)</h2>
-}
-
 
 <html>
     <head>
@@ -44,60 +39,39 @@
                     font-family: "nta", Arial, sans-serif;
                 }
 
-                table {
-                    width: 100%;
-                    font-size: 21px;
-                    line-height: 1.31579;
-                    border-collapse: collapse;
+                .box {
+                    border: 1px solid #000000;
+                    padding: 0px 10px 0px 10px;
                 }
 
-                td {
-                    padding: 8px 0px 8px 0px;
-                    border-bottom: 1px solid #bfc1c3;
-                    vertical-align: top;
-                }
-
-                td:nth-child(n) {
-                    width: 65%;
-                }
-
-                .title {
-                    align-content: center;
-                    text-align: center;
-                }
-
-                table.header td:nth-child(1) {
-                    width: 10%;
-                }
-
-                table.header td {
-                    border-bottom: 0px
+                .section-label {
+                    font-weight: bold;
                 }
         </style>
 
     </head>
     <body>
         <div class="centered-content">
-            <table class="header">
-                <tr>
-                    <td><img src="@createLink("images/hmrc-logo.jpg")" width="150" height="100"></td>
-                    <td> <h1 class="title">@messages("pdf.application.title")</h1> </td>
-                </tr>
-            </table>
+
+            <img src="@createLink("images/hmrc-logo.jpg")">
+            <h1 class="title">@messages("pdf.ruling.title")</h1>
 
             <div class="box">
-                <span>@messages("pdf.ruling.issuedBy.label"):</span> @messages("pdf.ruling.issuedBy.text")
+                <p>
+                    <span class="section-label">@messages("pdf.ruling.issuedBy.label"):
+                    </span> @messages("pdf.ruling.issuedBy.text")
+                </p>
             </div>
 
-            <div class="box">
+            <div id="section-holder" class="box">
                 <h2>@messages("pdf.ruling.section.holder.heading")</h2>
                 <p>
-                    <span class="section-label">@messages("pdf.ruling.section.holder.note.label")
-                        :</span> @messages("pdf.ruling.section.holder.note.text")
+                    <span class="section-label">@messages("pdf.ruling.section.holder.note.label"):</span>
+                    @messages("pdf.ruling.section.holder.note.text")
                 </p>
                 <p>
-                    <span class="section-label">@messages("pdf.ruling.section.holder.name.label")
-                        :</span> @c.application.holder.businessName
+                    <span class="section-label">@messages("pdf.ruling.section.holder.name.label"):</span>
+                    @c.application.holder.businessName
                 </p>
                 <p>
                     <span class="section-label">@messages("pdf.ruling.section.holder.address.label"):</span><br/>
@@ -107,7 +81,52 @@
                     @c.application.holder.postcode <br/>
                     @c.application.holder.country
                 </p>
+                <p>
+                    <span class="section-label">@messages("pdf.ruling.section.holder.eori.label"):</span>
+                    @c.application.holder.eori
+                </p>
+            </div>
+            <div id="section-ruling" class="box">
+                <h2>@messages("pdf.ruling.section.ruling.heading")</h2>
+                <p>
+                    <span class="section-label">@messages("pdf.ruling.section.ruling.commodityCode.label"):</span>
+                    @d.bindingCommodityCode
+                </p>
+                <p>
+                    <span class="section-label">@messages("pdf.ruling.section.ruling.rulingReference.label"):</span>
+                    @messages("caseReference.format", c.reference)
+                </p>
+                <p>
+                    <span class="section-label">@messages("pdf.ruling.section.ruling.validFrom.label"):</span>
+                    @Dates.format(d.effectiveStartDate.get)
+                </p>
+                <p>
+                    <span class="section-label">@messages("pdf.ruling.section.ruling.validTo.label"):</span>
+                    @Dates.format(d.effectiveEndDate.get)
+                </p>
+            </div>
 
+            <div class="box">
+                <p class="section-label">@messages("pdf.ruling.section.ruling.description.label")</p>
+                @d.goodsDescription
+            </div>
+
+            <div class="box">
+                <p>
+                    <span class="section-label">@messages("pdf.ruling.section.ruling.commercialDenomination.label")</span>
+                    <span>@messages("pdf.ruling.section.ruling.commercialDenomination.sublabel")</span>
+                </p>
+                @d.methodCommercialDenomination.getOrElse("")
+            </div>
+
+            <div class="box">
+                <p class="section-label">@messages("pdf.ruling.section.ruling.justification.label")</p>
+                @d.justification
+            </div>
+
+            <div class="box">
+                <p class="section-label">@messages("pdf.ruling.section.ruling.legalInformation.label")</p>
+                <span>@messages("pdf.ruling.section.ruling.legalInformation.text")</span>
             </div>
 
         </div>

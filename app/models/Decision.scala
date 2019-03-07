@@ -18,25 +18,14 @@ package models
 
 import java.time.Instant
 
-case class NewCaseRequest
+case class Decision
 (
-  application: Application,
-  attachments: Seq[Attachment] = Seq.empty
+  bindingCommodityCode: String,
+  effectiveStartDate: Option[Instant] = None,
+  effectiveEndDate: Option[Instant] = None,
+  justification: String,
+  goodsDescription: String,
+  methodSearch: Option[String] = None,
+  methodCommercialDenomination: Option[String] = None,
+  methodExclusion: Option[String] = None
 )
-
-case class Case
-(
-  reference: String,
-  createdDate: Instant,
-  application: Application,
-  decision: Option[Decision] = None,
-  attachments: Seq[Attachment] = Seq.empty
-) {
-  def hasEoriNumber(eoriNumber: String): Boolean = {
-    application.holder.eori == eoriNumber ||
-      application.agent.exists(_.eoriDetails.eori == eoriNumber)
-  }
-  def hasRuling: Boolean = {
-    decision.exists(d => d.effectiveStartDate.isDefined && d.effectiveEndDate.isDefined)
-  }
-}

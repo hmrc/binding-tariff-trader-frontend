@@ -41,7 +41,7 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
   private val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
   private val auditConnector = new DefaultAuditConnector(fakeApplication.configuration, fakeApplication.injector.instanceOf[Environment])
   private val client = new DefaultHttpClient(fakeApplication.configuration, auditConnector, wsClient, actorSystem)
-  private implicit val hc = HeaderCarrier()
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private val connector = new BindingTariffClassificationConnector(configuration, client)
 
@@ -67,6 +67,19 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
       )
 
       await(connector.createCase(request)) shouldBe response
+    }
+
+    "Find valid case" in {
+      val responseJSON = Json.toJson(oCase.btiCaseExample).toString()
+
+      stubFor(get(urlEqualTo("/cases/id"))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_OK)
+          .withBody(responseJSON)
+        )
+      )
+
+      await(connector.findCase("id")) shouldBe Some(oCase.btiCaseExample)
     }
 
     "propagate errors" in {

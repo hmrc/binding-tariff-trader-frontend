@@ -396,6 +396,7 @@ pdf.application.footer.sendingSamples.html = <p>You must label your sample with 
 pdf.application.footer.sendingSamplesTo.heading = Send your samples to
 
 
+pdf.ruling.title = Binding Tariff Information ruling
 pdf.ruling.issuedBy.label = Issued by
 pdf.ruling.issuedBy.text = HMRC Classification Team
 pdf.ruling.section.holder.heading = Holder details
@@ -404,4 +405,14 @@ pdf.ruling.section.holder.note.text = These holder details are not included in t
 pdf.ruling.section.holder.name.label = Name
 pdf.ruling.section.holder.address.label = Address
 pdf.ruling.section.holder.eori.label = EORI number
-
+pdf.ruling.section.ruling.heading = Ruling details
+pdf.ruling.section.ruling.commodityCode.label = Commodity code
+pdf.ruling.section.ruling.rulingReference.label = Ruling reference
+pdf.ruling.section.ruling.validFrom.label = Valid from
+pdf.ruling.section.ruling.validTo.label = Expires on
+pdf.ruling.section.ruling.description.label = Description of the item
+pdf.ruling.section.ruling.commercialDenomination.label = Commercial denomination
+pdf.ruling.section.ruling.commercialDenomination.sublabel = (confidential information not included in the published ruling)
+pdf.ruling.section.ruling.justification.label = Justification
+pdf.ruling.section.ruling.legalInformation.label = Legal information about this ruling
+pdf.ruling.section.ruling.legalInformation.text = This ruling is valid for 3 years and has been issued under the authority of HM Revenue & Customs. The information provided in the application will be stored on a UK database this includes photographs, brochures and images. The holder details and commercial denomination information shown in this ruling will not be published on the UK public rulings website. Information about the item that was not marked as confidential in the application may have been used as part of the published ruling. The holder has the right to appeal against this Binding Tariff Information ruling.

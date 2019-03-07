@@ -28,6 +28,7 @@ object JsonFormatters {
   implicit val eoriDetailsFormat: OFormat[EORIDetails] = Json.format[EORIDetails]
   implicit val agentDetailsFormat: OFormat[AgentDetails] = Json.format[AgentDetails]
   implicit val applicationFormat: OFormat[Application] = Json.format[Application]
+  implicit val decisionFormat: OFormat[Decision] = Json.format[Decision]
   implicit val caseFormat: OFormat[Case] = Json.format[Case]
   implicit val newCaseRequestFormat: OFormat[NewCaseRequest] = Json.format[NewCaseRequest]
   implicit val caseAuditPayloadFormat: OFormat[CaseAuditPayload] = Json.format[CaseAuditPayload]

@@ -49,13 +49,11 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
   }
 
   def ruling(reference: String): Action[AnyContent] = identify.async { implicit request =>
-    caseService.getCaseForUser(request.eoriNumber, reference) flatMap { c: Case =>
-      fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
-        pdfService.generatePdf(rulingPdf(appConfig, c, attachmentData)).map { binaryFile =>
-          Results.Ok(binaryFile.content)
-            .as(binaryFile.contentType)
-            .withHeaders(CONTENT_DISPOSITION -> s"filename=BTIRuling$reference.pdf")
-        }
+    caseService.getCaseWithRulingForUser(request.eoriNumber, reference) flatMap { c: Case =>
+      pdfService.generatePdf(rulingPdf(appConfig, c, c.decision.get)).map { binaryFile =>
+        Results.Ok(binaryFile.content)
+          .as(binaryFile.contentType)
+          .withHeaders(CONTENT_DISPOSITION -> s"filename=BTIRuling$reference.pdf")
       }
     }
   }

@@ -31,7 +31,7 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
   private def createView(c: Case, attachments: Seq[FilestoreResponse]) = applicationPdf(frontendAppConfig, c, attachments)(fakeRequest, messages)
 
 
-  "Check Your Answers view" must {
+  "Application pdf view" must {
 
     "contain the details for a trader" in {
       val doc = asDocument(createView(traderCase, Seq.empty))

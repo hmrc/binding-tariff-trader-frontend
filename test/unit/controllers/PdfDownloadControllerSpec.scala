@@ -37,6 +37,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
   private val fileService = mock[FileService]
   private val expectedResult = PdfFile("Some content".getBytes)
   private val testCase = oCase.btiCaseExample
+  private val testCaseWithRuling = oCase.btiCaseWithRulingExample
   private val caseRef = "123"
   private val userEori = "eori-789012"
 
@@ -53,12 +54,17 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     )
   }
 
-  private def givenTheCaseServiceFindsTheCase(expectedCase: Case): Unit = {
-    when(caseService.getCaseForUser(any[String], any[String])(any[HeaderCarrier])).thenReturn(successful(expectedCase))
+  private def givenTheCaseServiceFindsTheCase(): Unit = {
+    when(caseService.getCaseForUser(any[String], any[String])(any[HeaderCarrier])).thenReturn(successful(testCase))
+  }
+
+  private def givenTheCaseServiceFindsTheCaseWithRuling(): Unit = {
+    when(caseService.getCaseWithRulingForUser(any[String], any[String])(any[HeaderCarrier])).thenReturn(successful(testCaseWithRuling))
   }
 
   private def givenTheCaseServiceDoesNotFindTheCase(): Unit = {
     when(caseService.getCaseForUser(any[String], any[String])(any[HeaderCarrier])).thenReturn(failed(new RuntimeException("Case not found")))
+    when(caseService.getCaseWithRulingForUser(any[String], any[String])(any[HeaderCarrier])).thenReturn(failed(new RuntimeException("Case not found")))
   }
 
   private def givenTheFileServiceFindsTheAttachements(): Unit = {
@@ -69,10 +75,10 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     when(pdfService.generatePdf(any[Html])).thenReturn(successful(expectedResult))
   }
 
-  "PdfDownloadController Controller" must {
+  "PdfDownloadController Application" must {
 
     "return return PdfService result" in {
-      givenTheCaseServiceFindsTheCase(testCase)
+      givenTheCaseServiceFindsTheCase()
       givenTheFileServiceFindsTheAttachements()
       givenThePdfServiceGeneratesThePdf()
 
@@ -88,6 +94,30 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val caught: Exception = intercept[Exception] {
         await(controller().application(caseRef)(fakeIdentityRequest))
+      }
+      caught.getMessage mustBe "Case not found"
+    }
+
+  }
+
+  "PdfDownloadController Ruling" must {
+
+    "return return PdfService result" in {
+      givenTheCaseServiceFindsTheCaseWithRuling()
+      givenThePdfServiceGeneratesThePdf()
+
+      val result = controller().ruling(caseRef)(fakeIdentityRequest)
+
+      status(result) mustBe OK
+      contentAsString(result) mustBe "Some content"
+      contentType(result) mustBe Some("application/pdf")
+    }
+
+    "error when case not found" in {
+      givenTheCaseServiceDoesNotFindTheCase()
+
+      val caught: Exception = intercept[Exception] {
+        await(controller().ruling(caseRef)(fakeIdentityRequest))
       }
       caught.getMessage mustBe "Case not found"
     }
