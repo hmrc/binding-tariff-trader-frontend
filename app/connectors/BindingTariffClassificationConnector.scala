@@ -19,7 +19,8 @@ package connectors
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import javax.inject.Singleton
-import models.{Case, NewCaseRequest}
+import models.CaseStatus.CaseStatus
+import models.{Case, NewCaseRequest, Paged, Pagination}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
@@ -40,7 +41,7 @@ class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppC
     client.GET[Option[Case]](url)
   }
 
-  def findCasesByEori(eori: String, pagination: Pagination)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
+  def findCasesBy(eori: String, pagination: Pagination)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
     val url = s"${configuration.bindingTariffClassificationUrl}/cases?eori=$eori&page=${pagination.page}&page_size=${pagination.pageSize}"
     client.GET[Paged[Case]](url)
   }

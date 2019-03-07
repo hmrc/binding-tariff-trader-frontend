@@ -33,7 +33,7 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector){
   }
 
   def findApplicationsBy(eori: String, pagination: Pagination)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
-    connector.findCasesByEori(eori, pagination)
+    connector.findCasesBy(eori, pagination)
   }
 
   private val rulingStatuses = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
