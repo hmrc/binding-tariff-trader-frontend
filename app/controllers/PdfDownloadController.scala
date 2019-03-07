@@ -42,7 +42,19 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
         pdfService.generatePdf(applicationPdf(appConfig, c, attachmentData)).map { binaryFile =>
           Results.Ok(binaryFile.content)
             .as(binaryFile.contentType)
-            .withHeaders(CONTENT_DISPOSITION -> s"filename=confirmation_$reference.pdf")
+            .withHeaders(CONTENT_DISPOSITION -> s"filename=BTIConfirmation$reference.pdf")
+        }
+      }
+    }
+  }
+
+  def ruling(reference: String): Action[AnyContent] = identify.async { implicit request =>
+    caseService.getCaseForUser(request.eoriNumber, reference) flatMap { c: Case =>
+      fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
+        pdfService.generatePdf(applicationPdf(appConfig, c, attachmentData)).map { binaryFile =>
+          Results.Ok(binaryFile.content)
+            .as(binaryFile.contentType)
+            .withHeaders(CONTENT_DISPOSITION -> s"filename=BTIRuling$reference.pdf")
         }
       }
     }

@@ -394,3 +394,14 @@ pdf.application.footer.whatHappensNext.html = <p>The classification team will is
 pdf.application.footer.sendingSamples.heading = Sending samples
 pdf.application.footer.sendingSamples.html = <p>You must label your sample with the application reference number (GB@c.reference).</p><p>If you are sending samples the application will not be processed until they have been received.</p><p>Get more information about samples on GOV.UK Binding Tariff Information (Notice 600).</p>
 pdf.application.footer.sendingSamplesTo.heading = Send your samples to
+
+
+pdf.ruling.issuedBy.label = Issued by
+pdf.ruling.issuedBy.text = HMRC Classification Team
+pdf.ruling.section.holder.heading = Holder details
+pdf.ruling.section.holder.note.label = Note
+pdf.ruling.section.holder.note.text = These holder details are not included in the published ruling
+pdf.ruling.section.holder.name.label = Name
+pdf.ruling.section.holder.address.label = Address
+pdf.ruling.section.holder.eori.label = EORI number
+
