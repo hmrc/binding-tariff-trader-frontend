@@ -22,7 +22,7 @@ The Front-end microrservice for the BTI Application journey on GOV.UK
 7) Start Auth Identity verification `sm --start IDENTITY_VERIFICATION -r`
 8) Start User Details `sm --start USER_DETAILS -r`
 9) Start [Pdf Generator Service](https://github.com/hmrc/binding-tariff-classification)
- `sm --start USER_DETAILS -r` (Requires first installing dependencies - see link)
+ `sm --start PDF_GENERATOR_SERVICE -r` (Requires first installing dependencies - see link)
 
 ##### Running With SBT
 
