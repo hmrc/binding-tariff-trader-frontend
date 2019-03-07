@@ -49,6 +49,11 @@ label > .bold {
 
 // Margin Bottom
 
+
+.mb-2 {
+  margin-bottom: ($spacer * 0.5) !important;
+}
+
 .mb-5 {
   margin-bottom: ($spacer * 1.25) !important;
 }
@@ -74,3 +79,42 @@ label > .bold {
   margin-top: ($spacer * .75) !important;
   margin-bottom: ($spacer * .75) !important;
 }
+
+// Padding Left
+
+.pl-1 {
+  padding-left: 1em
+}
+
+.mx-5 {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+
+/*
+====================================
+Colors
+====================================
+*/
+
+.color-green {
+  color : #006435;
+}
+
+.color-red {
+  color : #B10E1E;
+}
+
+
+/*
+====================================
+Layout
+====================================
+*/
+
+
+.align-right {
+  text-align: right;
+}
+

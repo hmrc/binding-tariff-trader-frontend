@@ -17,11 +17,10 @@
 package navigation
 
 import base.SpecBase
-import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
 import controllers.routes
-import pages._
 import models._
+import org.scalatest.mockito.MockitoSugar
+import pages._
 
 class NavigatorSpec extends SpecBase with MockitoSugar {
 
@@ -34,7 +33,7 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
       "go to Index from a page that doesn't exist in the route map" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) mustBe routes.IndexController.onPageLoad()
+        navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) mustBe routes.IndexController.getApplications()
       }
     }
 

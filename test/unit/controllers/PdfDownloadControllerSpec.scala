@@ -37,7 +37,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
   private val fileService = mock[FileService]
   private val expectedResult = PdfFile("Some content".getBytes)
   private val testCase = oCase.btiCaseExample
-  private val testCaseWithRuling = oCase.btiCaseWithRulingExample
+  private val testCaseWithRuling = oCase.btiCaseWithDecision
   private val caseRef = "123"
   private val userEori = "eori-789012"
 

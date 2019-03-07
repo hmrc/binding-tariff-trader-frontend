@@ -395,7 +395,6 @@ pdf.application.footer.sendingSamples.heading = Sending samples
 pdf.application.footer.sendingSamples.html = <p>You must label your sample with the application reference number (GB@c.reference).</p><p>If you are sending samples the application will not be processed until they have been received.</p><p>Get more information about samples on GOV.UK Binding Tariff Information (Notice 600).</p>
 pdf.application.footer.sendingSamplesTo.heading = Send your samples to
 
-
 pdf.ruling.title = Binding Tariff Information ruling
 pdf.ruling.issuedBy.label = Issued by
 pdf.ruling.issuedBy.text = HMRC Classification Team
@@ -416,3 +415,44 @@ pdf.ruling.section.ruling.commercialDenomination.sublabel = (confidential inform
 pdf.ruling.section.ruling.justification.label = Justification
 pdf.ruling.section.ruling.legalInformation.label = Legal information about this ruling
 pdf.ruling.section.ruling.legalInformation.text = This ruling is valid for 3 years and has been issued under the authority of HM Revenue & Customs. The information provided in the application will be stored on a UK database this includes photographs, brochures and images. The holder details and commercial denomination information shown in this ruling will not be published on the UK public rulings website. Information about the item that was not marked as confidential in the application may have been used as part of the published ruling. The holder has the right to appeal against this Binding Tariff Information ruling.
+
+case.tabs.applications = Applications
+
+case.tabs.applications.notSubmitted = Submitted applications will appear here
+
+case.tabs.applications.table.reference = Reference
+case.tabs.applications.table.itemName = Item name
+case.tabs.applications.table.dateSubmitted = Date submitted
+case.tabs.applications.table.status = Status
+case.tabs.applications.table.download = Download Application
+
+case.applications.pagination.singular = application
+case.applications.pagination.plural = applications
+
+case.application.status.inProgress = In progress
+case.application.status.rejected = Rejected
+case.application.status.infoRequested = Info requested
+case.application.status.completed = Completed
+case.application.status.draft = Draft
+
+case.application.downloadPdf = Download PDF
+
+case.tabs.rulings = Rulings
+case.rulings.noRulings = BTI Rulings will appear here
+
+case.rulings.table.reference = reference
+case.rulings.table.itemName = Item name
+case.rulings.table.commodityCode = Commodity code
+case.rulings.table.startDate = Start date
+case.rulings.table.endDate = End date
+case.rulings.table.status = Status
+case.rulings.table.downloadBTI = Download BTI
+
+case.rulings.pagination.singular = ruling
+case.rulings.pagination.plural = rulings
+
+case.ruling.status.cancelled = Cancelled
+case.ruling.status.active = Active
+case.ruling.status.expired = Expired
+
+case.ruling.downloadPdf = Download PDF

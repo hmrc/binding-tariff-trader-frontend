@@ -16,19 +16,40 @@
 
 package controllers
 
+import config.FrontendAppConfig
+import controllers.actions.IdentifierAction
 import javax.inject.Inject
-
+import models.SearchPagination
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import service.CasesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import config.FrontendAppConfig
+import views.CaseDetailTab
+import views.html.components.{table_applications, table_rulings}
 import views.html.index
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future.successful
+
 class IndexController @Inject()(val appConfig: FrontendAppConfig,
+                                identify: IdentifierAction,
+                                service: CasesService,
                                 val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    Ok(index(appConfig))
+  def getApplications(page : Int): Action[AnyContent] = identify.async { implicit request =>
+
+    service.findApplicationsBy(request.eoriNumber, SearchPagination(page)) flatMap { pagedResult =>
+      successful(Ok(index(appConfig, CaseDetailTab.APPLICATION, table_applications(pagedResult))))
+    }
   }
+
+  def getRulings(page : Int): Action[AnyContent] = identify.async { implicit request =>
+
+    service.findRulingsBy(request.eoriNumber, SearchPagination(page)) flatMap { pagedResult =>
+      successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult) )))
+    }
+  }
+
+
 
 }

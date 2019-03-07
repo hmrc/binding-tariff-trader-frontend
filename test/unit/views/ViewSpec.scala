@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package models
+package views
 
-import models.CaseStatus.CaseStatus
+import config.FrontendAppConfig
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.twirl.api.Html
+import uk.gov.hmrc.play.test.UnitSpec
 
-object CaseStatus extends Enumeration {
-  type CaseStatus = Value
-  val DRAFT, NEW, OPEN, SUPPRESSED, REFERRED, REJECTED, CANCELLED, SUSPENDED, COMPLETED, REVOKED, ANNULLED = Value
+abstract class ViewSpec extends UnitSpec with GuiceOneAppPerSuite {
+
+  private def injector = app.injector
+
+  implicit val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+
+  protected def view(html: Html): Document = {
+    Jsoup.parse(html.toString())
+  }
+
 }
-
-case class Status
-(
-  status: CaseStatus
-)

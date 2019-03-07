@@ -18,7 +18,6 @@ package utils
 
 import audit.CaseAuditPayload
 import models._
-import models.response.FilestoreResponse
 import play.api.libs.json._
 
 object JsonFormatters {

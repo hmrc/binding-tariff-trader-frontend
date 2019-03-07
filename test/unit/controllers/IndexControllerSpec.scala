@@ -16,21 +16,70 @@
 
 package controllers
 
+import controllers.actions.FakeIdentifierAction
+import models.oCase._
+import models.{Case, Paged, SearchPagination}
+import org.mockito.ArgumentMatchers._
+import org.mockito.BDDMockito.given
+import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers._
-import views.html.index
+import service.CasesService
+import uk.gov.hmrc.http.HeaderCarrier
 
-class IndexControllerSpec extends ControllerSpecBase {
+import scala.concurrent.Future
+
+class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
+
+  private val casesService = mock[CasesService]
 
   "Index Controller" must {
-    "return 200 for a GET" in {
-      val result = new IndexController(frontendAppConfig, messagesApi).onPageLoad()(fakeRequest)
+
+    "return the correct view for a load applications" in {
+
+      given(casesService.findApplicationsBy(any[String], refEq(SearchPagination()))(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
+
+      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getApplications(page = 1)(fakeRequest)
+
       status(result) mustBe OK
+      contentAsString(result) must include("applications-list-table")
     }
 
-    "return the correct view for a GET" in {
-      val result = new IndexController(frontendAppConfig, messagesApi).onPageLoad()(fakeRequest)
-      contentAsString(result) mustBe index(frontendAppConfig)(fakeRequest, messages).toString
+    "return the correct view for a load rulings" in {
+
+      given(casesService.findRulingsBy(any[String], refEq(SearchPagination()))(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq(btiCaseWithDecision), 1, 10, 0)))
+
+      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getRulings(page = 1)(fakeRequest)
+
+      status(result) mustBe OK
+      contentAsString(result) must include("rulings-list-table")
+      contentAsString(result) must include("")
     }
+
+
+    "return 200 and show no results for a GET when no applications are found" in {
+      given(casesService.findApplicationsBy(any[String], refEq(SearchPagination()))(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq[Case](), 1, 10, 0)))
+
+      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getApplications(page = 1)(fakeRequest)
+
+      status(result) mustBe OK
+      contentAsString(result) must include("application-list-empty")
+
+    }
+
+    "return 200 and show no results  for a GET when no rulings are found" in {
+
+      given(casesService.findRulingsBy(any[String], refEq(SearchPagination()))(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq[Case](), 1, 10, 0)))
+
+      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getRulings(page = 1)(fakeRequest)
+
+      status(result) mustBe OK
+      contentAsString(result) must include("ruling-list-empty")
+    }
+
   }
 
 }

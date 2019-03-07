@@ -78,7 +78,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
       given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
 
       val caught = intercept[RuntimeException] {
-        await(service.getCaseForUser("someEORT", caseRef)(HeaderCarrier()))
+        await(service.getCaseForUser("someEORI", caseRef)(HeaderCarrier()))
       }
       caught.getMessage shouldBe "Case not found"
     }
@@ -88,7 +88,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
       given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willThrow(exception)
 
       val caught = intercept[RuntimeException] {
-        await(service.getCaseForUser("eort", caseRef)(HeaderCarrier()))
+        await(service.getCaseForUser("eori", caseRef)(HeaderCarrier()))
       }
       caught shouldBe exception
     }
@@ -97,14 +97,14 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
   "Service 'Get Case With Ruling For User'" should {
 
     "return ruling case for trader" in {
-      val traderCase = oCase.btiCaseWithRulingExample.copy(application = oCase.btiApplicationExample.copy(agent = None))
+      val traderCase = oCase.btiCaseWithDecision.copy(application = oCase.btiApplicationExample.copy(agent = None))
       given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(traderCase)))
 
       await(service.getCaseWithRulingForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe traderCase
     }
 
     "return ruling case for agent for both agent and trader" in {
-      val agentCase = oCase.btiCaseWithRulingExample
+      val agentCase = oCase.btiCaseWithDecision
       given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
 
       await(service.getCaseWithRulingForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe agentCase
@@ -112,7 +112,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
     }
 
     "not return ruling case for another EORI" in {
-      val someCase = oCase.btiCaseWithRulingExample
+      val someCase = oCase.btiCaseWithDecision
       given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
 
       val caught = intercept[RuntimeException] {

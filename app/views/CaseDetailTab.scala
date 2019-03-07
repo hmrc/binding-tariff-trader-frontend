@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package models
+package views
 
-import models.CaseStatus.CaseStatus
-
-object CaseStatus extends Enumeration {
-  type CaseStatus = Value
-  val DRAFT, NEW, OPEN, SUPPRESSED, REFERRED, REJECTED, CANCELLED, SUSPENDED, COMPLETED, REVOKED, ANNULLED = Value
+object CaseDetailTab extends Enumeration {
+  type CaseDetailTab  = Value
+  val APPLICATION: views.CaseDetailTab.Value = Value("application")
+  val RULING: views.CaseDetailTab.Value = Value("ruling")
 }
-
-case class Status
-(
-  status: CaseStatus
-)

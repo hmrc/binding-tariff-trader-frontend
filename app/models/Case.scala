@@ -17,6 +17,7 @@
 package models
 
 import java.time.Instant
+import models.CaseStatus.CaseStatus
 
 case class NewCaseRequest
 (
@@ -27,16 +28,19 @@ case class NewCaseRequest
 case class Case
 (
   reference: String,
-  createdDate: Instant,
+  status: CaseStatus,
+  createdDate: Instant = Instant.now,
   application: Application,
   decision: Option[Decision] = None,
   attachments: Seq[Attachment] = Seq.empty
 ) {
-  def hasEoriNumber(eoriNumber: String): Boolean = {
-    application.holder.eori == eoriNumber ||
-      application.agent.exists(_.eoriDetails.eori == eoriNumber)
-  }
-  def hasRuling: Boolean = {
-    decision.exists(d => d.effectiveStartDate.isDefined && d.effectiveEndDate.isDefined)
-  }
+
+  def hasEoriNumber(eoriNumber: String): Boolean = application.holder.eori == eoriNumber || application.agent.exists(_.eoriDetails.eori == eoriNumber)
+
+  def hasActiveDecision: Boolean = this.decision.flatMap(_.effectiveEndDate).exists(_.compareTo(Instant.now) >= 0)
+
+  def hasExpiredDecision: Boolean = this.decision.flatMap(_.effectiveEndDate).exists(_.compareTo(Instant.now) < 0)
+
+  def hasRuling: Boolean = decision.exists(d => d.effectiveStartDate.isDefined && d.effectiveEndDate.isDefined)
+
 }

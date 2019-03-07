@@ -16,52 +16,85 @@
 
 package views
 
-import models.response.FilestoreResponse
 import models.{Case, oCase}
-import utils.Dates
+import utils.Dates.format
 import views.html.pdftemplates.rulingPdf
 
 class RulingPdfViewSpec extends ViewSpecBase {
 
   private def createView(c: Case) = rulingPdf(frontendAppConfig, c, c.decision.get)(fakeRequest, messages)
 
-  private val rulingCase = oCase.btiCaseWithRulingExample
+  private val rulingCase = oCase.btiCaseWithDecision
   private val holder = rulingCase.application.holder
   private val ruling = rulingCase.decision.getOrElse(throw new Exception("Bad test data"))
   private val doc = asDocument(createView(rulingCase))
 
   "Ruling pdf holder section" must {
 
+    val section = "section-holder"
+
     "contain the holders name" in {
-      assertSectionContains("section-holder", holder.businessName)
+      assertSectionContains(section, holder.businessName)
     }
 
     "contain the holders address" in {
-      assertSectionContains("section-holder", holder.addressLine1)
-      assertSectionContains("section-holder", holder.addressLine2)
-      assertSectionContains("section-holder", holder.addressLine3)
-      assertSectionContains("section-holder", holder.postcode)
-      assertSectionContains("section-holder", holder.country)
+      assertSectionContains(section, holder.addressLine1)
+      assertSectionContains(section, holder.addressLine2)
+      assertSectionContains(section, holder.addressLine3)
+      assertSectionContains(section, holder.postcode)
+      assertSectionContains(section, holder.country)
     }
 
     "contain the holders EORI" in {
-      assertSectionContains("section-holder", holder.eori)
+      assertSectionContains(section, holder.eori)
     }
   }
 
   "Ruling pdf ruling section" must {
 
+    val section = "section-ruling"
+
     "contain the binding commodity code" in {
-      assertSectionContains("section-ruling", ruling.bindingCommodityCode )
+      assertSectionContains(section, ruling.bindingCommodityCode )
     }
 
     "contain the case reference" in {
-      assertSectionContains("section-ruling", rulingCase.reference )
+      assertSectionContains(section, rulingCase.reference )
     }
 
-
     "contain the ruling start data" in {
-      assertSectionContains("section-ruling", Dates.format(ruling.effectiveStartDate.get))
+      assertSectionContains(section, format(ruling.effectiveStartDate))
+    }
+
+    "contain the ruling end data" in {
+      assertSectionContains(section, format(ruling.effectiveEndDate))
+    }
+  }
+
+  "Ruling pdf goods section" must {
+
+    val section = "section-goods"
+
+    "contain the good description" in {
+      assertSectionContains(section, ruling.goodsDescription)
+    }
+  }
+
+  "Ruling pdf goods commercial denomination" must {
+
+    val section = "section-commercial"
+
+    "contain the good description" in {
+      assertSectionContains(section, ruling.methodCommercialDenomination.getOrElse(throw new Exception("Bad test data")))
+    }
+  }
+
+  "Ruling pdf justification" must {
+
+    val section = "section-justification"
+
+    "contain the good description" in {
+      assertSectionContains(section, ruling.justification)
     }
   }
 

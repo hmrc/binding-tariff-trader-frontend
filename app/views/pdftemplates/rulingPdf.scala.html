@@ -106,12 +106,12 @@
                 </p>
             </div>
 
-            <div class="box">
+            <div id="section-goods" class="box">
                 <p class="section-label">@messages("pdf.ruling.section.ruling.description.label")</p>
                 @d.goodsDescription
             </div>
 
-            <div class="box">
+            <div id="section-commercial" class="box">
                 <p>
                     <span class="section-label">@messages("pdf.ruling.section.ruling.commercialDenomination.label")</span>
                     <span>@messages("pdf.ruling.section.ruling.commercialDenomination.sublabel")</span>
@@ -119,7 +119,7 @@
                 @d.methodCommercialDenomination.getOrElse("")
             </div>
 
-            <div class="box">
+            <div id="section-justification" class="box">
                 <p class="section-label">@messages("pdf.ruling.section.ruling.justification.label")</p>
                 @d.justification
             </div>

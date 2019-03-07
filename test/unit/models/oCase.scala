@@ -42,16 +42,20 @@ object oCase {
     sampleToBeProvided = false,
     sampleToBeReturned = false
   )
+
   val decisionExample = Decision(
-    bindingCommodityCode =  "BindingCode223",
-    effectiveStartDate =  Some(Instant.now()),
-    effectiveEndDate = Some(Instant.now.plusSeconds(2 * 365 * 24 * 60 * 60)),
-    justification = "Justification",
-    goodsDescription = "Goods Description",
-    methodCommercialDenomination = Some("Commercial Denomination")
+    bindingCommodityCode = "commodity-code-123",
+    effectiveStartDate = Some(Instant.now),
+    effectiveEndDate = Some(Instant.now),
+    justification = "justification-content",
+    goodsDescription = "goodsDescription-content",
+    methodCommercialDenomination = Some("commercial-denomination-content")
   )
-  val btiCaseExample: Case = Case("1234", Instant.now(), btiApplicationExample, None, Seq.empty)
-  val newBtiCaseExample: NewCaseRequest = NewCaseRequest(btiApplicationExample, Seq.empty)
-  val btiCaseWithRulingExample: Case = btiCaseExample.copy(decision = Some(decisionExample))
+
+
+  val btiCaseWithDecision = Case(reference = "ref", status = CaseStatus.COMPLETED, application = btiApplicationExample, decision = Some(decisionExample))
+
+  val btiCaseExample = Case(reference = "ref", status = CaseStatus.OPEN, application = btiApplicationExample)
+  val newBtiCaseExample = NewCaseRequest(btiApplicationExample, Seq.empty)
 
 }
