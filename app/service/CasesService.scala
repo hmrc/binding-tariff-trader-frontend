@@ -32,8 +32,8 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector) {
     connector.createCase(c)
   }
 
-  def findCases(eori: String, statuses: Set[CaseStatus], pagination: Pagination, sort: Sort)
-               (implicit hc: HeaderCarrier): Future[Paged[Case]] = {
+  def getCases(eori: String, statuses: Set[CaseStatus], pagination: Pagination, sort: Sort)
+              (implicit hc: HeaderCarrier): Future[Paged[Case]] = {
     connector.findCasesBy(eori, statuses, pagination, sort)
   }
 

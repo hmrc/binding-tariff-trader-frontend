@@ -43,7 +43,7 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
 
   def getApplications(page: Int): Action[AnyContent] = identify.async { implicit request =>
 
-    service.findCases(request.eoriNumber, applicationStatuses, SearchPagination(page), Sort()) flatMap { pagedResult =>
+    service.getCases(request.eoriNumber, applicationStatuses, SearchPagination(page), Sort()) flatMap { pagedResult =>
       successful(Ok(index(appConfig, CaseDetailTab.APPLICATION, table_applications(pagedResult))))
     }
   }
@@ -52,7 +52,7 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
   private val rulingStatuses = Set(CaseStatus.CANCELLED, CaseStatus.COMPLETED)
 
   def getRulings(page: Int): Action[AnyContent] = identify.async { implicit request =>
-    service.findCases(request.eoriNumber, rulingStatuses, SearchPagination(page), Sort(SortField.DECISION_START_DATE)) flatMap { pagedResult =>
+    service.getCases(request.eoriNumber, rulingStatuses, SearchPagination(page), Sort(SortField.DECISION_START_DATE)) flatMap { pagedResult =>
       successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult))))
     }
   }

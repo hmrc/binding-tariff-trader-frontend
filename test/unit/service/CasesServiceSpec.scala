@@ -17,7 +17,8 @@
 package service
 
 import connectors.BindingTariffClassificationConnector
-import models.{Case, NewCaseRequest, oCase}
+import models.CaseStatus.CaseStatus
+import models._
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
@@ -30,6 +31,8 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
   private val existingCase = mock[Case]
   private val newCase = mock[NewCaseRequest]
+  private val pagination = mock[Pagination]
+  private val sort = mock[Sort]
   private val connector = mock[BindingTariffClassificationConnector]
   private val traderEori = "eoriTrader"
   private val agentEori = "eoriAgent"
@@ -55,6 +58,30 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
       caught shouldBe exception
     }
   }
+
+  "Service 'find Cases'" should {
+
+    "return paged cases" in {
+
+      val pagedResult = Paged(Seq(oCase.btiCaseExample, oCase.btiCaseExample), 1, 2, 2)
+
+      given(connector.findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier]))
+        .willReturn(Future.successful(pagedResult))
+
+      await(service.getCases(caseRef, Set.empty, pagination, sort)(HeaderCarrier())) shouldBe pagedResult
+    }
+
+    "propagate any error" in {
+      val exception = new RuntimeException("Error")
+      given(connector.findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier])).willThrow(exception)
+
+      val caught = intercept[RuntimeException] {
+        await(service.getCases(caseRef, Set.empty, pagination, sort)(HeaderCarrier()))
+      }
+      caught shouldBe exception
+    }
+  }
+
 
   "Service 'Get Case For User'" should {
 
@@ -93,5 +120,6 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
       caught shouldBe exception
     }
   }
+
 
 }
