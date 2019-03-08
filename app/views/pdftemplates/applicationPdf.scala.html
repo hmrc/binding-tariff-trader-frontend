@@ -22,6 +22,7 @@
 @import models.response.FilestoreResponse
 @import views.ViewUtils._
 @import utils.Dates
+@import java.time.Instant
 
 @(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse])(implicit request: Request[_], messages: Messages)
 
@@ -72,6 +73,11 @@
 
                 table.header td {
                     border-bottom: 0px
+                }
+
+                .timestamp {
+                    font-size: 10px;
+                    text-align: right;
                 }
         </style>
 
@@ -259,6 +265,11 @@
                 <address>
                 @Html(messages("confirmation.sendingSamples.address"))
                 </address>
+            </div>
+
+            <br/>
+            <div id="footer.createdTimestamp" class="timestamp">
+                <span>@messages("pdf.ruling.created.label"): @Instant.now()</span>
             </div>
         </div>
 

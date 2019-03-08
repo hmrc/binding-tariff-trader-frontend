@@ -415,6 +415,7 @@ pdf.ruling.section.ruling.commercialDenomination.sublabel = (confidential inform
 pdf.ruling.section.ruling.justification.label = Justification
 pdf.ruling.section.ruling.legalInformation.label = Legal information about this ruling
 pdf.ruling.section.ruling.legalInformation.text = This ruling is valid for 3 years and has been issued under the authority of HM Revenue & Customs. The information provided in the application will be stored on a UK database this includes photographs, brochures and images. The holder details and commercial denomination information shown in this ruling will not be published on the UK public rulings website. Information about the item that was not marked as confidential in the application may have been used as part of the published ruling. The holder has the right to appeal against this Binding Tariff Information ruling.
+pdf.ruling.created.label = File created
 
 case.tabs.applications = Applications
 

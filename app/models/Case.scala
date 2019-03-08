@@ -41,6 +41,8 @@ case class Case
 
   def hasExpiredDecision: Boolean = this.decision.flatMap(_.effectiveEndDate).exists(_.compareTo(Instant.now) < 0)
 
-  def hasRuling: Boolean = decision.exists(d => d.effectiveStartDate.isDefined && d.effectiveEndDate.isDefined)
+  def hasRuling: Boolean = rulingStates.contains(status) && decision.isDefined
+
+  private def rulingStates = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
 
 }

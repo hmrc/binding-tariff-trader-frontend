@@ -67,14 +67,8 @@ class CaseSpec extends WordSpec with MustMatchers {
       oCase.btiCaseExample.hasRuling mustBe false
     }
 
-    "hasRuling returns false for case with decision but no end date" in {
-      val decision = oCase.btiCaseWithDecision.decision.map(_.copy(effectiveEndDate = None))
-      oCase.btiCaseWithDecision.copy(decision = decision).hasRuling mustBe false
-    }
-
-    "hasRuling returns false for case with decision but no start date" in {
-      val decision = oCase.btiCaseWithDecision.decision.map(_.copy(effectiveStartDate = None))
-      oCase.btiCaseWithDecision.copy(decision = decision).hasRuling mustBe false
+    "hasRuling returns false for case with wrong status" in {
+      oCase.btiCaseWithDecision.copy(status = CaseStatus.OPEN).hasRuling mustBe false
     }
 
     "hasRuling returns true for case with decision" in {

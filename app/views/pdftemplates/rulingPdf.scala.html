@@ -22,6 +22,7 @@
 @import models.response.FilestoreResponse
 @import views.ViewUtils._
 @import utils.Dates
+@import java.time.Instant
 
 @(appConfig: FrontendAppConfig, c: Case, d: Decision)(implicit request: Request[_], messages: Messages)
 
@@ -46,6 +47,11 @@
 
                 .section-label {
                     font-weight: bold;
+                }
+
+                .timestamp {
+                    font-size: 10px;
+                    text-align: right;
                 }
         </style>
 
@@ -98,11 +104,11 @@
                 </p>
                 <p>
                     <span class="section-label">@messages("pdf.ruling.section.ruling.validFrom.label"):</span>
-                    @Dates.format(d.effectiveStartDate.get)
+                    @Dates.format(d.effectiveStartDate)
                 </p>
                 <p>
                     <span class="section-label">@messages("pdf.ruling.section.ruling.validTo.label"):</span>
-                    @Dates.format(d.effectiveEndDate.get)
+                    @Dates.format(d.effectiveEndDate)
                 </p>
             </div>
 
@@ -128,6 +134,11 @@
             <div id="section-legal" class="box">
                 <p class="section-label">@messages("pdf.ruling.section.ruling.legalInformation.label")</p>
                 <p>@messages("pdf.ruling.section.ruling.legalInformation.text")</p>
+            </div>
+
+            <br/>
+            <div id="footer.createdTimestamp" class="timestamp">
+                <span>@messages("pdf.ruling.created.label"): @Instant.now()</span>
             </div>
 
         </div>
