@@ -43,6 +43,6 @@ case class Case
 
   def hasRuling: Boolean = rulingStates.contains(status) && decision.isDefined
 
-  private def rulingStates = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
+  private val rulingStates = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
 
 }
