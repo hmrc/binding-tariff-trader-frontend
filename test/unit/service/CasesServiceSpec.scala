@@ -16,12 +16,15 @@
 
 package service
 
-import connectors.BindingTariffClassificationConnector
+import connectors.{BindingTariffClassificationConnector, EmailConnector}
 import models.CaseStatus.CaseStatus
 import models._
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
+import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -32,30 +35,60 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
   private val existingCase = mock[Case]
   private val newCase = mock[NewCaseRequest]
   private val pagination = mock[Pagination]
+  private val application = mock[Application]
+  private val contact = mock[Contact]
   private val sort = mock[Sort]
-  private val connector = mock[BindingTariffClassificationConnector]
+  private val caseConnector = mock[BindingTariffClassificationConnector]
+  private val emailConnector = mock[EmailConnector]
   private val traderEori = "eoriTrader"
   private val agentEori = "eoriAgent"
   private val caseRef = "123114"
 
-  private val service = new CasesService(connector)
+  private val service = new CasesService(caseConnector, emailConnector)
 
   "Service 'Create Case'" should {
+    given(existingCase.reference) willReturn caseRef
+    given(existingCase.application) willReturn application
+    given(application.contact) willReturn contact
+    given(contact.email) willReturn "email"
+    given(contact.name) willReturn "name"
 
     "delegate to connector" in {
-      given(connector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
+      given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
+      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Any]])).willReturn(Future.successful(()))
+
+      await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
+
+      theEmailSent shouldBe ApplicationSubmittedEmail(
+        Seq("email"),
+        ApplicationSubmittedParameters(
+          "name",
+          caseRef
+        )
+      )
+    }
+
+    "handle error with email silently" in {
+      given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
+      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Any]])).willReturn(Future.failed(new RuntimeException("Error")))
 
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
     }
 
-    "propagate any error" in {
+    "propagate any error on case c reate" in {
       val exception = new RuntimeException("Error")
-      given(connector.createCase(any[NewCaseRequest])(any[HeaderCarrier])).willThrow(exception)
+      given(caseConnector.createCase(any[NewCaseRequest])(any[HeaderCarrier])).willThrow(exception)
 
       val caught = intercept[RuntimeException] {
         await(service.create(newCase)(HeaderCarrier()))
       }
       caught shouldBe exception
+    }
+
+    def theEmailSent: ApplicationSubmittedEmail = {
+      val captor: ArgumentCaptor[ApplicationSubmittedEmail] = ArgumentCaptor.forClass(classOf[ApplicationSubmittedEmail])
+      verify(emailConnector).send(captor.capture())(any[HeaderCarrier], any[Writes[Any]])
+      captor.getValue
     }
   }
 
@@ -65,7 +98,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
       val pagedResult = Paged(Seq(oCase.btiCaseExample, oCase.btiCaseExample), 1, 2, 2)
 
-      given(connector.findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier]))
+      given(caseConnector.findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier]))
         .willReturn(Future.successful(pagedResult))
 
       await(service.getCases(caseRef, Set.empty, pagination, sort)(HeaderCarrier())) shouldBe pagedResult
@@ -73,7 +106,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
     "propagate any error" in {
       val exception = new RuntimeException("Error")
-      given(connector.findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier])).willThrow(exception)
+      given(caseConnector.findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier])).willThrow(exception)
 
       val caught = intercept[RuntimeException] {
         await(service.getCases(caseRef, Set.empty, pagination, sort)(HeaderCarrier()))
@@ -87,14 +120,14 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
     "return case for trader" in {
       val traderCase = oCase.btiCaseExample.copy(application = oCase.btiApplicationExample.copy(agent = None))
-      given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(traderCase)))
+      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(traderCase)))
 
       await(service.getCaseForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe traderCase
     }
 
     "return case for agent for both agent and trader" in {
       val agentCase = oCase.btiCaseExample
-      given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
+      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
 
       await(service.getCaseForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe agentCase
       await(service.getCaseForUser(agentEori, caseRef)(HeaderCarrier())) shouldBe agentCase
@@ -102,7 +135,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
     "not return case for another EORI" in {
       val someCase = oCase.btiCaseExample
-      given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
+      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseForUser("someEORI", caseRef)(HeaderCarrier()))
@@ -112,7 +145,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
     "propagate any error" in {
       val exception = new RuntimeException("Error")
-      given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willThrow(exception)
+      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willThrow(exception)
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseForUser("eori", caseRef)(HeaderCarrier()))
@@ -125,14 +158,14 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
     "return ruling case for trader" in {
       val traderCase = oCase.btiCaseWithDecision.copy(application = oCase.btiApplicationExample.copy(agent = None))
-      given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(traderCase)))
+      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(traderCase)))
 
       await(service.getCaseWithRulingForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe traderCase
     }
 
     "return ruling case for agent for both agent and trader" in {
       val agentCase = oCase.btiCaseWithDecision
-      given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
+      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
 
       await(service.getCaseWithRulingForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe agentCase
       await(service.getCaseWithRulingForUser(agentEori, caseRef)(HeaderCarrier())) shouldBe agentCase
@@ -140,7 +173,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
     "not return ruling case for another EORI" in {
       val someCase = oCase.btiCaseWithDecision
-      given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
+      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseWithRulingForUser("someEORT", caseRef)(HeaderCarrier()))
@@ -150,7 +183,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
     "not return case without ruling" in {
       val someCase = oCase.btiCaseExample
-      given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
+      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseWithRulingForUser(traderEori, caseRef)(HeaderCarrier()))
@@ -160,7 +193,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
     "propagate any error" in {
       val exception = new RuntimeException("Error")
-      given(connector.findCase(refEq(caseRef))(any[HeaderCarrier])).willThrow(exception)
+      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willThrow(exception)
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseForUser("eort", caseRef)(HeaderCarrier()))
