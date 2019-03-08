@@ -17,7 +17,8 @@
 package controllers
 
 import controllers.actions.FakeIdentifierAction
-import models.{Case, Paged, Pagination, SearchPagination}
+import models.CaseStatus.CaseStatus
+import models._
 import models.oCase._
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
@@ -36,7 +37,8 @@ class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
     "return the correct view for a load applications" in {
 
-      given(casesService.findApplicationsBy(any[String], refEq(SearchPagination(1)))(any[HeaderCarrier])).willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
+      given(casesService.findCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
 
       val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getApplications(page = 1)(fakeRequest)
 
@@ -46,18 +48,18 @@ class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
     "return the correct view for a load rulings" in {
 
-      given(casesService.findRulingsBy(any[String], refEq(SearchPagination(1)))(any[HeaderCarrier])).willReturn(Future.successful(Paged(Seq(btiCaseWithDecision), 1, 10, 0)))
+      given(casesService.findCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq(btiCaseWithDecision), 1, 10, 0)))
 
       val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getRulings(page = 1)(fakeRequest)
 
       status(result) mustBe OK
       contentAsString(result) must include("rulings-list-table")
-      contentAsString(result) must include("")
     }
 
 
     "return 200 and show no results for a GET when no applications are found" in {
-      given(casesService.findApplicationsBy(any[String], refEq(SearchPagination(1)))(any[HeaderCarrier]))
+      given(casesService.findCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
         .willReturn(Future.successful(Paged(Seq[Case](), 1, 10, 0)))
 
       val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getApplications(page = 1)(fakeRequest)
@@ -69,7 +71,7 @@ class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
     "return 200 and show no results  for a GET when no rulings are found" in {
 
-      given(casesService.findRulingsBy(any[String], refEq(SearchPagination(1)))(any[HeaderCarrier]))
+      given(casesService.findCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
         .willReturn(Future.successful(Paged(Seq[Case](), 1, 10, 0)))
 
       val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getRulings(page = 1)(fakeRequest)
