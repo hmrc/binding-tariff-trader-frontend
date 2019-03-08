@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
 import javax.inject.Inject
-import models.{Pagination, SearchPagination}
+import models.{CaseStatus, SearchPagination, Sort, SortField}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import service.CasesService
@@ -36,20 +36,26 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
                                 service: CasesService,
                                 val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
 
-  def getApplications(page : Int): Action[AnyContent] = identify.async { implicit request =>
 
-    service.findApplicationsBy(request.eoriNumber, SearchPagination(page)) flatMap { pagedResult =>
+  private val applicationStatuses = Set(CaseStatus.DRAFT, CaseStatus.NEW, CaseStatus.OPEN,
+    CaseStatus.SUPPRESSED, CaseStatus.REFERRED, CaseStatus.REJECTED,
+    CaseStatus.CANCELLED, CaseStatus.SUSPENDED, CaseStatus.COMPLETED)
+
+  def getApplications(page: Int): Action[AnyContent] = identify.async { implicit request =>
+
+    service.getCases(request.eoriNumber, applicationStatuses, SearchPagination(page), Sort()) flatMap { pagedResult =>
       successful(Ok(index(appConfig, CaseDetailTab.APPLICATION, table_applications(pagedResult))))
     }
   }
 
-  def getRulings(page : Int): Action[AnyContent] = identify.async { implicit request =>
 
-    service.findRulingsBy(request.eoriNumber, SearchPagination(page)) flatMap { pagedResult =>
-      successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult) )))
+  private val rulingStatuses = Set(CaseStatus.CANCELLED, CaseStatus.COMPLETED)
+
+  def getRulings(page: Int): Action[AnyContent] = identify.async { implicit request =>
+    service.getCases(request.eoriNumber, rulingStatuses, SearchPagination(page), Sort(SortField.DECISION_START_DATE)) flatMap { pagedResult =>
+      successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult))))
     }
   }
-
 
 
 }
