@@ -22,7 +22,8 @@ import java.util.UUID
 object oCase {
   val fileAttachment = Attachment(id = UUID.randomUUID().toString)
   val eoriDetailsExample = EORIDetails("eoriTrader", "Trader Business Name", "line1", "line2", "line3", "postcode", "country")
-  val eoriAgentDetailsExample = AgentDetails(EORIDetails("eoriAgent", "Agent Business Name", "line1", "line2", "line3", "postcode", "country"), Some(fileAttachment))
+  val eoriAgentDetailsExample = AgentDetails(EORIDetails("eoriAgent", "Agent Business Name", "line1", "line2", "line3", "postcode", "country"),
+    Some(fileAttachment))
   val contactExample = Contact("name", "email", Some("phone"))
   val btiApplicationExample = Application(
     "BTI",
@@ -47,7 +48,9 @@ object oCase {
     effectiveStartDate = Some(Instant.now),
     effectiveEndDate = Some(Instant.now),
     justification = "justification-content",
-    goodsDescription = "goodsDescription-content")
+    goodsDescription = "goodsDescription-content",
+    methodCommercialDenomination = Some("commercial-denomination-content")
+  )
 
 
   val btiCaseWithDecision = Case(reference = "ref", status = CaseStatus.COMPLETED, application = btiApplicationExample, decision = Some(decisionExample))

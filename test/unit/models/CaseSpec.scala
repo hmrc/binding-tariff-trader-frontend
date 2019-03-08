@@ -17,7 +17,7 @@
 package models
 
 import java.time.Instant
-import java.time.temporal.{ChronoUnit, TemporalUnit}
+import java.time.temporal.ChronoUnit
 
 import org.scalatest.{MustMatchers, WordSpec}
 
@@ -49,8 +49,30 @@ class CaseSpec extends WordSpec with MustMatchers {
       decisionWithEndDate(pastDate).hasExpiredDecision mustBe true
     }
 
+    "hasEori returns true for trader" in {
+      val traderCase = oCase.btiCaseExample.copy(application = oCase.btiApplicationExample.copy(agent = None))
+      traderCase.hasEoriNumber(traderCase.application.holder.eori) mustBe true
+    }
 
+    "hasEori returns true for agent" in {
+      val agentCase = oCase.btiCaseExample
+      agentCase.hasEoriNumber(agentCase.application.agent.get.eoriDetails.eori) mustBe true
+    }
 
+    "hasEori returns false for another user" in {
+      oCase.btiCaseExample.hasEoriNumber("????") mustBe false
+    }
 
+    "hasRuling returns false for case with no decision" in {
+      oCase.btiCaseExample.hasRuling mustBe false
+    }
+
+    "hasRuling returns false for case with wrong status" in {
+      oCase.btiCaseWithDecision.copy(status = CaseStatus.OPEN).hasRuling mustBe false
+    }
+
+    "hasRuling returns true for case with decision" in {
+      oCase.btiCaseWithDecision.hasRuling mustBe true
+    }
   }
 }

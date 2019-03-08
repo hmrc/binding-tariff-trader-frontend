@@ -18,6 +18,6 @@ package views
 
 object CaseDetailTab extends Enumeration {
   type CaseDetailTab  = Value
-  val APPLICATION = Value("application")
-  val RULING = Value("ruling")
+  val APPLICATION: views.CaseDetailTab.Value = Value("application")
+  val RULING: views.CaseDetailTab.Value = Value("ruling")
 }
