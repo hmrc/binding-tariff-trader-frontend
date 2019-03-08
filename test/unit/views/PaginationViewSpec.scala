@@ -17,6 +17,8 @@
 package views
 
 import models.Paged
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.mockito.ArgumentMatchers
 import org.mockito.BDDMockito._
 import org.mockito.invocation.InvocationOnMock
@@ -24,13 +26,18 @@ import org.mockito.stubbing.Answer
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Call
-import views.ViewMatchers.{containElementWithID, _}
+import play.twirl.api.Html
+import uk.gov.hmrc.play.test.UnitSpec
+import views.ViewMatchers._
 import views.html.components.pagination
 
-class PaginationViewSpec extends ViewSpec with MockitoSugar with BeforeAndAfterEach {
+class PaginationViewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
 
   private val goToPage: Int => Call = mock[Int => Call]
 
+  protected def view(html: Html): Document = {
+    Jsoup.parse(html.toString())
+  }
 
   override def beforeEach(): Unit = {
     def returnThePage: Answer[Call] = {
@@ -39,6 +46,7 @@ class PaginationViewSpec extends ViewSpec with MockitoSugar with BeforeAndAfterE
       }
     }
 
+    super.beforeEach()
     given(goToPage.apply(ArgumentMatchers.any[Int])) will returnThePage
   }
 
@@ -308,7 +316,6 @@ class PaginationViewSpec extends ViewSpec with MockitoSugar with BeforeAndAfterE
       doc shouldNot containElementWithID("ID-page_5")
       doc shouldNot containElementWithID("ID-page_6")
     }
-
 
   }
 

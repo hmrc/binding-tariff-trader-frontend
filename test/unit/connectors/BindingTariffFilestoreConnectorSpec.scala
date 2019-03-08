@@ -16,42 +16,19 @@
 
 package connectors
 
-import akka.actor.ActorSystem
 import com.github.tomakehurst.wiremock.client.WireMock._
-import config.FrontendAppConfig
 import models.{Attachment, FileAttachment}
 import models.response.FilestoreResponse
-import org.mockito.BDDMockito.given
-import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
-import play.api.Environment
 import play.api.http.Status
 import play.api.libs.Files.TemporaryFile
-import play.api.libs.ws.WSClient
 import play.api.mvc.MultipartFormData
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class BindingTariffFilestoreConnectorSpec extends UnitSpec with WithFakeApplication
-  with WiremockTestServer with MockitoSugar with BeforeAndAfterEach with ResourceFiles {
+class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
-  private val config = mock[FrontendAppConfig]
-  private val actorSystem = ActorSystem.create("test")
-  private val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
-  private val auditConnector = new DefaultAuditConnector(fakeApplication.configuration, fakeApplication.injector.instanceOf[Environment])
-  private val hmrcWsClient = new DefaultHttpClient(fakeApplication.configuration, auditConnector, wsClient, actorSystem)
-  private implicit val headers: HeaderCarrier = HeaderCarrier()
-
-  private val connector = new BindingTariffFilestoreConnector(config, wsClient, hmrcWsClient)
-
-  override protected def beforeEach(): Unit = {
-    super.beforeEach()
-    given(config.bindingTariffFileStoreUrl).willReturn(wireMockUrl)
-  }
+  private val connector = new BindingTariffFilestoreConnector(appConfig, wsClient, authenticatedHttpClient)
 
   "Connector" should {
+
     "Upload" in {
       stubFor(
         post("/file")
@@ -68,6 +45,11 @@ class BindingTariffFilestoreConnectorSpec extends UnitSpec with WithFakeApplicat
         id = "id",
         fileName = "file-name.txt",
         mimeType = "text/plain"
+      )
+
+      verify(
+        postRequestedFor(urlEqualTo("/file"))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
@@ -86,11 +68,17 @@ class BindingTariffFilestoreConnectorSpec extends UnitSpec with WithFakeApplicat
         fileName = "file-name.txt",
         mimeType = "text/plain"
       )
+
+
+      verify(
+        getRequestedFor(urlEqualTo("/file/id"))
+          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+      )
     }
 
     "Publish" in {
       stubFor(
-        post("/file/id/publish")
+        get("/file/id")
           .willReturn(
             aResponse()
               .withStatus(Status.ACCEPTED)
@@ -102,6 +90,11 @@ class BindingTariffFilestoreConnectorSpec extends UnitSpec with WithFakeApplicat
         id = "id",
         fileName = "file-name.txt",
         mimeType = "text/plain"
+      )
+
+      verify(
+        getRequestedFor(urlEqualTo("/file/id"))
+          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
       )
     }
 
@@ -124,6 +117,11 @@ class BindingTariffFilestoreConnectorSpec extends UnitSpec with WithFakeApplicat
           id = "id2",
           fileName = "file-name2.txt",
           mimeType = "text/plain")
+      )
+
+      verify(
+        getRequestedFor(urlEqualTo("/file?id=id1&id=id2"))
+          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
       )
     }
 

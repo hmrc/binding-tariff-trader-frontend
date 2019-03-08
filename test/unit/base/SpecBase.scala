@@ -16,17 +16,20 @@
 
 package base
 
+import com.codahale.metrics.SharedMetricRegistries
 import config.FrontendAppConfig
 import models.requests.OptionalDataRequest
 import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice._
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.test.FakeRequest
+import uk.gov.hmrc.play.test.WithFakeApplication
 
-trait SpecBase extends PlaySpec with GuiceOneAppPerSuite {
+trait SpecBase extends PlaySpec with WithFakeApplication {
 
-  def injector: Injector = app.injector
+  SharedMetricRegistries.clear()
+
+  protected lazy val injector: Injector = fakeApplication.injector
 
   def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 

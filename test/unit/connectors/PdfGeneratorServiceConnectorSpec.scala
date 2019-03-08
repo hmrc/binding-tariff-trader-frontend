@@ -17,31 +17,15 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import config.FrontendAppConfig
 import models.PdfFile
-import org.mockito.BDDMockito.given
-import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
-import play.api.libs.ws.WSClient
 import play.twirl.api.Html
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class PdfGeneratorServiceConnectorSpec extends UnitSpec with WithFakeApplication
-  with WiremockTestServer with MockitoSugar with BeforeAndAfterEach with ResourceFiles {
+class PdfGeneratorServiceConnectorSpec extends ConnectorTest {
 
-  private val config = mock[FrontendAppConfig]
   private val pdfTemplate = mock[Html]
-  private val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
-  private implicit val headers: HeaderCarrier = HeaderCarrier()
 
-  private val connector = new PdfGeneratorServiceConnector(config, wsClient)
-
-  override protected def beforeEach(): Unit = {
-    super.beforeEach()
-    given(config.pdfGeneratorUrl).willReturn(wireMockUrl)
-  }
+  private val connector = new PdfGeneratorServiceConnector(appConfig, wsClient)
 
   "Connector" should {
 
@@ -60,6 +44,11 @@ class PdfGeneratorServiceConnectorSpec extends UnitSpec with WithFakeApplication
 
       response.contentType shouldBe "application/pdf"
       response.content shouldBe expectedContent
+
+      verify(
+        postRequestedFor(urlEqualTo("/pdf-generator-service/generate"))
+          .withoutHeader("X-Api-Token")
+      )
     }
 
     "throw exception when call fails" in {
@@ -77,6 +66,11 @@ class PdfGeneratorServiceConnectorSpec extends UnitSpec with WithFakeApplication
       }
 
       caught.getMessage contains "Error calling PdfGeneratorService"
+
+      verify(
+        postRequestedFor(urlEqualTo("/pdf-generator-service/generate"))
+          .withoutHeader("X-Api-Token")
+      )
     }
   }
 

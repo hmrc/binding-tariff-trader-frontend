@@ -59,7 +59,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
   private val btiApp = mock[Application]
   private val contact = mock[Contact]
 
-  private implicit val mat: Materializer = app.materializer
+  private implicit val mat: Materializer = fakeApplication.materializer
 
   private lazy val error = new IllegalStateException("expected error")
 
