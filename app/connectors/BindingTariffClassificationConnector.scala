@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import javax.inject.Singleton
 import models.CaseStatus.CaseStatus
-import models.{Case, NewCaseRequest, Paged, Pagination}
+import models._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
@@ -41,9 +41,10 @@ class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppC
     client.GET[Option[Case]](url)
   }
 
-  def findCasesBy(eori: String, status: Seq[CaseStatus], pagination: Pagination)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
+  def findCasesBy(eori: String, status: Set[CaseStatus], pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
+
     val url = s"${configuration.bindingTariffClassificationUrl}/cases?eori=$eori&status=${status.mkString(",")}" +
-      s"&sort_by=decision-end-date&sort_direction=desc" +
+      s"&sort_by=${sort.field}&sort_direction=${sort.direction}" +
       s"&page=${pagination.page}&page_size=${pagination.pageSize}"
 
     client.GET[Paged[Case]](url)
