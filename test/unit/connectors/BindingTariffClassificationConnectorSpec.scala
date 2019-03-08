@@ -19,7 +19,7 @@ package connectors
 import akka.actor.ActorSystem
 import com.github.tomakehurst.wiremock.client.WireMock._
 import config.FrontendAppConfig
-import models._
+import models.{CasePayloads, _}
 import org.apache.http.HttpStatus
 import org.mockito.BDDMockito._
 import org.scalatest.mockito.MockitoSugar
@@ -30,7 +30,6 @@ import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import util.CasePayloads
 import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
 class BindingTariffClassificationConnectorSpec extends UnitSpec

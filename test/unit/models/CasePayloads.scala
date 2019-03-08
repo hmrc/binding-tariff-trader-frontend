@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package util
+package models
 
-import models.{Case, NoPagination, Paged, oCase}
 import play.api.libs.json.Json
 import utils.JsonFormatters._
 
@@ -25,6 +24,14 @@ object CasePayloads {
 
   val pagedGatewayCases: String = jsonOf(Paged(Seq(oCase.btiCaseExample), NoPagination(), 1))
   val pagedEmpty: String = jsonOf(Paged.empty[Case])
+
+  def jsonOf(obj: Case): String = {
+    Json.toJson(obj).toString()
+  }
+
+  def jsonOf(obj: Seq[Case]): String = {
+    Json.toJson(obj).toString()
+  }
 
   def jsonOf(obj: Paged[Case]): String = {
     Json.toJson(obj).toString()
