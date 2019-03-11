@@ -75,7 +75,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
     }
 
-    "propagate any error on case c reate" in {
+    "propagate any error on case create" in {
       val exception = new RuntimeException("Error")
       given(caseConnector.createCase(any[NewCaseRequest])(any[HeaderCarrier])).willThrow(exception)
 
