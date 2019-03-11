@@ -138,7 +138,7 @@ registerBusinessRepresenting.error.postCode.length = Postcode must be 9 characte
 registerBusinessRepresenting.error.country.length = Country must be 60 characters or less
 
 enterContactDetails.title = Contact details - GOV.UK
-enterContactDetails.heading = What are the details of who we could contact for this application?
+enterContactDetails.heading = Contact details for this application
 enterContactDetails.field1 = Full name
 enterContactDetails.field2 = Email address
 enterContactDetails.field3 = Telephone number (optional)

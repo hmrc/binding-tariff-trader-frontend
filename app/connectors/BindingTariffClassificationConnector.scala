@@ -22,14 +22,13 @@ import javax.inject.Singleton
 import models.CaseStatus.CaseStatus
 import models._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppConfig, client: HttpClient) {
+class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppConfig, client: AuthenticatedHttpClient) {
 
   def createCase(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
     val url = s"${configuration.bindingTariffClassificationUrl}/cases"
