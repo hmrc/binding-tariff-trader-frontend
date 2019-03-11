@@ -35,8 +35,13 @@ class EmailConnectorSpec extends ConnectorTest {
 
       val email = ApplicationSubmittedEmail(Seq("user@domain.com"), ApplicationSubmittedParameters("ref", "name"))
 
-      await(connector.send(email))
+      await(connector.send(email)) shouldBe ((): Unit)
     }
+
+    verify(
+      postRequestedFor(urlEqualTo("/hmrc/email"))
+        .withoutHeader("X-Api-Token")
+    )
   }
 
 }
