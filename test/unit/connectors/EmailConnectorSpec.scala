@@ -20,28 +20,47 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.matching.EqualToJsonPattern
 import models.{ApplicationSubmittedEmail, ApplicationSubmittedParameters}
 import org.apache.http.HttpStatus
+import uk.gov.hmrc.http.Upstream5xxResponse
 
 class EmailConnectorSpec extends ConnectorTest {
 
-  private val connector = new EmailConnector(appConfig, authenticatedHttpClient)
+  private val connector = new EmailConnector(appConfig, standardHttpClient)
+
+  private val email = ApplicationSubmittedEmail(Seq("user@domain.com"), ApplicationSubmittedParameters("ref", "name"))
 
   "Connector 'Send'" should {
+
     "POST Email payload" in {
       stubFor(post(urlEqualTo("/hmrc/email"))
-          .withRequestBody(new EqualToJsonPattern(fromResource("advice_request_email-request.json"), true, false))
+        .withRequestBody(new EqualToJsonPattern(fromResource("advice_request_email-request.json"), true, false))
         .willReturn(aResponse()
           .withStatus(HttpStatus.SC_ACCEPTED))
       )
 
-      val email = ApplicationSubmittedEmail(Seq("user@domain.com"), ApplicationSubmittedParameters("ref", "name"))
-
       await(connector.send(email)) shouldBe ((): Unit)
+
+      verify(
+        postRequestedFor(urlEqualTo("/hmrc/email"))
+          .withoutHeader("X-Api-Token")
+      )
     }
 
-    verify(
-      postRequestedFor(urlEqualTo("/hmrc/email"))
-        .withoutHeader("X-Api-Token")
-    )
+    "propagate errors" in {
+      stubFor(post(urlEqualTo("/hmrc/email"))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_BAD_GATEWAY)
+        )
+      )
+
+      intercept[Upstream5xxResponse] {
+        await(connector.send(email))
+      }
+
+      verify(
+        postRequestedFor(urlEqualTo("/hmrc/email"))
+          .withoutHeader("X-Api-Token")
+      )
+    }
   }
 
 }
