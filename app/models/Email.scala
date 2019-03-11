@@ -49,7 +49,7 @@ object ApplicationSubmittedEmail {
 
 case class ApplicationSubmittedParameters
 (
-  recipientName_line1: String, // Must match hrmc-email-renderer SalutationHelper param name The full name of the recipient
+  recipientName_line1: String, // The full name of the recipient. Must match hrmc-email-renderer SalutationHelper param name.
   reference: String
 )
 
