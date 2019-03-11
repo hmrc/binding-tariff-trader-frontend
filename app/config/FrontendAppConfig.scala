@@ -60,6 +60,8 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val cdsSubscribeUrl: String = s"$cdsUrl/customs/subscribe-for-cds"
   lazy val cdsRegisterUrl: String = s"$cdsUrl/customs/register-for-cds"
 
+  lazy val apiToken: String = loadConfig("auth.api-token")
+
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")

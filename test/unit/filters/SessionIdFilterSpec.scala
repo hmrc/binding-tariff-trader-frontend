@@ -19,9 +19,8 @@ package filters
 import java.util.UUID
 
 import akka.stream.Materializer
+import base.SpecBase
 import com.google.inject.Inject
-import org.scalatest.{MustMatchers, WordSpec}
-import org.scalatestplus.play.OneAppPerSuite
 import play.api.Application
 import play.api.http.{DefaultHttpFilters, HttpFilters}
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -36,7 +35,7 @@ import scala.concurrent.ExecutionContext
 
 object SessionIdFilterSpec {
 
-  val sessionId = "28836767-a008-46be-ac18-695ab140e705"
+  lazy val sessionId = "28836767-a008-46be-ac18-695ab140e705"
 
   class Filters @Inject() (sessionId: SessionIdFilter) extends DefaultHttpFilters(sessionId)
 
@@ -46,7 +45,7 @@ object SessionIdFilterSpec {
                                       ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec)
 }
 
-class SessionIdFilterSpec extends WordSpec with MustMatchers with OneAppPerSuite {
+class SessionIdFilterSpec extends SpecBase {
 
   import SessionIdFilterSpec._
 
@@ -73,13 +72,13 @@ class SessionIdFilterSpec extends WordSpec with MustMatchers with OneAppPerSuite
     }
   }
 
-  override lazy val app: Application = {
+  override lazy val fakeApplication: Application = {
 
     import play.api.inject._
 
     new GuiceApplicationBuilder()
       .overrides(
-        bind[HttpFilters].to[Filters],
+        bind[HttpFilters].to[SessionIdFilterSpec.Filters],
         bind[SessionIdFilter].to[TestSessionIdFilter]
       )
       .router(router)
@@ -90,7 +89,7 @@ class SessionIdFilterSpec extends WordSpec with MustMatchers with OneAppPerSuite
 
     "add a sessionId if one doesn't already exist" in {
 
-      val Some(result) = route(app, FakeRequest(GET, "/test"))
+      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test"))
 
       val body = contentAsJson(result)
 
@@ -100,7 +99,7 @@ class SessionIdFilterSpec extends WordSpec with MustMatchers with OneAppPerSuite
 
     "not override a sessionId if one doesn't already exist" in {
 
-      val Some(result) = route(app, FakeRequest(GET, "/test").withSession(SessionKeys.sessionId -> "foo"))
+      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test").withSession(SessionKeys.sessionId -> "foo"))
 
       val body = contentAsJson(result)
 
@@ -110,14 +109,15 @@ class SessionIdFilterSpec extends WordSpec with MustMatchers with OneAppPerSuite
 
     "not override other session values from the response" in {
 
-      val Some(result) = route(app, FakeRequest(GET, "/test2"))
+      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test2"))
       session(result).data must contain("foo" -> "bar")
     }
 
     "not override other session values from the request" in {
 
-      val Some(result) = route(app, FakeRequest(GET, "/test").withSession("foo" -> "bar"))
+      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test").withSession("foo" -> "bar"))
       session(result).data must contain("foo" -> "bar")
     }
   }
+
 }

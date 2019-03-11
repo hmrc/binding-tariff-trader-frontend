@@ -29,13 +29,12 @@ import play.api.libs.ws.WSClient
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig, ws: WSClient, http: HttpClient) {
+class BindingTariffFilestoreConnector @Inject()(appConfig: FrontendAppConfig, ws: WSClient, http: AuthenticatedHttpClient) {
 
   def upload(file: MultipartFormData.FilePart[TemporaryFile])
             (implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
@@ -47,18 +46,20 @@ class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig
       FileIO.fromPath(file.ref.file.toPath)
     )
 
-    ws.url(s"${configuration.bindingTariffFileStoreUrl}/file")
+    ws.url(s"${appConfig.bindingTariffFileStoreUrl}/file")
+      .withHeaders( hc.headers: _* )
+      .withHeaders( http.authHeaders(appConfig) )
       .post(Source(List(filePart)))
       .map( response => Json.fromJson[FilestoreResponse](Json.parse(response.body)).get )
 
   }
 
   def get(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
-    http.GET[FilestoreResponse](s"${configuration.bindingTariffFileStoreUrl}/file/${file.id}")
+    http.GET[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}")
   }
 
   def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
-    http.POSTEmpty[FilestoreResponse](s"${configuration.bindingTariffFileStoreUrl}/file/${file.id}/publish")
+    http.POSTEmpty[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish")
   }
 
   def getFileMetadata(attachments: Seq[Attachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[FilestoreResponse]] = {
@@ -66,7 +67,7 @@ class BindingTariffFilestoreConnector @Inject()(configuration: FrontendAppConfig
       Future.successful(Seq.empty)
     } else {
       val query = s"?${attachments.map(att => s"id=${att.id}").mkString("&")}"
-      val url = s"${configuration.bindingTariffFileStoreUrl}/file$query"
+      val url = s"${appConfig.bindingTariffFileStoreUrl}/file$query"
       http.GET[Seq[FilestoreResponse]](url)
     }
   }

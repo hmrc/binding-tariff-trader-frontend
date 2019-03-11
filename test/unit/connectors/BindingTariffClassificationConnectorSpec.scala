@@ -16,38 +16,16 @@
 
 package connectors
 
-import akka.actor.ActorSystem
 import com.github.tomakehurst.wiremock.client.WireMock._
-import config.FrontendAppConfig
-import models.{CasePayloads, _}
+import models._
 import org.apache.http.HttpStatus
-import org.mockito.BDDMockito._
-import org.scalatest.mockito.MockitoSugar
-import play.api.Environment
 import play.api.libs.json.Json
-import play.api.libs.ws.WSClient
-import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
-import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.http.Upstream5xxResponse
 import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
-class BindingTariffClassificationConnectorSpec extends UnitSpec
-  with WiremockTestServer with MockitoSugar with WithFakeApplication {
+class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
-  private val configuration = mock[FrontendAppConfig]
-  private val actorSystem = ActorSystem.create("test")
-  private val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
-  private val auditConnector = new DefaultAuditConnector(fakeApplication.configuration, fakeApplication.injector.instanceOf[Environment])
-  private val client = new DefaultHttpClient(fakeApplication.configuration, auditConnector, wsClient, actorSystem)
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
-
-  private val connector = new BindingTariffClassificationConnector(configuration, client)
-
-  override protected def beforeEach(): Unit = {
-    super.beforeEach()
-    given(configuration.bindingTariffClassificationUrl).willReturn(wireMockUrl)
-  }
+  private val connector = new BindingTariffClassificationConnector(appConfig, authenticatedHttpClient)
 
   "Connector 'Create Case'" should {
     val request = oCase.newBtiCaseExample
@@ -66,6 +44,11 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
       )
 
       await(connector.createCase(request)) shouldBe response
+
+      verify(
+        postRequestedFor(urlEqualTo("/cases"))
+          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+      )
     }
 
     "Find valid case" in {
@@ -79,6 +62,11 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
       )
 
       await(connector.findCase("id")) shouldBe Some(oCase.btiCaseExample)
+
+      verify(
+        getRequestedFor(urlEqualTo("/cases/id"))
+          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+      )
     }
 
     "propagate errors" in {
@@ -91,6 +79,11 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
       intercept[Upstream5xxResponse] {
         await(connector.createCase(request))
       }
+
+      verify(
+        postRequestedFor(urlEqualTo("/cases"))
+          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+      )
     }
   }
 
@@ -98,29 +91,45 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
   "Connector 'Find Cases By'" should {
 
     "Find empty paged case" in {
+      val url = "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50"
 
-      stubFor(get(urlEqualTo("/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50"))
+      stubFor(get(urlEqualTo(url))
         .willReturn(aResponse()
           .withStatus(HttpStatus.SC_OK)
           .withBody(CasePayloads.pagedEmpty)
         )
       )
+
       await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW, CaseStatus.OPEN), SearchPagination(2), Sort())) shouldBe Paged.empty[Case]
+
+      verify(
+        getRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+      )
     }
 
     "Find valid paged case" in {
+      val url = "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50"
 
-      stubFor(get(urlEqualTo("/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50"))
+      stubFor(get(urlEqualTo(url))
         .willReturn(aResponse()
           .withStatus(HttpStatus.SC_OK)
           .withBody(CasePayloads.pagedGatewayCases)
         )
       )
+
       await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW, CaseStatus.OPEN), SearchPagination(2), Sort())) shouldBe Paged(Seq(oCase.btiCaseExample))
+
+      verify(
+        getRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+      )
     }
 
     "propagate errors" in {
-      stubFor(get(urlEqualTo("/cases?eori=eori1234567&status=NEW&sort_by=created-date&sort_direction=desc&page=1&page_size=2147483647"))
+      val url = "/cases?eori=eori1234567&status=NEW&sort_by=created-date&sort_direction=desc&page=1&page_size=2147483647"
+
+      stubFor(get(urlEqualTo(url))
         .willReturn(aResponse()
           .withStatus(HttpStatus.SC_BAD_GATEWAY)
         )
@@ -129,7 +138,13 @@ class BindingTariffClassificationConnectorSpec extends UnitSpec
       intercept[Upstream5xxResponse] {
         await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW), NoPagination(), Sort()))
       }
+
+      verify(
+        getRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+      )
     }
+
   }
 
 }
