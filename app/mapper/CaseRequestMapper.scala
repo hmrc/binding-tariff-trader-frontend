@@ -102,12 +102,12 @@ class CaseRequestMapper {
   private def toEoriDetails(details: RegisteredAddressForEori): EORIDetails = {
     EORIDetails(
       details.eori,
-      details.businessName, // business name
-      details.addressLine1, // address line 1
-      details.townOrCity, // address line 2 (town)
-      "",             // address line 3 empty
-      details.postcode, // post code
-      details.country  // country
+      details.businessName,
+      details.addressLine1,
+      details.townOrCity,
+      "", // address line 3 empty
+      details.postcode,
+      details.country
     )
   }
 
