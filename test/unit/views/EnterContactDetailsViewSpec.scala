@@ -27,7 +27,7 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
 
   val messageKeyPrefix = "enterContactDetails"
 
-  override val form = new EnterContactDetailsFormProvider()()
+  override protected val form = new EnterContactDetailsFormProvider()()
 
   def createView = () => enterContactDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 

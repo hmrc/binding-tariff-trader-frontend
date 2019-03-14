@@ -27,7 +27,7 @@ class DescribeYourItemViewSpec extends QuestionViewBehaviours[DescribeYourItem] 
 
   val messageKeyPrefix = "describeYourItem"
 
-  override val form = new DescribeYourItemFormProvider()()
+  override protected val form = new DescribeYourItemFormProvider()()
 
   def createView = () => describeYourItem(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 

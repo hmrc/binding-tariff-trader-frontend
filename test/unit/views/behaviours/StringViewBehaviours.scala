@@ -40,10 +40,10 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
     }
   }
 
-  def stringPage(createView: Form[String] => HtmlFormat.Appendable,
-                 messageKeyPrefix: String,
-                 expectedFormAction: String,
-                 expectedHintKey: Option[String] = None): Unit = {
+  protected def stringPage(createView: Form[String] => HtmlFormat.Appendable,
+                           messageKeyPrefix: String,
+                           expectedFormAction: String,
+                           expectedHintKey: Option[String] = None): Unit = {
 
     "behave like a page with a string value field" when {
 
@@ -90,10 +90,10 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
     }
   }
 
-  def textareaPage(createView: Form[String] => HtmlFormat.Appendable,
-                 messageKeyPrefix: String,
-                 expectedFormAction: String,
-                 expectedHintKey: Option[String] = None): Unit = {
+  protected def textareaPage(createView: Form[String] => HtmlFormat.Appendable,
+                             messageKeyPrefix: String,
+                             expectedFormAction: String,
+                             expectedHintKey: Option[String] = None): Unit = {
 
     "behave like a page with a string value field" when {
 

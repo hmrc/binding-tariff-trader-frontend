@@ -21,8 +21,8 @@ import views.ViewSpecBase
 
 trait ViewBehaviours extends ViewSpecBase {
 
-  def normalPage(view: () => HtmlFormat.Appendable, messageKeyPrefix: String, messageHeadingArgs: Any*)
-                (expectedGuidanceKeys: String*): Unit = {
+  protected def normalPage(view: () => HtmlFormat.Appendable, messageKeyPrefix: String, messageHeadingArgs: Any*)
+                          (expectedGuidanceKeys: String*): Unit = {
 
     "behave like a normal page" when {
       "rendered" must {
@@ -51,7 +51,7 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithBackLink(view: () => HtmlFormat.Appendable): Unit = {
+  protected def pageWithBackLink(view: () => HtmlFormat.Appendable): Unit = {
 
     "behave like a page with a back link" must {
       "have a back link" in {
@@ -61,7 +61,7 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithoutBackLink(view: () => HtmlFormat.Appendable): Unit = {
+  protected def pageWithoutBackLink(view: () => HtmlFormat.Appendable): Unit = {
 
     "behave like a page with a back link" must {
       "have a back link" in {
