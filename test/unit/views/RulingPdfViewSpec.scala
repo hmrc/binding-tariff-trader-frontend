@@ -17,12 +17,15 @@
 package views
 
 import models.{Case, oCase}
+import play.twirl.api.HtmlFormat
 import utils.Dates.format
 import views.html.pdftemplates.rulingPdf
 
 class RulingPdfViewSpec extends ViewSpecBase {
 
-  private def createView(c: Case) = rulingPdf(frontendAppConfig, c, c.decision.get)(fakeRequest, messages)
+  private def createView(c: Case): HtmlFormat.Appendable = {
+    rulingPdf(frontendAppConfig, c, c.decision.get)(fakeRequest, messages)
+  }
 
   private val rulingCase = oCase.btiCaseWithDecision
   private val holder = rulingCase.application.holder
@@ -101,4 +104,5 @@ class RulingPdfViewSpec extends ViewSpecBase {
   private def assertSectionContains(sectionId: String, text: String) = {
     assertElementHasText(doc.getElementById(sectionId), text)
   }
+
 }
