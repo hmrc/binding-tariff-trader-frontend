@@ -46,8 +46,8 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     val preparedForm = request.userAnswers.flatMap(_.get(RegisteredAddressForEoriPage)) match {
-      case Some(value) if appConfig.isCdsEnrolmentCheckEnabled => form.fill(value.copy(eori = request.userEoriNumber.get))
-      case None if appConfig.isCdsEnrolmentCheckEnabled => form.fill(RegisteredAddressForEori(request.userEoriNumber.get))
+      case Some(value) if request.userEoriNumber.isDefined => form.fill(value.copy(eori = request.userEoriNumber.get))
+      case None if request.userEoriNumber.isDefined => form.fill(RegisteredAddressForEori(request.userEoriNumber.get))
       case Some(value) => form.fill(value)
       case _ => form
     }

@@ -16,7 +16,6 @@
 
 package utils
 
-import config.FrontendAppConfig
 import models.SelectApplicationType.NewCommodity
 import models.WhichBestDescribesYou.BusinessOwner
 import models._
@@ -28,8 +27,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
 
   private val userAnswers = mock[UserAnswers]
-  private val config = mock[FrontendAppConfig]
-  private val checkHelper = new CheckYourAnswersHelper(userAnswers, config)
+  private val checkHelper = new CheckYourAnswersHelper(userAnswers)
   private val fileAttachment = FileAttachment("id", "fileName", "mime", 1)
 
   "CheckYourAnswersHelper" when {

@@ -16,13 +16,13 @@
 
 package utils
 
-import config.FrontendAppConfig
 import controllers.routes
+import models.requests.DataRequest
 import models.{CheckMode, UserAnswers}
 import pages._
 import viewmodels.AnswerRow
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers, config: FrontendAppConfig) {
+class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
     x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name, false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
@@ -116,8 +116,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, config: FrontendAppConfig
     x => AnswerRow("whichBestDescribesYou.checkYourAnswersLabel", s"whichBestDescribesYou.$x", true, routes.WhichBestDescribesYouController.onPageLoad(CheckMode).url)
   }
 
-  def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map { x =>
-    val fields = if (config.isCdsEnrolmentCheckEnabled) {
+  def registeredAddressForEori(implicit request: DataRequest[_]): Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map { x =>
+    val fields = if (request.eoriNumber.isDefined) {
       Seq(x.businessName, x.addressLine1, x.townOrCity, x.postcode, x.country)
     } else {
       Seq(x.eori, x.businessName, x.addressLine1, x.townOrCity, x.postcode, x.country)
