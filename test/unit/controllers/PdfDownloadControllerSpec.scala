@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions._
 import models.requests.IdentifierRequest
-import models.{PdfFile, Case, oCase}
+import models.{Case, PdfFile, oCase}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
@@ -27,8 +27,7 @@ import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future.successful
-import scala.concurrent.Future.failed
+import scala.concurrent.Future.{failed, successful}
 
 class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
 
@@ -41,7 +40,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
   private val caseRef = "123"
   private val userEori = "eori-789012"
 
-  private val fakeIdentityRequest = IdentifierRequest(fakeRequest, "id", userEori)
+  private val fakeIdentityRequest = IdentifierRequest(fakeRequest, "id", Some(userEori))
 
   private def controller(): PdfDownloadController = {
     new PdfDownloadController(

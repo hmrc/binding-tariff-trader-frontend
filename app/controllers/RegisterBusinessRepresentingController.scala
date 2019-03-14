@@ -21,7 +21,7 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisterBusinessRepresentingFormProvider
 import javax.inject.Inject
-import models.{CheckMode, Mode}
+import models.{CheckMode, Mode, RegisterBusinessRepresenting}
 import navigation.Navigator
 import pages.{CheckYourAnswersPage, RegisterBusinessRepresentingPage, UploadWrittenAuthorisationPage}
 import play.api.data.Form
@@ -43,7 +43,7 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
                                                        formProvider: RegisterBusinessRepresentingFormProvider
                                                       ) extends FrontendController with I18nSupport {
 
-  private lazy val form = formProvider()
+  private lazy val form: Form[RegisterBusinessRepresenting] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -66,7 +66,7 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
     }
 
     form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
+      (formWithErrors: Form[RegisterBusinessRepresenting]) =>
         Future.successful(BadRequest(registerBusinessRepresenting(appConfig, formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(RegisterBusinessRepresentingPage, value)

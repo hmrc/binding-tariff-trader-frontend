@@ -16,10 +16,10 @@
 
 package views
 
-import play.api.data.Form
 import controllers.routes
 import forms.RegisteredAddressForEoriFormProvider
 import models.{NormalMode, RegisteredAddressForEori}
+import play.api.data.Form
 import views.behaviours.QuestionViewBehaviours
 import views.html.registeredAddressForEori
 
@@ -47,7 +47,7 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
       createViewUsingForm,
       messageKeyPrefix,
       routes.RegisteredAddressForEoriController.onSubmit(NormalMode).url,
-      "field1", "field2", "field3", "field4", "field5"
+      "businessName", "addressLine1", "townOrCity", "postcode", "country"
     )
 
     "show the expected text" in {

@@ -16,6 +16,7 @@
 
 package utils
 
+import config.FrontendAppConfig
 import models.SelectApplicationType.NewCommodity
 import models.WhichBestDescribesYou.BusinessOwner
 import models._
@@ -27,7 +28,8 @@ import uk.gov.hmrc.play.test.UnitSpec
 class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
 
   private val userAnswers = mock[UserAnswers]
-  private val checkHelper = new CheckYourAnswersHelper(userAnswers)
+  private val config = mock[FrontendAppConfig]
+  private val checkHelper = new CheckYourAnswersHelper(userAnswers, config)
   private val fileAttachment = FileAttachment("id", "fileName", "mime", 1)
 
   "CheckYourAnswersHelper" when {
@@ -135,8 +137,15 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
         checkHelper.whichBestDescribesYou.get.answer shouldBe "whichBestDescribesYou.businessOwner"
       }
 
-      "return a row with the correct answer for RegisteredAddressForEoriPage" in {
-        given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("f1", "f2", "f3", "f4", "f5")))
+      "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check disabled" in {
+        given(config.isCdsEnrolmentCheckEnabled).willReturn(false)
+        given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", "f4", "f5")))
+        checkHelper.registeredAddressForEori.get.answer shouldBe "eori\nf1\nf2\nf3\nf4\nf5"
+      }
+
+      "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check enabled" in {
+        given(config.isCdsEnrolmentCheckEnabled).willReturn(true)
+        given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", "f4", "f5")))
         checkHelper.registeredAddressForEori.get.answer shouldBe "f1\nf2\nf3\nf4\nf5"
       }
 

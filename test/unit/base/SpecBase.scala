@@ -37,7 +37,8 @@ trait SpecBase extends PlaySpec with WithFakeApplication {
 
   def fakeRequest = FakeRequest()
 
-  def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", "eori-789012", None)
+  def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
+  def fakeRequestWithoutEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
 
   def messages: Messages = messagesApi.preferred(fakeRequest)
 }

@@ -24,10 +24,10 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
 
   val form = new RegisteredAddressForEoriFormProvider()()
 
-  ".field1" must {
+  ".eori" must {
 
-    val fieldName = "field1"
-    val requiredKey = "registeredAddressForEori.error.field1.required"
+    val fieldName = "eori"
+    val requiredKey = "registeredAddressForEori.error.eori.required"
 
     behave like fieldThatBindsValidData(
       form,
@@ -42,11 +42,29 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
-  ".field2" must {
+  ".businessName" must {
 
-    val fieldName = "field2"
-    val requiredKey = "registeredAddressForEori.error.field2.required"
-    val lengthKey = "registeredAddressForEori.error.field2.length"
+    val fieldName = "businessName"
+    val requiredKey = "registeredAddressForEori.error.businessName.required"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      arbitrary[String]
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+
+  ".addressLine1" must {
+
+    val fieldName = "addressLine1"
+    val requiredKey = "registeredAddressForEori.error.addressLine1.required"
+    val lengthKey = "registeredAddressForEori.error.addressLine1.length"
     val maxLength = 70
 
     behave like fieldThatBindsValidData(
@@ -69,11 +87,11 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
-  ".field3" must {
+  ".townOrCity" must {
 
-    val fieldName = "field3"
-    val requiredKey = "registeredAddressForEori.error.field3.required"
-    val lengthKey = "registeredAddressForEori.error.field3.length"
+    val fieldName = "townOrCity"
+    val requiredKey = "registeredAddressForEori.error.townOrCity.required"
+    val lengthKey = "registeredAddressForEori.error.townOrCity.length"
     val maxLength = 35
 
     behave like fieldThatBindsValidData(
@@ -96,11 +114,11 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
-  ".field4" must {
+  ".postcode" must {
 
-    val fieldName = "field4"
-    val requiredKey = "registeredAddressForEori.error.field4.required"
-    val lengthKey = "registeredAddressForEori.error.field4.length"
+    val fieldName = "postcode"
+    val requiredKey = "registeredAddressForEori.error.postcode.required"
+    val lengthKey = "registeredAddressForEori.error.postcode.length"
     val maxLength = 9
 
     behave like fieldThatBindsValidData(
@@ -123,10 +141,10 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
-  ".field5" must {
+  ".country" must {
 
-    val fieldName = "field5"
-    val requiredKey = "registeredAddressForEori.error.field5.required"
+    val fieldName = "country"
+    val requiredKey = "registeredAddressForEori.error.country.required"
 
     behave like fieldThatBindsValidData(
       form,

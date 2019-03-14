@@ -24,6 +24,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Results}
 import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
+import uk.gov.hmrc.auth.core.InsufficientEnrolments
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.pdftemplates.{applicationPdf, rulingPdf}
 
@@ -38,17 +39,29 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                                      ) extends FrontendController with I18nSupport {
 
   def application(reference: String): Action[AnyContent] = identify.async { implicit request =>
-    caseService.getCaseForUser(request.eoriNumber, reference) flatMap { c: Case =>
-      fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
-        generatePdf(applicationPdf(appConfig, c, attachmentData), s"BTIConfirmation$reference.pdf")
-      }
+    request.eoriNumber match {
+      case Some(eori) =>
+        caseService.getCaseForUser(eori, reference) flatMap { c: Case =>
+          fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
+            generatePdf(applicationPdf(appConfig, c, attachmentData), s"BTIConfirmation$reference.pdf")
+          }
+        }
+
+      case None => throw InsufficientEnrolments()
     }
+
   }
 
   def ruling(reference: String): Action[AnyContent] = identify.async { implicit request =>
-    caseService.getCaseWithRulingForUser(request.eoriNumber, reference) flatMap { c: Case =>
-      generatePdf(rulingPdf(appConfig, c, c.decision.get), s"BTIRuling$reference.pdf")
+    request.eoriNumber match {
+      case Some(eori) =>
+        caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
+          generatePdf(rulingPdf(appConfig, c, c.decision.get), s"BTIRuling$reference.pdf")
+        }
+
+      case None => throw InsufficientEnrolments()
     }
+
   }
 
   private def generatePdf(htmlContent: Html, filename: String) = pdfService.generatePdf(htmlContent)

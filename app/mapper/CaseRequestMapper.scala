@@ -17,22 +17,16 @@
 package mapper
 
 import javax.inject.Singleton
-import models.WhichBestDescribesYou.isBusinessRepresentative
+import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import pages._
 
 @Singleton
 class CaseRequestMapper {
 
-  // TODO: rather than failing on the first missing mandatory field, we should throw an error
-  // showing all expected fields missing.
-  // This can be done with the `cats` library (see "Validated")
-  private def throwError(field: String) = {
-    throw new IllegalStateException(s"Missing User Session Data: $field")
-  }
+  private def throwError(field: String) = throw new IllegalStateException(s"Missing User Session Data: $field")
 
-  def map(userEori: String, answers: UserAnswers): NewCaseRequest = {
-
+  def map(answers: UserAnswers): NewCaseRequest = {
     val confidentialInfo: Option[ConfidentialInformation] = answers.get(ConfidentialInformationPage)
     val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
     val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
@@ -47,8 +41,8 @@ class CaseRequestMapper {
 
     val contact = contactDetails.map(toContact).getOrElse(throwError("contact details"))
 
-    val agentDetails: Option[AgentDetails] = buildAgentDetails(userEori)(answers)
-    val holderDetails: EORIDetails = buildHolderDetails(userEori)(answers)
+    val agentDetails: Option[AgentDetails] = agentDetailsFrom(answers)
+    val holderDetails: EORIDetails = holderDetailsFrom(answers)
 
     val goodName = describeYourItem.map(_.field1).getOrElse(throwError("good name"))
     val goodDescription = describeYourItem.map(_.field2).getOrElse(throwError("good description"))
@@ -73,27 +67,27 @@ class CaseRequestMapper {
     NewCaseRequest(app)
   }
 
-  private def buildHolderDetails(userEori: String): UserAnswers => EORIDetails = { answers: UserAnswers =>
-    val maybeEoriDetails = if (isBusinessRepresentative(answers)) {
-      answers.get(RegisterBusinessRepresentingPage).map(buildTraderEoriDetails(userEori)(_))
+  private def holderDetailsFrom(answers: UserAnswers): EORIDetails = {
+    val maybeEoriDetails = if (theUserIsAnAgent(answers)) {
+      answers.get(RegisterBusinessRepresentingPage).map(toEoriDetails)
     } else {
-      answers.get(RegisteredAddressForEoriPage).map(buildEoriDetailsFromCurrentUser(userEori)(_))
+      answers.get(RegisteredAddressForEoriPage).map(toEoriDetails)
     }
 
     maybeEoriDetails.getOrElse(throwError("holder EORI details"))
   }
 
-  private def buildAgentDetails(userEori: String): UserAnswers => Option[AgentDetails] = { answers: UserAnswers =>
-    if (isBusinessRepresentative(answers)) {
+  private def agentDetailsFrom(answers: UserAnswers): Option[AgentDetails] = {
+    if (theUserIsAnAgent(answers)) {
       answers.get(RegisteredAddressForEoriPage).map { details: RegisteredAddressForEori =>
-        AgentDetails(buildEoriDetailsFromCurrentUser(userEori)(details))
+        AgentDetails(toEoriDetails(details))
       }
     } else {
       None
     }
   }
 
-  private def buildTraderEoriDetails(eoriNumber: String): RegisterBusinessRepresenting => EORIDetails = { details: RegisterBusinessRepresenting =>
+  private def toEoriDetails(details: RegisterBusinessRepresenting): EORIDetails = {
     EORIDetails(
       details.eoriNumber,
       details.businessName,
@@ -105,15 +99,15 @@ class CaseRequestMapper {
     )
   }
 
-  private def buildEoriDetailsFromCurrentUser(eoriNumber: String): RegisteredAddressForEori => EORIDetails = { details: RegisteredAddressForEori =>
+  private def toEoriDetails(details: RegisteredAddressForEori): EORIDetails = {
     EORIDetails(
-      eoriNumber,
-      details.field1, // business name
-      details.field2, // address line 1
-      details.field3, // address line 2 (town)
+      details.eori,
+      details.businessName, // business name
+      details.addressLine1, // address line 1
+      details.townOrCity, // address line 2 (town)
       "",             // address line 3 empty
-      details.field4, // post code
-      details.field5  // country
+      details.postcode, // post code
+      details.country  // country
     )
   }
 

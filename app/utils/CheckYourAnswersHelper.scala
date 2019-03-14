@@ -16,12 +16,13 @@
 
 package utils
 
+import config.FrontendAppConfig
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
 import viewmodels.AnswerRow
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+class CheckYourAnswersHelper(userAnswers: UserAnswers, config: FrontendAppConfig) {
 
   def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
     x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name, false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
@@ -40,7 +41,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def legalChallenge: Option[AnswerRow] = userAnswers.get(LegalChallengePage) map {
-    x => AnswerRow("legalChallenge.checkYourAnswersLabel",  yesNoAnswer(x) , true, routes.LegalChallengeController.onPageLoad(CheckMode).url)
+    x => AnswerRow("legalChallenge.checkYourAnswersLabel", yesNoAnswer(x), true, routes.LegalChallengeController.onPageLoad(CheckMode).url)
   }
 
   def commodityCodeRulingReference: Option[AnswerRow] = userAnswers.get(CommodityCodeRulingReferencePage) map {
@@ -56,7 +57,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def whenToSendSample: Option[AnswerRow] = userAnswers.get(WhenToSendSamplePage) map {
-    x => AnswerRow("whenToSendSample.checkYourAnswersLabel", yesNoAnswer(x) , true, routes.WhenToSendSampleController.onPageLoad(CheckMode).url)
+    x => AnswerRow("whenToSendSample.checkYourAnswersLabel", yesNoAnswer(x), true, routes.WhenToSendSampleController.onPageLoad(CheckMode).url)
   }
 
   def commodityCodeDigits: Option[AnswerRow] = userAnswers.get(CommodityCodeDigitsPage) map {
@@ -64,7 +65,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def commodityCodeBestMatch: Option[AnswerRow] = userAnswers.get(CommodityCodeBestMatchPage) map {
-    x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", yesNoAnswer(x) , true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
+    x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", yesNoAnswer(x), true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
   }
 
   def confidentialInformation: Option[AnswerRow] = userAnswers.get(ConfidentialInformationPage) map {
@@ -115,8 +116,13 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     x => AnswerRow("whichBestDescribesYou.checkYourAnswersLabel", s"whichBestDescribesYou.$x", true, routes.WhichBestDescribesYouController.onPageLoad(CheckMode).url)
   }
 
-  def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map {
-    x => AnswerRow("registeredAddressForEori.checkYourAnswersLabel", Seq(x.field1, x.field2, x.field3, x.field4, x.field5), false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
+  def registeredAddressForEori: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map { x =>
+    val fields = if (config.isCdsEnrolmentCheckEnabled) {
+      Seq(x.businessName, x.addressLine1, x.townOrCity, x.postcode, x.country)
+    } else {
+      Seq(x.eori, x.businessName, x.addressLine1, x.townOrCity, x.postcode, x.country)
+    }
+    AnswerRow("registeredAddressForEori.checkYourAnswersLabel", fields, false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }
 
   private def yesNoAnswer(x: Boolean) = if (x) "site.yes" else "site.no"

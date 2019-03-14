@@ -15,12 +15,10 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
-@import models.Mode
-@import views.ViewUtils._
+@import uk.gov.hmrc.play.views.html._
 
-@(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig)(implicit request: Request[_], config: FrontendAppConfig, messages: Messages)
 
 @main_template(
     title = messages("beforeYouStart.title"),
@@ -37,7 +35,17 @@
 
         <h2>@messages("beforeYouStart.subheading0")</h2>
 
-        <p>@messages("beforeYouStart.paragraph1")</p>
+        @if(config.isCdsEnrolmentCheckEnabled) {
+            <p>@messages("beforeYouStart.paragraph1a")</p>
+        } else {
+            <p>@messages("beforeYouStart.paragraph1b")</p>
+            <ul class="list list-bullet">
+                <li>@messages("beforeYouStart.paragraph1b.item1")</li>
+                <li>@messages("beforeYouStart.paragraph1b.item2")</li>
+            </ul>
+            <p>@messages("beforeYouStart.paragraph1b.item3")</p>
+        }
+
 
         <h2>@messages("beforeYouStart.subheading1")</h2>
 

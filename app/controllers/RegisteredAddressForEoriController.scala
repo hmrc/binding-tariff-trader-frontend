@@ -21,7 +21,7 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisteredAddressForEoriFormProvider
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.{Mode, RegisteredAddressForEori, UserAnswers}
 import navigation.Navigator
 import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
 import play.api.data.Form
@@ -42,11 +42,12 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                                    formProvider: RegisteredAddressForEoriFormProvider
                                                   ) extends FrontendController with I18nSupport {
 
-  private lazy val form = formProvider()
+  private lazy val form: Form[RegisteredAddressForEori] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
-
     val preparedForm = request.userAnswers.flatMap(_.get(RegisteredAddressForEoriPage)) match {
+      case Some(value) if appConfig.isCdsEnrolmentCheckEnabled => form.fill(value.copy(eori = request.userEoriNumber.get))
+      case None if appConfig.isCdsEnrolmentCheckEnabled => form.fill(RegisteredAddressForEori(request.userEoriNumber.get))
       case Some(value) => form.fill(value)
       case _ => form
     }

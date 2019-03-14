@@ -15,10 +15,10 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
-@import models.{Mode, RegisteredAddressForEori}
+@import models.Mode
 @import models.requests.OptionalDataRequest
+@import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: OptionalDataRequest[_], messages: Messages)
@@ -32,34 +32,46 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading( messages("registeredAddressForEori.heading", request.userEoriNumber) )
+        @if(appConfig.isCdsEnrolmentCheckEnabled) {
+            @components.heading(messages("registeredAddressForEori.heading", request.userEoriNumber.get))
 
-        <div role="note" aria-label="Information" class="application-notice info-notice">
-            <p> @messages("registeredAddressForEori.note") </p>
-        </div>
+            <div role="note" aria-label="Information" class="application-notice info-notice">
+                <p> @messages("registeredAddressForEori.note") </p>
+            </div>
+
+            @components.input_hidden(field = form("eori"))
+        } else {
+            @components.heading(messages("registeredAddressForEori.headingNoEORI"))
+
+            @components.input_text(
+                field = form("eori"),
+                hint  = Some(messages("registeredAddressForEori.eori.hint")),
+                label = messages("registeredAddressForEori.eori")
+            )
+        }
 
         @components.input_text(
-            field = form("field1"),
+            field = form("businessName"),
             label = messages("registeredAddressForEori.businessName")
         )
 
         @components.input_text(
-            field = form("field2"),
+            field = form("addressLine1"),
             label = messages("registeredAddressForEori.addressLine1")
         )
 
         @components.input_text(
-            field = form("field3"),
+            field = form("townOrCity"),
             label = messages("registeredAddressForEori.townCity")
         )
 
         @components.input_text(
-            field = form("field4"),
+            field = form("postcode"),
             label = messages("registeredAddressForEori.postcode")
         )
 
         @components.input_text(
-            field = form("field5"),
+            field = form("country"),
             label = messages("registeredAddressForEori.country")
         )
 

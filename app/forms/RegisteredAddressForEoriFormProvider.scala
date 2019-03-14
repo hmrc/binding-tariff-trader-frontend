@@ -16,25 +16,26 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
+import models.RegisteredAddressForEori
 import play.api.data.Form
 import play.api.data.Forms._
-import models.RegisteredAddressForEori
 
 class RegisteredAddressForEoriFormProvider @Inject() extends Mappings {
 
    def apply(): Form[RegisteredAddressForEori] = Form(
      mapping(
-      "field1" -> text("registeredAddressForEori.error.field1.required"),
-      "field2" -> text("registeredAddressForEori.error.field2.required")
-        .verifying(maxLength(70, "registeredAddressForEori.error.field2.length")),
-      "field3" -> text("registeredAddressForEori.error.field3.required")
-        .verifying(maxLength(35, "registeredAddressForEori.error.field3.length")),
-      "field4" -> text("registeredAddressForEori.error.field4.required")
-        .verifying(maxLength(9, "registeredAddressForEori.error.field4.length")),
-      "field5" -> text("registeredAddressForEori.error.field5.required")
+      "eori" -> text("registeredAddressForEori.error.eori.required")
+        .verifying(FormConstraints.eoriCodeConstraint),
+      "businessName" -> text("registeredAddressForEori.error.businessName.required"),
+      "addressLine1" -> text("registeredAddressForEori.error.addressLine1.required")
+        .verifying(maxLength(70, "registeredAddressForEori.error.addressLine1.length")),
+      "townOrCity" -> text("registeredAddressForEori.error.townOrCity.required")
+        .verifying(maxLength(35, "registeredAddressForEori.error.townOrCity.length")),
+      "postcode" -> text("registeredAddressForEori.error.postcode.required")
+        .verifying(maxLength(9, "registeredAddressForEori.error.postcode.length")),
+      "country" -> text("registeredAddressForEori.error.country.required")
      )(RegisteredAddressForEori.apply)(RegisteredAddressForEori.unapply)
    )
 
