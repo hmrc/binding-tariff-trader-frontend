@@ -17,7 +17,6 @@
 package views
 
 import models.requests.IdentifierRequest
-import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
 import views.html.beforeYouStart
 
@@ -25,7 +24,7 @@ class BeforeYouStartViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "beforeYouStart"
 
-  private def createView(eori: Option[String]: () => HtmlFormat.Appendable = Some("eori")) = () => beforeYouStart(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages)
+  private def createView(eori: Option[String] = Some("eori")) = () => beforeYouStart(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages)
 
   "BeforeYouStart view" must {
     behave like normalPage(createView(), messageKeyPrefix)()
