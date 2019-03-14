@@ -16,20 +16,37 @@
 
 package service
 
-import connectors.BindingTariffClassificationConnector
+import connectors.{BindingTariffClassificationConnector, EmailConnector}
 import javax.inject.{Inject, Singleton}
 import models.CaseStatus.CaseStatus
 import models._
+import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class CasesService @Inject()(connector: BindingTariffClassificationConnector) {
+class CasesService @Inject()(connector: BindingTariffClassificationConnector, emailConnector: EmailConnector) {
 
   def create(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
-    connector.createCase(c)
+    for {
+      c <- connector.createCase(c)
+
+      email = ApplicationSubmittedEmail(
+        to = Seq(c.application.contact.email),
+        parameters = ApplicationSubmittedParameters(
+          c.application.contact.name,
+          c.reference
+        )
+      )
+
+      _ <- emailConnector.send(email) recover loggingAnError(c.reference)
+    } yield c
+  }
+
+  private def loggingAnError(ref: String): PartialFunction[Throwable, Unit] = {
+    case t: Throwable => Logger.error(s"Failed to send email for Application [$ref]", t)
   }
 
   def getCases(eori: String, statuses: Set[CaseStatus], pagination: Pagination, sort: Sort)
