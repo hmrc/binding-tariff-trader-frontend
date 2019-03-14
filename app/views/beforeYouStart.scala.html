@@ -18,7 +18,7 @@
 @import controllers.routes._
 @import uk.gov.hmrc.play.views.html._
 
-@(appConfig: FrontendAppConfig)(implicit request: Request[_], config: FrontendAppConfig, messages: Messages)
+@(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("beforeYouStart.title"),
@@ -35,7 +35,7 @@
 
         <h2>@messages("beforeYouStart.subheading0")</h2>
 
-        @if(config.isCdsEnrolmentCheckEnabled) {
+        @if(appConfig.isCdsEnrolmentCheckEnabled) {
             <p>@messages("beforeYouStart.paragraph1a")</p>
         } else {
             <p>@messages("beforeYouStart.paragraph1b")</p>

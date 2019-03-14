@@ -30,7 +30,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
     new BeforeYouStartController(frontendAppConfig, messagesApi,  new FakeNavigator(onwardRoute), FakeIdentifierAction,
       dataRetrievalAction, new DataRequiredActionImpl)
 
-  def viewAsString() = beforeYouStart(frontendAppConfig)(fakeRequest, frontendAppConfig, messages).toString
+  def viewAsString() = beforeYouStart(frontendAppConfig)(fakeRequest, messages).toString
 
   "BeforeYouStart Controller" must {
 
