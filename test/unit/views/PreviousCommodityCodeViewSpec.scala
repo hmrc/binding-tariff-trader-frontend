@@ -27,7 +27,7 @@ class PreviousCommodityCodeViewSpec extends QuestionViewBehaviours[PreviousCommo
 
   val messageKeyPrefix = "previousCommodityCode"
 
-  override val form = new PreviousCommodityCodeFormProvider()()
+  override protected val form = new PreviousCommodityCodeFormProvider()()
 
   def createView = () => previousCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 

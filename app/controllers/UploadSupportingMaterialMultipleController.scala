@@ -68,7 +68,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
       def saveAndRedirect(file: FileAttachment): Future[Result] = {
         val updatedFiles = request.userAnswers.get(SupportingMaterialFileListPage)
-          .map(s => s ++ Seq(file)) getOrElse Seq(file)
+          .map(_ ++ Seq(file)) getOrElse Seq(file)
         val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, updatedFiles)
         dataCacheConnector.save(updatedAnswers.cacheMap)
           .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))

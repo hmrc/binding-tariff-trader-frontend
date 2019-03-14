@@ -27,7 +27,7 @@ class ConfidentialInformationViewSpec extends QuestionViewBehaviours[Confidentia
 
   val messageKeyPrefix = "confidentialInformation"
 
-  override val form = new ConfidentialInformationFormProvider()()
+  override protected val form = new ConfidentialInformationFormProvider()()
 
   def createView = () => confidentialInformation(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 

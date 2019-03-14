@@ -28,7 +28,8 @@ class RegisterBusinessRepresentingViewSpec extends QuestionViewBehaviours[Regist
 
   private val messageKeyPrefix = "registerBusinessRepresenting"
 
-  override val form: Form[RegisterBusinessRepresenting] = new RegisterBusinessRepresentingFormProvider()()
+  override protected val form: Form[RegisterBusinessRepresenting] = new RegisterBusinessRepresentingFormProvider()()
+
 
   private def createView: () => HtmlFormat.Appendable = () => registerBusinessRepresenting(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 

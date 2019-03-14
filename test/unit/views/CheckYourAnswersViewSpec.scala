@@ -29,12 +29,12 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
   private val agentAnswerForTrader = "Answer by the agent on behalf of trader"
 
   private val traderAnswers = Seq(
-    AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", traderAnswer, false, "url"))),
+    AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", traderAnswer, answerIsMessageKey = false, "url"))),
     AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq.empty)
   )
   private val agentAnswers = Seq(
-    AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", agentAnswer, false, "url"))),
-    AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq(AnswerRow("label", agentAnswerForTrader, false, "url")))
+    AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", agentAnswer, answerIsMessageKey = false, "url"))),
+    AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq(AnswerRow("label", agentAnswerForTrader, answerIsMessageKey = false, "url")))
   )
 
   private def createTraderView: () => Html = () => check_your_answers(frontendAppConfig, traderAnswers)(fakeRequest, messages)
@@ -49,7 +49,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
       text must include("Your details")
       text must include(traderAnswer)
-      text must not include("Details of the business, organisation or individual you represent")
+      text must not include "Details of the business, organisation or individual you represent"
     }
 
     "contain the answers for an agent" in {
