@@ -45,5 +45,7 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
     behave like pageWithBackLink(createView)
 
     behave like multipleFileUploadPage(createViewUsingForm, messageKeyPrefix, routes.UploadSupportingMaterialMultipleController.onSubmit(NormalMode).url)
+
   }
+
 }
