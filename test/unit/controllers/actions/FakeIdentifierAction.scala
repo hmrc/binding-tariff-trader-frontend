@@ -21,10 +21,15 @@ import play.api.mvc.{Request, Result}
 
 import scala.concurrent.Future
 
-object FakeIdentifierAction extends IdentifierAction {
+class BaseFakeIdentifierAction(eori: Option[String] = Some("eori-789012")) extends IdentifierAction {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
-    block(IdentifierRequest(request, "id", Some("eori-789012")))
+    block(IdentifierRequest(request, "id", eori))
   }
 
+}
+
+object FakeIdentifierAction extends BaseFakeIdentifierAction {
+  def apply(): IdentifierAction = new BaseFakeIdentifierAction()
+  def apply(eori: Option[String]): IdentifierAction = new BaseFakeIdentifierAction(eori)
 }

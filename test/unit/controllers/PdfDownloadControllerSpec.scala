@@ -25,6 +25,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
+import uk.gov.hmrc.auth.core.InsufficientEnrolments
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future.{failed, successful}
@@ -40,13 +41,13 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
   private val caseRef = "123"
   private val userEori = "eori-789012"
 
-  private val fakeIdentityRequest = IdentifierRequest(fakeRequest, "id", Some(userEori))
+  private val request = IdentifierRequest(fakeRequest, "id", Some(userEori))
 
-  private def controller(): PdfDownloadController = {
+  private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): PdfDownloadController = {
     new PdfDownloadController(
       frontendAppConfig,
       messagesApi,
-      FakeIdentifierAction,
+      action,
       pdfService,
       caseService,
       fileService
@@ -81,7 +82,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheFileServiceFindsTheAttachements()
       givenThePdfServiceGeneratesThePdf()
 
-      val result = controller().application(caseRef)(fakeIdentityRequest)
+      val result = controller().application(caseRef)(request)
 
       status(result) mustBe OK
       contentAsString(result) mustBe "Some content"
@@ -92,10 +93,17 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
-        await(controller().application(caseRef)(fakeIdentityRequest))
+        await(controller().application(caseRef)(request))
       }
       caught.getMessage mustBe "Case not found"
     }
+
+    "error when request eori is not defined" in {
+      intercept[InsufficientEnrolments] {
+        await(controller(FakeIdentifierAction(None)).application(caseRef)(request))
+      }
+    }
+
 
   }
 
@@ -105,7 +113,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheCaseServiceFindsTheCaseWithRuling()
       givenThePdfServiceGeneratesThePdf()
 
-      val result = controller().ruling(caseRef)(fakeIdentityRequest)
+      val result = controller().ruling(caseRef)(request)
 
       status(result) mustBe OK
       contentAsString(result) mustBe "Some content"
@@ -116,9 +124,15 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
-        await(controller().ruling(caseRef)(fakeIdentityRequest))
+        await(controller().ruling(caseRef)(request))
       }
       caught.getMessage mustBe "Case not found"
+    }
+
+    "error when request eori is not defined" in {
+      intercept[InsufficientEnrolments] {
+        await(controller(FakeIdentifierAction(None)).ruling(caseRef)(request))
+      }
     }
 
   }
