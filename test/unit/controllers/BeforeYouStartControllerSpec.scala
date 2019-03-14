@@ -17,6 +17,7 @@
 package controllers
 
 import controllers.actions._
+import models.requests.IdentifierRequest
 import navigation.FakeNavigator
 import play.api.mvc.Call
 import play.api.test.Helpers._
@@ -26,19 +27,32 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new BeforeYouStartController(frontendAppConfig, messagesApi,  new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl)
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, identifier: IdentifierAction = FakeIdentifierAction) =
+    new BeforeYouStartController(
+      frontendAppConfig,
+      messagesApi,
+      new FakeNavigator(onwardRoute),
+      identifier,
+      dataRetrievalAction,
+      new DataRequiredActionImpl
+    )
 
-  def viewAsString() = beforeYouStart(frontendAppConfig)(fakeRequest, messages).toString
+  private def viewAsString(eori: Option[String]) = beforeYouStart(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages).toString
 
   "BeforeYouStart Controller" must {
 
-    "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(fakeRequest)
+    "return OK and the correct view for a GET - with EORI" in {
+      val result = controller(identifier = FakeIdentifierAction(Some("eori"))).onPageLoad(fakeRequest)
 
       status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString()
+      contentAsString(result) mustBe viewAsString(Some("eori"))
+    }
+
+    "return OK and the correct view for a GET - without EORI" in {
+      val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
+
+      status(result) mustBe OK
+      contentAsString(result) mustBe viewAsString(None)
     }
 
     "redirect to the next page when valid data is submitted with POST" in {

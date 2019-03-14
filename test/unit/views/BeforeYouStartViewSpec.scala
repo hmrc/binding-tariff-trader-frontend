@@ -16,18 +16,19 @@
 
 package views
 
+import models.requests.IdentifierRequest
 import views.behaviours.ViewBehaviours
 import views.html.beforeYouStart
 
 class BeforeYouStartViewSpec extends ViewBehaviours {
 
-  val messageKeyPrefix = "beforeYouStart"
+  private val messageKeyPrefix = "beforeYouStart"
 
-  def createView = () => beforeYouStart(frontendAppConfig)(fakeRequest, messages)
+  private def createView(eori: Option[String] = Some("eori")) = () => beforeYouStart(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages)
 
   "BeforeYouStart view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
+    behave like normalPage(createView(), messageKeyPrefix)()
 
-    behave like pageWithoutBackLink(createView)
+    behave like pageWithoutBackLink(createView())
   }
 }

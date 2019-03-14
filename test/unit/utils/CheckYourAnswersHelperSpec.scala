@@ -19,9 +19,11 @@ package utils
 import models.SelectApplicationType.NewCommodity
 import models.WhichBestDescribesYou.BusinessOwner
 import models._
+import models.requests.DataRequest
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
 import pages._
+import play.api.test.FakeRequest
 import uk.gov.hmrc.play.test.UnitSpec
 
 class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
@@ -136,15 +138,15 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
       }
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check disabled" in {
-        given(config.isCdsEnrolmentCheckEnabled).willReturn(false)
+        val requestWithoutEori = DataRequest(FakeRequest(), "", None, mock[UserAnswers])
         given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", "f4", "f5")))
-        checkHelper.registeredAddressForEori.get.answer shouldBe "eori\nf1\nf2\nf3\nf4\nf5"
+        checkHelper.registeredAddressForEori(requestWithoutEori).get.answer shouldBe "eori\nf1\nf2\nf3\nf4\nf5"
       }
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check enabled" in {
-        given(config.isCdsEnrolmentCheckEnabled).willReturn(true)
+        val requestWithEori = DataRequest(FakeRequest(), "", Some("eori"), mock[UserAnswers])
         given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", "f4", "f5")))
-        checkHelper.registeredAddressForEori.get.answer shouldBe "f1\nf2\nf3\nf4\nf5"
+        checkHelper.registeredAddressForEori(requestWithEori).get.answer shouldBe "f1\nf2\nf3\nf4\nf5"
       }
 
     }
