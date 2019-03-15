@@ -68,6 +68,8 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
 
     when(createdCase.reference).thenReturn("reference")
     when(createdCase.application).thenReturn(btiApp)
+    when(btiApp.agent).thenReturn(None)
+    when(btiApp.holder).thenReturn(EORIDetails("eori", "", "", "", "", "", ""))
     when(btiApp.contact).thenReturn(contact)
     when(contact.email).thenReturn("luigi@example.test")
 

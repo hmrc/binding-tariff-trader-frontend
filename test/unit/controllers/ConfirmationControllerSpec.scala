@@ -24,6 +24,7 @@ import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import pages.ConfirmationPage
 import play.api.test.Helpers._
+import service.PdfService
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.confirmation
 
@@ -33,6 +34,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private val cache = mock[DataCacheConnector]
   private val cacheMap = mock[CacheMap]
+  private val pdfService = mock[PdfService]
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
     new ConfirmationController(
@@ -41,19 +43,21 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
-      cache
+      cache,
+      pdfService
     )
   }
 
   private def viewAsString: String = {
-    confirmation(frontendAppConfig, Confirmation("ref", "marisa@example.test", sendingSamples = true))(fakeRequest, messages).toString
+    confirmation(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true), "token")(fakeRequest, messages).toString
   }
 
   "Confirmation Controller" must {
 
     "return OK and the correct view for a GET" in {
       given(cache.remove(cacheMap)).willReturn(Future.successful(true))
-      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "marisa@example.test", sendingSamples = true)))
+      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true)))
+      given(pdfService.encodeToken("eori", "ref")).willReturn("token")
 
       val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
 

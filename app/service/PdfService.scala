@@ -19,12 +19,38 @@ package service
 import connectors.PdfGeneratorServiceConnector
 import javax.inject.{Inject, Singleton}
 import models.PdfFile
+import org.apache.commons.codec.binary.Base64
+import play.api.Logger
 import play.twirl.api.Html
+import uk.gov.hmrc.crypto.{CompositeSymmetricCrypto, Crypted, PlainText}
 
 import scala.concurrent.Future
+import scala.util.{Failure, Success, Try}
 
 @Singleton
-class PdfService @Inject()(connector: PdfGeneratorServiceConnector) {
+class PdfService @Inject()(connector: PdfGeneratorServiceConnector, crypto: CompositeSymmetricCrypto) {
+
+  private def encrypt(string: String): String = crypto.encrypt(PlainText(string)).value
+
+  private def encode(string: String): String = Base64.encodeBase64String(string.getBytes)
+
+  private def decrypt(string: String): String = crypto.decrypt(Crypted(string)).value
+
+  private def decode(string: String): String = new String(Base64.decodeBase64(string.getBytes))
+
+  def encodeToken(eori: String, reference: String): String = {
+    encode(encrypt(eori + ":" + reference))
+  }
+
+  def decodeToken(token: String): Option[(String, String)] = {
+    Try(decrypt(decode(token)).split(":")) match {
+      case Success(Array(eori, reference)) => Some((eori, reference))
+      case Failure(error) =>
+        Logger.debug("Bad Token", error)
+        None
+      case _ => None
+    }
+  }
 
   def generatePdf(htmlContent: Html): Future[PdfFile] = {
     connector.generatePdf(htmlContent)

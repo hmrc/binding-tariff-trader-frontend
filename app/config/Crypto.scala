@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package config
 
-import play.api.libs.json.{Json, OFormat}
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.crypto.{AesCrypto, CompositeSymmetricCrypto, Decrypter}
 
-case class Confirmation(reference: String, eori: String, emailAddress: String, sendingSamples: Boolean)
+@Singleton
+class Crypto @Inject()(appConfig: FrontendAppConfig) extends CompositeSymmetricCrypto {
 
-object Confirmation {
-  implicit val format: OFormat[Confirmation] = Json.format[Confirmation]
+  override protected lazy val currentCrypto: AesCrypto = new AesCrypto {
+    override protected lazy val encryptionKey: String = appConfig.aesKey
+  }
 
-  def apply(c: Case): Confirmation = new Confirmation(
-    c.reference,
-    c.application.agent.map(_.eoriDetails.eori).getOrElse(c.application.holder.eori),
-    c.application.contact.email,
-    c.application.sampleToBeProvided
-  )
+  override protected val previousCryptos = Seq.empty[Decrypter]
+
 }

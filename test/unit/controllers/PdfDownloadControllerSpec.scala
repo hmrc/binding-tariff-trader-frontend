@@ -25,7 +25,6 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
-import uk.gov.hmrc.auth.core.InsufficientEnrolments
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future.{failed, successful}
@@ -38,7 +37,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
   private val expectedResult = PdfFile("Some content".getBytes)
   private val testCase = oCase.btiCaseExample
   private val testCaseWithRuling = oCase.btiCaseWithDecision
-  private val caseRef = "123"
+  private val token = "123"
   private val userEori = "eori-789012"
 
   private val request = IdentifierRequest(fakeRequest, "id", Some(userEori))
@@ -71,6 +70,14 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     when(fileService.getAttachmentMetadata(any[Case])(any[HeaderCarrier])).thenReturn(successful(Seq.empty))
   }
 
+  private def givenThePdfServiceDecodesTheTokenWith(eori: String, reference: String): Unit = {
+    when(pdfService.decodeToken(any[String])).thenReturn(Some((eori, reference)))
+  }
+
+  private def givenThePdfServiceFailsToDecodeTheToken(): Unit = {
+    when(pdfService.decodeToken(any[String])).thenReturn(None)
+  }
+
   private def givenThePdfServiceGeneratesThePdf(): Unit = {
     when(pdfService.generatePdf(any[Html])).thenReturn(successful(expectedResult))
   }
@@ -78,11 +85,12 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
   "PdfDownloadController Application" must {
 
     "return return PdfService result" in {
+      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
       givenTheCaseServiceFindsTheCase()
       givenTheFileServiceFindsTheAttachements()
       givenThePdfServiceGeneratesThePdf()
 
-      val result = controller().application(caseRef)(request)
+      val result = controller().application(token)(request)
 
       status(result) mustBe OK
       contentAsString(result) mustBe "Some content"
@@ -90,30 +98,34 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     }
 
     "error when case not found" in {
+      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
-        await(controller().application(caseRef)(request))
+        await(controller().application(token)(request))
       }
       caught.getMessage mustBe "Case not found"
     }
 
-    "error when request eori is not defined" in {
-      intercept[InsufficientEnrolments] {
-        await(controller(FakeIdentifierAction(None)).application(caseRef)(request))
-      }
-    }
+    "redirect to session expired when the token is invalid" in {
+      givenThePdfServiceFailsToDecodeTheToken()
 
+      val result = controller(FakeIdentifierAction(None)).application(token)(request)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+    }
 
   }
 
   "PdfDownloadController Ruling" must {
 
     "return return PdfService result" in {
+      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
       givenTheCaseServiceFindsTheCaseWithRuling()
       givenThePdfServiceGeneratesThePdf()
 
-      val result = controller().ruling(caseRef)(request)
+      val result = controller().ruling(token)(request)
 
       status(result) mustBe OK
       contentAsString(result) mustBe "Some content"
@@ -121,18 +133,22 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     }
 
     "error when case not found" in {
+      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
-        await(controller().ruling(caseRef)(request))
+        await(controller().ruling(token)(request))
       }
       caught.getMessage mustBe "Case not found"
     }
 
-    "error when request eori is not defined" in {
-      intercept[InsufficientEnrolments] {
-        await(controller(FakeIdentifierAction(None)).ruling(caseRef)(request))
-      }
+    "redirect to session expired when the token is invalid" in {
+      givenThePdfServiceFailsToDecodeTheToken()
+
+      val result = controller(FakeIdentifierAction(None)).ruling(token)(request)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
   }
