@@ -51,7 +51,7 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
           successful(Ok(index(appConfig, CaseDetailTab.APPLICATION, table_applications(pagedResult))))
         }
 
-      case None => successful(Ok(index(appConfig, CaseDetailTab.APPLICATION, table_applications(Paged.empty[Case]))))
+      case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
     }
 
   }
@@ -63,7 +63,7 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
           successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult))))
         }
 
-      case None => successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(Paged.empty[Case]))))
+      case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
     }
   }
 
