@@ -215,7 +215,7 @@ supportingMaterialFileList.indications.bullet2 = technical specifications
 supportingMaterialFileList.indications.bullet3 = lists of materials
 supportingMaterialFileList.indications.bullet4 = images of the item
 supportingMaterialFileList.indications.bullet5 = images of packaging
-supportingMaterialFileList.error.required = Select yes if you want to upload any supporting document
+supportingMaterialFileList.error.required = Please select Yes or No
 
 uploadSupportingMaterialMultiple.title = Upload files - GOV.UK
 uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, brochures or technical specifications
