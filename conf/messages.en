@@ -97,6 +97,7 @@ registeredAddressForEori.townCity = Town or city
 registeredAddressForEori.postcode = Postcode
 registeredAddressForEori.country = Country
 registeredAddressForEori.checkYourAnswersLabel = Your registered details
+registeredAddressForEori.error.eori.required = Enter your EORI
 registeredAddressForEori.error.businessName.required = Enter a business, organisation or individual''s name
 registeredAddressForEori.error.addressLine1.required = Enter address line 1
 registeredAddressForEori.error.townOrCity.required = Enter a town or city
