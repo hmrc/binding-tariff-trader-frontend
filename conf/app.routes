@@ -115,5 +115,5 @@ POST        /check-your-answers                                  controllers.Che
 
 GET         /confirmation                                        controllers.ConfirmationController.onPageLoad()
 
-GET         /pdf/application/:reference                          controllers.PdfDownloadController.application(reference: String)
-GET         /pdf/ruling/:reference                               controllers.PdfDownloadController.ruling(reference: String)
+GET         /pdf/application/:reference                          controllers.PdfDownloadController.application(reference: String, token: Option[String] ?= None)
+GET         /pdf/ruling/:reference                               controllers.PdfDownloadController.ruling(reference: String, token: Option[String] ?= None)

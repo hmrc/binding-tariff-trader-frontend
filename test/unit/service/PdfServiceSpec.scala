@@ -61,9 +61,9 @@ class PdfServiceSpec extends UnitSpec with MockitoSugar {
     "Reversibly Encode & Decode Token" in {
       given(config.aesKey).willReturn(key)
 
-      val pair: Option[(String, String)] = service().decodeToken(service().encodeToken("eori", "reference"))
+      val pair: Option[String] = service().decodeToken(service().encodeToken("eori"))
 
-      pair shouldBe Some(("eori", "reference"))
+      pair shouldBe Some("eori")
     }
   }
 

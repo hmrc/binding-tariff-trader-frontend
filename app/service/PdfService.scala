@@ -38,17 +38,21 @@ class PdfService @Inject()(connector: PdfGeneratorServiceConnector, crypto: Comp
 
   private def decode(string: String): String = new String(Base64.decodeBase64(string.getBytes))
 
-  def encodeToken(eori: String, reference: String): String = {
-    encode(encrypt(eori + ":" + reference))
+  def encodeToken(eori: String): String = {
+    encode(encrypt(eori))
   }
 
-  def decodeToken(token: String): Option[(String, String)] = {
-    Try(decrypt(decode(token)).split(":")) match {
-      case Success(Array(eori, reference)) => Some((eori, reference))
+  def decodeToken(token: String): Option[String] = {
+    Try(decrypt(decode(token))) match {
+      case Success(eori) if eori.nonEmpty =>
+        Some(eori)
+
       case Failure(error) =>
         Logger.debug("Bad Token", error)
         None
-      case _ => None
+
+      case _ =>
+        None
     }
   }
 

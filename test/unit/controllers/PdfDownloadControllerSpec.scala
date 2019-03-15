@@ -37,6 +37,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
   private val expectedResult = PdfFile("Some content".getBytes)
   private val testCase = oCase.btiCaseExample
   private val testCaseWithRuling = oCase.btiCaseWithDecision
+  private val caseRef = "ref"
   private val token = "123"
   private val userEori = "eori-789012"
 
@@ -71,7 +72,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
   }
 
   private def givenThePdfServiceDecodesTheTokenWith(eori: String, reference: String): Unit = {
-    when(pdfService.decodeToken(any[String])).thenReturn(Some((eori, reference)))
+    when(pdfService.decodeToken(any[String])).thenReturn(Some(eori))
   }
 
   private def givenThePdfServiceFailsToDecodeTheToken(): Unit = {
@@ -90,7 +91,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheFileServiceFindsTheAttachements()
       givenThePdfServiceGeneratesThePdf()
 
-      val result = controller().application(token)(request)
+      val result = controller().application(caseRef, Some(token))(request)
 
       status(result) mustBe OK
       contentAsString(result) mustBe "Some content"
@@ -102,7 +103,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
-        await(controller().application(token)(request))
+        await(controller().application(caseRef, Some(token))(request))
       }
       caught.getMessage mustBe "Case not found"
     }
@@ -110,10 +111,19 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to session expired when the token is invalid" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).application(token)(request)
+      val result = controller(FakeIdentifierAction(None)).application(caseRef, Some(token))(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+    }
+
+    "redirect to unauthorized when the token is empty and session EORI is not present" in {
+      givenThePdfServiceFailsToDecodeTheToken()
+
+      val result = controller(FakeIdentifierAction(None)).application(caseRef, None)(request)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
     }
 
   }
@@ -125,7 +135,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheCaseServiceFindsTheCaseWithRuling()
       givenThePdfServiceGeneratesThePdf()
 
-      val result = controller().ruling(token)(request)
+      val result = controller().ruling(caseRef, Some(token))(request)
 
       status(result) mustBe OK
       contentAsString(result) mustBe "Some content"
@@ -137,7 +147,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
-        await(controller().ruling(token)(request))
+        await(controller().ruling(caseRef, Some(token))(request))
       }
       caught.getMessage mustBe "Case not found"
     }
@@ -145,10 +155,19 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to session expired when the token is invalid" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).ruling(token)(request)
+      val result = controller(FakeIdentifierAction(None)).ruling(caseRef, Some(token))(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+    }
+
+    "redirect to unauthorized when the token is empty and session EORI is not present" in {
+      givenThePdfServiceFailsToDecodeTheToken()
+
+      val result = controller(FakeIdentifierAction(None)).ruling(caseRef, None)(request)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
     }
 
   }

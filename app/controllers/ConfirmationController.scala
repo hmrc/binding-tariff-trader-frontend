@@ -48,7 +48,7 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
       removed <- dataCacheConnector.remove(request.userAnswers.cacheMap)
       _ = if (!removed) Logger.warn("Session entry failed to be removed from the cache")
 
-      token: String = pdfService.encodeToken(c.eori, c.reference)
+      token: String = pdfService.encodeToken(c.eori)
     } yield Ok(confirmation(appConfig, c, token))
 
     request.userAnswers.get(ConfirmationPage) match {

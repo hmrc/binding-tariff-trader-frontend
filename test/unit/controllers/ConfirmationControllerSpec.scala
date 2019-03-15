@@ -57,7 +57,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
     "return OK and the correct view for a GET" in {
       given(cache.remove(cacheMap)).willReturn(Future.successful(true))
       given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true)))
-      given(pdfService.encodeToken("eori", "ref")).willReturn("token")
+      given(pdfService.encodeToken("eori")).willReturn("token")
 
       val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
 
