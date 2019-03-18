@@ -109,12 +109,13 @@ trait ModelGenerators {
   implicit lazy val arbitraryRegisteredAddressForEori: Arbitrary[RegisteredAddressForEori] =
     Arbitrary {
       for {
-        field1 <- arbitrary[String]
-        field2 <- arbitrary[String]
-        field3 <- arbitrary[String]
-        field4 <- arbitrary[String]
-        field5 <- arbitrary[String]
-      } yield RegisteredAddressForEori(field1, field2, field3, field4, field5)
+        eori <- arbitrary[String]
+        businessName <- arbitrary[String]
+        addressLine1 <- arbitrary[String]
+        town <- arbitrary[String]
+        postcode <- arbitrary[String]
+        country <- arbitrary[String]
+      } yield RegisteredAddressForEori(eori, businessName, addressLine1, town, postcode, country)
     }
 
 }

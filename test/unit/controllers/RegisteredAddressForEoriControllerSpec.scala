@@ -33,8 +33,8 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private lazy val formProvider = new RegisteredAddressForEoriFormProvider()
-  private lazy val form = formProvider()
+  private lazy val formProvider: RegisteredAddressForEoriFormProvider = new RegisteredAddressForEoriFormProvider()
+  private lazy val form: Form[RegisteredAddressForEori] = formProvider()
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) = {
     new RegisteredAddressForEoriController(
@@ -48,7 +48,7 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
     )
   }
 
-  private def viewAsString(form: Form[_] = form): String = {
+  private def viewAsString(form: Form[RegisteredAddressForEori] = form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get))): String = {
     registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages).toString
   }
 
@@ -62,16 +62,16 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(RegisteredAddressForEoriPage.toString -> Json.toJson(RegisteredAddressForEori("value 1", "value 2", "value 3", "value 4", "value 5")))
+      val validData = Map(RegisteredAddressForEoriPage.toString -> Json.toJson(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get, "businessName", "addressLine1", "townOrCity", "postcode", "country")))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(RegisteredAddressForEori("value 1", "value 2", "value 3", "value 4", "value 5")))
+      contentAsString(result) mustBe viewAsString(form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get, "businessName", "addressLine1", "townOrCity", "postcode", "country")))
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("field1", "value 1"), ("field2", "value 2"), ("field3", "value 3"), ("field4", "value 4"), ("field5", "value 5"))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("eori", "GB123"), ("businessName", "value 1"), ("addressLine1", "value 3"), ("townOrCity", "value 4"), ("postcode", "value 5"), ("country", "value 6"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 

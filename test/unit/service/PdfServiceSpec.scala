@@ -16,6 +16,7 @@
 
 package service
 
+import config.{Crypto, FrontendAppConfig}
 import connectors.PdfGeneratorServiceConnector
 import models.PdfFile
 import org.mockito.ArgumentMatchers._
@@ -29,19 +30,40 @@ import scala.concurrent.Future
 class PdfServiceSpec extends UnitSpec with MockitoSugar {
 
   private val pdfHtml = mock[Html]
+  private val config = mock[FrontendAppConfig]
   private val connector = mock[PdfGeneratorServiceConnector]
   private val connectorResponse = PdfFile("Some content".getBytes)
 
-  private val service = new PdfService(connector)
+  private def service() = new PdfService(connector, new Crypto(config))
 
   "Service 'Generate Pdf'" should {
 
     "delegate to connector" in {
       given(connector.generatePdf(any[Html])).willReturn(Future.successful(connectorResponse))
 
-      val file: PdfFile = await(service.generatePdf(pdfHtml))
+      val file: PdfFile = await(service().generatePdf(pdfHtml))
 
       file shouldBe connectorResponse
+    }
+  }
+
+  "Service" should {
+    val key = "9368B45C6E87AB6C45839EB23A123763"
+
+    "Decode BadToken" in {
+      given(config.aesKey).willReturn(key)
+
+      val token = service().decodeToken("token")
+
+      token shouldBe None
+    }
+
+    "Reversibly Encode & Decode Token" in {
+      given(config.aesKey).willReturn(key)
+
+      val pair: Option[String] = service().decodeToken(service().encodeToken("eori"))
+
+      pair shouldBe Some("eori")
     }
   }
 

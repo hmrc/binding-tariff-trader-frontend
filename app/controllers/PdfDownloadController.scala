@@ -21,13 +21,14 @@ import controllers.actions._
 import javax.inject.Inject
 import models.Case
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Results}
+import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.pdftemplates.{applicationPdf, rulingPdf}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                                       override val messagesApi: MessagesApi,
@@ -37,23 +38,48 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                                       fileService: FileService
                                      ) extends FrontendController with I18nSupport {
 
-  def application(reference: String): Action[AnyContent] = identify.async { implicit request =>
-    caseService.getCaseForUser(request.eoriNumber, reference) flatMap { c: Case =>
+  def application(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+    if(request.eoriNumber.isDefined) {
+      getApplicationPDF(request.eoriNumber.get, reference)
+    } else if(token.isDefined) {
+      pdfService.decodeToken(token.get) match {
+        case Some(eori) => getApplicationPDF(eori, reference)
+        case None => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+      }
+    } else {
+      Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
+    }
+  }
+
+  def ruling(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+    if(request.eoriNumber.isDefined) {
+      getRulingPDF(request.eoriNumber.get, reference)
+    } else if(token.isDefined) {
+      pdfService.decodeToken(token.get) match {
+        case Some(eori) => getRulingPDF(eori, reference)
+        case None => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+      }
+    } else {
+      Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
+    }
+  }
+
+  private def getApplicationPDF(eori: String, reference: String)(implicit r: Request[_]): Future[Result] = {
+    caseService.getCaseForUser(eori, reference) flatMap { c: Case =>
       fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
         generatePdf(applicationPdf(appConfig, c, attachmentData), s"BTIConfirmation$reference.pdf")
       }
     }
   }
 
-  def ruling(reference: String): Action[AnyContent] = identify.async { implicit request =>
-    caseService.getCaseWithRulingForUser(request.eoriNumber, reference) flatMap { c: Case =>
+  private def getRulingPDF(eori: String, reference: String)(implicit r: Request[_]): Future[Result] = {
+    caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
       generatePdf(rulingPdf(appConfig, c, c.decision.get), s"BTIRuling$reference.pdf")
     }
   }
 
-  private def generatePdf(htmlContent: Html, filename: String) = pdfService.generatePdf(htmlContent)
-    .map(pdfFile => {
-      Results.Ok(pdfFile.content).as(pdfFile.contentType).withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
-    })
+  private def generatePdf(htmlContent: Html, filename: String) = pdfService.generatePdf(htmlContent) map {
+    pdfFile => Results.Ok(pdfFile.content).as(pdfFile.contentType).withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
+  }
 
 }

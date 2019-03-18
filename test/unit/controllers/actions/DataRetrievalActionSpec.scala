@@ -16,16 +16,16 @@
 
 package controllers.actions
 
-import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
 import base.SpecBase
 import connectors.DataCacheConnector
 import models.requests.{IdentifierRequest, OptionalDataRequest}
+import org.mockito.Mockito._
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.http.cache.client.CacheMap
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
@@ -42,7 +42,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
         when(dataCacheConnector.fetch("id")) thenReturn Future(None)
         val action = new Harness(dataCacheConnector)
 
-        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, "id", "eori-789012"))
+        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, "id", Some("eori-789012")))
 
         whenReady(futureResult) {
           _.userAnswers.isEmpty mustBe true
@@ -58,7 +58,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
         when(dataCacheConnector.fetch("id")) thenReturn Future(Some(new CacheMap("id", Map())))
         val action = new Harness(dataCacheConnector)
 
-        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, "id", "eori-789012"))
+        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, "id", Some("eori-789012")))
 
         whenReady(futureResult) {
           _.userAnswers.isDefined mustBe true

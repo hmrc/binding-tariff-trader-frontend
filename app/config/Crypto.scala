@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package config
 
-import play.api.libs.json._
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.crypto.{AesCrypto, CompositeSymmetricCrypto, Decrypter}
 
-case class RegisteredAddressForEori(eori: String, businessName: String, addressLine1: String, townOrCity: String, postcode: String, country: String)
+@Singleton
+class Crypto @Inject()(appConfig: FrontendAppConfig) extends CompositeSymmetricCrypto {
 
-object RegisteredAddressForEori {
-  implicit val format: OFormat[RegisteredAddressForEori] = Json.format[RegisteredAddressForEori]
+  override protected lazy val currentCrypto: AesCrypto = new AesCrypto {
+    override protected lazy val encryptionKey: String = appConfig.aesKey
+  }
 
-  def apply(eori: String): RegisteredAddressForEori = RegisteredAddressForEori(eori, "", "", "", "", "")
+  override protected val previousCryptos = Seq.empty[Decrypter]
+
 }

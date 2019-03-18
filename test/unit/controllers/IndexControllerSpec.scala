@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.FakeIdentifierAction
+import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import models.CaseStatus.CaseStatus
 import models._
 import models.oCase._
@@ -32,41 +32,58 @@ import scala.concurrent.Future
 class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private val casesService = mock[CasesService]
+  private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
+  private def controller(identifier: IdentifierAction = FakeIdentifierAction): IndexController = new IndexController(
+    frontendAppConfig,
+    identifier,
+    casesService,
+    messagesApi
+  )
 
-  "Index Controller" must {
+  "Index Controller - Get Applications" must {
 
     "return the correct view for a load applications" in {
 
       given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
         .willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
 
-      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getApplications(page = 1)(fakeRequest)
+      val result = controller().getApplications(page = 1)(fakeRequest)
 
       status(result) mustBe OK
       contentAsString(result) must include("applications-list-table")
     }
+
+    "return 200 and show no results for a GET when no applications are found" in {
+      given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq[Case](), 1, 10, 0)))
+
+      val result = controller().getApplications(page = 1)(fakeRequest)
+
+      status(result) mustBe OK
+      contentAsString(result) must include("application-list-empty")
+
+    }
+
+    "redirect to BeforeYouStart when EORI unavailable" in {
+      val result = controller(givenUserDoesntHaveAnEORI).getApplications(page = 1)(fakeRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad().url)
+    }
+
+  }
+
+  "Index Controller - Get Rulings" should {
 
     "return the correct view for a load rulings" in {
 
       given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
         .willReturn(Future.successful(Paged(Seq(btiCaseWithDecision), 1, 10, 0)))
 
-      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getRulings(page = 1)(fakeRequest)
+      val result = controller().getRulings(page = 1)(fakeRequest)
 
       status(result) mustBe OK
       contentAsString(result) must include("rulings-list-table")
-    }
-
-
-    "return 200 and show no results for a GET when no applications are found" in {
-      given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
-        .willReturn(Future.successful(Paged(Seq[Case](), 1, 10, 0)))
-
-      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getApplications(page = 1)(fakeRequest)
-
-      status(result) mustBe OK
-      contentAsString(result) must include("application-list-empty")
-
     }
 
     "return 200 and show no results  for a GET when no rulings are found" in {
@@ -74,10 +91,17 @@ class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
       given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
         .willReturn(Future.successful(Paged(Seq[Case](), 1, 10, 0)))
 
-      val result = new IndexController(frontendAppConfig, FakeIdentifierAction, casesService, messagesApi).getRulings(page = 1)(fakeRequest)
+      val result = controller().getRulings(page = 1)(fakeRequest)
 
       status(result) mustBe OK
       contentAsString(result) must include("ruling-list-empty")
+    }
+
+    "redirect to BeforeYouStart when EORI unavailable" in {
+      val result = controller(givenUserDoesntHaveAnEORI).getRulings(page = 1)(fakeRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad().url)
     }
 
   }

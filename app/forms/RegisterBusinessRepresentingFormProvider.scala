@@ -19,9 +19,8 @@ package forms
 import forms.mappings.Mappings
 import javax.inject.Inject
 import models.RegisterBusinessRepresenting
-import play.api.data.Forms._
-import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.Form
+import play.api.data.Forms._
 
 class RegisterBusinessRepresentingFormProvider @Inject() extends Mappings {
 
@@ -47,17 +46,5 @@ class RegisterBusinessRepresentingFormProvider @Inject() extends Mappings {
         .verifying(maxLength(countryMaxLength, "registerBusinessRepresenting.error.country.length"))
     )(RegisterBusinessRepresenting.apply)(RegisterBusinessRepresenting.unapply)
   )
-
-  object FormConstraints {
-
-    private val eoriCodeRegex = "^[a-zA-Z0-9]{1,17}"
-    private val eoriCodeError = "registerBusinessRepresenting.error.eoriNumber.format"
-
-    val eoriCodeConstraint: Constraint[String] = Constraint("constraints.eoriFormat")({
-      case s: String if s.isEmpty => Valid
-      case s: String if s.matches(eoriCodeRegex) => Valid
-      case _: String => Invalid(eoriCodeError)
-    })
-  }
 
 }

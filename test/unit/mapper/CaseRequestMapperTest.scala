@@ -25,19 +25,18 @@ import uk.gov.hmrc.play.test.UnitSpec
 class CaseRequestMapperTest extends UnitSpec {
 
   private val mapper = new CaseRequestMapper()
-  private val userEori = "EORI-12345"
 
   "Mapper" should {
 
     "Fail when mandatory fields are missing" in {
       intercept[IllegalStateException] {
-        mapper.map(userEori, missingGoodDetails())
+        mapper.map(missingGoodDetails())
       }
     }
 
     "Map Mandatory Fields" in {
       // When
-      val response = mapper.map(userEori, mandatoryAnswers())
+      val response = mapper.map(mandatoryAnswers())
 
       // Then Mandatory fields should be present
       response.attachments shouldBe Seq.empty
@@ -45,7 +44,7 @@ class CaseRequestMapperTest extends UnitSpec {
       val application = response.application
 
       val holder: EORIDetails = application.holder
-      holder.eori shouldBe userEori
+      holder.eori shouldBe "Trader EORI"
       holder.businessName shouldBe "Trader Business Name"
       holder.addressLine1 shouldBe "Trader Address Line 1"
       holder.addressLine2 shouldBe "Trader Town"
@@ -75,7 +74,7 @@ class CaseRequestMapperTest extends UnitSpec {
 
     "Map Optional Fields" in {
       // When
-      val response = mapper.map(userEori, allAnswers())
+      val response = mapper.map(allAnswers())
 
       // Then Mandatory fields should be present
       response.attachments shouldBe Seq.empty
@@ -96,7 +95,7 @@ class CaseRequestMapperTest extends UnitSpec {
       contact.phone shouldBe None
 
       val agent: AgentDetails = application.agent.get
-      agent.eoriDetails.eori shouldBe userEori
+      agent.eoriDetails.eori shouldBe "Agent EORI"
       agent.eoriDetails.businessName shouldBe "Agent Business Name"
       agent.eoriDetails.addressLine1 shouldBe "Agent Address Line 1"
       agent.eoriDetails.addressLine2 shouldBe "Agent Town"
@@ -128,6 +127,7 @@ class CaseRequestMapperTest extends UnitSpec {
         Map(
           RegisteredAddressForEoriPage.toString -> js(
             RegisteredAddressForEori(
+              "Agent EORI",
               "Agent Business Name",
               "Agent Address Line 1",
               "Agent Town",
@@ -192,6 +192,7 @@ class CaseRequestMapperTest extends UnitSpec {
         Map(
           RegisteredAddressForEoriPage.toString -> js(
             RegisteredAddressForEori(
+              "Trader EORI",
               "Trader Business Name",
               "Trader Address Line 1",
               "Trader Town",
@@ -225,6 +226,7 @@ class CaseRequestMapperTest extends UnitSpec {
         Map(
           RegisteredAddressForEoriPage.toString -> js(
             RegisteredAddressForEori(
+              "Trader EORI",
               "Trader Business Name",
               "Trader Address Line 1",
               "Trader Town",

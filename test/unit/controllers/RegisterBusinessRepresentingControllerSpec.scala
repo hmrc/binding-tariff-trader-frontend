@@ -33,14 +33,14 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new RegisterBusinessRepresentingFormProvider()
-  val form = formProvider()
+  private val formProvider = new RegisterBusinessRepresentingFormProvider()
+  private val form: Form[RegisterBusinessRepresenting] = formProvider()
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new RegisterBusinessRepresentingController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
       dataRetrievalAction, new DataRequiredActionImpl, formProvider)
 
-  def viewAsString(form: Form[_] = form) = registerBusinessRepresenting(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  private def viewAsString(form: Form[RegisterBusinessRepresenting] = form) = registerBusinessRepresenting(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
 
   "RegisterBusinessRepresenting Controller" must {
 

@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json._
+import play.api.data.validation.{Constraint, Invalid, Valid}
 
-case class RegisteredAddressForEori(eori: String, businessName: String, addressLine1: String, townOrCity: String, postcode: String, country: String)
+object FormConstraints {
 
-object RegisteredAddressForEori {
-  implicit val format: OFormat[RegisteredAddressForEori] = Json.format[RegisteredAddressForEori]
+  private val eoriCodeRegex = "^[a-zA-Z0-9]{1,17}"
+  private val eoriCodeError = "registerBusinessRepresenting.error.eoriNumber.format"
 
-  def apply(eori: String): RegisteredAddressForEori = RegisteredAddressForEori(eori, "", "", "", "", "")
+  val eoriCodeConstraint: Constraint[String] = Constraint("constraints.eoriFormat")({
+    case s: String if s.isEmpty => Valid
+    case s: String if s.matches(eoriCodeRegex) => Valid
+    case _: String => Invalid(eoriCodeError)
+  })
 }

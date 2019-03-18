@@ -25,6 +25,7 @@ import pages.ConfirmationPage
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
+import service.PdfService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.confirmation
 
@@ -37,19 +38,18 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
-                                       dataCacheConnector: DataCacheConnector
+                                       dataCacheConnector: DataCacheConnector,
+                                       pdfService: PdfService
                                       ) extends FrontendController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def show(c: Confirmation): Future[Result] = {
-      dataCacheConnector.remove(request.userAnswers.cacheMap).map { b: Boolean =>
-        if (!b) {
-          Logger.warn("Session entry failed to be removed from the cache")
-        }
-        Ok(confirmation(appConfig, c))
-      }
-    }
+    def show(c: Confirmation): Future[Result] = for {
+      removed <- dataCacheConnector.remove(request.userAnswers.cacheMap)
+      _ = if (!removed) Logger.warn("Session entry failed to be removed from the cache")
+
+      token: String = pdfService.encodeToken(c.eori)
+    } yield Ok(confirmation(appConfig, c, token))
 
     request.userAnswers.get(ConfirmationPage) match {
       case Some(c: Confirmation) => show(c)

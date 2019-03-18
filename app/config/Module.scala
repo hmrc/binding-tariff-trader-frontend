@@ -19,6 +19,7 @@ package config
 import com.google.inject.AbstractModule
 import connectors._
 import controllers.actions._
+import uk.gov.hmrc.crypto.CompositeSymmetricCrypto
 
 class Module extends AbstractModule {
 
@@ -29,5 +30,8 @@ class Module extends AbstractModule {
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl]).asEagerSingleton()
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction]).asEagerSingleton()
     bind(classOf[DataCacheConnector]).to(classOf[MongoCacheConnector]).asEagerSingleton()
+    bind(classOf[CompositeSymmetricCrypto]).to(classOf[Crypto])
   }
 }
+
+

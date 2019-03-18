@@ -16,22 +16,24 @@
 
 package views
 
-import play.api.data.Form
 import controllers.routes
 import forms.RegisterBusinessRepresentingFormProvider
 import models.{NormalMode, RegisterBusinessRepresenting}
+import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.registerBusinessRepresenting
 
 class RegisterBusinessRepresentingViewSpec extends QuestionViewBehaviours[RegisterBusinessRepresenting] {
 
-  val messageKeyPrefix = "registerBusinessRepresenting"
+  private val messageKeyPrefix = "registerBusinessRepresenting"
 
-  override protected val form = new RegisterBusinessRepresentingFormProvider()()
+  override protected val form: Form[RegisterBusinessRepresenting] = new RegisterBusinessRepresentingFormProvider()()
 
-  def createView = () => registerBusinessRepresenting(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => registerBusinessRepresenting(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  private def createView: () => HtmlFormat.Appendable = () => registerBusinessRepresenting(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+
+  private def createViewUsingForm: Form[RegisterBusinessRepresenting] => HtmlFormat.Appendable = (form: Form[RegisterBusinessRepresenting]) => registerBusinessRepresenting(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
 
   "RegisterBusinessRepresenting view" must {

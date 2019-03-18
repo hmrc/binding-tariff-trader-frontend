@@ -23,7 +23,7 @@ import controllers.actions._
 import javax.inject.Inject
 import mapper.CaseRequestMapper
 import models.Confirmation.format
-import models.WhichBestDescribesYou.isBusinessRepresentative
+import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import models.requests.OptionalDataRequest
 import navigation.Navigator
@@ -59,7 +59,7 @@ class DeclarationController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
 
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
-    val newCaseRequest = mapper.map(request.userEoriNumber, answers)
+    val newCaseRequest = mapper.map(answers)
 
     val attachments: Seq[FileAttachment] = answers
       .get(SupportingMaterialFileListPage)
@@ -80,7 +80,7 @@ class DeclarationController @Inject()(
   private def getPublishedLetter(answers: UserAnswers)
                                 (implicit headerCarrier: HeaderCarrier): Future[Option[PublishedFileAttachment]] = {
 
-    if (isBusinessRepresentative(answers)) {
+    if (theUserIsAnAgent(answers)) {
       answers.get(UploadWrittenAuthorisationPage)
         .map(fileService.publish(_).map(Some(_)))
         .getOrElse(successful(None))
@@ -99,7 +99,7 @@ class DeclarationController @Inject()(
                                 letter: Option[PublishedFileAttachment], answers: UserAnswers): NewCaseRequest = {
     def toAttachment: PublishedFileAttachment => Attachment = file => Attachment(file.id)
 
-    if (isBusinessRepresentative(answers)) {
+    if (theUserIsAnAgent(answers)) {
       val letterOfAuth: Option[Attachment] = letter.map(toAttachment)
       val agentDetails = caseRequest.application.agent.map(_.copy(letterOfAuthorisation = letterOfAuth))
       val application = caseRequest.application.copy(agent = agentDetails)
