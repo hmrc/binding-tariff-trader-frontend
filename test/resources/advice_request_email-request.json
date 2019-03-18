@@ -1,0 +1,8 @@
+{
+  "to": ["user@domain.com"],
+  "templateId": "digital_tariffs_application_submitted",
+  "parameters": {
+    "recipientName_line1": "ref",
+    "reference": "name"
+  }
+}

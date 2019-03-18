@@ -48,6 +48,7 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val loginContinueUrl: String = loadConfig("urls.loginContinue")
   lazy val bindingTariffClassificationUrl: String = baseUrl("binding-tariff-classification")
   lazy val bindingTariffFileStoreUrl: String = baseUrl("binding-tariff-filestore")
+  lazy val emailUrl: String = baseUrl("email")
   lazy val pdfGeneratorUrl: String = baseUrl("pdf-generator-service")
   lazy val isCdsEnrolmentCheckEnabled: Boolean = getBoolean("cdsEnrolmentCheckEnabled")
 

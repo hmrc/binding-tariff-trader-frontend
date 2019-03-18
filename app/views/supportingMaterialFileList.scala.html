@@ -36,8 +36,12 @@
 
         @if(files.isEmpty) {
             @components.heading(messages("supportingMaterialFileList.heading"))
-        }else{
-            <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter", files.size)</h1>
+        } else {
+            @if(files.size == 1) {
+                <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter.singular")</h1>
+            } else {
+                <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter.plural", files.size)</h1>
+            }
             @components.show_file_table(files, mode)
         }
 
@@ -68,7 +72,7 @@
                 </div>
 
                 <div class="multiple-choice">
-                    <input id="add-file-no" type="radio" name="add-file-choice" value="false" checked="checked" />
+                    <input id="add-file-no" type="radio" name="add-file-choice" value="false" />
                     <label class="block-label selection-button-radio" for="add-file-no">  @messages("site.no") </label>
                 </div>
             </fieldset>

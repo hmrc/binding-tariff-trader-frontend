@@ -21,7 +21,8 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SupportingMaterialFileListFormProvider
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.requests.DataRequest
+import models.{FileAttachment, Mode, UserAnswers}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
@@ -47,13 +48,11 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
   private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val existingFiles = request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
     Ok(supportingMaterialFileList(appConfig, form, existingFiles, mode))
   }
 
   def onRemove(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    val existingFiles = request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
     val removedFile = existingFiles.filter(_.id != fileId).seq
     val answers: UserAnswers = request.userAnswers.set(SupportingMaterialFileListPage, removedFile)
     dataCacheConnector.save(answers.cacheMap)
@@ -78,12 +77,16 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, Seq.empty, mode))),
+        successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, existingFiles, mode))),
       {
         case true => successful(Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
         case false => defaultCachePageAndRedirect
       }
     )
+  }
+
+  private def existingFiles(implicit request: DataRequest[AnyContent]): Seq[FileAttachment] = {
+    request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
   }
 
 }

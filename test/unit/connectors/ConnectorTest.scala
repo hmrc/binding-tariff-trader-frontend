@@ -59,6 +59,7 @@ trait ConnectorTest extends UnitSpec with WiremockTestServer
     when(appConfig.bindingTariffFileStoreUrl) thenReturn wireMockUrl
     when(appConfig.bindingTariffClassificationUrl) thenReturn wireMockUrl
     when(appConfig.pdfGeneratorUrl) thenReturn wireMockUrl
+    when(appConfig.emailUrl) thenReturn wireMockUrl
 
     when(appConfig.apiToken) thenReturn fakeAuthToken
   }
