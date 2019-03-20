@@ -69,16 +69,18 @@ site.upload_continue = Upload and continue
 site.service_name = Apply for a Binding Tariff Information ruling
 
 unauthorised.title = Not registered for CDS
-unauthorised.heading = To apply for a Binding Information ruling you need to get access to CDS
-unauthorised.body1 = CDS is the replacement for Customs Handling Imports and Export Freight (CHIEF) system. You can use it to manage your customs interactions.
-unauthorised.body2_p1 = If you have an EORI number you can
-unauthorised.body2_link = get access to CDS
-unauthorised.body2_p2 = so that you can:
-unauthorised.body3 = process declarations for goods entering and leaving the UK or EU through ports and airports
-unauthorised.body4 = calculate and pay the correct duty and taxes
-unauthorised.body5 = complete customs information electronically
-unauthorised.body6_p1 = If you do not, you can
-unauthorised.body6_link = get an EORI number and get access here.
+unauthorised.heading = To apply for a Binding Tariff Information (BTI) ruling you need to get access to CDS
+unauthorised.intro = Customs Declaration Service (CDS) is the replacement for the Customs Handling Imports and Export Freight (CHIEF) system. You can use it to manage your customs interactions.
+unauthorised.warn_p1 = Once you have applied to get access to CDS, you’ll need to return to this page and
+unauthorised.warn_link = restart your application.
+unauthorised.warn_p2 = If you still cannot start the application, you may have to try again once you have received a confirmation email from CDS.
+unauthorised.get.eori_p1 = To get access to CDS you''ll need an
+unauthorised.get.eori_link = Economic Operator and Registration Identification (EORI) number (opens in a new window or tab)
+unauthorised.have.eori_p1 = If you already have an EORI number, you can
+unauthorised.have.eori_link = get access to CDS here (opens in a new window or tab)
+unauthorised.help.title = Help and support
+unauthorised.help_p1 = If you are having problems registering or are unsure if you have an EORI number, phone 0300 322 7067.
+unauthorised.help_p2 = Open 8am to 6pm, Monday to Friday (closed bank holidays).
 
 ## Generic messages
 eori.number = EORI number

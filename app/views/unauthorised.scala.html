@@ -25,22 +25,33 @@
 
     @components.heading(messages("unauthorised.heading"))
 
-    <p>@messages("unauthorised.body1")</p>
-    <p>
-        @messages("unauthorised.body2_p1")
-        <a href="@appConfig.cdsSubscribeUrl">@messages("unauthorised.body2_link")</a>
-        @messages("unauthorised.body2_p2")
+    <p>@messages("unauthorised.intro")</p>
+
+    <p class="notice">
+        <i class="icon icon-important">
+            <span class="visually-hidden">Warning</span>
+        </i>
+        <strong class="bold-small">
+            @messages("unauthorised.warn_p1")
+            <a href="@controllers.routes.IndexController.getApplications()">@messages("unauthorised.warn_link")</a>
+            @messages("unauthorised.warn_p2")
+        </strong>
     </p>
 
-    <ul class="list list-bullet">
-        <li>@messages("unauthorised.body3")</li>
-        <li>@messages("unauthorised.body4")</li>
-        <li>@messages("unauthorised.body5")</li>
-    </ul>
+    <p>
+        @messages("unauthorised.get.eori_p1")
+        <a target="_blank" href="@appConfig.cdsRegisterUrl">@messages("unauthorised.get.eori_link")</a>
+    </p>
 
     <p>
-        @messages("unauthorised.body6_p1")
-        <a href="@appConfig.cdsRegisterUrl">@messages("unauthorised.body6_link")</a>
+        @messages("unauthorised.have.eori_p1")
+        <a target="_blank" href="@appConfig.cdsSubscribeUrl">@messages("unauthorised.have.eori_link")</a>
+    </p>
+
+    <h2>@messages("unauthorised.help.title")</h2>
+    <p>
+        @messages("unauthorised.help_p1")<br/>
+        @messages("unauthorised.help_p2")
     </p>
 
 }
