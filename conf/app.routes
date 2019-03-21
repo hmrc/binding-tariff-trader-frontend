@@ -13,7 +13,6 @@ GET         /rulings                                             controllers.Ind
 GET         /unauthorised                                        controllers.UnauthorisedController.onPageLoad
 
 GET         /information-you-need                                controllers.BeforeYouStartController.onPageLoad()
-POST        /information-you-need                                controllers.BeforeYouStartController.onSubmit()
 GET         /registered-address-for-eori                         controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = NormalMode)
 POST        /registered-address-for-eori                         controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = NormalMode)
 GET         /change-registered-address-for-eori                  controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = CheckMode)
@@ -51,7 +50,6 @@ POST        /describe-your-item                                  controllers.Des
 GET         /change-describe-your-item                           controllers.DescribeYourItemController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-describe-your-item                           controllers.DescribeYourItemController.onSubmit(mode: Mode = CheckMode)
 GET         /information-you-must-provide                        controllers.AcceptItemInformationListController.onPageLoad()
-POST        /information-you-must-provide                        controllers.AcceptItemInformationListController.onSubmit()
 GET         /enter-confidential-information                      controllers.ConfidentialInformationController.onPageLoad(mode: Mode = NormalMode)
 POST        /enter-confidential-information                      controllers.ConfidentialInformationController.onSubmit(mode: Mode = NormalMode)
 GET         /change-enter-confidential-information               controllers.ConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)
@@ -111,7 +109,6 @@ POST        /apply-for-a-ruling                                  controllers.Dec
 GET         /change-apply-for-a-ruling                           controllers.DeclarationController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-apply-for-a-ruling                           controllers.DeclarationController.onSubmit(mode: Mode = CheckMode)
 GET         /check-your-answers                                  controllers.CheckYourAnswersController.onPageLoad
-POST        /check-your-answers                                  controllers.CheckYourAnswersController.onSubmit()
 
 GET         /confirmation                                        controllers.ConfirmationController.onPageLoad()
 

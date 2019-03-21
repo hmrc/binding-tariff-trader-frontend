@@ -92,7 +92,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
           case Left(errorMessage) => badRequest("validation-error", errorMessage)
         }
         case _ =>
-          badRequest("validation-error", messagesApi("uploadSupportingMaterialMultiple.upload.selectFile"))
+          badRequest("file-input", messagesApi("uploadSupportingMaterialMultiple.upload.selectFile"))
       }
 
     }

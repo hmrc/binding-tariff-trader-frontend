@@ -55,13 +55,6 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
       contentAsString(result) mustBe viewAsString(None)
     }
 
-    "redirect to the next page when valid data is submitted with POST" in {
-      val result = controller().onSubmit()(fakeRequest)
-
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
-    }
-
   }
 }
 

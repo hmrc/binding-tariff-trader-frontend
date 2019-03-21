@@ -19,17 +19,13 @@ package controllers
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import models.NormalMode
 import navigation.Navigator
-import pages.DeclarationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.check_your_answers
-
-import scala.concurrent.Future
 
 class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
                                            override val messagesApi: MessagesApi,
@@ -86,12 +82,6 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
     )
 
     Ok(check_your_answers(appConfig, sections))
-  }
-
-  def onSubmit(): Action[AnyContent] = (authenticate andThen getData andThen requireData).async { implicit request =>
-    Future.successful(
-      Redirect(navigator.nextPage(DeclarationPage, NormalMode)(request.userAnswers))
-    )
   }
 
 }
