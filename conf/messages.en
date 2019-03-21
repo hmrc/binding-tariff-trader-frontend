@@ -228,9 +228,9 @@ supportingMaterialFileList.indications.bullet4 = images of the item
 supportingMaterialFileList.indications.bullet5 = images of packaging
 supportingMaterialFileList.error.required = Please select Yes or No
 
-uploadSupportingMaterialMultiple.title = Upload files - GOV.UK
+uploadSupportingMaterialMultiple.title = Upload a file - GOV.UK
 uploadSupportingMaterialMultiple.heading = Upload photographs, manuals, brochures or technical specifications
-uploadSupportingMaterialMultiple.label = Upload files
+uploadSupportingMaterialMultiple.label = Upload a file
 uploadSupportingMaterialMultiple.upload.title =  You can upload:
 uploadSupportingMaterialMultiple.upload.restrictionFiles = one file at a time, up to 10 files
 uploadSupportingMaterialMultiple.upload.restrictionSize =  a maximum individual file size of 10MB

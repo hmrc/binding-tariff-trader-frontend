@@ -89,7 +89,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
         case Some(_) if hasMaxFiles => badRequest("validation-error", messagesApi("uploadSupportingMaterialMultiple.error.numberFiles"))
         case Some(file) => fileService.validate(file) match {
           case Right(rightFile) => uploadFile(rightFile)
-          case Left(errorMessage) => badRequest("validation-error", errorMessage)
+          case Left(errorMessage) => badRequest("file-input", errorMessage)
         }
         case _ =>
           badRequest("file-input", messagesApi("uploadSupportingMaterialMultiple.upload.selectFile"))

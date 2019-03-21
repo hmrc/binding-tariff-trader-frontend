@@ -21,7 +21,8 @@
         inputClass: Option[String] = None,
         labelClass: Option[String] = None,
         hint: Option[String] = None,
-        htmlHint: Option[Html] = None
+        htmlHint: Option[Html] = None,
+        numRows: Int = 5
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -42,7 +43,7 @@
             class="form-control form-control-3-4 @inputClass"
             id="@{field.id}"
             name="@{field.id}"
-            rows="5"
+            rows=@numRows
             @if(field.hasErrors){aria-describedby="error-message-@{field.id}-input"}>@{field.value}</textarea>
     </div>
 </div>
