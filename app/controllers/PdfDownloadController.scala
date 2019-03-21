@@ -30,6 +30,7 @@ import views.html.pdftemplates.{applicationPdf, rulingPdf}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.Future.successful
 
 class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                                       override val messagesApi: MessagesApi,
@@ -39,6 +40,9 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                                       fileService: FileService
                                      ) extends FrontendController with I18nSupport {
 
+  private type Eori = String
+  private type CaseReference = String
+
   def application(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
     getPdf(reference, token, getApplicationPDF)
   }
@@ -47,19 +51,19 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
     getPdf(reference, token, getRulingPDF)
   }
 
-  private def getPdf(reference: String, token: Option[String], pdf: (String, String) => Future[Result])
+  private def getPdf(reference: String, token: Option[String], toPdf: (Eori, CaseReference) => Future[Result])
                     (implicit request: IdentifierRequest[AnyContent]): Future[Result] = {
     (request.eoriNumber, token) match {
-      case (Some(eori), _) => pdf(eori, reference)
+      case (Some(eori), _) => toPdf(eori, reference)
       case (_, Some(tkn)) => pdfService.decodeToken(tkn) match {
-        case Some(eori) => pdf(eori, reference)
-        case None => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+        case Some(eori) => toPdf(eori, reference)
+        case None => successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
-      case _ => Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
+      case _ => successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
     }
   }
 
-  private def getRulingPDF(implicit request: Request[AnyContent]): (String, String) => Future[Result] = { (eori, reference) =>
+  private def getRulingPDF(implicit request: Request[AnyContent]): (Eori, CaseReference) => Future[Result] = { (eori, reference) =>
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
       generatePdf(
         rulingPdf(appConfig, c, c.decision.getOrElse(throw new IllegalStateException("Missing decision"))), s"BTIRuling$reference.pdf"
@@ -67,7 +71,7 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
     }
   }
 
-  private def getApplicationPDF(implicit request: Request[AnyContent]): (String, String) => Future[Result] = { (eori, reference) =>
+  private def getApplicationPDF(implicit request: Request[AnyContent]): (Eori, CaseReference) => Future[Result] = { (eori, reference) =>
     caseService.getCaseForUser(eori, reference) flatMap { c: Case =>
       fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
         generatePdf(
