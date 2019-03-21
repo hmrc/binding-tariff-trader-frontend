@@ -56,19 +56,19 @@
             </ul>
         </div>
 
-        <div class="form-group">
-            @if(files.nonEmpty){
-                <h2 class="heading-large">
-                    @messages("supportingMaterialFileList.label.anotherFile")
-                </h2>
-            }
-        </div>
-
-        @components.input_yes_no(
-            field = form("add-file-choice"),
-            label = messages("uploadSupportingMaterialMultiple.label"),
-            labelClass = Some("visually-hidden")
-        )
+        @if(files.nonEmpty) {
+            @components.input_yes_no(
+                field = form("add-file-choice"),
+                label = messages("supportingMaterialFileList.label.anotherFile"),
+                labelClass = Some("heading-large mb-2")
+            )
+        } else {
+            @components.input_yes_no(
+                field = form("add-file-choice"),
+                label = messages("supportingMaterialFileList.heading"),
+                labelClass = Some("visually-hidden")
+            )
+        }
 
         <div class="section">
             <button id="submit" class="button"> Continue </button>

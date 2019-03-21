@@ -33,14 +33,11 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("legalChallenge.heading"))
-
-        <p>@messages("legalChallenge.paragraph")</p>
-
         @components.input_yes_no(
             field = form("value"),
             label = messages("legalChallenge.heading"),
-            labelClass = Some("visually-hidden")
+            labelClass = Some("heading-xlarge mb-2"),
+            hint = Some(messages("legalChallenge.paragraph"))
         )
 
         @components.submit_button()

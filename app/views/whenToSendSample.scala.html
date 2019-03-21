@@ -50,14 +50,11 @@
             <p>@Html(messages("whenToSendSample.third.paragraph"))</p>
         </div>
 
-        <h2 class="heading-medium">@messages("whenToSendSample.legend")</h2>
-
-        <p>@messages("whenToSendSample.fourth.paragraph")</p>
-
         @components.input_yes_no(
             field = form("value"),
-            label = messages("whenToSendSample.heading"),
-            labelClass = Some("visually-hidden")
+            label = messages("whenToSendSample.legend"),
+            labelClass = Some("heading-medium"),
+            hint = Some(messages("whenToSendSample.fourth.paragraph"))
         )
 
         @components.submit_button()

@@ -30,9 +30,9 @@
     <fieldset  id="@{field.id}">
 
         <legend>
-            <span @if(labelClass.nonEmpty){class="@labelClass"}>@label</span>
+            <div @if(labelClass.nonEmpty){class="@labelClass"}>@label</div>
             @if(hint.nonEmpty){
-                <span class="form-hint">@hint</span>
+                <div class="form-hint mb-2">@hint</div>
             }
             @field.errors.map { error =>
                 <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>

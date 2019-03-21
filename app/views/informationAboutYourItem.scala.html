@@ -33,16 +33,11 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("informationAboutYourItem.heading"))
-
-        <div class="form-group">
-            <p>@messages("informationAboutYourItem.paragraph")</p>
-        </div>
-
         @components.input_yes_no(
             field = form("value"),
             label = messages("informationAboutYourItem.heading"),
-            labelClass = Some("visually-hidden")
+            labelClass = Some("heading-xlarge mb-2"),
+            hint = Some(messages("informationAboutYourItem.paragraph"))
         )
 
         @components.submit_button()
