@@ -15,10 +15,6 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
-@import controllers.routes._
-@import models.Mode
-@import views.ViewUtils._
 
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
@@ -27,7 +23,6 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = AcceptItemInformationListController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -44,6 +39,5 @@
             <li>@messages("acceptItemInformationList.askfor.item2")</li>
         </ul>
 
-        @components.submit_button()
+        @components.button_link(messages("site.continue"), routes.InformationAboutYourItemController.onPageLoad(NormalMode).url)
     }
-}

@@ -19,15 +19,11 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
-import models.{NormalMode, UserAnswers}
 import navigation.Navigator
-import pages.RegisteredAddressForEoriPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.beforeYouStart
-
-import scala.concurrent.Future.successful
 
 class BeforeYouStartController @Inject()(appConfig: FrontendAppConfig,
                                          override val messagesApi: MessagesApi,
@@ -40,9 +36,4 @@ class BeforeYouStartController @Inject()(appConfig: FrontendAppConfig,
   def onPageLoad: Action[AnyContent] = identify { implicit request =>
     Ok(beforeYouStart(appConfig))
   }
-
-  def onSubmit: Action[AnyContent] = (identify andThen getData).async { implicit request =>
-    successful(Redirect(navigator.nextPage(RegisteredAddressForEoriPage, NormalMode)(request.userAnswers.getOrElse(UserAnswers(request.internalId)))))
-  }
-
 }

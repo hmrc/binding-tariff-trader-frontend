@@ -15,19 +15,14 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
-@import controllers.routes._
-@import views.ViewUtils._
 @import viewmodels.AnswerSection
 
 @(appConfig: FrontendAppConfig, answerSections: Seq[AnswerSection])(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("checkYourAnswers.title"),
-    appConfig = appConfig,
-    bodyClasses = None) {
-
-    @helpers.form(action = CheckYourAnswersController.onSubmit(), 'autoComplete -> "off") {
+    @main_template(
+        title = messages("checkYourAnswers.title"),
+        appConfig = appConfig,
+        bodyClasses = None) {
 
         @components.heading(messages("checkYourAnswers.heading"))
 
@@ -35,7 +30,6 @@
             @components.answer_section(section)
         }
 
-        @components.submit_button()
-    }
+        @components.button_link(messages("site.continue"), routes.DeclarationController.onPageLoad(NormalMode).url)
 
-}
+    }

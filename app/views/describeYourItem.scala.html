@@ -47,7 +47,8 @@
         @components.input_textarea(
             field = form("field2"),
             label = messages("describeYourItem.field2"),
-            htmlHint = Some(descriptionHint)
+            htmlHint = Some(descriptionHint),
+            numRows = 10
         )
 
         @components.submit_button()

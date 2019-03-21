@@ -19,15 +19,11 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
-import models._
 import navigation.Navigator
-import pages.InformationAboutYourItemPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.acceptItemInformationList
-
-import scala.concurrent.Future.successful
 
 class AcceptItemInformationListController @Inject()(appConfig: FrontendAppConfig,
                                                     override val messagesApi: MessagesApi,
@@ -40,9 +36,4 @@ class AcceptItemInformationListController @Inject()(appConfig: FrontendAppConfig
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     Ok(acceptItemInformationList(appConfig))
   }
-
-  def onSubmit: Action[AnyContent] = (identify andThen getData).async { implicit request =>
-    successful(Redirect(navigator.nextPage(InformationAboutYourItemPage, NormalMode)(request.userAnswers.get)))
-  }
-
 }
