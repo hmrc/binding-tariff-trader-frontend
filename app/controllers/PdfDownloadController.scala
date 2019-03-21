@@ -51,33 +51,32 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
   private type CaseReference = String
 
   private def getPdf(maybeEoriNumber: Option[Eori],
-                     caseReference: CaseReference,
+                     reference: CaseReference,
                      token: Option[String],
                      toPdf: (Eori, CaseReference) => Future[Result]): Future[Result] = {
     (maybeEoriNumber, token) match {
-      case (Some(eori), _) => toPdf(eori, caseReference)
+      case (Some(eori), _) => toPdf(eori, reference)
       case (_, Some(tkn)) => pdfService.decodeToken(tkn) match {
-        case Some(eori) => toPdf(eori, caseReference)
+        case Some(eori) => toPdf(eori, reference)
         case None => successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
       case _ => successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
     }
   }
 
-  private def getRulingPDF(implicit request: Request[AnyContent]): (Eori, CaseReference) => Future[Result] = { (eori, reference) =>
+  private def getRulingPDF(eori: Eori, reference: CaseReference)
+                          (implicit request: Request[AnyContent]): Future[Result] = {
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
-      generatePdf(
-        rulingPdf(appConfig, c, c.decision.getOrElse(throw new IllegalStateException("Missing decision"))), s"BTIRuling$reference.pdf"
-      )
+      lazy val decision = c.decision.getOrElse(throw new IllegalStateException("Missing decision"))
+      generatePdf(rulingPdf(appConfig, c, decision), s"BTIRuling$reference.pdf")
     }
   }
 
-  private def getApplicationPDF(implicit request: Request[AnyContent]): (Eori, CaseReference) => Future[Result] = { (eori, reference) =>
+  private def getApplicationPDF(eori: Eori, reference: CaseReference)
+                               (implicit request: Request[AnyContent]): Future[Result] = {
     caseService.getCaseForUser(eori, reference) flatMap { c: Case =>
       fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
-        generatePdf(
-          applicationPdf(appConfig, c, attachmentData), s"BTIConfirmation$reference.pdf"
-        )
+        generatePdf(applicationPdf(appConfig, c, attachmentData), s"BTIConfirmation$reference.pdf")
       }
     }
   }
