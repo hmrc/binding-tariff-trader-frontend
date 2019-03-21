@@ -20,7 +20,6 @@ import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
 import models.Case
-import models.requests.IdentifierRequest
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.twirl.api.Html
@@ -40,23 +39,25 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                                       fileService: FileService
                                      ) extends FrontendController with I18nSupport {
 
-  private type Eori = String
-  private type CaseReference = String
-
   def application(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
-    getPdf(reference, token, getApplicationPDF)
+    getPdf(request.eoriNumber, reference, token, getApplicationPDF)
   }
 
   def ruling(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
-    getPdf(reference, token, getRulingPDF)
+    getPdf(request.eoriNumber, reference, token, getRulingPDF)
   }
 
-  private def getPdf(reference: String, token: Option[String], toPdf: (Eori, CaseReference) => Future[Result])
-                    (implicit request: IdentifierRequest[AnyContent]): Future[Result] = {
-    (request.eoriNumber, token) match {
-      case (Some(eori), _) => toPdf(eori, reference)
+  private type Eori = String
+  private type CaseReference = String
+
+  private def getPdf(maybeEoriNumber: Option[Eori],
+                     caseReference: CaseReference,
+                     token: Option[String],
+                     toPdf: (Eori, CaseReference) => Future[Result]): Future[Result] = {
+    (maybeEoriNumber, token) match {
+      case (Some(eori), _) => toPdf(eori, caseReference)
       case (_, Some(tkn)) => pdfService.decodeToken(tkn) match {
-        case Some(eori) => toPdf(eori, reference)
+        case Some(eori) => toPdf(eori, caseReference)
         case None => successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
       case _ => successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
