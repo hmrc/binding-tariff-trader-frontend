@@ -25,7 +25,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.twirl.api.Html
 import uk.gov.hmrc.play.test.UnitSpec
 
-import scala.concurrent.Future
+import scala.concurrent.Future._
 
 class PdfServiceSpec extends UnitSpec with MockitoSugar {
 
@@ -34,17 +34,26 @@ class PdfServiceSpec extends UnitSpec with MockitoSugar {
   private val connector = mock[PdfGeneratorServiceConnector]
   private val connectorResponse = PdfFile("Some content".getBytes)
 
-  private def service() = new PdfService(connector, new Crypto(config))
+  private def service = new PdfService(connector, new Crypto(config))
 
   "Service 'Generate Pdf'" should {
 
     "delegate to connector" in {
-      given(connector.generatePdf(any[Html])).willReturn(Future.successful(connectorResponse))
+      given(connector.generatePdf(any[Html])).willReturn(successful(connectorResponse))
 
-      val file: PdfFile = await(service().generatePdf(pdfHtml))
+      val file: PdfFile = await(service.generatePdf(pdfHtml))
 
       file shouldBe connectorResponse
     }
+
+    "propagates errors" in {
+      given(connector.generatePdf(any[Html])).willReturn(failed(new RuntimeException))
+
+      intercept[RuntimeException] {
+        await(service.generatePdf(pdfHtml))
+      }
+    }
+
   }
 
   "Service" should {
@@ -53,7 +62,7 @@ class PdfServiceSpec extends UnitSpec with MockitoSugar {
     "Decode BadToken" in {
       given(config.aesKey).willReturn(key)
 
-      val token = service().decodeToken("token")
+      val token = service.decodeToken("token")
 
       token shouldBe None
     }
@@ -61,7 +70,7 @@ class PdfServiceSpec extends UnitSpec with MockitoSugar {
     "Reversibly Encode & Decode Token" in {
       given(config.aesKey).willReturn(key)
 
-      val pair: Option[String] = service().decodeToken(service().encodeToken("eori"))
+      val pair: Option[String] = service.decodeToken(service.encodeToken("eori"))
 
       pair shouldBe Some("eori")
     }
