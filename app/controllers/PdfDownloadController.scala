@@ -29,6 +29,7 @@ import views.html.pdftemplates.{applicationPdf, rulingPdf}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.Future.successful
 
 class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                                       override val messagesApi: MessagesApi,
@@ -39,32 +40,40 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                                      ) extends FrontendController with I18nSupport {
 
   def application(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
-    if(request.eoriNumber.isDefined) {
-      getApplicationPDF(request.eoriNumber.get, reference)
-    } else if(token.isDefined) {
-      pdfService.decodeToken(token.get) match {
-        case Some(eori) => getApplicationPDF(eori, reference)
-        case None => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
-      }
-    } else {
-      Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
-    }
+    getPdf(request.eoriNumber, reference, token, getApplicationPDF)
   }
 
   def ruling(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
-    if(request.eoriNumber.isDefined) {
-      getRulingPDF(request.eoriNumber.get, reference)
-    } else if(token.isDefined) {
-      pdfService.decodeToken(token.get) match {
-        case Some(eori) => getRulingPDF(eori, reference)
-        case None => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+    getPdf(request.eoriNumber, reference, token, getRulingPDF)
+  }
+
+  private type Eori = String
+  private type CaseReference = String
+
+  private def getPdf(maybeEoriNumber: Option[Eori],
+                     reference: CaseReference,
+                     token: Option[String],
+                     toPdf: (Eori, CaseReference) => Future[Result]): Future[Result] = {
+    (maybeEoriNumber, token) match {
+      case (Some(eori), _) => toPdf(eori, reference)
+      case (_, Some(tkn)) => pdfService.decodeToken(tkn) match {
+        case Some(eori) => toPdf(eori, reference)
+        case None => successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
-    } else {
-      Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
+      case _ => successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
     }
   }
 
-  private def getApplicationPDF(eori: String, reference: String)(implicit r: Request[_]): Future[Result] = {
+  private def getRulingPDF(eori: Eori, reference: CaseReference)
+                          (implicit request: Request[AnyContent]): Future[Result] = {
+    caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
+      lazy val decision = c.decision.getOrElse(throw new IllegalStateException("Missing decision"))
+      generatePdf(rulingPdf(appConfig, c, decision), s"BTIRuling$reference.pdf")
+    }
+  }
+
+  private def getApplicationPDF(eori: Eori, reference: CaseReference)
+                               (implicit request: Request[AnyContent]): Future[Result] = {
     caseService.getCaseForUser(eori, reference) flatMap { c: Case =>
       fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
         generatePdf(applicationPdf(appConfig, c, attachmentData), s"BTIConfirmation$reference.pdf")
@@ -72,14 +81,12 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
     }
   }
 
-  private def getRulingPDF(eori: String, reference: String)(implicit r: Request[_]): Future[Result] = {
-    caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
-      generatePdf(rulingPdf(appConfig, c, c.decision.get), s"BTIRuling$reference.pdf")
+  private def generatePdf(htmlContent: Html, filename: String): Future[Result] = {
+    pdfService.generatePdf(htmlContent) map { pdfFile =>
+      Results.Ok(pdfFile.content)
+        .as(pdfFile.contentType)
+        .withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
     }
-  }
-
-  private def generatePdf(htmlContent: Html, filename: String) = pdfService.generatePdf(htmlContent) map {
-    pdfFile => Results.Ok(pdfFile.content).as(pdfFile.contentType).withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
   }
 
 }
