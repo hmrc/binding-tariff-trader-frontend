@@ -31,7 +31,7 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
           val doc = asDocument(createView(form))
           val legends = doc.getElementsByTag("legend")
           legends.size mustBe 1
-          legends.first.text mustBe messages(s"$messageKeyPrefix.heading")
+          legends.first.text must include (expectedLegend)
         }
 
         "contain an input for the value" in {
@@ -78,8 +78,19 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
         }
       }
     }
-  }
 
+    def expectedLegend: String = {
+      def has(value: String): Boolean = {
+        val key = s"$messageKeyPrefix.$value"
+        messages(key) != key
+      }
+      if(has("legend")) {
+        messages(s"$messageKeyPrefix.legend")
+      } else {
+        messages(s"$messageKeyPrefix.heading")
+      }
+    }
+  }
 
   protected def answeredYesNoPage(createView: Form[Boolean] => HtmlFormat.Appendable, answer: Boolean): Unit = {
 

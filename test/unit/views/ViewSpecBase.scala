@@ -38,10 +38,13 @@ trait ViewSpecBase extends SpecBase {
     assert(elements.first().html().replace("\n", "") == expectedValue)
   }
 
-  def assertPageTitleEqualsMessage(doc: Document, expectedMessageKey: String, args: Any*): Assertion = {
+  def assertPageTitleEqualsMessage(doc: Document, expectedMessageKey: String, args: Any*) = {
     val headers = doc.getElementsByTag("h1")
-    headers.size mustBe 1
-    headers.first.text.replaceAll("\u00a0", " ") mustBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
+    headers.size() match {
+      case 0 => ()
+      case 1 => headers.first.text.replaceAll("\u00a0", " ") mustBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
+      case _ => throw new RuntimeException(s"Pages should only have (at most) one h1 element. Found ${headers.size}")
+    }
   }
 
   def assertContainsText(doc: Document, text: String): Assertion = assert(doc.toString.contains(text),
