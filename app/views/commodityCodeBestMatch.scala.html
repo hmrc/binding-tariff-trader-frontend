@@ -33,14 +33,11 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("commodityCodeBestMatch.heading"))
-
-        <p>@messages("commodityCodeBestMatch.bodyText")</p>
-
         @components.input_yes_no(
             field = form("value"),
             label = messages("commodityCodeBestMatch.heading"),
-            labelClass = Some("visually-hidden")
+            labelClass = Some("heading-xlarge mb-2"),
+            hint = Some(messages("commodityCodeBestMatch.bodyText"))
         )
 
         @components.submit_button()

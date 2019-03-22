@@ -34,12 +34,10 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("whichBestDescribesYou.heading"))
-
         @components.input_radio(
             field = form("value"),
             legend = messages("whichBestDescribesYou.heading"),
-            legendClass = Some("visually-hidden"),
+            legendClass = Some("heading-xlarge mb-2"),
             inputs = WhichBestDescribesYou.options.toSeq
         )
 

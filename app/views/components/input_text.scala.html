@@ -24,9 +24,9 @@
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
     <label class="form-label" for="@{field.id}">
-        <span class="@if(labelClass.nonEmpty){@labelClass}">@label</span>
+        <div class="@if(labelClass.nonEmpty){@labelClass}">@label</div>
         @if(hint.nonEmpty){
-            <span class="form-hint">@hint</span>
+            <div class="form-hint">@hint</div>
         }
         @field.errors.map { error =>
             <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>

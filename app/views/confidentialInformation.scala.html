@@ -33,11 +33,10 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("confidentialInformation.heading"))
-
         @components.input_textarea(
             field = form("field1"),
-            label = messages("confidentialInformation.field1"),
+            label = messages("confidentialInformation.heading"),
+            labelClass = Some("heading-xlarge mb-2"),
             hint = Some(messages("confidentialInformation.hint"))
         )
 

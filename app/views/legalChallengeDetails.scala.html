@@ -33,12 +33,10 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("legalChallengeDetails.heading"))
-
         @components.input_textarea(
-          field = form("value"),
-          label = messages("legalChallengeDetails.heading"),
-          labelClass=Some("visually-hidden")
+            field = form("value"),
+            label = messages("legalChallengeDetails.heading"),
+            labelClass = Some("heading-xlarge mb-2")
         )
 
         @components.submit_button()
