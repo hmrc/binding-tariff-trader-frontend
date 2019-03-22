@@ -70,8 +70,8 @@ site.service_name = Apply for a Binding Tariff Information ruling
 
 unauthorised.title = Not registered for CDS
 unauthorised.heading = To apply for a Binding Tariff Information (BTI) ruling you need to get access to CDS
-unauthorised.intro1 = Customs Declaration Service (CDS) is the replacement for the Customs Handling Imports and Export Freight (CHIEF) system. In future, you will be able to use it to manage your customs interactions. 
-unauthorised.intro2 = CDS is still in development and does not yet offer all services.  However, you will still need to get access to CDS in order to apply for a BTI ruling.
+unauthorised.intro1 = Customs Declaration Service (CDS) is the replacement for the Customs Handling Imports and Export Freight (CHIEF) system. 
+unauthorised.intro2 = In future, you will be able to use CDS to manage your customs interactions. At this time, you will only have access to BTI ruling applications.
 unauthorised.warn_p1 = Once you have confirmation of CDS access, you’ll need to return to this page and
 unauthorised.warn_link = restart your application.
 unauthorised.warn_p2 = If you still cannot start the application, you may have to try again once you have received a confirmation email from CDS.
