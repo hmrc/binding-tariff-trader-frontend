@@ -20,6 +20,7 @@ import controllers.routes
 import forms.SupportingInformationDetailsFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
 import views.html.supportingInformationDetails
 
@@ -29,15 +30,21 @@ class SupportingInformationDetailsViewSpec extends StringViewBehaviours {
 
   val form = new SupportingInformationDetailsFormProvider()()
 
-  def createView = () => supportingInformationDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable = () => supportingInformationDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) => supportingInformationDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[String] => HtmlFormat.Appendable = (form: Form[String]) =>
+    supportingInformationDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "SupportingInformationDetails view" must {
     behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 
-    behave like textareaPage(createViewUsingForm, messageKeyPrefix, routes.SupportingInformationDetailsController.onSubmit(NormalMode).url)
+    behave like textareaPage(
+      createViewUsingForm,
+      messageKeyPrefix,
+      routes.SupportingInformationDetailsController.onSubmit(NormalMode).url,
+      Some(s"$messageKeyPrefix.hint")
+    )
   }
 }

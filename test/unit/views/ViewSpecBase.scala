@@ -78,12 +78,18 @@ trait ViewSpecBase extends SpecBase {
     assert(labels.size == 1, s"\n\nLabel for $forElement was not rendered on the page.")
     val label = labels.first
 
-    if (expectedHintText.isDefined) {
-      assert(label.getElementsByClass("form-hint").first.text == expectedHintText.get,
-        s"\n\nLabel for $forElement did not contain hint text $expectedHintText")
+    def assertLabel(label: Element, expectedText: String, forElement: String) = {
+      assert(label.text() == expectedText, s"\n\nLabel for $forElement was not $expectedText")
     }
 
-    assert(label.text() == expectedText, s"\n\nLabel for $forElement was not $expectedText")
+    expectedHintText match {
+      case Some(hint) => {
+        assert(label.getElementsByClass("form-hint").first.text == hint,
+          s"\n\nLabel for $forElement did not contain hint text $hint")
+        assertLabel(label, s"$expectedText $hint", forElement)
+      }
+      case _ => assertLabel(label, expectedText, forElement)
+    }
   }
 
   def assertElementHasClass(doc: Document, id: String, expectedClass: String): Assertion = {
