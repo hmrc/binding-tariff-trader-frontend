@@ -36,7 +36,8 @@
         @components.input_textarea(
             field = form("value"),
             label = messages("supportingInformationDetails.heading"),
-            labelClass = Some("heading-xlarge mb-2")
+            labelClass = Some("heading-xlarge mb-2"),
+            hint = Some(messages("supportingInformationDetails.hint"))
         )
 
         @components.submit_button()

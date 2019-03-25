@@ -315,11 +315,13 @@ supportingInformation.title = Other information to support this application - GO
 supportingInformation.heading = Do you need to enter any other information to support this application?
 supportingInformation.yesInformation = Yes
 supportingInformation.noInformation = No
+supportingInformation.hint = Tell us if the item is going to be exported.
 supportingInformation.checkYourAnswersLabel = Do you have supporting information?
 supportingInformation.error.required = Select yes if you want to enter any supporting information
 
 supportingInformationDetails.title = Enter supporting information - GOV.UK
 supportingInformationDetails.heading = What is the information you want to provide?
+supportingInformationDetails.hint = Tell us if the item will be exported and any other relevant information.
 supportingInformationDetails.checkYourAnswersLabel = Supporting information
 supportingInformationDetails.error.required = Enter supporting information
 supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less

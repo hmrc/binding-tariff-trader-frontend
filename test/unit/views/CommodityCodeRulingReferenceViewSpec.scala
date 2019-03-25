@@ -16,9 +16,11 @@
 
 package views
 
+import controllers.routes
 import forms.CommodityCodeRulingReferenceFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
 import views.html.commodityCodeRulingReference
 
@@ -28,16 +30,21 @@ class CommodityCodeRulingReferenceViewSpec extends StringViewBehaviours {
 
   val form = new CommodityCodeRulingReferenceFormProvider()()
 
-  def createView = () => commodityCodeRulingReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable = () => commodityCodeRulingReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) => commodityCodeRulingReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[String] => HtmlFormat.Appendable = (form: Form[String]) =>
+    commodityCodeRulingReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "CommodityCodeRulingReference view" must {
     behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 
-    // TODO scaffold test cannot cope with text-area with no label
-//    behave like textareaPage(createViewUsingForm, messageKeyPrefix, routes.CommodityCodeRulingReferenceController.onSubmit(NormalMode).url)
+    behave like textareaPage(
+      createViewUsingForm,
+      messageKeyPrefix,
+      routes.CommodityCodeRulingReferenceController.onSubmit(NormalMode).url,
+      Some(s"$messageKeyPrefix.hint")
+    )
   }
 }
