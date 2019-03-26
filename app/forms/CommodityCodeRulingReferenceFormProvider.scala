@@ -26,7 +26,6 @@ class CommodityCodeRulingReferenceFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "value" -> text("commodityCodeRulingReference.error.required")
-        .verifying(maxLength(100, "commodityCodeRulingReference.error.length"))
     )
 
 }
