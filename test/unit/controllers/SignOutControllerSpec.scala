@@ -16,20 +16,19 @@
 
 package controllers
 
-import java.net.URL
+import play.api.mvc.Result
+import play.api.test.Helpers._
 
-import config.FrontendAppConfig
-import controllers.actions.IdentifierAction
-import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import scala.concurrent.Future
 
-class SignOutController @Inject()(val appConfig: FrontendAppConfig,
-                                  val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
+class SignOutControllerSpec extends ControllerSpecBase {
 
-  def startFeedbackSurvey: Action[AnyContent] = Action { implicit request =>
-    SeeOther(new URL(appConfig.feedbackSurvey).toString).withNewSession
+  "Sign out controller" must {
+
+    "return 200 for a GET" in {
+      val result: Future[Result] = new SignOutController(frontendAppConfig, messagesApi).startFeedbackSurvey(fakeRequest)
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result).get must endWith( "/feedback/ABTIR")
+    }
   }
-
 }
