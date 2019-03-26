@@ -45,7 +45,7 @@
       navTitle = Some(messages("site.service_name")),
       navTitleLink = None,
       showBetaLink = false,
-      navLinks = None)
+      navLinks = Some(Html(s"<a href='${routes.SignOutController.startFeedbackSurvey}'> ${messages("global.link.signout")} </a>")))
 }
 
 @afterHeader = {}

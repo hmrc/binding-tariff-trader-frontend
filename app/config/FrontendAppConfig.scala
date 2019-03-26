@@ -34,6 +34,7 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   }
 
   private lazy val contactHost = runModeConfiguration.getString("contact-frontend.host").getOrElse("")
+
   private val contactFormServiceIdentifier = "BindingTariffApplication"
 
   lazy val analyticsToken: String = loadConfig("google-analytics.token")
@@ -57,9 +58,14 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
 
   lazy val languageTranslationEnabled: Boolean = runModeConfiguration.getBoolean("microservice.services.features.welsh-translation").getOrElse(true)
 
-  lazy val cdsUrl: String = loadConfig("customs-frontend.host")
+  private lazy val cdsUrl: String = loadConfig("customs-frontend.host")
   lazy val cdsSubscribeUrl: String = s"$cdsUrl/customs/subscribe-for-cds"
   lazy val cdsRegisterUrl: String = s"$cdsUrl/customs/register-for-cds"
+
+  private lazy val feedbackUrl: String = baseUrl("feedback-frontend")
+  private lazy val feedbackServiceName : String = "ABTIR"
+  lazy val feedbackSurvey: String = s"$feedbackUrl/feedback/$feedbackServiceName"
+
 
   lazy val apiToken: String = loadConfig("auth.api-token")
   lazy val aesKey: String = loadConfig("auth.aes-key")

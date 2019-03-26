@@ -25,6 +25,8 @@ index.title = BTI home - GOV.UK
 index.heading = Apply for a BTI ruling
 index.home = Home
 
+global.link.signout = Sign out
+
 beforeYouStart.title = Before you start - GOV.UK
 beforeYouStart.heading = Information you need to apply for a ruling
 beforeYouStart.subheading0 = About you
