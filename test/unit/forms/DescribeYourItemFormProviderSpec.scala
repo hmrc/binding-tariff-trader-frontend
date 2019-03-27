@@ -69,4 +69,16 @@ class DescribeYourItemFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
+  ".confidentialInformation" must {
+
+    val fieldName = "confidentialInformation"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      arbitrary[String]
+    )
+
+  }
+
 }
