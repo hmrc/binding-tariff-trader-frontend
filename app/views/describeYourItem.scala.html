@@ -47,14 +47,16 @@
             field = form("description"),
             label = messages("describeYourItem.description"),
             htmlHint = Some(descriptionHint),
-            numRows = 10
+            numRows = 15,
+            maxlength = 50000
         )
 
         @components.input_textarea(
             field = form("confidentialInformation"),
             label = messages("describeYourItem.confidentialInformation"),
             labelClass = Some("heading-medium"),
-            hint = Some(messages("describeYourItem.confidentialInformation.hint"))
+            hint = Some(messages("describeYourItem.confidentialInformation.hint")),
+            maxlength = 30000
         )
 
         <p>
