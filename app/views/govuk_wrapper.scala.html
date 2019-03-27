@@ -40,12 +40,16 @@
     <script type="text/javascript" src=@routes.Assets.versioned("javascripts/ga-tag-manager.js")></script>
 }
 
+@signOutLink = {
+        <a href="@routes.SignOutController.startFeedbackSurvey"> @messages("global.link.signout") </a>
+}
+
 @insideHeader = {
     @uiLayouts.header_nav(
       navTitle = Some(messages("site.service_name")),
       navTitleLink = None,
       showBetaLink = false,
-      navLinks = Some(Html(s"<a href='${routes.SignOutController.startFeedbackSurvey}'> ${messages("global.link.signout")} </a>")))
+      navLinks = Some(signOutLink))
 }
 
 @afterHeader = {}
