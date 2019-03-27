@@ -57,9 +57,6 @@ trait PageGenerators {
   implicit lazy val arbitraryUploadSupportingMaterialMultiplePage: Arbitrary[UploadSupportingMaterialMultiplePage.type] =
     Arbitrary(UploadSupportingMaterialMultiplePage)
 
-  implicit lazy val arbitraryConfidentialInformationPage: Arbitrary[ConfidentialInformationPage.type] =
-    Arbitrary(ConfidentialInformationPage)
-
   implicit lazy val arbitraryDescribeYourItemPage: Arbitrary[DescribeYourItemPage.type] =
     Arbitrary(DescribeYourItemPage)
 

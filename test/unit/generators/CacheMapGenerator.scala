@@ -38,7 +38,6 @@ trait CacheMapGenerator {
     arbitrary[(CommodityCodeDigitsPage.type, JsValue)] ::
     arbitrary[(CommodityCodeBestMatchPage.type, JsValue)] ::
     arbitrary[(UploadSupportingMaterialMultiplePage.type, JsValue)] ::
-    arbitrary[(ConfidentialInformationPage.type, JsValue)] ::
     arbitrary[(DescribeYourItemPage.type, JsValue)] ::
     arbitrary[(PreviousCommodityCodePage.type, JsValue)] ::
     arbitrary[(InformationAboutYourItemPage.type, JsValue)] ::

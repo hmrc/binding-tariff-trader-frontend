@@ -18,8 +18,8 @@ package models
 
 import play.api.libs.json._
 
-case class DescribeYourItem (field1: String, field2: String)
+case class DescribeYourItem (name: String, description: String, confidentialInformation: Option[String])
 
 object DescribeYourItem {
-  implicit val format = Json.format[DescribeYourItem]
+  implicit val format: OFormat[DescribeYourItem] = Json.format[DescribeYourItem]
 }

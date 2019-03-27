@@ -171,14 +171,6 @@ acceptItemInformationList.askfor.paragraph2 = You can let us know if you:
 acceptItemInformationList.askfor.item1 = think you have found the correct commodity code
 acceptItemInformationList.askfor.item2 = need to send samples
 
-informationAboutYourItem.title = Information not to be published - GOV.UK
-informationAboutYourItem.heading = Is there any confidential information about your item that you do not want us to publish?
-informationAboutYourItem.paragraph = This can include photographs, manuals, brochures or technical specifications.
-informationAboutYourItem.yesIHaveInfo = Yes
-informationAboutYourItem.no = No
-informationAboutYourItem.checkYourAnswersLabel = Confidential information
-informationAboutYourItem.error.required = Select yes if you have information that you do not want to be published 
-
 previousCommodityCode.title = Enter reference number of ruling to renew - GOV.UK
 previousCommodityCode.heading = What is the reference number for the ruling you want to renew?
 previousCommodityCode.field1 = Ruling reference number
@@ -191,28 +183,23 @@ previousCommodityCode.details.contentParagraph = The reference number was suppli
 
 describeYourItem.title = Describe your item - GOV.UK
 describeYourItem.heading = Detailed description of your item
-describeYourItem.field1 = Item name
-describeYourItem.field2 = Description
+describeYourItem.subheading = Description of your item that may be used as part of the published ruling
+describeYourItem.name = Item name
+describeYourItem.description = Description
+describeYourItem.confidentialInformation = Confidential information about your item that you do not want to be published (optional)
+describeYourItem.confidentialInformation.hint = Include the file names of any confidential photographs, manuals, brochures or technical specifications you are going to upload.
+describeYourItem.confidentialInformation.publishText = Information will not be published on the
+describeYourItem.confidentialInformation.publishWebsite = public ruling website.
 describeYourItem.checkYourAnswersLabel = Item description
-describeYourItem.error.field1.required = Enter item name
-describeYourItem.error.field2.required = Enter a detailed description of your item
-describeYourItem.error.field1.length = Item name must be 100 characters or less
-describeYourItem.error.field2.length = Describe your item in detail must be 100 characters or less
-describeYourItem.pullOut.paragraph = The more detailed your description, the faster we will be able to classify your item. Information entered on this page might be used as part of the published ruling.
+describeYourItem.error.name.required = Enter item name
+describeYourItem.error.description.required = Enter a detailed description of your item
+describeYourItem.error.name.length = Item name must be 100 characters or less
 describeYourItem.paragraph.includes = This may include:
 describeYourItem.listItem1 = what it is used for
 describeYourItem.listItem2 = what it is made from including all materials, parts or ingredients
 describeYourItem.listItem3 = how it is made, including all manufacturing processes
 describeYourItem.listItem4 = how it works
 describeYourItem.listItem5 = how it is packaged, including all materials
-
-confidentialInformation.title = Enter information not to be published- GOV.UK
-confidentialInformation.heading = What is the confidential information that you do not want us to publish?
-confidentialInformation.field1 = Confidential information
-confidentialInformation.hint = Include the file names of any confidential photographs, manuals, brochures or technical specifications you are going to upload.
-confidentialInformation.checkYourAnswersLabel = Confidential information details
-confidentialInformation.error.field1.required = Enter information that you do not want to be published
-confidentialInformation.error.field1.length = Information must be 100 characters or less
 
 supportingMaterialFileList.title = Upload file list - GOV.UK
 supportingMaterialFileList.heading = Do you want to upload any supporting documents?

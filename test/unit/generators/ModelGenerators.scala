@@ -28,13 +28,6 @@ trait ModelGenerators {
       Gen.oneOf(ReturnSamples.values.toSeq)
     }
 
-  implicit lazy val arbitraryConfidentialInformation: Arbitrary[ConfidentialInformation] =
-    Arbitrary {
-      for {
-        field1 <- arbitrary[String]
-      } yield ConfidentialInformation(field1)
-    }
-
   implicit lazy val arbitraryUploadSupportingMaterialMultiple: Arbitrary[Seq[FileAttachment]] =
     Arbitrary {
       for {
@@ -60,7 +53,8 @@ trait ModelGenerators {
       for {
         field1 <- arbitrary[String]
         field2 <- arbitrary[String]
-      } yield DescribeYourItem(field1, field2)
+        field3 <- arbitrary[Option[String]]
+      } yield DescribeYourItem(field1, field2, field3)
     }
 
   implicit lazy val arbitraryPreviousCommodityCode: Arbitrary[PreviousCommodityCode] =

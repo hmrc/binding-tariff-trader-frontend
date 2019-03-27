@@ -36,20 +36,31 @@
         @components.error_summary(form.errors)
 
         @components.heading(messages("describeYourItem.heading"))
-
-        <p>@messages("describeYourItem.pullOut.paragraph")</p>
+        @components.subheading(messages("describeYourItem.subheading"))
 
         @components.input_text(
-            field = form("field1"),
-            label = messages("describeYourItem.field1")
+            field = form("name"),
+            label = messages("describeYourItem.name")
         )
 
         @components.input_textarea(
-            field = form("field2"),
-            label = messages("describeYourItem.field2"),
+            field = form("description"),
+            label = messages("describeYourItem.description"),
             htmlHint = Some(descriptionHint),
             numRows = 10
         )
+
+        @components.input_textarea(
+            field = form("confidentialInformation"),
+            label = messages("describeYourItem.confidentialInformation"),
+            labelClass = Some("heading-medium"),
+            hint = Some(messages("describeYourItem.confidentialInformation.hint"))
+        )
+
+        <p>
+        @messages("describeYourItem.confidentialInformation.publishText") <a id="confirmation-pdf-link" target="_blank"
+        href="@appConfig.bindingTariffRulingFrontend">@messages("describeYourItem.confidentialInformation.publishWebsite")</a>
+        </p>
 
         @components.submit_button()
     }

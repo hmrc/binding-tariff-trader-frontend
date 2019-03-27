@@ -54,7 +54,7 @@ class CaseRequestMapperTest extends UnitSpec {
       val contact: Contact = application.contact
       contact.name shouldBe "Name"
       contact.email shouldBe "Email"
-      contact.phone shouldBe Some("Phone")
+      contact.phone shouldBe None
 
       application.offline shouldBe false
       application.goodName shouldBe "Good Name"
@@ -92,7 +92,7 @@ class CaseRequestMapperTest extends UnitSpec {
       val contact: Contact = application.contact
       contact.name shouldBe "Name"
       contact.email shouldBe "Email"
-      contact.phone shouldBe None
+      contact.phone shouldBe Some("12345")
 
       val agent: AgentDetails = application.agent.get
       agent.eoriDetails.eori shouldBe "Agent EORI"
@@ -139,13 +139,14 @@ class CaseRequestMapperTest extends UnitSpec {
             EnterContactDetails(
               "Name",
               "Email",
-              None
+              Some("12345")
             )
           ),
           DescribeYourItemPage.toString -> js(
             DescribeYourItem(
               "Good Name",
-              "Good Description"
+              "Good Description",
+              Some("Confidential Info")
             )
           ),
           WhichBestDescribesYouPage.toString -> js(
@@ -159,11 +160,6 @@ class CaseRequestMapperTest extends UnitSpec {
               "Trader Town",
               "Trader Post Code",
               "Trader Country"
-            )
-          ),
-          ConfidentialInformationPage.toString -> js(
-            ConfidentialInformation(
-              "Confidential Info"
             )
           ),
           SupportingInformationDetailsPage.toString -> js("Other Info"),
@@ -204,13 +200,14 @@ class CaseRequestMapperTest extends UnitSpec {
             EnterContactDetails(
               "Name",
               "Email",
-              Some("Phone")
+              None
             )
           ),
           DescribeYourItemPage.toString -> js(
             DescribeYourItem(
               "Good Name",
-              "Good Description"
+              "Good Description",
+              None
             )
           ),
           WhenToSendSamplePage.toString -> js(true)

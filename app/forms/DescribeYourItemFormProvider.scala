@@ -25,12 +25,13 @@ import models.DescribeYourItem
 
 class DescribeYourItemFormProvider @Inject() extends Mappings {
 
-   def apply(): Form[DescribeYourItem] = Form(
-     mapping(
-      "field1" -> text("describeYourItem.error.field1.required")
-        .verifying(maxLength(100, "describeYourItem.error.field1.length")),
-      "field2" -> text("describeYourItem.error.field2.required")
-     )(DescribeYourItem.apply)(DescribeYourItem.unapply)
-   )
+  def apply(): Form[DescribeYourItem] = Form(
+    mapping(
+      "name" -> text("describeYourItem.error.name.required")
+        .verifying(maxLength(100, "describeYourItem.error.name.length")),
+      "description" -> text("describeYourItem.error.description.required"),
+      "confidentialInformation" -> optional(text())
+    )(DescribeYourItem.apply)(DescribeYourItem.unapply)
+  )
 
 }
