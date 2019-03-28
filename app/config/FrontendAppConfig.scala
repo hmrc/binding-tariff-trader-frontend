@@ -61,8 +61,6 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val cdsSubscribeUrl: String = s"$cdsUrl/customs/subscribe-for-cds"
   lazy val cdsRegisterUrl: String = s"$cdsUrl/customs/register-for-cds"
 
-  lazy val bindingTariffRulingFrontend = s"${loadConfig("binding-tariff-ruling-frontend.host")}/binding-tariff-rulings"
-
   lazy val apiToken: String = loadConfig("auth.api-token")
   lazy val aesKey: String = loadConfig("auth.aes-key")
 
