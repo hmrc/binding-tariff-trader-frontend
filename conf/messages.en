@@ -115,7 +115,7 @@ whichBestDescribesYou.heading = Who is this application for?
 whichBestDescribesYou.businessOwner = The business or organisation that I work for or own
 whichBestDescribesYou.businessRepresentative = A different business or organisation that I am representing
 whichBestDescribesYou.checkYourAnswersLabel = This application is for
-whichBestDescribesYou.error.required = Select if this application is for the business or organisation you work for or own or a business, organisation or individual that you're representing
+whichBestDescribesYou.error.required = Select if this application is for the business or organisation you work for or own, or a business, organisation or individual that you’re representing
 
 selectApplicationType.title = Application type - GOV.UK
 selectApplicationType.heading = Is this a new application or a renewal of a previous ruling?
