@@ -23,7 +23,6 @@ import play.api.data.FormError
 class CommodityCodeRulingReferenceFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "commodityCodeRulingReference.error.required"
-  val lengthKey = "commodityCodeRulingReference.error.length"
 
   val form = new CommodityCodeRulingReferenceFormProvider()()
 

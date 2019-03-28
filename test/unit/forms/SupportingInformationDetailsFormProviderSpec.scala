@@ -23,7 +23,6 @@ import play.api.data.FormError
 class SupportingInformationDetailsFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "supportingInformationDetails.error.required"
-  val lengthKey = "supportingInformationDetails.error.length"
 
   val form = new SupportingInformationDetailsFormProvider()()
 

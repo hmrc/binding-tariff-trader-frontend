@@ -23,7 +23,6 @@ import play.api.data.FormError
 class LegalChallengeDetailsFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "legalChallengeDetails.error.required"
-  val lengthKey = "legalChallengeDetails.error.length"
 
   val form = new LegalChallengeDetailsFormProvider()()
 

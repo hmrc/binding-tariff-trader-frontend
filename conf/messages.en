@@ -227,7 +227,6 @@ uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file types can 
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
-uploadSupportingMaterialMultiple.error.length = UploadSupportingMaterialMultiple must be 100 characters or less
 uploadSupportingMaterialMultiple.error.numberFiles = Reduce the number of files to a maximum of 10
 
 commodityCodeBestMatch.title = Have you found a commodity code? - GOV.UK
@@ -282,7 +281,6 @@ commodityCodeRulingReference.heading = What are the details and reference number
 commodityCodeRulingReference.hint = The reference number, for example GB12345678 and FR12345678, is on the ruling certificate. You can include more than one reference number.
 commodityCodeRulingReference.checkYourAnswersLabel = Ruling reference number
 commodityCodeRulingReference.error.required = Enter the ruling reference number and explanation
-commodityCodeRulingReference.error.length = Ruling reference number must be 100 characters or less
 
 legalChallenge.title = Problems with the classification of the item - GOV.UK
 legalChallenge.heading = Do you know if there have been any problems classifying the item?
@@ -296,7 +294,6 @@ legalChallengeDetails.title = Enter problems with the classification of the item
 legalChallengeDetails.heading = What are the problems with classifying your item?
 legalChallengeDetails.checkYourAnswersLabel = Problems with the classification of the item
 legalChallengeDetails.error.required = Enter any problems with the classification of your item
-legalChallengeDetails.error.length = Details of any problems with classification must be 100 characters or less
 
 supportingInformation.title = Other information to support this application - GOV.UK
 supportingInformation.heading = Do you need to enter any other information to support this application?
@@ -311,7 +308,6 @@ supportingInformationDetails.heading = What is the information you want to provi
 supportingInformationDetails.hint = Tell us if the item will be exported and any other relevant information.
 supportingInformationDetails.checkYourAnswersLabel = Supporting information
 supportingInformationDetails.error.required = Enter supporting information
-supportingInformationDetails.error.length = Enter supporting information must be 100 characters or less
 
 declaration.title = Declaration - GOV.UK
 declaration.heading = Apply for a ruling
@@ -352,7 +348,6 @@ uploadWrittenAuthorisation.error.selectFile = You must select a file, you cannot
 uploadWrittenAuthorisation.error.size = The selected file must be smaller than 10MB
 uploadWrittenAuthorisation.error.fileType = Your document will not upload because it’s not a valid file type
 uploadWrittenAuthorisation.error.required = Enter uploadWrittenAuthorisation
-uploadWrittenAuthorisation.error.length = must be 100 characters or less
 uploadWrittenAuthorisation.upload.title =  The authorisation must be:
 uploadWrittenAuthorisation.upload.restrictionSize = a maximum file size of 10MB
 uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg and txt files
