@@ -27,7 +27,6 @@ class CaseRequestMapper {
   private def throwError(field: String) = throw new IllegalStateException(s"Missing User Session Data: $field")
 
   def map(answers: UserAnswers): NewCaseRequest = {
-    val confidentialInfo: Option[ConfidentialInformation] = answers.get(ConfidentialInformationPage)
     val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
     val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
     val previousCommodityCode: Option[PreviousCommodityCode] = answers.get(PreviousCommodityCodePage)
@@ -44,8 +43,9 @@ class CaseRequestMapper {
     val agentDetails: Option[AgentDetails] = agentDetailsFrom(answers)
     val holderDetails: EORIDetails = holderDetailsFrom(answers)
 
-    val goodName = describeYourItem.map(_.field1).getOrElse(throwError("good name"))
-    val goodDescription = describeYourItem.map(_.field2).getOrElse(throwError("good description"))
+    val goodName = describeYourItem.map(_.name).getOrElse(throwError("good name"))
+    val goodDescription = describeYourItem.map(_.description).getOrElse(throwError("good description"))
+    val confidentialInformation = describeYourItem.flatMap(_.confidentialInformation)
 
     val app = Application(
       holder = holderDetails,
@@ -54,7 +54,7 @@ class CaseRequestMapper {
       offline = false,
       goodName = goodName,
       goodDescription = goodDescription,
-      confidentialInformation = confidentialInfo.map(_.field1),
+      confidentialInformation = confidentialInformation,
       otherInformation = supportingInformationDetails,
       reissuedBTIReference = previousCommodityCode.map(_.field1),
       relatedBTIReference = commodityCodeRulingReference,

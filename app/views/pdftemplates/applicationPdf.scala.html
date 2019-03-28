@@ -165,19 +165,19 @@
             @sectionHeading("pdf.application.section.aboutItem.heading")
             <table>
                 <tr>
+                    <td>@messages("pdf.application.section.aboutItem.description")</td>
+                    <td id="application.goods.details">
+                        @c.application.goodName <br/>
+                        @c.application.goodDescription
+                    </td>
+                </tr>
+                <tr>
                     <td>@messages("pdf.application.section.aboutItem.confidentialInfo")</td>
                     <td id="application.confidentialInformation">@if(c.application.confidentialInformation.isDefined) {
                         @c.application.confidentialInformation.get
                     } else {
                         @messages("site.no")
                     }</td>
-                </tr>
-                <tr>
-                    <td>@messages("pdf.application.section.aboutItem.description")</td>
-                    <td id="application.goods.details">
-                        @c.application.goodName <br/>
-                        @c.application.goodDescription
-                    </td>
                 </tr>
                 <tr>
                     <td>@messages("pdf.application.section.aboutItem.uploadeDocuments")</td>

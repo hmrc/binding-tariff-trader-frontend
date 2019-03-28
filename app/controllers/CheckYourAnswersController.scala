@@ -59,8 +59,6 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
         Seq(
           checkYourAnswersHelper.selectApplicationType,
           checkYourAnswersHelper.previousCommodityCode,
-          checkYourAnswersHelper.informationAboutYourItem,
-          checkYourAnswersHelper.confidentialInformation,
           checkYourAnswersHelper.describeYourItem,
           checkYourAnswersHelper.supportingMaterialFileList,
           checkYourAnswersHelper.commodityCodeBestMatch,

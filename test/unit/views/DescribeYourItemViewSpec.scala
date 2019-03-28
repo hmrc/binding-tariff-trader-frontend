@@ -44,7 +44,7 @@ class DescribeYourItemViewSpec extends QuestionViewBehaviours[DescribeYourItem] 
       createViewUsingForm,
       messageKeyPrefix,
       routes.DescribeYourItemController.onSubmit(NormalMode).url,
-      "field1", "field2"
+      "name", "description"
     )
   }
 

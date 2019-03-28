@@ -68,10 +68,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", yesNoAnswer(x), true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
   }
 
-  def confidentialInformation: Option[AnswerRow] = userAnswers.get(ConfidentialInformationPage) map {
-    x => AnswerRow("confidentialInformation.checkYourAnswersLabel", s"${x.field1}", false, routes.ConfidentialInformationController.onPageLoad(CheckMode).url)
-  }
-
   def supportingMaterialFileList: Option[AnswerRow] = {
 
     def constructRow: Seq[String] => AnswerRow = { content =>
@@ -85,15 +81,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def describeYourItem: Option[AnswerRow] = userAnswers.get(DescribeYourItemPage) map {
-    x => AnswerRow("describeYourItem.checkYourAnswersLabel", Seq(x.field1, x.field2), false, routes.DescribeYourItemController.onPageLoad(CheckMode).url)
+    x => AnswerRow("describeYourItem.checkYourAnswersLabel", Seq(x.name, x.description, x.confidentialInformation.orNull), false, routes.DescribeYourItemController.onPageLoad(CheckMode).url)
   }
 
   def previousCommodityCode: Option[AnswerRow] = userAnswers.get(PreviousCommodityCodePage) map {
     x => AnswerRow("previousCommodityCode.checkYourAnswersLabel", s"${x.field1}", false, routes.PreviousCommodityCodeController.onPageLoad(CheckMode).url)
-  }
-
-  def informationAboutYourItem: Option[AnswerRow] = userAnswers.get(InformationAboutYourItemPage) map {
-    x => AnswerRow("informationAboutYourItem.checkYourAnswersLabel", yesNoAnswer(x), true, routes.InformationAboutYourItemController.onPageLoad(CheckMode).url)
   }
 
   def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
