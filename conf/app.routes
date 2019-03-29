@@ -10,6 +10,7 @@ GET         /                                                    controllers.Def
 GET         /applications                                        controllers.IndexController.getApplications(page: Int ?= 1)
 GET         /rulings                                             controllers.IndexController.getRulings(page: Int ?= 1)
 
+GET         /sign-out                                            controllers.SignOutController.startFeedbackSurvey
 GET         /unauthorised                                        controllers.UnauthorisedController.onPageLoad
 
 GET         /information-you-need                                controllers.BeforeYouStartController.onPageLoad()
