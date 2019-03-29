@@ -34,7 +34,6 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   }
 
   private lazy val contactHost = runModeConfiguration.getString("contact-frontend.host").getOrElse("")
-
   private val contactFormServiceIdentifier = "BindingTariffApplication"
 
   lazy val analyticsToken: String = loadConfig("google-analytics.token")
@@ -65,7 +64,6 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   private lazy val feedbackUrl: String = baseUrl("feedback-frontend")
   private lazy val feedbackServiceName : String = "ABTIR"
   lazy val feedbackSurvey: String = s"$feedbackUrl/feedback/$feedbackServiceName"
-
 
   lazy val apiToken: String = loadConfig("auth.api-token")
   lazy val aesKey: String = loadConfig("auth.aes-key")

@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.net.URL
-
 import config.FrontendAppConfig
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -28,6 +26,6 @@ class SignOutController @Inject()(val appConfig: FrontendAppConfig,
                                   val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
 
   def startFeedbackSurvey: Action[AnyContent] = Action { implicit request =>
-    SeeOther(new URL(appConfig.feedbackSurvey).toString).withNewSession
+    SeeOther(appConfig.feedbackSurvey).withNewSession
   }
 }
