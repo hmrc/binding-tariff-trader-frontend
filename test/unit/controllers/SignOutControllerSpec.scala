@@ -26,7 +26,7 @@ class SignOutControllerSpec extends ControllerSpecBase {
   "Sign out controller" must {
 
     "return 200 for a GET" in {
-      val result: Future[Result] = new SignOutController(frontendAppConfig, messagesApi).startFeedbackSurvey(fakeRequest)
+      val result: Future[Result] = new SignOutController(frontendAppConfig, messagesApi).startFeedbackSurvey(fakeRequestWithEori)
       status(result) mustBe SEE_OTHER
       redirectLocation(result).get must endWith( "/feedback/ABTIR")
     }
