@@ -61,7 +61,7 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val cdsSubscribeUrl: String = s"$cdsUrl/customs/subscribe-for-cds"
   lazy val cdsRegisterUrl: String = s"$cdsUrl/customs/register-for-cds"
 
-  private lazy val feedbackUrl: String = baseUrl("feedback-frontend")
+  private lazy val feedbackUrl: String = loadConfig("feedback-frontend.host")
   private lazy val feedbackServiceName : String = "ABTIR"
   lazy val feedbackSurvey: String = s"$feedbackUrl/feedback/$feedbackServiceName"
 
