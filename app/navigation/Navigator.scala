@@ -33,9 +33,7 @@ class Navigator @Inject()() {
     RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(NormalMode)),
     UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(NormalMode)),
     AcceptItemInformationPage -> (_ => routes.AcceptItemInformationListController.onPageLoad()),
-    InformationAboutYourItemPage -> (_ => routes.InformationAboutYourItemController.onPageLoad(NormalMode)),
     PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
-    ConfidentialInformationPage -> (_ => routes.ConfidentialInformationController.onPageLoad(NormalMode)),
     DescribeYourItemPage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode)),
     SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
@@ -57,7 +55,6 @@ class Navigator @Inject()() {
   private val checkRouteMap: Map[Page, UserAnswers => Call] = Map(
     LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(CheckMode)),
     CommodityCodeRulingReferencePage -> (_ => routes.CommodityCodeRulingReferenceController.onPageLoad(CheckMode)),
-    ConfidentialInformationPage -> (_ => routes.ConfidentialInformationController.onPageLoad(CheckMode)),
     CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(CheckMode)),
     ReturnSamplesPage -> (_ => routes.ReturnSamplesController.onPageLoad(CheckMode)),
     SupportingInformationDetailsPage -> (_ => routes.SupportingInformationDetailsController.onPageLoad(CheckMode)),

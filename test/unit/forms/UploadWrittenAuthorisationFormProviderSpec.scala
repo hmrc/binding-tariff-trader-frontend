@@ -17,13 +17,11 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
+import org.scalacheck.Arbitrary.arbitrary
 
 class UploadWrittenAuthorisationFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "uploadWrittenAuthorisation.error.required"
-  val lengthKey = "uploadWrittenAuthorisation.error.length"
-  val maxLength = 100
 
   val form = new UploadWrittenAuthorisationFormProvider()()
 
@@ -34,7 +32,7 @@ class UploadWrittenAuthorisationFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      arbitrary[String]
     )
   }
 }

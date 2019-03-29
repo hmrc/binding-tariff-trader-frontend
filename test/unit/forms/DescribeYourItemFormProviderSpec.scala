@@ -24,11 +24,11 @@ class DescribeYourItemFormProviderSpec extends StringFieldBehaviours {
 
   val form = new DescribeYourItemFormProvider()()
 
-  ".field1" must {
+  ".name" must {
 
-    val fieldName = "field1"
-    val requiredKey = "describeYourItem.error.field1.required"
-    val lengthKey = "describeYourItem.error.field1.length"
+    val fieldName = "name"
+    val requiredKey = "describeYourItem.error.name.required"
+    val lengthKey = "describeYourItem.error.name.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(
@@ -51,10 +51,10 @@ class DescribeYourItemFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
-  ".field2" must {
+  ".description" must {
 
-    val fieldName = "field2"
-    val requiredKey = "describeYourItem.error.field2.required"
+    val fieldName = "description"
+    val requiredKey = "describeYourItem.error.description.required"
 
     behave like fieldThatBindsValidData(
       form,
@@ -67,6 +67,18 @@ class DescribeYourItemFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+  }
+
+  ".confidentialInformation" must {
+
+    val fieldName = "confidentialInformation"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      arbitrary[String]
+    )
+
   }
 
 }

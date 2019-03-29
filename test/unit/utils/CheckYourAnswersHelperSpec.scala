@@ -61,20 +61,9 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
         checkHelper.similarItemCommodityCode.get.answer shouldBe "site.yes"
       }
 
-
-      "return a row with the correct answer for InformationAboutYourItemPage" in {
-        given(userAnswers.get(InformationAboutYourItemPage)).willReturn(Option(true))
-        checkHelper.informationAboutYourItem.get.answer shouldBe "site.yes"
-      }
-
     }
 
     "rendering information pages" must {
-
-      "return a row with the correct answer for ConfidentialInformationPage" in {
-        given(userAnswers.get(ConfidentialInformationPage)).willReturn(Option(ConfidentialInformation("Some info")))
-        checkHelper.confidentialInformation.get.answer shouldBe "Some info"
-      }
 
       "return a row with the correct answer for CommodityCodeDigitsPage" in {
         given(userAnswers.get(CommodityCodeDigitsPage)).willReturn(Option("12131233241324"))
@@ -107,7 +96,7 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
       }
 
       "return a row with the correct answer for DescribeYourItemPage" in {
-        given(userAnswers.get(DescribeYourItemPage)).willReturn(Option(DescribeYourItem("field1", "field2")))
+        given(userAnswers.get(DescribeYourItemPage)).willReturn(Option(DescribeYourItem("field1", "field2", None)))
         checkHelper.describeYourItem.get.answer shouldBe "field1\nfield2"
       }
 

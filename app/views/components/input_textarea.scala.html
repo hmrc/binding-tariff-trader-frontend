@@ -19,10 +19,12 @@
         label: String,
         secondaryLabel: Option[String] = None,
         inputClass: Option[String] = None,
+        inputFormControl: String = "form-control-3-4",
         labelClass: Option[String] = None,
         hint: Option[String] = None,
         htmlHint: Option[Html] = None,
-        numRows: Int = 5
+        numRows: Int = 5,
+        maxlength: Int = 90000
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -40,10 +42,11 @@
     </label>
     <div class="form-control-wrapper char-counter" data-char-counter>
         <textarea
-            class="form-control form-control-3-4 @inputClass"
+            class="form-control @inputFormControl @inputClass"
             id="@{field.id}"
             name="@{field.id}"
             rows=@numRows
+            maxlength=@maxlength
             @if(field.hasErrors){aria-describedby="error-message-@{field.id}-input"}>@{field.value}</textarea>
     </div>
 </div>
