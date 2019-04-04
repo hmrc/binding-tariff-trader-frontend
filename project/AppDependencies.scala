@@ -9,7 +9,7 @@ object AppDependencies {
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc"       %% "auth-client"                      % "2.20.0-play-25",
     "uk.gov.hmrc"       %% "bootstrap-play-25"                % "4.10.0",
-    "uk.gov.hmrc"       %% "govuk-template"                   % "5.30.0-play-25",
+    "uk.gov.hmrc"       %% "govuk-template"                   % "5.31.0-play-25",
     "uk.gov.hmrc"       %% "http-caching-client"              % "8.1.0",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"    % "0.2.0",
     "uk.gov.hmrc"       %% "play-health"                      % "3.12.0-play-25",
@@ -26,7 +26,7 @@ object AppDependencies {
   val test = Seq(
     "com.github.tomakehurst"     % "wiremock"               % "2.22.0"            % scope,
     "com.typesafe.play"         %% "play-test"              % PlayVersion.current % scope,
-    "org.mockito"                % "mockito-core"           % "2.25.1"            % scope,
+    "org.mockito"                % "mockito-core"           % "2.26.0"            % scope,
     "org.pegdown"                % "pegdown"                % "1.6.0"             % scope,
     "org.jsoup"                  % "jsoup"                  % "1.11.3"            % scope,
     "org.scalacheck"            %% "scalacheck"             % "1.14.0"            % scope,
