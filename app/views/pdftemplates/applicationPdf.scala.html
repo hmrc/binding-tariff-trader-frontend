@@ -79,6 +79,9 @@
                     font-size: 10px;
                     text-align: right;
                 }
+                .pre-wrap {
+                    white-space: pre-wrap;
+                }
         </style>
 
     </head>
@@ -168,13 +171,13 @@
                     <td>@messages("pdf.application.section.aboutItem.description")</td>
                     <td id="application.goods.details">
                         @c.application.goodName <br/>
-                        @c.application.goodDescription
+                        <span class="pre-wrap">@c.application.goodDescription</span>
                     </td>
                 </tr>
                 <tr>
                     <td>@messages("pdf.application.section.aboutItem.confidentialInfo")</td>
                     <td id="application.confidentialInformation">@if(c.application.confidentialInformation.isDefined) {
-                        @c.application.confidentialInformation.get
+                        <span class="pre-wrap">@c.application.confidentialInformation.get</span>
                     } else {
                         @messages("site.no")
                     }</td>
@@ -217,7 +220,7 @@
                 @if(c.application.relatedBTIReference.isDefined) {
                     <tr>
                         <td>@messages("pdf.application.section.aboutItem.similarRuling.BTIRef")</td>
-                        <td id="application.relatedBTIReference">@c.application.relatedBTIReference.get</td>
+                        <td id="application.relatedBTIReference"><span class="pre-wrap">@c.application.relatedBTIReference.get</span></td>
                     </tr>
                 }
                 <tr>
@@ -231,7 +234,7 @@
                 @if(c.application.knownLegalProceedings.isDefined) {
                     <tr>
                         <td>@messages("pdf.application.section.aboutItem.legalProblems.details")</td>
-                        <td id="application.knownLegalProceedings">@c.application.knownLegalProceedings.get</td>
+                        <td id="application.knownLegalProceedings"><span class="pre-wrap">@c.application.knownLegalProceedings.get</span></td>
                     </tr>
                 }
             </table>
@@ -241,7 +244,7 @@
                 <tr>
                     <td>@messages("pdf.application.section.other.label")</td>
                     <td id="application.otherInformation">@if(c.application.otherInformation.isDefined) {
-                        @c.application.otherInformation.get
+                        <span class="pre-wrap">@c.application.otherInformation.get</span>
                     } else {
                         @messages("site.none")
                     }</td>

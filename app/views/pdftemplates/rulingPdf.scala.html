@@ -53,6 +53,9 @@
                     font-size: 10px;
                     text-align: right;
                 }
+                .pre-wrap {
+                    white-space: pre-wrap;
+                }
         </style>
 
     </head>
@@ -114,7 +117,7 @@
 
             <div id="section-goods" class="box">
                 <p class="section-label">@messages("pdf.ruling.section.ruling.description.label")</p>
-                <p>@d.goodsDescription</p>
+                <p><span class="pre-wrap">@d.goodsDescription</span></p>
             </div>
 
             <div id="section-commercial" class="box">
@@ -122,12 +125,12 @@
                     <span class="section-label">@messages("pdf.ruling.section.ruling.commercialDenomination.label")</span>
                     <span>@messages("pdf.ruling.section.ruling.commercialDenomination.sublabel")</span>
                 </p>
-                <p>@d.methodCommercialDenomination.getOrElse("")</p>
+                <p><span class="pre-wrap">@d.methodCommercialDenomination.getOrElse("")</span></p>
             </div>
 
             <div id="section-justification" class="box">
                 <p class="section-label">@messages("pdf.ruling.section.ruling.justification.label")</p>
-                <p>@d.justification</p>
+                <p><span class="pre-wrap">@d.justification</span></p>
             </div>
 
             <br/><br/>
