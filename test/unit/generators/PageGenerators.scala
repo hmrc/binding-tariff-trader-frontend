@@ -78,6 +78,9 @@ trait PageGenerators {
   implicit lazy val arbitraryWhichBestDescribesYouPage: Arbitrary[WhichBestDescribesYouPage.type] =
     Arbitrary(WhichBestDescribesYouPage)
 
+  implicit lazy val arbitraryImportOrExportPage: Arbitrary[ImportOrExportPage.type] =
+    Arbitrary(ImportOrExportPage)
+
   implicit lazy val arbitraryRegisteredAddressForEoriPage: Arbitrary[RegisteredAddressForEoriPage.type] =
     Arbitrary(RegisteredAddressForEoriPage)
 

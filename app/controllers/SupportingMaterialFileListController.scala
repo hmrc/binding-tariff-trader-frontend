@@ -71,7 +71,7 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
       }
 
       updatedAnswers.map { userAnswers =>
-        Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(userAnswers))
+        Redirect(navigator.nextPage(ImportOrExportPage, mode)(userAnswers))
       }
     }
 

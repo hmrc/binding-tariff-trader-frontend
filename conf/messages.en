@@ -356,6 +356,13 @@ uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg a
 uploadWrittenAuthorisation.upload.timeLimit = from within the last 12 months
 uploadWrittenAuthorisation.upload.document = a digital document, a scanned letter or copy of an email from the business, organisation or individual
 
+importOrExport.title = Is this item going to be imported or exported? - GOV.UK
+importOrExport.heading = Is this item going to be imported or exported?
+importOrExport.import = The item is going to be imported
+importOrExport.export = The item is going to be exported
+importOrExport.checkYourAnswersLabel = Is this item going to be imported or exported?
+importOrExport.error.required = Enter import or export
+
 checkYourAnswers.applicantRegisteredSection = Your details
 checkYourAnswers.applicantOtherBusiness = Details of the business, organisation or individual you represent
 checkYourAnswers.informationAboutYourItemSection = Information about your item
