@@ -183,6 +183,22 @@
                     }</td>
                 </tr>
                 <tr>
+                    <td>@messages("pdf.application.section.aboutItem.suggestedCommodityCode")</td>
+                    <td id="application.suggestedCommodityCode">@if(c.application.envisagedCommodityCode.isDefined) {
+                        <span class="pre-wrap">@c.application.envisagedCommodityCode.get</span>
+                    } else {
+                        @messages("site.none")
+                    }</td>
+                </tr>
+                <tr>
+                    <td>@messages("pdf.application.section.aboutItem.importOrExport")</td>
+                    <td id="application.importOrExport">@if(c.application.importOrExport.isDefined) {
+                        <span class="pre-wrap">@c.application.importOrExport.get.toLowerCase.capitalize</span>
+                    } else {
+                        @messages("site.none")
+                    }</td>
+                </tr>
+                <tr>
                     <td>@messages("pdf.application.section.aboutItem.uploadeDocuments")</td>
                     <td id="application.attachments">@if(attachments.isEmpty) {@messages("site.none")} else {
                         @for(row <- attachments) {
