@@ -57,9 +57,9 @@
         } else {
             @Html(messages("confirmation.paragraph.whatNext0.nosample"))
         }
-        <br/>
         @Html(messages("confirmation.paragraph.whatNext1"))
     </p>
-
-    <a href="@routes.IndexController.getApplications()">@messages("confirmation.homeLink")</a>
+    <p>
+        <a href="@routes.IndexController.getApplications()">@messages("confirmation.homeLink")</a>.
+    </p>
 }
