@@ -121,6 +121,11 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
         checkHelper.selectApplicationType.get.answer shouldBe "selectApplicationType.newCommodity"
       }
 
+      "return a row with the correct answer for importOrExportPage" in {
+        given(userAnswers.get(ImportOrExportPage)).willReturn(Option(ImportOrExport.Import))
+        checkHelper.importOrExport.get.answer shouldBe "importOrExport.import"
+      }
+
       "return a row with the correct answer for WhichBestDescribesYouPage" in {
         given(userAnswers.get(WhichBestDescribesYouPage)).willReturn(Option(BusinessOwner))
         checkHelper.whichBestDescribesYou.get.answer shouldBe "whichBestDescribesYou.businessOwner"

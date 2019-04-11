@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import viewmodels.AnswerSection
-@import views.html._
+package forms
 
-@(answerSection: AnswerSection)(implicit messages: Messages)
+import forms.mappings.Mappings
+import models.ImportOrExport
+import play.api.data.Form
 
-@if(answerSection.headingKey.isDefined) {
-    <h2 class="heading-medium" id="@answerSection.headingKey.get">@messages(answerSection.headingKey.get)</h2>
+class ImportOrExportFormProvider extends Mappings {
+
+  def apply(): Form[ImportOrExport] =
+    Form(
+      "value" -> enumerable[ImportOrExport]("importOrExport.error.required")
+    )
+
 }
-
-<ul class="govuk-check-your-answers cya-questions-long section">
-  @for(row <- answerSection.rows) {
-      @components.answer_row(row)
-  }
-</ul>

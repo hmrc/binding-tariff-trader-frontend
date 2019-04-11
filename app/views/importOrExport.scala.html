@@ -15,28 +15,29 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
-@import models.Mode
+@import models.{ImportOrExport, Mode}
+@import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("supportingInformation.title")}",
+    title = s"${errorPrefix(form)} ${messages("importOrExport.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = SupportingInformationController.onSubmit(mode), 'autoComplete -> "off") {
+    @helpers.form(action = ImportOrExportController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_yes_no(
+        @components.input_radio(
             field = form("value"),
-            label = messages("supportingInformation.heading"),
-            labelClass = Some("heading-xlarge mb-2")
+            legend = messages("importOrExport.heading"),
+            legendClass = Some("heading-xlarge mb-2"),
+            inputs = ImportOrExport.options.toSeq
         )
 
         @components.submit_button()

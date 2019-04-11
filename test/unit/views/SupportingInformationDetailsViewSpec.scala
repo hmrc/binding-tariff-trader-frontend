@@ -43,8 +43,7 @@ class SupportingInformationDetailsViewSpec extends StringViewBehaviours {
     behave like textareaPage(
       createViewUsingForm,
       messageKeyPrefix,
-      routes.SupportingInformationDetailsController.onSubmit(NormalMode).url,
-      Some(s"$messageKeyPrefix.hint")
+      routes.SupportingInformationDetailsController.onSubmit(NormalMode).url
     )
   }
 }

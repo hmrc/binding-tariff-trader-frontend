@@ -66,7 +66,7 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryInformationAboutYourItem: Arbitrary[Boolean] =
     Arbitrary {
-      Gen.oneOf(Seq(true,false))
+      Gen.oneOf(Seq(true, false))
     }
 
   implicit lazy val arbitraryEnterContactDetails: Arbitrary[EnterContactDetails] =
@@ -89,7 +89,7 @@ trait ModelGenerators {
         country <- arbitrary[String]
       } yield RegisterBusinessRepresenting(eoriNumber, businessName, addressLine1, town, postCode, country)
     }
- 
+
   implicit lazy val arbitrarySelectApplicationType: Arbitrary[SelectApplicationType] =
     Arbitrary {
       Gen.oneOf(SelectApplicationType.values.toSeq)
@@ -98,6 +98,11 @@ trait ModelGenerators {
   implicit lazy val arbitraryWhichBestDescribesYou: Arbitrary[WhichBestDescribesYou] =
     Arbitrary {
       Gen.oneOf(WhichBestDescribesYou.values.toSeq)
+    }
+
+  implicit lazy val arbitraryImportOrExport: Arbitrary[ImportOrExport] =
+    Arbitrary {
+      Gen.oneOf(ImportOrExport.values.toSeq)
     }
 
   implicit lazy val arbitraryRegisteredAddressForEori: Arbitrary[RegisteredAddressForEori] =
