@@ -192,11 +192,13 @@
                 </tr>
                 <tr>
                     <td>@messages("pdf.application.section.aboutItem.importOrExport")</td>
-                    <td id="application.importOrExport">@if(c.application.importOrExport.isDefined) {
-                        <span class="pre-wrap">@c.application.importOrExport.get.toLowerCase.capitalize</span>
-                    } else {
-                        @messages("site.unknown")
-                    }</td>
+                    <td id="application.importOrExport">
+                        @{c.application.importOrExport match {
+                            case Some("IMPORT") => messages("pdf.application.section.aboutItem.import")
+                            case Some("EXPORT") => messages("pdf.application.section.aboutItem.export")
+                            case _ => messages("site.unknown")
+                        }}
+                    </td>
                 </tr>
                 <tr>
                     <td>@messages("pdf.application.section.aboutItem.uploadeDocuments")</td>
