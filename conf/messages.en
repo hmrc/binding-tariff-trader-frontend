@@ -466,3 +466,5 @@ case.ruling.status.active = Active
 case.ruling.status.expired = Expired
 
 case.ruling.downloadPdf = View BTI Ruling
+
+rulingInformation.title = Information on Ruling

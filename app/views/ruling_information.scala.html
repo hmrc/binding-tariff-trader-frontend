@@ -1,0 +1,51 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+@import uk.gov.hmrc.play.views.html._
+@import controllers.routes._
+@import models.Mode
+@import views.ViewUtils._
+
+@(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
+
+    @main_template(
+        title = s"${messages("rulingInformation.title")}",
+        appConfig = appConfig,
+        bodyClasses = None)  {
+
+        @components.back_link()
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+    <h1>Important information about BTI ruling @c.reference</h1>
+
+        <p><h2>Ruling summary</h2></p>
+
+        <p>Holder @c.application.holder.businessName</p>
+        <p>Ruling @c.reference</p>
+        <p>Start date @c.decision.get.effectiveStartDate</p>
+        <p>Expiry date @c.decision.get.effectiveEndDate</p>
+
+        <p><h2>The commodity code we've issued and why we made this decision</h2></p>
+    </body>
+</html>
+
+}
