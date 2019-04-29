@@ -58,7 +58,7 @@
                 <tbody id="rulings-list-body">
                     @for((c: Case, index: Int) <- cases.results.zipWithIndex) {
                         <tr id="rulings-list-row-@{index}">
-                            <td id="rulings-list-row-@{index}-reference">@c.reference</td>
+                            <td id="rulings-list-row-@{index}-reference">GB@c.reference</td>
                             <td id="rulings-list-row-@{index}-item_name">@c.application.goodName</td>
                             <td id="rulings-list-row-@{index}-commodity_code">@if(c.decision.isDefined){ @c.decision.get.bindingCommodityCode }</td>
                             <td id="rulings-list-row-@{index}-start_date">@if(c.decision.isDefined){ @Dates.format(c.decision.get.effectiveStartDate) }</td>

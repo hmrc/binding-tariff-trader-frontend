@@ -26,6 +26,7 @@ import service.CasesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.ruling_information
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.successful
 
 class RulingController @Inject()(val appConfig: FrontendAppConfig,
@@ -43,18 +44,7 @@ class RulingController @Inject()(val appConfig: FrontendAppConfig,
 
 
       case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
-      //case _ => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
     }
 
-
-
-//    request.eoriNumber match {
-//      case Some(eori: String) =>
-//        service.getCases(eori, rulingStatuses, SearchPagination(page), Sort(SortField.DECISION_START_DATE)) flatMap { pagedResult =>
-//          successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult))))
-//        }
-//
-//      case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
-//    }
   }
 }

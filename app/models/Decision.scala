@@ -27,7 +27,8 @@ case class Decision
   goodsDescription: String,
   methodSearch: Option[String] = None,
   methodCommercialDenomination: Option[String] = None,
-  methodExclusion: Option[String] = None
+  methodExclusion: Option[String] = None,
+  explanation: Option[String] = None
 )
 
 
