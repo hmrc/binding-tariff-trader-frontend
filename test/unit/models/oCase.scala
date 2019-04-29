@@ -50,7 +50,8 @@ object oCase {
     effectiveEndDate = Some(Instant.now),
     justification = "justification-content",
     goodsDescription = "goodsDescription-content",
-    methodCommercialDenomination = Some("commercial-denomination-content")
+    methodCommercialDenomination = Some("commercial-denomination-content"),
+    explanation = Some("This is some explanation")
   )
 
 

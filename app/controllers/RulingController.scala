@@ -42,7 +42,6 @@ class RulingController @Inject()(val appConfig: FrontendAppConfig,
           c: Case => successful(Ok(ruling_information(appConfig, c)))
         }
 
-
       case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
     }
 
