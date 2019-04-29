@@ -39,7 +39,7 @@ class RulingController @Inject()(val appConfig: FrontendAppConfig,
     request.eoriNumber match {
       case Some(eori: String) =>
         service.getCaseForUser(eori,reference) flatMap {
-          c: Case => successful(Ok(ruling_information(appConfig,c)))
+          c: Case => successful(Ok(ruling_information(appConfig, c)))
         }
 
 
