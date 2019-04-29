@@ -65,34 +65,40 @@
 
         <p style="white-space:pre-wrap">@c.decision.get.explanation</p>
 
-        <p>@messages("rulingInformation.CommoditySuffix") <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600"
-        target="_blank">
-        @messages("rulingInformation.CommodityLink")
-        </a></p>
+        <p>
+            @messages("rulingInformation.CommoditySuffix")
+            <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+            @messages("rulingInformation.CommodityLink")
+            </a>
+        </p>
 
         @components.subheading(messages("rulingInformation.CertificateSubheading"))
 
         <p>@messages("rulingInformation.CertificateText")</p>
 
-        <p><a href="@routes.PdfDownloadController.ruling(c.reference)" target="_blank">
-        @messages("rulingInformation.CertificateLink")
-        </a></p>
+        <p>
+            <a href="@routes.PdfDownloadController.ruling(c.reference)" target="_blank">
+            @messages("rulingInformation.CertificateLink")
+            </a>
+        </p>
 
         @components.subheading(messages("rulingInformation.SamplesSubheading"))
 
-        <p>@messages("rulingInformation.SamplesText")
-            <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#before-you-start"
-            target="_blank">
-                @messages("rulingInformation.SamplesLink")
-            </a></p>
+        <p>
+            @messages("rulingInformation.SamplesText")
+            <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#before-you-start" target="_blank">
+            @messages("rulingInformation.SamplesLink")
+            </a>
+        </p>
 
         @components.subheading(messages("rulingInformation.AppealsSubheading"))
 
-        <p>@messages("rulingInformation.AppealsText")
-            <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#appeal-a-binding-tariff-information-decision"
-            target="_blank">
+        <p>
+            @messages("rulingInformation.AppealsText")
+            <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#appeal-a-binding-tariff-information-decision" target="_blank">
             @messages("rulingInformation.AppealsLink")
-            </a></p>
+            </a>
+        </p>
 
 
 }
