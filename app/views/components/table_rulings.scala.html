@@ -72,7 +72,7 @@
                                 }
                             </td>
                             <td id="rulings-list-row-@{index}-download">
-                                <a id="rulings-list-row-@{index}-download-link" target="_self" href="@routes.RulingController.viewRuling(c.reference)">@messages("case.ruling.downloadPdf")</a>
+                                <a id="rulings-list-row-@{index}-download-link" href="@routes.RulingController.viewRuling(c.reference)">@messages("case.ruling.downloadPdf")</a>
                             </td>
                         </tr>
                     }

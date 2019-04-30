@@ -26,77 +26,80 @@
 
         @components.back_link()
 
-        @components.heading(s"${messages("rulingInformation.Heading")} GB${c.reference}")
+        @components.heading(s"${messages("rulingInformation.heading")} GB${c.reference}")
 
-        @components.subheading(messages("rulingInformation.Summary"))
+        @components.subheading(messages("rulingInformation.summary"))
 
 
         <div class="grid-row">
             <div class="grid-full-width">
-                <div class="column-one-third">@messages("rulingInformation.Holder")</div>
-                <div class="column-two-thirds">@c.application.holder.businessName</div>
+                <div class="column-one-third">@messages("rulingInformation.holder")</div>
+                <div id="rulingInformation.holder" class="column-two-thirds">@c.application.holder.businessName</div>
             </div>
         </div>
         </br>
         <div class="grid-row">
             <div class="grid-full-width">
-                <div class="column-one-third">@messages("rulingInformation.Ruling")</div>
-                <div class="column-two-thirds">GB@c.reference</div>
+                <div class="column-one-third">@messages("rulingInformation.ruling")</div>
+                <div id="rulingInformation.ruling" class="column-two-thirds">GB@c.reference</div>
             </div>
         </div>
         </br>
         <div class="grid-row">
             <div class="grid-full-width">
-                <div class="column-one-third">@messages("rulingInformation.StartDate")</div>
-                <div class="column-two-thirds">@Dates.format(c.decision.get.effectiveStartDate)</div>
+                <div class="column-one-third">@messages("rulingInformation.startDate")</div>
+                <div id="rulingInformation.startDate" class="column-two-thirds">@Dates.format(c.decision.get.effectiveStartDate)</div>
             </div>
         </div>
         </br>
         <div class="grid-row">
             <div class="grid-full-width">
-                <div class="column-one-third">@messages("rulingInformation.ExpiryDate")</div>
-                <div class="column-two-thirds">@Dates.format(c.decision.get.effectiveEndDate)</div>
+                <div class="column-one-third">@messages("rulingInformation.expiryDate")</div>
+                <div id="rulingInformation.expiryDate" class="column-two-thirds">@Dates.format(c.decision.get.effectiveEndDate)</div>
             </div>
         </div>
 
-        @components.subheading(messages("rulingInformation.CommoditySubheading"))
+        @components.subheading(messages("rulingInformation.commoditySubheading"))
 
-        <p>@messages("rulingInformation.CommodityIntro") @c.decision.get.bindingCommodityCode. </p>
+        <p>@messages("rulingInformation.commodityIntro") <span id="rulingInformation.commodityCode">@c.decision.get.bindingCommodityCode</span>. </p>
 
-        <p style="white-space:pre-wrap">@c.decision.get.explanation</p>
 
-        <p>
-            @messages("rulingInformation.CommoditySuffix")
+        @if(c.decision.get.explanation.isDefined) {
+            <p id="rulingInformation.explanation" style="white-space: pre-wrap">@c.decision.get.explanation</p>
+        }
+
+        <p id="rulingInformation.commoditySuffix">
+            @messages("rulingInformation.commoditySuffix")
             <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
-            @messages("rulingInformation.CommodityLink")
+            @messages("rulingInformation.commodityLink")
             </a>
         </p>
 
-        @components.subheading(messages("rulingInformation.CertificateSubheading"))
+        @components.subheading(messages("rulingInformation.certificateSubheading"))
 
-        <p>@messages("rulingInformation.CertificateText")</p>
+        <p>@messages("rulingInformation.certificateText")</p>
 
         <p>
             <a href="@routes.PdfDownloadController.ruling(c.reference)" target="_blank">
-            @messages("rulingInformation.CertificateLink")
+            @messages("rulingInformation.certificateLink")
             </a>
         </p>
 
-        @components.subheading(messages("rulingInformation.SamplesSubheading"))
+        @components.subheading(messages("rulingInformation.samplesSubheading"))
 
         <p>
-            @messages("rulingInformation.SamplesText")
+            @messages("rulingInformation.samplesText")
             <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#before-you-start" target="_blank">
-            @messages("rulingInformation.SamplesLink")
+            @messages("rulingInformation.samplesLink")
             </a>
         </p>
 
-        @components.subheading(messages("rulingInformation.AppealsSubheading"))
+        @components.subheading(messages("rulingInformation.appealsSubheading"))
 
         <p>
-            @messages("rulingInformation.AppealsText")
+            @messages("rulingInformation.appealsText")
             <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#appeal-a-binding-tariff-information-decision" target="_blank">
-            @messages("rulingInformation.AppealsLink")
+            @messages("rulingInformation.appealsLink")
             </a>
         </p>
 
