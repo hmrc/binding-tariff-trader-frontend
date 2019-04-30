@@ -43,8 +43,8 @@ class RulingInformationViewSpec extends ViewBehaviours {
       assertContainsText(doc,Dates.format(ruling.effectiveStartDate))
       assertContainsText(doc,Dates.format(ruling.effectiveEndDate))
 
-      assertContainsText(doc,s"${messages("rulingInformation.commodityIntro")}")
-      assertContainsText(doc, s"${ruling.bindingCommodityCode}")
+      assertContainsText(doc,messages("rulingInformation.commodityIntro"))
+      assertContainsText(doc, ruling.bindingCommodityCode)
 
       assertContainsText(doc,ruling.explanation.getOrElse("NeverMatch"))
 
