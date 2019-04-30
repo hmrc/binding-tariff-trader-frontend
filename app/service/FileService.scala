@@ -29,13 +29,17 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.Future.sequence
+import scala.concurrent.Future.{sequence, successful}
 
 @Singleton
 class FileService @Inject()(connector: BindingTariffFilestoreConnector, messagesApi: MessagesApi, configuration: FrontendAppConfig) {
 
   def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
     connector.upload(f).map(toFileAttachment(f.ref.file.length))
+  }
+
+  private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
+    r => FileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
   def refresh(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FileAttachment] = {
@@ -46,8 +50,11 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
     connector.getFileMetadata(c.attachments)
   }
 
-  private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
-    r => FileAttachment(r.id, r.fileName, r.mimeType, size)
+  def getLetterOfAuthority(c: Case)(implicit hc: HeaderCarrier): Future[Option[FilestoreResponse]] = {
+    c.application.agent.flatMap(_.letterOfAuthorisation) match {
+      case Some(attachment: Attachment) => connector.get(attachment)
+      case _ => successful(None)
+    }
   }
 
   def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[PublishedFileAttachment]] = {

@@ -24,7 +24,7 @@
 @import utils.Dates
 @import java.time.Instant
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse])(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None)(implicit request: Request[_], messages: Messages)
 
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
@@ -86,7 +86,7 @@
                     border-bottom: 0;
                 }
 
-                table.first-column-width-35 td:nth-child(1) {
+                table.first-column-w35 td:nth-child(1) {
                     width: 35%;
                 }
         </style>
@@ -102,7 +102,7 @@
             </table>
 
 
-            <table class="first-column-width-35 bb-0">
+            <table class="first-column-w35 bb-0">
                 <tr>
                     <td><span id="application.submitted">@messages("pdf.application.submitted") </span> </td> <td> @Dates.format(c.createdDate) </td>
                 </tr>
@@ -170,7 +170,7 @@
                         <tr>
                             <td> Written authorisation </td>
                               <td id="agentDetails.eoriDetails.address">
-                                        my_written_auth.pdf
+                                    @if(letterOfAuthority.isDefined){@letterOfAuthority.get.fileName}
                              </td>
                         </tr>
                     </table>

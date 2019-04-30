@@ -21,8 +21,8 @@ import akka.stream.scaladsl.{FileIO, Source}
 import akka.util.ByteString
 import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
-import models.{Attachment, FileAttachment}
 import models.response.FilestoreResponse
+import models.{Attachment, FileAttachment}
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
@@ -47,10 +47,10 @@ class BindingTariffFilestoreConnector @Inject()(appConfig: FrontendAppConfig, ws
     )
 
     ws.url(s"${appConfig.bindingTariffFileStoreUrl}/file")
-      .withHeaders( hc.headers: _* )
-      .withHeaders( http.authHeaders(appConfig) )
+      .withHeaders(hc.headers: _*)
+      .withHeaders(http.authHeaders(appConfig))
       .post(Source(List(filePart)))
-      .map( response => Json.fromJson[FilestoreResponse](Json.parse(response.body)).get )
+      .map(response => Json.fromJson[FilestoreResponse](Json.parse(response.body)).get)
 
   }
 
@@ -70,6 +70,10 @@ class BindingTariffFilestoreConnector @Inject()(appConfig: FrontendAppConfig, ws
       val url = s"${appConfig.bindingTariffFileStoreUrl}/file$query"
       http.GET[Seq[FilestoreResponse]](url)
     }
+  }
+
+  def get(attachment: Attachment)(implicit headerCarrier: HeaderCarrier): Future[Option[FilestoreResponse]] = {
+    http.GET[Option[FilestoreResponse]](s"${appConfig.bindingTariffFileStoreUrl}/file/${attachment.id}")
   }
 
 }

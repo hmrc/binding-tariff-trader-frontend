@@ -17,8 +17,9 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.{Attachment, FileAttachment}
 import models.response.FilestoreResponse
+import models.{Attachment, FileAttachment}
+import org.mockito.BDDMockito.given
 import play.api.http.Status
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
@@ -74,6 +75,54 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         getRequestedFor(urlEqualTo("/file/id"))
           .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
       )
+    }
+
+    "Connector 'GET' one" should {
+      "handle 404" in {
+        val att = mock[Attachment]
+        given(att.id) willReturn "id"
+
+        stubFor(
+          get("/file/id")
+            .willReturn(aResponse().withStatus(Status.NOT_FOUND))
+        )
+
+        await(connector.get(att)) shouldBe None
+
+        verify(
+          getRequestedFor(urlEqualTo("/file/id"))
+            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+        )
+      }
+
+      "handle response with mandatory fields only" in {
+        val att = mock[Attachment]
+        given(att.id) willReturn "id"
+
+        stubFor(
+          get("/file/id")
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+                .withBody(fromResource("single-file-response.json"))
+            )
+        )
+
+        await(connector.get(att)) shouldBe Some(
+          FilestoreResponse(
+            id = "id",
+            fileName = "name",
+            mimeType = "text/plain",
+            url = None,
+            scanStatus = None
+          )
+        )
+
+        verify(
+          getRequestedFor(urlEqualTo("/file/id"))
+            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+        )
+      }
     }
 
     "Publish" in {

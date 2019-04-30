@@ -21,8 +21,8 @@ import java.nio.file.Files
 
 import config.FrontendAppConfig
 import connectors.BindingTariffFilestoreConnector
-import models.response.FilestoreResponse
 import models._
+import models.response.FilestoreResponse
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.reset
@@ -91,6 +91,26 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
     }
   }
 
+  "Service 'getLetterOfAuthority'" should {
+
+    "Return Stored Attachment" in {
+      val c = aCase(withLetterOfAuthWithId("1"))
+      val expectedAtt = anAttachmentWithId("1")
+
+      given(connector.get(any[Attachment])(any[HeaderCarrier])) willReturn successful(Some(someMetadataWithId("1")))
+
+      await(service.getLetterOfAuthority(c)) shouldBe Some(someMetadataWithId("1"))
+    }
+
+    "Return None for missing letter" in {
+      await(service.getLetterOfAuthority(aCase(withAgentDetails()))) shouldBe None
+    }
+
+    "Return None for missing agent" in {
+      await(service.getLetterOfAuthority(aCase(withoutAgentDetails()))) shouldBe None
+    }
+  }
+
   "Publish multiple" should {
     val filePublishing1 = FileAttachment("id1", "filename1", "type", 0)
     val filePublishing2 = FileAttachment("id2", "filename2", "type", 0)
@@ -117,7 +137,7 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
 
   "Validate file type" should {
 
-    given(configuration.fileUploadMimeTypes).willReturn(Set("text/plain", "application/pdf" , "image/png"))
+    given(configuration.fileUploadMimeTypes).willReturn(Set("text/plain", "application/pdf", "image/png"))
 
     "Allow a valid text file" in {
       val file = createFileOfType("txt", "text/plain")
@@ -173,10 +193,6 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
     createFile(extension, mimeType, fileSizeSmall)
   }
 
-  private def createFileOfSize(numBytes: Int) = {
-    createFile("txt", "text/plain", numBytes)
-  }
-
   private def createFile(extension: String, mimeType: String, numBytes: Int) = {
     val filename = "example." + extension
     val file = new TemporaryFile(createTemporaryFile(numBytes))
@@ -191,4 +207,49 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
     Files.write(temporaryFile.toPath, Array.fill(size)('A'.toByte))
     temporaryFile
   }
+
+  private def createFileOfSize(numBytes: Int) = {
+    createFile("txt", "text/plain", numBytes)
+  }
+
+  private def aCase(modifiers: (Case => Case)*): Case = {
+    var c = oCase.btiCaseExample
+    modifiers.foreach(m => c = m(c))
+    c
+  }
+
+  private def withAgentDetails(): Case => Case = c => {
+    val details = AgentDetails(mock[EORIDetails], None)
+    val app = c.application.copy(agent = Some(details))
+    c.copy(application = app)
+  }
+
+  private def withoutAgentDetails(): Case => Case = c => {
+    val app = c.application.copy(agent = None)
+    c.copy(application = app)
+  }
+
+  private def withLetterOfAuthWithId(id: String): Case => Case = c => {
+    val details = AgentDetails(mock[EORIDetails], Some(anAttachmentWithId(id)))
+    val app = c.application.copy(agent = Some(details))
+    c.copy(application = app)
+  }
+
+  private def anAttachmentWithId(id: String): Attachment = {
+    Attachment(
+      id = id,
+      public = true
+    )
+  }
+
+  private def someMetadataWithId(id: String): FilestoreResponse = {
+    FilestoreResponse(
+      id = id,
+      fileName = s"name-$id",
+      mimeType = s"type-$id",
+      url = Some(s"url-$id"),
+      scanStatus = Some(ScanStatus.READY)
+    )
+  }
+
 }
