@@ -8,13 +8,13 @@ object AppDependencies {
     "commons-validator" % "commons-validator"                 % "1.6",
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc"       %% "auth-client"                      % "2.20.0-play-25",
-    "uk.gov.hmrc"       %% "bootstrap-play-25"                % "4.10.0",
+    "uk.gov.hmrc"       %% "bootstrap-play-25"                % "4.11.0",
     "uk.gov.hmrc"       %% "govuk-template"                   % "5.31.0-play-25",
-    "uk.gov.hmrc"       %% "http-caching-client"              % "8.1.0",
+    "uk.gov.hmrc"       %% "http-caching-client"              % "8.3.0",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"    % "0.2.0",
-    "uk.gov.hmrc"       %% "play-health"                      % "3.12.0-play-25",
+    "uk.gov.hmrc"       %% "play-health"                      % "3.14.0-play-25",
     "uk.gov.hmrc"       %% "play-language"                    % "3.4.0",
-    "uk.gov.hmrc"       %% "play-ui"                          % "7.38.0-play-25",
+    "uk.gov.hmrc"       %% "play-ui"                          % "7.39.0-play-25",
     "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.16.0-play-25",
     "uk.gov.hmrc"       %% "play-whitelist-filter"            % "2.0.0",
     "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.5.0"
@@ -32,7 +32,7 @@ object AppDependencies {
     "org.scalacheck"            %% "scalacheck"             % "1.14.0"            % scope,
     "org.scalatest"             %% "scalatest"              % "3.0.4"             % scope,
     "org.scalatestplus.play"    %% "scalatestplus-play"     % "2.0.1"             % scope,
-    "uk.gov.hmrc"               %% "hmrctest"               % "3.6.0-play-25"     % scope
+    "uk.gov.hmrc"               %% "hmrctest"               % "3.8.0-play-25"     % scope
   )
 
   def apply(): Seq[ModuleID] = (compile ++ test).map(_ withSources())
