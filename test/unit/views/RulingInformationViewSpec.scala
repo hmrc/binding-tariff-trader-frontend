@@ -37,7 +37,7 @@ class RulingInformationViewSpec extends ViewBehaviours {
     "show the expected element values" in {
 
       val doc = asDocument(createView(rulingCase).apply())
-      assertContainsText(doc,s"GB${rulingCase.reference}")
+      assertContainsText(doc,rulingCase.reference)
       assertContainsText(doc,rulingCase.application.holder.businessName)
       assertContainsText(doc,rulingCase.application.holder.businessName)
       assertContainsText(doc,Dates.format(ruling.effectiveStartDate))

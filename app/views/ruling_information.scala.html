@@ -26,7 +26,7 @@
 
         @components.back_link()
 
-        @components.heading(s"${messages("rulingInformation.heading")} GB${c.reference}")
+        @components.heading(s"${messages("rulingInformation.heading")} ${c.reference}")
 
         @components.subheading(messages("rulingInformation.summary"))
 
@@ -41,7 +41,7 @@
         <div class="grid-row">
             <div class="grid-full-width">
                 <div class="column-one-third">@messages("rulingInformation.ruling")</div>
-                <div id="rulingInformation.ruling" class="column-two-thirds">GB@c.reference</div>
+                <div id="rulingInformation.ruling" class="column-two-thirds">@c.reference</div>
             </div>
         </div>
         </br>
@@ -80,7 +80,7 @@
         <p>@messages("rulingInformation.certificateText")</p>
 
         <p>
-            <a href="@routes.PdfDownloadController.ruling(c.reference)" target="_blank">
+            <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.ruling(c.reference)" target="_blank">
             @messages("rulingInformation.certificateLink")
             </a>
         </p>
