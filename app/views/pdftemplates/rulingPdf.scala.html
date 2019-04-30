@@ -40,6 +40,27 @@
                     font-family: "nta", Arial, sans-serif;
                 }
 
+                table {
+                    width: 100%;
+                    font-size: 21px;
+                    line-height: 1.31579;
+                    border-collapse: collapse;
+                }
+
+                td {
+                    padding: 8px 0px 8px 0px;
+                    /*border-bottom: 1px solid #bfc1c3;*/
+                    vertical-align: top;
+                }
+
+                td:nth-child(n) {
+                    width: 35%;
+                }
+
+                table.header td {
+                    border-bottom: 0px
+                }
+
                 .box {
                     border: 1px solid #000000;
                     padding: 0px 10px 0px 10px;
@@ -63,7 +84,7 @@
         <div class="centered-content">
 
             <img src="@createLink("images/hmrc-logo.jpg")">
-            <h1 class="title">@messages("pdf.ruling.title")</h1>
+            <h1>@messages("pdf.ruling.title")</h1>
 
             <div class="box">
                 <p>
@@ -74,50 +95,62 @@
 
             <div id="section-holder" class="box">
                 <h2>@messages("pdf.ruling.section.holder.heading")</h2>
+
                 <p>
-                    <span class="section-label">@messages("pdf.ruling.section.holder.note.label"):</span>
+                    <span class="section-label">@messages("pdf.ruling.section.holder.note.label")</span>
                     @messages("pdf.ruling.section.holder.note.text")
                 </p>
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.section.holder.name.label"):</span>
-                    @c.application.holder.businessName
-                </p>
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.section.holder.address.label"):</span><br/>
-                    @c.application.holder.addressLine1 <br/>
-                    @c.application.holder.addressLine2 <br/>
-                    @c.application.holder.addressLine3 <br/>
-                    @c.application.holder.postcode <br/>
-                    @c.application.holder.country
-                </p>
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.section.holder.eori.label"):</span>
-                    @c.application.holder.eori
-                </p>
+
+                <table>
+                    <tr>
+                        <td class="section-label">@messages("pdf.ruling.section.holder.name.label")</td>
+                        <td id="ruling.holder.businessName">@c.application.holder.businessName</td>
+                    </tr>
+                    <tr>
+                        <td class="section-label">@messages("pdf.ruling.section.holder.address.label")</td>
+                        <td id="ruling.holder.address">
+                            @c.application.holder.addressLine1 <br/>
+                            @c.application.holder.addressLine2 <br/>
+                            @c.application.holder.addressLine3 <br/>
+                            @c.application.holder.postcode <br/>
+                            @c.application.holder.country
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="section-label">@messages("pdf.ruling.section.holder.eori.label")</td>
+                        <td id="ruling.holder.eori">@c.application.holder.eori</td>
+                    </tr>
+
+                </table>
+
             </div>
             <div id="section-ruling" class="box">
                 <h2>@messages("pdf.ruling.section.ruling.heading")</h2>
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.section.ruling.commodityCode.label"):</span>
-                    @d.bindingCommodityCode
-                </p>
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.section.ruling.rulingReference.label"):</span>
-                    @messages("caseReference.format", c.reference)
-                </p>
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.section.ruling.validFrom.label"):</span>
-                    @Dates.format(d.effectiveStartDate)
-                </p>
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.section.ruling.validTo.label"):</span>
-                    @Dates.format(d.effectiveEndDate)
-                </p>
+
+                <table>
+                    <tr>
+                        <td class="section-label">@messages("pdf.ruling.section.ruling.commodityCode.label")</td>
+                        <td id="ruling.details.commodityCode">@d.bindingCommodityCode</td>
+                    </tr>
+                    <tr>
+                        <td class="section-label">@messages("pdf.ruling.section.ruling.rulingReference.label")</td>
+                        <td id="ruling.details.rulingReference">@messages("caseReference.format", c.reference)</td>
+                    </tr>
+                    <tr>
+                        <td class="section-label">@messages("pdf.ruling.section.ruling.validFrom.label")</td>
+                        <td id="ruling.details.startDate">@Dates.format(d.effectiveStartDate)</td>
+                    </tr>
+                    <tr>
+                        <td class="section-label">@messages("pdf.ruling.section.ruling.validTo.label")</td>
+                        <td id="ruling.details.endDate">@Dates.format(d.effectiveEndDate)</td>
+                    </tr>
+                </table>
+
             </div>
 
             <div id="section-goods" class="box">
                 <p class="section-label">@messages("pdf.ruling.section.ruling.description.label")</p>
-                <p><span class="pre-wrap">@d.goodsDescription</span></p>
+                <p id="ruling.goodsDescription"><span class="pre-wrap">@d.goodsDescription</span></p>
             </div>
 
             <div id="section-commercial" class="box">
@@ -125,18 +158,29 @@
                     <span class="section-label">@messages("pdf.ruling.section.ruling.commercialDenomination.label")</span>
                     <span>@messages("pdf.ruling.section.ruling.commercialDenomination.sublabel")</span>
                 </p>
-                <p><span class="pre-wrap">@d.methodCommercialDenomination.getOrElse("")</span></p>
+                <p id="ruling.methodCommercialDenomination"><span class="pre-wrap">@d.methodCommercialDenomination.getOrElse("")</span></p>
             </div>
 
             <div id="section-justification" class="box">
                 <p class="section-label">@messages("pdf.ruling.section.ruling.justification.label")</p>
-                <p><span class="pre-wrap">@d.justification</span></p>
+                <p id="ruling.justification"><span class="pre-wrap">@d.justification</span></p>
             </div>
 
-            <br/><br/>
             <div id="section-legal" class="box">
-                <p class="section-label">@messages("pdf.ruling.section.ruling.legalInformation.label")</p>
-                <p>@messages("pdf.ruling.section.ruling.legalInformation.text")</p>
+                <h3>@messages("pdf.ruling.section.ruling.legalInformation.section1.label")</h3>
+                <p>@messages("pdf.ruling.section.ruling.legalInformation.section1.paragraph1")</p>
+                <p>@messages("pdf.ruling.section.ruling.legalInformation.section1.paragraph2")</p>
+
+                <h4>@messages("pdf.ruling.section.ruling.legalInformation.section2.label")</h4>
+                <p>@messages("pdf.ruling.section.ruling.legalInformation.section2.paragraph1")</p>
+                <ul>
+                    <li>@messages("pdf.ruling.section.ruling.legalInformation.section2.paragraph1.listitem1")</li>
+                    <li>@messages("pdf.ruling.section.ruling.legalInformation.section2.paragraph1.listitem2")</li>
+                </ul>
+                <p>@messages("pdf.ruling.section.ruling.legalInformation.section2.paragraph2")</p>
+                <ul>
+                    <li>@messages("pdf.ruling.section.ruling.legalInformation.section2.paragraph2.listitem1")</li>
+                </ul>
             </div>
 
         </div>
@@ -144,9 +188,3 @@
     </body>
 
 </html>
-
-
-
-
-
-
