@@ -24,7 +24,7 @@
 @import utils.Dates
 @import java.time.Instant
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse])(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None)(implicit request: Request[_], messages: Messages)
 
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
@@ -35,7 +35,6 @@
 @sectionHeading(headerId: String) = {
     <h2 id=@headerId>@messages(headerId)</h2>
 }
-
 
 <html>
     <head>
@@ -82,6 +81,14 @@
                 .pre-wrap {
                     white-space: pre-wrap;
                 }
+
+                table.bb-0 td {
+                    border-bottom: 0;
+                }
+
+                table.first-column-w35 td:nth-child(1) {
+                    width: 35%;
+                }
         </style>
 
     </head>
@@ -94,8 +101,15 @@
                 </tr>
             </table>
 
-            <p id="application.submitted">@messages("pdf.application.submitted"): @Dates.format(c.createdDate)</p>
-            <p id="application.casereference">@messages("pdf.application.reference"): @messages("caseReference.format", c.reference)</p>
+
+            <table class="first-column-w35 bb-0">
+                <tr>
+                    <td>@messages("pdf.application.submitted") </td> <td><span id="application.submitted"> @Dates.format(c.createdDate)  </span></td>
+                </tr>
+                <tr>
+                    <td>@messages("pdf.application.reference") </td> <td> <span id="application.casereference"> @messages("caseReference.format", c.reference) </span> </td>
+                </tr>
+            </table>
 
             @sectionHeading("pdf.application.section.applicant.heading")
             <table>
@@ -104,17 +118,15 @@
                     <td id="application.holder.eori">@c.application.holder.eori</td>
                 </tr>
                 <tr>
-                    <td>@messages("pdf.application.section.applicant.companyName")</td>
-                    <td id="application.holder.businessName">@c.application.holder.businessName</td>
-                </tr>
-                <tr>
-                    <td>@messages("pdf.application.section.applicant.companyAddress")</td>
-                    <td id="application.holder.address">
+                    <td>@messages("pdf.application.section.applicant.companyDetails")</td>
+                    <td id="application.holder.businessName">
+                        @c.application.holder.businessName <br/>
                         @c.application.holder.addressLine1 <br/>
                         @c.application.holder.addressLine2 <br/>
                         @c.application.holder.addressLine3 <br/>
                         @c.application.holder.postcode <br/>
                         @c.application.holder.country
+
                     </td>
                 </tr>
                 <tr>
@@ -125,79 +137,76 @@
                         @c.application.contact.phone
                     </td>
                 </tr>
+                  <tr>
+                    <td>@messages("pdf.application.section.applyingFor")</td>
+                    <td id="application.contact.details">
+                        @if(c.application.agent.isDefined){
+                            @messages("whichBestDescribesYou.businessRepresentative")
+                        }else{
+                            @messages("whichBestDescribesYou.businessOwner")
+                        }
+                    </td>
+                </tr>
+
+
             </table>
 
             @if(c.application.agent.isDefined) {
-                @defining(c.application.agent.get) { agentDetails: AgentDetails =>
+                @defining(c.application.agent.get) { agent: AgentDetails =>
                     @sectionHeading("pdf.application.section.applyingFor.heading")
                     <table>
                         <tr>
-                            <td>@messages("pdf.application.section.applyingFor.eori")</td>
-                            <td id="agentDetails.eoriDetails.eori">@agentDetails.eoriDetails.eori</td>
-                        </tr>
-                        <tr>
-                            <td>@messages("pdf.application.section.applyingFor.companyName")</td>
-                            <td id="agentDetails.eoriDetails.businessName">@agentDetails.eoriDetails.businessName</td>
-                        </tr>
-                        <tr>
-                            <td>@messages("pdf.application.section.applyingFor.companyAddress")</td>
-                            <td id="agentDetails.eoriDetails.address">
-                                @agentDetails.eoriDetails.addressLine1 <br/>
-                                @agentDetails.eoriDetails.addressLine2 <br/>
-                                @agentDetails.eoriDetails.addressLine3 <br/>
-                                @agentDetails.eoriDetails.postcode <br/>
-                                @agentDetails.eoriDetails.country
+                            <td>@messages("pdf.application.section.applyingFor.details")</td>
+                              <td id="agentDetails.eoriDetails.address">
+                                @agent.eoriDetails.eori <br/>
+                                @agent.eoriDetails.businessName <br/>
+                                @agent.eoriDetails.addressLine1 <br/>
+                                @agent.eoriDetails.addressLine2 <br/>
+                                @agent.eoriDetails.addressLine3 <br/>
+                                @agent.eoriDetails.postcode <br/>
+                                @agent.eoriDetails.country
                             </td>
+                        </tr>
+                        <tr>
+                            <td> Written authorisation </td>
+                              <td id="agentDetails.letterOfAuthority">
+                                  @letterOfAuthority.map(_.fileName)
+                             </td>
                         </tr>
                     </table>
                 }
             }
 
-            @sectionHeading("pdf.application.section.applicationType.heading")
-            <table>
-                <tr>
-                @if(c.application.reissuedBTIReference.isDefined) {
-                    <td>@messages("pdf.application.section.applicationType.reIssue")</td>
-                    <td id="application.reissuedBTIReference">@c.application.reissuedBTIReference.get</td>
-                } else {
-                    <td>@messages("pdf.application.section.applicationType.newApplication")</td>
-                }
-                </tr>
-            </table>
-
             @sectionHeading("pdf.application.section.aboutItem.heading")
             <table>
+
+                <tr>
+                    <td>@messages("pdf.application.section.applicationType")</td>
+                    <td id="application.applicationType">
+                         @if(c.application.reissuedBTIReference.isDefined){
+                            @messages("pdf.application.section.applicationType.renewalApplication")
+                         }else{
+                            @messages("pdf.application.section.applicationType.newApplication")
+                         }
+                    </td>
+                </tr>
+
+                @if(c.application.reissuedBTIReference.isDefined){
+                     <tr>
+                        <td>@messages("pdf.application.section.applicationType.reIssue")</td>
+                        <td id="application.reissuedBTIReference">
+                            @c.application.reissuedBTIReference <br/>
+                        </td>
+                    </tr>
+                }
                 <tr>
                     <td>@messages("pdf.application.section.aboutItem.description")</td>
                     <td id="application.goods.details">
                         @c.application.goodName <br/>
-                        <span class="pre-wrap">@c.application.goodDescription</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>@messages("pdf.application.section.aboutItem.confidentialInfo")</td>
-                    <td id="application.confidentialInformation">@if(c.application.confidentialInformation.isDefined) {
-                        <span class="pre-wrap">@c.application.confidentialInformation.get</span>
-                    } else {
-                        @messages("site.no")
-                    }</td>
-                </tr>
-                <tr>
-                    <td>@messages("pdf.application.section.aboutItem.suggestedCommodityCode")</td>
-                    <td id="application.suggestedCommodityCode">@if(c.application.envisagedCommodityCode.isDefined) {
-                        <span class="pre-wrap">@c.application.envisagedCommodityCode.get</span>
-                    } else {
-                        @messages("site.none")
-                    }</td>
-                </tr>
-                <tr>
-                    <td>@messages("pdf.application.section.aboutItem.importOrExport")</td>
-                    <td id="application.importOrExport">
-                        @{c.application.importOrExport match {
-                            case Some("IMPORT") => messages("pdf.application.section.aboutItem.import")
-                            case Some("EXPORT") => messages("pdf.application.section.aboutItem.export")
-                            case _ => messages("site.unknown")
-                        }}
+                        <span class="pre-wrap">@c.application.goodDescription</span><br/>
+                        @if(c.application.confidentialInformation.isDefined) {
+                            <span class="pre-wrap">@c.application.confidentialInformation.get</span>
+                        }
                     </td>
                 </tr>
                 <tr>
@@ -210,6 +219,36 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>@messages("pdf.application.section.aboutItem.importOrExport")</td>
+                    <td id="application.importOrExport">
+                        @{c.application.importOrExport match {
+                            case Some("IMPORT") => messages("pdf.application.section.aboutItem.import")
+                            case Some("EXPORT") => messages("pdf.application.section.aboutItem.export")
+                            case _ => messages("site.unknown")
+                        }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>@messages("pdf.application.section.aboutItem.suggestedCommodityCode")</td>
+                    <td id="application.suggestedCommodityCode.question">
+                        @if(c.application.envisagedCommodityCode.isDefined){
+                            @messages("site.yes")
+                        }else{
+                            @messages("site.no")
+                        }
+                    </td>
+                </tr>
+
+                @if(c.application.envisagedCommodityCode.isDefined) {
+                     <tr>
+                        <td>@messages("pdf.application.section.aboutItem.envisagedCommodityCode")</td>
+                        <td id="application.suggestedCommodityCode">
+                                <span class="pre-wrap">@c.application.envisagedCommodityCode.get</span>
+                        </td>
+                    </tr>
+                }
+
+                <tr>
                     <td>@messages("pdf.application.section.aboutItem.sampleProvided")</td>
                     <td id="application.sampleToBeProvided">@if(c.application.sampleToBeProvided) {
                         @messages("site.yes")
@@ -217,6 +256,7 @@
                         @messages("site.no")
                     }</td>
                 </tr>
+
                 @if(c.application.sampleToBeProvided) {
                     <tr>
                         <td>@messages("pdf.application.section.aboutItem.sampleReturned")</td>
@@ -227,6 +267,7 @@
                         }</td>
                     </tr>
                 }
+
                 <tr>
                     <td>@messages("pdf.application.section.aboutItem.similarRuling")</td>
                     <td id="application.relatedBTIReference.defined">@if(c.application.relatedBTIReference.isDefined) {
@@ -235,12 +276,14 @@
                         @messages("site.no")
                     }</td>
                 </tr>
+
                 @if(c.application.relatedBTIReference.isDefined) {
                     <tr>
                         <td>@messages("pdf.application.section.aboutItem.similarRuling.BTIRef")</td>
                         <td id="application.relatedBTIReference"><span class="pre-wrap">@c.application.relatedBTIReference.get</span></td>
                     </tr>
                 }
+
                 <tr>
                     <td>@messages("pdf.application.section.aboutItem.legalProblems")</td>
                     <td id="application.knownLegalProceedings.defined">@if(c.application.knownLegalProceedings.isDefined) {
@@ -249,6 +292,7 @@
                         @messages("site.no")
                     }</td>
                 </tr>
+
                 @if(c.application.knownLegalProceedings.isDefined) {
                     <tr>
                         <td>@messages("pdf.application.section.aboutItem.legalProblems.details")</td>
@@ -260,13 +304,19 @@
             @sectionHeading("pdf.application.section.other.heading")
             <table>
                 <tr>
-                    <td>@messages("pdf.application.section.other.label")</td>
-                    <td id="application.otherInformation">@if(c.application.otherInformation.isDefined) {
-                        <span class="pre-wrap">@c.application.otherInformation.get</span>
+                    <td>@messages("pdf.application.section.other.haveOtherInformation")</td>
+                    <td id="application.otherInformation.question">@if(c.application.otherInformation.isDefined) {
+                       @messages("site.yes")
                     } else {
-                        @messages("site.none")
+                       @messages("site.no")
                     }</td>
                 </tr>
+                @if(c.application.otherInformation.isDefined) {
+                    <tr>
+                        <td>@messages("pdf.application.section.other.supportingInformation")</td>
+                        <td id="application.otherInformation"><span class="pre-wrap">@c.application.otherInformation.get</span></td>
+                    </tr>
+                }
             </table>
 
             <br/>
@@ -283,9 +333,9 @@
 
             <div id="footer.sendSamplesTo">
                 <h2>@messages("pdf.application.footer.sendingSamplesTo.heading")</h2>
-                <address>
-                @Html(messages("confirmation.sendingSamples.address"))
-                </address>
+                <p>
+                    @Html(messages("confirmation.sendingSamples.address"))
+                </p>
             </div>
 
         </div>
@@ -293,9 +343,3 @@
     </body>
 
 </html>
-
-
-
-
-
-

@@ -71,6 +71,11 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     when(fileService.getAttachmentMetadata(any[Case])(any[HeaderCarrier])).thenReturn(successful(Seq.empty))
   }
 
+  private def givenTheFileServiceHaveNoLetterOfAuthority(): Unit = {
+    when(fileService.getLetterOfAuthority(any[Case])(any[HeaderCarrier])).thenReturn(successful(None))
+  }
+
+
   private def givenThePdfServiceDecodesTheTokenWith(eori: String, reference: String): Unit = {
     when(pdfService.decodeToken(any[String])).thenReturn(Some(eori))
   }
@@ -89,6 +94,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenThePdfServiceDecodesTheTokenWith("eori", "reference")
       givenTheCaseServiceFindsTheCase()
       givenTheFileServiceFindsTheAttachements()
+      givenTheFileServiceHaveNoLetterOfAuthority()
       givenThePdfServiceGeneratesThePdf()
 
       val result = controller().application(caseRef, Some(token))(request)

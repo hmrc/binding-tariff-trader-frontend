@@ -39,16 +39,12 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                                       fileService: FileService
                                      ) extends FrontendController with I18nSupport {
 
+  private type Eori = String
+  private type CaseReference = String
+
   def application(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
     getPdf(request.eoriNumber, reference, token, getApplicationPDF)
   }
-
-  def ruling(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
-    getPdf(request.eoriNumber, reference, token, getRulingPDF)
-  }
-
-  private type Eori = String
-  private type CaseReference = String
 
   private def getPdf(maybeEoriNumber: Option[Eori],
                      reference: CaseReference,
@@ -64,21 +60,16 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
     }
   }
 
-  private def getRulingPDF(eori: Eori, reference: CaseReference)
-                          (implicit request: Request[AnyContent]): Future[Result] = {
-    caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
-      lazy val decision = c.decision.getOrElse(throw new IllegalStateException("Missing decision"))
-      generatePdf(rulingPdf(appConfig, c, decision), s"BTIRuling$reference.pdf")
-    }
-  }
 
   private def getApplicationPDF(eori: Eori, reference: CaseReference)
                                (implicit request: Request[AnyContent]): Future[Result] = {
-    caseService.getCaseForUser(eori, reference) flatMap { c: Case =>
-      fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
-        generatePdf(applicationPdf(appConfig, c, attachmentData), s"BTIConfirmation$reference.pdf")
-      }
-    }
+
+    for {
+      c <- caseService.getCaseForUser(eori, reference)
+      attachments <- fileService.getAttachmentMetadata(c)
+      letter <- fileService.getLetterOfAuthority(c)
+      pdf <-  generatePdf(applicationPdf(appConfig, c, attachments, letter), s"BTIConfirmation$reference.pdf")
+    } yield pdf
   }
 
   private def generatePdf(htmlContent: Html, filename: String): Future[Result] = {
@@ -86,6 +77,18 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
       Results.Ok(pdfFile.content)
         .as(pdfFile.contentType)
         .withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
+    }
+  }
+
+  def ruling(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+    getPdf(request.eoriNumber, reference, token, getRulingPDF)
+  }
+
+  private def getRulingPDF(eori: Eori, reference: CaseReference)
+                          (implicit request: Request[AnyContent]): Future[Result] = {
+    caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
+      lazy val decision = c.decision.getOrElse(throw new IllegalStateException("Missing decision"))
+      generatePdf(rulingPdf(appConfig, c, decision), s"BTIRuling$reference.pdf")
     }
   }
 
