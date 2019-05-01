@@ -169,7 +169,7 @@
                         </tr>
                         <tr>
                             <td> Written authorisation </td>
-                              <td id="agentDetails.eoriDetails.address">
+                              <td id="agentDetails.letterOfAuthority">
                                     @if(letterOfAuthority.isDefined){@letterOfAuthority.get.fileName}
                              </td>
                         </tr>
@@ -230,7 +230,7 @@
                 </tr>
                 <tr>
                     <td>@messages("pdf.application.section.aboutItem.suggestedCommodityCode")</td>
-                    <td id="application.suggestedCommodityCode">
+                    <td id="application.suggestedCommodityCode.question">
                         @if(c.application.envisagedCommodityCode.isDefined){
                             @messages("site.yes")
                         }else{
