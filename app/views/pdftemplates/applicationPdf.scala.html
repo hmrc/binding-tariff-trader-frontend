@@ -104,10 +104,10 @@
 
             <table class="first-column-w35 bb-0">
                 <tr>
-                    <td><span id="application.submitted">@messages("pdf.application.submitted") </span> </td> <td> @Dates.format(c.createdDate) </td>
+                    <td>@messages("pdf.application.submitted") </td> <td><span id="application.submitted"> @Dates.format(c.createdDate)  </span></td>
                 </tr>
                 <tr>
-                    <td><span id="application.casereference">@messages("pdf.application.reference") </span> </td> <td> @messages("caseReference.format", c.reference) </td>
+                    <td>@messages("pdf.application.reference") </td> <td> <span id="application.casereference"> @messages("caseReference.format", c.reference) </span> </td>
                 </tr>
             </table>
 

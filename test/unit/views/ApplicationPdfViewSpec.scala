@@ -54,13 +54,6 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
       doc.getElementById("application.reissuedBTIReference").text() mustBe "REISSUE1234"
     }
 
-    "contain the details for confidential information" in {
-      val doc = asDocument(createView(traderCase.copy(application = traderApplication.copy(
-        confidentialInformation = Some("Confidential information"))), Seq.empty))
-
-      doc.getElementById("application.confidentialInformation").text() mustBe "Confidential information"
-    }
-
     "contain the details for uploaded files" in {
       asDocument(createView(traderCase, Seq.empty)).getElementById("application.attachments").text() mustBe "None"
 
@@ -93,10 +86,9 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
   }
 
   private def containsCommonSections(doc: Document) = {
-    doc.getElementById("application.submitted").text() mustBe s"Application submitted on: ${Dates.format(oCase.btiCaseExample.createdDate)}"
-    doc.getElementById("application.casereference").text() mustBe s"Application reference number: ${oCase.btiCaseExample.reference}"
+    doc.getElementById("application.submitted").text() mustBe s"${Dates.format(oCase.btiCaseExample.createdDate)}"
+    doc.getElementById("application.casereference").text() mustBe s"${oCase.btiCaseExample.reference}"
     assertRenderedById(doc, "pdf.application.section.applicant.heading")
-    assertRenderedById(doc, "pdf.application.section.applicationType.heading")
     assertRenderedById(doc, "pdf.application.section.aboutItem.heading")
     assertRenderedById(doc, "pdf.application.section.other.heading")
   }
