@@ -62,14 +62,13 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
 
   private def getApplicationPDF(eori: Eori, reference: CaseReference)
                                (implicit request: Request[AnyContent]): Future[Result] = {
-
-    val viewPdf: Future[Html] = for {
-      c <- caseService.getCaseForUser(eori, reference)
-      attachments <- fileService.getAttachmentMetadata(c)
-      letter <- fileService.getLetterOfAuthority(c)
-    } yield applicationPdf(appConfig, c, attachments, letter)
-
-    viewPdf flatMap (v => generatePdf(v, s"BTIConfirmation$reference.pdf"))
+    caseService.getCaseForUser(eori, reference) flatMap { c: Case =>
+      fileService.getAttachmentMetadata(c) flatMap { attachmentData =>
+        fileService.getLetterOfAuthority(c) flatMap { letter =>
+          generatePdf(applicationPdf(appConfig, c, attachmentData, letter), s"BTIConfirmation$reference.pdf")
+        }
+      }
+    }
   }
 
   private def generatePdf(htmlContent: Html, filename: String): Future[Result] = {
