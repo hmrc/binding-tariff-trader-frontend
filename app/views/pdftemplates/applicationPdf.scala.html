@@ -170,7 +170,7 @@
                         <tr>
                             <td> Written authorisation </td>
                               <td id="agentDetails.letterOfAuthority">
-                                    @if(letterOfAuthority.isDefined){@letterOfAuthority.get.fileName}
+                                  @letterOfAuthority.map(_.fileName)
                              </td>
                         </tr>
                     </table>
