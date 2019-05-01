@@ -71,8 +71,8 @@
                                     case _ => { @c.status }
                                 }
                             </td>
-                            <td id="rulings-list-row-@{index}-download">
-                                <a id="rulings-list-row-@{index}-download-link" target="_blank" href="@routes.PdfDownloadController.ruling(c.reference)">@messages("case.ruling.downloadPdf")</a>
+                            <td id="rulings-list-row-@{index}-view">
+                                <a id="rulings-list-row-@{index}-view-link" href="@routes.RulingController.viewRuling(c.reference)">@messages("case.ruling.downloadPdf")</a>
                             </td>
                         </tr>
                     }

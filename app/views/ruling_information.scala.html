@@ -1,0 +1,107 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+@import utils.Dates
+
+@(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
+
+    @main_template(
+        title = s"${messages("rulingInformation.title")}",
+        appConfig = appConfig,
+        bodyClasses = None)  {
+
+        @components.back_link()
+
+        @components.heading(s"${messages("rulingInformation.heading")} ${c.reference}")
+
+        @components.subheading(messages("rulingInformation.summary"))
+
+
+        <div class="grid-row">
+            <div class="grid-full-width">
+                <div class="column-one-third">@messages("rulingInformation.holder")</div>
+                <div id="rulingInformation.holder" class="column-two-thirds">@c.application.holder.businessName</div>
+            </div>
+        </div>
+        </br>
+        <div class="grid-row">
+            <div class="grid-full-width">
+                <div class="column-one-third">@messages("rulingInformation.ruling")</div>
+                <div id="rulingInformation.ruling" class="column-two-thirds">@c.reference</div>
+            </div>
+        </div>
+        </br>
+        <div class="grid-row">
+            <div class="grid-full-width">
+                <div class="column-one-third">@messages("rulingInformation.startDate")</div>
+                <div id="rulingInformation.startDate" class="column-two-thirds">@Dates.format(c.decision.get.effectiveStartDate)</div>
+            </div>
+        </div>
+        </br>
+        <div class="grid-row">
+            <div class="grid-full-width">
+                <div class="column-one-third">@messages("rulingInformation.expiryDate")</div>
+                <div id="rulingInformation.expiryDate" class="column-two-thirds">@Dates.format(c.decision.get.effectiveEndDate)</div>
+            </div>
+        </div>
+
+        @components.subheading(messages("rulingInformation.commoditySubheading"))
+
+        <p>@messages("rulingInformation.commodityIntro") <span id="rulingInformation.commodityCode">@c.decision.get.bindingCommodityCode</span>. </p>
+
+
+        @if(c.decision.get.explanation.isDefined) {
+            <p id="rulingInformation.explanation" style="white-space: pre-wrap">@c.decision.get.explanation</p>
+        }
+
+        <p id="rulingInformation.commoditySuffix">
+            @messages("rulingInformation.commoditySuffix")
+            <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+            @messages("rulingInformation.commodityLink")
+            </a>
+        </p>
+
+        @components.subheading(messages("rulingInformation.certificateSubheading"))
+
+        <p>@messages("rulingInformation.certificateText")</p>
+
+        <p>
+            <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.ruling(c.reference)" target="_blank">
+            @messages("rulingInformation.certificateLink")
+            </a>
+        </p>
+
+        @components.subheading(messages("rulingInformation.samplesSubheading"))
+
+        <p>
+            @messages("rulingInformation.samplesText")
+            <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#before-you-start" target="_blank">
+            @messages("rulingInformation.samplesLink")
+            </a>
+        </p>
+
+        @components.subheading(messages("rulingInformation.appealsSubheading"))
+
+        <p>
+            @messages("rulingInformation.appealsText")
+            <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#appeal-a-binding-tariff-information-decision" target="_blank">
+            @messages("rulingInformation.appealsLink")
+            </a>
+        </p>
+
+
+}

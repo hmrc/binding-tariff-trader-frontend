@@ -441,7 +441,7 @@ case.tabs.applications.table.reference = Reference
 case.tabs.applications.table.itemName = Item name
 case.tabs.applications.table.dateSubmitted = Date submitted
 case.tabs.applications.table.status = Status
-case.tabs.applications.table.download = Download application
+case.tabs.applications.table.download =
 
 case.applications.pagination.singular = application
 case.applications.pagination.plural = applications
@@ -452,7 +452,7 @@ case.application.status.infoRequested = Info requested
 case.application.status.completed = Completed
 case.application.status.draft = Draft
 
-case.application.downloadPdf = Download pdf
+case.application.downloadPdf = View Application
 
 case.tabs.rulings = Rulings
 case.rulings.noRulings = BTI rulings will appear here
@@ -463,7 +463,7 @@ case.rulings.table.commodityCode = Commodity code
 case.rulings.table.startDate = Start date
 case.rulings.table.endDate = End date
 case.rulings.table.status = Status
-case.rulings.table.downloadBTI = Download BTI
+case.rulings.table.downloadBTI =
 
 case.rulings.pagination.singular = ruling
 case.rulings.pagination.plural = rulings
@@ -472,4 +472,25 @@ case.ruling.status.cancelled = Cancelled
 case.ruling.status.active = Active
 case.ruling.status.expired = Expired
 
-case.ruling.downloadPdf = Download pdf
+case.ruling.downloadPdf = View BTI Ruling
+
+rulingInformation.title = Information on Ruling
+rulingInformation.heading = Important information about BTI ruling
+rulingInformation.summary = Ruling summary
+rulingInformation.commoditySubheading = The commodity code we have issued and why we made this decision
+rulingInformation.commodityIntro = Commodity code for your item:
+rulingInformation.commoditySuffix = In reaching this decision I have followed the legal procedure for Tariff Classification as shown in Volume 2, Part 1, Section 3 of the Tariff. Get more information about classification in the guide
+rulingInformation.commodityLink = Apply for a Binding Tariff Information (BTI) ruling (Notice 600).
+rulingInformation.certificateSubheading = BTI ruling certificate
+rulingInformation.samplesSubheading = Samples
+rulingInformation.appealsSubheading = Appeals
+rulingInformation.certificateText = You can view and download a PDF copy of the ruling for your records. You'll always be able to access this ruling certificate from your BTI home page.
+rulingInformation.certificateLink = View the ruling certificate
+rulingInformation.samplesText = Get information on samples in the guide
+rulingInformation.samplesLink = Apply for a Binding Tariff Information (BTI) ruling (Notice 600).
+rulingInformation.appealsText = Get information on how to appeal this ruling in the guide
+rulingInformation.appealsLink = Apply for a Binding Tariff Information (BTI) ruling (Notice 600).
+rulingInformation.holder = Holder
+rulingInformation.ruling = Ruling reference
+rulingInformation.startDate = Start date
+rulingInformation.expiryDate = Expiry date

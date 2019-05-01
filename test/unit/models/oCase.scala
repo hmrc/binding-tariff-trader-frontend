@@ -44,17 +44,21 @@ object oCase {
     sampleToBeReturned = false
   )
 
-  val decisionExample = Decision(
-    bindingCommodityCode = "commodity-code-123",
-    effectiveStartDate = Some(Instant.now),
-    effectiveEndDate = Some(Instant.now),
-    justification = "justification-content",
-    goodsDescription = "goodsDescription-content",
-    methodCommercialDenomination = Some("commercial-denomination-content")
-  )
+  def decisionExample(exp : Option[String] = Some("This is some explanation")) = {
+    Decision(
+      bindingCommodityCode = "commodity-code-123",
+      effectiveStartDate = Some(Instant.now),
+      effectiveEndDate = Some(Instant.now),
+      justification = "justification-content",
+      goodsDescription = "goodsDescription-content",
+      methodCommercialDenomination = Some("commercial-denomination-content"),
+      explanation = exp
+    )
+  }
 
 
-  val btiCaseWithDecision = Case(reference = "ref", status = CaseStatus.COMPLETED, application = btiApplicationExample, decision = Some(decisionExample))
+  val btiCaseWithDecision = Case(reference = "ref", status = CaseStatus.COMPLETED, application = btiApplicationExample, decision = Some(decisionExample()))
+  val btiCaseWithDecisionNoExplanation = Case(reference = "ref", status = CaseStatus.COMPLETED, application = btiApplicationExample, decision = Some(decisionExample(None)))
 
   val btiCaseExample = Case(reference = "ref", status = CaseStatus.OPEN, application = btiApplicationExample)
   val newBtiCaseExample = NewCaseRequest(btiApplicationExample, Seq.empty)
