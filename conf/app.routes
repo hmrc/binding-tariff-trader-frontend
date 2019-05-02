@@ -111,5 +111,6 @@ GET         /confirmation                                        controllers.Con
 
 GET         /pdf/application/:reference                          controllers.PdfDownloadController.application(reference: String, token: Option[String] ?= None)
 GET         /pdf/ruling/:reference                               controllers.PdfDownloadController.ruling(reference: String, token: Option[String] ?= None)
+GET         /pdf/accessible-ruling/:reference                    controllers.PdfDownloadController.accessibleRuling(reference: String, token: Option[String] ?= None)
 
 GET         /view-ruling/:reference                              controllers.RulingController.viewRuling(reference: String)
