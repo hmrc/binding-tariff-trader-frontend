@@ -24,7 +24,7 @@
 @import utils.Dates
 @import java.time.Instant
 
-@(appConfig: FrontendAppConfig, c: Case, d: Decision)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, d: Decision, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
@@ -83,8 +83,10 @@
     <body>
         <div class="centered-content">
 
-            <img src="@createLink("images/hmrc-logo.jpg")">
-            <h1>@messages("pdf.ruling.title")</h1>
+            @if(!compositeMode) {
+                <img src="@createLink("images/hmrc-logo.jpg")">
+                <h1>@messages("pdf.ruling.title")</h1>
+            }
 
             <div class="box">
                 <p>

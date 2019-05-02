@@ -27,16 +27,16 @@
 
     @components.back_link()
 
-    <span class=""organisation-logo organisation-logo-medium">HM Revenue & Customs</span>
+    <span class="organisation-logo organisation-logo-medium">HM Revenue & Customs</span>
 
     @components.heading(messages("pdf.ruling.title"))
 
     <p>
         <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.ruling(c.reference)" target="_blank">
-            View ruling PDF (opens in new window or tab)
+            @messages("rulingInformation.certificateLink")
         </a>
     </p>
 
-    @rulingPdf(appConfig, c, c.decision.get)
+    @rulingPdf(appConfig, c, c.decision.get, compositeMode = true)
 
 }

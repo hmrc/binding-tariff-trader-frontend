@@ -80,14 +80,8 @@
         <p>@messages("rulingInformation.certificateText")</p>
 
         <p>
-            <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.ruling(c.reference)" target="_blank">
+            <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.accessibleRuling(c.reference)">
             @messages("rulingInformation.certificateLink")
-            </a>
-        </p>
-
-        <p>
-            <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.accessibleRuling(c.reference)" target="_blank">
-            View the accessible ruling certificate
             </a>
         </p>
 
