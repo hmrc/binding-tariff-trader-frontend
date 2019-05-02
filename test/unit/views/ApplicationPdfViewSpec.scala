@@ -20,7 +20,7 @@ import models.response.FilestoreResponse
 import models.{Case, oCase}
 import org.jsoup.nodes.Document
 import utils.Dates
-import views.html.pdftemplates.applicationPdf
+import views.html.templates.applicationPdf
 
 class ApplicationPdfViewSpec extends ViewSpecBase {
 

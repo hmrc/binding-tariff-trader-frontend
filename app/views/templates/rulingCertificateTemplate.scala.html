@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 @import utils.Dates
-@import pdftemplates.rulingPdf
+@import templates.rulingCertificate
 
 @(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
 
@@ -33,10 +33,12 @@
 
     <p>
         <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.ruling(c.reference)" target="_blank">
-            @messages("rulingInformation.certificateLink")
+            @messages("rulingInformation.certificatePDFLink")
         </a>
     </p>
 
-    @rulingPdf(appConfig, c, c.decision.get, compositeMode = true)
+    </br>
+
+    @rulingCertificate(appConfig, c, c.decision.get, compositeMode = true)
 
 }

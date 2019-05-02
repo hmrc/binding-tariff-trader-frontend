@@ -25,9 +25,7 @@ import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.pdftemplates.{applicationPdf, rulingPdf}
-import views.html.pdftemplates.accessibleRulingPdf
-import views.html.ruling_information
+import views.html.templates.{rulingCertificateTemplate, applicationPdf}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -90,15 +88,15 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                           (implicit request: Request[AnyContent]): Future[Result] = {
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
       lazy val decision = c.decision.getOrElse(throw new IllegalStateException("Missing decision"))
-      generatePdf(rulingPdf(appConfig, c, decision), s"BTIRuling$reference.pdf")
+      generatePdf(views.html.templates.rulingCertificate(appConfig, c, decision), s"BTIRuling$reference.pdf")
     }
   }
 
-  def accessibleRuling(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+  def rulingCertificate(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
         caseService.getCaseForUser(eori, reference) flatMap {
-          c: Case => successful(Ok(accessibleRulingPdf(appConfig, c)))
+          c: Case => successful(Ok(rulingCertificateTemplate(appConfig, c)))
         }
 
       case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
