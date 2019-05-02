@@ -68,7 +68,7 @@
                                 }
                             </td>
                             <td id="application-list-row-@{index}-download">
-                                <a id="application-list-row-@{index}-download-link" target="_blank" href="@routes.PdfDownloadController.application(c.reference)">@messages("case.application.downloadPdf")</a>
+                                <a id="application-list-row-@{index}-download-link" href="@routes.PdfDownloadController.applicationDetails(c.reference)">@messages("case.application.downloadPdf")</a>
                             </td>
                         </tr>
                     }

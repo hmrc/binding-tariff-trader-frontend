@@ -25,7 +25,7 @@ import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.templates.{rulingCertificateTemplate, applicationPdf}
+import views.html.templates.{rulingCertificateTemplate, applicationPdf, applicationTemplate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -103,5 +103,22 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
     }
 
   }
+
+  def applicationDetails(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+
+    request.eoriNumber match {
+      case Some(eori: String) => {
+        for {
+          c <- caseService.getCaseForUser(eori, reference)
+          attachments <- fileService.getAttachmentMetadata(c)
+          letter <- fileService.getLetterOfAuthority(c)
+          view <- successful(Ok(applicationTemplate(appConfig, c, attachments, letter)))
+        } yield view
+      }
+      case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
+    }
+
+  }
+
 
 }
