@@ -25,7 +25,7 @@ import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.templates.{rulingCertificateTemplate, applicationPdf, applicationTemplate}
+import views.html.templates.{applicationTemplate, applicationView, rulingCertificateTemplate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -61,15 +61,18 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
   }
 
 
+
   private def getApplicationPDF(eori: Eori, reference: CaseReference)
                                (implicit request: Request[AnyContent]): Future[Result] = {
+
+    //TODO: make function to not repeat this for comprehension and pass the view as a Function Parameter
 
     for {
       c <- caseService.getCaseForUser(eori, reference)
       attachments <- fileService.getAttachmentMetadata(c)
       letter <- fileService.getLetterOfAuthority(c)
-      pdf <-  generatePdf(applicationPdf(appConfig, c, attachments, letter), s"BTIConfirmation$reference.pdf")
-    } yield pdf
+      view <- generatePdf(applicationTemplate(appConfig, c, attachments, letter, true), s"BTIConfirmation$reference.pdf")
+    } yield view
   }
 
   private def generatePdf(htmlContent: Html, filename: String): Future[Result] = {
@@ -98,27 +101,21 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
         caseService.getCaseForUser(eori, reference) flatMap {
           c: Case => successful(Ok(rulingCertificateTemplate(appConfig, c)))
         }
-
       case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
     }
-
   }
 
   def applicationDetails(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
-
     request.eoriNumber match {
       case Some(eori: String) => {
         for {
           c <- caseService.getCaseForUser(eori, reference)
           attachments <- fileService.getAttachmentMetadata(c)
           letter <- fileService.getLetterOfAuthority(c)
-          view <- successful(Ok(applicationTemplate(appConfig, c, attachments, letter)))
+          view <- successful(Ok(applicationView(appConfig, c, attachments, letter)))
         } yield view
       }
       case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
     }
-
   }
-
-
 }

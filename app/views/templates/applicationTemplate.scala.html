@@ -15,31 +15,336 @@
  *@
 
 @import config.FrontendAppConfig
-@import utils.Dates
-@import templates.applicationPdf
+@import uk.gov.hmrc.play.views.html._
+@import controllers.routes._
+@import models.ReturnSamples
+@import models.Mode
 @import models.response.FilestoreResponse
+@import views.ViewUtils._
+@import utils.Dates
+@import java.time.Instant
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, renderHeader: Boolean = false)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${messages("rulingInformation.title")}",
-    appConfig = appConfig,
-    bodyClasses = None)  {
 
-    @components.back_link()
-
-    <span class="organisation-logo organisation-logo-medium">HM Revenue & Customs</span>
-
-    @components.heading(messages("pdf.application.title"))
-
-    <p>
-        <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.application(c.reference)" target="_blank">
-            @messages("rulingInformation.certificatePDFLink")
-        </a>
-    </p>
-
-    </br>
-
-    @applicationPdf(appConfig, c, attachments, letterOfAuthority)
-
+@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
+    val protocol = if(req.secure) "https" else "http"
+    s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 }
+
+@sectionHeading(headerId: String) = {
+    <h2 id=@headerId>@messages(headerId)</h2>
+}
+
+<html>
+    <head>
+        <style>
+                body {
+                    font-size: 21px;
+                    font-family: "nta", Arial, sans-serif;
+                }
+
+                table {
+                    width: 100%;
+                    font-size: 21px;
+                    line-height: 1.31579;
+                    border-collapse: collapse;
+                }
+
+                td {
+                    padding: 8px 0px 8px 0px;
+                    border-bottom: 1px solid #bfc1c3;
+                    vertical-align: top;
+                }
+
+                td:nth-child(n) {
+                    width: 65%;
+                }
+
+                .title {
+                    align-content: center;
+                    text-align: center;
+                }
+
+                table.header td:nth-child(1) {
+                    width: 10%;
+                }
+
+                table.header td {
+                    border-bottom: 0px
+                }
+
+                .timestamp {
+                    font-size: 10px;
+                    text-align: right;
+                }
+                .pre-wrap {
+                    white-space: pre-wrap;
+                }
+
+                table.bb-0 td {
+                    border-bottom: 0;
+                }
+
+                table.first-column-w35 td:nth-child(1) {
+                    width: 35%;
+                }
+        </style>
+
+    </head>
+    <body>
+        <div>
+
+            @if(renderHeader) {
+                <table class="header">
+                    <tr>
+                        <td width="auto"><img src="@createLink("images/hmrc-logo.jpg")"></td>
+                        <td> <h1 class="title">@messages("pdf.application.title")</h1> </td>
+                    </tr>
+                </table>
+            }
+
+            <table class="first-column-w35 bb-0">
+                <tr>
+                    <td>@messages("pdf.application.submitted") </td> <td><span id="application.submitted"> @Dates.format(c.createdDate)  </span></td>
+                </tr>
+                <tr>
+                    <td>@messages("pdf.application.reference") </td> <td> <span id="application.casereference"> @messages("caseReference.format", c.reference) </span> </td>
+                </tr>
+            </table>
+
+            @sectionHeading("pdf.application.section.applicant.heading")
+
+            <table>
+                <tr>
+                    <td>EORI number</td>
+                    <td id="application.holder.eori">@c.application.holder.eori</td>
+                </tr>
+                <tr>
+                    <td>@messages("pdf.application.section.applicant.companyDetails")</td>
+                    <td id="application.holder.businessName">
+                        @c.application.holder.businessName <br/>
+                        @c.application.holder.addressLine1 <br/>
+                        @c.application.holder.addressLine2 <br/>
+                        @c.application.holder.addressLine3 <br/>
+                        @c.application.holder.postcode <br/>
+                        @c.application.holder.country
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>@messages("pdf.application.section.applicant.contactDetails")</td>
+                    <td id="application.contact.details">
+                        @c.application.contact.name <br/>
+                        @c.application.contact.email <br/>
+                        @c.application.contact.phone
+                    </td>
+                </tr>
+                  <tr>
+                    <td>@messages("pdf.application.section.applyingFor")</td>
+                    <td id="application.contact.details">
+                        @if(c.application.agent.isDefined){
+                            @messages("whichBestDescribesYou.businessRepresentative")
+                        }else{
+                            @messages("whichBestDescribesYou.businessOwner")
+                        }
+                    </td>
+                </tr>
+
+
+            </table>
+
+            @if(c.application.agent.isDefined) {
+                @defining(c.application.agent.get) { agent: AgentDetails =>
+                    @sectionHeading("pdf.application.section.applyingFor.heading")
+                    <table>
+                        <tr>
+                            <td>@messages("pdf.application.section.applyingFor.details")</td>
+                              <td id="agentDetails.eoriDetails.address">
+                                @agent.eoriDetails.eori <br/>
+                                @agent.eoriDetails.businessName <br/>
+                                @agent.eoriDetails.addressLine1 <br/>
+                                @agent.eoriDetails.addressLine2 <br/>
+                                @agent.eoriDetails.addressLine3 <br/>
+                                @agent.eoriDetails.postcode <br/>
+                                @agent.eoriDetails.country
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Written authorisation </td>
+                              <td id="agentDetails.letterOfAuthority">
+                                  @letterOfAuthority.map(_.fileName)
+                             </td>
+                        </tr>
+                    </table>
+                }
+            }
+
+            @sectionHeading("pdf.application.section.aboutItem.heading")
+
+            <table>
+
+                <tr>
+                    <td>@messages("pdf.application.section.applicationType")</td>
+                    <td id="application.applicationType">
+                         @if(c.application.reissuedBTIReference.isDefined){
+                            @messages("pdf.application.section.applicationType.renewalApplication")
+                         }else{
+                            @messages("pdf.application.section.applicationType.newApplication")
+                         }
+                    </td>
+                </tr>
+
+                @if(c.application.reissuedBTIReference.isDefined){
+                     <tr>
+                        <td>@messages("pdf.application.section.applicationType.reIssue")</td>
+                        <td id="application.reissuedBTIReference">
+                            @c.application.reissuedBTIReference <br/>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td>@messages("pdf.application.section.aboutItem.description")</td>
+                    <td id="application.goods.details">
+                        @c.application.goodName <br/>
+                        <span class="pre-wrap">@c.application.goodDescription</span><br/>
+                        @if(c.application.confidentialInformation.isDefined) {
+                            <span class="pre-wrap">@c.application.confidentialInformation.get</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>@messages("pdf.application.section.aboutItem.uploadeDocuments")</td>
+                    <td id="application.attachments">@if(attachments.isEmpty) {@messages("site.none")} else {
+                        @for(row <- attachments) {
+                            @row.fileName <br/>
+                        }
+                    }
+                    </td>
+                </tr>
+                <tr>
+                    <td>@messages("pdf.application.section.aboutItem.importOrExport")</td>
+                    <td id="application.importOrExport">
+                        @{c.application.importOrExport match {
+                            case Some("IMPORT") => messages("pdf.application.section.aboutItem.import")
+                            case Some("EXPORT") => messages("pdf.application.section.aboutItem.export")
+                            case _ => messages("site.unknown")
+                        }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>@messages("pdf.application.section.aboutItem.suggestedCommodityCode")</td>
+                    <td id="application.suggestedCommodityCode.question">
+                        @if(c.application.envisagedCommodityCode.isDefined){
+                            @messages("site.yes")
+                        }else{
+                            @messages("site.no")
+                        }
+                    </td>
+                </tr>
+
+                @if(c.application.envisagedCommodityCode.isDefined) {
+                     <tr>
+                        <td>@messages("pdf.application.section.aboutItem.envisagedCommodityCode")</td>
+                        <td id="application.suggestedCommodityCode">
+                                <span class="pre-wrap">@c.application.envisagedCommodityCode.get</span>
+                        </td>
+                    </tr>
+                }
+
+                <tr>
+                    <td>@messages("pdf.application.section.aboutItem.sampleProvided")</td>
+                    <td id="application.sampleToBeProvided">@if(c.application.sampleToBeProvided) {
+                        @messages("site.yes")
+                    } else {
+                        @messages("site.no")
+                    }</td>
+                </tr>
+
+                @if(c.application.sampleToBeProvided) {
+                    <tr>
+                        <td>@messages("pdf.application.section.aboutItem.sampleReturned")</td>
+                        <td id="application.sampleToBeReturned">@if(c.application.sampleToBeReturned) {
+                            @messages("site.yes")
+                        } else {
+                            @messages("site.no")
+                        }</td>
+                    </tr>
+                }
+
+                <tr>
+                    <td>@messages("pdf.application.section.aboutItem.similarRuling")</td>
+                    <td id="application.relatedBTIReference.defined">@if(c.application.relatedBTIReference.isDefined) {
+                        @messages("site.yes")
+                    } else {
+                        @messages("site.no")
+                    }</td>
+                </tr>
+
+                @if(c.application.relatedBTIReference.isDefined) {
+                    <tr>
+                        <td>@messages("pdf.application.section.aboutItem.similarRuling.BTIRef")</td>
+                        <td id="application.relatedBTIReference"><span class="pre-wrap">@c.application.relatedBTIReference.get</span></td>
+                    </tr>
+                }
+
+                <tr>
+                    <td>@messages("pdf.application.section.aboutItem.legalProblems")</td>
+                    <td id="application.knownLegalProceedings.defined">@if(c.application.knownLegalProceedings.isDefined) {
+                        @messages("site.yes")
+                    } else {
+                        @messages("site.no")
+                    }</td>
+                </tr>
+
+                @if(c.application.knownLegalProceedings.isDefined) {
+                    <tr>
+                        <td>@messages("pdf.application.section.aboutItem.legalProblems.details")</td>
+                        <td id="application.knownLegalProceedings"><span class="pre-wrap">@c.application.knownLegalProceedings.get</span></td>
+                    </tr>
+                }
+            </table>
+
+            @sectionHeading("pdf.application.section.other.heading")
+
+            <table>
+                <tr>
+                    <td>@messages("pdf.application.section.other.haveOtherInformation")</td>
+                    <td id="application.otherInformation.question">@if(c.application.otherInformation.isDefined) {
+                       @messages("site.yes")
+                    } else {
+                       @messages("site.no")
+                    }</td>
+                </tr>
+                @if(c.application.otherInformation.isDefined) {
+                    <tr>
+                        <td>@messages("pdf.application.section.other.supportingInformation")</td>
+                        <td id="application.otherInformation"><span class="pre-wrap">@c.application.otherInformation.get</span></td>
+                    </tr>
+                }
+            </table>
+
+            <br/>
+
+            <div id="footer.whatHappensNext">
+                <h2>@messages("pdf.application.footer.whatHappensNext.heading")</h2>
+                @Html(messages("pdf.application.footer.whatHappensNext.html"))
+            </div>
+
+            <div id="footer.sendingSamples">
+                <h2>@messages("pdf.application.footer.sendingSamples.heading")</h2>
+                @Html(messages("pdf.application.footer.sendingSamples.html"))
+            </div>
+
+            <div id="footer.sendSamplesTo">
+                <h2>@messages("pdf.application.footer.sendingSamplesTo.heading")</h2>
+                <p>
+                    @Html(messages("confirmation.sendingSamples.address"))
+                </p>
+            </div>
+
+        </div>
+
+    </body>
+
+</html>
