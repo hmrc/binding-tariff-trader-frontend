@@ -16,8 +16,9 @@
 
 @import config.FrontendAppConfig
 @import utils.Dates
-@import templates.rulingCertificate
+@import templates._
 
+@import views.html.templates.rulingCertificateTemplate
 @(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
 
 @main_template(
@@ -32,7 +33,7 @@
     @components.heading(messages("pdf.ruling.title"))
 
     <p>
-        <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.ruling(c.reference)" target="_blank">
+        <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.rulingCertificatePdf(c.reference)" target="_blank">
             @messages("rulingInformation.certificatePDFLink")
         </a>
     </p>
