@@ -15,7 +15,6 @@
  *@
 
 @import utils.Dates
-
 @import views.html.components.pagination
 @(cases: Paged[Case])(implicit messages: Messages)
 
@@ -68,7 +67,7 @@
                                 }
                             </td>
                             <td id="application-list-row-@{index}-download">
-                                <a id="application-list-row-@{index}-download-link" href="@routes.PdfDownloadController.viewApplication(c.reference)">@messages("case.application.downloadPdf")</a>
+                                <a id="application-list-row-@{index}-download-link" href="@routes.ApplicationController.viewApplication(c.reference)">@messages("case.application.downloadPdf")</a>
                             </td>
                         </tr>
                     }

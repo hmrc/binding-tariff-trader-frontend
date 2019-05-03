@@ -31,7 +31,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
-class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
+class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                                       override val messagesApi: MessagesApi,
                                       identify: IdentifierAction,
                                       pdfService: PdfService,
@@ -59,7 +59,6 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
       case _ => successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
     }
   }
-
 
 
   private def getApplicationPDF(eori: Eori, reference: CaseReference)

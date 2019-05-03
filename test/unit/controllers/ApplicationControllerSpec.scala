@@ -29,7 +29,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future.{failed, successful}
 
-class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
+class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private val pdfService = mock[PdfService]
   private val caseService = mock[CasesService]
@@ -43,8 +43,8 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private val request = IdentifierRequest(fakeRequest, "id", Some(userEori))
 
-  private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): PdfDownloadController = {
-    new PdfDownloadController(
+  private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): ApplicationController = {
+    new ApplicationController(
       frontendAppConfig,
       messagesApi,
       action,
