@@ -24,7 +24,7 @@
 @import utils.Dates
 @import java.time.Instant
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, renderHeader: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
@@ -95,7 +95,7 @@
     <body>
         <div>
 
-            @if(renderHeader) {
+            @if(!compositeMode) {
                 <table class="header" id="application.header.logo">
                     <tr>
                         <td width="auto"><img src="@createLink("images/hmrc-logo.jpg")"></td>
@@ -328,12 +328,20 @@
 
             <div id="footer.whatHappensNext">
                 <h2>@messages("pdf.application.footer.whatHappensNext.heading")</h2>
-                @Html(messages("pdf.application.footer.whatHappensNext.html"))
+                @if(!compositeMode) {
+                    @Html(messages("pdf.application.footer.whatHappensNext.html"))
+                } else {
+                    @Html(messages("applicationView.whatHappensNext.html"))
+                }
             </div>
 
             <div id="footer.sendingSamples">
                 <h2>@messages("pdf.application.footer.sendingSamples.heading")</h2>
-                @Html(messages("pdf.application.footer.sendingSamples.html"))
+                @if(!compositeMode) {
+                    @Html(messages("pdf.application.footer.sendingSamples.html"))
+                } else {
+                    @Html(messages("applicationView.sendingSamples.html"))
+                }
             </div>
 
             <div id="footer.sendSamplesTo">

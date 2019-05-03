@@ -28,7 +28,7 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
   private val traderCase = oCase.btiCaseExample.copy(application = traderApplication)
   private val agentCase = oCase.btiCaseExample
 
-  private def createView(c: Case, attachments: Seq[FilestoreResponse]) = applicationTemplate(frontendAppConfig, c, attachments, renderHeader = true)(fakeRequest, messages)
+  private def createView(c: Case, attachments: Seq[FilestoreResponse]) = applicationTemplate(frontendAppConfig, c, attachments)(fakeRequest, messages)
 
 
   "Application pdf view" must {
