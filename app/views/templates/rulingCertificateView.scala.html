@@ -16,13 +16,12 @@
 
 @import config.FrontendAppConfig
 @import utils.Dates
-@import templates.applicationTemplate
-@import models.response.FilestoreResponse
+@import templates.rulingCertificate
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${messages("applicationView.title")}",
+    title = s"${messages("rulingInformation.title")}",
     appConfig = appConfig,
     bodyClasses = None)  {
 
@@ -30,16 +29,16 @@
 
     <span class="organisation-logo organisation-logo-medium">HM Revenue & Customs</span>
 
-    @components.heading(messages("pdf.application.title"))
+    @components.heading(messages("pdf.ruling.title"))
 
     <p>
-        <a id="applicationView.applicationLink" href="@routes.PdfDownloadController.applicationPdf(c.reference)" target="_blank">
-            @messages("applicationView.applicationPDFLink")
+        <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.ruling(c.reference)" target="_blank">
+            @messages("rulingInformation.certificatePDFLink")
         </a>
     </p>
 
     </br>
 
-    @applicationTemplate(appConfig, c, attachments, letterOfAuthority, true)
+    @rulingCertificateTemplate(appConfig, c, c.decision.get, compositeMode = true)
 
 }

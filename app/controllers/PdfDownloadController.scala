@@ -25,7 +25,7 @@ import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.templates.{applicationTemplate, applicationView, rulingCertificateTemplate}
+import views.html.templates.{applicationTemplate, applicationView, rulingCertificateTemplate, rulingCertificateView}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -71,7 +71,7 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
       c <- caseService.getCaseForUser(eori, reference)
       attachments <- fileService.getAttachmentMetadata(c)
       letter <- fileService.getLetterOfAuthority(c)
-      view <- generatePdf(applicationTemplate(appConfig, c, attachments, letter, true), s"BTIConfirmation$reference.pdf")
+      view <- generatePdf(applicationTemplate(appConfig, c, attachments, letter), s"BTIConfirmation$reference.pdf")
     } yield view
   }
 
@@ -91,7 +91,7 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
                           (implicit request: Request[AnyContent]): Future[Result] = {
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
       lazy val decision = c.decision.getOrElse(throw new IllegalStateException("Missing decision"))
-      generatePdf(views.html.templates.rulingCertificate(appConfig, c, decision), s"BTIRuling$reference.pdf")
+      generatePdf(rulingCertificateTemplate(appConfig, c, decision), s"BTIRuling$reference.pdf")
     }
   }
 
@@ -99,7 +99,7 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
     request.eoriNumber match {
       case Some(eori: String) =>
         caseService.getCaseForUser(eori, reference) flatMap {
-          c: Case => successful(Ok(rulingCertificateTemplate(appConfig, c)))
+          c: Case => successful(Ok(rulingCertificateView(appConfig, c)))
         }
       case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
     }
