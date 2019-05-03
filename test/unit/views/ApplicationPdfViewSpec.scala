@@ -20,7 +20,7 @@ import models.response.FilestoreResponse
 import models.{Case, oCase}
 import org.jsoup.nodes.Document
 import utils.Dates
-import views.html.templates.applicationPdf
+import views.html.templates.applicationTemplate
 
 class ApplicationPdfViewSpec extends ViewSpecBase {
 
@@ -28,7 +28,7 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
   private val traderCase = oCase.btiCaseExample.copy(application = traderApplication)
   private val agentCase = oCase.btiCaseExample
 
-  private def createView(c: Case, attachments: Seq[FilestoreResponse]) = applicationPdf(frontendAppConfig, c, attachments)(fakeRequest, messages)
+  private def createView(c: Case, attachments: Seq[FilestoreResponse]) = applicationTemplate(frontendAppConfig, c, attachments, renderHeader = true)(fakeRequest, messages)
 
 
   "Application pdf view" must {
@@ -82,6 +82,12 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
         otherInformation = Some("Other information"))), Seq.empty))
 
       doc.getElementById("application.otherInformation").text() mustBe "Other information"
+    }
+
+    "contain the optional hmrc logo" in {
+      val doc = asDocument(createView(traderCase, Seq.empty))
+
+      assertRenderedById(doc, "application.header.logo")
     }
   }
 

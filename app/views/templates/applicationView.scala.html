@@ -22,7 +22,7 @@
 @(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${messages("rulingInformation.title")}",
+    title = s"${messages("applicationView.title")}",
     appConfig = appConfig,
     bodyClasses = None)  {
 
@@ -33,8 +33,8 @@
     @components.heading(messages("pdf.application.title"))
 
     <p>
-        <a id="rulingInformation.certificateLink" href="@routes.PdfDownloadController.application(c.reference)" target="_blank">
-            @messages("rulingInformation.certificatePDFLink")
+        <a id="applicationView.applicationLink" href="@routes.PdfDownloadController.application(c.reference)" target="_blank">
+            @messages("applicationView.applicationPDFLink")
         </a>
     </p>
 

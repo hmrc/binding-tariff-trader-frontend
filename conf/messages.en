@@ -495,3 +495,7 @@ rulingInformation.holder = Holder
 rulingInformation.ruling = Ruling reference
 rulingInformation.startDate = Start date
 rulingInformation.expiryDate = Expiry date
+
+applicationView.title = Binding Tariff Information ruling
+applicationView.applicationLink = View application
+applicationView.applicationPDFLink = View application PDF (opens in new window or tab)
