@@ -97,7 +97,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   def viewRulingCertificate(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
-        caseService.getCaseForUser(eori, reference) flatMap {
+        caseService.getCaseWithRulingForUser(eori, reference) flatMap {
           c: Case => successful(Ok(rulingCertificateView(appConfig, c)))
         }
       case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))

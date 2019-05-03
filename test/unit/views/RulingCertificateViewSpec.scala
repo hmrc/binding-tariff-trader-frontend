@@ -19,12 +19,12 @@ package views
 import models.{Case, oCase}
 import play.twirl.api.HtmlFormat
 import utils.Dates.format
-import views.html.templates.rulingCertificate
+import views.html.templates.rulingCertificateView
 
 class RulingCertificateViewSpec extends ViewSpecBase {
 
   private def createView(c: Case): HtmlFormat.Appendable = {
-    rulingCertificate(frontendAppConfig, c, c.decision.get)(fakeRequest, messages)
+    rulingCertificateView(frontendAppConfig, c)(fakeRequest, messages)
   }
 
   private val rulingCase = oCase.btiCaseWithDecision
