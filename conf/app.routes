@@ -109,9 +109,9 @@ GET         /check-your-answers                                  controllers.Che
 
 GET         /confirmation                                        controllers.ConfirmationController.onPageLoad()
 
-GET         /pdf/application/:reference                          controllers.PdfDownloadController.application(reference: String, token: Option[String] ?= None)
-GET         /pdf/application-details/:reference                  controllers.PdfDownloadController.applicationDetails(reference: String, token: Option[String] ?= None)
-GET         /pdf/ruling/:reference                               controllers.PdfDownloadController.ruling(reference: String, token: Option[String] ?= None)
-GET         /pdf/ruling-certificate/:reference                   controllers.PdfDownloadController.rulingCertificate(reference: String, token: Option[String] ?= None)
+GET         /applications/:reference                             controllers.PdfDownloadController.viewApplication(reference: String, token: Option[String] ?= None)
+GET         /applications/:reference/pdf                         controllers.PdfDownloadController.applicationPdf(reference: String, token: Option[String] ?= None)
+GET         /applications/:reference/ruling                      controllers.PdfDownloadController.viewRulingCertificate(reference: String, token: Option[String] ?= None)
+GET         /applications/:reference/ruling/pdf                  controllers.PdfDownloadController.rulingCertificatePdf(reference: String, token: Option[String] ?= None)
 
 GET         /view-ruling/:reference                              controllers.RulingController.viewRuling(reference: String)

@@ -32,7 +32,7 @@
 
     <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
     <ul class="list">
-        <li><a id="confirmation-pdf-link" target="_blank" href="@routes.PdfDownloadController.application(confirmation.reference, Some(pdfToken))">@messages("confirmation.download.link.PDF")</a></li>
+        <li><a id="confirmation-pdf-link" target="_blank" href="@routes.PdfDownloadController.viewApplication(confirmation.reference, Some(pdfToken))">@messages("confirmation.download.link.PDF")</a></li>
     </ul>
 
     @if(confirmation.sendingSamples) {

@@ -42,7 +42,7 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
   private type Eori = String
   private type CaseReference = String
 
-  def application(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+  def applicationPdf(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
     getPdf(request.eoriNumber, reference, token, getApplicationPDF)
   }
 
@@ -83,7 +83,7 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
     }
   }
 
-  def ruling(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+  def rulingCertificatePdf(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
     getPdf(request.eoriNumber, reference, token, getRulingPDF)
   }
 
@@ -95,7 +95,7 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
     }
   }
 
-  def rulingCertificate(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+  def viewRulingCertificate(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
         caseService.getCaseForUser(eori, reference) flatMap {
@@ -105,7 +105,7 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
     }
   }
 
-  def applicationDetails(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+  def viewApplication(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) => {
         for {

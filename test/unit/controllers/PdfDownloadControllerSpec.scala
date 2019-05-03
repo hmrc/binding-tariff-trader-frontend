@@ -97,7 +97,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheFileServiceHaveNoLetterOfAuthority()
       givenThePdfServiceGeneratesThePdf()
 
-      val result = controller().application(caseRef, Some(token))(request)
+      val result = controller().applicationPdf(caseRef, Some(token))(request)
 
       status(result) mustBe OK
       contentAsString(result) mustBe "Some content"
@@ -109,7 +109,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
-        await(controller().application(caseRef, Some(token))(request))
+        await(controller().applicationPdf(caseRef, Some(token))(request))
       }
       caught.getMessage mustBe "Case not found"
     }
@@ -117,7 +117,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to session expired when the token is invalid" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).application(caseRef, Some(token))(request)
+      val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
@@ -126,7 +126,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to unauthorized when the token is empty and session EORI is not present" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).application(caseRef, None)(request)
+      val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, None)(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
@@ -141,7 +141,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheCaseServiceFindsTheCaseWithRuling()
       givenThePdfServiceGeneratesThePdf()
 
-      val result = controller().ruling(caseRef, Some(token))(request)
+      val result = controller().rulingCertificatePdf(caseRef, Some(token))(request)
 
       status(result) mustBe OK
       contentAsString(result) mustBe "Some content"
@@ -153,7 +153,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
-        await(controller().ruling(caseRef, Some(token))(request))
+        await(controller().rulingCertificatePdf(caseRef, Some(token))(request))
       }
       caught.getMessage mustBe "Case not found"
     }
@@ -161,7 +161,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to session expired when the token is invalid" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).ruling(caseRef, Some(token))(request)
+      val result = controller(FakeIdentifierAction(None)).rulingCertificatePdf(caseRef, Some(token))(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
@@ -170,7 +170,7 @@ class PdfDownloadControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to unauthorized when the token is empty and session EORI is not present" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).ruling(caseRef, None)(request)
+      val result = controller(FakeIdentifierAction(None)).rulingCertificatePdf(caseRef, None)(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
