@@ -98,7 +98,6 @@
             @if(!compositeMode) {
                 <table class="header" id="application.header.logo">
                     <tr>
-                        <td width="auto"><img src="@createLink("images/hmrc-logo.jpg")"></td>
                         <td> <h1 class="title">@messages("pdf.application.title")</h1> </td>
                     </tr>
                 </table>
@@ -338,7 +337,7 @@
             <div id="footer.sendingSamples">
                 <h2>@messages("pdf.application.footer.sendingSamples.heading")</h2>
                 @if(!compositeMode) {
-                    @Html(messages("pdf.application.footer.sendingSamples.html"))
+                    @Html(messages("pdf.application.footer.sendingSamples.html",c.reference))
                 } else {
                     @Html(messages("applicationView.sendingSamples.html",c.reference))
                 }
