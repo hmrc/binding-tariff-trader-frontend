@@ -24,7 +24,7 @@
 @import utils.Dates
 @import java.time.Instant
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, viewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
@@ -95,20 +95,20 @@
     <body>
         <div>
 
-            @if(!compositeMode) {
-                <h1 id="application.header.logo" class="title">@messages("pdf.application.title")</h1>
+            @if(!viewMode) {
+                <h1 id="application.header.logo" class="title">@messages("application.title")</h1>
             }
 
             <table class="first-column-w35 bb-0">
                 <tr>
-                    <td>@messages("pdf.application.submitted") </td> <td><span id="application.submitted"> @Dates.format(c.createdDate)  </span></td>
+                    <td>@messages("application.submitted") </td> <td><span id="application.submitted"> @Dates.format(c.createdDate)  </span></td>
                 </tr>
                 <tr>
-                    <td>@messages("pdf.application.reference") </td> <td> <span id="application.casereference"> @messages("caseReference.format", c.reference) </span> </td>
+                    <td>@messages("application.reference") </td> <td> <span id="application.casereference"> @messages("caseReference.format", c.reference) </span> </td>
                 </tr>
             </table>
 
-            @sectionHeading("pdf.application.section.applicant.heading")
+            @sectionHeading("application.section.applicant.heading")
 
             <table>
                 <tr>
@@ -116,7 +116,7 @@
                     <td id="application.holder.eori">@c.application.holder.eori</td>
                 </tr>
                 <tr>
-                    <td>@messages("pdf.application.section.applicant.companyDetails")</td>
+                    <td>@messages("application.section.applicant.companyDetails")</td>
                     <td id="application.holder.businessName">
                         @c.application.holder.businessName <br/>
                         @c.application.holder.addressLine1 <br/>
@@ -128,7 +128,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>@messages("pdf.application.section.applicant.contactDetails")</td>
+                    <td>@messages("application.section.applicant.contactDetails")</td>
                     <td id="application.contact.details">
                         @c.application.contact.name <br/>
                         @c.application.contact.email <br/>
@@ -136,7 +136,7 @@
                     </td>
                 </tr>
                   <tr>
-                    <td>@messages("pdf.application.section.applyingFor")</td>
+                    <td>@messages("application.section.applyingFor")</td>
                     <td id="application.contact.details">
                         @if(c.application.agent.isDefined){
                             @messages("whichBestDescribesYou.businessRepresentative")
@@ -151,10 +151,10 @@
 
             @if(c.application.agent.isDefined) {
                 @defining(c.application.agent.get) { agent: AgentDetails =>
-                    @sectionHeading("pdf.application.section.applyingFor.heading")
+                    @sectionHeading("application.section.applyingFor.heading")
                     <table>
                         <tr>
-                            <td>@messages("pdf.application.section.applyingFor.details")</td>
+                            <td>@messages("application.section.applyingFor.details")</td>
                               <td id="agentDetails.eoriDetails.address">
                                 @agent.eoriDetails.eori <br/>
                                 @agent.eoriDetails.businessName <br/>
@@ -175,31 +175,31 @@
                 }
             }
 
-            @sectionHeading("pdf.application.section.aboutItem.heading")
+            @sectionHeading("application.section.aboutItem.heading")
 
             <table>
 
                 <tr>
-                    <td>@messages("pdf.application.section.applicationType")</td>
+                    <td>@messages("application.section.applicationType")</td>
                     <td id="application.applicationType">
                          @if(c.application.reissuedBTIReference.isDefined){
-                            @messages("pdf.application.section.applicationType.renewalApplication")
+                            @messages("application.section.applicationType.renewalApplication")
                          }else{
-                            @messages("pdf.application.section.applicationType.newApplication")
+                            @messages("application.section.applicationType.newApplication")
                          }
                     </td>
                 </tr>
 
                 @if(c.application.reissuedBTIReference.isDefined){
                      <tr>
-                        <td>@messages("pdf.application.section.applicationType.reIssue")</td>
+                        <td>@messages("application.section.applicationType.reIssue")</td>
                         <td id="application.reissuedBTIReference">
                             @c.application.reissuedBTIReference <br/>
                         </td>
                     </tr>
                 }
                 <tr>
-                    <td>@messages("pdf.application.section.aboutItem.description")</td>
+                    <td>@messages("application.section.aboutItem.description")</td>
                     <td id="application.goods.details">
                         @c.application.goodName <br/>
                         <span class="pre-wrap">@c.application.goodDescription</span><br/>
@@ -209,7 +209,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>@messages("pdf.application.section.aboutItem.uploadeDocuments")</td>
+                    <td>@messages("application.section.aboutItem.uploadeDocuments")</td>
                     <td id="application.attachments">@if(attachments.isEmpty) {@messages("site.none")} else {
                         @for(row <- attachments) {
                             @row.fileName <br/>
@@ -218,17 +218,17 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>@messages("pdf.application.section.aboutItem.importOrExport")</td>
+                    <td>@messages("application.section.aboutItem.importOrExport")</td>
                     <td id="application.importOrExport">
                         @{c.application.importOrExport match {
-                            case Some("IMPORT") => messages("pdf.application.section.aboutItem.import")
-                            case Some("EXPORT") => messages("pdf.application.section.aboutItem.export")
+                            case Some("IMPORT") => messages("application.section.aboutItem.import")
+                            case Some("EXPORT") => messages("application.section.aboutItem.export")
                             case _ => messages("site.unknown")
                         }}
                     </td>
                 </tr>
                 <tr>
-                    <td>@messages("pdf.application.section.aboutItem.suggestedCommodityCode")</td>
+                    <td>@messages("application.section.aboutItem.suggestedCommodityCode")</td>
                     <td id="application.suggestedCommodityCode.question">
                         @if(c.application.envisagedCommodityCode.isDefined){
                             @messages("site.yes")
@@ -240,7 +240,7 @@
 
                 @if(c.application.envisagedCommodityCode.isDefined) {
                      <tr>
-                        <td>@messages("pdf.application.section.aboutItem.envisagedCommodityCode")</td>
+                        <td>@messages("application.section.aboutItem.envisagedCommodityCode")</td>
                         <td id="application.suggestedCommodityCode">
                                 <span class="pre-wrap">@c.application.envisagedCommodityCode.get</span>
                         </td>
@@ -248,7 +248,7 @@
                 }
 
                 <tr>
-                    <td>@messages("pdf.application.section.aboutItem.sampleProvided")</td>
+                    <td>@messages("application.section.aboutItem.sampleProvided")</td>
                     <td id="application.sampleToBeProvided">@if(c.application.sampleToBeProvided) {
                         @messages("site.yes")
                     } else {
@@ -258,7 +258,7 @@
 
                 @if(c.application.sampleToBeProvided) {
                     <tr>
-                        <td>@messages("pdf.application.section.aboutItem.sampleReturned")</td>
+                        <td>@messages("application.section.aboutItem.sampleReturned")</td>
                         <td id="application.sampleToBeReturned">@if(c.application.sampleToBeReturned) {
                             @messages("site.yes")
                         } else {
@@ -268,7 +268,7 @@
                 }
 
                 <tr>
-                    <td>@messages("pdf.application.section.aboutItem.similarRuling")</td>
+                    <td>@messages("application.section.aboutItem.similarRuling")</td>
                     <td id="application.relatedBTIReference.defined">@if(c.application.relatedBTIReference.isDefined) {
                         @messages("site.yes")
                     } else {
@@ -278,13 +278,13 @@
 
                 @if(c.application.relatedBTIReference.isDefined) {
                     <tr>
-                        <td>@messages("pdf.application.section.aboutItem.similarRuling.BTIRef")</td>
+                        <td>@messages("application.section.aboutItem.similarRuling.BTIRef")</td>
                         <td id="application.relatedBTIReference"><span class="pre-wrap">@c.application.relatedBTIReference.get</span></td>
                     </tr>
                 }
 
                 <tr>
-                    <td>@messages("pdf.application.section.aboutItem.legalProblems")</td>
+                    <td>@messages("application.section.aboutItem.legalProblems")</td>
                     <td id="application.knownLegalProceedings.defined">@if(c.application.knownLegalProceedings.isDefined) {
                         @messages("site.yes")
                     } else {
@@ -294,17 +294,17 @@
 
                 @if(c.application.knownLegalProceedings.isDefined) {
                     <tr>
-                        <td>@messages("pdf.application.section.aboutItem.legalProblems.details")</td>
+                        <td>@messages("application.section.aboutItem.legalProblems.details")</td>
                         <td id="application.knownLegalProceedings"><span class="pre-wrap">@c.application.knownLegalProceedings.get</span></td>
                     </tr>
                 }
             </table>
 
-            @sectionHeading("pdf.application.section.other.heading")
+            @sectionHeading("application.section.other.heading")
 
             <table>
                 <tr>
-                    <td>@messages("pdf.application.section.other.haveOtherInformation")</td>
+                    <td>@messages("application.section.other.haveOtherInformation")</td>
                     <td id="application.otherInformation.question">@if(c.application.otherInformation.isDefined) {
                        @messages("site.yes")
                     } else {
@@ -313,7 +313,7 @@
                 </tr>
                 @if(c.application.otherInformation.isDefined) {
                     <tr>
-                        <td>@messages("pdf.application.section.other.supportingInformation")</td>
+                        <td>@messages("application.section.other.supportingInformation")</td>
                         <td id="application.otherInformation"><span class="pre-wrap">@c.application.otherInformation.get</span></td>
                     </tr>
                 }
@@ -322,27 +322,52 @@
             <br/>
 
             <div id="footer.whatHappensNext">
-                <h2>@messages("pdf.application.footer.whatHappensNext.heading")</h2>
-                @if(!compositeMode) {
-                    @Html(messages("pdf.application.footer.whatHappensNext.html"))
-                } else {
-                    @Html(messages("applicationView.whatHappensNext.html"))
-                }
+                <h2>@messages("application.footer.whatHappensNext.heading")</h2>
+                <span id="applicationView.whatHappensNext">
+                    <p>@messages("application.footer.whatHappensNext.paragraph1")</p>
+                    <ul class="list list-bullet">
+                        <li>@messages("application.footer.whatHappensNext.paragraph1.list.1")</li>
+                        <li>@messages("application.footer.whatHappensNext.paragraph1.list.2")</li>
+                    </ul>
+                    <p>@messages("application.footer.whatHappensNext.paragraph2")
+                        @if(viewMode) {
+                            <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+                            @messages("application.footer.whatHappensNext.paragraph2.applySite.link")
+                            </a>
+                        }else{
+                            @messages("application.footer.whatHappensNext.paragraph2.applySite")
+                        }
+                    </p>
+                </span>
             </div>
 
             <div id="footer.sendingSamples">
-                <h2>@messages("pdf.application.footer.sendingSamples.heading")</h2>
-                @if(!compositeMode) {
-                    @Html(messages("pdf.application.footer.sendingSamples.html",c.reference))
-                } else {
-                    @Html(messages("applicationView.sendingSamples.html",c.reference))
-                }
+                <h2>@messages("application.footer.sendingSamples.heading")</h2>
+                    <span id="applicationView.sendingSamples">
+                        <p>@messages("application.footer.sendingSamples.paragraph1", c.reference)</p>
+                        <p>@messages("application.footer.sendingSamples.paragraph2")</p>
+                        <p>
+                        @if(viewMode) {
+                            <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#check-if-you-need-to-provide-a-sample">
+                                @messages("application.footer.sendingSamples.paragraph3.link")
+                            </a>
+                        }else{
+                            @messages("application.footer.sendingSamples.paragraph3")
+                        }
+                        </p>
+                    </span>
             </div>
 
             <div id="footer.sendSamplesTo">
-                <h2>@messages("pdf.application.footer.sendingSamplesTo.heading")</h2>
-                <p>
-                    @Html(messages("confirmation.sendingSamples.address"))
+                <h2>@messages("application.footer.sendingSamplesTo.heading")</h2>
+                    @messages("application.footer.sendingSamples.address.line1") </br>
+                    @messages("application.footer.sendingSamples.address.line2") </br>
+                    @messages("application.footer.sendingSamples.address.line3") </br>
+                    @messages("application.footer.sendingSamples.address.line4") </br>
+                    @messages("application.footer.sendingSamples.address.line5") </br>
+                    @messages("application.footer.sendingSamples.address.line6") </br>
+                    @messages("application.footer.sendingSamples.address.line7") </br>
+                    @messages("application.footer.sendingSamples.address.line8")
                 </p>
             </div>
 
