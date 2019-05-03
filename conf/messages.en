@@ -474,7 +474,7 @@ case.ruling.status.expired = Expired
 
 case.ruling.downloadPdf = View BTI Ruling
 
-rulingInformation.title = Information on Ruling
+rulingInformation.title = Ruling certificate - GOV.UK
 rulingInformation.heading = Important information about BTI ruling
 rulingInformation.summary = Ruling summary
 rulingInformation.commoditySubheading = The commodity code we have issued and why we made this decision
@@ -496,7 +496,7 @@ rulingInformation.ruling = Ruling reference
 rulingInformation.startDate = Start date
 rulingInformation.expiryDate = Expiry date
 
-applicationView.title = Binding Tariff Information ruling
+applicationView.title = View application - GOV.UK
 applicationView.applicationLink = View application
 applicationView.applicationPDFLink = View application PDF (opens in new window or tab)
 applicationView.whatHappensNext.html = <p>HMRC will issue your Binding Tariff Information ruling by email within 30 days unless you:</p><ul><li>are sending samples</li><li>are asked for more information to support your application</li></ul><p>You can find out the status of your application by signing into your account through the guide <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600">Apply for a Binding Tariff Information (BTI) ruling (Notice 600), this will open in a new window.</a></p>
