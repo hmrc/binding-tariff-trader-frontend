@@ -60,7 +60,6 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
     }
   }
 
-
   private def getApplicationPDF(eori: Eori, reference: CaseReference)
                                (implicit request: Request[AnyContent]): Future[Result] = {
 
@@ -70,8 +69,8 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
       c <- caseService.getCaseForUser(eori, reference)
       attachments <- fileService.getAttachmentMetadata(c)
       letter <- fileService.getLetterOfAuthority(c)
-      view <- generatePdf(applicationTemplate(appConfig, c, attachments, letter), s"BTIConfirmation$reference.pdf")
-    } yield view
+      pdf <- generatePdf(applicationTemplate(appConfig, c, attachments, letter), s"BTIConfirmation$reference.pdf")
+    } yield pdf
   }
 
   private def generatePdf(htmlContent: Html, filename: String): Future[Result] = {
