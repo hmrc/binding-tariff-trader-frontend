@@ -90,7 +90,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   "Application Pdf" must {
 
-    "return return PdfService result" in {
+    "return PdfService result" in {
       givenThePdfServiceDecodesTheTokenWith("eori", "reference")
       givenTheCaseServiceFindsTheCase()
       givenTheFileServiceFindsTheAttachments()

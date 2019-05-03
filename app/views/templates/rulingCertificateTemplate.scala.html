@@ -84,8 +84,10 @@
         <div class="centered-content">
 
             @if(!compositeMode) {
-                <img src="@createLink("images/hmrc-logo.jpg")">
-                <h1>@messages("pdf.ruling.title")</h1>
+                <span id="pdf.ruling.header.logo">
+                    <img src="@createLink("images/hmrc-logo.jpg")">
+                    <h1>@messages("pdf.ruling.title")</h1>
+                </span>
             }
 
             <div class="box">
