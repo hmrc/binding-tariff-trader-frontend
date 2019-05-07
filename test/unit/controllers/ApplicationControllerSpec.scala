@@ -136,7 +136,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   "Application View" must {
 
-    "return return application view result" in {
+    "return application view result" in {
       givenThePdfServiceDecodesTheTokenWith("eori", "reference")
       givenTheCaseServiceFindsTheCase()
       givenTheFileServiceFindsTheAttachments()
@@ -173,7 +173,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   "Ruling Pdf" must {
 
-    "return return PdfService result" in {
+    "return PdfService result" in {
       givenThePdfServiceDecodesTheTokenWith("eori", "reference")
       givenTheCaseWithRulingFindsTheCaseWithRuling()
       givenThePdfServiceGeneratesThePdf()
@@ -239,13 +239,13 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
       caught.getMessage mustBe "Case not found"
     }
 
-    "redirect to before you start page when the token is invalid" in {
+    "redirect to session expired when the token is invalid" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
       val result = controller(FakeIdentifierAction(None)).viewRulingCertificate(caseRef, Some(token))(request)
 
       status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad().url)
+      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
   }
