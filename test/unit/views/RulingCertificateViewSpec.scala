@@ -19,18 +19,36 @@ package views
 import models.{Case, oCase}
 import play.twirl.api.HtmlFormat
 import utils.Dates.format
-import views.html.pdftemplates.rulingPdf
+import views.html.templates.rulingCertificateTemplate
 
-class RulingPdfViewSpec extends ViewSpecBase {
+class RulingCertificateViewSpec extends ViewSpecBase {
 
-  private def createView(c: Case): HtmlFormat.Appendable = {
-    rulingPdf(frontendAppConfig, c, c.decision.get)(fakeRequest, messages)
+  private def createPdfView(c: Case): HtmlFormat.Appendable = {
+    rulingCertificateTemplate(frontendAppConfig, c, c.decision.get)(fakeRequest, messages)
+  }
+
+  private def createHtmlView(c: Case): HtmlFormat.Appendable = {
+    rulingCertificateTemplate(frontendAppConfig, c, c.decision.get, compositeMode = true)(fakeRequest, messages)
   }
 
   private val rulingCase = oCase.btiCaseWithDecision
   private val holder = rulingCase.application.holder
   private val ruling = rulingCase.decision.getOrElse(throw new Exception("Bad test data"))
-  private val doc = asDocument(createView(rulingCase))
+  private val doc = asDocument(createPdfView(rulingCase))
+
+  "Ruling pdf view" must {
+    "contain the optional hmrc logo" in {
+      assertRenderedById(doc,"pdf.ruling.header.logo")
+    }
+  }
+
+  "Ruling html view" must {
+    "not contain the optional hmrc logo" in {
+      val doc = asDocument(createHtmlView(rulingCase))
+
+      assertNotRenderedById(doc,"pdf.ruling.header.logo")
+    }
+  }
 
   "Ruling pdf holder section" must {
 

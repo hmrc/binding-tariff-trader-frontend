@@ -25,13 +25,13 @@ import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.pdftemplates.{applicationPdf, rulingPdf}
+import views.html.templates.{applicationTemplate, applicationView, rulingCertificateTemplate, rulingCertificateView}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
-class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
+class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                                       override val messagesApi: MessagesApi,
                                       identify: IdentifierAction,
                                       pdfService: PdfService,
@@ -42,33 +42,57 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
   private type Eori = String
   private type CaseReference = String
 
-  def application(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
-    getPdf(request.eoriNumber, reference, token, getApplicationPDF)
+  def applicationPdf(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+    getPdfOrHtml(request.eoriNumber, reference, token, getApplicationPDF)
   }
 
-  private def getPdf(maybeEoriNumber: Option[Eori],
+  def rulingCertificatePdf(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+    getPdfOrHtml(request.eoriNumber, reference, token, getRulingPDF)
+  }
+
+  def viewRulingCertificate(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+    getPdfOrHtml(request.eoriNumber, reference, token, rulingCertificateHtmlView)
+  }
+
+  def viewApplication(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+    getPdfOrHtml(request.eoriNumber, reference, token, getApplicationView)
+  }
+
+  private def getPdfOrHtml(maybeEoriNumber: Option[Eori],
                      reference: CaseReference,
                      token: Option[String],
-                     toPdf: (Eori, CaseReference) => Future[Result]): Future[Result] = {
+                     toView: (Eori, CaseReference) => Future[Result]): Future[Result] = {
     (maybeEoriNumber, token) match {
-      case (Some(eori), _) => toPdf(eori, reference)
+      case (Some(eori), _) => toView(eori, reference)
       case (_, Some(tkn)) => pdfService.decodeToken(tkn) match {
-        case Some(eori) => toPdf(eori, reference)
+        case Some(eori) => toView(eori, reference)
         case None => successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
       case _ => successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
     }
   }
 
-
   private def getApplicationPDF(eori: Eori, reference: CaseReference)
+                               (implicit request: Request[AnyContent]): Future[Result] = {
+    getApplicationPDForHtml(eori,reference,true)
+  }
+
+  private def getApplicationView(eori: Eori, reference: CaseReference)
+                               (implicit request: Request[AnyContent]): Future[Result] = {
+    getApplicationPDForHtml(eori,reference,false)
+  }
+
+  private def getApplicationPDForHtml(eori: Eori, reference: CaseReference, pdf : Boolean)
                                (implicit request: Request[AnyContent]): Future[Result] = {
 
     for {
       c <- caseService.getCaseForUser(eori, reference)
       attachments <- fileService.getAttachmentMetadata(c)
       letter <- fileService.getLetterOfAuthority(c)
-      pdf <-  generatePdf(applicationPdf(appConfig, c, attachments, letter), s"BTIConfirmation$reference.pdf")
+      pdf <- pdf match {
+        case true => generatePdf(applicationTemplate(appConfig, c, attachments, letter), s"BTIConfirmation$reference.pdf")
+        case false => successful(Ok(applicationView(appConfig, c, attachments, letter)))
+      }
     } yield pdf
   }
 
@@ -80,15 +104,18 @@ class PdfDownloadController @Inject()(appConfig: FrontendAppConfig,
     }
   }
 
-  def ruling(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
-    getPdf(request.eoriNumber, reference, token, getRulingPDF)
-  }
-
   private def getRulingPDF(eori: Eori, reference: CaseReference)
                           (implicit request: Request[AnyContent]): Future[Result] = {
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
       lazy val decision = c.decision.getOrElse(throw new IllegalStateException("Missing decision"))
-      generatePdf(rulingPdf(appConfig, c, decision), s"BTIRuling$reference.pdf")
+      generatePdf(rulingCertificateTemplate(appConfig, c, decision), s"BTIRuling$reference.pdf")
+    }
+  }
+
+  def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)
+                           (implicit request: Request[AnyContent]): Future[Result] = {
+    caseService.getCaseWithRulingForUser(eori, reference) flatMap {
+      c: Case => successful(Ok(rulingCertificateView(appConfig, c)))
     }
   }
 
