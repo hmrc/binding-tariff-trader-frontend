@@ -29,7 +29,7 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
   private val agentCase = oCase.btiCaseExample
 
   private def createPdfView(c: Case, attachments: Seq[FilestoreResponse]) = applicationTemplate(frontendAppConfig, c, attachments)(fakeRequest, messages)
-  private def createHtmlView(c: Case, attachments: Seq[FilestoreResponse]) = applicationTemplate(frontendAppConfig, c, attachments,compositeMode = true)(fakeRequest, messages)
+  private def createHtmlView(c: Case, attachments: Seq[FilestoreResponse]) = applicationTemplate(frontendAppConfig, c, attachments,viewMode = true)(fakeRequest, messages)
 
   "Application pdf view" must {
 
@@ -37,14 +37,14 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
       val doc = asDocument(createPdfView(traderCase, Seq.empty))
 
       containsCommonSections(doc)
-      assertNotRenderedById(doc, "pdf.application.section.applyingFor.heading")
+      assertNotRenderedById(doc, "application.section.applyingFor.heading")
     }
 
     "contain the details for an agent" in {
       val doc = asDocument(createPdfView(agentCase, Seq.empty))
 
       containsCommonSections(doc)
-      assertRenderedById(doc, "pdf.application.section.applyingFor.heading")
+      assertRenderedById(doc, "application.section.applyingFor.heading")
     }
 
     "contain the details for re-issued BTI" in {
@@ -93,13 +93,13 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
     "contain the pdf version of samples section" in {
       val doc = asDocument(createPdfView(traderCase, Seq.empty))
 
-      assertRenderedById(doc, "pdf.application.footer.sendingSamples")
+      assertRenderedById(doc, "applicationView.sendingSamples")
     }
 
     "contain the pdf version of what happens next section" in {
       val doc = asDocument(createPdfView(traderCase, Seq.empty))
 
-      assertRenderedById(doc, "pdf.application.footer.whatHappensNext")
+      assertRenderedById(doc, "applicationView.whatHappensNext")
     }
   }
 
@@ -127,9 +127,9 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
   private def containsCommonSections(doc: Document) = {
     doc.getElementById("application.submitted").text() mustBe s"${Dates.format(oCase.btiCaseExample.createdDate)}"
     doc.getElementById("application.casereference").text() mustBe s"${oCase.btiCaseExample.reference}"
-    assertRenderedById(doc, "pdf.application.section.applicant.heading")
-    assertRenderedById(doc, "pdf.application.section.aboutItem.heading")
-    assertRenderedById(doc, "pdf.application.section.other.heading")
+    assertRenderedById(doc, "application.section.applicant.heading")
+    assertRenderedById(doc, "application.section.aboutItem.heading")
+    assertRenderedById(doc, "application.section.other.heading")
   }
 
 }
