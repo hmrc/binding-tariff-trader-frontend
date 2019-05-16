@@ -32,13 +32,14 @@
         @components.back_link()
 
         @components.error_summary(form.errors)
+        <fieldset>
+            <legend>
+                @components.heading(messages("commodityCodeDigits.heading"))
+            </legend>
 
-        @components.input_text(
-            field = form("value"),
-            label = messages("commodityCodeDigits.heading"),
-            labelClass = Some("heading-xlarge mb-2")
-        )
+            @components.input_text(field = form("value"))
 
-        @components.submit_button()
+            @components.submit_button()
+        </fieldset>
     }
 }

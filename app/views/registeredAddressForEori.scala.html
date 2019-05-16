@@ -32,49 +32,54 @@
 
         @components.error_summary(form.errors)
 
-        @if(request.userEoriNumber.isDefined) {
-            @components.heading(messages("registeredAddressForEori.heading", request.userEoriNumber.get))
+        <fieldset>
 
-            <div role="note" class="application-notice info-notice">
-                <p> @messages("registeredAddressForEori.note") </p>
-            </div>
+            @if(request.userEoriNumber.isDefined) {
+                <legend>
+                    @components.heading(messages("registeredAddressForEori.heading", request.userEoriNumber.get))
 
-            @components.input_hidden(field = form("eori"))
-        } else {
-            @components.heading(messages("registeredAddressForEori.headingNoEORI"))
+                    <div role="note" class="application-notice info-notice">
+                        <p> @messages("registeredAddressForEori.note") </p>
+                    </div>
+                </legend>
+                @components.input_hidden(field = form("eori"))
+            } else {
+                <legend>
+                    @components.heading(messages("registeredAddressForEori.headingNoEORI"))
+                </legend>
+                @components.input_text(
+                    field = form("eori"),
+                    hint  = Some(messages("registeredAddressForEori.eori.hint")),
+                    label = Some(messages("registeredAddressForEori.eori"))
+                )
+            }
 
             @components.input_text(
-                field = form("eori"),
-                hint  = Some(messages("registeredAddressForEori.eori.hint")),
-                label = messages("registeredAddressForEori.eori")
+                field = form("businessName"),
+                label = Some(messages("registeredAddressForEori.businessName"))
             )
-        }
 
-        @components.input_text(
-            field = form("businessName"),
-            label = messages("registeredAddressForEori.businessName")
-        )
+            @components.input_text(
+                field = form("addressLine1"),
+                label = Some(messages("registeredAddressForEori.addressLine1"))
+            )
 
-        @components.input_text(
-            field = form("addressLine1"),
-            label = messages("registeredAddressForEori.addressLine1")
-        )
+            @components.input_text(
+                field = form("townOrCity"),
+                label = Some(messages("registeredAddressForEori.townCity"))
+            )
 
-        @components.input_text(
-            field = form("townOrCity"),
-            label = messages("registeredAddressForEori.townCity")
-        )
+            @components.input_text(
+                field = form("postcode"),
+                label = Some(messages("registeredAddressForEori.postcode"))
+            )
 
-        @components.input_text(
-            field = form("postcode"),
-            label = messages("registeredAddressForEori.postcode")
-        )
+            @components.input_text(
+                field = form("country"),
+                label = Some(messages("registeredAddressForEori.country"))
+            )
 
-        @components.input_text(
-            field = form("country"),
-            label = messages("registeredAddressForEori.country")
-        )
-
-        @components.submit_button()
+            @components.submit_button()
+        </fieldset>
     }
 }

@@ -33,23 +33,28 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("enterContactDetails.heading"))
+        <fieldset>
+            <legend>
+                @components.heading(messages("enterContactDetails.heading"))
+            </legend>
 
-        @components.input_text(
-            field = form("field1"),
-            label = messages("enterContactDetails.field1")
-        )
+            @components.input_text(
+                field = form("field1"),
+                label = Some(messages("enterContactDetails.field1"))
+            )
 
-        @components.input_text(
-            field = form("field2"),
-            label = messages("enterContactDetails.field2")
-        )
+            @components.input_text(
+                field = form("field2"),
+                label = Some(messages("enterContactDetails.field2"))
+            )
 
-        @components.input_text(
-            field = form("field3"),
-            label = messages("enterContactDetails.field3")
-        )
+            @components.input_text(
+                field = form("field3"),
+                label = Some(messages("enterContactDetails.field3"))
+            )
 
-        @components.submit_button()
+            @components.submit_button()
+
+        </fieldset>
     }
 }
