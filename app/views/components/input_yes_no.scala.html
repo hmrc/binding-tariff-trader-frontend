@@ -17,20 +17,28 @@
 @(
         field: Field,
         label: String,
-        secondaryLabel: Option[String] = None,
+        labelClass: Option[String] = None,
+        labelHeadingLevel : Int = 1,
+        helpText : Option[Html] = None,
         inputClass: Option[String] = None,
         hint: Option[String] = None,
         yesAssoc: Option[String] = None,
-        noAssoc: Option[String] = None,
-        labelClass: Option[String] = None
+        noAssoc: Option[String] = None
 )(implicit messages: Messages)
 
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
     <fieldset  id="@{field.id}">
-
         <legend>
-            <div @if(labelClass.nonEmpty){class="@labelClass"}>@label</div>
+
+            @labelHeadingLevel match {
+                case 1 => {<h1 @if(labelClass.nonEmpty) {class="@labelClass"}>@label</h1>}
+                case 2 => {<h2 @if(labelClass.nonEmpty) {class="@labelClass"}>@label</h2>}
+                case _ => {<div @if(labelClass.nonEmpty) {class="@labelClass"}>@label</div>}
+            }
+
+            @if(helpText.isDefined){ @helpText }
+
             @if(hint.nonEmpty){
                 <div class="form-hint mb-2">@hint</div>
             }
@@ -38,6 +46,7 @@
                 <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
             }
         </legend>
+
         <div class="multiple-choice">
             <input id="@{field.id}-yes" type="radio" name="@{field.id}" value="true" @if(field.value.contains("true")){checked="checked"} />
             <label class="block-label selection-button-radio" for="@{field.id}-yes" data-target="@if(yesAssoc.nonEmpty){@yesAssoc}">
@@ -51,7 +60,6 @@
                 @messages("site.no")
             </label>
         </div>
-
     </fieldset>
 </div>
 
