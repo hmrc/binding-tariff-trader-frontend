@@ -35,8 +35,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("legalChallenge.heading"),
-            labelClass = Some("heading-xlarge mb-2"),
+            labelHtml = Some(components.heading(messages("legalChallenge.heading"))),
             hint = Some(messages("legalChallenge.paragraph"))
         )
 

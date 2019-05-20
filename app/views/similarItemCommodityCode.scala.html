@@ -41,13 +41,10 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("similarItemCommodityCode.heading"))
-
         @components.input_yes_no(
             field = form("value"),
-            label = messages("similarItemCommodityCode.heading"),
-            helpText = Some(helpText),
-            labelClass = Some("visually-hidden")
+            labelHtml = Some(components.heading(messages("similarItemCommodityCode.heading"))),
+            contentHtml = Some(helpText)
         )
 
         @components.submit_button()

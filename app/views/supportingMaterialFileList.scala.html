@@ -23,6 +23,13 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], files: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+
+@addAnotherFile = {
+    <h2 class="heading-large mb-2">
+        @messages("supportingMaterialFileList.label.anotherFile")
+    </h2>
+}
+
 @main_template(
     title = s"${errorPrefix(form)} ${messages("supportingMaterialFileList.title")}",
     appConfig = appConfig,
@@ -59,14 +66,11 @@
         @if(files.nonEmpty) {
             @components.input_yes_no(
                 field = form("add-file-choice"),
-                label = messages("supportingMaterialFileList.label.anotherFile"),
-                labelClass = Some("heading-large mb-2")
+                labelHtml = Some(addAnotherFile)
             )
         } else {
             @components.input_yes_no(
-                field = form("add-file-choice"),
-                label = messages("supportingMaterialFileList.heading"),
-                labelClass = Some("visually-hidden")
+                field = form("add-file-choice")
             )
         }
 

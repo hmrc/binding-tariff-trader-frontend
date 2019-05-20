@@ -14,6 +14,6 @@
  * limitations under the License.
  *@
 
-@(headingMsg: String, headingSize: String = "heading-xlarge")
+ @(headingMsg: String, headingSize: String = "heading-xlarge", headingClass: Option[String] = None)
 
-<h1 class="@headingSize">@headingMsg</h1>
+<h1 class="@headingSize @headingClass.map{classes => classes}">@headingMsg</h1>

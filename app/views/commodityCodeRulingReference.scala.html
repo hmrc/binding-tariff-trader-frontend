@@ -34,10 +34,9 @@
         @components.error_summary(form.errors)
 
         @components.input_textarea(
-          field = form("value"),
-          label = messages("commodityCodeRulingReference.heading"),
-          labelClass = Some("heading-xlarge mb-2"),
-          hint = Some(messages("commodityCodeRulingReference.hint"))
+            field = form("value"),
+            labelHtml = Some(components.heading(messages("commodityCodeRulingReference.heading"))),
+            hint = Some(Html(messages("commodityCodeRulingReference.hint")))
         )
 
         @components.submit_button()

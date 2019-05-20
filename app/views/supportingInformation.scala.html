@@ -35,8 +35,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("supportingInformation.heading"),
-            labelClass = Some("heading-xlarge mb-2")
+            labelHtml = Some(components.heading(messages("supportingInformation.heading")))
         )
 
         @components.submit_button()

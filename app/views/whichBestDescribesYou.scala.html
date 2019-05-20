@@ -36,8 +36,7 @@
 
         @components.input_radio(
             field = form("value"),
-            legend = messages("whichBestDescribesYou.heading"),
-            legendClass = Some("heading-xlarge mb-2"),
+            labelHtml = Some(components.heading(messages("whichBestDescribesYou.heading"))),
             inputs = WhichBestDescribesYou.options.toSeq
         )
 

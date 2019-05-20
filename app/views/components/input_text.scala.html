@@ -17,16 +17,19 @@
 @(
         field: Field,
         label: Option[String] = None,
+        labelClass: Option[String] = None,
+        labelHtml: Option[Html] = None,
         inputClass: Option[String] = None,
         hint: Option[String] = None,
-        labelClass: Option[String] = None,
         maxlength: Int = 1000
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
     <label class="form-label" for="@{field.id}">
+        @labelHtml.map { lb => @lb }
+
         @if(label.isDefined){
-            <div class="@if(labelClass.nonEmpty) {@labelClass}">@label.get</div>
+            <div class="@if(labelClass.nonEmpty) {@labelClass}">@label</div>
         }
         @if(hint.nonEmpty){
             <div class="form-hint">@hint</div>

@@ -37,27 +37,25 @@
 
         <div class="form-group">
             <p>@messages("whenToSendSample.second.paragraph")</p>
-
             <p>@messages("whenToSendSample.first.paragraph")</p>
-        
             <ul class="list list-bullet">
                 <li>@messages("whenToSendSample.listItem1")</li>
                 <li>@messages("whenToSendSample.listItem2")</li>
                 <li>@messages("whenToSendSample.listItem3")</li>
             </ul>
-    
-
             <p>@Html(messages("whenToSendSample.third.paragraph"))</p>
         </div>
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("whenToSendSample.legend"),
-            labelHeadingLevel = 2,
-            labelClass = Some("heading-medium"),
+            labelHtml = Some(sendSampleQuestion),
             hint = Some(messages("whenToSendSample.fourth.paragraph"))
         )
 
         @components.submit_button()
     }
+}
+
+@sendSampleQuestion = {
+    <h2 class="heading-medium">@messages("whenToSendSample.legend")</h2>
 }
