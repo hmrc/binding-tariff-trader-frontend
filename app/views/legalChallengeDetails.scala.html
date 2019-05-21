@@ -33,9 +33,10 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("legalChallengeDetails.heading"))
-
-        @components.input_textarea(field = form("value"))
+        @components.input_textarea(
+            field = form("value") ,
+            labelHtml = Some(components.heading(messages("legalChallengeDetails.heading")))
+        )
 
         @components.submit_button()
     }
