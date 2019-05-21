@@ -18,9 +18,9 @@
 
 @(
         field: Field,
-        legend: String,
-        legendClass: Option[String] = None,
-        hint: Option[String] = None,
+        labelHtml: Option[Html] = None,
+        contentHtml: Option[Html] = None,
+        hint: Option[Html] = None,
         trackGa: Boolean = false,
         inputs: Seq[RadioOption]
 )(implicit messages: Messages)
@@ -28,9 +28,14 @@
 <div class="form-group @if(field.hasErrors){form-group-error}">
     <fieldset id="@{field.id}">
         <legend>
-            <div class="bold-small @if(legendClass.nonEmpty){@{legendClass.get}}">@legend</div>
-            @if(hint.nonEmpty){
-                <div class="form-hint mb-2">@{hint.get}</div>
+            @if(labelHtml.isDefined){
+               @labelHtml
+            }
+            @if(contentHtml.isDefined){
+                @contentHtml
+            }
+            @if(hint.isDefined){
+                <div class="form-hint mb-2">@hint</div>
             }
             @field.errors.map { error =>
                 <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
@@ -38,8 +43,7 @@
         </legend>
         @for(input <- inputs) {
             <div class="multiple-choice">
-                <input id="@{input.id}" type="radio" name="@{field.id}" value="@{input.value}" @if(field.value == Some(input.value)){checked="checked"} @if(trackGa){data-journey-click="binding-tariff-trader-frontend:click:@{input.id}"} />
-
+                <input id="@{input.id}" type="radio" name="@{field.id}" value="@{input.value}" @if(field.value.contains(input.value)){checked="checked"} @if(trackGa){data-journey-click="binding-tariff-trader-frontend:click:@{input.id}"} />
                 <label class="block-label selection-button-radio" for="@{input.id}">
                     @messages(input.messageKey)
                 </label>

@@ -35,9 +35,9 @@ hint: Option[String] = None
         <span class="form-label bold @if(legendClass.nonEmpty){@legendClass}">
           @label
         </span>
-        @if(hint.nonEmpty){
-            <span class="form-hint" id="@{id}-date-hint">@hint</span>
-        }
+            @if(hint.nonEmpty){
+                <span class="form-hint" id="@{id}-date-hint">@hint</span>
+            }
             @if(errorKey.nonEmpty){
                 <span class="error-message" id="error-message-@{id}-date">@messages(errorKey)</span>
             }

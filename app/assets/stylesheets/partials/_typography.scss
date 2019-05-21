@@ -4,6 +4,10 @@ this fixes a specificity issue with content__body p selectors
 see https://github.com/hmrc/assets-frontend/issues/676
 ====================================
 */
+p {
+  word-break: break-word;
+}
+
 p.lede {
   font-family: "nta",Arial,sans-serif;
   font-size: 24px;

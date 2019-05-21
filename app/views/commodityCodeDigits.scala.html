@@ -35,8 +35,7 @@
 
         @components.input_text(
             field = form("value"),
-            label = messages("commodityCodeDigits.heading"),
-            labelClass = Some("heading-xlarge mb-2")
+            labelHtml = Some(components.heading(messages("commodityCodeDigits.heading")))
         )
 
         @components.submit_button()

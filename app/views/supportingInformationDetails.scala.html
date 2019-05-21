@@ -34,9 +34,8 @@
         @components.error_summary(form.errors)
 
         @components.input_textarea(
-            field = form("value"),
-            label = messages("supportingInformationDetails.heading"),
-            labelClass = Some("heading-xlarge mb-2")
+            field = form("value") ,
+            labelHtml = Some(components.heading(messages("supportingInformationDetails.heading")))
         )
 
         @components.submit_button()

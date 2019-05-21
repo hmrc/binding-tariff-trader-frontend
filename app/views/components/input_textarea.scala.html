@@ -16,25 +16,24 @@
 
 @(
         field: Field,
-        label: String,
-        secondaryLabel: Option[String] = None,
+        label: Option[String] = None,
+        labelClass: Option[String] = None,
+        labelHtml: Option[Html] = None,
         inputClass: Option[String] = None,
         inputFormControl: String = "form-control-3-4",
-        labelClass: Option[String] = None,
-        hint: Option[String] = None,
-        htmlHint: Option[Html] = None,
+        hint: Option[Html] = None,
         numRows: Int = 5,
         maxlength: Int = 90000
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
     <label class="form-label" for="@{field.id}">
-        <div class="@labelClass">@label</div>
+        @labelHtml.map {lb => @lb}
+        @label.map { label =>
+            <div class="@labelClass">@label</div>
+        }
         @hint.map { hint =>
             <div class="form-hint">@hint</div>
-        }
-        @htmlHint.map { htmlHint =>
-            <div class="form-hint">@htmlHint</div>
         }
         @field.errors.map { error =>
             <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
@@ -49,5 +48,6 @@
             maxlength=@maxlength
             @if(field.hasErrors){aria-describedby="error-message-@{field.id}-input"}>@{field.value}</textarea>
     </div>
+
 </div>
 

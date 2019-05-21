@@ -35,11 +35,9 @@
 
         @components.input_text(
             field = form("field1"),
-            label = messages("previousCommodityCode.heading"),
-            labelClass = Some("heading-xlarge mb-2"),
+            labelHtml = Some(components.heading(messages("previousCommodityCode.heading"))),
             hint = Some(messages("previousCommodityCode.field1.hint"))
         )
-
         @components.submit_button()
     }
 }

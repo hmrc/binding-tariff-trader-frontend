@@ -22,6 +22,14 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@helpText = {
+    <p>@messages("similarItemCommodityCode.bodyText")</p>
+    <ul class="list list-bullet">
+        <li>@messages("similarItemCommodityCode.listItem1")</li>
+        <li>@messages("similarItemCommodityCode.listItem2")</li>
+    </ul>
+}
+
 @main_template(
     title = s"${errorPrefix(form)} ${messages("similarItemCommodityCode.title")}",
     appConfig = appConfig,
@@ -33,19 +41,10 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("similarItemCommodityCode.heading"))
-
-        <p>@messages("similarItemCommodityCode.bodyText")</p>
-
-        <ul class="list list-bullet">
-            <li>@messages("similarItemCommodityCode.listItem1")</li>
-            <li>@messages("similarItemCommodityCode.listItem2")</li>
-        </ul>
-
         @components.input_yes_no(
             field = form("value"),
-            label = messages("similarItemCommodityCode.heading"),
-            labelClass = Some("visually-hidden")
+            labelHtml = Some(components.heading(messages("similarItemCommodityCode.heading"))),
+            contentHtml = Some(helpText)
         )
 
         @components.submit_button()
