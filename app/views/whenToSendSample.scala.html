@@ -48,14 +48,10 @@
 
         @components.input_yes_no(
             field = form("value"),
-            labelHtml = Some(sendSampleQuestion),
+            labelHtml =  Some(components.subheading(messages("whenToSendSample.legend"))),
             hint = Some(messages("whenToSendSample.fourth.paragraph"))
         )
 
         @components.submit_button()
     }
-}
-
-@sendSampleQuestion = {
-    <h2 class="heading-medium">@messages("whenToSendSample.legend")</h2>
 }
