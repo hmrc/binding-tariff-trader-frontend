@@ -37,8 +37,10 @@
         <fieldset>
             <legend>
                 @components.heading(messages("describeYourItem.heading"))
-                @components.subheading(messages("describeYourItem.subheading"))
             </legend>
+
+            @components.subheading(messages("describeYourItem.subheading"))
+
             @components.input_text(
                 field = form("name"),
                 label = Some(messages("describeYourItem.name"))
