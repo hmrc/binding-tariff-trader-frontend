@@ -23,13 +23,6 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], files: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-
-@addAnotherFile = {
-    <h2 class="heading-large mb-2">
-        @messages("supportingMaterialFileList.label.anotherFile")
-    </h2>
-}
-
 @main_template(
     title = s"${errorPrefix(form)} ${messages("supportingMaterialFileList.title")}",
     appConfig = appConfig,
@@ -79,4 +72,10 @@
         </div>
 
     }
+}
+
+@addAnotherFile = {
+    <h2 class="heading-large mb-2">
+    @messages("supportingMaterialFileList.label.anotherFile")
+    </h2>
 }

@@ -30,12 +30,12 @@
 <div class="form-group @if(field.hasErrors){form-group-error}">
     <fieldset  id="@{field.id}">
         <legend>
-            @if(label.nonEmpty){
-                <div @if(labelClass.nonEmpty) {class="@labelClass"}>@label</div>
+            @if(label.isDefined){
+                <div @if(labelClass.isDefined) {class="@labelClass"}>@label</div>
             }
             @labelHtml.map {lb => @lb}
             @contentHtml.map {content => @content}
-            @if(hint.nonEmpty){
+            @if(hint.isDefined){
                 <div class="form-hint mb-2">@hint</div>
             }
             @field.errors.map { error =>

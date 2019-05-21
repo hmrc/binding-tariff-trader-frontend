@@ -31,10 +31,10 @@
             @if(labelHtml.isDefined){
                @labelHtml
             }
-            @if(contentHtml.nonEmpty){
+            @if(contentHtml.isDefined){
                 @contentHtml
             }
-            @if(hint.nonEmpty){
+            @if(hint.isDefined){
                 <div class="form-hint mb-2">@hint</div>
             }
             @field.errors.map { error =>
