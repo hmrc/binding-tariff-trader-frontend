@@ -27,7 +27,7 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = ImportOrExportController.onSubmit(mode), 'autoComplete -> "off") {
+    @helpers.form(action = ImportOrExportController.onSubmit(mode)) {
 
         @components.back_link()
 
