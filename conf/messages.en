@@ -518,9 +518,9 @@ applicationView.mainTitle = Your application for a Binding Tariff Information ru
 applicationView.applicationLink = View application
 applicationView.applicationPDFLink = View application PDF (opens in new window or tab)
 
-timeoutDialog.title= For your security, we will sign you out
+timeoutDialog.title= You are about to be signed out and your answers deleted
 timeoutDialog.seconds= seconds
 timeoutDialog.minutes= minutes
 timeoutDialog.minute= minute
 timeoutDialog.button= Stay signed in
-timeoutDialog.p1 = We will sign you out and delete your answers in 
+timeoutDialog.p1 = For your security, we will sign you out and delete your answers in 
