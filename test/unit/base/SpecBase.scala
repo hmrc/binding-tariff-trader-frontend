@@ -18,11 +18,13 @@ package base
 
 import com.codahale.metrics.SharedMetricRegistries
 import config.FrontendAppConfig
+import models.UserAnswers
 import models.requests.OptionalDataRequest
 import org.scalatestplus.play.PlaySpec
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.test.FakeRequest
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.WithFakeApplication
 
 trait SpecBase extends PlaySpec with WithFakeApplication {
@@ -38,6 +40,8 @@ trait SpecBase extends PlaySpec with WithFakeApplication {
   def fakeRequest = FakeRequest()
 
   def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
+
+  def fakeRequestWithEoriAndCache = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), Some(UserAnswers(CacheMap("id", Map.empty))))
 
   def messages: Messages = messagesApi.preferred(fakeRequest)
 }
