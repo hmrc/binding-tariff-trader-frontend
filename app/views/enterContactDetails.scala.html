@@ -27,7 +27,7 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = EnterContactDetailsController.onSubmit(mode), 'autoComplete -> "off") {
+    @helpers.form(action = EnterContactDetailsController.onSubmit(mode)) {
 
         @components.back_link()
 
@@ -40,17 +40,20 @@
 
             @components.input_text(
                 field = form("field1"),
-                label = Some(messages("enterContactDetails.field1"))
+                label = Some(messages("enterContactDetails.field1")),
+                inputPurpose=Some("name")
             )
 
             @components.input_text(
                 field = form("field2"),
-                label = Some(messages("enterContactDetails.field2"))
+                label = Some(messages("enterContactDetails.field2")),
+                inputPurpose=Some("email")
             )
 
             @components.input_text(
                 field = form("field3"),
-                label = Some(messages("enterContactDetails.field3"))
+                label = Some(messages("enterContactDetails.field3")),
+                inputPurpose=Some("tel")
             )
 
             @components.submit_button()

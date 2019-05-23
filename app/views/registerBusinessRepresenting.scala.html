@@ -27,7 +27,7 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = RegisterBusinessRepresentingController.onSubmit(mode), 'autoComplete -> "off") {
+    @helpers.form(action = RegisterBusinessRepresentingController.onSubmit(mode)) {
 
         @components.back_link()
 
@@ -48,27 +48,32 @@
 
             @components.input_text(
                 field = form("businessName"),
-                label = Some(messages("registerBusinessRepresenting.businessName"))
+                label = Some(messages("registerBusinessRepresenting.businessName")),
+                inputPurpose=Some("section-representing organization")
             )
 
             @components.input_text(
                 field = form("addressLine1"),
-                label = Some(messages("registerBusinessRepresenting.addressLine1"))
+                label = Some(messages("registerBusinessRepresenting.addressLine1")),
+                inputPurpose=Some("section-representing address-line1")
             )
 
             @components.input_text(
                 field = form("town"),
-                label = Some(messages("registerBusinessRepresenting.town"))
+                label = Some(messages("registerBusinessRepresenting.town")),
+                inputPurpose=Some("section-representing address-level1")
             )
 
             @components.input_text(
                 field = form("postCode"),
-                label = Some(messages("registerBusinessRepresenting.postCode"))
+                label = Some(messages("registerBusinessRepresenting.postCode")),
+                inputPurpose=Some("section-representing postal-code")
             )
 
             @components.input_text(
                 field = form("country"),
-                label = Some(messages("registerBusinessRepresenting.country"))
+                label = Some(messages("registerBusinessRepresenting.country")),
+                inputPurpose=Some("section-representing country-name")
             )
 
             @components.submit_button()
