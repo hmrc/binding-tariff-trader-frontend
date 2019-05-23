@@ -28,7 +28,7 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = RegisteredAddressForEoriController.onSubmit(mode), 'autoComplete -> "off") {
+    @helpers.form(action = RegisteredAddressForEoriController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 
@@ -56,27 +56,32 @@
 
             @components.input_text(
                 field = form("businessName"),
-                label = Some(messages("registeredAddressForEori.businessName"))
+                label = Some(messages("registeredAddressForEori.businessName")),
+                inputPurpose=Some("section-registered organization")
             )
 
             @components.input_text(
                 field = form("addressLine1"),
-                label = Some(messages("registeredAddressForEori.addressLine1"))
-            )
+                label = Some(messages("registeredAddressForEori.addressLine1")),
+                inputPurpose=Some("section-registered address-line1")
+        )
 
             @components.input_text(
                 field = form("townOrCity"),
-                label = Some(messages("registeredAddressForEori.townCity"))
+                label = Some(messages("registeredAddressForEori.townCity")),
+                inputPurpose=Some("section-registered address-level1")
             )
 
             @components.input_text(
                 field = form("postcode"),
-                label = Some(messages("registeredAddressForEori.postcode"))
+                label = Some(messages("registeredAddressForEori.postcode")),
+                inputPurpose=Some("section-registered postal-code")
             )
 
             @components.input_text(
                 field = form("country"),
-                label = Some(messages("registeredAddressForEori.country"))
+                label = Some(messages("registeredAddressForEori.country")),
+                inputPurpose=Some("section-registered country-name")
             )
 
             @components.submit_button()

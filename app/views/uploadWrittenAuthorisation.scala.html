@@ -27,7 +27,7 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = UploadWrittenAuthorisationController.onSubmit(mode), 'enctype -> "multipart/form-data", 'autoComplete -> "off") {
+    @helpers.form(action = UploadWrittenAuthorisationController.onSubmit(mode), 'enctype -> "multipart/form-data") {
 
         @components.back_link()
 
