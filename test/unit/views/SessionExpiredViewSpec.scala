@@ -23,6 +23,8 @@ class SessionExpiredViewSpec extends ViewBehaviours {
 
   def view = () => session_expired(frontendAppConfig)(fakeRequest, messages)
 
+  override val expectTimeoutDialog: Boolean = false
+
   "Session Expired view" must {
 
     behave like normalPage(view, "session_expired")( "guidance")

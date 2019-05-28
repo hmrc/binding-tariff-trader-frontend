@@ -21,6 +21,8 @@ import views.ViewSpecBase
 
 trait ViewBehaviours extends ViewSpecBase {
 
+  val expectTimeoutDialog: Boolean = true
+
   protected def normalPage(view: () => HtmlFormat.Appendable, messageKeyPrefix: String, messageHeadingArgs: Any*)
                           (expectedGuidanceKeys: String*): Unit = {
 
@@ -46,6 +48,15 @@ trait ViewBehaviours extends ViewSpecBase {
         "display the correct guidance" in {
           val doc = asDocument(view())
           for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
+        }
+
+        "contain a timeout dialog" in {
+          val doc = asDocument(view())
+          if(expectTimeoutDialog) {
+            assertRenderedById(doc, "timeoutDialog")
+          } else {
+            assertNotRenderedById(doc, "timeoutDialog")
+          }
         }
       }
     }

@@ -52,8 +52,8 @@ beforeYouStart.paragraph4.item2 = their EORI number
 beforeYouStart.paragraph4.item3 = their registered EORI address
 
 
-session_expired.title = For your security, this service has been reset
-session_expired.heading = For your security, this service has been reset
+session_expired.title = For your security, we deleted your answers
+session_expired.heading = For your security, we deleted your answers
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
 
 site.start = Start application
@@ -517,3 +517,10 @@ applicationView.title = View application - GOV.UK
 applicationView.mainTitle = Your application for a Binding Tariff Information ruling
 applicationView.applicationLink = View application
 applicationView.applicationPDFLink = View application PDF (opens in new window or tab)
+
+timeoutDialog.title= You are about to be signed out and your answers deleted
+timeoutDialog.seconds= seconds
+timeoutDialog.minutes= minutes
+timeoutDialog.minute= minute
+timeoutDialog.button= Stay signed in
+timeoutDialog.p1 = For your security, we will sign you out and delete your answers in 

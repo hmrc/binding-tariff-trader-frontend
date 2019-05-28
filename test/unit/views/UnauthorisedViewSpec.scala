@@ -21,6 +21,8 @@ import views.html.unauthorised
 
 class UnauthorisedViewSpec extends ViewBehaviours {
 
+  override val expectTimeoutDialog: Boolean = false
+
   def view = () => unauthorised(frontendAppConfig)(fakeRequest, messages)
 
   "Unauthorised view" must {

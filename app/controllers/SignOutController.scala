@@ -17,15 +17,39 @@
 package controllers
 
 import config.FrontendAppConfig
+import connectors.DataCacheConnector
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import javax.inject.Inject
+import models.requests.OptionalDataRequest
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Results}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
+import scala.concurrent.Future
+import scala.concurrent.Future.successful
+
 class SignOutController @Inject()(val appConfig: FrontendAppConfig,
+                                  dataCacheConnector: DataCacheConnector,
+                                  identify: IdentifierAction,
+                                  getData: DataRetrievalAction,
+                                  requireData: DataRequiredAction,
                                   val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
 
-  def startFeedbackSurvey: Action[AnyContent] = Action { implicit request =>
-    SeeOther(appConfig.feedbackSurvey).withNewSession
+  def startFeedbackSurvey: Action[AnyContent] = (identify andThen getData).async { implicit request =>
+    clearDataCache(request)
+    successful(SeeOther(appConfig.feedbackSurvey).withNewSession)
+  }
+
+  def forceSignOut: Action[AnyContent] = (identify andThen getData).async { implicit request =>
+    clearDataCache(request)
+    successful(Results.Redirect(routes.SessionExpiredController.onPageLoad()).withNewSession)
+  }
+
+  def keepAlive(): Action[AnyContent] = Action.async {
+    implicit request => Future.successful(Ok("OK"))
+  }
+
+  private def clearDataCache(request: OptionalDataRequest[AnyContent]) = {
+    request.userAnswers map { answer => dataCacheConnector.remove(answer.cacheMap) }
   }
 }

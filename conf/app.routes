@@ -11,6 +11,8 @@ GET         /applications                                              controlle
 GET         /rulings                                                   controllers.IndexController.getRulings(page: Int ?= 1)
 
 GET         /sign-out                                                  controllers.SignOutController.startFeedbackSurvey
+GET         /force-sign-out                                            controllers.SignOutController.forceSignOut
+GET         /keep-alive                                                controllers.SignOutController.keepAlive
 GET         /unauthorised                                              controllers.UnauthorisedController.onPageLoad
 
 GET         /information-you-need                                      controllers.BeforeYouStartController.onPageLoad()

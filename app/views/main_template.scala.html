@@ -23,7 +23,8 @@
   bodyClasses: Option[String] = None,
   mainClass: Option[String] = None,
   contentClass : Option[String] = Some("grid-row column-two-thirds"),
-  scriptElem: Option[Html] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages)
+  scriptElem: Option[Html] = None,
+  hasTimeOut: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @import uk.gov.hmrc.play.views.html.layouts
 
@@ -39,6 +40,28 @@
     @layouts.article(mainContent, false, contentClass)
 }
 
+@scriptElement = {
+    @scriptElem
+
+    @if(hasTimeOut && appConfig.enableRefresh) {
+        <script id="timeoutDialog">
+        $.timeoutDialog({
+            timeout: @appConfig.timeOutSeconds,
+            countdown: @appConfig.timeOutCountDownSeconds,
+            keep_alive_url: '@controllers.routes.SignOutController.keepAlive()',
+            title: "@Messages("timeoutDialog.title")",
+            messageSeconds: "@Messages("timeoutDialog.seconds")",
+            messageMinutes: "@Messages("timeoutDialog.minutes")",
+            messageMinute: "@Messages("timeoutDialog.minute")",
+            logout_url: '@controllers.routes.SignOutController.forceSignOut()',
+            message: "@Messages("timeoutDialog.p1")",
+            keep_alive_button_text: "@Messages("timeoutDialog.button")"
+        });
+        </script>
+    }
+
+}
+
 
 @govuk_wrapper(appConfig = appConfig,
                title = title,
@@ -48,5 +71,5 @@
                contentHeader = contentHeader,
                mainContent = content,
                serviceInfoContent = serviceInfoContent,
-               scriptElem = scriptElem
+               scriptElem = Some(scriptElement)
 )

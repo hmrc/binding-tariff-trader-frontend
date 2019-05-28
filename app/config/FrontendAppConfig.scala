@@ -68,6 +68,11 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val apiToken: String = loadConfig("auth.api-token")
   lazy val aesKey: String = loadConfig("auth.aes-key")
 
+  lazy val timeOutSeconds : Int = runModeConfiguration.getInt("timeoutDialog.timeoutSeconds").getOrElse(780)
+  lazy val timeOutCountDownSeconds: Int = runModeConfiguration.getInt("timeoutDialog.time-out-countdown-seconds").getOrElse(120)
+  lazy val refreshInterval: Int = timeOutSeconds + 10
+  lazy val enableRefresh: Boolean= runModeConfiguration.getBoolean("timeoutDialog.enableRefresh").getOrElse(true)
+
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")
