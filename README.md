@@ -21,10 +21,9 @@ The Front-end microrservice for the BTI Application journey on GOV.UK
 6) Start Auth Login API `sm --start AUTH_LOGIN_API -r`
 7) Start Auth Identity verification `sm --start IDENTITY_VERIFICATION -r`
 8) Start User Details `sm --start USER_DETAILS -r`
-9) Start [Pdf Generator Service](https://github.com/hmrc/pdf-generator-service)
+9) Start Pdf Generator Service `sm --start PDF_GENERATOR_SERVICE -r` (Requires first installing dependencies - see [below](#pdf-generator-service))
 10) Start Feedback Frontend `sm --start FEEDBACK_FRONTEND -r`
 11) Start Frontend Template Provider `sm --start FRONTEND_TEMPLATE_PROVIDER -r`
- `sm --start PDF_GENERATOR_SERVICE -r` (Requires first installing dependencies - see link)
 
 ##### Running With SBT
 
@@ -36,11 +35,20 @@ You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisati
 
 ##### Running with Service Manager
 
+This application runs on port 9582
+
 Run `sm --start BINDING_TARIFF_TRADER_FRONTEND -r`
 
 Go to http://localhost:9582/binding-tariff-application/
 
 You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisation` and Submit.
+
+### PDF Generator Service
+This service requires the installation of some dependencies before it can be run using Service Manager.  See [Pdf Generator Service](https://github.com/hmrc/pdf-generator-service).
+
+Running PDF Generator Service locally on Mac OSX (currently) requires running an older version.  
+
+Run `sm --start PDF_GENERATOR_SERVICE -r 1.20.0`
 
 ### Testing
 
