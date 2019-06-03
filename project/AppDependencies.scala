@@ -7,15 +7,15 @@ object AppDependencies {
   val compile = Seq(
     "commons-validator" % "commons-validator"                 % "1.6",
     play.sbt.PlayImport.ws,
-    "uk.gov.hmrc"       %% "auth-client"                      % "2.20.0-play-25",
-    "uk.gov.hmrc"       %% "bootstrap-play-25"                % "4.11.0",
+    "uk.gov.hmrc"       %% "auth-client"                      % "2.22.0-play-25",
+    "uk.gov.hmrc"       %% "bootstrap-play-25"                % "4.12.0",
     "uk.gov.hmrc"       %% "govuk-template"                   % "5.31.0-play-25",
-    "uk.gov.hmrc"       %% "http-caching-client"              % "8.3.0",
+    "uk.gov.hmrc"       %% "http-caching-client"              % "8.4.0-play-25",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"    % "0.2.0",
     "uk.gov.hmrc"       %% "play-health"                      % "3.14.0-play-25",
     "uk.gov.hmrc"       %% "play-language"                    % "3.4.0",
-    "uk.gov.hmrc"       %% "play-ui"                          % "7.39.0-play-25",
-    "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.16.0-play-25",
+    "uk.gov.hmrc"       %% "play-ui"                          % "7.40.0-play-25",
+    "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.19.0-play-25",
     "uk.gov.hmrc"       %% "play-whitelist-filter"            % "2.0.0",
     "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.5.0"
 
