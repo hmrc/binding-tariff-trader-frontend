@@ -24,6 +24,7 @@ The Front-end microrservice for the BTI Application journey on GOV.UK
 9) Start Pdf Generator Service `sm --start PDF_GENERATOR_SERVICE -r` (Requires first installing dependencies - see [below](#pdf-generator-service))
 10) Start Feedback Frontend `sm --start FEEDBACK_FRONTEND -r`
 11) Start Frontend Template Provider `sm --start FRONTEND_TEMPLATE_PROVIDER -r`
+12 Start EMAIL Service `sm --start EMAIL -r && sm --start HMRC_TEMPLATE_RENDERER -r && sm --start MAILGUN_STUB -r`
 
 ##### Running With SBT
 
@@ -31,7 +32,11 @@ Run `sbt run` to boot the app
 
 Go to http://localhost:9000/binding-tariff-application/
 
-You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisation` and Submit.
+You will be redirected to the Auth Stub.
+In the Enrolments section add: 
+Key: `HMRC-CUS-ORG`
+Identifier name: `EORINumber`
+Identifier value: any string or eori
 
 ##### Running with Service Manager
 
@@ -41,7 +46,7 @@ Run `sm --start BINDING_TARIFF_TRADER_FRONTEND -r`
 
 Go to http://localhost:9582/binding-tariff-application/
 
-You will be redirected to the Auth Stub. Make sure you pick `Affinity=Organisation` and Submit.
+You will be redirected to the Auth Stub.
 
 ### PDF Generator Service
 This service requires the installation of some dependencies before it can be run using Service Manager.  See [Pdf Generator Service](https://github.com/hmrc/pdf-generator-service).
