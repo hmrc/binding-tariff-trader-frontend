@@ -33,10 +33,6 @@ Run `sbt run` to boot the app
 Go to http://localhost:9000/binding-tariff-application/
 
 You will be redirected to the Auth Stub.
-In the Enrolments section add: 
-Key: `HMRC-CUS-ORG`
-Identifier name: `EORINumber`
-Identifier value: any string or eori
 
 ##### Running with Service Manager
 
@@ -47,6 +43,16 @@ Run `sm --start BINDING_TARIFF_TRADER_FRONTEND -r`
 Go to http://localhost:9582/binding-tariff-application/
 
 You will be redirected to the Auth Stub.
+
+##### Authentication
+
+The service uses the [HMRC Auth Client](https://github.com/hmrc/auth-client) for authentication with Gov Gateway as the provider. In non production environments you will be redirected to the Auth Stub, to authenticate you need an enrolment with properties:
+
+Key: `HMRC-CUS-ORG`
+
+Identifier name: `EORINumber`
+
+Identifier value: any string or eori
 
 ### PDF Generator Service
 This service requires the installation of some dependencies before it can be run using Service Manager.  See [Pdf Generator Service](https://github.com/hmrc/pdf-generator-service).
