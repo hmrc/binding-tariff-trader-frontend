@@ -18,18 +18,14 @@
 
 @(files: Seq[FileAttachment], mode: Mode)
 
-<div class="form-group mb-5">
-    <table id="files-table">
-        <tbody>
-        @for((file: FileAttachment, index: Int) <- files.zipWithIndex) {
-            <tr id="files-row-@{index}">
-                <td id="files-row-@{index}-title" class="w-50">  @file.name </td>
-                <td id="files-row-@{index}-size">  @humanReadableSize(file.size) </td>
-                <td id="files-row-@{index}-remove" class="w-15">
-                    <a id="files-row-@{index}-remove-file" class="remove" href="@routes.SupportingMaterialFileListController.onRemove(file.id, mode)">Remove</a>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-</div>
+<dl class="file-list">
+    @for((file: FileAttachment, index: Int) <- files.zipWithIndex) {
+        <div id="files-row-@{index}" class="file-list-row">
+            <dt class="file-list-name" id="files-row-@{index}-title">@file.name</dt>
+            <dd class="file-list-size" id="files-row-@{index}-size" >@humanReadableSize(file.size)</dd>
+            <dd class="file-list-link" id="files-row-@{index}-remove">
+                <a id="files-row-@{index}-remove-file" class="remove" href="@routes.SupportingMaterialFileListController.onRemove(file.id, mode)"><span style="position: absolute;">Remove</span><span class="visually-hidden">this file</span></a>
+            </dd>
+        </div>
+    }
+</dl>
