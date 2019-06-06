@@ -47,6 +47,14 @@ label > .bold {
   margin-top: ($spacer * .75) !important;
 }
 
+.mt-4 {
+  margin-top: ($spacer * 1) !important;
+}
+
+.mt-5 {
+  margin-top: ($spacer * 1.25) !important;
+}
+
 // Margin Bottom
 
 
@@ -99,7 +107,6 @@ label > .bold {
   margin-right: 5px;
 }
 
-
 /*
 ====================================
 Colors
@@ -126,3 +133,41 @@ Layout
   text-align: right;
 }
 
+
+/*
+====================================
+DL and DD
+====================================
+*/
+
+.file-list {
+
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+
+  &-row {
+    display: flex;
+    word-wrap: break-word;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #bfc1c3;
+  }
+  &-name {
+    display: table-cell;
+    width: 60%;
+    overflow-wrap: break-word;
+  }
+  &-size{
+    display: table-cell;
+    width: 25%;
+  }
+  &-link{
+    display: table-cell;
+    width: 15%;
+  }
+
+  .visually-hidden{
+    position: fixed;
+  }
+}
