@@ -153,3 +153,11 @@ $(document).ready(function() {
               e.preventDefault();
       });
   }
+
+  function onButtonLinkClick(event) {
+      var target = event.target;
+      if (target.getAttribute('role') === 'button' && event.code === 'Space') {
+          event.preventDefault();
+          target.click();
+      }
+  }
