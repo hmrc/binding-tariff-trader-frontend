@@ -48,7 +48,7 @@ $(document).ready(function () {
 
 
     //======================================================
-    // Move immediate forcus to any error summary
+    // Move immediate focus to any error summary
     //======================================================
     if ($('.error-summary a').length > 0) {
         $('.error-summary').focus();
