@@ -156,7 +156,7 @@ $(document).ready(function() {
 
   function onButtonLinkClick(event) {
       var target = event.target;
-      if (target.getAttribute('role') === 'button' && event.code === 'Space') {
+      if (target.getAttribute('role') === 'button' && event.key === " ") {
           target.click();
       }
   }
