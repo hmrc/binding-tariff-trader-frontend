@@ -23,8 +23,8 @@
     <h2 class="heading-medium" id="@answerSection.headingKey.get">@messages(answerSection.headingKey.get)</h2>
 }
 
-<ul class="govuk-check-your-answers cya-questions-long section">
+<dl class="govuk-check-your-answers cya-questions-long section">
   @for(row <- answerSection.rows) {
       @components.answer_row(row)
   }
-</ul>
+</dl>
