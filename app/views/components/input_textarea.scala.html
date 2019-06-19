@@ -36,14 +36,12 @@
     @labelHtml.map { label =>
         <label for="@{field.id}">@label</label>
     }
-
     @hint.map { hint =>
         <span id="@{field.id}-hint" class="form-hint">@hint</span>
     }
     @field.errors.map { error =>
         <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
     }
-
     <div class="form-control-wrapper char-counter" data-char-counter>
         <textarea
             class="form-control @inputFormControl @inputClass"
