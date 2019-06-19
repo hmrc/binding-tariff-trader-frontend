@@ -16,9 +16,8 @@
 
 @(
         field: Field,
-        label: Option[String] = None,
+        label: Html,
         labelClass: Option[String] = None,
-        labelHtml: Option[Html] = None,
         inputClass: Option[String] = None,
         inputFormControl: String = "form-control-3-4",
         hint: Option[Html] = None,
@@ -30,12 +29,8 @@
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
 
-    @label.map { label =>
-        <label class="form-label @labelClass" for="@{field.id}">@label</label>
-    }
-    @labelHtml.map { label =>
-        <label for="@{field.id}">@label</label>
-    }
+    <label @labelClass.map{_ => class="@labelClass"} for="@{field.id}">@label</label>
+
     @hint.map { hint =>
         <span id="@{field.id}-hint" class="form-hint">@hint</span>
     }
