@@ -16,9 +16,8 @@
 
 @(
         field: Field,
-        label: Option[String] = None,
+        label: Html,
         labelClass: Option[String] = None,
-        labelHtml: Option[Html] = None,
         inputClass: Option[String] = None,
         inputFormControl: String = "form-control-3-4",
         hint: Option[Html] = None,
@@ -26,27 +25,27 @@
         maxlength: Int = 90000
 )(implicit messages: Messages)
 
+@ariaDescribeElements={@hint.map{_ =>@{field.id}-hint}@field.error.map{_ => error-message-@{field.id}-input}}
+
 <div class="form-group @if(field.hasErrors){form-group-error}">
-    <label class="form-label" for="@{field.id}">
-        @labelHtml.map {lb => @lb}
-        @label.map { label =>
-            <div class="@labelClass">@label</div>
-        }
-        @hint.map { hint =>
-            <div class="form-hint">@hint</div>
-        }
-        @field.errors.map { error =>
-            <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
-        }
-    </label>
+
+    <label @labelClass.map{_ => class="@labelClass"} for="@{field.id}">@label</label>
+
+    @hint.map { hint =>
+        <span id="@{field.id}-hint" class="form-hint">@hint</span>
+    }
+    @field.errors.map { error =>
+        <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
+    }
     <div class="form-control-wrapper char-counter" data-char-counter>
         <textarea
             class="form-control @inputFormControl @inputClass"
             id="@{field.id}"
             name="@{field.id}"
+            @if(hint.isDefined || field.hasErrors){aria-describedby="@ariaDescribeElements"}
             rows=@numRows
             maxlength=@maxlength
-            @if(field.hasErrors){aria-describedby="error-message-@{field.id}-input"}>@{field.value}</textarea>
+        >@{field.value}</textarea>
     </div>
 
 </div>

@@ -47,7 +47,7 @@
 
             @components.input_textarea(
                 field = form("description"),
-                label = Some(messages("describeYourItem.description")),
+                label = Html(messages("describeYourItem.description")),
                 hint = Some(descriptionHint),
                 inputFormControl = "form-control--full-width",
                 numRows = 15,
@@ -56,7 +56,7 @@
 
             @components.input_textarea(
                 field = form("confidentialInformation"),
-                labelHtml =  Some(components.subheading(messages("describeYourItem.confidentialInformation"))),
+                label = components.subheading(messages("describeYourItem.confidentialInformation")),
                 hint = Some(Html(messages("describeYourItem.confidentialInformation.hint"))),
                 inputFormControl = "form-control--full-width",
                 maxlength = 30000

@@ -84,9 +84,9 @@ trait ViewSpecBase extends SpecBase {
 
     expectedHintText match {
       case Some(hint) => {
-        assert(label.getElementsByClass("form-hint").first.text == hint,
+        assert(doc.getElementsByClass("form-hint").first.text == hint,
           s"\n\nLabel for $forElement did not contain hint text $hint")
-        assertLabel(label, s"$expectedText $hint", forElement)
+        assertLabel(label, expectedText, forElement)
       }
       case _ => assertLabel(label, expectedText, forElement)
     }
