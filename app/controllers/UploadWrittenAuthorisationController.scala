@@ -74,7 +74,7 @@ class UploadWrittenAuthorisationController @Inject()(
             val updatedAnswers = request.userAnswers.set(UploadWrittenAuthorisationPage, fileAttachment)
             dataCacheConnector.save(updatedAnswers.cacheMap)
               .map(_ => Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(request.userAnswers)))
-          case _ => badRequest("upload-error", "File upload has failed. Try again")
+          case _ => badRequest("letter-of-authority", "File upload has failed. Try again")
         }
       }
 
@@ -84,7 +84,7 @@ class UploadWrittenAuthorisationController @Inject()(
         case Some(file) =>
           fileService.validate(file) match {
             case Right(validFile) => uploadFile(validFile)
-            case Left(errorMessage) => badRequest("validation-error", errorMessage)
+            case Left(errorMessage) => badRequest("letter-of-authority", errorMessage)
           }
         case _ =>
           request.userAnswers.get(UploadWrittenAuthorisationPage) match {
