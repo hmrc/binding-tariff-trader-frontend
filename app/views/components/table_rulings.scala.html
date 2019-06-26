@@ -20,9 +20,9 @@
 @(cases: Paged[Case])(implicit messages: Messages)
 
 
-@paginate(containerClass : String) = {
+@paginate(containerClass : String, idPrefix: String) = {
     @pagination(
-        id = "rulings-pagination",
+        id = s"$idPrefix-rulings-pagination",
         singularName =  messages("case.rulings.pagination.singular"),
         pluralName = messages("case.rulings.pagination.plural"),
         pager = cases,
@@ -41,7 +41,7 @@
     <div class="tabs__panel">
         <div class="tabs__panel__content">
 
-            @paginate("mb-2")
+            @paginate("mb-2", "top")
 
             <table id="rulings-list-table">
                 <thead>
@@ -79,7 +79,7 @@
                 </tbody>
             </table>
 
-            @paginate("mt-2")
+            @paginate("mt-2", "bottom")
 
         </div>
     </div>
