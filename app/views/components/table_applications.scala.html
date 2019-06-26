@@ -18,9 +18,9 @@
 @import views.html.components.pagination
 @(cases: Paged[Case])(implicit messages: Messages)
 
-@paginate(containerClass : String, idPrefix: Option[String] = None) = {
+@paginate(containerClass : String, idPrefix: String) = {
     @pagination(
-        id = s"${idPrefix.map(prefix => s"$prefix-").getOrElse("")}applications-pagination",
+        id = s"$idPrefix-applications-pagination",
         singularName =  messages("case.applications.pagination.singular"),
         pluralName = messages("case.applications.pagination.plural"),
         pager = cases,
@@ -39,7 +39,7 @@
     <div id="application-list" class="tabs__panel">
         <div class="tabs__panel__content">
 
-            @paginate("mb-2")
+            @paginate("mb-2", "top")
 
             <table id="applications-list-table">
                 <thead>
@@ -74,7 +74,7 @@
                 </tbody>
             </table>
 
-            @paginate("mt-2", Some("bottom"))
+            @paginate("mt-2", "bottom")
 
         </div>
     </div>
