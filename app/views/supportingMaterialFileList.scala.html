@@ -43,18 +43,9 @@
                 <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter.plural", files.size)</h1>
             }
             @components.show_file_table(files, mode)
-        }
 
-        <div class="form-group mt-5">
-            <p>@messages("supportingMaterialFileList.indications")</p>
-            <ul class="list list-bullet">
-                <li>@messages("supportingMaterialFileList.indications.bullet1")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet2")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet3")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet4")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet5")</li>
-            </ul>
-        </div>
+            @indicationsLabel
+        }
 
         @if(files.nonEmpty) {
             @components.input_yes_no(
@@ -63,7 +54,8 @@
             )
         } else {
             @components.input_yes_no(
-                field = form("add-file-choice")
+                field = form("add-file-choice"),
+                contentHtml = Some(indicationsLabel)
             )
         }
 
@@ -78,4 +70,18 @@
     <h2 class="heading-large mb-2">
     @messages("supportingMaterialFileList.label.anotherFile")
     </h2>
+}
+
+@indicationsLabel = {
+    <div class="form-group">
+        <p>@messages("supportingMaterialFileList.indications")</p>
+        <ul class="list list-bullet">
+            <li>@messages("supportingMaterialFileList.indications.bullet1")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet2")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet3")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet4")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet5")</li>
+        </ul>
+    </div>
+
 }
