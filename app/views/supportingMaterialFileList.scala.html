@@ -34,36 +34,26 @@
 
         @components.error_summary(form.errors)
 
-        @if(files.isEmpty) {
-            @components.heading(messages("supportingMaterialFileList.heading"))
-        } else {
+        @if(files.nonEmpty) {
             @if(files.size == 1) {
                 <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter.singular")</h1>
             } else {
                 <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter.plural", files.size)</h1>
             }
+
             @components.show_file_table(files, mode)
-        }
 
-        <div class="form-group mt-5">
-            <p>@messages("supportingMaterialFileList.indications")</p>
-            <ul class="list list-bullet">
-                <li>@messages("supportingMaterialFileList.indications.bullet1")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet2")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet3")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet4")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet5")</li>
-            </ul>
-        </div>
+            @indicationsContent
 
-        @if(files.nonEmpty) {
             @components.input_yes_no(
                 field = form("add-file-choice"),
                 labelHtml = Some(addAnotherFile)
             )
         } else {
             @components.input_yes_no(
-                field = form("add-file-choice")
+                field = form("add-file-choice"),
+                labelHtml = Some(components.heading(messages("supportingMaterialFileList.heading"))),
+                contentHtml = Some(indicationsContent)
             )
         }
 
@@ -76,6 +66,20 @@
 
 @addAnotherFile = {
     <h2 class="heading-large mb-2">
-    @messages("supportingMaterialFileList.label.anotherFile")
+        @messages("supportingMaterialFileList.label.anotherFile")
     </h2>
+}
+
+@indicationsContent = {
+    <div class="form-group">
+        <p>@messages("supportingMaterialFileList.indications")</p>
+        <ul class="list list-bullet">
+            <li>@messages("supportingMaterialFileList.indications.bullet1")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet2")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet3")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet4")</li>
+            <li>@messages("supportingMaterialFileList.indications.bullet5")</li>
+        </ul>
+    </div>
+
 }

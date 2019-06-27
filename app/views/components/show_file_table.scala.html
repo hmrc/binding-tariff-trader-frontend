@@ -18,7 +18,7 @@
 
 @(files: Seq[FileAttachment], mode: Mode)
 
-<dl class="file-list">
+<dl class="file-list mb-5">
     @for((file: FileAttachment, index: Int) <- files.zipWithIndex) {
         <div id="files-row-@{index}" class="file-list-row">
             <dt class="file-list-name" id="files-row-@{index}-title">@file.name</dt>
