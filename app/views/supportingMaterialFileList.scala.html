@@ -43,7 +43,7 @@
 
             @components.show_file_table(files, mode)
 
-            @indicationsLabel
+            @indicationsContent
 
             @components.input_yes_no(
                 field = form("add-file-choice"),
@@ -53,7 +53,7 @@
             @components.input_yes_no(
                 field = form("add-file-choice"),
                 labelHtml = Some(components.heading(messages("supportingMaterialFileList.heading"))),
-                contentHtml = Some(indicationsLabel)
+                contentHtml = Some(indicationsContent)
             )
         }
 
@@ -70,7 +70,7 @@
     </h2>
 }
 
-@indicationsLabel = {
+@indicationsContent = {
     <div class="form-group">
         <p>@messages("supportingMaterialFileList.indications")</p>
         <ul class="list list-bullet">
