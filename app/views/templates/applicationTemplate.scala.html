@@ -28,17 +28,17 @@
 
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
-    val protocol = if(req.secure) "https" else "http"
-    s"$protocol://${req.host}${routes.Assets.versioned(path)}"
+val protocol = if(req.secure) "https" else "http"
+s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 }
 
 @sectionHeading(headerId: String) = {
-    <h2 id=@headerId>@messages(headerId)</h2>
+<h2 id=@headerId>@messages(headerId)</h2>
 }
 
 <html>
-    <head>
-        <style>
+<head>
+    <style>
                 body {
                     font-size: 21px;
                     font-family: "nta", Arial, sans-serif;
@@ -91,239 +91,260 @@
                 }
         </style>
 
-    </head>
-    <body>
-        <div>
+</head>
+<body>
+<div>
 
-            @if(!viewMode) {
-                <h1 id="application.header.logo" class="title">@messages("application.title")</h1>
-            }
+    @if(!viewMode) {
+    <h1 id="application.header.logo" class="title">@messages("application.title")</h1>
+    }
 
-            <table class="first-column-w35 bb-0">
-                <tr>
-                    <td>@messages("application.submitted") </td> <td><span id="application.submitted"> @Dates.format(c.createdDate)  </span></td>
-                </tr>
-                <tr>
-                    <td>@messages("application.reference") </td> <td> <span id="application.casereference"> @messages("caseReference.format", c.reference) </span> </td>
-                </tr>
-            </table>
+    <table class="first-column-w35 bb-0">
+        <tr>
+            <td>@messages("application.submitted") </td> <td><span id="application.submitted"> @Dates.format(c.createdDate)  </span></td>
+        </tr>
+        <tr>
+            <td>@messages("application.reference") </td> <td> <span id="application.casereference"> @messages("caseReference.format", c.reference) </span> </td>
+        </tr>
+    </table>
 
-            @sectionHeading("application.section.applicant.heading")
+    @sectionHeading("application.section.applicant.heading")
 
-            <table>
-                <tr>
-                    <td>EORI number</td>
-                    <td id="application.holder.eori">@c.application.holder.eori</td>
-                </tr>
-                <tr>
-                    <td>@messages("application.section.applicant.companyDetails")</td>
-                    <td id="application.holder.businessName">
-                        @c.application.holder.businessName <br/>
-                        @c.application.holder.addressLine1 <br/>
-                        @c.application.holder.addressLine2 <br/>
-                        @c.application.holder.addressLine3 <br/>
-                        @c.application.holder.postcode <br/>
-                        @c.application.holder.country
+    <table>
+        <tr>
+            <td>
+                @if(c.application.agent.isDefined){
+                @messages("application.section.applicant.businessName")
+                }else{
+                @messages("application.section.applicant.businessContactDetails")
+                }</td>
+            <td id="application.holder.eori">
+                @if(c.application.agent.isDefined){
+                    @c.application.holder.businessName
+                }else{
+                @c.application.contact.name <br/>
+                @c.application.holder.businessName
+                @c.application.contact.email <br/>
+                @c.application.contact.phone <br/>
+            }</td>
+        </tr>
+        <tr>
+            <td>@messages("application.section.applicant.registeredAddress")</td>
+            <td id="application.holder.businessName">
+                @c.application.holder.addressLine1 <br/>
+                @c.application.holder.addressLine2 <br/>
+                @c.application.holder.addressLine3 <br/>
+                @c.application.holder.postcode <br/>
+                @c.application.holder.country
 
-                    </td>
-                </tr>
-                <tr>
-                    <td>@messages("application.section.applicant.contactDetails")</td>
-                    <td id="application.contact.details">
-                        @c.application.contact.name <br/>
-                        @c.application.contact.email <br/>
-                        @c.application.contact.phone
-                    </td>
-                </tr>
-                  <tr>
-                    <td>@messages("application.section.applyingFor")</td>
-                    <td id="application.contact.details">
-                        @if(c.application.agent.isDefined){
-                            @messages("whichBestDescribesYou.businessRepresentative")
-                        }else{
-                            @messages("whichBestDescribesYou.businessOwner")
-                        }
-                    </td>
-                </tr>
-
-
-            </table>
-
-            @if(c.application.agent.isDefined) {
-                @defining(c.application.agent.get) { agent: AgentDetails =>
-                    @sectionHeading("application.section.applyingFor.heading")
-                    <table>
-                        <tr>
-                            <td>@messages("application.section.applyingFor.details")</td>
-                              <td id="agentDetails.eoriDetails.address">
-                                @agent.eoriDetails.eori <br/>
-                                @agent.eoriDetails.businessName <br/>
-                                @agent.eoriDetails.addressLine1 <br/>
-                                @agent.eoriDetails.addressLine2 <br/>
-                                @agent.eoriDetails.addressLine3 <br/>
-                                @agent.eoriDetails.postcode <br/>
-                                @agent.eoriDetails.country
-                            </td>
-                        </tr>
-                        <tr>
-                            <td> Written authorisation </td>
-                              <td id="agentDetails.letterOfAuthority">
-                                  @letterOfAuthority.map(_.fileName)
-                             </td>
-                        </tr>
-                    </table>
+            </td>
+        </tr>
+        <tr>
+            <td>@messages("application.section.applicant.businessEORI")</td>
+            <td id="application.holder.eori">@c.application.holder.eori</td>
+        </tr>
+        <tr>
+            <td>@messages("application.section.applicationSubmittedBy")</td>
+            <td id="application.contact.details">
+                @if(c.application.agent.isDefined){
+                @c.application.agent.get.eoriDetails.businessName
+                }else{
+                @c.application.contact.name
                 }
-            }
+            </td>
+        </tr>
 
-            @sectionHeading("application.section.aboutItem.heading")
 
-            <table>
+    </table>
 
-                <tr>
-                    <td>@messages("application.section.applicationType")</td>
-                    <td id="application.applicationType">
-                         @if(c.application.reissuedBTIReference.isDefined){
-                            @messages("application.section.applicationType.renewalApplication")
-                         }else{
-                            @messages("application.section.applicationType.newApplication")
-                         }
-                    </td>
-                </tr>
+    @if(c.application.agent.isDefined) {
+    @defining(c.application.agent.get) { agent: AgentDetails =>
+    @sectionHeading("application.section.applyingFor.heading")
+    <table>
+        <tr>
+            <td>@messages("application.section.applyingFor.details")</td>
+            <td id="agentDetails.eoriDetails.address">
+                @c.application.contact.name <br/>
+                @c.application.contact.email <br/>
+                @c.application.contact.phone <br/>
 
+            </td>
+        </tr>
+        <tr>
+            <td>@messages("application.section.agentContactDetails")</td>
+            <td id="agentDetails.registered.address">
+                @agent.eoriDetails.addressLine1 <br/>
+                @agent.eoriDetails.addressLine2 <br/>
+                @agent.eoriDetails.addressLine3 <br/>
+                @agent.eoriDetails.postcode <br/>
+                @agent.eoriDetails.country
+            <td/>
+        </tr>
+        <tr>
+            <td>@messages("application.section.agentEoriNumber")</td>
+            <td id="agentDetails.eoriNumber">
+                @agent.eoriDetails.eori
+            </td>
+        </tr>
+        <tr>
+            <td> Written authorisation </td>
+            <td id="agentDetails.letterOfAuthority">
+                @letterOfAuthority.map(_.fileName)
+            </td>
+        </tr>
+    </table>
+    }
+    }
+
+    @sectionHeading("application.section.aboutItem.heading")
+
+    <table>
+
+        <tr>
+            <td>@messages("application.section.applicationType")</td>
+            <td id="application.applicationType">
                 @if(c.application.reissuedBTIReference.isDefined){
-                     <tr>
-                        <td>@messages("application.section.applicationType.reIssue")</td>
-                        <td id="application.reissuedBTIReference">
-                            @c.application.reissuedBTIReference <br/>
-                        </td>
-                    </tr>
+                @messages("application.section.applicationType.renewalApplication")
+                }else{
+                @messages("application.section.applicationType.newApplication")
                 }
-                <tr>
-                    <td>@messages("application.section.aboutItem.description")</td>
-                    <td id="application.goods.details">
-                        @c.application.goodName <br/>
-                        <span class="pre-wrap">@c.application.goodDescription</span><br/>
-                        @if(c.application.confidentialInformation.isDefined) {
-                            <span class="pre-wrap">@c.application.confidentialInformation.get</span>
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td>@messages("application.section.aboutItem.uploadeDocuments")</td>
-                    <td id="application.attachments">@if(attachments.isEmpty) {@messages("site.none")} else {
-                        @for(row <- attachments) {
-                            @row.fileName <br/>
-                        }
-                    }
-                    </td>
-                </tr>
-                <tr>
-                    <td>@messages("application.section.aboutItem.importOrExport")</td>
-                    <td id="application.importOrExport">
-                        @{c.application.importOrExport match {
-                            case Some("IMPORT") => messages("application.section.aboutItem.import")
-                            case Some("EXPORT") => messages("application.section.aboutItem.export")
-                            case _ => messages("site.unknown")
-                        }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>@messages("application.section.aboutItem.suggestedCommodityCode")</td>
-                    <td id="application.suggestedCommodityCode.question">
-                        @if(c.application.envisagedCommodityCode.isDefined){
-                            @messages("site.yes")
-                        }else{
-                            @messages("site.no")
-                        }
-                    </td>
-                </tr>
+            </td>
+        </tr>
 
-                @if(c.application.envisagedCommodityCode.isDefined) {
-                     <tr>
-                        <td>@messages("application.section.aboutItem.envisagedCommodityCode")</td>
-                        <td id="application.suggestedCommodityCode">
-                                <span class="pre-wrap">@c.application.envisagedCommodityCode.get</span>
-                        </td>
-                    </tr>
+        @if(c.application.reissuedBTIReference.isDefined){
+        <tr>
+            <td>@messages("application.section.applicationType.reIssue")</td>
+            <td id="application.reissuedBTIReference">
+                @c.application.reissuedBTIReference <br/>
+            </td>
+        </tr>
+        }
+        <tr>
+            <td>@messages("application.section.aboutItem.description")</td>
+            <td id="application.goods.details">
+                @c.application.goodName <br/>
+                <span class="pre-wrap">@c.application.goodDescription</span><br/>
+                @if(c.application.confidentialInformation.isDefined) {
+                <span class="pre-wrap">@c.application.confidentialInformation.get</span>
                 }
-
-                <tr>
-                    <td>@messages("application.section.aboutItem.sampleProvided")</td>
-                    <td id="application.sampleToBeProvided">@if(c.application.sampleToBeProvided) {
-                        @messages("site.yes")
-                    } else {
-                        @messages("site.no")
-                    }</td>
-                </tr>
-
-                @if(c.application.sampleToBeProvided) {
-                    <tr>
-                        <td>@messages("application.section.aboutItem.sampleReturned")</td>
-                        <td id="application.sampleToBeReturned">@if(c.application.sampleToBeReturned) {
-                            @messages("site.yes")
-                        } else {
-                            @messages("site.no")
-                        }</td>
-                    </tr>
+            </td>
+        </tr>
+        <tr>
+            <td>@messages("application.section.aboutItem.uploadeDocuments")</td>
+            <td id="application.attachments">@if(attachments.isEmpty) {@messages("site.none")} else {
+                @for(row <- attachments) {
+                @row.fileName <br/>
                 }
-
-                <tr>
-                    <td>@messages("application.section.aboutItem.similarRuling")</td>
-                    <td id="application.relatedBTIReference.defined">@if(c.application.relatedBTIReference.isDefined) {
-                        @messages("site.yes")
-                    } else {
-                        @messages("site.no")
-                    }</td>
-                </tr>
-
-                @if(c.application.relatedBTIReference.isDefined) {
-                    <tr>
-                        <td>@messages("application.section.aboutItem.similarRuling.BTIRef")</td>
-                        <td id="application.relatedBTIReference"><span class="pre-wrap">@c.application.relatedBTIReference.get</span></td>
-                    </tr>
                 }
-
-                <tr>
-                    <td>@messages("application.section.aboutItem.legalProblems")</td>
-                    <td id="application.knownLegalProceedings.defined">@if(c.application.knownLegalProceedings.isDefined) {
-                        @messages("site.yes")
-                    } else {
-                        @messages("site.no")
-                    }</td>
-                </tr>
-
-                @if(c.application.knownLegalProceedings.isDefined) {
-                    <tr>
-                        <td>@messages("application.section.aboutItem.legalProblems.details")</td>
-                        <td id="application.knownLegalProceedings"><span class="pre-wrap">@c.application.knownLegalProceedings.get</span></td>
-                    </tr>
+            </td>
+        </tr>
+        <tr>
+            <td>@messages("application.section.aboutItem.importOrExport")</td>
+            <td id="application.importOrExport">
+                @{c.application.importOrExport match {
+                case Some("IMPORT") => messages("application.section.aboutItem.import")
+                case Some("EXPORT") => messages("application.section.aboutItem.export")
+                case _ => messages("site.unknown")
+                }}
+            </td>
+        </tr>
+        <tr>
+            <td>@messages("application.section.aboutItem.suggestedCommodityCode")</td>
+            <td id="application.suggestedCommodityCode.question">
+                @if(c.application.envisagedCommodityCode.isDefined){
+                @messages("site.yes")
+                }else{
+                @messages("site.no")
                 }
-            </table>
+            </td>
+        </tr>
 
-            @sectionHeading("application.section.other.heading")
+        @if(c.application.envisagedCommodityCode.isDefined) {
+        <tr>
+            <td>@messages("application.section.aboutItem.envisagedCommodityCode")</td>
+            <td id="application.suggestedCommodityCode">
+                <span class="pre-wrap">@c.application.envisagedCommodityCode.get</span>
+            </td>
+        </tr>
+        }
 
-            <table>
-                <tr>
-                    <td>@messages("application.section.other.haveOtherInformation")</td>
-                    <td id="application.otherInformation.question">@if(c.application.otherInformation.isDefined) {
-                       @messages("site.yes")
-                    } else {
-                       @messages("site.no")
-                    }</td>
-                </tr>
-                @if(c.application.otherInformation.isDefined) {
-                    <tr>
-                        <td>@messages("application.section.other.supportingInformation")</td>
-                        <td id="application.otherInformation"><span class="pre-wrap">@c.application.otherInformation.get</span></td>
-                    </tr>
-                }
-            </table>
+        <tr>
+            <td>@messages("application.section.aboutItem.sampleProvided")</td>
+            <td id="application.sampleToBeProvided">@if(c.application.sampleToBeProvided) {
+                @messages("site.yes")
+                } else {
+                @messages("site.no")
+                }</td>
+        </tr>
 
-            <br/>
+        @if(c.application.sampleToBeProvided) {
+        <tr>
+            <td>@messages("application.section.aboutItem.sampleReturned")</td>
+            <td id="application.sampleToBeReturned">@if(c.application.sampleToBeReturned) {
+                @messages("site.yes")
+                } else {
+                @messages("site.no")
+                }</td>
+        </tr>
+        }
 
-            <div id="footer.whatHappensNext">
-                <h2>@messages("application.footer.whatHappensNext.heading")</h2>
-                <span id="applicationView.whatHappensNext">
+        <tr>
+            <td>@messages("application.section.aboutItem.similarRuling")</td>
+            <td id="application.relatedBTIReference.defined">@if(c.application.relatedBTIReference.isDefined) {
+                @messages("site.yes")
+                } else {
+                @messages("site.no")
+                }</td>
+        </tr>
+
+        @if(c.application.relatedBTIReference.isDefined) {
+        <tr>
+            <td>@messages("application.section.aboutItem.similarRuling.BTIRef")</td>
+            <td id="application.relatedBTIReference"><span class="pre-wrap">@c.application.relatedBTIReference.get</span></td>
+        </tr>
+        }
+
+        <tr>
+            <td>@messages("application.section.aboutItem.legalProblems")</td>
+            <td id="application.knownLegalProceedings.defined">@if(c.application.knownLegalProceedings.isDefined) {
+                @messages("site.yes")
+                } else {
+                @messages("site.no")
+                }</td>
+        </tr>
+
+        @if(c.application.knownLegalProceedings.isDefined) {
+        <tr>
+            <td>@messages("application.section.aboutItem.legalProblems.details")</td>
+            <td id="application.knownLegalProceedings"><span class="pre-wrap">@c.application.knownLegalProceedings.get</span></td>
+        </tr>
+        }
+    </table>
+
+    @sectionHeading("application.section.other.heading")
+
+    <table>
+        <tr>
+            <td>@messages("application.section.other.haveOtherInformation")</td>
+            <td id="application.otherInformation.question">@if(c.application.otherInformation.isDefined) {
+                @messages("site.yes")
+                } else {
+                @messages("site.no")
+                }</td>
+        </tr>
+        @if(c.application.otherInformation.isDefined) {
+        <tr>
+            <td>@messages("application.section.other.supportingInformation")</td>
+            <td id="application.otherInformation"><span class="pre-wrap">@c.application.otherInformation.get</span></td>
+        </tr>
+        }
+    </table>
+
+    <br/>
+
+    <div id="footer.whatHappensNext">
+        <h2>@messages("application.footer.whatHappensNext.heading")</h2>
+        <span id="applicationView.whatHappensNext">
                     <p>@messages("application.footer.whatHappensNext.paragraph1")</p>
                     <ul class="list list-bullet">
                         <li>@messages("application.footer.whatHappensNext.paragraph1.list.1")</li>
@@ -339,11 +360,11 @@
                         }
                     </p>
                 </span>
-            </div>
+    </div>
 
-            <div id="footer.sendingSamples">
-                <h2>@messages("application.footer.sendingSamples.heading")</h2>
-                    <span id="applicationView.sendingSamples">
+    <div id="footer.sendingSamples">
+        <h2>@messages("application.footer.sendingSamples.heading")</h2>
+        <span id="applicationView.sendingSamples">
                         <p>@messages("application.footer.sendingSamples.paragraph1", c.reference)</p>
                         <p>@messages("application.footer.sendingSamples.paragraph2")</p>
                         <p>
@@ -356,23 +377,23 @@
                         }
                         </p>
                     </span>
-            </div>
+    </div>
 
-            <div id="footer.sendSamplesTo">
-                <h2>@messages("application.footer.sendingSamplesTo.heading")</h2>
-                    @messages("application.footer.sendingSamples.address.line1") </br>
-                    @messages("application.footer.sendingSamples.address.line2") </br>
-                    @messages("application.footer.sendingSamples.address.line3") </br>
-                    @messages("application.footer.sendingSamples.address.line4") </br>
-                    @messages("application.footer.sendingSamples.address.line5") </br>
-                    @messages("application.footer.sendingSamples.address.line6") </br>
-                    @messages("application.footer.sendingSamples.address.line7") </br>
-                    @messages("application.footer.sendingSamples.address.line8")
-                </p>
-            </div>
+    <div id="footer.sendSamplesTo">
+        <h2>@messages("application.footer.sendingSamplesTo.heading")</h2>
+        @messages("application.footer.sendingSamples.address.line1") </br>
+        @messages("application.footer.sendingSamples.address.line2") </br>
+        @messages("application.footer.sendingSamples.address.line3") </br>
+        @messages("application.footer.sendingSamples.address.line4") </br>
+        @messages("application.footer.sendingSamples.address.line5") </br>
+        @messages("application.footer.sendingSamples.address.line6") </br>
+        @messages("application.footer.sendingSamples.address.line7") </br>
+        @messages("application.footer.sendingSamples.address.line8")
+        </p>
+    </div>
 
-        </div>
+</div>
 
-    </body>
+</body>
 
 </html>
