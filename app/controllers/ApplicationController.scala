@@ -33,11 +33,12 @@ import scala.concurrent.Future.successful
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                                       override val messagesApi: MessagesApi,
+                                      cc: MessagesControllerComponents,
                                       identify: IdentifierAction,
                                       pdfService: PdfService,
                                       caseService: CasesService,
                                       fileService: FileService
-                                     ) extends FrontendController with I18nSupport {
+                                     ) extends FrontendController(cc) with I18nSupport {
 
   private type Eori = String
   private type CaseReference = String

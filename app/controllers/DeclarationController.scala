@@ -29,7 +29,7 @@ import models.requests.OptionalDataRequest
 import navigation.Navigator
 import pages.{ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -42,6 +42,7 @@ import scala.concurrent.Future.successful
 class DeclarationController @Inject()(
                                        appConfig: FrontendAppConfig,
                                        override val messagesApi: MessagesApi,
+                                       cc: MessagesControllerComponents,
                                        dataCacheConnector: DataCacheConnector,
                                        auditService: AuditService,
                                        navigator: Navigator,
@@ -50,7 +51,7 @@ class DeclarationController @Inject()(
                                        caseService: CasesService,
                                        fileService: FileService,
                                        mapper: CaseRequestMapper
-                                     ) extends FrontendController with I18nSupport {
+                                     ) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     Ok(declaration(appConfig, mode))

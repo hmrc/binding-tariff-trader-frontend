@@ -21,7 +21,7 @@ import controllers.actions.IdentifierAction
 import javax.inject.Inject
 import models._
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CasesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.CaseDetailTab
@@ -34,7 +34,8 @@ import scala.concurrent.Future.successful
 class IndexController @Inject()(val appConfig: FrontendAppConfig,
                                 identify: IdentifierAction,
                                 service: CasesService,
-                                val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
+                                override val messagesApi: MessagesApi,
+                                cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
 
   private val applicationStatuses = Set(

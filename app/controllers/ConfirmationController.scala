@@ -24,7 +24,7 @@ import models.Confirmation
 import pages.ConfirmationPage
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.PdfService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.confirmation
@@ -35,12 +35,13 @@ import scala.concurrent.Future.successful
 
 class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                        override val messagesApi: MessagesApi,
+                                       cc: MessagesControllerComponents,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
                                        dataCacheConnector: DataCacheConnector,
                                        pdfService: PdfService
-                                      ) extends FrontendController with I18nSupport {
+                                      ) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 

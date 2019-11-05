@@ -22,7 +22,7 @@ import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierA
 import javax.inject.Inject
 import models.requests.OptionalDataRequest
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Results}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -33,7 +33,8 @@ class SignOutController @Inject()(val appConfig: FrontendAppConfig,
                                   identify: IdentifierAction,
                                   getData: DataRetrievalAction,
                                   requireData: DataRequiredAction,
-                                  val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
+                                  override val messagesApi: MessagesApi,
+                                  cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   def startFeedbackSurvey: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     clearDataCache(request)

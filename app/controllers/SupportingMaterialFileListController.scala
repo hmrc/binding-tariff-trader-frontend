@@ -27,7 +27,7 @@ import navigation.Navigator
 import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.supportingMaterialFileList
 
@@ -37,13 +37,14 @@ import scala.concurrent.Future.successful
 
 class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfig,
                                                      override val messagesApi: MessagesApi,
+                                                     cc: MessagesControllerComponents,
                                                      dataCacheConnector: DataCacheConnector,
                                                      navigator: Navigator,
                                                      identify: IdentifierAction,
                                                      getData: DataRetrievalAction,
                                                      requireData: DataRequiredAction,
                                                      formProvider: SupportingMaterialFileListFormProvider
-                                                    ) extends FrontendController with I18nSupport {
+                                                    ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

@@ -21,14 +21,14 @@ import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Writes
 import play.api.libs.ws.WSClient
+import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
 @Singleton
-class AuthenticatedHttpClient @Inject()(auditConnector: AuditConnector, wsClient: WSClient, actorSystem: ActorSystem)
+class AuthenticatedHttpClient @Inject()(auditConnector: HttpAuditing, wsClient: WSClient, actorSystem: ActorSystem)
                                        (implicit val config: FrontendAppConfig)
   extends DefaultHttpClient(config.runModeConfiguration, auditConnector, wsClient, actorSystem)
     with InjectAuthHeader {
@@ -63,12 +63,12 @@ class AuthenticatedHttpClient @Inject()(auditConnector: AuditConnector, wsClient
     super.doPut(url, body)(rds, addAuth)
   }
 
-  override def doDelete(url: String)
+   def doDelete(url: String)
                        (implicit hc: HeaderCarrier): Future[HttpResponse] = {
     super.doDelete(url)(addAuth)
   }
 
-  override def doPatch[A](url: String, body: A)
+   def doPatch[A](url: String, body: A)
                          (implicit rds: Writes[A], hc: HeaderCarrier): Future[HttpResponse] = {
     super.doPatch(url, body)(rds, addAuth)
   }
