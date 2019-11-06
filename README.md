@@ -26,6 +26,7 @@ The Front-end microrservice for the BTI Application journey on GOV.UK
 11) Start Frontend Template Provider `sm --start FRONTEND_TEMPLATE_PROVIDER -r`
 12) Start EMAIL Service `sm --start EMAIL -r && sm --start HMRC_TEMPLATE_RENDERER -r && sm --start MAILGUN_STUB -r`
 
+
 ##### Running With SBT
 
 Run `sbt run` to boot the app
