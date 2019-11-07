@@ -26,9 +26,13 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class DataRetrievalActionImpl @Inject()(val dataCacheConnector: DataCacheConnector) extends DataRetrievalAction {
+
+  def parser: play.api.mvc.BodyParser[play.api.mvc.AnyContent] = ???
+
+  protected def executionContext: scala.concurrent.ExecutionContext = ???
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
 

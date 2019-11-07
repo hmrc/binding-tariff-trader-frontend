@@ -19,15 +19,18 @@
 @import controllers.routes._
 @import models.Mode
 @import views.ViewUtils._
+@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
-@(appConfig: FrontendAppConfig, mode: Mode)(implicit request: Request[_], messages: Messages)
+@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig)(implicit messages: Messages)
+
+@(mode: Mode)(implicit request: Request[_])
 
 @main_template(
     title = s"${messages("declaration.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = DeclarationController.onSubmit(mode)) {
+    @formHelper(action = DeclarationController.onSubmit(mode)) {
 
         @components.back_link()
 

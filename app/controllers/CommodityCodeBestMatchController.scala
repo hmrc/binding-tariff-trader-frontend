@@ -32,7 +32,6 @@ import views.html.commodityCodeBestMatch
 import scala.concurrent.Future
 
 class CommodityCodeBestMatchController @Inject()(
-                                                  appConfig: FrontendAppConfig,
                                                   override val messagesApi: MessagesApi,
                                                   override val dataCacheConnector: DataCacheConnector,
                                                   override val navigator: Navigator,
@@ -40,7 +39,8 @@ class CommodityCodeBestMatchController @Inject()(
                                                   getData: DataRetrievalAction,
                                                   requireData: DataRequiredAction,
                                                   formProvider: CommodityCodeBestMatchFormProvider,
-                                                  cc: MessagesControllerComponents
+                                                  cc: MessagesControllerComponents,
+                                                  commodityCodeBestMatch : commodityCodeBestMatch
                                                   ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
@@ -56,13 +56,13 @@ class CommodityCodeBestMatchController @Inject()(
       case _ => form
     }
 
-    Ok(commodityCodeBestMatch(appConfig, preparedForm, mode))
+    Ok(commodityCodeBestMatch(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode)))
+      Future.successful(BadRequest(commodityCodeBestMatch(formWithErrors, mode)))
     }
 
     form.bindFromRequest().fold( badRequest, submitAnswer(_, mode))

@@ -41,6 +41,7 @@ class EnterContactDetailsController @Inject()(appConfig: FrontendAppConfig,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
                                       formProvider: EnterContactDetailsFormProvider,
+                                              enterContactDetails:enterContactDetails,
                                               cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
@@ -52,14 +53,14 @@ class EnterContactDetailsController @Inject()(appConfig: FrontendAppConfig,
       case _ => form
     }
 
-    Ok(enterContactDetails(appConfig, preparedForm, mode))
+    Ok(enterContactDetails(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(enterContactDetails(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(enterContactDetails(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(EnterContactDetailsPage, value)
 

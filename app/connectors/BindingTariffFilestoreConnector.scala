@@ -43,7 +43,7 @@ class BindingTariffFilestoreConnector @Inject()(appConfig: FrontendAppConfig, ws
       "file",
       file.filename,
       file.contentType,
-      FileIO.fromPath(file.ref.file.toPath)
+      FileIO.fromPath(file.ref.path)
     )
 
     ws.url(s"${appConfig.bindingTariffFileStoreUrl}/file")

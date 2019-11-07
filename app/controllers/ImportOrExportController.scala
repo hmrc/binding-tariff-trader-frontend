@@ -42,6 +42,7 @@ class ImportOrExportController @Inject()(
                                           getData: DataRetrievalAction,
                                           requireData: DataRequiredAction,
                                           formProvider: ImportOrExportFormProvider,
+                                          importOrExport: importOrExport,
                                           cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
@@ -53,14 +54,14 @@ class ImportOrExportController @Inject()(
       case _ => form
     }
 
-    Ok(importOrExport(appConfig, preparedForm, mode))
+    Ok(importOrExport(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(importOrExport(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(importOrExport(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(ImportOrExportPage, value)
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
