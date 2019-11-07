@@ -19,9 +19,10 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
+import models.requests.IdentifierRequest
 import navigation.Navigator
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.beforeYouStart
 
@@ -30,8 +31,9 @@ class BeforeYouStartController @Inject()(appConfig: FrontendAppConfig,
                                          navigator: Navigator,
                                          identify: IdentifierAction,
                                          getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction
-                                        ) extends FrontendController with I18nSupport {
+                                         requireData: DataRequiredAction,
+                                         cc: MessagesControllerComponents
+                                        )(implicit identifierRequest: IdentifierRequest[_]) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = identify { implicit request =>
     Ok(beforeYouStart(appConfig))

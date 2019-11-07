@@ -16,7 +16,6 @@
 
 @import config.FrontendAppConfig
 @import models.response.FilestoreResponse
-@import templates.applicationTemplate
 
 @(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None)(implicit request: Request[_], messages: Messages)
 

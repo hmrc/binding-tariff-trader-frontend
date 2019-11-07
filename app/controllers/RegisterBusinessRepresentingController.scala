@@ -26,7 +26,7 @@ import navigation.Navigator
 import pages.{CheckYourAnswersPage, RegisterBusinessRepresentingPage, UploadWrittenAuthorisationPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.registerBusinessRepresenting
 
@@ -40,8 +40,8 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
                                                        identify: IdentifierAction,
                                                        getData: DataRetrievalAction,
                                                        requireData: DataRequiredAction,
-                                                       formProvider: RegisterBusinessRepresentingFormProvider
-                                                      ) extends FrontendController with I18nSupport {
+                                                       formProvider: RegisterBusinessRepresentingFormProvider,
+                                                       cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form: Form[RegisterBusinessRepresenting] = formProvider()
 

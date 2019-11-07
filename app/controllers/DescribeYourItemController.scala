@@ -27,7 +27,7 @@ import forms.DescribeYourItemFormProvider
 import models.Mode
 import pages.{DescribeYourItemPage, SupportingMaterialFileListPage}
 import navigation.Navigator
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import views.html.describeYourItem
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,8 +40,8 @@ class DescribeYourItemController @Inject()(appConfig: FrontendAppConfig,
                                       identify: IdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
-                                      formProvider: DescribeYourItemFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                      formProvider: DescribeYourItemFormProvider,
+                                           cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

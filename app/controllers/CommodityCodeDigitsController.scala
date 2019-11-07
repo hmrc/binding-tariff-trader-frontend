@@ -27,7 +27,7 @@ import forms.CommodityCodeDigitsFormProvider
 import models.Mode
 import pages.{CommodityCodeDigitsPage, WhenToSendSamplePage}
 import navigation.Navigator
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import views.html.commodityCodeDigits
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,8 +41,8 @@ class CommodityCodeDigitsController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: CommodityCodeDigitsFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                        formProvider: CommodityCodeDigitsFormProvider,
+                                        cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

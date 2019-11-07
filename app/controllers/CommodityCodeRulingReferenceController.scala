@@ -27,7 +27,7 @@ import forms.CommodityCodeRulingReferenceFormProvider
 import models.Mode
 import pages.{CommodityCodeRulingReferencePage, LegalChallengePage}
 import navigation.Navigator
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import views.html.commodityCodeRulingReference
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,8 +41,8 @@ class CommodityCodeRulingReferenceController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: CommodityCodeRulingReferenceFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                        formProvider: CommodityCodeRulingReferenceFormProvider,
+                                        cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

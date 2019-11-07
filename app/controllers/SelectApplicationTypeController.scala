@@ -27,7 +27,7 @@ import navigation.Navigator
 import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Results}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.selectApplicationType
 
@@ -42,19 +42,19 @@ class SelectApplicationTypeController @Inject()(
                                                  identify: IdentifierAction,
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
-                                                 formProvider: SelectApplicationTypeFormProvider
-                                               ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                                 formProvider: SelectApplicationTypeFormProvider,
+                                                 cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(SelectApplicationTypePage) match {
+        case Some(value) => form.fill(value)
+        case _ => form
+      }
 
-    val preparedForm = request.userAnswers.get(SelectApplicationTypePage) match {
-      case Some(value) => form.fill(value)
-      case _ => form
-    }
-
-    Ok(selectApplicationType(appConfig, preparedForm, mode))
+      Ok(selectApplicationType(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>

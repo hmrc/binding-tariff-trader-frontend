@@ -26,10 +26,9 @@ import navigation.Navigator
 import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.commodityCodeBestMatch
-
 import scala.concurrent.Future
 
 class CommodityCodeBestMatchController @Inject()(
@@ -40,8 +39,9 @@ class CommodityCodeBestMatchController @Inject()(
                                                   identify: IdentifierAction,
                                                   getData: DataRetrievalAction,
                                                   requireData: DataRequiredAction,
-                                                  formProvider: CommodityCodeBestMatchFormProvider
-                                                ) extends FrontendController with I18nSupport with YesNoBehaviour[String] {
+                                                  formProvider: CommodityCodeBestMatchFormProvider,
+                                                  cc: MessagesControllerComponents
+                                                  ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
 

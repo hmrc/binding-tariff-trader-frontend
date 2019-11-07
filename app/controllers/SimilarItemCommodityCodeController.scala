@@ -26,7 +26,7 @@ import navigation.Navigator
 import pages.{CommodityCodeRulingReferencePage, LegalChallengePage, SimilarItemCommodityCodePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.similarItemCommodityCode
 
@@ -40,8 +40,9 @@ class SimilarItemCommodityCodeController @Inject()(
                                                     identify: IdentifierAction,
                                                     getData: DataRetrievalAction,
                                                     requireData: DataRequiredAction,
-                                                    formProvider: SimilarItemCommodityCodeFormProvider
-                                                  ) extends FrontendController with I18nSupport with YesNoBehaviour[String] {
+                                                    formProvider: SimilarItemCommodityCodeFormProvider,
+                                                    cc: MessagesControllerComponents
+                                                  ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
   private lazy val form = formProvider()
 
   override val page = SimilarItemCommodityCodePage

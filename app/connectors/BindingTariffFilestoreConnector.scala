@@ -47,8 +47,8 @@ class BindingTariffFilestoreConnector @Inject()(appConfig: FrontendAppConfig, ws
     )
 
     ws.url(s"${appConfig.bindingTariffFileStoreUrl}/file")
-      .withHeaders(hc.headers: _*)
-      .withHeaders(http.authHeaders(appConfig))
+      .withHttpHeaders(hc.headers: _*)
+      .withHttpHeaders(http.authHeaders(appConfig))
       .post(Source(List(filePart)))
       .map(response => Json.fromJson[FilestoreResponse](Json.parse(response.body)).get)
 

@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 import models._
 import models.response.FilestoreResponse
 import play.api.Logger
-import play.api.i18n.MessagesApi
+import play.api.i18n.{Lang, MessagesApi}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import uk.gov.hmrc.http.HeaderCarrier
@@ -32,7 +32,7 @@ import scala.concurrent.Future
 import scala.concurrent.Future.{sequence, successful}
 
 @Singleton
-class FileService @Inject()(connector: BindingTariffFilestoreConnector, messagesApi: MessagesApi, configuration: FrontendAppConfig) {
+class FileService @Inject()(connector: BindingTariffFilestoreConnector, messagesApi: MessagesApi, configuration: FrontendAppConfig) (implicit val lang: Lang){
 
   def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
     connector.upload(f).map(toFileAttachment(f.ref.file.length))

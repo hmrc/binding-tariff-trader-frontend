@@ -27,7 +27,7 @@ import forms.EnterContactDetailsFormProvider
 import models.Mode
 import pages.{EnterContactDetailsPage, WhichBestDescribesYouPage}
 import navigation.Navigator
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import views.html.enterContactDetails
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,8 +40,8 @@ class EnterContactDetailsController @Inject()(appConfig: FrontendAppConfig,
                                       identify: IdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
-                                      formProvider: EnterContactDetailsFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                      formProvider: EnterContactDetailsFormProvider,
+                                              cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

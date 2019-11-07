@@ -27,7 +27,7 @@ import forms.LegalChallengeDetailsFormProvider
 import models.Mode
 import pages.{LegalChallengeDetailsPage, SupportingInformationPage}
 import navigation.Navigator
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import views.html.legalChallengeDetails
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,8 +41,8 @@ class LegalChallengeDetailsController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: LegalChallengeDetailsFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                        formProvider: LegalChallengeDetailsFormProvider,
+                                        cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
