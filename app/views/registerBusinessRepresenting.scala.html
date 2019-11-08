@@ -19,15 +19,18 @@
 @import models.{Mode, RegisterBusinessRepresenting}
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
+@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
-@(appConfig: FrontendAppConfig, form: Form[RegisterBusinessRepresenting], mode: Mode)(implicit request: Request[_], messages: Messages)
+@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig)(implicit messages: Messages)
+
+@(form: Form[RegisterBusinessRepresenting], mode: Mode)(implicit request: Request[_])
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("registerBusinessRepresenting.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = RegisterBusinessRepresentingController.onSubmit(mode)) {
+    @formHelper(action = RegisterBusinessRepresentingController.onSubmit(mode)) {
 
         @components.back_link()
 

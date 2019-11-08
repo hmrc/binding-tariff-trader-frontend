@@ -43,6 +43,7 @@ class WhichBestDescribesYouController @Inject()(
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
                                                  formProvider: WhichBestDescribesYouFormProvider,
+                                                 whichBestDescribesYou: whichBestDescribesYou,
                                                  cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
@@ -55,7 +56,7 @@ class WhichBestDescribesYouController @Inject()(
       case _ => form
     }
 
-    Ok(whichBestDescribesYou(appConfig, preparedForm, mode))
+    Ok(whichBestDescribesYou(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
@@ -78,7 +79,7 @@ class WhichBestDescribesYouController @Inject()(
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(whichBestDescribesYou(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(whichBestDescribesYou(formWithErrors, mode))),
       selectedOption => {
         val updatedAnswers = update(selectedOption)
         dataCacheConnector.save(updatedAnswers.cacheMap).map(

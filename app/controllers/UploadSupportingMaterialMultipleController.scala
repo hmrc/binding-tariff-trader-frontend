@@ -45,13 +45,14 @@ class UploadSupportingMaterialMultipleController @Inject()(
                                                             requireData: DataRequiredAction,
                                                             formProvider: UploadSupportingMaterialMultipleFormProvider,
                                                             fileService: FileService,
+                                                            uploadSupportingMaterialMultiple: uploadSupportingMaterialMultiple,
                                                             cc: MessagesControllerComponents) (implicit val lang: Lang) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-    Ok(uploadSupportingMaterialMultiple(appConfig, form, mode))
+    Ok(uploadSupportingMaterialMultiple(form, mode))
   }
 
   def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
@@ -60,7 +61,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
       def badRequest(errorKey: String, errorMessage: String): Future[Result] = {
         successful(
           BadRequest(
-            uploadSupportingMaterialMultiple(appConfig, form.copy(errors = Seq(FormError(errorKey, errorMessage))), mode)
+            uploadSupportingMaterialMultiple(form.copy(errors = Seq(FormError(errorKey, errorMessage))), mode)
           )
         )
       }

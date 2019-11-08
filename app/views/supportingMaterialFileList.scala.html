@@ -19,16 +19,18 @@
 @import models.Mode
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
+@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
+@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig)(implicit messages: Messages)
 
-@(appConfig: FrontendAppConfig, form: Form[_], files: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], files: Seq[FileAttachment], mode: Mode)(implicit request: Request[_])
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("supportingMaterialFileList.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = SupportingMaterialFileListController.onSubmit(mode)) {
+    @formHelper(action = SupportingMaterialFileListController.onSubmit(mode)) {
 
         @components.back_link()
 

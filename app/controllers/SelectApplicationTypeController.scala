@@ -43,6 +43,7 @@ class SelectApplicationTypeController @Inject()(
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
                                                  formProvider: SelectApplicationTypeFormProvider,
+                                                 selectApplicationType: selectApplicationType,
                                                  cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
@@ -54,7 +55,7 @@ class SelectApplicationTypeController @Inject()(
         case _ => form
       }
 
-      Ok(selectApplicationType(appConfig, preparedForm, mode))
+      Ok(selectApplicationType(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -73,7 +74,7 @@ class SelectApplicationTypeController @Inject()(
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(selectApplicationType(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(selectApplicationType(formWithErrors, mode))),
       selectedOption => {
         val updatedAnswers = update(selectedOption)
         dataCacheConnector.save(updatedAnswers.cacheMap).map(

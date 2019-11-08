@@ -20,15 +20,18 @@
 @import models.requests.OptionalDataRequest
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
+@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: OptionalDataRequest[_], messages: Messages)
+@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig)(implicit messages: Messages)
+
+@(form: Form[_], mode: Mode)(implicit request: OptionalDataRequest[_])
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("registeredAddressForEori.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = RegisteredAddressForEoriController.onSubmit(mode)) {
+    @formHelper(action = RegisteredAddressForEoriController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

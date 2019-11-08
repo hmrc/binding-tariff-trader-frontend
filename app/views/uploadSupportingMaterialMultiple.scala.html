@@ -19,16 +19,18 @@
 @import models.Mode
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
+@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
+@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig)(implicit messages: Messages)
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode)(implicit request: Request[_])
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("uploadSupportingMaterialMultiple.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = UploadSupportingMaterialMultipleController.onSubmit(mode),
+    @formHelper(action = UploadSupportingMaterialMultipleController.onSubmit(mode),
          'enctype -> "multipart/form-data",
          'id -> "upload-files-form") {
 

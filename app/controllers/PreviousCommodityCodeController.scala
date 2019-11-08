@@ -41,6 +41,7 @@ class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
                                       formProvider: PreviousCommodityCodeFormProvider,
+                                                previousCommodityCode: previousCommodityCode,
                                                 cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
@@ -52,14 +53,14 @@ class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
       case _ => form
     }
 
-    Ok(previousCommodityCode(appConfig, preparedForm, mode))
+    Ok(previousCommodityCode(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(previousCommodityCode(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(previousCommodityCode(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(PreviousCommodityCodePage, value)
 
