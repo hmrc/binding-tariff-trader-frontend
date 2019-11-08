@@ -42,7 +42,6 @@ import scala.concurrent.Future.successful
 class DeclarationController @Inject()(
                                        appConfig: FrontendAppConfig,
                                        override val messagesApi: MessagesApi,
-                                       cc: MessagesControllerComponents,
                                        dataCacheConnector: DataCacheConnector,
                                        auditService: AuditService,
                                        navigator: Navigator,
@@ -50,11 +49,12 @@ class DeclarationController @Inject()(
                                        getData: DataRetrievalAction,
                                        caseService: CasesService,
                                        fileService: FileService,
-                                       mapper: CaseRequestMapper
-                                     ) extends FrontendController(cc) with I18nSupport {
+                                       mapper: CaseRequestMapper,
+                                       declaration : declaration,
+                                       cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
-    Ok(declaration(appConfig, mode))
+    Ok(declaration(mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>

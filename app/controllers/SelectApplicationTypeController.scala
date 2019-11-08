@@ -37,25 +37,24 @@ import scala.concurrent.Future
 class SelectApplicationTypeController @Inject()(
                                                  appConfig: FrontendAppConfig,
                                                  override val messagesApi: MessagesApi,
-                                                 cc: MessagesControllerComponents,
                                                  dataCacheConnector: DataCacheConnector,
                                                  navigator: Navigator,
                                                  identify: IdentifierAction,
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
-                                                 formProvider: SelectApplicationTypeFormProvider
-                                               ) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
+                                                 formProvider: SelectApplicationTypeFormProvider,
+                                                 cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(SelectApplicationTypePage) match {
+        case Some(value) => form.fill(value)
+        case _ => form
+      }
 
-    val preparedForm = request.userAnswers.get(SelectApplicationTypePage) match {
-      case Some(value) => form.fill(value)
-      case _ => form
-    }
-
-    Ok(selectApplicationType(appConfig, preparedForm, mode))
+      Ok(selectApplicationType(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>

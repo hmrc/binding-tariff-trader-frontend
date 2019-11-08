@@ -35,14 +35,13 @@ import scala.concurrent.Future
 class SupportingInformationController @Inject()(
                                                  appConfig: FrontendAppConfig,
                                                  override val messagesApi: MessagesApi,
-                                                 cc: MessagesControllerComponents,
                                                  override val dataCacheConnector: DataCacheConnector,
                                                  override val navigator: Navigator,
                                                  identify: IdentifierAction,
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
-                                                 formProvider: SupportingInformationFormProvider
-                                               ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
+                                                 formProvider: SupportingInformationFormProvider,
+                                                 cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
 

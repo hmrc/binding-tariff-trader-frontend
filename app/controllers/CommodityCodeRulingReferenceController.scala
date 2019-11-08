@@ -29,21 +29,20 @@ import pages.{CommodityCodeRulingReferencePage, LegalChallengePage}
 import navigation.Navigator
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import views.html.commodityCodeRulingReference
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CommodityCodeRulingReferenceController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
-                                        cc: MessagesControllerComponents,
                                         dataCacheConnector: DataCacheConnector,
                                         navigator: Navigator,
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: CommodityCodeRulingReferenceFormProvider
-                                      ) extends FrontendController(cc) with I18nSupport {
+                                        formProvider: CommodityCodeRulingReferenceFormProvider,
+                                        commodityCodeRulingReference:commodityCodeRulingReference,
+                                        cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -54,14 +53,14 @@ class CommodityCodeRulingReferenceController @Inject()(
       case _ => form
     }
 
-    Ok(commodityCodeRulingReference(appConfig, preparedForm, mode))
+    Ok(commodityCodeRulingReference(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(commodityCodeRulingReference(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(commodityCodeRulingReference(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(CommodityCodeRulingReferencePage, value)
 

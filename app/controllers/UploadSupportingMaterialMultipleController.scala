@@ -25,13 +25,12 @@ import models.{FileAttachment, Mode}
 import navigation.Navigator
 import pages._
 import play.api.data.FormError
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{Lang,I18nSupport, MessagesApi}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MultipartFormData, Result}
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
@@ -39,15 +38,14 @@ import scala.concurrent.Future.successful
 class UploadSupportingMaterialMultipleController @Inject()(
                                                             appConfig: FrontendAppConfig,
                                                             override val messagesApi: MessagesApi,
-                                                            cc: MessagesControllerComponents,
                                                             dataCacheConnector: DataCacheConnector,
                                                             navigator: Navigator,
                                                             identify: IdentifierAction,
                                                             getData: DataRetrievalAction,
                                                             requireData: DataRequiredAction,
                                                             formProvider: UploadSupportingMaterialMultipleFormProvider,
-                                                            fileService: FileService
-                                                          ) extends FrontendController(cc) with I18nSupport {
+                                                            fileService: FileService,
+                                                            cc: MessagesControllerComponents) (implicit val lang: Lang) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

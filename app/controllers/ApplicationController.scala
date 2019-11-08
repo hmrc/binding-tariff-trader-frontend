@@ -28,17 +28,17 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.templates.{applicationTemplate, applicationView, rulingCertificateTemplate, rulingCertificateView}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.successful
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                                       override val messagesApi: MessagesApi,
-                                      cc: MessagesControllerComponents,
                                       identify: IdentifierAction,
                                       pdfService: PdfService,
                                       caseService: CasesService,
-                                      fileService: FileService
-                                     ) extends FrontendController(cc) with I18nSupport {
+                                      fileService: FileService,
+                                      cc: MessagesControllerComponents
+                                      ) extends FrontendController(cc) with I18nSupport {
 
   private type Eori = String
   private type CaseReference = String

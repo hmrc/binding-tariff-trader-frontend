@@ -29,20 +29,19 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.commodityCodeBestMatch
-
 import scala.concurrent.Future
 
 class CommodityCodeBestMatchController @Inject()(
-                                                  appConfig: FrontendAppConfig,
                                                   override val messagesApi: MessagesApi,
-                                                  cc: MessagesControllerComponents,
                                                   override val dataCacheConnector: DataCacheConnector,
                                                   override val navigator: Navigator,
                                                   identify: IdentifierAction,
                                                   getData: DataRetrievalAction,
                                                   requireData: DataRequiredAction,
-                                                  formProvider: CommodityCodeBestMatchFormProvider
-                                                ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
+                                                  formProvider: CommodityCodeBestMatchFormProvider,
+                                                  cc: MessagesControllerComponents,
+                                                  commodityCodeBestMatch : commodityCodeBestMatch
+                                                  ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
 
@@ -57,13 +56,13 @@ class CommodityCodeBestMatchController @Inject()(
       case _ => form
     }
 
-    Ok(commodityCodeBestMatch(appConfig, preparedForm, mode))
+    Ok(commodityCodeBestMatch(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode)))
+      Future.successful(BadRequest(commodityCodeBestMatch(formWithErrors, mode)))
     }
 
     form.bindFromRequest().fold( badRequest, submitAnswer(_, mode))

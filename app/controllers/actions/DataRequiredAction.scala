@@ -28,6 +28,10 @@ import scala.concurrent.Future
 
 class DataRequiredActionImpl @Inject() extends DataRequiredAction {
 
+  def parser: play.api.mvc.BodyParser[play.api.mvc.AnyContent] = ???
+
+  protected def executionContext: scala.concurrent.ExecutionContext = ???
+
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))

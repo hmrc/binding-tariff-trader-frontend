@@ -23,16 +23,15 @@ import models.Email
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import play.api.libs.json.JsObject
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
 class EmailConnector @Inject()(configuration: FrontendAppConfig, client: HttpClient) {
-
   def send[E >: Email[Any]](e: E)(implicit hc: HeaderCarrier, writes: Writes[E]): Future[Unit] = {
     val url = s"${configuration.emailUrl}/hmrc/email"
-    client.POST(url = url, body = e).map(_ => ())
+    client.POST[E,JsObject](url = url, body = e).map(_ => ())
   }
-
 }

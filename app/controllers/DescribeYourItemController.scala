@@ -35,14 +35,14 @@ import scala.concurrent.Future
 
 class DescribeYourItemController @Inject()(appConfig: FrontendAppConfig,
                                       override val messagesApi: MessagesApi,
-                                           cc: MessagesControllerComponents,
                                       dataCacheConnector: DataCacheConnector,
                                       navigator: Navigator,
                                       identify: IdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
-                                      formProvider: DescribeYourItemFormProvider
-                                      ) extends FrontendController(cc) with I18nSupport {
+                                      formProvider: DescribeYourItemFormProvider,
+                                           describeYourItem: describeYourItem,
+                                           cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -53,14 +53,14 @@ class DescribeYourItemController @Inject()(appConfig: FrontendAppConfig,
       case _ => form
     }
 
-    Ok(describeYourItem(appConfig, preparedForm, mode))
+    Ok(describeYourItem(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(describeYourItem(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(describeYourItem(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(DescribeYourItemPage, value)
 

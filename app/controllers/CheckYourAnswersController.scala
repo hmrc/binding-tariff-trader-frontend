@@ -29,11 +29,12 @@ import views.html.check_your_answers
 
 class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
                                            override val messagesApi: MessagesApi,
-                                           cc: MessagesControllerComponents,
                                            navigator: Navigator,
                                            authenticate: IdentifierAction,
                                            getData: DataRetrievalAction,
-                                           requireData: DataRequiredAction) extends FrontendController(cc) with I18nSupport {
+                                           requireData: DataRequiredAction,
+                                           cc: MessagesControllerComponents
+                                          ) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (authenticate andThen getData andThen requireData) { implicit request =>
 

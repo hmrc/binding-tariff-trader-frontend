@@ -7,18 +7,18 @@ object AppDependencies {
   val compile = Seq(
     "commons-validator" % "commons-validator"                 % "1.6",
     play.sbt.PlayImport.ws,
-    "uk.gov.hmrc"       %% "auth-client"                      % "2.27.0-play-26",
-    "uk.gov.hmrc"       %% "bootstrap-play-26"                % "0.45.0",
-    "uk.gov.hmrc"       %% "govuk-template"                   % "5.25.0-play-26",
-    "uk.gov.hmrc"       %% "http-caching-client"              % "8.5.0-play-26",
+    "uk.gov.hmrc"       %% "auth-client"                      % "2.31.0-play-26",
+    "uk.gov.hmrc"       %% "bootstrap-play-26"                % "1.1.0",
+    "uk.gov.hmrc"       %% "govuk-template"                   % "5.44.0-play-26",
+    "uk.gov.hmrc"       %% "http-caching-client"              % "9.0.0-play-26",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"    % "0.2.0",
     "uk.gov.hmrc"       %% "play-health"                      % "3.14.0-play-26",
     "uk.gov.hmrc"       %% "play-language"                    % "3.4.0",
-    "uk.gov.hmrc"       %% "play-ui"                          % "8.1.0-play-26",
+    "uk.gov.hmrc"       %% "play-ui"                          % "8.3.0-play-26",
     "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.20.0-play-26",
     "uk.gov.hmrc"       %% "play-whitelist-filter"            % "2.0.0",
-    "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.5.0"
-
+    "uk.gov.hmrc"       %% "logback-json-logger"              % "3.1.0",
+    "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.7.0"
   )
 
   private lazy val scope: String = "test,it"

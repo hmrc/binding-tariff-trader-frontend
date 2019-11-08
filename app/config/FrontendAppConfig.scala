@@ -18,22 +18,20 @@ package config
 
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
-import play.api.Mode.Mode
+import play.api.Mode
 import play.api.i18n.Lang
 import play.api.mvc.Call
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class FrontendAppConfig @Inject() ( val runModeConfiguration: Configuration, environment: Environment, val config: ServicesConfig){
+class FrontendAppConfig @Inject() (val runModeConfiguration: Configuration, environment: Environment, val config: ServicesConfig){
 
-   protected def mode: Mode = environment.mode
+  protected def mode: Mode = environment.mode
 
-  private def loadConfig(key: String): String = {
-    runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
-  }
+  private def loadConfig(key: String) = config.getString(key)
+  private lazy val contactHost = loadConfig("contact-frontend.host")
 
-  private lazy val contactHost = runModeConfiguration.getString("contact-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "BindingTariffApplication"
 
   lazy val analyticsToken: String = loadConfig("google-analytics.token")
@@ -55,7 +53,7 @@ class FrontendAppConfig @Inject() ( val runModeConfiguration: Configuration, env
   lazy val fileUploadMaxSize: Int = loadConfig("fileupload.maxSize").toInt
   lazy val fileUploadMimeTypes: Set[String] = loadConfig("fileupload.mimeTypes").split(",").map(_.trim).toSet
 
-  lazy val languageTranslationEnabled: Boolean = runModeConfiguration.getBoolean("microservice.services.features.welsh-translation").getOrElse(true)
+  lazy val languageTranslationEnabled: Boolean = config.getBoolean("microservice.services.features.welsh-translation")
 
   private lazy val cdsUrl: String = loadConfig("customs-frontend.host")
   lazy val cdsSubscribeUrl: String = s"$cdsUrl/customs/subscribe-for-cds"
@@ -68,10 +66,10 @@ class FrontendAppConfig @Inject() ( val runModeConfiguration: Configuration, env
   lazy val apiToken: String = loadConfig("auth.api-token")
   lazy val aesKey: String = loadConfig("auth.aes-key")
 
-  lazy val timeOutSeconds : Int = runModeConfiguration.getInt("timeoutDialog.timeoutSeconds").getOrElse(780)
-  lazy val timeOutCountDownSeconds: Int = runModeConfiguration.getInt("timeoutDialog.time-out-countdown-seconds").getOrElse(120)
+  lazy val timeOutSeconds : Int = config.getInt("timeoutDialog.timeoutSeconds")
+  lazy val timeOutCountDownSeconds: Int = config.getInt("timeoutDialog.time-out-countdown-seconds")
   lazy val refreshInterval: Int = timeOutSeconds + 10
-  lazy val enableRefresh: Boolean= runModeConfiguration.getBoolean("timeoutDialog.enableRefresh").getOrElse(true)
+  lazy val enableRefresh: Boolean= config.getBoolean("timeoutDialog.enableRefresh")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),

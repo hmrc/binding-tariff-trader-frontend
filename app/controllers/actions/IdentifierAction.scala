@@ -21,6 +21,7 @@ import config.FrontendAppConfig
 import controllers.routes
 import models.requests.IdentifierRequest
 import play.api.mvc._
+import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionBuilder, ActionFunction, AnyContent, Request, Result}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
@@ -28,17 +29,20 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
 import uk.gov.hmrc.play.HeaderCarrierConverter
-
 import scala.concurrent.{ExecutionContext, Future}
 
-trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest] {
+trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]{
   protected lazy val cdsEnrolment = "HMRC-CUS-ORG"
 }
 
-
 class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthConnector,
                                               config: FrontendAppConfig)
-                                             (implicit ec: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
+                                             (implicit val ec: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
+
+  def parser: play.api.mvc.BodyParser[play.api.mvc.AnyContent] = ???
+
+  protected def executionContext: scala.concurrent.ExecutionContext = ???
+
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 

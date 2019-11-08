@@ -19,8 +19,12 @@
 @import controllers.routes._
 @import models.{Mode, DescribeYourItem}
 @import views.ViewUtils._
+@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig)(implicit messages: Messages)
+
+
+@(form: Form[_], mode: Mode)(implicit request: Request[_])
 
 
 
@@ -29,7 +33,7 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = DescribeYourItemController.onSubmit(mode)) {
+    @formHelper(action = DescribeYourItemController.onSubmit(mode)) {
 
         @components.back_link()
 

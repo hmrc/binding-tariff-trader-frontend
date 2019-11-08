@@ -27,11 +27,11 @@ import views.html.acceptItemInformationList
 
 class AcceptItemInformationListController @Inject()(appConfig: FrontendAppConfig,
                                                     override val messagesApi: MessagesApi,
-                                                    cc: MessagesControllerComponents,
                                                     navigator: Navigator,
                                                     identify: IdentifierAction,
                                                     getData: DataRetrievalAction,
-                                                    requireData: DataRequiredAction
+                                                    requireData: DataRequiredAction,
+                                                    cc: MessagesControllerComponents
                                                    ) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>

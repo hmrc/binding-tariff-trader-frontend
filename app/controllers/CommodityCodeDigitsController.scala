@@ -29,21 +29,20 @@ import pages.{CommodityCodeDigitsPage, WhenToSendSamplePage}
 import navigation.Navigator
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import views.html.commodityCodeDigits
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CommodityCodeDigitsController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
-                                        cc: MessagesControllerComponents,
                                         dataCacheConnector: DataCacheConnector,
                                         navigator: Navigator,
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: CommodityCodeDigitsFormProvider
-                                      ) extends FrontendController(cc) with I18nSupport {
+                                        commodityCodeDigits: commodityCodeDigits,
+                                        formProvider: CommodityCodeDigitsFormProvider,
+                                        cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -54,14 +53,14 @@ class CommodityCodeDigitsController @Inject()(
       case _ => form
     }
 
-    Ok(commodityCodeDigits(appConfig, preparedForm, mode))
+    Ok(commodityCodeDigits(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(commodityCodeDigits(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(commodityCodeDigits(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(CommodityCodeDigitsPage, value)
 

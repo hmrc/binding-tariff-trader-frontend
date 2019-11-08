@@ -37,14 +37,13 @@ import scala.concurrent.Future.successful
 
 class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfig,
                                                      override val messagesApi: MessagesApi,
-                                                     cc: MessagesControllerComponents,
                                                      dataCacheConnector: DataCacheConnector,
                                                      navigator: Navigator,
                                                      identify: IdentifierAction,
                                                      getData: DataRetrievalAction,
                                                      requireData: DataRequiredAction,
-                                                     formProvider: SupportingMaterialFileListFormProvider
-                                                    ) extends FrontendController(cc) with I18nSupport {
+                                                     formProvider: SupportingMaterialFileListFormProvider,
+                                                     cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

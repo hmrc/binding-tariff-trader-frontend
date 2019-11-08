@@ -19,15 +19,18 @@
 @import controllers.routes._
 @import models.Mode
 @import views.ViewUtils._
+@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig)(implicit messages: Messages)
+
+@(form: Form[_], mode: Mode)(implicit request: Request[_])
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("commodityCodeDigits.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = CommodityCodeDigitsController.onSubmit(mode)) {
+    @formHelper(action = CommodityCodeDigitsController.onSubmit(mode)) {
 
         @components.back_link()
 

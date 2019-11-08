@@ -36,14 +36,13 @@ import scala.concurrent.Future
 class LegalChallengeDetailsController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
-                                        cc: MessagesControllerComponents,
                                         dataCacheConnector: DataCacheConnector,
                                         navigator: Navigator,
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: LegalChallengeDetailsFormProvider
-                                      ) extends FrontendController(cc) with I18nSupport {
+                                        formProvider: LegalChallengeDetailsFormProvider,
+                                        cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

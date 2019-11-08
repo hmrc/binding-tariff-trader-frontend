@@ -18,23 +18,25 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
-import javax.inject.Inject
 import models.Case
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CasesService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.ruling_information
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.successful
+import javax.inject.Inject
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
+
 
 class RulingController @Inject()(val appConfig: FrontendAppConfig,
                                  identify: IdentifierAction,
                                  service: CasesService,
                                  override val messagesApi: MessagesApi,
-                                 cc: MessagesControllerComponents)
-                                    extends FrontendController(cc) with I18nSupport {
+                                 cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   def viewRuling(reference: String): Action[AnyContent] = identify.async { implicit request =>
 

@@ -35,13 +35,12 @@ import scala.concurrent.Future
 
 class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                                    override val messagesApi: MessagesApi,
-                                                   cc: MessagesControllerComponents,
                                                    dataCacheConnector: DataCacheConnector,
                                                    navigator: Navigator,
                                                    identify: IdentifierAction,
                                                    getData: DataRetrievalAction,
-                                                   formProvider: RegisteredAddressForEoriFormProvider
-                                                  ) extends FrontendController(cc) with I18nSupport {
+                                                   formProvider: RegisteredAddressForEoriFormProvider,
+                                                   cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form: Form[RegisteredAddressForEori] = formProvider()
 

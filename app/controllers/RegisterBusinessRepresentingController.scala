@@ -35,14 +35,13 @@ import scala.concurrent.Future
 
 class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppConfig,
                                                        override val messagesApi: MessagesApi,
-                                                       cc: MessagesControllerComponents,
                                                        dataCacheConnector: DataCacheConnector,
                                                        navigator: Navigator,
                                                        identify: IdentifierAction,
                                                        getData: DataRetrievalAction,
                                                        requireData: DataRequiredAction,
-                                                       formProvider: RegisterBusinessRepresentingFormProvider
-                                                      ) extends FrontendController(cc) with I18nSupport {
+                                                       formProvider: RegisterBusinessRepresentingFormProvider,
+                                                       cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form: Form[RegisterBusinessRepresenting] = formProvider()
 

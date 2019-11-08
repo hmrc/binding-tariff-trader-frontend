@@ -36,14 +36,13 @@ import scala.concurrent.Future
 class ReturnSamplesController @Inject()(
                                         appConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
-                                        cc: MessagesControllerComponents,
                                         dataCacheConnector: DataCacheConnector,
                                         navigator: Navigator,
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: ReturnSamplesFormProvider
-                                      ) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
+                                        formProvider: ReturnSamplesFormProvider,
+                                          cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 

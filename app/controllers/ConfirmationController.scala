@@ -35,13 +35,12 @@ import scala.concurrent.Future.successful
 
 class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                        override val messagesApi: MessagesApi,
-                                       cc: MessagesControllerComponents,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
                                        dataCacheConnector: DataCacheConnector,
-                                       pdfService: PdfService
-                                      ) extends FrontendController(cc) with I18nSupport {
+                                       pdfService: PdfService,
+                                       cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 

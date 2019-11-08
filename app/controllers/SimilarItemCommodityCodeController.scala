@@ -35,13 +35,13 @@ import scala.concurrent.Future
 class SimilarItemCommodityCodeController @Inject()(
                                                     appConfig: FrontendAppConfig,
                                                     override val messagesApi: MessagesApi,
-                                                    cc: MessagesControllerComponents,
                                                     override val dataCacheConnector: DataCacheConnector,
                                                     override val navigator: Navigator,
                                                     identify: IdentifierAction,
                                                     getData: DataRetrievalAction,
                                                     requireData: DataRequiredAction,
-                                                    formProvider: SimilarItemCommodityCodeFormProvider
+                                                    formProvider: SimilarItemCommodityCodeFormProvider,
+                                                    cc: MessagesControllerComponents
                                                   ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
   private lazy val form = formProvider()
 

@@ -35,14 +35,13 @@ import scala.concurrent.Future
 class WhenToSendSampleController @Inject()(
                                             appConfig: FrontendAppConfig,
                                             override val messagesApi: MessagesApi,
-                                            cc: MessagesControllerComponents,
                                             override val dataCacheConnector: DataCacheConnector,
                                             override val navigator: Navigator,
                                             identify: IdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
-                                            formProvider: WhenToSendSampleFormProvider
-                                          ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[ReturnSamples] {
+                                            formProvider: WhenToSendSampleFormProvider,
+                                            cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[ReturnSamples] {
 
   private lazy val form = formProvider()
 
