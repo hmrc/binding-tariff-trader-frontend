@@ -14,23 +14,44 @@
  * limitations under the License.
  *@
 
-@import play.twirl.api.HtmlFormat
-@import layouts.{govuk_template => hmrcGovUkTemplate}
-@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers, layouts => uiLayouts}
+@import uk.gov.hmrc.play.views.html.layouts.Head
+@import uk.gov.hmrc.play.views.html.layouts.HeaderNav
+@import uk.gov.hmrc.play.views.html.layouts.Footer
+@import uk.gov.hmrc.play.views.html.layouts.BetaBanner
+@import uk.gov.hmrc.play.views.html.layouts.ServiceInfo
+@import uk.gov.hmrc.play.views.html.layouts.MainContentHeader
+@import uk.gov.hmrc.play.views.html.layouts.MainContent
+@import uk.gov.hmrc.play.views.html.layouts.Article
+@import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
+@import uk.gov.hmrc.play.views.html.layouts.FooterLinks
+@import views.html.layouts.GovUkTemplate
 
-@(appConfig: config.FrontendAppConfig,
-  title: String,
-  mainClass: Option[String] = None,
-  mainDataAttributes: Option[Html] = None,
-  bodyClasses: Option[String] = None,
-  sidebar: Html = HtmlFormat.empty,
-  contentHeader: Option[Html] = None,
-  mainContent: Html = HtmlFormat.empty,
-  serviceInfoContent: Html = HtmlFormat.empty,
-  scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages)
+@this(  appConfig: config.FrontendAppConfig,
+        layoutHead: Head,
+        layoutHeaderNav: HeaderNav,
+        layoutFooter: Footer,
+        layoutBetaBanner: BetaBanner,
+        layoutServiceInfo: ServiceInfo,
+        layoutMainContentHeader: MainContentHeader,
+        layoutMainContent: MainContent,
+        article: Article,
+        reportAProblemLink: ReportAProblemLink,
+        footerLinks: FooterLinks,
+        govUkTemplate: GovUkTemplate)
+
+@(
+        title: String,
+        mainClass: Option[String] = None,
+        mainDataAttributes: Option[Html] = None,
+        bodyClasses: Option[String] = None,
+        sidebar: Html = Html(""),
+        contentHeader: Option[Html] = None,
+        mainContent: Html = Html(""),
+        serviceInfoContent: Html = Html(""),
+        scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages)
 
 @head = {
-    @uiLayouts.head(
+    @layoutHead(
       linkElem = None,
       headScripts = None)
     <meta name="format-detection" content="telephone=no" />
@@ -46,7 +67,7 @@
 }
 
 @insideHeader = {
-    @uiLayouts.header_nav(
+    @layoutHeaderNav(
       navTitle = Some(messages("site.service_name")),
       navTitleLink = None,
       showBetaLink = false,
@@ -56,7 +77,7 @@
 @afterHeader = {}
 
 @bodyEnd = {
-    @uiLayouts.footer(
+    @layoutFooter(
       analyticsToken = Some(appConfig.analyticsToken),
       analyticsHost = appConfig.analyticsHost,
       ssoUrl = None,
@@ -68,8 +89,8 @@
 @footerTop = {}
 @footerLinks = {}
 
-@phaseBanner = {
-    @uiLayouts.betaBanner(
+@betaBanner = {
+    @layoutBetaBanner(
         userLoggedIn = false,
         betaFeedbackUrl = appConfig.betaFeedbackUrl,
         betaFeedbackUnauthenticatedUrl = appConfig.betaFeedbackUnauthenticatedUrl,
@@ -78,8 +99,8 @@
 }
 
 @serviceInfo = {
-    @uiLayouts.serviceInfo(
-      betaBanner = phaseBanner,
+    @layoutServiceInfo(
+      betaBanner = betaBanner,
       includeHMRCBranding = false,
       includeGridWrapper = false,
       serviceInfoContent = Some(serviceInfoContent))
@@ -88,14 +109,14 @@
 @mainContentHeader = {
 
     @if(contentHeader.isDefined) {
-        @uiLayouts.main_content_header(contentHeader = contentHeader.get)
+        @layoutMainContentHeader(contentHeader = contentHeader.get)
     }
 }
 
-@getHelpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
+@getHelpForm = @{reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
 
 @content = {
-    @uiLayouts.main_content(
+    @layoutMainContent(
       article = mainContent,
       mainClass = mainClass,
       mainDataAttributes = mainDataAttributes,
@@ -105,4 +126,4 @@
       sidebar = sidebar)
 }
 
-@hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
+@govUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, footerLinks = Some(footerLinks()), nav = true)(content)
