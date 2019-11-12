@@ -35,7 +35,7 @@ import scala.concurrent.Future.{sequence, successful}
 class FileService @Inject()(connector: BindingTariffFilestoreConnector, messagesApi: MessagesApi, configuration: FrontendAppConfig) (implicit val lang: Lang){
 
   def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
-    connector.upload(f).map(toFileAttachment(f.ref.file.length))
+    connector.upload(f).map(toFileAttachment(f.ref.path.toFile.length))
   }
 
   private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
@@ -88,7 +88,7 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
   }
 
   private def hasInvalidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = {
-    _.ref.file.length > configuration.fileUploadMaxSize
+    _.ref.path.toFile.length > configuration.fileUploadMaxSize
   }
 
   private def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
