@@ -35,6 +35,7 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
                                 identify: IdentifierAction,
                                 service: CasesService,
                                 override val messagesApi: MessagesApi,
+                                view: index,
                                 cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
 
@@ -49,7 +50,7 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
     request.eoriNumber match {
       case Some(eori: String) =>
         service.getCases(eori, applicationStatuses, SearchPagination(page), Sort()) flatMap { pagedResult =>
-          successful(Ok(index(appConfig, CaseDetailTab.APPLICATION, table_applications(pagedResult))))
+          successful(Ok(view(CaseDetailTab.APPLICATION, table_applications(pagedResult))))
         }
 
       case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
@@ -61,7 +62,7 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
     request.eoriNumber match {
       case Some(eori: String) =>
         service.getCases(eori, rulingStatuses, SearchPagination(page), Sort(SortField.DECISION_START_DATE)) flatMap { pagedResult =>
-          successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult))))
+          successful(Ok(view(CaseDetailTab.RULING, table_rulings(pagedResult))))
         }
 
       case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))

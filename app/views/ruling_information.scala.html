@@ -17,11 +17,12 @@
 @import config.FrontendAppConfig
 @import utils.Dates
 
-@(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
+@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
 
-    @main_template(
+@(c: Case)(implicit request: Request[_])
+
+    @template(
         title = s"${messages("rulingInformation.title")}",
-        appConfig = appConfig,
         bodyClasses = None)  {
 
         @components.back_link()

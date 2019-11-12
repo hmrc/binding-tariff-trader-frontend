@@ -41,8 +41,8 @@ class CommodityCodeRulingReferenceController @Inject()(
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
                                         formProvider: CommodityCodeRulingReferenceFormProvider,
-                                        commodityCodeRulingReference:commodityCodeRulingReference,
-                                        cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
+                                        cc: MessagesControllerComponents,
+                                        view: commodityCodeRulingReference) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -53,14 +53,14 @@ class CommodityCodeRulingReferenceController @Inject()(
       case _ => form
     }
 
-    Ok(commodityCodeRulingReference(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(commodityCodeRulingReference(formWithErrors, mode))),
+        Future.successful(BadRequest(view(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(CommodityCodeRulingReferencePage, value)
 

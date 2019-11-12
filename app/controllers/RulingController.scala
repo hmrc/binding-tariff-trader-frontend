@@ -36,14 +36,15 @@ class RulingController @Inject()(val appConfig: FrontendAppConfig,
                                  identify: IdentifierAction,
                                  service: CasesService,
                                  override val messagesApi: MessagesApi,
-                                 cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
+                                 cc: MessagesControllerComponents,
+                                 view: ruling_information) extends FrontendController(cc) with I18nSupport {
 
   def viewRuling(reference: String): Action[AnyContent] = identify.async { implicit request =>
 
     request.eoriNumber match {
       case Some(eori: String) =>
         service.getCaseForUser(eori,reference) flatMap {
-          c: Case => successful(Ok(ruling_information(appConfig, c)))
+          c: Case => successful(Ok(view(c)))
         }
 
       case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))

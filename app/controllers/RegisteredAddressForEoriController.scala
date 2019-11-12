@@ -40,8 +40,8 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                                    identify: IdentifierAction,
                                                    getData: DataRetrievalAction,
                                                    formProvider: RegisteredAddressForEoriFormProvider,
-                                                   registeredAddressForEori: registeredAddressForEori,
-                                                   cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
+                                                   cc: MessagesControllerComponents,
+                                                   view: registeredAddressForEori) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form: Form[RegisteredAddressForEori] = formProvider()
 
@@ -53,14 +53,14 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
       case _ => form
     }
 
-    Ok(registeredAddressForEori(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(registeredAddressForEori(formWithErrors, mode))),
+        Future.successful(BadRequest(view(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId)).set(RegisteredAddressForEoriPage, value)
 

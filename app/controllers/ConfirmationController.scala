@@ -40,7 +40,8 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                        requireData: DataRequiredAction,
                                        dataCacheConnector: DataCacheConnector,
                                        pdfService: PdfService,
-                                       cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
+                                       cc: MessagesControllerComponents,
+                                       view: confirmation) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
@@ -49,7 +50,7 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
       _ = if (!removed) Logger.warn("Session entry failed to be removed from the cache")
 
       token: String = pdfService.encodeToken(c.eori)
-    } yield Ok(confirmation(appConfig, c, token))
+    } yield Ok(view(c, token))
 
     request.userAnswers.get(ConfirmationPage) match {
       case Some(c: Confirmation) => show(c)

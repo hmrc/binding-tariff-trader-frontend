@@ -20,11 +20,11 @@
 @import views.CaseDetailTab
 
 @import views.html.components.pagination
-@(appConfig: FrontendAppConfig, activeTab : CaseDetailTab, viewTable : Html)(implicit request: Request[_], messages: Messages)
+@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
+@(activeTab : CaseDetailTab, viewTable : Html)(implicit request: Request[_])
 
-@main_template(
+@template(
     title = messages("index.title"),
-    appConfig = appConfig,
     contentClass = Some("column-full"),
     bodyClasses = None) {
 

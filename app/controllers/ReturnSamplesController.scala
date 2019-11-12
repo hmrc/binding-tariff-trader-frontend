@@ -42,8 +42,8 @@ class ReturnSamplesController @Inject()(
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
                                         formProvider: ReturnSamplesFormProvider,
-                                        returnSamples: returnSamples,
-                                          cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
+                                        cc: MessagesControllerComponents,
+                                        view: returnSamples) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 
@@ -54,14 +54,14 @@ class ReturnSamplesController @Inject()(
       case _ => form
     }
 
-    Ok(returnSamples(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(returnSamples(formWithErrors, mode))),
+        Future.successful(BadRequest(view(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(ReturnSamplesPage, value)
 

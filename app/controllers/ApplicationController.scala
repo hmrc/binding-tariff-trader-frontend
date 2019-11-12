@@ -37,7 +37,9 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                                       pdfService: PdfService,
                                       caseService: CasesService,
                                       fileService: FileService,
-                                      cc: MessagesControllerComponents
+                                      cc: MessagesControllerComponents,
+                                      applicationView: applicationView,
+                                      rulingCertificateView: rulingCertificateView
                                       ) extends FrontendController(cc) with I18nSupport {
 
   private type Eori = String
@@ -92,7 +94,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
       letter <- fileService.getLetterOfAuthority(c)
       pdf <- pdf match {
         case true => generatePdf(applicationTemplate(appConfig, c, attachments, letter), s"BTIConfirmation$reference.pdf")
-        case false => successful(Ok(applicationView(appConfig, c, attachments, letter)))
+        case false => successful(Ok(applicationView(c, attachments, letter)))
       }
     } yield pdf
   }
@@ -116,7 +118,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)
                            (implicit request: Request[AnyContent]): Future[Result] = {
     caseService.getCaseWithRulingForUser(eori, reference) flatMap {
-      c: Case => successful(Ok(rulingCertificateView(appConfig, c)))
+      c: Case => successful(Ok(rulingCertificateView(c)))
     }
   }
 

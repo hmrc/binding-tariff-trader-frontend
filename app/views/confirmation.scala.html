@@ -15,11 +15,11 @@
  *@
 
 @import config.FrontendAppConfig
-@(appConfig: FrontendAppConfig, confirmation: Confirmation, pdfToken: String)(implicit request: Request[_], messages: Messages)
+@this(appConfig: FrontendAppConfig, template: main_template)
+@(confirmation: Confirmation, pdfToken: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@template(
     title = messages("confirmation.title"),
-    appConfig = appConfig,
     bodyClasses = None) {
 
     <div class="govuk-box-highlight">

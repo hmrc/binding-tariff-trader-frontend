@@ -46,15 +46,15 @@ class UploadWrittenAuthorisationController @Inject()(
                                                       requireData: DataRequiredAction,
                                                       formProvider: UploadWrittenAuthorisationFormProvider,
                                                       fileService: FileService,
-                                                      uploadWrittenAuthorisation: uploadWrittenAuthorisation,
-                                                      cc: MessagesControllerComponents) (implicit val lang: Lang)  extends FrontendController(cc) with I18nSupport {
+                                                      cc: MessagesControllerComponents,
+                                                      view: uploadWrittenAuthorisation) (implicit val lang: Lang)  extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
     val uploadedFile = request.userAnswers.get(UploadWrittenAuthorisationPage)
-    Ok(uploadWrittenAuthorisation(form, uploadedFile, mode))
+    Ok(view(form, uploadedFile, mode))
   }
 
   def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
@@ -64,7 +64,7 @@ class UploadWrittenAuthorisationController @Inject()(
         val storedLetter = request.userAnswers.get(UploadWrittenAuthorisationPage)
         successful(
           BadRequest(
-            uploadWrittenAuthorisation(form.copy(errors = Seq(FormError(errorKey, errorMessage))), storedLetter, mode)
+            view(form.copy(errors = Seq(FormError(errorKey, errorMessage))), storedLetter, mode)
           )
         )
       }

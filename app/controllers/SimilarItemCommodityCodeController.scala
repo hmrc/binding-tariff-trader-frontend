@@ -41,8 +41,8 @@ class SimilarItemCommodityCodeController @Inject()(
                                                     getData: DataRetrievalAction,
                                                     requireData: DataRequiredAction,
                                                     formProvider: SimilarItemCommodityCodeFormProvider,
-                                                    similarItemCommodityCode: similarItemCommodityCode,
-                                                    cc: MessagesControllerComponents
+                                                    cc: MessagesControllerComponents,
+                                                    view: similarItemCommodityCode
                                                   ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
   private lazy val form = formProvider()
 
@@ -57,13 +57,13 @@ class SimilarItemCommodityCodeController @Inject()(
       case _ => form
     }
 
-    Ok(similarItemCommodityCode(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(similarItemCommodityCode(formWithErrors, mode)))
+      Future.successful(BadRequest(view(formWithErrors, mode)))
     }
 
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))

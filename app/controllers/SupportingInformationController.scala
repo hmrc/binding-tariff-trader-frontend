@@ -41,8 +41,8 @@ class SupportingInformationController @Inject()(
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
                                                  formProvider: SupportingInformationFormProvider,
-                                                 supportingInformation: supportingInformation,
-                                                 cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
+                                                 cc: MessagesControllerComponents,
+                                                 view: supportingInformation) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
 
@@ -57,13 +57,13 @@ class SupportingInformationController @Inject()(
       case _ => form
     }
 
-    Ok(supportingInformation(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(supportingInformation(formWithErrors, mode)))
+      Future.successful(BadRequest(view(formWithErrors, mode)))
     }
 
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))

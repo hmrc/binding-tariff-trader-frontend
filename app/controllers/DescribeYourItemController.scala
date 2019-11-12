@@ -41,8 +41,8 @@ class DescribeYourItemController @Inject()(appConfig: FrontendAppConfig,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
                                       formProvider: DescribeYourItemFormProvider,
-                                           describeYourItem: describeYourItem,
-                                           cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
+                                           cc: MessagesControllerComponents,
+                                           view: describeYourItem) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -53,14 +53,14 @@ class DescribeYourItemController @Inject()(appConfig: FrontendAppConfig,
       case _ => form
     }
 
-    Ok(describeYourItem(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(describeYourItem(formWithErrors, mode))),
+        Future.successful(BadRequest(view(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(DescribeYourItemPage, value)
 

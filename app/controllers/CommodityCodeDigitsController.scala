@@ -40,9 +40,9 @@ class CommodityCodeDigitsController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        commodityCodeDigits: commodityCodeDigits,
                                         formProvider: CommodityCodeDigitsFormProvider,
-                                        cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
+                                        cc: MessagesControllerComponents,
+                                        view: commodityCodeDigits) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -53,14 +53,14 @@ class CommodityCodeDigitsController @Inject()(
       case _ => form
     }
 
-    Ok(commodityCodeDigits(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(commodityCodeDigits(formWithErrors, mode))),
+        Future.successful(BadRequest(view(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(CommodityCodeDigitsPage, value)
 

@@ -51,10 +51,11 @@ class DeclarationController @Inject()(
                                        fileService: FileService,
                                        mapper: CaseRequestMapper,
                                        declaration : declaration,
-                                       cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
+                                       cc: MessagesControllerComponents,
+                                       view: declaration) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
-    Ok(declaration(mode))
+    Ok(view(mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>

@@ -41,8 +41,8 @@ class SupportingInformationDetailsController @Inject()(
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
                                         formProvider: SupportingInformationDetailsFormProvider,
-                                        supportingInformationDetails: supportingInformationDetails,
-                                        cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
+                                        cc: MessagesControllerComponents,
+                                        view: supportingInformationDetails) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -53,14 +53,14 @@ class SupportingInformationDetailsController @Inject()(
       case _ => form
     }
 
-    Ok(supportingInformationDetails(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(supportingInformationDetails(formWithErrors, mode))),
+        Future.successful(BadRequest(view(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(SupportingInformationDetailsPage, value)
 

@@ -24,7 +24,7 @@
 @import uk.gov.hmrc.play.views.html.layouts.Article
 @import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
 @import uk.gov.hmrc.play.views.html.layouts.FooterLinks
-@import views.html.layouts.GovUkTemplate
+@import layouts.GovUkTemplate
 
 @this(  appConfig: config.FrontendAppConfig,
         layoutHead: Head,
@@ -126,4 +126,4 @@
       sidebar = sidebar)
 }
 
-@govUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, footerLinks = Some(footerLinks()), nav = true)(content)
+@govUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, footerLinks = Some(footerLinks), true)(content)

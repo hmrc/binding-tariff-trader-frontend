@@ -14,19 +14,16 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
+@this(appConfig: config.FrontendAppConfig, govuk_wrapper: views.html.govuk_wrapper)
 
-@import config.FrontendAppConfig
-
-@(title: String,
-  appConfig: FrontendAppConfig,
-  sidebarLinks: Option[Html] = None,
-  contentHeader: Option[Html] = None,
-  bodyClasses: Option[String] = None,
-  mainClass: Option[String] = None,
-  contentClass : Option[String] = Some("grid-row column-two-thirds"),
-  scriptElem: Option[Html] = None,
-  hasTimeOut: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages)
+@(  title: String,
+    sidebarLinks: Option[Html] = None,
+    contentHeader: Option[Html] = None,
+    bodyClasses: Option[String] = None,
+    mainClass: Option[String] = None,
+    contentClass : Option[String] = Some("grid-row column-two-thirds"),
+    scriptElem: Option[Html] = None,
+    hasTimeOut: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @import uk.gov.hmrc.play.views.html.layouts
 
@@ -65,7 +62,7 @@
 }
 
 
-@govuk_wrapper(appConfig = appConfig,
+@govuk_wrapper(
                title = title,
                mainClass = mainClass,
                bodyClasses = bodyClasses,

@@ -41,8 +41,8 @@ class WhenToSendSampleController @Inject()(
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
                                             formProvider: WhenToSendSampleFormProvider,
-                                            whenToSendSample: whenToSendSample,
-                                            cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[ReturnSamples] {
+                                            cc: MessagesControllerComponents,
+                                            view: whenToSendSample) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[ReturnSamples] {
 
   private lazy val form = formProvider()
 
@@ -57,13 +57,13 @@ class WhenToSendSampleController @Inject()(
       case _ => form
     }
 
-    Ok(whenToSendSample(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(whenToSendSample(formWithErrors, mode)))
+      Future.successful(BadRequest(view(formWithErrors, mode)))
     }
 
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))

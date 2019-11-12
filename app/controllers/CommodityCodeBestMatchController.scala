@@ -40,7 +40,7 @@ class CommodityCodeBestMatchController @Inject()(
                                                   requireData: DataRequiredAction,
                                                   formProvider: CommodityCodeBestMatchFormProvider,
                                                   cc: MessagesControllerComponents,
-                                                  commodityCodeBestMatch : commodityCodeBestMatch
+                                                  view : commodityCodeBestMatch
                                                   ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
@@ -56,13 +56,13 @@ class CommodityCodeBestMatchController @Inject()(
       case _ => form
     }
 
-    Ok(commodityCodeBestMatch(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(commodityCodeBestMatch(formWithErrors, mode)))
+      Future.successful(BadRequest(view(formWithErrors, mode)))
     }
 
     form.bindFromRequest().fold( badRequest, submitAnswer(_, mode))

@@ -33,7 +33,8 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
                                            authenticate: IdentifierAction,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction,
-                                           cc: MessagesControllerComponents
+                                           cc: MessagesControllerComponents,
+                                           view: check_your_answers
                                           ) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (authenticate andThen getData andThen requireData) { implicit request =>
@@ -82,7 +83,7 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
       )
     )
 
-    Ok(check_your_answers(appConfig, sections))
+    Ok(view(sections))
   }
 
 }

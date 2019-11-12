@@ -22,13 +22,12 @@
 @import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
 
-@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig)(implicit messages: Messages)
+@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
 
 @(form: Form[_], file: Option[FileAttachment], mode: Mode)(implicit request: Request[_])
 
-@main_template(
+@template(
     title = s"${errorPrefix(form)} ${messages("uploadWrittenAuthorisation.title")}",
-    appConfig = appConfig,
     bodyClasses = None) {
 
     @formHelper(action = UploadWrittenAuthorisationController.onSubmit(mode), 'enctype -> "multipart/form-data") {

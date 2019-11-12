@@ -44,13 +44,13 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
                                                      getData: DataRetrievalAction,
                                                      requireData: DataRequiredAction,
                                                      formProvider: SupportingMaterialFileListFormProvider,
-                                                     supportingMaterialFileList: supportingMaterialFileList,
-                                                     cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
+                                                     cc: MessagesControllerComponents,
+                                                     view: supportingMaterialFileList) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    Ok(supportingMaterialFileList(form, existingFiles, mode))
+    Ok(view(form, existingFiles, mode))
   }
 
   def onRemove(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -79,7 +79,7 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        successful(BadRequest(supportingMaterialFileList(formWithErrors, existingFiles, mode))),
+        successful(BadRequest(view(formWithErrors, existingFiles, mode))),
       {
         case true => successful(Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
         case false => defaultCachePageAndRedirect

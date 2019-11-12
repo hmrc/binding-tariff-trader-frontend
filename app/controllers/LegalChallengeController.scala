@@ -41,8 +41,8 @@ class LegalChallengeController @Inject()(
                                           getData: DataRetrievalAction,
                                           requireData: DataRequiredAction,
                                           formProvider: LegalChallengeFormProvider,
-                                          legalChallenge: legalChallenge,
-                                          cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
+                                          cc: MessagesControllerComponents,
+                                          view: legalChallenge) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
 
@@ -57,13 +57,13 @@ class LegalChallengeController @Inject()(
       case _ => form
     }
 
-    Ok(legalChallenge(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(legalChallenge(formWithErrors, mode)))
+      Future.successful(BadRequest(view(formWithErrors, mode)))
     }
 
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))

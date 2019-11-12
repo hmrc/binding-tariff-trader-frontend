@@ -16,12 +16,12 @@
 
 @import config.FrontendAppConfig
 @import viewmodels.AnswerSection
+@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
 
-@(appConfig: FrontendAppConfig, answerSections: Seq[AnswerSection])(implicit request: Request[_], messages: Messages)
+@(answerSections: Seq[AnswerSection])(implicit request: Request[_])
 
-    @main_template(
+    @template(
         title = messages("checkYourAnswers.title"),
-        appConfig = appConfig,
         bodyClasses = None) {
 
         @components.heading(messages("checkYourAnswers.heading"))

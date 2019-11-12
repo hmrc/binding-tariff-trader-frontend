@@ -16,11 +16,11 @@
 
 @import config.FrontendAppConfig
 @import models.requests.IdentifierRequest
-@(appConfig: FrontendAppConfig)(implicit request: IdentifierRequest[_], messages: Messages)
+@this(appConfig: FrontendAppConfig, template: main_template)(implicit  messages: Messages)
+@()(implicit request: IdentifierRequest[_])
 
-@main_template(
+@template(
     title = messages("beforeYouStart.title"),
-    appConfig = appConfig,
     bodyClasses = None) {
 
     @components.heading(messages("beforeYouStart.heading"))

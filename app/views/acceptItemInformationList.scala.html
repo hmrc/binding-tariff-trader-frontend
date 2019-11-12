@@ -16,11 +16,12 @@
 
 @import config.FrontendAppConfig
 
-@(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
+@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
 
-@main_template(
+@()(implicit request: Request[_])
+
+@template (
     title = messages("acceptItemInformationList.title"),
-    appConfig = appConfig,
     bodyClasses = None) {
 
 

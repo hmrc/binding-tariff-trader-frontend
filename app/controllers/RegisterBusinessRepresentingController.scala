@@ -41,8 +41,8 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
                                                        getData: DataRetrievalAction,
                                                        requireData: DataRequiredAction,
                                                        formProvider: RegisterBusinessRepresentingFormProvider,
-                                                       registerBusinessRepresenting: registerBusinessRepresenting,
-                                                       cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
+                                                       cc: MessagesControllerComponents,
+                                                       view: registerBusinessRepresenting) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form: Form[RegisterBusinessRepresenting] = formProvider()
 
@@ -53,7 +53,7 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
       case _ => form
     }
 
-    Ok(registerBusinessRepresenting(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -68,7 +68,7 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[RegisterBusinessRepresenting]) =>
-        Future.successful(BadRequest(registerBusinessRepresenting(formWithErrors, mode))),
+        Future.successful(BadRequest(view(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(RegisterBusinessRepresentingPage, value)
         dataCacheConnector.save(updatedAnswers.cacheMap).map { _ =>

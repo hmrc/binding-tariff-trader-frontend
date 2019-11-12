@@ -42,8 +42,8 @@ class LegalChallengeDetailsController @Inject()(
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
                                         formProvider: LegalChallengeDetailsFormProvider,
-                                        legalChallengeDetails: legalChallengeDetails,
-                                        cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
+                                        cc: MessagesControllerComponents,
+                                        view: legalChallengeDetails) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -54,14 +54,14 @@ class LegalChallengeDetailsController @Inject()(
       case _ => form
     }
 
-    Ok(legalChallengeDetails(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(legalChallengeDetails(formWithErrors, mode))),
+        Future.successful(BadRequest(view(formWithErrors, mode))),
       value => {
         val updatedAnswers = request.userAnswers.set(LegalChallengeDetailsPage, value)
 

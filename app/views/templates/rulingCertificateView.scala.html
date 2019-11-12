@@ -15,11 +15,11 @@
  *@
 
 @import config.FrontendAppConfig
-@(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
+@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
+@(c: Case)(implicit request: Request[_])
 
-@main_template(
+@template(
     title = s"${messages("rulingInformation.title")}",
-    appConfig = appConfig,
     bodyClasses = None)  {
 
     @components.back_link()

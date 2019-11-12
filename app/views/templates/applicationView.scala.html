@@ -17,11 +17,12 @@
 @import config.FrontendAppConfig
 @import models.response.FilestoreResponse
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None)(implicit request: Request[_], messages: Messages)
+@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
 
-@main_template(
+@(c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None)(implicit request: Request[_])
+
+@template(
     title = s"${messages("applicationView.title")}",
-    appConfig = appConfig,
     bodyClasses = None)  {
 
     @components.back_link()

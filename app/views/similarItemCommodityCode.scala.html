@@ -21,7 +21,7 @@
 @import views.ViewUtils._
 @import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
-@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig)(implicit messages: Messages)
+@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_])
 
@@ -33,9 +33,8 @@
     </ul>
 }
 
-@main_template(
+@template(
     title = s"${errorPrefix(form)} ${messages("similarItemCommodityCode.title")}",
-    appConfig = appConfig,
     bodyClasses = None) {
 
     @formHelper(action = SimilarItemCommodityCodeController.onSubmit(mode)) {
