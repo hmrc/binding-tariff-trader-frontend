@@ -383,6 +383,7 @@ application.section.applyingFor.details = Agent contact details
 application.section.agentContactDetails = Agent registered address
 application.section.agentEoriNumber = Agent EORI number
 application.section.applicationSubmittedBy = Application submitted by
+application.section.writtenAuthorisation = Written authorisation from business or organisation
 application.section.applicationType = Is this a new application or a renewal?
 application.section.applicationType.newApplication = This is a new application
 application.section.applicationType.renewalApplication = This is a renewal of a previous ruling
