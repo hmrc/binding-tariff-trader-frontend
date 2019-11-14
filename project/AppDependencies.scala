@@ -8,7 +8,7 @@ object AppDependencies {
     "commons-validator" % "commons-validator"                 % "1.6",
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc"       %% "auth-client"                      % "2.31.0-play-26",
-    "uk.gov.hmrc"       %% "bootstrap-play-26"                % "1.1.0",
+    "uk.gov.hmrc"       %% "bootstrap-play-26"                % "0.42.0",
     "uk.gov.hmrc"       %% "govuk-template"                   % "5.44.0-play-26",
     "uk.gov.hmrc"       %% "http-caching-client"              % "9.0.0-play-26",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"    % "0.2.0",
