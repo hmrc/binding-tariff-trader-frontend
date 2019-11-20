@@ -24,13 +24,15 @@ import views.html.{acceptItemInformationList, beforeYouStart}
 
 class AcceptItemInformationListControllerSpec extends ControllerSpecBase {
 
+  private val view: acceptItemInformationList = app.injector.instanceOf[acceptItemInformationList]
+
   private def onwardRoute = Call("GET", "/foo")
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new AcceptItemInformationListController(frontendAppConfig,  messagesApi,  new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl)
+      dataRetrievalAction, new DataRequiredActionImpl, messagesControllerComponents,view)
 
-  def viewAsString() = acceptItemInformationList(frontendAppConfig)(fakeRequest, messages).toString
+  def viewAsString() = view()(fakeRequest).toString
 
   "AcceptItemInformationList Controller" must {
 

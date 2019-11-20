@@ -26,6 +26,7 @@ import views.html.beforeYouStart
 class BeforeYouStartControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
+  private def view: beforeYouStart = app.injector.instanceOf[beforeYouStart]
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, identifier: IdentifierAction = FakeIdentifierAction) =
     new BeforeYouStartController(
@@ -34,10 +35,12 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
       new FakeNavigator(onwardRoute),
       identifier,
       dataRetrievalAction,
-      new DataRequiredActionImpl
+      new DataRequiredActionImpl,
+      messagesControllerComponents,
+      view
     )
 
-  private def viewAsString(eori: Option[String]) = beforeYouStart(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages).toString
+  private def viewAsString(eori: Option[String]) = view()(IdentifierRequest(fakeRequest, "id", eori)).toString
 
   "BeforeYouStart Controller" must {
 

@@ -26,6 +26,7 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.templates.{applicationView, rulingCertificateView}
 
 import scala.concurrent.Future.{failed, successful}
 
@@ -40,6 +41,8 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
   private val caseRef = "ref"
   private val token = "123"
   private val userEori = "eori-789012"
+  private val applicationView: applicationView = app.injector.instanceOf[applicationView]
+  private val rulingCertificateView : rulingCertificateView = app.injector.instanceOf[rulingCertificateView]
 
   private val request = IdentifierRequest(fakeRequest, "id", Some(userEori))
 
@@ -50,7 +53,10 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
       action,
       pdfService,
       caseService,
-      fileService
+      fileService,
+      messagesControllerComponents,
+      applicationView,
+      rulingCertificateView
     )
   }
 

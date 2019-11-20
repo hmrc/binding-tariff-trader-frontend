@@ -21,12 +21,16 @@ import models.response.FilestoreResponse
 import models.{Attachment, FileAttachment}
 import org.mockito.BDDMockito.given
 import play.api.http.Status
-import play.api.libs.Files.TemporaryFile
+import play.api.libs.Files.{DefaultTemporaryFileCreator, TemporaryFile}
 import play.api.mvc.MultipartFormData
+import play.libs.Files.TemporaryFileCreator
 
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
   private val connector = new BindingTariffFilestoreConnector(appConfig, wsClient, authenticatedHttpClient)
+
+  val temporaryFileCreator = app.injector.instanceOf[DefaultTemporaryFileCreator]
+
 
   "Connector" should {
 
@@ -40,7 +44,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           )
       )
 
-      val file = MultipartFormData.FilePart[TemporaryFile]("file", "file-name", Some("text/plain"), TemporaryFile("file-name.txt"))
+      val file = MultipartFormData.FilePart[TemporaryFile]("file", "file-name", Some("text/plain"), temporaryFileCreator.create("file-name.txt"))
 
       await(connector.upload(file)) shouldBe FilestoreResponse(
         id = "id",

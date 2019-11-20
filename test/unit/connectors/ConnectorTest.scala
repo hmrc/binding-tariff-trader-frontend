@@ -17,24 +17,25 @@
 package connectors
 
 import akka.actor.ActorSystem
+import base.SpecBase
 import config.FrontendAppConfig
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Environment
 import play.api.inject.Injector
 import play.api.libs.ws.WSClient
-import play.api.test.FakeApplication
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.UnitSpec
 
-trait ConnectorTest extends UnitSpec with WiremockTestServer
+trait ConnectorTest extends SpecBase with WiremockTestServer with UnitSpec
  with MockitoSugar with ResourceFiles {
 
-  override lazy val fakeApplication = FakeApplication()
 
-  protected lazy val injector: Injector = fakeApplication.injector
+  // protected lazy val injector: Injector = fakeApplication.injector
 
   private val actorSystem = ActorSystem.create("testActorSystem")
 
@@ -46,7 +47,7 @@ trait ConnectorTest extends UnitSpec with WiremockTestServer
   protected implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private val environment = injector.instanceOf[Environment]
-  private val auditConnector = new DefaultAuditConnector(fakeApplication.configuration, environment)
+  private val auditConnector = mock[HttpAuditing]
 
   protected val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
 
