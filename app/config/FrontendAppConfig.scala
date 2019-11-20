@@ -41,6 +41,11 @@ class FrontendAppConfig @Inject() (val runModeConfiguration: Configuration, envi
   lazy val betaFeedbackUrl = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
   lazy val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
 
+  lazy val reportAccessibilityProblemDefaultUrl = loadConfig("urls.reportAccessibilityProblemDefaultUrl")
+  lazy val testedOnDate = loadConfig("accessibility.testedOnDate")
+  lazy val preparedOnDate = loadConfig("accessibility.preparedOnDate")
+  lazy val lastUpdatedDate = loadConfig("accessibility.lastUpdatedDate")
+
   lazy val authUrl: String = config.baseUrl("auth")
   lazy val loginUrl: String = loadConfig("urls.login")
   lazy val loginContinueUrl: String = loadConfig("urls.loginContinue")
