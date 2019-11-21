@@ -47,8 +47,8 @@
 
             @components.input_textarea(
                 field = form("description"),
-                label = Html(messages("describeYourItem.description")),
-                hint = Some(descriptionHint),
+                label = descriptionBullets,
+                hint = None,
                 inputFormControl = "form-control--full-width",
                 numRows = 15,
                 maxlength = 50000
@@ -67,7 +67,8 @@
     }
 }
 
-@descriptionHint = {
+@descriptionBullets = {
+    <p>@messages("describeYourItem.description")</p>
     <p>@messages("describeYourItem.paragraph.includes")</p>
     <ul class="list list-bullet">
         <li>@messages("describeYourItem.listItem1")</li>
