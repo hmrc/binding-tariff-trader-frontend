@@ -20,15 +20,17 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import play.api.{Application, Configuration}
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Controller}
+import play.api.mvc.{Action, AnyContent, Controller, ControllerComponents}
 import uk.gov.hmrc.play.language.LanguageUtils
 import uk.gov.hmrc.play.language.LanguageController
 
 // TODO: upstream this into the Play framework
 class LanguageSwitchController @Inject() (
                                            configuration: Configuration,
-                                           appConfig: FrontendAppConfig
-                                         )(implicit val application: Application, override implicit val messagesApi: MessagesApi) extends LanguageController with I18nSupport {
+                                           appConfig: FrontendAppConfig,
+                                           languageUtils: LanguageUtils,
+                                           controllerComponents: ControllerComponents
+                                         )(implicit val application: Application, override implicit val messagesApi: MessagesApi) extends LanguageController(configuration, languageUtils, controllerComponents) {
 
   override def fallbackURL: String = routes.IndexController.getApplications().url
 
