@@ -118,4 +118,4 @@ GET         /applications/:reference/ruling/pdf                        controlle
 
 GET         /view-ruling/:reference                                    controllers.RulingController.viewRuling(reference: String)
 
-
+GET         /accessibilityTemplate                                     controllers.AccessibilityController.onPageLoad()

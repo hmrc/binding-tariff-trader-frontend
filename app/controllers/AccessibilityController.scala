@@ -25,14 +25,10 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.ExecutionContext
-
-
 class AccessibilityController  @Inject()(
                                         val frontendAppConfig: FrontendAppConfig,
                                         override val messagesApi: MessagesApi,
                                         cc: MessagesControllerComponents,
-                                        implicit val executionContext: ExecutionContext,
                                         view: accessibilityStatementView) extends FrontendController(cc) with I18nSupport{
 
 

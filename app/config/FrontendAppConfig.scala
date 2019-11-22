@@ -45,6 +45,9 @@ class FrontendAppConfig @Inject() (val runModeConfiguration: Configuration, envi
   lazy val testedOnDate = loadConfig("accessibility.testedOnDate")
   lazy val preparedOnDate = loadConfig("accessibility.preparedOnDate")
   lazy val lastUpdatedDate = loadConfig("accessibility.lastUpdatedDate")
+  lazy val govukAccessibilityUrl = controllers.routes.AccessibilityController.onPageLoad().url
+  lazy val subdomainUrl = "https://www.tax.service.gov.uk/report-import-vat-parcels/"
+
 
   lazy val authUrl: String = config.baseUrl("auth")
   lazy val loginUrl: String = loadConfig("urls.login")
