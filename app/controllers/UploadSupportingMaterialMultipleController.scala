@@ -25,19 +25,19 @@ import models.{FileAttachment, Mode}
 import navigation.Navigator
 import pages._
 import play.api.data.FormError
-import play.api.i18n.{Lang,I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MultipartFormData, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MultipartFormData, Request, Result}
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
 class UploadSupportingMaterialMultipleController @Inject()(
                                                             appConfig: FrontendAppConfig,
-                                                            override val messagesApi: MessagesApi,
                                                             dataCacheConnector: DataCacheConnector,
                                                             navigator: Navigator,
                                                             identify: IdentifierAction,
@@ -46,7 +46,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
                                                             formProvider: UploadSupportingMaterialMultipleFormProvider,
                                                             fileService: FileService,
                                                             cc: MessagesControllerComponents,
-                                                            view: uploadSupportingMaterialMultiple) (implicit val lang: Lang) extends FrontendController(cc) with I18nSupport {
+                                                            view: uploadSupportingMaterialMultiple) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -86,15 +86,37 @@ class UploadSupportingMaterialMultipleController @Inject()(
       }
 
       request.body.file("file-input").filter(_.filename.nonEmpty) match {
-        case Some(_) if hasMaxFiles => badRequest("validation-error", messagesApi("uploadSupportingMaterialMultiple.error.numberFiles"))
-        case Some(file) => fileService.validate(file) match {
+        case Some(_) if hasMaxFiles => badRequest("validation-error", request.messages.apply("uploadSupportingMaterialMultiple.error.numberFiles"))
+        case Some(file) => validateFile(file)(request) match {
           case Right(rightFile) => uploadFile(rightFile)
           case Left(errorMessage) => badRequest("file-input", errorMessage)
         }
         case _ =>
-          badRequest("file-input", messagesApi("uploadSupportingMaterialMultiple.upload.selectFile"))
+          badRequest("file-input", request.messages.apply("uploadSupportingMaterialMultiple.upload.selectFile"))
       }
 
     }
+
+  private def validateFile(file: MultipartFormData.FilePart[TemporaryFile])(implicit request: Request[_]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
+
+    def hasInvalidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = {
+      _.ref.path.toFile.length > appConfig.fileUploadMaxSize
+    }
+
+    def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
+      f.contentType match {
+        case Some(c: String) if appConfig.fileUploadMimeTypes.contains(c) => false
+        case _ => true
+      }
+    }
+
+    if (hasInvalidSize(file)) {
+      Left(request.messages.apply("uploadWrittenAuthorisation.error.size"))
+    } else if (hasInvalidContentType(file)) {
+      Left(request.messages.apply("uploadWrittenAuthorisation.error.fileType"))
+    } else {
+      Right(file)
+    }
+  }
 
 }

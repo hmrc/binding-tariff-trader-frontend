@@ -36,12 +36,12 @@ trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with
 }
 
 class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthConnector,
-                                              config: FrontendAppConfig)
+                                              config: FrontendAppConfig, cc: MessagesControllerComponents)
                                              (implicit val ec: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
 
-  def parser: play.api.mvc.BodyParser[play.api.mvc.AnyContent] = ???
+  def parser: play.api.mvc.BodyParser[play.api.mvc.AnyContent] = cc.parsers.defaultBodyParser
 
-  protected def executionContext: scala.concurrent.ExecutionContext = ???
+  protected def executionContext: scala.concurrent.ExecutionContext = cc.executionContext
 
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {

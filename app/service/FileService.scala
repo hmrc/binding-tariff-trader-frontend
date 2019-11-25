@@ -32,7 +32,7 @@ import scala.concurrent.Future
 import scala.concurrent.Future.{sequence, successful}
 
 @Singleton
-class FileService @Inject()(connector: BindingTariffFilestoreConnector, messagesApi: MessagesApi, configuration: FrontendAppConfig) (implicit val lang: Lang){
+class FileService @Inject()(connector: BindingTariffFilestoreConnector, messagesApi: MessagesApi, configuration: FrontendAppConfig){
 
   def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
     connector.upload(f).map(toFileAttachment(f.ref.path.toFile.length))
@@ -77,25 +77,5 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
     r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
-  def validate(file: MultipartFormData.FilePart[TemporaryFile]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
-    if (hasInvalidSize(file)) {
-      Left(messagesApi("uploadWrittenAuthorisation.error.size"))
-    } else if (hasInvalidContentType(file)) {
-      Left(messagesApi("uploadWrittenAuthorisation.error.fileType"))
-    } else {
-      Right(file)
-    }
-  }
-
-  private def hasInvalidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = {
-    _.ref.path.toFile.length > configuration.fileUploadMaxSize
-  }
-
-  private def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
-    f.contentType match {
-      case Some(c: String) if configuration.fileUploadMimeTypes.contains(c) => false
-      case _ => true
-    }
-  }
 
 }

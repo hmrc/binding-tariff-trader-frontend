@@ -30,7 +30,7 @@ class LanguageSwitchController @Inject() (
                                            appConfig: FrontendAppConfig,
                                            languageUtils: LanguageUtils,
                                            controllerComponents: ControllerComponents
-                                         )(implicit val application: Application, override implicit val messagesApi: MessagesApi) extends LanguageController(configuration, languageUtils, controllerComponents) {
+                                         )(override implicit val messagesApi: MessagesApi) extends LanguageController(configuration, languageUtils, controllerComponents) {
 
   override def fallbackURL: String = routes.IndexController.getApplications().url
 
