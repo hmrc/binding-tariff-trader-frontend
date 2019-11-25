@@ -34,7 +34,6 @@ import scala.concurrent.Future.successful
 class IndexController @Inject()(val appConfig: FrontendAppConfig,
                                 identify: IdentifierAction,
                                 service: CasesService,
-                                override val messagesApi: MessagesApi,
                                 view: index,
                                 cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 

@@ -39,9 +39,7 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
                                               config: FrontendAppConfig, cc: MessagesControllerComponents)
                                              (implicit val ec: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
 
-  def parser: play.api.mvc.BodyParser[play.api.mvc.AnyContent] = cc.parsers.defaultBodyParser
 
-  protected def executionContext: scala.concurrent.ExecutionContext = cc.executionContext
 
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
@@ -77,5 +75,9 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
   } else {
     authorised(AuthProviders(GovernmentGateway))
   }
+
+  override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
+
+  override protected def executionContext: ExecutionContext = cc.executionContext
 
 }
