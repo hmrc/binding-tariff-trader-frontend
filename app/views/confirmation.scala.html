@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 @this(appConfig: FrontendAppConfig, template: main_template)
-@(confirmation: Confirmation, pdfToken: String)(implicit request: Request[_], messages: Messages)
+@(confirmation: Confirmation, pdfToken: String)(implicit messages: Messages, request: Request[_])
 
 @template(
     title = messages("confirmation.title"),

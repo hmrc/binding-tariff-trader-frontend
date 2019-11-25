@@ -17,9 +17,9 @@
 @import config.FrontendAppConfig
 @import models.response.FilestoreResponse
 
-@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
+@this(appConfig: FrontendAppConfig, template: main_template)
 
-@(c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None)(implicit request: Request[_])
+@(c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None)(implicit messages: Messages, request: Request[_])
 
 @template(
     title = s"${messages("applicationView.title")}",

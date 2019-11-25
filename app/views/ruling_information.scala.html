@@ -17,9 +17,9 @@
 @import config.FrontendAppConfig
 @import utils.Dates
 
-@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
+@this(appConfig: FrontendAppConfig, template: main_template)
 
-@(c: Case)(implicit request: Request[_])
+@(c: Case)(implicit messages: Messages, request: Request[_])
 
     @template(
         title = s"${messages("rulingInformation.title")}",

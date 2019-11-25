@@ -24,7 +24,7 @@
 @import utils.Dates
 @import java.time.Instant
 
-@(appConfig: FrontendAppConfig, c: Case, d: Decision, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, d: Decision, compositeMode: Boolean = false)(implicit messages: Messages, request: Request[_])
 
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{

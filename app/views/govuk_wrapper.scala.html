@@ -48,7 +48,7 @@
         contentHeader: Option[Html] = None,
         mainContent: Html = Html(""),
         serviceInfoContent: Html = Html(""),
-        scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages)
+        scriptElem: Option[Html] = None)(implicit messages: Messages, request: Request[_])
 
 @head = {
     @layoutHead(

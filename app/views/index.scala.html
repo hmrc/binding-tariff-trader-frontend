@@ -20,8 +20,8 @@
 @import views.CaseDetailTab
 
 @import views.html.components.pagination
-@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
-@(activeTab : CaseDetailTab, viewTable : Html)(implicit request: Request[_])
+@this(appConfig: FrontendAppConfig, template: main_template)
+@(activeTab : CaseDetailTab, viewTable : Html)(implicit messages: Messages, request: Request[_])
 
 @template(
     title = messages("index.title"),

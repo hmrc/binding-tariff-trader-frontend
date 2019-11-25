@@ -22,9 +22,9 @@
 @import views.ViewUtils._
 @import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
-@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
+@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig, template: main_template)
 
-@(form: Form[_], mode: Mode)(implicit request: OptionalDataRequest[_])
+@(form: Form[_], mode: Mode)(implicit messages: Messages, request: OptionalDataRequest[_])
 
 @template(
     title = s"${errorPrefix(form)} ${messages("registeredAddressForEori.title")}",

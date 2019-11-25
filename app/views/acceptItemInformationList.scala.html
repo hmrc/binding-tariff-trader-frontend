@@ -16,9 +16,9 @@
 
 @import config.FrontendAppConfig
 
-@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
+@this(appConfig: FrontendAppConfig, template: main_template)
 
-@()(implicit request: Request[_])
+@()(implicit messages: Messages, request: Request[_])
 
 @template (
     title = messages("acceptItemInformationList.title"),

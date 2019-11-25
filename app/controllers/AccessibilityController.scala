@@ -21,15 +21,13 @@ import java.net.URI
 import config.FrontendAppConfig
 import javax.inject.Inject
 import views.html.accessibilityStatementView
-import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 class AccessibilityController  @Inject()(
                                         val frontendAppConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
                                         cc: MessagesControllerComponents,
-                                        view: accessibilityStatementView) extends FrontendController(cc) with I18nSupport{
+                                        view: accessibilityStatementView) extends FrontendController(cc) {
 
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>

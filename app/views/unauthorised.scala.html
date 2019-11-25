@@ -16,8 +16,8 @@
 
 @import config.FrontendAppConfig
 
-@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
-@()(implicit request: Request[_])
+@this(appConfig: FrontendAppConfig, template: main_template)
+@()(implicit messages: Messages, request: Request[_])
 
 @template(
     title = messages("unauthorised.title"),

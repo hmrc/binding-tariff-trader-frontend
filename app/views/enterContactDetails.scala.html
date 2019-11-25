@@ -21,9 +21,9 @@
 @import views.ViewUtils._
 @import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
-@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
+@this(formHelper: FormWithCSRF, appConfig: FrontendAppConfig, template: main_template)
 
-@(form: Form[_],mode: Mode)(implicit request: Request[_])
+@(form: Form[_],mode: Mode)(implicit messages: Messages, request: Request[_])
 
 @template(
     title = s"${errorPrefix(form)} ${messages("enterContactDetails.title")}",

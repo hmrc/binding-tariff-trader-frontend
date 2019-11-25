@@ -16,8 +16,8 @@
 
 @import config.FrontendAppConfig
 @import models.requests.IdentifierRequest
-@this(appConfig: FrontendAppConfig, template: main_template)(implicit  messages: Messages)
-@()(implicit request: IdentifierRequest[_])
+@this(appConfig: FrontendAppConfig, template: main_template)
+@()(implicit messages: Messages, request: IdentifierRequest[_])
 
 @template(
     title = messages("beforeYouStart.title"),

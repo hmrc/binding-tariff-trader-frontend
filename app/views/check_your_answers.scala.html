@@ -16,9 +16,9 @@
 
 @import config.FrontendAppConfig
 @import viewmodels.AnswerSection
-@this(appConfig: FrontendAppConfig, template: main_template)(implicit messages: Messages)
+@this(appConfig: FrontendAppConfig, template: main_template)
 
-@(answerSections: Seq[AnswerSection])(implicit request: Request[_])
+@(answerSections: Seq[AnswerSection])(implicit messages: Messages, request: Request[_])
 
     @template(
         title = messages("checkYourAnswers.title"),
