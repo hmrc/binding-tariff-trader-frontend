@@ -22,22 +22,25 @@ import javax.inject.Singleton
 import models.CaseStatus.CaseStatus
 import models._
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppConfig, client: AuthenticatedHttpClient) {
+class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppConfig, client: HttpClient) {
+
+  private val APITokenHeader = Seq("X-Api-Token" -> configuration.apiToken)
 
   def createCase(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
     val url = s"${configuration.bindingTariffClassificationUrl}/cases"
-    client.POST[NewCaseRequest, Case](url = url, body = c)
+    client.POST[NewCaseRequest, Case](url = url, body = c, headers= APITokenHeader)
   }
 
   def findCase(reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] = {
     val url = s"${configuration.bindingTariffClassificationUrl}/cases/$reference"
-    client.GET[Option[Case]](url)
+    client.GET[Option[Case]](url, Nil, APITokenHeader)
   }
 
   def findCasesBy(eori: String, status: Set[CaseStatus], pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
@@ -46,6 +49,6 @@ class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppC
       s"&sort_by=${sort.field}&sort_direction=${sort.direction}" +
       s"&page=${pagination.page}&page_size=${pagination.pageSize}"
 
-    client.GET[Paged[Case]](url)
+    client.GET[Paged[Case]](url, Nil, APITokenHeader)
   }
 }

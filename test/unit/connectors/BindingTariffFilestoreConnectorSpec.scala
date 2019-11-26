@@ -27,7 +27,7 @@ import play.libs.Files.TemporaryFileCreator
 
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
-  private val connector = new BindingTariffFilestoreConnector(appConfig, wsClient, authenticatedHttpClient)
+  private val connector = new BindingTariffFilestoreConnector(appConfig, wsClient, standardHttpClient)
 
   val temporaryFileCreator = app.injector.instanceOf[DefaultTemporaryFileCreator]
 

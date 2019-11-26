@@ -46,12 +46,9 @@ trait ConnectorTest extends SpecBase with WiremockTestServer with UnitSpec
 
   protected implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  private val environment = injector.instanceOf[Environment]
   private val auditConnector = mock[HttpAuditing]
 
   protected val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
-
-  protected val authenticatedHttpClient = new AuthenticatedHttpClient(auditConnector, wsClient, actorSystem)
   protected val standardHttpClient = new DefaultHttpClient(fakeApplication.configuration, auditConnector, wsClient, actorSystem)
 
   override def beforeAll(): Unit = {
