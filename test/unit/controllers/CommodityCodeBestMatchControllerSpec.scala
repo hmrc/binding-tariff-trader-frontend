@@ -34,13 +34,14 @@ class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CommodityCodeBestMatchFormProvider()
+  val view = app.injector.instanceOf[commodityCodeBestMatch]
   val form = formProvider()
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new CommodityCodeBestMatchController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+    new CommodityCodeBestMatchController(messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, messagesControllerComponents, view)
 
-  def viewAsString(form: Form[_] = form) = commodityCodeBestMatch(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
   "CommodityCodeBestMatch Controller" must {
 

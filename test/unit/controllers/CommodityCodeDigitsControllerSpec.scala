@@ -35,12 +35,13 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase {
 
   val formProvider = new CommodityCodeDigitsFormProvider()
   val form = formProvider()
+  val view = app.injector.instanceOf[commodityCodeDigits]
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CommodityCodeDigitsController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, messagesControllerComponents, view)
 
-  def viewAsString(form: Form[_] = form) = commodityCodeDigits(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
 
   val testAnswer = "answer"
 

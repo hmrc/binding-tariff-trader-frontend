@@ -32,7 +32,7 @@ class AcceptItemInformationListControllerSpec extends ControllerSpecBase {
     new AcceptItemInformationListController(frontendAppConfig,  messagesApi,  new FakeNavigator(onwardRoute), FakeIdentifierAction,
       dataRetrievalAction, new DataRequiredActionImpl, messagesControllerComponents,view)
 
-  def viewAsString() = view()(fakeRequest).toString
+  def viewAsString() = view()(messages, fakeRequest).toString
 
   "AcceptItemInformationList Controller" must {
 

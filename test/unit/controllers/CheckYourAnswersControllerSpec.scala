@@ -26,6 +26,7 @@ import views.html.check_your_answers
 class CheckYourAnswersControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
+  private def view = app.injector.instanceOf[check_your_answers]
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CheckYourAnswersController(
@@ -34,7 +35,9 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
-      new DataRequiredActionImpl
+      new DataRequiredActionImpl,
+      messagesControllerComponents,
+      view
     )
 
   "Check Your Answers Controller" must {
@@ -49,7 +52,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
         AnswerSection(Some("checkYourAnswers.informationAboutYourItemSection"), Seq.empty),
         AnswerSection(Some("checkYourAnswers.otherInformation"), Seq.empty)
       )
-      contentAsString(result) mustBe check_your_answers(frontendAppConfig, expectedSections)(fakeRequest, messages).toString
+      contentAsString(result) mustBe view(expectedSections)(messages, fakeRequest).toString
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

@@ -40,7 +40,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
       view
     )
 
-  private def viewAsString(eori: Option[String]) = view()(IdentifierRequest(fakeRequest, "id", eori)).toString
+  private def viewAsString(eori: Option[String]) = view()(messages, IdentifierRequest(fakeRequest, "id", eori)).toString
 
   "BeforeYouStart Controller" must {
 
