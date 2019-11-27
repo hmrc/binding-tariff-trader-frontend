@@ -28,7 +28,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
 import pages.UploadWrittenAuthorisationPage
 import play.api.data.Form
-import play.api.libs.Files.TemporaryFile
+import play.api.libs.Files.{SingletonTemporaryFileCreator, TemporaryFile}
 import play.api.libs.json.Json
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc.{Call, MultipartFormData}
@@ -47,6 +47,7 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
   private def onwardRoute = Call("GET", "/foo")
 
   private val fileService = mock[FileService]
+  private val fileValidator = mock[FileValidator]
   private val view = app.injector.instanceOf[uploadWrittenAuthorisation]
   private val cacheConnector = mock[DataCacheConnector]
 
@@ -59,8 +60,8 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
   private val form = formProvider()
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new UploadWrittenAuthorisationController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, fileService, messagesControllerComponents, view)
+    new UploadWrittenAuthorisationController(frontendAppConfig, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, fileService, messagesControllerComponents, view, fileValidator)
 
   private def viewAsString(form: Form[_] = form, file: Option[FileAttachment] = None): String =
     view(form, file, NormalMode)(messages, fakeRequest).toString
@@ -92,13 +93,13 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
     "redirect to the next page when valid data is submitted" in {
 
       //Given
-      val file = TemporaryFile("example-file.txt")
+      val file = SingletonTemporaryFileCreator.create("example-file.txt")
       val filePart = FilePart[TemporaryFile](key = "letter-of-authority", "file.txt", contentType = Some("text/plain"), ref = file)
       val form: MultipartFormData[TemporaryFile] = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
       given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(Future.successful(FileAttachment("id", "file-name", "type", 0)))
-      given(fileService.validate(any[MultipartFormData.FilePart[TemporaryFile]])).willReturn(Right(form.file("letter-of-authority").get))
+      given(fileValidator.validateFile(any[MultipartFormData.FilePart[TemporaryFile]],postRequest)).willReturn(Right(form.file("letter-of-authority").get))
 
       val savedCacheMap = mock[CacheMap]
       given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
@@ -141,12 +142,12 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
 
     "return a Bad Request when invalid file type is submitted" in {
 
-      val file = TemporaryFile("example-file.mp3")
+      val file = SingletonTemporaryFileCreator.create("example-file.mp3")
       val filePart = FilePart[TemporaryFile](key = "letter-of-authority", "example-file.mp3", contentType = Some("audio/mpeg"), ref = file)
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
-      given(fileService.validate(any[MultipartFormData.FilePart[TemporaryFile]])).willReturn(Left("some error message about bad file"))
+      given(fileValidator.validateFile(any[MultipartFormData.FilePart[TemporaryFile]],postRequest)).willReturn(Left("some error message about bad file"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -163,7 +164,8 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"), ref = TemporaryFile("example-file.txt"))
+      val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"),
+        ref = SingletonTemporaryFileCreator.create("example-file.txt"))
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)

@@ -31,7 +31,7 @@ import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
 import pages.SupportingMaterialFileListPage
 import play.api.data.Form
-import play.api.libs.Files.TemporaryFile
+import play.api.libs.Files.{SingletonTemporaryFileCreator, TemporaryFile}
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.mvc.{Call, MultipartFormData}
 import play.api.test.Helpers._
@@ -48,6 +48,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
   def onwardRoute = Call("GET", "/foo")
 
   private val fileService = mock[FileService]
+  private val fileValidator = mock[FileValidator]
+  private val view = app.injector.instanceOf[uploadSupportingMaterialMultiple]
   private val cacheConnector = mock[DataCacheConnector]
   private val formProvider = new UploadSupportingMaterialMultipleFormProvider()
   private val form = formProvider()
@@ -56,21 +58,22 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new UploadSupportingMaterialMultipleController(
       frontendAppConfig,
-      messagesApi,
       cacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      fileService
+      fileService,
+      messagesControllerComponents,
+      view,
+      fileValidator
     )
 
-  private def viewAsString(form: Form[_] = form): String = uploadSupportingMaterialMultiple(
-    frontendAppConfig,
+  private def viewAsString(form: Form[_] = form): String = view(
     form,
     NormalMode
-  )(fakeRequest, messages).toString
+  )(messages,fakeRequest).toString
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -88,12 +91,12 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
     "respond with accepted and add next page on the location header  when valid data is submitted" in {
       // Given A Form
-      val file = TemporaryFile("example-file.txt")
+      val file = SingletonTemporaryFileCreator.create("example-file.txt")
       val filePart = FilePart[TemporaryFile](key = "file-input", "file.txt", contentType = Some("text/plain"), ref = file)
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
-      given(fileService.validate(refEq(filePart))).willReturn(Right(filePart))
+      given(fileValidator.validateFile(refEq(filePart),postRequest)).willReturn(Right(filePart))
       given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(concurrent.Future(FileAttachment("id", "file-name", "type", 0)))
 
       val savedCacheMap = mock[CacheMap]
@@ -111,12 +114,12 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
     "respond with bad request if a file has wrong extension" in {
       // Given A Form
-      val file = TemporaryFile("example-file.txt")
+      val file = SingletonTemporaryFileCreator.create("example-file.txt")
       val filePart = FilePart[TemporaryFile](key = "file-input", "file.3gp", contentType = Some("video/3gpp"), ref = file)
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
 
-      given(fileService.validate(refEq(filePart))).willReturn(Left("message something went wrong"))
+      given(fileValidator.validateFile(refEq(filePart),postRequest)).willReturn(Left("message something went wrong"))
 
       val savedCacheMap = mock[CacheMap]
       given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
@@ -153,7 +156,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val filePart = FilePart[TemporaryFile](key = "file-input", "file.txt", contentType = Some("text/plain"), ref = TemporaryFile("example-file.txt"))
+      val filePart = FilePart[TemporaryFile](key = "file-input", "file.txt", contentType = Some("text/plain"),
+        ref = SingletonTemporaryFileCreator.create("example-file.txt"))
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
