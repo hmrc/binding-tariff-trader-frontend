@@ -27,7 +27,7 @@ import pages._
 import play.api.data.FormError
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MultipartFormData, Request, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MultipartFormData, Result}
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadWrittenAuthorisation
@@ -46,7 +46,9 @@ class UploadWrittenAuthorisationController @Inject()(
                                                       formProvider: UploadWrittenAuthorisationFormProvider,
                                                       fileService: FileService,
                                                       cc: MessagesControllerComponents,
-                                                      view: uploadWrittenAuthorisation) extends FrontendController(cc) with I18nSupport {
+                                                      view: uploadWrittenAuthorisation,
+                                                      fileValidator: FileValidator
+                                                    ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -82,7 +84,7 @@ class UploadWrittenAuthorisationController @Inject()(
 
       letterOfAuthority match {
         case Some(file) =>
-          validateFile(file)(request) match {
+          fileValidator.validateFile(file, request) match {
             case Right(validFile) => uploadFile(validFile)
             case Left(errorMessage) => badRequest("letter-of-authority", errorMessage)
           }
@@ -93,29 +95,4 @@ class UploadWrittenAuthorisationController @Inject()(
           }
       }
     }
-
-  private def validateFile(file: MultipartFormData.FilePart[TemporaryFile])(implicit request: Request[_]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
-
-     def hasInvalidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = {
-      _.ref.path.toFile.length > appConfig.fileUploadMaxSize
-    }
-
-     def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
-      f.contentType match {
-        case Some(c: String) if appConfig.fileUploadMimeTypes.contains(c) => false
-        case _ => true
-      }
-    }
-
-    if (hasInvalidSize(file)) {
-      Left(request.messages.apply("uploadWrittenAuthorisation.error.size"))
-    } else if (hasInvalidContentType(file)) {
-      Left(request.messages.apply("uploadWrittenAuthorisation.error.fileType"))
-    } else {
-      Right(file)
-    }
-  }
-
-
-
 }

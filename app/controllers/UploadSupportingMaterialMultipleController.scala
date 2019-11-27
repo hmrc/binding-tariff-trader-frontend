@@ -46,7 +46,8 @@ class UploadSupportingMaterialMultipleController @Inject()(
                                                             formProvider: UploadSupportingMaterialMultipleFormProvider,
                                                             fileService: FileService,
                                                             cc: MessagesControllerComponents,
-                                                            view: uploadSupportingMaterialMultiple) extends FrontendController(cc) with I18nSupport {
+                                                            view: uploadSupportingMaterialMultiple,
+                                                            fileValidator: FileValidator) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -87,7 +88,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
       request.body.file("file-input").filter(_.filename.nonEmpty) match {
         case Some(_) if hasMaxFiles => badRequest("validation-error", request.messages.apply("uploadSupportingMaterialMultiple.error.numberFiles"))
-        case Some(file) => validateFile(file)(request) match {
+        case Some(file) => fileValidator.validateFile(file, request) match {
           case Right(rightFile) => uploadFile(rightFile)
           case Left(errorMessage) => badRequest("file-input", errorMessage)
         }
@@ -96,27 +97,4 @@ class UploadSupportingMaterialMultipleController @Inject()(
       }
 
     }
-
-  private def validateFile(file: MultipartFormData.FilePart[TemporaryFile])(implicit request: Request[_]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
-
-    def hasInvalidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = {
-      _.ref.path.toFile.length > appConfig.fileUploadMaxSize
-    }
-
-    def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
-      f.contentType match {
-        case Some(c: String) if appConfig.fileUploadMimeTypes.contains(c) => false
-        case _ => true
-      }
-    }
-
-    if (hasInvalidSize(file)) {
-      Left(request.messages.apply("uploadWrittenAuthorisation.error.size"))
-    } else if (hasInvalidContentType(file)) {
-      Left(request.messages.apply("uploadWrittenAuthorisation.error.fileType"))
-    } else {
-      Right(file)
-    }
-  }
-
 }

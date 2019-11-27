@@ -76,6 +76,4 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
   private def toPublishedAttachment(size: Long): FilestoreResponse => PublishedFileAttachment = {
     r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size)
   }
-
-
 }
