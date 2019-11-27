@@ -33,7 +33,7 @@ class CommodityCodeDigitsViewSpec extends StringViewBehaviours {
 
   def createViewUsingForm = (form: Form[String]) => view(form, NormalMode)(messages, fakeRequest)
 
-  
+
   "CommodityCodeDigits view" must {
     behave like normalPage(createView, messageKeyPrefix)()
 

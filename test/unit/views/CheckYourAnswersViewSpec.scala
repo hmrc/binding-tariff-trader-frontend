@@ -28,6 +28,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
   private val agentAnswer = "Answer by the agent"
   private val agentAnswerForTrader = "Answer by the agent on behalf of trader"
 
+  private val view = app.injector.instanceOf[check_your_answers]
+
   private val traderAnswers = Seq(
     AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", traderAnswer, answerIsMessageKey = false, "url"))),
     AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq.empty)
@@ -37,8 +39,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq(AnswerRow("label", agentAnswerForTrader, answerIsMessageKey = false, "url")))
   )
 
-  private def createTraderView: () => Html = () => check_your_answers(frontendAppConfig, traderAnswers)(fakeRequest, messages)
-  private def createAgentView: () => Html = () => check_your_answers(frontendAppConfig, agentAnswers)(fakeRequest, messages)
+  private def createTraderView: () => Html = () => view(traderAnswers)(messages, fakeRequest)
+  private def createAgentView: () => Html = () => view(agentAnswers)(messages, fakeRequest)
 
   "Check Your Answers view" must {
     behave like normalPage(createTraderView, messageKeyPrefix)()

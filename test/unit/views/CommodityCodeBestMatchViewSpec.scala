@@ -27,11 +27,12 @@ class CommodityCodeBestMatchViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "commodityCodeBestMatch"
 
+  private val view = app.injector.instanceOf[commodityCodeBestMatch]
   val form = new CommodityCodeBestMatchFormProvider()()
 
-  def createView = () => commodityCodeBestMatch(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => commodityCodeBestMatch(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(messages, fakeRequest)
 
   "CommodityCodeBestMatch view" must {
     behave like normalPage(createView, messageKeyPrefix)()
@@ -40,5 +41,4 @@ class CommodityCodeBestMatchViewSpec extends YesNoViewBehaviours {
 
     behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.CommodityCodeBestMatchController.onSubmit(NormalMode).url)
   }
-
 }
