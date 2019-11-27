@@ -36,13 +36,14 @@ class WhichBestDescribesYouControllerSpec extends ControllerSpecBase {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new WhichBestDescribesYouFormProvider()
+  private val view = app.injector.instanceOf[whichBestDescribesYou]
   val form = formProvider()
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new WhichBestDescribesYouController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, messagesControllerComponents, view)
 
-  def viewAsString(form: Form[_] = form) = whichBestDescribesYou(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
   "WhichBestDescribesYou Controller" must {
 

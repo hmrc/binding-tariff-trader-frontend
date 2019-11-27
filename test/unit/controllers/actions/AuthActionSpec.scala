@@ -128,7 +128,7 @@ class AuthActionSpec extends SpecBase {
   }
 
   private def handleAuthError(exc: AuthorisationException): Future[Result] = {
-    val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(exc), frontendAppConfig)
+    val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(exc), frontendAppConfig, messagesControllerComponents)
     val controller = new Harness(authAction)
     controller.onPageLoad()(fakeRequest)
   }

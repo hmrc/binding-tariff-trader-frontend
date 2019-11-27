@@ -25,7 +25,7 @@ import play.api.Application
 import play.api.http.{DefaultHttpFilters, HttpFilters}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import play.api.mvc.{Action, Results}
+import play.api.mvc.{Action, Results, SessionCookieBaker}
 import play.api.routing.Router
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -41,8 +41,9 @@ object SessionIdFilterSpec {
 
   class TestSessionIdFilter @Inject() (
                                         override val mat: Materializer,
+                                        sessionCookieBaker: SessionCookieBaker,
                                         ec: ExecutionContext
-                                      ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec)
+                                      ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec, sessionCookieBaker)
 }
 
 class SessionIdFilterSpec extends SpecBase {

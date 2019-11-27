@@ -47,6 +47,7 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
   private def onwardRoute = Call("GET", "/foo")
 
   private val fileService = mock[FileService]
+  private val view = app.injector.instanceOf[uploadWrittenAuthorisation]
   private val cacheConnector = mock[DataCacheConnector]
 
   override protected def afterEach(): Unit = {
@@ -59,10 +60,10 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new UploadWrittenAuthorisationController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, fileService)
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, fileService, messagesControllerComponents, view)
 
   private def viewAsString(form: Form[_] = form, file: Option[FileAttachment] = None): String =
-    uploadWrittenAuthorisation(frontendAppConfig, form, file, NormalMode)(fakeRequest, messages).toString
+    view(form, file, NormalMode)(messages, fakeRequest).toString
 
   private val testAnswer = "answer"
 

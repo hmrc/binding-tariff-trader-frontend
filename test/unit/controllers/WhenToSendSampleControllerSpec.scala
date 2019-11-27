@@ -34,13 +34,14 @@ class WhenToSendSampleControllerSpec extends ControllerSpecBase {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new WhenToSendSampleFormProvider()
+  private val view = app.injector.instanceOf[whenToSendSample]
   val form = formProvider()
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new WhenToSendSampleController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, messagesControllerComponents, view)
 
-  def viewAsString(form: Form[_] = form) = whenToSendSample(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
   "WhenToSendSample Controller" must {
 
