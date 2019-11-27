@@ -27,11 +27,12 @@ class DescribeYourItemViewSpec extends QuestionViewBehaviours[DescribeYourItem] 
 
   val messageKeyPrefix = "describeYourItem"
 
+  val view = app.injector.instanceOf[describeYourItem]
   override protected val form = new DescribeYourItemFormProvider()()
 
-  def createView = () => describeYourItem(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => describeYourItem(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(messages, fakeRequest)
 
 
   "DescribeYourItem view" must {

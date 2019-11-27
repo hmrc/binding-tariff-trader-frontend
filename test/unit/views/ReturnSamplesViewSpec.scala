@@ -27,11 +27,12 @@ class ReturnSamplesViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "returnSamples"
 
+  val view = app.injector.instanceOf[returnSamples]
   val form = new ReturnSamplesFormProvider()()
 
-  def createView = () => returnSamples(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => returnSamples(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(messages, fakeRequest)
 
   "ReturnSamples view" must {
     behave like normalPage(createView, messageKeyPrefix)()

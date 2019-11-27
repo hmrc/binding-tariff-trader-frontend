@@ -28,12 +28,13 @@ class SupportingInformationDetailsViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "supportingInformationDetails"
 
+  val view = app.injector.instanceOf[supportingInformationDetails]
   val form = new SupportingInformationDetailsFormProvider()()
 
-  def createView: () => HtmlFormat.Appendable = () => supportingInformationDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable = () => view(form, NormalMode)(messages, fakeRequest)
 
   def createViewUsingForm: Form[String] => HtmlFormat.Appendable = (form: Form[String]) =>
-    supportingInformationDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+    view(form, NormalMode)(messages, fakeRequest)
 
   "SupportingInformationDetails view" must {
     behave like normalPage(createView, messageKeyPrefix)()

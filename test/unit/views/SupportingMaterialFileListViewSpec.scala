@@ -27,6 +27,7 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
   private lazy val messageKeyPrefix = "supportingMaterialFileList"
 
+  private val view = app.injector.instanceOf[supportingMaterialFileList]
   override protected val form = new SupportingMaterialFileListFormProvider()()
 
   private def createView: () => HtmlFormat.Appendable = { () =>
@@ -34,7 +35,7 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
   }
 
   private def createViewWithForm(f: Form[Boolean], files: Seq[FileAttachment] = Seq.empty): HtmlFormat.Appendable = {
-    supportingMaterialFileList(frontendAppConfig, f, files, NormalMode)(fakeRequest, messages)
+    view(f, files, NormalMode)(fakeRequest, messages)
   }
 
   "SupportingMaterialFileList view" must {

@@ -27,11 +27,12 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "legalChallengeDetails"
 
+  val view = app.injector.instanceOf[legalChallengeDetails]
   val form = new LegalChallengeDetailsFormProvider()()
 
-  def createView = () => legalChallengeDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[String]) => legalChallengeDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[String]) => view(form, NormalMode)(messages, fakeRequest)
 
   "LegalChallengeDetails view" must {
     behave like normalPage(createView, messageKeyPrefix)()

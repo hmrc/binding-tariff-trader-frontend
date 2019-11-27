@@ -26,11 +26,12 @@ class ImportOrExportViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "importOrExport"
 
+  val view = app.injector.instanceOf[importOrExport]
   val form = new ImportOrExportFormProvider()()
 
-  def createView = () => importOrExport(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => importOrExport(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(messages, fakeRequest)
 
   "ImportOrExport view" must {
     behave like normalPage(createView, messageKeyPrefix)()

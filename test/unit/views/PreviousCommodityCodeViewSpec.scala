@@ -27,11 +27,12 @@ class PreviousCommodityCodeViewSpec extends QuestionViewBehaviours[PreviousCommo
 
   val messageKeyPrefix = "previousCommodityCode"
 
+  val view = app.injector.instanceOf[previousCommodityCode]
   override protected val form = new PreviousCommodityCodeFormProvider()()
 
-  def createView = () => previousCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => previousCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(fakeRequest)
 
 
   "PreviousCommodityCode view" must {

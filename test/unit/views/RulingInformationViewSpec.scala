@@ -24,7 +24,8 @@ import views.html.ruling_information
 
 class RulingInformationViewSpec extends ViewBehaviours {
 
-  private def createView(c: Case): () => HtmlFormat.Appendable = () => ruling_information(frontendAppConfig, c)(fakeRequest, messages)
+  val view = app.injector.instanceOf[ruling_information]
+  private def createView(c: Case): () => HtmlFormat.Appendable = () => view(c)(messages, fakeRequest)
 
   private val rulingCase = oCase.btiCaseWithDecision
   private val rulingCaseNoExplanation = oCase.btiCaseWithDecisionNoExplanation

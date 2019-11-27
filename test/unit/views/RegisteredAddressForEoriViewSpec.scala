@@ -27,14 +27,15 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
 
   private val messageKeyPrefix = "registeredAddressForEori"
 
+  val view = app.injector.instanceOf[registeredAddressForEori]
   override protected val form = new RegisteredAddressForEoriFormProvider()()
 
   private def createView = { () =>
-    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages)
+    view(form, NormalMode)(messages, fakeRequestWithEori)
   }
 
   private def createViewUsingForm = { form: Form[_] =>
-    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages)
+    view(form, NormalMode)(messages, fakeRequestWithEori)
   }
 
   "RegisteredAddressForEori view" must {

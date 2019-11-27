@@ -27,11 +27,12 @@ class SupportingInformationViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "supportingInformation"
 
+  val view = app.injector.instanceOf[supportingInformation]
   val form = new SupportingInformationFormProvider()()
 
-  def createView = () => supportingInformation(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => supportingInformation(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(messages, fakeRequest)
 
   "SupportingInformation view" must {
     behave like normalPage(createView, messageKeyPrefix)()

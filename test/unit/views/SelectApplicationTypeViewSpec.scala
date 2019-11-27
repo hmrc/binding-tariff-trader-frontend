@@ -27,11 +27,12 @@ class SelectApplicationTypeViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "selectApplicationType"
 
+  val view = app.injector.instanceOf[selectApplicationType]
   val form = new SelectApplicationTypeFormProvider()()
 
-  def createView = () => selectApplicationType(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => selectApplicationType(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(messages, fakeRequest)
 
   "SelectApplicationType view" must {
     behave like normalPage(createView, messageKeyPrefix)()

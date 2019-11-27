@@ -27,11 +27,12 @@ class LegalChallengeViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "legalChallenge"
 
+  val view = app.injector.instanceOf[legalChallenge]
   val form = new LegalChallengeFormProvider()()
 
-  def createView = () => legalChallenge(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => legalChallenge(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(messages, fakeRequest)
 
   "LegalChallenge view" must {
 

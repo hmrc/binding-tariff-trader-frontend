@@ -27,11 +27,12 @@ class SimilarItemCommodityCodeViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "similarItemCommodityCode"
 
+  val view = app.injector.instanceOf[similarItemCommodityCode]
   val form = new SimilarItemCommodityCodeFormProvider()()
 
-  def createView = () => similarItemCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => similarItemCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(messages, fakeRequest)
 
   "SimilarItemCommodityCode view" must {
     behave like normalPage(createView, messageKeyPrefix)()
