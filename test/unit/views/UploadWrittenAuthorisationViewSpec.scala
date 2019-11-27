@@ -26,11 +26,12 @@ class UploadWrittenAuthorisationViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "uploadWrittenAuthorisation"
 
+  private val view = app.injector.instanceOf[uploadWrittenAuthorisation]
   val form = new UploadWrittenAuthorisationFormProvider()()
 
-  def createView = () => uploadWrittenAuthorisation(frontendAppConfig, form, None, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, None, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[String]) => uploadWrittenAuthorisation(frontendAppConfig, form, None, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[String]) => view(form, None, NormalMode)(messages, fakeRequest)
 
   "UploadWrittenAuthorisation view" must {
     behave like normalPage(createView, messageKeyPrefix)()

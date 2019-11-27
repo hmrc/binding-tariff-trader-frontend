@@ -27,11 +27,12 @@ class WhenToSendSampleViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "whenToSendSample"
 
+  private val view = app.injector.instanceOf[whenToSendSample]
   val form = new WhenToSendSampleFormProvider()()
 
-  def createView = () => whenToSendSample(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => whenToSendSample(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(messages, fakeRequest)
 
   "WhenToSendSample view" must {
     behave like normalPage(createView, messageKeyPrefix)()

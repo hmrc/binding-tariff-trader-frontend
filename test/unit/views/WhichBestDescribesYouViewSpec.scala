@@ -27,11 +27,12 @@ class WhichBestDescribesYouViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "whichBestDescribesYou"
 
+  private val view = app.injector.instanceOf[whichBestDescribesYou]
   val form = new WhichBestDescribesYouFormProvider()()
 
-  def createView = () => whichBestDescribesYou(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => whichBestDescribesYou(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(messages, fakeRequest)
 
   "WhichBestDescribesYou view" must {
     behave like normalPage(createView, messageKeyPrefix)()

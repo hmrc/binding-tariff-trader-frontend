@@ -35,7 +35,7 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
   }
 
   private def createViewWithForm(f: Form[Boolean], files: Seq[FileAttachment] = Seq.empty): HtmlFormat.Appendable = {
-    view(f, files, NormalMode)(fakeRequest, messages)
+    view(f, files, NormalMode)(messages, fakeRequest)
   }
 
   "SupportingMaterialFileList view" must {

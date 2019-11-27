@@ -24,7 +24,8 @@ class DeclarationViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "declaration"
 
-  def createView = () => declaration(frontendAppConfig, NormalMode)(fakeRequest, messages)
+  private val view = app.injector.instanceOf[declaration]
+  def createView = () => view(NormalMode)(messages, fakeRequest)
 
   "Declaration view" must {
     behave like normalPage(createView, messageKeyPrefix)()

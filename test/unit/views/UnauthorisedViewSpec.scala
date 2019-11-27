@@ -23,10 +23,12 @@ class UnauthorisedViewSpec extends ViewBehaviours {
 
   override val expectTimeoutDialog: Boolean = false
 
-  def view = () => unauthorised(frontendAppConfig)(fakeRequest, messages)
+  private val view = app.injector.instanceOf[unauthorised]
+
+  def createView = () => view()(messages, fakeRequest)
 
   "Unauthorised view" must {
 
-    behave like normalPage(view, "unauthorised")()
+    behave like normalPage(createView, "unauthorised")()
   }
 }

@@ -25,11 +25,12 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "confirmation"
 
+  private val view = app.injector.instanceOf[confirmation]
   private val confirm = Confirmation("reference", "eori", "marisa@example.test", sendingSamples = true)
   private val confirmNoSample = Confirmation("referenceNoSample", "eori", "marisa.nosample@example.test", sendingSamples = false)
 
-  private def createView: () => Html = () => confirmation(frontendAppConfig, confirm, "token")(fakeRequest, messages)
-  private def createViewNoSamples: () => Html = () => confirmation(frontendAppConfig, confirmNoSample, "token")(fakeRequest, messages)
+  private def createView: () => Html = () => view(confirm, "token")(messages, fakeRequest)
+  private def createViewNoSamples: () => Html = () => view(confirmNoSample, "token")(messages, fakeRequest)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)()

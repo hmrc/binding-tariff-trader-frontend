@@ -32,7 +32,7 @@ class PreviousCommodityCodeViewSpec extends QuestionViewBehaviours[PreviousCommo
 
   def createView = () => view(form, NormalMode)(messages, fakeRequest)
 
-  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(fakeRequest)
+  def createViewUsingForm = (form: Form[_]) => view(form, NormalMode)(messages, fakeRequest)
 
 
   "PreviousCommodityCode view" must {
