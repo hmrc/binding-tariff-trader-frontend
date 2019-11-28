@@ -28,6 +28,7 @@ import models.NormalMode
 import pages.SimilarItemCommodityCodePage
 import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.similarItemCommodityCode
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class SimilarItemCommodityCodeControllerSpec extends ControllerSpecBase {
 

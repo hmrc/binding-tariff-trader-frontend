@@ -109,7 +109,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       status(result) mustBe SEE_OTHER
 
       val cache = theCacheSaved
-      cache.getEntry[Seq[FileAttachment]](SupportingMaterialFileListPage) mustBe Some(Seq(FileAttachment("id", "file-name", "type", file.file.length())))
+      cache.getEntry[Seq[FileAttachment]](SupportingMaterialFileListPage) mustBe Some(Seq(FileAttachment("id", "file-name", "type", file.path.toFile.length())))
     }
 
     "respond with bad request if a file has wrong extension" in {

@@ -39,6 +39,7 @@ import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.declaration
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future.{failed, successful}
 

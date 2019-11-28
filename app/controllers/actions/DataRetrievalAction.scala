@@ -17,7 +17,7 @@
 package controllers.actions
 
 import com.google.inject.Inject
-import play.api.mvc.ActionTransformer
+import play.api.mvc.{ActionTransformer, BodyParsers}
 import connectors.DataCacheConnector
 import models.UserAnswers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
@@ -28,11 +28,9 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRetrievalActionImpl @Inject()(val dataCacheConnector: DataCacheConnector) extends DataRetrievalAction {
+class DataRetrievalActionImpl @Inject()(val dataCacheConnector: DataCacheConnector, val parser: BodyParsers.Default)
+                                       (implicit val executionContext: ExecutionContext)extends DataRetrievalAction {
 
-  def parser: play.api.mvc.BodyParser[play.api.mvc.AnyContent] = ???
-
-  protected def executionContext: scala.concurrent.ExecutionContext = ???
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
 

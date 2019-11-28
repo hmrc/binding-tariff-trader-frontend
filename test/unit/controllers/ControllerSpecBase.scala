@@ -19,6 +19,7 @@ package controllers
 import uk.gov.hmrc.http.cache.client.CacheMap
 import base.SpecBase
 import controllers.actions.FakeDataRetrievalAction
+import scala.concurrent.ExecutionContext.Implicits.global
 
 trait ControllerSpecBase extends SpecBase {
 

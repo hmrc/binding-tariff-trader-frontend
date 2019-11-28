@@ -28,6 +28,7 @@ import models.NormalMode
 import pages.SupportingInformationPage
 import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.supportingInformation
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class SupportingInformationControllerSpec extends ControllerSpecBase {
 

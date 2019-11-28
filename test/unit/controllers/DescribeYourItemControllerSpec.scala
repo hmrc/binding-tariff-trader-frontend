@@ -28,6 +28,7 @@ import models.{DescribeYourItem, NormalMode}
 import pages.DescribeYourItemPage
 import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.describeYourItem
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class DescribeYourItemControllerSpec extends ControllerSpecBase {
 

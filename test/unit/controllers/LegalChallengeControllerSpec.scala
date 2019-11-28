@@ -28,6 +28,7 @@ import models.NormalMode
 import pages.LegalChallengePage
 import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.legalChallenge
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class LegalChallengeControllerSpec extends ControllerSpecBase {
 

@@ -20,6 +20,7 @@ import akka.actor.ActorSystem
 import base.SpecBase
 import config.FrontendAppConfig
 import org.mockito.Mockito.when
+import org.scalatest.Matchers
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Environment
@@ -33,9 +34,6 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 trait ConnectorTest extends SpecBase with WiremockTestServer with UnitSpec
  with MockitoSugar with ResourceFiles {
-
-
-  // protected lazy val injector: Injector = fakeApplication.injector
 
   private val actorSystem = ActorSystem.create("testActorSystem")
 

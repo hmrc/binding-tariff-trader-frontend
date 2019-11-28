@@ -20,9 +20,9 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import models.UserAnswers
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class FakeDataRetrievalAction(cacheMapToReturn: Option[CacheMap]) extends DataRetrievalAction {
+class FakeDataRetrievalAction(cacheMapToReturn: Option[CacheMap])(implicit val executionContext: ExecutionContext) extends DataRetrievalAction {
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
     val userAnswers = cacheMapToReturn map (new UserAnswers(_))

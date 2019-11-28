@@ -23,8 +23,10 @@ import models.UserAnswers
 import models.requests.OptionalDataRequest
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -33,6 +35,8 @@ import uk.gov.hmrc.play.test.WithFakeApplication
 trait SpecBase extends PlaySpec with WithFakeApplication with GuiceOneAppPerSuite{
 
   SharedMetricRegistries.clear()
+
+  override lazy val fakeApplication: Application = new GuiceApplicationBuilder().bindings(bindModules:_*).build()
 
   protected lazy val injector: Injector = fakeApplication.injector
 

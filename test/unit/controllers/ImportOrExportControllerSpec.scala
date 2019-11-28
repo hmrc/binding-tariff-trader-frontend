@@ -29,6 +29,7 @@ import play.api.mvc.{Call, MessagesControllerComponents}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.importOrExport
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class ImportOrExportControllerSpec extends ControllerSpecBase {
 

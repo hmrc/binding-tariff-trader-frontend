@@ -17,19 +17,24 @@
 package controllers.actions
 
 import models.requests.IdentifierRequest
-import play.api.mvc.{Request, Result}
+import play.api.mvc.{AnyContent, BodyParser, BodyParsers, PlayBodyParsers, Request, Result}
 
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.global
+import scala.concurrent.{ExecutionContext, Future}
 
-class BaseFakeIdentifierAction(eori: Option[String] = Some("eori-789012")) extends IdentifierAction {
+class FakeIdentifierAction(eori: Option[String] = Some("eori-789012")) extends IdentifierAction {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
     block(IdentifierRequest(request, "id", eori))
   }
 
+
+  override def parser: BodyParser[AnyContent] = ???
+
+  override protected def executionContext: ExecutionContext = global
 }
 
-object FakeIdentifierAction extends BaseFakeIdentifierAction {
-  def apply(): IdentifierAction = new BaseFakeIdentifierAction()
-  def apply(eori: Option[String]): IdentifierAction = new BaseFakeIdentifierAction(eori)
+object FakeIdentifierAction {
+  def apply(): IdentifierAction = new FakeIdentifierAction()
+  def apply(eori: Option[String]): IdentifierAction = new FakeIdentifierAction(eori)
 }

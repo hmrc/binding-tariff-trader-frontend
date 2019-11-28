@@ -28,6 +28,8 @@ import models.NormalMode
 import pages.WhenToSendSamplePage
 import play.api.mvc.Call
 import views.html.whenToSendSample
+import scala.concurrent.ExecutionContext.Implicits.global
+
 
 class WhenToSendSampleControllerSpec extends ControllerSpecBase {
 

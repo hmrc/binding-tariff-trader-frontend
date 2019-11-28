@@ -28,6 +28,7 @@ import models.NormalMode
 import pages.CommodityCodeRulingReferencePage
 import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.commodityCodeRulingReference
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase {
 

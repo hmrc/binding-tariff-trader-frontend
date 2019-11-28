@@ -30,6 +30,7 @@ import models.WhichBestDescribesYou.{BusinessOwner, BusinessRepresentative}
 import pages.WhichBestDescribesYouPage
 import play.api.mvc.Call
 import views.html.whichBestDescribesYou
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class WhichBestDescribesYouControllerSpec extends ControllerSpecBase {
 

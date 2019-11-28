@@ -29,6 +29,7 @@ import models.ReturnSamples
 import pages.ReturnSamplesPage
 import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.returnSamples
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class ReturnSamplesControllerSpec extends ControllerSpecBase {
 

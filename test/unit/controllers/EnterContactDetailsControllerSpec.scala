@@ -28,6 +28,7 @@ import models.{EnterContactDetails, NormalMode}
 import pages.EnterContactDetailsPage
 import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.enterContactDetails
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class EnterContactDetailsControllerSpec extends ControllerSpecBase {
 

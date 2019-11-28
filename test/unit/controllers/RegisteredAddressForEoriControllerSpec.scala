@@ -28,6 +28,7 @@ import play.api.mvc.{Call, MessagesControllerComponents}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.registeredAddressForEori
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 

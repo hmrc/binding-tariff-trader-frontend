@@ -30,6 +30,7 @@ import models.SelectApplicationType.{NewCommodity, PreviousCommodity}
 import pages.SelectApplicationTypePage
 import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.selectApplicationType
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
 

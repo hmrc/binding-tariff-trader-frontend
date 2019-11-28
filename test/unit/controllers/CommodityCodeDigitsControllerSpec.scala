@@ -28,6 +28,7 @@ import models.NormalMode
 import pages.CommodityCodeDigitsPage
 import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.commodityCodeDigits
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class CommodityCodeDigitsControllerSpec extends ControllerSpecBase {
 

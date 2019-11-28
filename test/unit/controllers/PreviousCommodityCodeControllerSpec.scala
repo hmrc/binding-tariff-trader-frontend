@@ -28,6 +28,7 @@ import models.{NormalMode, PreviousCommodityCode}
 import pages.PreviousCommodityCodePage
 import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.previousCommodityCode
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class PreviousCommodityCodeControllerSpec extends ControllerSpecBase {
 

@@ -21,6 +21,7 @@ import models._
 import org.apache.http.HttpStatus
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.Upstream5xxResponse
+import uk.gov.hmrc.play.test.UnitSpec
 import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
 class BindingTariffClassificationConnectorSpec extends ConnectorTest {
