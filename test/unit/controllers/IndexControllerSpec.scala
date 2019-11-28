@@ -23,21 +23,25 @@ import models.oCase._
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.index
 
 import scala.concurrent.Future
 
 class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private val casesService = mock[CasesService]
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+  private val view = app.injector.instanceOf[index]
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
   private def controller(identifier: IdentifierAction = FakeIdentifierAction): IndexController = new IndexController(
-    frontendAppConfig,
     identifier,
     casesService,
-    messagesApi
+    view,
+    mcc
   )
 
   "Index Controller - Get Applications" must {

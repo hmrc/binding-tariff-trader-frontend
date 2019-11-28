@@ -26,21 +26,24 @@ import play.api.test.Helpers._
 import forms.CommodityCodeRulingReferenceFormProvider
 import models.NormalMode
 import pages.CommodityCodeRulingReferencePage
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.commodityCodeRulingReference
 
 class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new CommodityCodeRulingReferenceFormProvider()
-  val form = formProvider()
+  private val formProvider = new CommodityCodeRulingReferenceFormProvider()
+  private val form = formProvider()
+  private val view = app.injector.instanceOf[commodityCodeRulingReference]
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new CommodityCodeRulingReferenceController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+    new CommodityCodeRulingReferenceController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, mcc, view)
 
-  def viewAsString(form: Form[_] = form) = commodityCodeRulingReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
   val testAnswer = "answer"
 

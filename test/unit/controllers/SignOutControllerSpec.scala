@@ -22,7 +22,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.verify
 import org.mockito.{ArgumentMatchers, Mockito}
 import org.scalatest.mockito.MockitoSugar._
-import play.api.mvc.Result
+import play.api.mvc.{MessagesControllerComponents, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 
@@ -30,11 +30,14 @@ import scala.concurrent.Future
 
 class SignOutControllerSpec extends ControllerSpecBase {
 
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+
+
   "Sign out controller" must {
 
     "return 200 for a start feedback survey" in {
       val result: Future[Result] = new SignOutController(frontendAppConfig, mock[DataCacheConnector], FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, messagesApi).startFeedbackSurvey(fakeRequestWithEori)
+        new DataRequiredActionImpl, mcc).startFeedbackSurvey(fakeRequestWithEori)
       status(result) mustBe SEE_OTHER
       redirectLocation(result).get must endWith( "/feedback/ABTIR")
     }
@@ -42,7 +45,7 @@ class SignOutControllerSpec extends ControllerSpecBase {
     "clear user cache when present" in {
       val cache = mock[DataCacheConnector]
       new SignOutController(frontendAppConfig, cache, FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, messagesApi).startFeedbackSurvey(fakeRequestWithEoriAndCache)
+        new DataRequiredActionImpl, mcc).startFeedbackSurvey(fakeRequestWithEoriAndCache)
       verify(cache).remove(any())
     }
   }
@@ -51,7 +54,7 @@ class SignOutControllerSpec extends ControllerSpecBase {
 
     "return 200 for a start feedback survey" in {
       val result: Future[Result] = new SignOutController(frontendAppConfig, mock[DataCacheConnector], FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, messagesApi).forceSignOut(fakeRequestWithEori)
+        new DataRequiredActionImpl, mcc).forceSignOut(fakeRequestWithEori)
       status(result) mustBe SEE_OTHER
       redirectLocation(result).get must endWith( "/this-service-has-been-reset")
     }
@@ -59,7 +62,7 @@ class SignOutControllerSpec extends ControllerSpecBase {
     "clear user cache when present" in {
       val cache = mock[DataCacheConnector]
       new SignOutController(frontendAppConfig, cache, FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, messagesApi).forceSignOut(fakeRequestWithEoriAndCache)
+        new DataRequiredActionImpl, mcc).forceSignOut(fakeRequestWithEoriAndCache)
       verify(cache).remove(any())
     }
   }

@@ -24,32 +24,34 @@ import connectors.FakeDataCacheConnector
 import controllers.actions._
 import play.api.test.Helpers._
 import forms.DescribeYourItemFormProvider
-import models.{NormalMode, DescribeYourItem}
+import models.{DescribeYourItem, NormalMode}
 import pages.DescribeYourItemPage
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.describeYourItem
 
 class DescribeYourItemControllerSpec extends ControllerSpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new DescribeYourItemFormProvider()
-  val form = formProvider()
+  private val formProvider = new DescribeYourItemFormProvider()
+  private val form = formProvider()
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+  private val view = app.injector.instanceOf[describeYourItem]
+
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new DescribeYourItemController(
-      frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
-      formProvider
-    )
+      formProvider,
+      mcc,
+      view)
 
   def viewAsString(form: Form[_] = form): String = {
-    describeYourItem(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+    view(form, NormalMode)(messages, fakeRequest).toString
   }
 
   "DescribeYourItem Controller" must {

@@ -24,7 +24,7 @@ import navigation.FakeNavigator
 import pages.RegisteredAddressForEoriPage
 import play.api.data.Form
 import play.api.libs.json.Json
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.registeredAddressForEori
@@ -35,21 +35,24 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 
   private lazy val formProvider: RegisteredAddressForEoriFormProvider = new RegisteredAddressForEoriFormProvider()
   private lazy val form: Form[RegisteredAddressForEori] = formProvider()
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+  private val view = app.injector.instanceOf[registeredAddressForEori]
+
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) = {
     new RegisteredAddressForEoriController(
-      frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
-      formProvider
+      formProvider,
+      mcc,
+      view
     )
   }
 
   private def viewAsString(form: Form[RegisteredAddressForEori] = form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get))): String = {
-    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages).toString
+    view(form, NormalMode)(messages, fakeRequestWithEori).toString
   }
 
   "RegisteredAddressForEori Controller" must {

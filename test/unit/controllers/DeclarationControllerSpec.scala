@@ -33,7 +33,7 @@ import org.scalatest.mockito.MockitoSugar
 import pages.{DeclarationPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
 import play.api.libs.json.{JsString, Json}
-import play.api.mvc.{Call, Result}
+import play.api.mvc.{Call, MessagesControllerComponents, Result}
 import play.api.test.Helpers._
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -58,6 +58,10 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
   private val fileService = mock[FileService]
   private val btiApp = mock[Application]
   private val contact = mock[Contact]
+  private val view = app.injector.instanceOf[declaration]
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+
+
 
   private implicit val mat: Materializer = fakeApplication.materializer
 
@@ -150,8 +154,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): DeclarationController = {
     new DeclarationController(
-      frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       auditService,
       new FakeNavigator(onwardRoute),
@@ -159,7 +161,9 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
       dataRetrievalAction,
       casesService,
       fileService,
-      mapper
+      mapper,
+      mcc,
+      view
     )
   }
 
@@ -177,7 +181,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
   }
 
   private def viewAsString: String = {
-    declaration(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
+    view(NormalMode)(messages, fakeRequest).toString
   }
 
 }

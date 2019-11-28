@@ -26,21 +26,24 @@ import play.api.test.Helpers._
 import forms.SimilarItemCommodityCodeFormProvider
 import models.NormalMode
 import pages.SimilarItemCommodityCodePage
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.similarItemCommodityCode
 
 class SimilarItemCommodityCodeControllerSpec extends ControllerSpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new SimilarItemCommodityCodeFormProvider()
-  val form = formProvider()
+  private val formProvider = new SimilarItemCommodityCodeFormProvider()
+  private val form = formProvider()
+  private val view = app.injector.instanceOf[similarItemCommodityCode]
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new SimilarItemCommodityCodeController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, mcc, view)
 
-  def viewAsString(form: Form[_] = form) = similarItemCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
   "SimilarItemCommodityCode Controller" must {
 

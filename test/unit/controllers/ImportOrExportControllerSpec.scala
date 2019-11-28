@@ -25,7 +25,7 @@ import navigation.FakeNavigator
 import pages.ImportOrExportPage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.importOrExport
@@ -34,14 +34,17 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ImportOrExportFormProvider()
-  val form = formProvider()
+  private val formProvider = new ImportOrExportFormProvider()
+  private val form = formProvider()
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+  private val view = app.injector.instanceOf[importOrExport]
+
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new ImportOrExportController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+    new ImportOrExportController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, mcc, view)
 
-  def viewAsString(form: Form[_] = form) = importOrExport(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
   "ImportOrExport Controller" must {
 

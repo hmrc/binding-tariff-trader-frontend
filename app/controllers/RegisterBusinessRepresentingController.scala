@@ -16,7 +16,6 @@
 
 package controllers
 
-import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisterBusinessRepresentingFormProvider
@@ -25,7 +24,7 @@ import models.{CheckMode, Mode, RegisterBusinessRepresenting}
 import navigation.Navigator
 import pages.{CheckYourAnswersPage, RegisterBusinessRepresentingPage, UploadWrittenAuthorisationPage}
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.registerBusinessRepresenting
@@ -33,9 +32,7 @@ import views.html.registerBusinessRepresenting
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppConfig,
-                                                       override val messagesApi: MessagesApi,
-                                                       dataCacheConnector: DataCacheConnector,
+class RegisterBusinessRepresentingController @Inject()(dataCacheConnector: DataCacheConnector,
                                                        navigator: Navigator,
                                                        identify: IdentifierAction,
                                                        getData: DataRetrievalAction,

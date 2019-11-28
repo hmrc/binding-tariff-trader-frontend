@@ -28,7 +28,7 @@ import models.NormalMode
 import models.SelectApplicationType
 import models.SelectApplicationType.{NewCommodity, PreviousCommodity}
 import pages.SelectApplicationTypePage
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.selectApplicationType
 
 class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
@@ -37,19 +37,20 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
 
   private val formProvider = new SelectApplicationTypeFormProvider()
   private val form = formProvider()
+  private val view = app.injector.instanceOf[selectApplicationType]
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): SelectApplicationTypeController = {
     new SelectApplicationTypeController(
-      frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute), FakeIdentifierAction,
       dataRetrievalAction,
-      new DataRequiredActionImpl, formProvider)
+      new DataRequiredActionImpl, formProvider, mcc, view)
   }
 
   private def viewAsString(form: Form[_] = form): String = {
-    selectApplicationType(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+    view(form, NormalMode)(messages, fakeRequest).toString
   }
 
   "SelectApplicationType Controller" must {

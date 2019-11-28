@@ -26,22 +26,24 @@ import play.api.test.Helpers._
 import forms.CommodityCodeDigitsFormProvider
 import models.NormalMode
 import pages.CommodityCodeDigitsPage
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.commodityCodeDigits
 
 class CommodityCodeDigitsControllerSpec extends ControllerSpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new CommodityCodeDigitsFormProvider()
-  val form = formProvider()
-  val view = app.injector.instanceOf[commodityCodeDigits]
+  private val formProvider = new CommodityCodeDigitsFormProvider()
+  private val form = formProvider()
+  private val view = app.injector.instanceOf[commodityCodeDigits]
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new CommodityCodeDigitsController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, messagesControllerComponents, view)
+    new CommodityCodeDigitsController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, mcc, view)
 
-  def viewAsString(form: Form[_] = form) = view(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
   val testAnswer = "answer"
 

@@ -16,11 +16,10 @@
 
 package controllers
 
-import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
 import javax.inject.Inject
 import models._
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CasesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -31,8 +30,7 @@ import views.html.index
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.successful
 
-class IndexController @Inject()(val appConfig: FrontendAppConfig,
-                                identify: IdentifierAction,
+class IndexController @Inject()(identify: IdentifierAction,
                                 service: CasesService,
                                 view: index,
                                 cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {

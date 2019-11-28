@@ -23,6 +23,7 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import pages.ConfirmationPage
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers._
 import service.PdfService
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -35,21 +36,24 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
   private val cache = mock[DataCacheConnector]
   private val cacheMap = mock[CacheMap]
   private val pdfService = mock[PdfService]
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+  private val view = app.injector.instanceOf[confirmation]
+
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
     new ConfirmationController(
-      frontendAppConfig,
-      messagesApi,
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
       cache,
-      pdfService
+      pdfService,
+      mcc,
+      view
     )
   }
 
   private def viewAsString: String = {
-    confirmation(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true), "token")(fakeRequest, messages).toString
+    view(Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true), "token")(messages, fakeRequest).toString
   }
 
   "Confirmation Controller" must {

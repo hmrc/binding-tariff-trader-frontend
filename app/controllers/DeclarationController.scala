@@ -17,7 +17,6 @@
 package controllers
 
 import audit.AuditService
-import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import javax.inject.Inject
@@ -28,7 +27,7 @@ import models._
 import models.requests.OptionalDataRequest
 import navigation.Navigator
 import pages.{ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -40,8 +39,6 @@ import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
 class DeclarationController @Inject()(
-                                       appConfig: FrontendAppConfig,
-                                       override val messagesApi: MessagesApi,
                                        dataCacheConnector: DataCacheConnector,
                                        auditService: AuditService,
                                        navigator: Navigator,
@@ -50,7 +47,6 @@ class DeclarationController @Inject()(
                                        caseService: CasesService,
                                        fileService: FileService,
                                        mapper: CaseRequestMapper,
-                                       declaration : declaration,
                                        cc: MessagesControllerComponents,
                                        view: declaration) extends FrontendController(cc) with I18nSupport {
 

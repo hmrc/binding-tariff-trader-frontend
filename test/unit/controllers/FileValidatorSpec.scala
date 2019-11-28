@@ -24,12 +24,10 @@ import org.mockito.BDDMockito.given
 import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.mockito.MockitoSugar
 import play.api.i18n.MessagesApi
-import play.api.inject.DefaultApplicationLifecycle
-import play.api.libs.Files.{DefaultTemporaryFileCreator, DefaultTemporaryFileReaper, SingletonTemporaryFileCreator, TemporaryFile}
+import play.api.libs.Files.{SingletonTemporaryFileCreator, TemporaryFile}
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.test.FakeRequest
-import play.inject.ApplicationLifecycle
 
 class FileValidatorSpec extends WordSpec with Matchers with MockitoSugar  {
   private val configuration = mock[FrontendAppConfig]
@@ -87,7 +85,7 @@ class FileValidatorSpec extends WordSpec with Matchers with MockitoSugar  {
 
     "Reject invalid file type" in {
       val file = createFileOfType("mp3", "audio/mpeg")
-      given(messagesApi.apply("uploadWrittenAuthorisation.error.fileType")).willReturn("some error message")
+      given(messagesApi.preferred(fakeRequest)apply("uploadWrittenAuthorisation.error.fileType")).willReturn("some error message")
       val SUT = new FileValidator(configuration, messagesApi)
       SUT.validateFile(file, fakeRequest) shouldBe Left("some error message")
     }
@@ -106,7 +104,7 @@ class FileValidatorSpec extends WordSpec with Matchers with MockitoSugar  {
 
     "Reject large file" in {
       val file = createFileOfSize(fileSizeLarge)
-      given(messagesApi.apply("uploadWrittenAuthorisation.error.size")).willReturn("some error message")
+      given(messagesApi.preferred(fakeRequest).apply("uploadWrittenAuthorisation.error.size")).willReturn("some error message")
       val SUT = new FileValidator(configuration, messagesApi)
       SUT.validateFile(file, fakeRequest) shouldBe Left("some error message")
     }

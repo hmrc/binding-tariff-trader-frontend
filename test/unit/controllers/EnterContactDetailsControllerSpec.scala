@@ -24,9 +24,9 @@ import connectors.FakeDataCacheConnector
 import controllers.actions._
 import play.api.test.Helpers._
 import forms.EnterContactDetailsFormProvider
-import models.{NormalMode, EnterContactDetails}
+import models.{EnterContactDetails, NormalMode}
 import pages.EnterContactDetailsPage
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.enterContactDetails
 
 class EnterContactDetailsControllerSpec extends ControllerSpecBase {
@@ -35,22 +35,25 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase {
 
   private val formProvider = new EnterContactDetailsFormProvider
   private val form = formProvider()
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+  private val view = app.injector.instanceOf[enterContactDetails]
+
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): EnterContactDetailsController = {
     new EnterContactDetailsController(
-      frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
-      formProvider
+      formProvider,
+      mcc,
+      view
     )
   }
 
   private def viewAsString(form: Form[_] = form): String = {
-    enterContactDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+    view(form, NormalMode)(messages, fakeRequest).toString
   }
 
   "EnterContactDetails Controller" must {

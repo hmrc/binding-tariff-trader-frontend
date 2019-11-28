@@ -23,9 +23,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import config.FrontendAppConfig
 import views.html.session_expired
 
-class SessionExpiredController @Inject()(val appConfig: FrontendAppConfig,
-                                         override val messagesApi: MessagesApi,
-                                         cc: MessagesControllerComponents,
+class SessionExpiredController @Inject()(cc: MessagesControllerComponents,
                                          view: session_expired) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>

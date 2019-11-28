@@ -16,7 +16,6 @@
 
 package controllers
 
-import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.PreviousCommodityCodeFormProvider
@@ -25,7 +24,7 @@ import models.Mode
 import navigation.Navigator
 import pages.{AcceptItemInformationPage, PreviousCommodityCodePage}
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.previousCommodityCode
@@ -33,16 +32,15 @@ import views.html.previousCommodityCode
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
-                                      override val messagesApi: MessagesApi,
+class PreviousCommodityCodeController @Inject()(
                                       dataCacheConnector: DataCacheConnector,
                                       navigator: Navigator,
                                       identify: IdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
                                       formProvider: PreviousCommodityCodeFormProvider,
-                                                cc: MessagesControllerComponents,
-                                                view: previousCommodityCode) extends FrontendController(cc) with I18nSupport {
+                                      cc: MessagesControllerComponents,
+                                      view: previousCommodityCode) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

@@ -26,21 +26,25 @@ import play.api.test.Helpers._
 import forms.LegalChallengeDetailsFormProvider
 import models.NormalMode
 import pages.LegalChallengeDetailsPage
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.legalChallengeDetails
 
 class LegalChallengeDetailsControllerSpec extends ControllerSpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new LegalChallengeDetailsFormProvider()
-  val form = formProvider()
+  private val formProvider = new LegalChallengeDetailsFormProvider()
+  private val form = formProvider()
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+  private val view = app.injector.instanceOf[legalChallengeDetails]
+
+
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new LegalChallengeDetailsController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+    new LegalChallengeDetailsController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, mcc, view)
 
-  def viewAsString(form: Form[_] = form) = legalChallengeDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
   val testAnswer = "answer"
 

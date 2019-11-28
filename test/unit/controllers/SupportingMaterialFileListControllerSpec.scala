@@ -22,7 +22,7 @@ import forms.SupportingMaterialFileListFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
 import play.api.data.Form
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import play.api.test.Helpers._
 import views.html.supportingMaterialFileList
 
@@ -30,14 +30,17 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new SupportingMaterialFileListFormProvider()
-  val form = formProvider()
+  private val formProvider = new SupportingMaterialFileListFormProvider()
+  private val form = formProvider()
+  private val view = app.injector.instanceOf[supportingMaterialFileList]
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new SupportingMaterialFileListController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider,mcc, view)
 
-  def viewAsString(form: Form[_] = form) = supportingMaterialFileList(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(form, Seq.empty, NormalMode)(messages,fakeRequest).toString
 
 
   "SupportingMaterialFileList Controller" must {

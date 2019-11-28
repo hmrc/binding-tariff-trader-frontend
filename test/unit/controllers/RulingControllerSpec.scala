@@ -21,9 +21,11 @@ import models.oCase
 import org.mockito.ArgumentMatchers.any
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.Helpers.{redirectLocation, status, _}
 import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.ruling_information
 
 import scala.concurrent.Future
 
@@ -31,9 +33,11 @@ class RulingControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private val casesService = mock[CasesService]
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
+  private val view = app.injector.instanceOf[ruling_information]
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
 
   def controller(identifier: IdentifierAction = FakeIdentifierAction) =
-    new RulingController(frontendAppConfig, identifier, casesService, messagesApi)
+    new RulingController(identifier, casesService, mcc, view)
 
 
   "Ruling Controller" must {

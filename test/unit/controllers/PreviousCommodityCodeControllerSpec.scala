@@ -26,21 +26,25 @@ import play.api.test.Helpers._
 import forms.PreviousCommodityCodeFormProvider
 import models.{NormalMode, PreviousCommodityCode}
 import pages.PreviousCommodityCodePage
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.previousCommodityCode
 
 class PreviousCommodityCodeControllerSpec extends ControllerSpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new PreviousCommodityCodeFormProvider()
-  val form = formProvider()
+  private val formProvider = new PreviousCommodityCodeFormProvider()
+  private val form = formProvider()
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+  private val view = app.injector.instanceOf[previousCommodityCode]
+
+
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new PreviousCommodityCodeController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+    new PreviousCommodityCodeController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, mcc, view)
 
-  def viewAsString(form: Form[_] = form) = previousCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
   "PreviousCommodityCode Controller" must {
 

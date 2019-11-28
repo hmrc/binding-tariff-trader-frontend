@@ -16,14 +16,13 @@
 
 package controllers
 
-import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import javax.inject.Inject
 import models.Confirmation
 import pages.ConfirmationPage
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.PdfService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -33,8 +32,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
-class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
-                                       override val messagesApi: MessagesApi,
+class ConfirmationController @Inject()(
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,

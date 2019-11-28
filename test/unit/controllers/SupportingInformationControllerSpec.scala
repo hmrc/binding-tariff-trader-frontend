@@ -26,21 +26,25 @@ import play.api.test.Helpers._
 import forms.SupportingInformationFormProvider
 import models.NormalMode
 import pages.SupportingInformationPage
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import views.html.supportingInformation
 
 class SupportingInformationControllerSpec extends ControllerSpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new SupportingInformationFormProvider()
-  val form = formProvider()
+  private val formProvider = new SupportingInformationFormProvider()
+  private val form = formProvider()
+  private val view = app.injector.instanceOf[supportingInformation]
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+
+
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new SupportingInformationController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, mcc, view)
 
-  def viewAsString(form: Form[_] = form) = supportingInformation(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
   "SupportingInformation Controller" must {
 

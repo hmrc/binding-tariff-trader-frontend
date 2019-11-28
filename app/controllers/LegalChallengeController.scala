@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.FrontendAppConfig
+
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.LegalChallengeFormProvider
@@ -25,7 +25,7 @@ import models.Mode
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.legalChallenge
@@ -33,8 +33,6 @@ import views.html.legalChallenge
 import scala.concurrent.Future
 
 class LegalChallengeController @Inject()(
-                                          appConfig: FrontendAppConfig,
-                                          override val messagesApi: MessagesApi,
                                           override val dataCacheConnector: DataCacheConnector,
                                           override val navigator: Navigator,
                                           identify: IdentifierAction,

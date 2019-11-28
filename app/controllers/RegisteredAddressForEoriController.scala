@@ -16,7 +16,6 @@
 
 package controllers
 
-import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisteredAddressForEoriFormProvider
@@ -25,7 +24,7 @@ import models.{Mode, RegisteredAddressForEori, UserAnswers}
 import navigation.Navigator
 import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.registeredAddressForEori
@@ -33,9 +32,7 @@ import views.html.registeredAddressForEori
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
-                                                   override val messagesApi: MessagesApi,
-                                                   dataCacheConnector: DataCacheConnector,
+class RegisteredAddressForEoriController @Inject()(dataCacheConnector: DataCacheConnector,
                                                    navigator: Navigator,
                                                    identify: IdentifierAction,
                                                    getData: DataRetrievalAction,

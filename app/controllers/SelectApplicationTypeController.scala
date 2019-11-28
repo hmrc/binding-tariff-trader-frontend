@@ -34,10 +34,7 @@ import views.html.selectApplicationType
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class SelectApplicationTypeController @Inject()(
-                                                 appConfig: FrontendAppConfig,
-                                                 override val messagesApi: MessagesApi,
-                                                 dataCacheConnector: DataCacheConnector,
+class SelectApplicationTypeController @Inject()(dataCacheConnector: DataCacheConnector,
                                                  navigator: Navigator,
                                                  identify: IdentifierAction,
                                                  getData: DataRetrievalAction,

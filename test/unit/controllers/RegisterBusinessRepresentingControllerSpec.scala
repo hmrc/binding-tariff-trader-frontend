@@ -24,7 +24,7 @@ import navigation.FakeNavigator
 import pages.RegisterBusinessRepresentingPage
 import play.api.data.Form
 import play.api.libs.json.Json
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.registerBusinessRepresenting
@@ -35,12 +35,15 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
 
   private val formProvider = new RegisterBusinessRepresentingFormProvider()
   private val form: Form[RegisterBusinessRepresenting] = formProvider()
+  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
+  private val view = app.injector.instanceOf[registerBusinessRepresenting]
+
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new RegisterBusinessRepresentingController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+    new RegisterBusinessRepresentingController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, mcc, view)
 
-  private def viewAsString(form: Form[RegisterBusinessRepresenting] = form) = registerBusinessRepresenting(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  private def viewAsString(form: Form[RegisterBusinessRepresenting] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
   "RegisterBusinessRepresenting Controller" must {
 

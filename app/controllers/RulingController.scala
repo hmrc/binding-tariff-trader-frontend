@@ -16,26 +16,21 @@
 
 package controllers
 
-import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
 import models.Case
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CasesService
 import views.html.ruling_information
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.successful
 import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 
 
-class RulingController @Inject()(val appConfig: FrontendAppConfig,
-                                 identify: IdentifierAction,
+class RulingController @Inject()(identify: IdentifierAction,
                                  service: CasesService,
-                                 override val messagesApi: MessagesApi,
                                  cc: MessagesControllerComponents,
                                  view: ruling_information) extends FrontendController(cc) with I18nSupport {
 
