@@ -38,9 +38,6 @@ class SessionIdFilter (
     this(mat, UUID.randomUUID(), ec,sessionCookieBaker)
   }
 
-
-
-
   override def apply(f: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] = {
 
     lazy val sessionId: String = s"session-$uuid"
@@ -63,20 +60,7 @@ class SessionIdFilter (
         HeaderNames.COOKIE -> cookies
       )
 
-      f(rh.withHeaders(headers)).map {
-        result =>
-
-          val cookies =
-            Cookies.fromSetCookieHeader(result.header.headers.get(HeaderNames.SET_COOKIE))
-
-          val session = Session.decodeFromCookie(cookies.get(sessionCookieBaker.COOKIE_NAME)).data
-            .foldLeft(rh.session) {
-              case (m, n) =>
-                m + n
-            }
-
-          result.withSession(session + (SessionKeys.sessionId -> sessionId))
-      }
+      f(rh.withHeaders(headers)).map (_.addingToSession(SessionKeys.sessionId -> sessionId)(rh))
     } else {
       f(rh)
     }

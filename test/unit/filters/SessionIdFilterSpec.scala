@@ -16,108 +16,70 @@
 
 package filters
 
-import java.util.UUID
-
-import akka.stream.Materializer
 import base.SpecBase
-import com.google.inject.Inject
-import play.api.Application
-import play.api.http.{DefaultHttpFilters, HttpFilters}
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
-import play.api.mvc.{Action, BaseController, InjectedController, Results, SessionCookieBaker}
-import play.api.routing.Router
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import org.scalatest.concurrent.ScalaFutures
+import play.api.mvc.{RequestHeader, Result, Results}
 import uk.gov.hmrc.http.{HeaderNames, SessionKeys}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
-object SessionIdFilterSpec {
-
-  lazy val sessionId = "28836767-a008-46be-ac18-695ab140e705"
-
-  class Filters @Inject() (sessionId: SessionIdFilter) extends DefaultHttpFilters(sessionId)
-
-  class TestSessionIdFilter @Inject() (
-                                        override val mat: Materializer,
-                                        sessionCookieBaker: SessionCookieBaker,
-                                        ec: ExecutionContext
-                                      ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec, sessionCookieBaker)
-}
-
-class SessionIdFilterSpec extends SpecBase  {
-
-  import SessionIdFilterSpec._
-  val router: Router = {
-
-    val builder = messagesControllerComponents.actionBuilder
-    import play.api.routing.sird._
-
-    Router.from {
-      case GET(p"/test") => builder {
-        request =>
-          val fromHeader = request.headers.get(HeaderNames.xSessionId).getOrElse("")
-          val fromSession = request.session.get(SessionKeys.sessionId).getOrElse("")
-          Results.Ok(
-            Json.obj(
-              "fromHeader" -> fromHeader,
-              "fromSession" -> fromSession
-            )
-          )
-      }
-      case GET(p"/test2") => builder {
-        implicit request =>
-          Results.Ok.addingToSession("foo" -> "bar")
-      }
-    }
-  }
-
-  override lazy val fakeApplication: Application = {
-
-    import play.api.inject._
-
-    new GuiceApplicationBuilder()
-      .overrides(
-        bind[HttpFilters].to[SessionIdFilterSpec.Filters],
-        bind[SessionIdFilter].to[TestSessionIdFilter]
-      )
-      .router(router)
-      .build()
-  }
+class SessionIdFilterSpec extends SpecBase with ScalaFutures {
+  val builder = messagesControllerComponents.actionBuilder
 
   ".apply" must {
 
-    "add a sessionId if one doesn't already exist" in {
+    "add a sessionId to the headers of the incoming request if one doesn't already exist" in {
+      val SUT = app.injector.instanceOf[SessionIdFilter]
 
-      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test"))
+      val handler : RequestHeader => Future[Result] = rh => {
+        rh.headers.get(HeaderNames.xSessionId) mustBe a[Some[_]]
+        rh.headers.get(HeaderNames.xSessionId).get must startWith("session-")
+        Future.successful(Results.Ok)
+      }
 
-      val body = contentAsJson(result)
-
-      (body \ "fromHeader").as[String] mustEqual s"session-$sessionId"
-      (body \ "fromSession").as[String] mustEqual s"session-$sessionId"
+      SUT(handler)(fakeRequest)
     }
 
-    "not override a sessionId if one doesn't already exist" in {
+    "add a sessionId to the session on the response if one doesn't already exist" in {
+      val SUT = app.injector.instanceOf[SessionIdFilter]
 
-      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test").withSession(SessionKeys.sessionId -> "foo"))
+      val handler : RequestHeader => Future[Result] = _ => Future.successful(Results.Ok)
 
-      val body = contentAsJson(result)
-
-      (body \ "fromHeader").as[String] mustEqual ""
-      (body \ "fromSession").as[String] mustEqual "foo"
+      val request = fakeRequest
+      whenReady(SUT(handler)(request)){ response =>
+        response.session(request).get(SessionKeys.sessionId) mustBe a[Some[_]]
+        response.session(request).get(SessionKeys.sessionId).get must startWith("session-")
+      }
     }
 
-    "not override other session values from the response" in {
+    "not override a sessionId if one already exists" in {
+      val SUT = app.injector.instanceOf[SessionIdFilter]
 
-      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test2"))
-      session(result).data must contain("foo" -> "bar")
+      val handler : RequestHeader => Future[Result] = rh => {
+        rh.headers.get(HeaderNames.xSessionId) mustBe(None)
+        rh.session.get(SessionKeys.sessionId) mustBe(Some("foo"))
+        Future.successful(Results.Ok)
+      }
+
+      val request = fakeRequest.withSession(SessionKeys.sessionId -> "foo")
+      whenReady(SUT(handler)(request)){ response =>
+        response.session(request).get(SessionKeys.sessionId) mustBe (Some("foo"))
+      }
     }
 
-    "not override other session values from the request" in {
+    "not override other session values from either the request or the response" in {
+      val SUT = app.injector.instanceOf[SessionIdFilter]
 
-      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test").withSession("foo" -> "bar"))
-      session(result).data must contain("foo" -> "bar")
+      val handler: RequestHeader => Future[Result] = rh => {
+        rh.session.get("foo") mustBe Some("bar")
+        Future.successful(Results.Ok.addingToSession("baz" -> "qux")(rh))
+      }
+
+      val request = fakeRequest.withSession("foo" -> "bar")
+      whenReady(SUT(handler)(request)) {response =>
+        response.session(request).get("foo") mustBe Some("bar")
+        response.session(request).get("baz") mustBe Some("qux")
+      }
     }
   }
 
