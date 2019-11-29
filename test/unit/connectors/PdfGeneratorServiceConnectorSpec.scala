@@ -17,12 +17,11 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.PdfFile
 import org.scalatest.concurrent.ScalaFutures
 import play.api.http.Status
 import play.twirl.api.Html
 
-class PdfGeneratorServiceConnectorSpec extends ConnectorTest with ScalaFutures{
+class PdfGeneratorServiceConnectorSpec extends ConnectorTest with ScalaFutures {
 
   private val pdfTemplate = mock[Html]
 
@@ -72,7 +71,5 @@ class PdfGeneratorServiceConnectorSpec extends ConnectorTest with ScalaFutures{
         )
       }
     }
-
   }
-
 }

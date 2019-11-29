@@ -24,7 +24,7 @@ object AppDependencies {
   private lazy val scope: String = "test,it"
 
   val test = Seq(
-    "com.github.tomakehurst"     % "wiremock"               % "2.22.0"            % scope,
+    "com.github.tomakehurst"     % "wiremock-jre8"               % "2.25.1"            % scope,
     "com.typesafe.play"         %% "play-test"              % PlayVersion.current % scope,
     "org.mockito"                % "mockito-core"           % "2.26.0"            % scope,
     "org.pegdown"                % "pegdown"                % "1.6.0"             % scope,
