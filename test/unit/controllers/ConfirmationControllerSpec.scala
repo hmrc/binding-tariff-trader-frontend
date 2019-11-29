@@ -37,18 +37,17 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
   private val cache = mock[DataCacheConnector]
   private val cacheMap = mock[CacheMap]
   private val pdfService = mock[PdfService]
-  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
   private val view = app.injector.instanceOf[confirmation]
 
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
     new ConfirmationController(
-      FakeIdentifierAction,
+      FakeIdentifierAction(messagesControllerComponents),
       dataRetrievalAction,
       app.injector.instanceOf[DataRequiredActionImpl],
       cache,
       pdfService,
-      mcc,
+      messagesControllerComponents,
       view
     )
   }

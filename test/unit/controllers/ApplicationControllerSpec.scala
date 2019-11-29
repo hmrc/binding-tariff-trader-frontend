@@ -46,7 +46,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private val request = IdentifierRequest(fakeRequest, "id", Some(userEori))
 
-  private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): ApplicationController = {
+  private def controller(action: IdentifierAction = FakeIdentifierAction(messagesControllerComponents, Some(userEori))): ApplicationController = {
     new ApplicationController(
       frontendAppConfig,
       messagesApi,
@@ -123,7 +123,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to session expired when the token is invalid" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
+      val result = controller(FakeIdentifierAction(messagesControllerComponents, None)).applicationPdf(caseRef, Some(token))(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
@@ -132,7 +132,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to unauthorized when the token is empty and session EORI is not present" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, None)(request)
+      val result = controller(FakeIdentifierAction(messagesControllerComponents, None)).applicationPdf(caseRef, None)(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
@@ -169,7 +169,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to session expired when the token is invalid" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
+      val result = controller(FakeIdentifierAction(messagesControllerComponents, None)).applicationPdf(caseRef, Some(token))(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
@@ -204,7 +204,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to session expired when the token is invalid" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).rulingCertificatePdf(caseRef, Some(token))(request)
+      val result = controller(FakeIdentifierAction(messagesControllerComponents, None)).rulingCertificatePdf(caseRef, Some(token))(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
@@ -213,7 +213,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to unauthorized when the token is empty and session EORI is not present" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).rulingCertificatePdf(caseRef, None)(request)
+      val result = controller(FakeIdentifierAction(messagesControllerComponents, None)).rulingCertificatePdf(caseRef, None)(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
@@ -248,7 +248,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
     "redirect to session expired when the token is invalid" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).viewRulingCertificate(caseRef, Some(token))(request)
+      val result = controller(FakeIdentifierAction(messagesControllerComponents, None)).viewRulingCertificate(caseRef, Some(token))(request)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)

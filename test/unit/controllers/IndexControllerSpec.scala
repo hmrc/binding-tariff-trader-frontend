@@ -34,14 +34,13 @@ import scala.concurrent.Future
 class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private val casesService = mock[CasesService]
-  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
   private val view = app.injector.instanceOf[index]
-  private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
-  private def controller(identifier: IdentifierAction = FakeIdentifierAction): IndexController = new IndexController(
+  private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(messagesControllerComponents, None)
+  private def controller(identifier: IdentifierAction = FakeIdentifierAction(messagesControllerComponents)): IndexController = new IndexController(
     identifier,
     casesService,
     view,
-    mcc
+    messagesControllerComponents
   )
 
   "Index Controller - Get Applications" must {

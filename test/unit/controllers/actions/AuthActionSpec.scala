@@ -16,7 +16,7 @@
 
 package controllers.actions
 
-import play.api.mvc.{Controller, Result}
+import play.api.mvc.{InjectedController, Result}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -30,7 +30,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class AuthActionSpec extends SpecBase {
 
-  private class Harness(authAction: IdentifierAction) extends Controller {
+  private class Harness(authAction: IdentifierAction) extends InjectedController {
     def onPageLoad() = authAction { _ => Ok }
   }
 

@@ -18,10 +18,11 @@ package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.PdfFile
+import org.scalatest.concurrent.ScalaFutures
 import play.api.http.Status
 import play.twirl.api.Html
 
-class PdfGeneratorServiceConnectorSpec extends ConnectorTest {
+class PdfGeneratorServiceConnectorSpec extends ConnectorTest with ScalaFutures{
 
   private val pdfTemplate = mock[Html]
 
@@ -40,15 +41,15 @@ class PdfGeneratorServiceConnectorSpec extends ConnectorTest {
           )
       )
 
-      val response: PdfFile = await(connector.generatePdf(pdfTemplate))
+      whenReady(connector.generatePdf(pdfTemplate)) { result =>
+        result.contentType mustBe  "application/pdf"
+        result.content mustBe expectedContent
 
-      response.contentType shouldBe "application/pdf"
-      response.content shouldBe expectedContent
-
-      verify(
-        postRequestedFor(urlEqualTo("/pdf-generator-service/generate"))
-          .withoutHeader("X-Api-Token")
-      )
+        verify(
+          postRequestedFor(urlEqualTo("/pdf-generator-service/generate"))
+            .withoutHeader("X-Api-Token")
+        )
+      }
     }
 
     "throw exception when call fails" in {
@@ -61,17 +62,17 @@ class PdfGeneratorServiceConnectorSpec extends ConnectorTest {
           )
       )
 
-      val caught: Exception = intercept[Exception] {
-        await(connector.generatePdf(pdfTemplate))
+
+      whenReady(connector.generatePdf(pdfTemplate).failed) { ex =>
+        ex.getMessage contains "Error calling PdfGeneratorService"
+
+        verify(
+          postRequestedFor(urlEqualTo("/pdf-generator-service/generate"))
+            .withoutHeader("X-Api-Token")
+        )
       }
-
-      caught.getMessage contains "Error calling PdfGeneratorService"
-
-      verify(
-        postRequestedFor(urlEqualTo("/pdf-generator-service/generate"))
-          .withoutHeader("X-Api-Token")
-      )
     }
+
   }
 
 }

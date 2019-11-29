@@ -42,7 +42,7 @@ class WhichBestDescribesYouControllerSpec extends ControllerSpecBase {
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new WhichBestDescribesYouController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
-      dataRetrievalAction, app.injector.instanceOf[DataRequiredActionImpl](messagesControllerComponents), formProvider, messagesControllerComponents, view)
+      dataRetrievalAction, app.injector.instanceOf[DataRequiredActionImpl], formProvider, messagesControllerComponents, view)
 
   def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 

@@ -25,7 +25,7 @@ import play.api.Application
 import play.api.http.{DefaultHttpFilters, HttpFilters}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import play.api.mvc.{Action, BaseController, Results, SessionCookieBaker}
+import play.api.mvc.{Action, BaseController, InjectedController, Results, SessionCookieBaker}
 import play.api.routing.Router
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -46,16 +46,16 @@ object SessionIdFilterSpec {
                                       ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec, sessionCookieBaker)
 }
 
-class SessionIdFilterSpec extends SpecBase  with BaseController{
+class SessionIdFilterSpec extends SpecBase  {
 
   import SessionIdFilterSpec._
-
   val router: Router = {
 
+    val builder = messagesControllerComponents.actionBuilder
     import play.api.routing.sird._
 
     Router.from {
-      case GET(p"/test") => Action {
+      case GET(p"/test") => builder {
         request =>
           val fromHeader = request.headers.get(HeaderNames.xSessionId).getOrElse("")
           val fromSession = request.session.get(SessionKeys.sessionId).getOrElse("")
@@ -66,7 +66,7 @@ class SessionIdFilterSpec extends SpecBase  with BaseController{
             )
           )
       }
-      case GET(p"/test2") => Action {
+      case GET(p"/test2") => builder {
         implicit request =>
           Results.Ok.addingToSession("foo" -> "bar")
       }

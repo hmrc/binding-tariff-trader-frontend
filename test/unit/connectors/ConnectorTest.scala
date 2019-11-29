@@ -32,7 +32,7 @@ import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.UnitSpec
 
-trait ConnectorTest extends SpecBase with WiremockTestServer with UnitSpec
+trait ConnectorTest extends SpecBase with WiremockTestServer
  with MockitoSugar with ResourceFiles {
 
   private val actorSystem = ActorSystem.create("testActorSystem")

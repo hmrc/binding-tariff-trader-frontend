@@ -20,9 +20,10 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.matching.EqualToJsonPattern
 import models.{ApplicationSubmittedEmail, ApplicationSubmittedParameters}
 import org.apache.http.HttpStatus
+import org.scalatest.concurrent.ScalaFutures
 import uk.gov.hmrc.http.Upstream5xxResponse
 
-class EmailConnectorSpec extends ConnectorTest {
+class EmailConnectorSpec extends ConnectorTest with ScalaFutures{
 
   private val connector = new EmailConnector(appConfig, standardHttpClient)
 
@@ -37,12 +38,12 @@ class EmailConnectorSpec extends ConnectorTest {
           .withStatus(HttpStatus.SC_ACCEPTED))
       )
 
-      await(connector.send(email)) shouldBe ((): Unit)
-
-      verify(
-        postRequestedFor(urlEqualTo("/hmrc/email"))
-          .withoutHeader("X-Api-Token")
-      )
+      whenReady(connector.send(email)){_ =>
+          verify(
+            postRequestedFor(urlEqualTo("/hmrc/email"))
+              .withoutHeader("X-Api-Token")
+          )
+        }
     }
 
     "propagate errors" in {
@@ -52,14 +53,14 @@ class EmailConnectorSpec extends ConnectorTest {
         )
       )
 
-      intercept[Upstream5xxResponse] {
-        await(connector.send(email))
-      }
+      whenReady(connector.send(email).failed) { ex =>
+        ex mustBe a[Upstream5xxResponse]
 
-      verify(
-        postRequestedFor(urlEqualTo("/hmrc/email"))
-          .withoutHeader("X-Api-Token")
-      )
+        verify(
+          postRequestedFor(urlEqualTo("/hmrc/email"))
+            .withoutHeader("X-Api-Token")
+        )
+      }
     }
   }
 

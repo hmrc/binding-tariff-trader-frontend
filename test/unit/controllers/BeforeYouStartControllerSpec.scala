@@ -28,7 +28,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
   private def onwardRoute = Call("GET", "/foo")
   private def view: beforeYouStart = app.injector.instanceOf[beforeYouStart]
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, identifier: IdentifierAction = FakeIdentifierAction) =
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, identifier: IdentifierAction = FakeIdentifierAction(messagesControllerComponents)) =
     new BeforeYouStartController(
       frontendAppConfig,
       messagesApi,
@@ -45,14 +45,14 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
   "BeforeYouStart Controller" must {
 
     "return OK and the correct view for a GET - with EORI" in {
-      val result = controller(identifier = FakeIdentifierAction(Some("eori"))).onPageLoad(fakeRequest)
+      val result = controller(identifier = FakeIdentifierAction(messagesControllerComponents, Some("eori"))).onPageLoad(fakeRequest)
 
       status(result) mustBe OK
       contentAsString(result) mustBe viewAsString(Some("eori"))
     }
 
     "return OK and the correct view for a GET - without EORI" in {
-      val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
+      val result = controller(identifier = FakeIdentifierAction(messagesControllerComponents, None)).onPageLoad(fakeRequest)
 
       status(result) mustBe OK
       contentAsString(result) mustBe viewAsString(None)

@@ -32,12 +32,11 @@ import scala.concurrent.Future
 class RulingControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private val casesService = mock[CasesService]
-  private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
+  private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(messagesControllerComponents, None)
   private val view = app.injector.instanceOf[ruling_information]
-  private val mcc = app.injector.instanceOf[MessagesControllerComponents]
 
-  def controller(identifier: IdentifierAction = FakeIdentifierAction) =
-    new RulingController(identifier, casesService, mcc, view)
+  def controller(identifier: IdentifierAction = FakeIdentifierAction(messagesControllerComponents)) =
+    new RulingController(identifier, casesService, messagesControllerComponents, view)
 
 
   "Ruling Controller" must {

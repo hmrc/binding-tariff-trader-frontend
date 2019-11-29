@@ -20,12 +20,13 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import models.response.FilestoreResponse
 import models.{Attachment, FileAttachment}
 import org.mockito.BDDMockito.given
+import org.scalatest.concurrent.ScalaFutures
 import play.api.http.Status
 import play.api.libs.Files.{DefaultTemporaryFileCreator, TemporaryFile}
 import play.api.mvc.MultipartFormData
 import play.libs.Files.TemporaryFileCreator
 
-class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
+class BindingTariffFilestoreConnectorSpec extends ConnectorTest with ScalaFutures {
 
   private val connector = new BindingTariffFilestoreConnector(appConfig, wsClient, standardHttpClient)
 
@@ -46,16 +47,18 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
       val file = MultipartFormData.FilePart[TemporaryFile]("file", "file-name", Some("text/plain"), temporaryFileCreator.create("file-name.txt"))
 
-      await(connector.upload(file)) shouldBe FilestoreResponse(
-        id = "id",
-        fileName = "file-name.txt",
-        mimeType = "text/plain"
-      )
+      whenReady(connector.upload(file)) { response =>
+        response mustBe FilestoreResponse(
+          id = "id",
+          fileName = "file-name.txt",
+          mimeType = "text/plain"
+        )
 
-      verify(
-        postRequestedFor(urlEqualTo("/file"))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
-      )
+        verify(
+          postRequestedFor(urlEqualTo("/file"))
+            .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+        )
+      }
     }
 
     "Get" in {
@@ -68,17 +71,20 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           )
       )
 
-      await(connector.get(FileAttachment("id", "name", "type", 0))) shouldBe FilestoreResponse(
-        id = "id",
-        fileName = "file-name.txt",
-        mimeType = "text/plain"
-      )
+      whenReady(connector.get(FileAttachment("id", "name", "type", 0))) { result =>
+        result mustBe FilestoreResponse(
+
+          id = "id",
+          fileName = "file-name.txt",
+          mimeType = "text/plain"
+        )
 
 
-      verify(
-        getRequestedFor(urlEqualTo("/file/id"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
-      )
+        verify(
+          getRequestedFor(urlEqualTo("/file/id"))
+            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+        )
+      }
     }
 
     "Connector 'GET' one" should {
@@ -91,12 +97,14 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
             .willReturn(aResponse().withStatus(Status.NOT_FOUND))
         )
 
-        await(connector.get(att)) shouldBe None
+        whenReady(connector.get(att)) { result =>
+          result mustBe None
 
-        verify(
-          getRequestedFor(urlEqualTo("/file/id"))
-            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
-        )
+          verify(
+            getRequestedFor(urlEqualTo("/file/id"))
+              .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          )
+        }
       }
 
       "handle response with mandatory fields only" in {
@@ -112,20 +120,22 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
             )
         )
 
-        await(connector.get(att)) shouldBe Some(
-          FilestoreResponse(
-            id = "id",
-            fileName = "name",
-            mimeType = "text/plain",
-            url = None,
-            scanStatus = None
+        whenReady(connector.get(att)) { result =>
+          result mustBe Some(
+            FilestoreResponse(
+              id = "id",
+              fileName = "name",
+              mimeType = "text/plain",
+              url = None,
+              scanStatus = None
+            )
           )
-        )
 
-        verify(
-          getRequestedFor(urlEqualTo("/file/id"))
-            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
-        )
+          verify(
+            getRequestedFor(urlEqualTo("/file/id"))
+              .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          )
+        }
       }
     }
 
@@ -139,16 +149,18 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           )
       )
 
-      await(connector.get(FileAttachment("id", "name", "type", 0))) shouldBe FilestoreResponse(
-        id = "id",
-        fileName = "file-name.txt",
-        mimeType = "text/plain"
-      )
+      whenReady(connector.get(FileAttachment("id", "name", "type", 0))) { result =>
+        result mustBe FilestoreResponse(
+          id = "id",
+          fileName = "file-name.txt",
+          mimeType = "text/plain"
+        )
 
-      verify(
-        getRequestedFor(urlEqualTo("/file/id"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
-      )
+        verify(
+          getRequestedFor(urlEqualTo("/file/id"))
+            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+        )
+      }
     }
 
     "Get FileMetadata" in {
@@ -161,27 +173,29 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           )
       )
 
-      await(connector.getFileMetadata(Seq(Attachment("id1"), Attachment("id2")))) shouldBe Seq(
-        FilestoreResponse(
-          id = "id1",
-          fileName = "file-name1.txt",
-          mimeType = "text/plain"),
-        FilestoreResponse(
-          id = "id2",
-          fileName = "file-name2.txt",
-          mimeType = "text/plain")
-      )
+      whenReady(connector.getFileMetadata(Seq(Attachment("id1"), Attachment("id2")))) { result =>
+        result mustBe Seq(
+          FilestoreResponse(
+            id = "id1",
+            fileName = "file-name1.txt",
+            mimeType = "text/plain"),
+          FilestoreResponse(
+            id = "id2",
+            fileName = "file-name2.txt",
+            mimeType = "text/plain")
+        )
 
-      verify(
-        getRequestedFor(urlEqualTo("/file?id=id1&id=id2"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
-      )
+        verify(
+          getRequestedFor(urlEqualTo("/file?id=id1&id=id2"))
+            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+        )
+      }
     }
 
     "Get FileMetadata returns no data" in {
-      await(connector.getFileMetadata(Seq.empty)) shouldBe Seq.empty
+      whenReady(connector.getFileMetadata(Seq.empty)) { result =>
+        result mustBe Seq.empty
+      }
     }
-
   }
-
 }

@@ -17,16 +17,19 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models._
+import models.{Paged, _}
 import org.apache.http.HttpStatus
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.Upstream5xxResponse
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.concurrent.ScalaFutures
 import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
-class BindingTariffClassificationConnectorSpec extends ConnectorTest {
+import scala.concurrent.{Await, Future}
+
+class BindingTariffClassificationConnectorSpec extends ConnectorTest with ScalaFutures  {
 
   private val connector = new BindingTariffClassificationConnector(appConfig, standardHttpClient)
+
 
   "Connector 'Create Case'" should {
     val request = oCase.newBtiCaseExample
@@ -44,12 +47,15 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.createCase(request)) shouldBe response
 
-      verify(
-        postRequestedFor(urlEqualTo("/cases"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
-      )
+      whenReady(connector.createCase(request)) {result =>
+        result mustBe response
+
+        verify(
+          postRequestedFor(urlEqualTo("/cases"))
+            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+        )
+      }
     }
 
     "Find valid case" in {
@@ -62,12 +68,14 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.findCase("id")) shouldBe Some(oCase.btiCaseExample)
+      whenReady(connector.findCase("id")) {result =>
+        result mustBe Some(oCase.btiCaseExample)
 
-      verify(
-        getRequestedFor(urlEqualTo("/cases/id"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
-      )
+        verify(
+          getRequestedFor(urlEqualTo("/cases/id"))
+            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+        )
+      }
     }
 
     "propagate errors" in {
@@ -77,14 +85,14 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      intercept[Upstream5xxResponse] {
-        await(connector.createCase(request))
-      }
+      whenReady(connector.createCase(request).failed){ ex =>
+        ex mustBe a[Upstream5xxResponse]
 
-      verify(
-        postRequestedFor(urlEqualTo("/cases"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
-      )
+        verify(
+          postRequestedFor(urlEqualTo("/cases"))
+            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+        )
+      }
     }
   }
 
@@ -101,12 +109,13 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW, CaseStatus.OPEN), SearchPagination(2), Sort())) shouldBe Paged.empty[Case]
-
-      verify(
-        getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
-      )
+      whenReady(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW, CaseStatus.OPEN), SearchPagination(2), Sort())){ result =>
+        result mustBe Paged.empty[Case]
+        verify(
+          getRequestedFor(urlEqualTo(url))
+            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+        )
+      }
     }
 
     "Find valid paged case" in {
@@ -119,12 +128,14 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW, CaseStatus.OPEN), SearchPagination(2), Sort())) shouldBe Paged(Seq(oCase.btiCaseExample))
+      whenReady(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW, CaseStatus.OPEN), SearchPagination(2), Sort())) { result =>
+        result mustBe Paged (Seq(oCase.btiCaseExample))
 
-      verify(
-        getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
-      )
+        verify(
+          getRequestedFor(urlEqualTo(url))
+            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+        )
+      }
     }
 
     "propagate errors" in {
@@ -136,16 +147,15 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      intercept[Upstream5xxResponse] {
-        await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW), NoPagination(), Sort()))
-      }
+        whenReady(
+          connector.findCasesBy("eori1234567", Set(CaseStatus.NEW), NoPagination(), Sort()).failed){ ex =>
+            ex mustBe a[Upstream5xxResponse]
 
-      verify(
-        getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
-      )
+            verify(
+              getRequestedFor(urlEqualTo(url))
+                .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+            )
+        }
     }
-
   }
-
 }
