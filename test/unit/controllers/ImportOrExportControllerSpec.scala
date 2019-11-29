@@ -42,8 +42,8 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
 
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new ImportOrExportController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, mcc, view)
+    new ImportOrExportController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
+      dataRetrievalAction, app.injector.instanceOf[DataRequiredActionImpl], formProvider, mcc, view)
 
   def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 

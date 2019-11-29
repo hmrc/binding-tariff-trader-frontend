@@ -39,8 +39,8 @@ class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase {
   val form = formProvider()
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new CommodityCodeBestMatchController(messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, messagesControllerComponents, view)
+    new CommodityCodeBestMatchController(messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
+      dataRetrievalAction, app.injector.instanceOf[DataRequiredActionImpl], formProvider, messagesControllerComponents, view)
 
   def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 

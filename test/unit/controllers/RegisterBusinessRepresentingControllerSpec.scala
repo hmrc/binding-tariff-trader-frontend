@@ -41,8 +41,8 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
 
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new RegisterBusinessRepresentingController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, mcc, view)
+    new RegisterBusinessRepresentingController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
+      dataRetrievalAction, app.injector.instanceOf[DataRequiredActionImpl], formProvider, mcc, view)
 
   private def viewAsString(form: Form[RegisterBusinessRepresenting] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 

@@ -35,7 +35,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
       new FakeNavigator(onwardRoute),
       identifier,
       dataRetrievalAction,
-      new DataRequiredActionImpl,
+      app.injector.instanceOf[DataRequiredActionImpl],
       messagesControllerComponents,
       view
     )

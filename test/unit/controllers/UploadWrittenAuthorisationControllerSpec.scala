@@ -60,8 +60,8 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
   private val form = formProvider()
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new UploadWrittenAuthorisationController(frontendAppConfig, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, fileService, messagesControllerComponents, view, fileValidator)
+    new UploadWrittenAuthorisationController(frontendAppConfig, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
+      dataRetrievalAction, app.injector.instanceOf[DataRequiredActionImpl], formProvider, fileService, messagesControllerComponents, view, fileValidator)
 
   private def viewAsString(form: Form[_] = form, file: Option[FileAttachment] = None): String =
     view(form, file, NormalMode)(messages, fakeRequest).toString

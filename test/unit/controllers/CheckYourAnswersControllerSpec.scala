@@ -32,10 +32,9 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
     new CheckYourAnswersController(
       frontendAppConfig,
       messagesApi,
-      new FakeNavigator(onwardRoute),
-      FakeIdentifierAction,
+      new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
       dataRetrievalAction,
-      new DataRequiredActionImpl,
+      app.injector.instanceOf[DataRequiredActionImpl],
       messagesControllerComponents,
       view
     )

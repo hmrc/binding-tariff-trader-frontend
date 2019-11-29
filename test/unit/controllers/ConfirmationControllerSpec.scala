@@ -45,7 +45,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
     new ConfirmationController(
       FakeIdentifierAction,
       dataRetrievalAction,
-      new DataRequiredActionImpl,
+      app.injector.instanceOf[DataRequiredActionImpl],
       cache,
       pdfService,
       mcc,

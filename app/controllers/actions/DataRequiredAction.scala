@@ -17,7 +17,7 @@
 package controllers.actions
 
 import com.google.inject.Inject
-import play.api.mvc.{ActionRefiner, Result}
+import play.api.mvc.{ActionRefiner, MessagesControllerComponents, Result}
 import play.api.mvc.Results.Redirect
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
@@ -26,11 +26,11 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.Future
 
-class DataRequiredActionImpl @Inject() extends DataRequiredAction {
+class DataRequiredActionImpl @Inject()(mcc : MessagesControllerComponents) extends DataRequiredAction {
 
-  def parser: play.api.mvc.BodyParser[play.api.mvc.AnyContent] = ???
+  def parser: play.api.mvc.BodyParser[play.api.mvc.AnyContent] = mcc.parsers.defaultBodyParser
 
-  protected def executionContext: scala.concurrent.ExecutionContext = ???
+  protected def executionContext: scala.concurrent.ExecutionContext = mcc.executionContext
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
 

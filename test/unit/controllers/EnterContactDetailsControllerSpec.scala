@@ -43,10 +43,9 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): EnterContactDetailsController = {
     new EnterContactDetailsController(
       FakeDataCacheConnector,
-      new FakeNavigator(onwardRoute),
-      FakeIdentifierAction,
+      new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
       dataRetrievalAction,
-      new DataRequiredActionImpl,
+      app.injector.instanceOf[DataRequiredActionImpl],
       formProvider,
       mcc,
       view

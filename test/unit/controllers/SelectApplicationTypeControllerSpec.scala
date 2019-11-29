@@ -45,9 +45,9 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): SelectApplicationTypeController = {
     new SelectApplicationTypeController(
       FakeDataCacheConnector,
-      new FakeNavigator(onwardRoute), FakeIdentifierAction,
+      new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
       dataRetrievalAction,
-      new DataRequiredActionImpl, formProvider, mcc, view)
+      app.injector.instanceOf[DataRequiredActionImpl], formProvider, mcc, view)
   }
 
   private def viewAsString(form: Form[_] = form): String = {

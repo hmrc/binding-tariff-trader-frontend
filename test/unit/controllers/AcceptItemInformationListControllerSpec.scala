@@ -29,8 +29,8 @@ class AcceptItemInformationListControllerSpec extends ControllerSpecBase {
   private def onwardRoute = Call("GET", "/foo")
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new AcceptItemInformationListController(frontendAppConfig,  messagesApi,  new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, messagesControllerComponents,view)
+    new AcceptItemInformationListController(frontendAppConfig,  messagesApi,  new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
+      dataRetrievalAction, app.injector.instanceOf[DataRequiredActionImpl], messagesControllerComponents,view)
 
   def viewAsString() = view()(messages, fakeRequest).toString
 

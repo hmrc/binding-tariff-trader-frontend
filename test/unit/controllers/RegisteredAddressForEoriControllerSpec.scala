@@ -43,8 +43,7 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) = {
     new RegisteredAddressForEoriController(
       FakeDataCacheConnector,
-      new FakeNavigator(onwardRoute),
-      FakeIdentifierAction,
+      new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
       dataRetrievalAction,
       formProvider,
       mcc,

@@ -20,11 +20,9 @@ import connectors.DataCacheConnector
 import controllers.actions.{DataRequiredActionImpl, FakeIdentifierAction}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.verify
-import org.mockito.{ArgumentMatchers, Mockito}
 import org.scalatest.mockito.MockitoSugar._
 import play.api.mvc.{MessagesControllerComponents, Result}
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -36,16 +34,16 @@ class SignOutControllerSpec extends ControllerSpecBase {
   "Sign out controller" must {
 
     "return 200 for a start feedback survey" in {
-      val result: Future[Result] = new SignOutController(frontendAppConfig, mock[DataCacheConnector], FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, mcc).startFeedbackSurvey(fakeRequestWithEori)
+      val result: Future[Result] = new SignOutController(frontendAppConfig, mock[DataCacheConnector], FakeIdentifierAction(messagesControllerComponents), getEmptyCacheMap,
+        app.injector.instanceOf[DataRequiredActionImpl], mcc).startFeedbackSurvey(fakeRequestWithEori)
       status(result) mustBe SEE_OTHER
       redirectLocation(result).get must endWith( "/feedback/ABTIR")
     }
 
     "clear user cache when present" in {
       val cache = mock[DataCacheConnector]
-      new SignOutController(frontendAppConfig, cache, FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, mcc).startFeedbackSurvey(fakeRequestWithEoriAndCache)
+      new SignOutController(frontendAppConfig, cache, FakeIdentifierAction(messagesControllerComponents), getEmptyCacheMap,
+        app.injector.instanceOf[DataRequiredActionImpl], mcc).startFeedbackSurvey(fakeRequestWithEoriAndCache)
       verify(cache).remove(any())
     }
   }
@@ -53,16 +51,16 @@ class SignOutControllerSpec extends ControllerSpecBase {
   "Force sign out controller" must {
 
     "return 200 for a start feedback survey" in {
-      val result: Future[Result] = new SignOutController(frontendAppConfig, mock[DataCacheConnector], FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, mcc).forceSignOut(fakeRequestWithEori)
+      val result: Future[Result] = new SignOutController(frontendAppConfig, mock[DataCacheConnector], FakeIdentifierAction(messagesControllerComponents), getEmptyCacheMap,
+        app.injector.instanceOf[DataRequiredActionImpl], mcc).forceSignOut(fakeRequestWithEori)
       status(result) mustBe SEE_OTHER
       redirectLocation(result).get must endWith( "/this-service-has-been-reset")
     }
 
     "clear user cache when present" in {
       val cache = mock[DataCacheConnector]
-      new SignOutController(frontendAppConfig, cache, FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, mcc).forceSignOut(fakeRequestWithEoriAndCache)
+      new SignOutController(frontendAppConfig, cache, FakeIdentifierAction(messagesControllerComponents), getEmptyCacheMap,
+        app.injector.instanceOf[DataRequiredActionImpl], mcc).forceSignOut(fakeRequestWithEoriAndCache)
       verify(cache).remove(any())
     }
   }

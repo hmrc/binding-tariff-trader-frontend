@@ -43,10 +43,9 @@ class DescribeYourItemControllerSpec extends ControllerSpecBase {
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new DescribeYourItemController(
       FakeDataCacheConnector,
-      new FakeNavigator(onwardRoute),
-      FakeIdentifierAction,
+      new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
       dataRetrievalAction,
-      new DataRequiredActionImpl,
+      app.injector.instanceOf[DataRequiredActionImpl],
       formProvider,
       mcc,
       view)

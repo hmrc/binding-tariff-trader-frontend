@@ -59,10 +59,9 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     new UploadSupportingMaterialMultipleController(
       frontendAppConfig,
       cacheConnector,
-      new FakeNavigator(onwardRoute),
-      FakeIdentifierAction,
+      new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
       dataRetrievalAction,
-      new DataRequiredActionImpl,
+      app.injector.instanceOf[DataRequiredActionImpl],
       formProvider,
       fileService,
       messagesControllerComponents,

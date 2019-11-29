@@ -157,8 +157,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
     new DeclarationController(
       FakeDataCacheConnector,
       auditService,
-      new FakeNavigator(onwardRoute),
-      FakeIdentifierAction,
+      new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
       dataRetrievalAction,
       casesService,
       fileService,

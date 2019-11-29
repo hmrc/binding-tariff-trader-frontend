@@ -41,8 +41,8 @@ class WhichBestDescribesYouControllerSpec extends ControllerSpecBase {
   val form = formProvider()
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new WhichBestDescribesYouController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, messagesControllerComponents, view)
+    new WhichBestDescribesYouController(FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction(messagesControllerComponents),
+      dataRetrievalAction, app.injector.instanceOf[DataRequiredActionImpl](messagesControllerComponents), formProvider, messagesControllerComponents, view)
 
   def viewAsString(form: Form[_] = form) = view(form, NormalMode)(messages, fakeRequest).toString
 
