@@ -61,7 +61,7 @@ class FrontendAppConfig @Inject() (val runModeConfiguration: Configuration, envi
   lazy val fileUploadMaxSize: Int = loadConfig("fileupload.maxSize").toInt
   lazy val fileUploadMimeTypes: Set[String] = loadConfig("fileupload.mimeTypes").split(",").map(_.trim).toSet
 
-  lazy val languageTranslationEnabled: Boolean = config.getBoolean("microservice.services.features.welsh-translation")
+  lazy val languageTranslationEnabled: Boolean = config.getConfBool("microservice.services.features.welsh-translation", true)
 
   private lazy val cdsUrl: String = loadConfig("customs-frontend.host")
   lazy val cdsSubscribeUrl: String = s"$cdsUrl/customs/subscribe-for-cds"
@@ -74,8 +74,8 @@ class FrontendAppConfig @Inject() (val runModeConfiguration: Configuration, envi
   lazy val apiToken: String = loadConfig("auth.api-token")
   lazy val aesKey: String = loadConfig("auth.aes-key")
 
-  lazy val timeOutSeconds : Int = config.getInt("timeoutDialog.timeoutSeconds")
-  lazy val timeOutCountDownSeconds: Int = config.getInt("timeoutDialog.time-out-countdown-seconds")
+  lazy val timeOutSeconds : Int = config.getConfInt("timeoutDialog.timeoutSeconds", 780)
+  lazy val timeOutCountDownSeconds: Int = config.getConfInt("timeoutDialog.time-out-countdown-seconds",120)
   lazy val refreshInterval: Int = timeOutSeconds + 10
   lazy val enableRefresh: Boolean= config.getConfBool("timeoutDialog.enableRefresh", true)
 
