@@ -77,7 +77,7 @@ class FrontendAppConfig @Inject() (val runModeConfiguration: Configuration, envi
   lazy val timeOutSeconds : Int = config.getInt("timeoutDialog.timeoutSeconds")
   lazy val timeOutCountDownSeconds: Int = config.getInt("timeoutDialog.time-out-countdown-seconds")
   lazy val refreshInterval: Int = timeOutSeconds + 10
-  lazy val enableRefresh: Boolean= config.getBoolean("timeoutDialog.enableRefresh")
+  lazy val enableRefresh: Boolean= config.getConfBool("timeoutDialog.enableRefresh", true)
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
