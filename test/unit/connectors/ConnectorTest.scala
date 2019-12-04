@@ -20,17 +20,11 @@ import akka.actor.ActorSystem
 import base.SpecBase
 import config.FrontendAppConfig
 import org.mockito.Mockito.when
-import org.scalatest.Matchers
 import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Environment
-import play.api.inject.Injector
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.HttpAuditing
-import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.test.UnitSpec
 
 trait ConnectorTest extends SpecBase with WiremockTestServer
  with MockitoSugar with ResourceFiles {

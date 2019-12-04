@@ -16,7 +16,6 @@
 
 package base
 
-import audit.AuditService
 import com.codahale.metrics.SharedMetricRegistries
 import config.FrontendAppConfig
 import models.UserAnswers

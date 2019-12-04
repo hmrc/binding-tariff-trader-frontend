@@ -16,52 +16,77 @@
 
 package connectors
 
-import com.github.tomakehurst.wiremock.client.WireMock._
-import com.github.tomakehurst.wiremock.matching.EqualToJsonPattern
-import models.{ApplicationSubmittedEmail, ApplicationSubmittedParameters}
-import org.apache.http.HttpStatus
+import config.FrontendAppConfig
+import models.{ApplicationSubmittedEmail, ApplicationSubmittedParameters, Email}
+import org.scalatest.{MustMatchers, WordSpec}
 import org.scalatest.concurrent.ScalaFutures
-import uk.gov.hmrc.http.Upstream5xxResponse
+import org.scalatest.mockito.MockitoSugar
+import org.mockito.ArgumentMatchers.{any, eq => equality}
+import org.mockito.Mockito.{times, verify, when}
+import uk.gov.hmrc.http.{BadGatewayException, HeaderCarrier, HttpReads, Upstream5xxResponse}
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import play.api.libs.json.{JsObject, Writes}
 
-class EmailConnectorSpec extends ConnectorTest with ScalaFutures{
+import scala.concurrent.{ExecutionContext, Future}
 
-  private val connector = new EmailConnector(appConfig, standardHttpClient)
-
-  private val email = ApplicationSubmittedEmail(Seq("user@domain.com"), ApplicationSubmittedParameters("ref", "name"))
+class EmailConnectorSpec extends WordSpec with ScalaFutures with MockitoSugar with ResourceFiles with MustMatchers {
 
   "Connector 'Send'" should {
+    val appConfig = mock[FrontendAppConfig]
+    when(appConfig.emailUrl).thenReturn("EmailService")
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+    val email = ApplicationSubmittedEmail(Seq("user@domain.com"), ApplicationSubmittedParameters("ref", "name"))
+
 
     "POST Email payload" in {
-      stubFor(post(urlEqualTo("/hmrc/email"))
-        .withRequestBody(new EqualToJsonPattern(fromResource("advice_request_email-request.json"), true, false))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_ACCEPTED))
-      )
+      val httpClient = mock[HttpClient]
 
-      whenReady(connector.send(email)){_ =>
-          verify(
-            postRequestedFor(urlEqualTo("/hmrc/email"))
-              .withoutHeader("X-Api-Token")
-          )
-        }
+      val ongoingStubbingForPOSTCall =  when(httpClient.POST(
+        any[String],
+        any[ApplicationSubmittedEmail],
+        any[Seq[(String, String)]]
+      )(
+        any[Writes[ApplicationSubmittedEmail]],
+        any[HttpReads[JsObject]],
+        any[HeaderCarrier],
+        any[ExecutionContext]))
+
+      ongoingStubbingForPOSTCall.thenReturn(Future.successful(JsObject.empty))
+      val SUT = new EmailConnector(appConfig, httpClient)
+
+      whenReady(SUT.send(email)) { _ =>
+        verify(httpClient, times(1)).POST(
+          equality("EmailService/hmrc/email"),
+          any[ApplicationSubmittedEmail],
+          any[Seq[(String, String)]]
+        )(
+          any[Writes[ApplicationSubmittedEmail]],
+          any[HttpReads[JsObject]],
+          any[HeaderCarrier],
+          any[ExecutionContext])
+      }
     }
 
-    "propagate errors" in {
-      stubFor(post(urlEqualTo("/hmrc/email"))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_BAD_GATEWAY)
-        )
-      )
+    "propogate errors" in {
 
-      whenReady(connector.send(email).failed) { ex =>
+      val httpClient = mock[HttpClient]
+
+      val ongoingStubbingForPOSTCall =  when(httpClient.POST(
+        any[String],
+        any[ApplicationSubmittedEmail],
+        any[Seq[(String, String)]]
+      )(
+        any[Writes[ApplicationSubmittedEmail]],
+        any[HttpReads[JsObject]],
+        any[HeaderCarrier],
+        any[ExecutionContext]))
+
+      ongoingStubbingForPOSTCall.thenReturn(Future.failed(Upstream5xxResponse("Test Exception", 500, 500)))
+      val SUT = new EmailConnector(appConfig, httpClient)
+
+      whenReady(SUT.send(email).failed){ ex =>
         ex mustBe a[Upstream5xxResponse]
-
-        verify(
-          postRequestedFor(urlEqualTo("/hmrc/email"))
-            .withoutHeader("X-Api-Token")
-        )
       }
     }
   }
-
 }
