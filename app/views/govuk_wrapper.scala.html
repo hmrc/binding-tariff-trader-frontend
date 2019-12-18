@@ -65,7 +65,6 @@
 }
 
 @footerTop = {}
-@footerLinks = {}
 
 @phaseBanner = {
     @uiLayouts.betaBanner(
@@ -91,6 +90,12 @@
     }
 }
 
+@footerLinks = {
+@uiLayouts.footer_links(
+accessibilityFooterUrl = Some("Neda")
+)
+}
+
 @getHelpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
 
 @content = {
@@ -104,4 +109,4 @@
       sidebar = sidebar)
 }
 
-@hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
+@hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinks), true)(content)
