@@ -16,6 +16,8 @@
 
 package views
 
+import controllers.routes
+import models.NormalMode
 import play.twirl.api.{Html, HtmlFormat}
 import views.behaviours.ViewBehaviours
 import views.html.index
@@ -37,5 +39,13 @@ class IndexViewSpec extends ViewBehaviours {
 
     behave like normalPage(rulingView, "index")()
 
+  }
+
+  "IndexView" must {
+    "contain a start button that redirects to ImportExportOrAdvice Page" in {
+      val doc = asDocument(applicationView())
+
+      assertLinkContainsHref(doc, "start-application", routes.ImportOrExportController.onPageLoad(NormalMode).url)
+    }
   }
 }

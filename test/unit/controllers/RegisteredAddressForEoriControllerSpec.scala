@@ -44,12 +44,13 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
+      new DataRequiredActionImpl,
       formProvider
     )
   }
 
   private def viewAsString(form: Form[RegisteredAddressForEori] = form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get))): String = {
-    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages).toString
+    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithNotOptionalEoriAndCache, messages).toString
   }
 
   "RegisteredAddressForEori Controller" must {

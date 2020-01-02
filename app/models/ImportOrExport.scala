@@ -26,8 +26,9 @@ object ImportOrExport {
 
   case object Import extends WithName("import") with ImportOrExport
   case object Export extends WithName("export") with ImportOrExport
+  case object Advice extends WithName("advice") with ImportOrExport
 
-  val values: Set[ImportOrExport] = Set(Import, Export)
+  val values: Set[ImportOrExport] = Set(Import, Export, Advice)
 
   val options: Set[RadioOption] = values.map {
     value => RadioOption("importOrExport", value.toString)
@@ -44,6 +45,7 @@ object ImportOrExport {
     override def reads(json: JsValue): JsResult[ImportOrExport] = json match {
       case JsString(Import.toString) => JsSuccess(Import)
       case JsString(Export.toString) => JsSuccess(Export)
+      case JsString(Advice.toString) => JsSuccess(Advice)
       case _ => JsError("Unknown importOrExport")
     }
   }

@@ -30,11 +30,11 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
   override protected val form = new RegisteredAddressForEoriFormProvider()()
 
   private def createView = { () =>
-    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages)
+    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithNotOptionalEoriAndCache, messages)
   }
 
   private def createViewUsingForm = { form: Form[_] =>
-    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages)
+    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithNotOptionalEoriAndCache, messages)
   }
 
   "RegisteredAddressForEori view" must {

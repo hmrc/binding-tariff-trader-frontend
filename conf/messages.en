@@ -357,8 +357,11 @@ uploadWrittenAuthorisation.upload.document = a digital document, a scanned lette
 
 importOrExport.title = Is the item going to be imported or exported? - Apply for a Binding Tariff Information ruling - GOV.UK
 importOrExport.heading = Is the item going to be imported or exported?
-importOrExport.import = The item is going to be imported
-importOrExport.export = The item is going to be exported
+importOrExport.import = Import an item to the UK
+importOrExport.export = Export an item from the UK
+importOrExport.advice = Get commodity code advice from the Customs Duty Liability team
+contactCustomsDutyLiabilityTeam.title = Contact the custom 
+contactCustomsDutyLiabilityTeam.heading = Contact the  Customs Duty Liability team
 importOrExport.checkYourAnswersLabel = Is the item going to be imported or exported?
 importOrExport.error.required = Select if the item is going to be imported or exported
 
