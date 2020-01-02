@@ -1,4 +1,4 @@
-checkYourAnswers.title = Check your answers before sending your application
+checkYourAnswers.title = Check your answers before sending your application - Apply for a Binding Tariff Information ruling - GOV.UK
 checkYourAnswers.heading = Check your answers before sending your application
 checkYourAnswers.guidance = Guidance for check your answers
 
@@ -21,13 +21,13 @@ error.number = Please enter a valid number
 error.required = Enter a value
 error.summary.title = There is a problem
 
-index.title = BTI home - GOV.UK
+index.title = Apply for a Binding Tariff Information ruling - GOV.UK
 index.heading = Apply for a BTI ruling
 index.home = Home
 
 global.link.signout = Sign out
 
-beforeYouStart.title = Before you start - GOV.UK
+beforeYouStart.title = Information you need to apply for a ruling - Apply for a Binding Tariff Information ruling - GOV.UK
 beforeYouStart.heading = Information you need to apply for a ruling
 beforeYouStart.subheading0 = About you
 beforeYouStart.subheading1 = About the item
@@ -91,7 +91,7 @@ eori.number = EORI number
 eori.details = EORI details
 caseReference.format = {0}
 
-registeredAddressForEori.title = Registered EORI details - GOV.UK
+registeredAddressForEori.title = What is the registered name and address for this EORI number? - Apply for a Binding Tariff Information ruling - GOV.UK
 registeredAddressForEori.heading = What is the registered name and address for EORI number {0}?
 registeredAddressForEori.headingNoEORI = What is your EORI number and what are the details of your registered EORI address?
 registeredAddressForEori.note = The details you enter must match the exact format of the registered EORI address
@@ -113,21 +113,21 @@ registeredAddressForEori.error.addressLine1.length = Address line 1 must be 70 c
 registeredAddressForEori.error.townOrCity.length = Town or city must be 35 characters or less
 registeredAddressForEori.error.postcode.length = Postcode must be 9 characters or less
 
-whichBestDescribesYou.title = Who is this application for? - GOV.UK
+whichBestDescribesYou.title = Who is this application for? - Apply for a Binding Tariff Information ruling - GOV.UK
 whichBestDescribesYou.heading = Who is this application for?
 whichBestDescribesYou.businessOwner = The business or organisation that I work for or own
 whichBestDescribesYou.businessRepresentative = A different business or organisation that I am representing
 whichBestDescribesYou.checkYourAnswersLabel = This application is for
 whichBestDescribesYou.error.required = Select if this application is for the business or organisation you work for or own, or a business, organisation or individual that you’re representing
 
-selectApplicationType.title = Application type - GOV.UK
+selectApplicationType.title = Is this a new application or a renewal of a previous ruling? - Apply for a Binding Tariff Information ruling - GOV.UK
 selectApplicationType.heading = Is this a new application or a renewal of a previous ruling?
 selectApplicationType.newCommodity = This is a new application
 selectApplicationType.previousCommodity = This is a renewal of a previous ruling
 selectApplicationType.checkYourAnswersLabel = Is this a new application or a renewal?
 selectApplicationType.error.required = Select if this is a new application or a renewal of a previous ruling
 
-registerBusinessRepresenting.title =  Registered EORI details - GOV.UK
+registerBusinessRepresenting.title =  What are the registered details of the business, organisation or individual you’re representing? - Apply for a Binding Tariff Information ruling - GOV.UK
 registerBusinessRepresenting.heading = What are the registered details of the business, organisation or individual you’re representing?
 registerBusinessRepresenting.note = The details you enter must match the exact format of their registered EORI address
 registerBusinessRepresenting.eoriNumber = EORI number
@@ -151,7 +151,7 @@ registerBusinessRepresenting.error.town.length = Town or city must be 35 charact
 registerBusinessRepresenting.error.postCode.length = Postcode must be 9 characters or less
 registerBusinessRepresenting.error.country.length = Country must be 60 characters or less
 
-enterContactDetails.title = Contact details - GOV.UK
+enterContactDetails.title = Contact details for this application - Apply for a Binding Tariff Information ruling - GOV.UK
 enterContactDetails.heading = Contact details for this application
 enterContactDetails.field1 = Full name
 enterContactDetails.field2 = Email address
@@ -165,7 +165,7 @@ enterContactDetails.error.field1.length = Full name must be 100 characters or le
 enterContactDetails.error.field2.length = Email address must be 100 characters or less
 enterContactDetails.error.field3.length = Direct telephone number must be 20 characters or less
 
-acceptItemInformationList.title = Information about your item - GOV.UK
+acceptItemInformationList.title = Information you must provide about your item to get the correct commodity code - Apply for a Binding Tariff Information ruling - GOV.UK
 acceptItemInformationList.heading = Information you must provide about your item to get the correct commodity code
 acceptItemInformationList.important = You will be able to tell us if any of the information is confidential. We will not publish any confidential information on the rulings website.
 acceptItemInformationList.askfor.paragraph0 = You must provide a detailed description of your item. The more detailed the description, the faster we will be able to classify your item.
@@ -174,7 +174,7 @@ acceptItemInformationList.askfor.paragraph2 = You can let us know if you:
 acceptItemInformationList.askfor.item1 = think you have found the correct commodity code
 acceptItemInformationList.askfor.item2 = need to send samples
 
-previousCommodityCode.title = Enter reference number of ruling to renew - GOV.UK
+previousCommodityCode.title = What is the reference number for the ruling you want to renew? - Apply for a Binding Tariff Information ruling - GOV.UK
 previousCommodityCode.heading = What is the reference number for the ruling you want to renew?
 previousCommodityCode.field1 = Ruling reference number
 previousCommodityCode.field1.hint = The reference number, for example GB12345678, is on the ruling certificate.
@@ -184,7 +184,7 @@ previousCommodityCode.error.field1.length = Previous Binding Tariff Information 
 previousCommodityCode.details.summary = What is my Binding Tariff Information ruling reference number?
 previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling. 
 
-describeYourItem.title = Describe your item - GOV.UK
+describeYourItem.title = Detailed description of your item - Apply for a Binding Tariff Information ruling - GOV.UK
 describeYourItem.heading = Detailed description of your item
 describeYourItem.subheading = Description of your item that may be used as part of the published ruling
 describeYourItem.name = Item name
@@ -204,7 +204,7 @@ describeYourItem.listItem3 = how it is made, including all manufacturing process
 describeYourItem.listItem4 = how it works
 describeYourItem.listItem5 = how it is packaged, including all materials
 
-supportingMaterialFileList.title = Upload file list - GOV.UK
+supportingMaterialFileList.title = Do you want to upload any supporting documents? - Apply for a Binding Tariff Information ruling - GOV.UK
 supportingMaterialFileList.heading = Do you want to upload any supporting documents?
 supportingMaterialFileList.uploadFileCounter.singular = You have uploaded 1 supporting document
 supportingMaterialFileList.uploadFileCounter.plural = You have uploaded {0} supporting documents
@@ -232,7 +232,7 @@ uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functiona
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.numberFiles = Reduce the number of files to a maximum of 10
 
-commodityCodeBestMatch.title = Have you found a commodity code? - GOV.UK
+commodityCodeBestMatch.title = Have you found a commodity code for your item? - Apply for a Binding Tariff Information ruling - GOV.UK
 commodityCodeBestMatch.heading = Have you found a commodity code for your item?
 commodityCodeBestMatch.bodyText = Entering a commodity code, even just the first 2 numbers, means we will be able to classify your item faster.
 commodityCodeBestMatch.yesFoundCommodityCode = Yes
@@ -240,14 +240,14 @@ commodityCodeBestMatch.noHaventFoundCommodityCode = No
 commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code?
 commodityCodeBestMatch.error.required = Select yes if you have found a commodity code
 
-commodityCodeDigits.title = Enter the commodity code - GOV.UK
+commodityCodeDigits.title = What is the commodity code you found for your item? - Apply for a Binding Tariff Information ruling - GOV.UK
 commodityCodeDigits.heading = What is the commodity code you found for your item?
 commodityCodeDigits.checkYourAnswersLabel = Commodity code
 commodityCodeDigits.error.required = Enter a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
 
-whenToSendSample.title = Samples - GOV.UK
-whenToSendSample.heading = Samples
+whenToSendSample.title = Sending samples to HMRC - Apply for a Binding Tariff Information ruling - GOV.UK
+whenToSendSample.heading = Sending samples to HMRC
 whenToSendSample.yesProvideSample = Yes
 whenToSendSample.notSendingSample = No
 whenToSendSample.checkYourAnswersLabel = Are you sending a sample?
@@ -261,7 +261,7 @@ whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
 whenToSendSample.legend = Are you sending a sample?
 
-returnSamples.title = Returning Samples - GOV.UK
+returnSamples.title = Would you like the samples returned? - Apply for a Binding Tariff Information ruling - GOV.UK
 returnSamples.heading = Would you like the samples returned?
 returnSamples.first.paragraph = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
 returnSamples.yesReturnSamples = Yes
@@ -269,7 +269,7 @@ returnSamples.noDontReturnSamples = No
 returnSamples.checkYourAnswersLabel = Would you like the sample returned?
 returnSamples.error.required = Select yes if you would like the sample returned
 
-similarItemCommodityCode.title = Similar item with a ruling - GOV.UK
+similarItemCommodityCode.title = Do you know of a similar item that already has a BTI ruling? - Apply for a Binding Tariff Information ruling - GOV.UK
 similarItemCommodityCode.heading = Do you know of a similar item that already has a BTI ruling?
 similarItemCommodityCode.yesAwareSimilarCode = Yes
 similarItemCommodityCode.noNotAware = No
@@ -279,13 +279,13 @@ similarItemCommodityCode.bodyText = It can help us classify your goods and align
 similarItemCommodityCode.listItem1 = your business or organisation operates in other countries and you have a ruling for that country
 similarItemCommodityCode.listItem2 = you know of a similar item with a ruling
 
-commodityCodeRulingReference.title = Enter the details of the similar rulings - GOV.UK
+commodityCodeRulingReference.title = What are the details and reference numbers of the similar rulings? - Apply for a Binding Tariff Information ruling - GOV.UK
 commodityCodeRulingReference.heading = What are the details and reference numbers of the similar rulings?
 commodityCodeRulingReference.hint = The reference number, for example GB12345678 and FR12345678, is on the ruling certificate. You can include more than one reference number.
 commodityCodeRulingReference.checkYourAnswersLabel = Ruling reference number
 commodityCodeRulingReference.error.required = Enter the ruling reference numbers and details of similar rulings
 
-legalChallenge.title = Problems with the classification of the item - GOV.UK
+legalChallenge.title = Do you know if there have been any problems classifying the item? - Apply for a Binding Tariff Information ruling - GOV.UK
 legalChallenge.heading = Do you know if there have been any problems classifying the item?
 legalChallenge.yesLegalChallenge = Yes
 legalChallenge.noLegalChallenge = No
@@ -293,24 +293,24 @@ legalChallenge.checkYourAnswersLabel = Do you know of any problems with the clas
 legalChallenge.error.required = Select yes if you are aware of any problems with the item’s classification
 legalChallenge.paragraph = This includes court rulings and when a commodity code is being reviewed. This helps us align with other rulings.
 
-legalChallengeDetails.title = Enter problems with the classification of the item - GOV.UK
+legalChallengeDetails.title = What are the problems with classifying your item? - Apply for a Binding Tariff Information ruling - GOV.UK
 legalChallengeDetails.heading = What are the problems with classifying your item?
 legalChallengeDetails.checkYourAnswersLabel = Problems with the classification of the item
 legalChallengeDetails.error.required = Enter any problems with the classification of your item
 
-supportingInformation.title = Other information to support this application - GOV.UK
+supportingInformation.title = Do you need to enter any other information to support this application? - Apply for a Binding Tariff Information ruling - GOV.UK
 supportingInformation.heading = Do you need to enter any other information to support this application?
 supportingInformation.yesInformation = Yes
 supportingInformation.noInformation = No
 supportingInformation.checkYourAnswersLabel = Do you have supporting information?
 supportingInformation.error.required = Select yes if you want to enter any supporting information
 
-supportingInformationDetails.title = Enter supporting information - GOV.UK
+supportingInformationDetails.title = What is the information you want to provide? - Apply for a Binding Tariff Information ruling - GOV.UK
 supportingInformationDetails.heading = What is the information you want to provide?
 supportingInformationDetails.checkYourAnswersLabel = Supporting information
 supportingInformationDetails.error.required = Enter supporting information
 
-declaration.title = Declaration - GOV.UK
+declaration.title = Apply for a ruling - Apply for a Binding Tariff Information ruling - GOV.UK
 declaration.heading = Apply for a ruling
 declaration.checkYourAnswersLabel = Declaration
 declaration.paragraph0 = By applying for a Binding Tariff Information ruling, you confirm that the information you provided is correct and complete to the best of your knowledge.
@@ -320,7 +320,7 @@ declaration.listItem2 = publish information that is not confidential on the Bind
 declaration.paragraph2 = You understand that your samples may be damaged during testing.
 declaration.submit = Accept and apply for a ruling
 
-confirmation.title = Application complete - GOV.UK
+confirmation.title = Application complete - Apply for a Binding Tariff Information ruling - GOV.UK
 confirmation.heading = Application complete
 confirmation.heading2.sendingSamples = What you must do next
 confirmation.sendingSamples.important = Your application will not be processed until we get your samples.
@@ -340,7 +340,7 @@ confirmation.paragraph.confirmationEmail = We have sent your confirmation email 
 confirmation.download.link.PDF = Download a PDF of the application
 confirmation.download.link.accessibleText = Download an accessible text file of the application
 
-uploadWrittenAuthorisation.title = Upload written authorisation - GOV.UK
+uploadWrittenAuthorisation.title = Upload written authorisation from the business, organisation or individual you’re representing - Apply for a Binding Tariff Information ruling - GOV.UK
 uploadWrittenAuthorisation.heading = Upload written authorisation from the business, organisation or individual you’re representing
 uploadWrittenAuthorisation.label = Upload a file
 uploadWrittenAuthorisation.label.replace = Replace file
@@ -355,7 +355,7 @@ uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg a
 uploadWrittenAuthorisation.upload.timeLimit = from within the last 12 months
 uploadWrittenAuthorisation.upload.document = a digital document, a scanned letter or copy of an email from the business, organisation or individual
 
-importOrExport.title = Is the item going to be imported or exported? - GOV.UK
+importOrExport.title = Is the item going to be imported or exported? - Apply for a Binding Tariff Information ruling - GOV.UK
 importOrExport.heading = Is the item going to be imported or exported?
 importOrExport.import = The item is going to be imported
 importOrExport.export = The item is going to be exported
@@ -497,7 +497,7 @@ case.ruling.status.expired = Expired
 
 case.ruling.viewRuling = View BTI Ruling
 
-rulingInformation.title = Ruling certificate - GOV.UK
+rulingInformation.title = Important information about this BTI ruling - Apply for a Binding Tariff Information ruling - GOV.UK
 rulingInformation.maintitle = Binding Tariff Information ruling
 rulingInformation.heading = Important information about BTI ruling
 rulingInformation.summary = Ruling summary
@@ -520,7 +520,7 @@ rulingInformation.ruling = Ruling reference
 rulingInformation.startDate = Start date
 rulingInformation.expiryDate = Expiry date
 
-applicationView.title = View application - GOV.UK
+applicationView.title = Your application for a Binding Tariff Information ruling - Apply for a Binding Tariff Information ruling - GOV.UK
 applicationView.mainTitle = Your application for a Binding Tariff Information ruling
 applicationView.applicationLink = View application
 applicationView.applicationPDFLink = View application PDF (opens in new window or tab)
