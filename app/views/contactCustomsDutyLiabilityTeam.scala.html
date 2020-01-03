@@ -28,7 +28,10 @@
     bodyClasses = None) {
 
     @components.back_link()
-    @components.heading(messages("contactCustomsDutyLiabilityTeam.heading"))
-    
 
+    @components.heading(messages("contactCustomsDutyLiabilityTeam.heading"))
+
+    <p>@Html(messages("contactCustomsDutyLiabilityTeam.forGeneralAdvice"))</p>
+
+    <p>@messages("contactCustomsDutyLiabilityTeam.onlyUseTheApply")</p>
 }

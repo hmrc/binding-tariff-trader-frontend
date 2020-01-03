@@ -29,7 +29,7 @@ class BeforeYouStartViewSpec extends ViewBehaviours {
   "BeforeYouStart view" must {
     behave like normalPage(createView(), messageKeyPrefix)()
 
-    behave like pageWithoutBackLink(createView())
+    behave like pageWithBackLink(createView())
   }
 
 }

@@ -20,7 +20,7 @@ import connectors.FakeDataCacheConnector
 import controllers.actions._
 import forms.SupportingMaterialFileListFormProvider
 import models.NormalMode
-import navigation.FakeNavigator
+import navigation.{FakeNavigator, Navigator}
 import play.api.data.Form
 import play.api.mvc.Call
 import play.api.test.Helpers._
@@ -34,7 +34,7 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
   val form = formProvider()
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new SupportingMaterialFileListController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
+    new SupportingMaterialFileListController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new Navigator, FakeIdentifierAction,
       dataRetrievalAction, new DataRequiredActionImpl, formProvider)
 
   def viewAsString(form: Form[_] = form) = supportingMaterialFileList(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages).toString
@@ -49,13 +49,13 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
       contentAsString(result) mustBe viewAsString()
     }
 
-    "redirect to the next page when option No is submitted" in {
+    "redirect to the next page (Have you found commodity code) when no is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("add-file-choice", "false"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      redirectLocation(result) mustBe Some(routes.CommodityCodeBestMatchController.onPageLoad(NormalMode).url)
     }
 
     "redirect to the same page when delete element" in {

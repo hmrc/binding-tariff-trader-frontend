@@ -38,7 +38,7 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
         navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) mustBe routes.IndexController.getApplications()
       }
 
-      "go to contactCustomsDutyLiabilityTeam page when import or export is not selected" in {
+      "go to contactCustomsDutyLiabilityTeam page when Advice option is selected" in {
         val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get[ImportOrExport](ImportOrExportPage)).thenReturn(Some(Advice))
@@ -46,12 +46,12 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
         navigator.nextPage(ImportExportOrAdvicePage, NormalMode)(mockUserAnswers) mustBe routes.ContactCustomsDutyLiabilityTeamController.onPageLoad()
       }
 
-      "go to Import or export page when import or export is selected" in {
+      "go to the next page (Information you need) when import or export option is selected" in {
         val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get[ImportOrExport](ImportOrExportPage)).thenReturn(Some(Import))
 
-        navigator.nextPage(ImportExportOrAdvicePage, NormalMode)(mockUserAnswers) mustBe routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)
+        navigator.nextPage(ImportExportOrAdvicePage, NormalMode)(mockUserAnswers) mustBe routes.BeforeYouStartController.onPageLoad()
       }
     }
 

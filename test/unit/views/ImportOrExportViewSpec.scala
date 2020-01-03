@@ -48,13 +48,13 @@ class ImportOrExportViewSpec extends ViewBehaviours {
       }
     }
 
-    for(option <- ImportOrExport.options) {
+    for (option <- ImportOrExport.options) {
       s"rendered with a value of '${option.value}'" must {
         s"have the '${option.value}' radio button selected" in {
           val doc = asDocument(createViewUsingForm(form.bind(Map("value" -> s"${option.value}"))))
           assertContainsRadioButton(doc, option.id, "value", option.value, true)
 
-          for(unselectedOption <- ImportOrExport.options.filterNot(o => o == option)) {
+          for (unselectedOption <- ImportOrExport.options.filterNot(o => o == option)) {
             assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
           }
         }

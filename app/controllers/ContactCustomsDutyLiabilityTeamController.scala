@@ -19,10 +19,8 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.EnterContactDetailsFormProvider
 import javax.inject.Inject
 import models.Mode
-import navigation.Navigator
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController

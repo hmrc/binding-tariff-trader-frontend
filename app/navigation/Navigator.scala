@@ -41,7 +41,7 @@ class Navigator @Inject()() {
     ImportOrExportPage -> (_ => routes.ImportOrExportController.onPageLoad(NormalMode)),
     ImportExportOrAdvicePage -> (answer => answer.get[ImportOrExport](ImportOrExportPage) match {
       case Some(Advice) => routes.ContactCustomsDutyLiabilityTeamController.onPageLoad()
-      case _ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)
+      case _ => routes.BeforeYouStartController.onPageLoad()
     }),
     CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)),
     CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(NormalMode)),

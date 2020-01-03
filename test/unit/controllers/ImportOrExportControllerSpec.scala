@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.ImportOrExportFormProvider
 import models.ImportOrExport.{Advice, Export, Import}
 import models.{ImportOrExport, NormalMode}
-import navigation.{FakeNavigator, Navigator}
+import navigation.Navigator
 import pages.ImportOrExportPage
 import play.api.data.Form
 import play.api.libs.json.JsString
@@ -67,7 +67,7 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.CommodityCodeBestMatchController.onPageLoad(NormalMode).url)
+      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad.url)
     }
 
     "redirect to the next page when Export is submitted" in {
@@ -76,7 +76,7 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.CommodityCodeBestMatchController.onPageLoad(NormalMode).url)
+      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad.url)
     }
 
     "redirect to the next page when Advice is submitted" in {
