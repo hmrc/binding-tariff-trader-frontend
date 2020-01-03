@@ -18,7 +18,7 @@ package controllers
 
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import javax.inject.Inject
 import models.Mode
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -29,11 +29,9 @@ import views.html.contactCustomsDutyLiabilityTeam
 class ContactCustomsDutyLiabilityTeamController @Inject()(appConfig: FrontendAppConfig,
                                                           override val messagesApi: MessagesApi,
                                                           dataCacheConnector: DataCacheConnector,
-                                                          identify: IdentifierAction,
-                                                          getData: DataRetrievalAction,
-                                                          requireData: DataRequiredAction) extends FrontendController with I18nSupport {
+                                                          identify: IdentifierAction) extends FrontendController with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify { implicit request =>
     Ok(contactCustomsDutyLiabilityTeam(appConfig, mode))
   }
 }
