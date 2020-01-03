@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,8 +52,7 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
 
     "show the expected text" in {
       val text = asDocument(createViewUsingForm(form)).text()
-
-      text must include("Registered EORI details - GOV.UK")
+      text must include("What is the registered name and address for this EORI number? - Apply for a Binding Tariff Information ruling - GOV.UK")
       text must include("What is the registered name and address for EORI number eori-789012?")
       text must include("The details you enter must match the exact format of the registered EORI address")
       text must include("Business, organisation or individual’s name")
