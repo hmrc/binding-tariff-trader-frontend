@@ -25,7 +25,7 @@ bodyClasses = None,
 hasTimeOut = false) {
 @components.heading(messages("accessibility.heading"))
 
-<p>@messages("accessibility.overview1")</p>
+<p class="govuk-body-l">@messages("accessibility.overview1")</p>
 <p>@messages("accessibility.overview2.start") <a target="_self" href="@appConfig.govukAccessibilityUrl">@messages("accessibility.overview2.link")</a> @messages("accessibility.overview2.end")</p>
 <p>@messages("accessibility.overview3") <a target="_self" href="@appConfig.subdomainUrl">@messages("accessibility.overview3.subdomainUrl")</a>
 </p>
@@ -41,6 +41,41 @@ messages("accessibility.usingThisService.bullet3"),
 messages("accessibility.usingThisService.bullet4"),
 messages("accessibility.usingThisService.bullet5")
 )
+<p>@messages("accessibility.usingThisService.p3")</p>
 
+<p><a target="_self" href="@appConfig.abilityNetUrl">@messages("accessibility.usingThisService.p4.link")</a>
+ @messages("accessibility.usingThisService.p4.text")</p>
+
+@components.subheading(messages("accessibility.howAccessibleIsThisService.heading"))
+
+<p>@messages("accessibility.howAccessible.p1") <a target="_self" href="@appConfig.webStandards">@messages("accessibility.howAccessible.p1.link")</a></p>
+<p>@messages("accessibility.talkAboutDifficultiesForDisabledUsers.text")</p>
+
+
+@components.subheading(messages("accessibility.whatToDoIfYouHaveDifficulty.heading"))
+
+@components.subheading(messages("accessibility.reportingProblems.heading"))
+   <p>
+    @messages("accessibility.reportingProblems.p1")
+    @components.link(
+    url = appConfig.reportEmail,
+    value=messages("accessibility.reportingProblems.p1.link"),
+    external = true
+    )@messages("common.fullstop")
+   </p>
+
+@components.subheading(messages("accessibility.notHappyWithCompliance.heading"))
+
+@components.subheading(messages("accessibility.contactUs.heading"))
+<p>@messages("accessibility.contactUs.p1")</p>
+<p>@messages("accessibility.contactUs.p2")</p>
+<p>@messages("accessibility.contactUs.p3")</p>
+
+
+@components.subheading(messages("accessibility.technicalInformation.heading"))
+<p>@messages("accessibility.technicalInformation.p1")</p>
+<p>@messages("accessibility.technicalInformation.p2.text")</p>
+
+@components.subheading(messages("accessibility.howWeTested.heading"))
 
 }

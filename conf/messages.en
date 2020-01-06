@@ -549,4 +549,32 @@ accessibility.usingThisService.bullet2 = zoom in up to 300% without the text spi
 accessibility.usingThisService.bullet3 = get from the start of the service to the end using just a keyboard
 accessibility.usingThisService.bullet4 = get from the start of the service to the end using speech recognition software
 accessibility.usingThisService.bullet5 = listen to the service using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)
+accessibility.usingThisService.p3 = We have also made the text in the service as simple as possible to understand.
+accessibility.usingThisService.p4.link = AbilityNet
+accessibility.usingThisService.p4.text=has advice on making your device easier to use if you have a disability.
 
+accessibility.howAccessibleIsThisService.heading=How accessible this service is
+accessibility.howAccessible.p1=This service is fully compliant with the
+accessibility.howAccessible.p1.link=Web Content Accessibility Guidelines version 2.1 AA standard
+accessibility.talkAboutDifficultiesForDisabledUsers.text=[Note: Even if this service meets WCAG 2.1 AA, use this section to talk about any tasks in the service disabled users may find difficult to do. For example:]
+
+accessibility.whatToDoIfYouHaveDifficulty.heading=What to do if you have difficulty using this service
+
+accessibility.reportingProblems.heading=Reporting accessibility problems with this service
+accessibility.reportingProblems.p1=We are always looking to improve the accessibility of this service. If you find any problems that are not listed on this page or think we are not meeting accessibility requirements,
+accessibility.reportingProblems.p1.link=report the accessibility problem
+
+accessibility.notHappyWithCompliance.heading=What to do if you are not happy with how we respond to your complaint
+
+accessibility.contactUs.heading=Contacting us by phone or getting a visit from us in person
+accessibility.contactUs.p1=We provide a text relay service if you are deaf, hearing impaired or have a speech impediment.
+accessibility.contactUs.p2=We can provide a British Sign Language (BSL) interpreter, or you can arrange a visit from an HMRC advisor to help you complete the service.
+accessibility.contactUs.p3=Find out how to
+accessibility.contactUs.p3.link=
+
+accessibility.technicalInformation.heading=Technical information about this service’s accessibility
+accessibility.technicalInformation.p1=HMRC is committed to making this service accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.
+accessibility.technicalInformation.p2.text=This service is fully compliant with the
+accessibility.technicalInformation.p2.link=
+
+accessibility.howWeTested.heading=How we tested this service
