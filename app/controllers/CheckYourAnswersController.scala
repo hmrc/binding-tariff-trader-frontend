@@ -57,11 +57,11 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
       AnswerSection(
         Some("checkYourAnswers.informationAboutYourItemSection"),
         Seq(
+          checkYourAnswersHelper.importOrExport,
           checkYourAnswersHelper.selectApplicationType,
           checkYourAnswersHelper.previousCommodityCode,
           checkYourAnswersHelper.describeYourItem,
           checkYourAnswersHelper.supportingMaterialFileList,
-          checkYourAnswersHelper.importOrExport,
           checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,
           checkYourAnswersHelper.whenToSendSample,

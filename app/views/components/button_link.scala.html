@@ -16,9 +16,10 @@
 
 @(
 messageKey: String = "",
-href: String
+href: String,
+        id: Option[String] = None
 )(implicit messages: Messages)
 
 <div class="section">
-    <a href="@href" role="button" class="button">@messages(messageKey)</a>
+    <a href="@href" role="button" @if(id.isDefined){ @Html("id="+id.get)} class="button">@messages(messageKey)</a>
 </div>

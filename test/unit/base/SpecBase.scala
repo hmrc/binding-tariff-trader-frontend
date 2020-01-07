@@ -19,7 +19,7 @@ package base
 import com.codahale.metrics.SharedMetricRegistries
 import config.FrontendAppConfig
 import models.UserAnswers
-import models.requests.OptionalDataRequest
+import models.requests.{DataRequest, OptionalDataRequest}
 import org.scalatestplus.play.PlaySpec
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
@@ -40,6 +40,8 @@ trait SpecBase extends PlaySpec with WithFakeApplication {
   def fakeRequest = FakeRequest()
 
   def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
+
+  def fakeRequestWithNotOptionalEoriAndCache = DataRequest(fakeRequest, "id", Some("eori-789012"), UserAnswers(CacheMap("id", Map.empty)))
 
   def fakeRequestWithEoriAndCache = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), Some(UserAnswers(CacheMap("id", Map.empty))))
 

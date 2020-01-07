@@ -15,31 +15,22 @@
  *@
 
 @import config.FrontendAppConfig
-@import controllers.routes._
-@import models.{ImportOrExport, Mode}
+@import models.Mode
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
-@import models.requests.OptionalDataRequest
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request:  OptionalDataRequest[_], messages: Messages)
+@(appConfig: FrontendAppConfig, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("importOrExport.title")}",
+    title = s"${messages("contactCustomsDutyLiabilityTeam.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = ImportOrExportController.onSubmit(mode)) {
+    @components.back_link()
 
-        @components.back_link()
+    @components.heading(messages("contactCustomsDutyLiabilityTeam.heading"))
 
-        @components.error_summary(form.errors)
+    <p>@Html(messages("contactCustomsDutyLiabilityTeam.forGeneralAdvice"))</p>
 
-        @components.input_radio(
-            field = form("value"),
-            labelHtml = Some(components.heading(messages("importOrExport.heading"))),
-            inputs = ImportOrExport.options.toSeq
-        )
-
-        @components.submit_button()
-    }
+    <p>@messages("contactCustomsDutyLiabilityTeam.onlyUseTheApply")</p>
 }

@@ -19,9 +19,9 @@ package controllers
 import connectors.FakeDataCacheConnector
 import controllers.actions._
 import forms.ImportOrExportFormProvider
-import models.ImportOrExport.{Export, Import}
+import models.ImportOrExport.{Advice, Export, Import}
 import models.{ImportOrExport, NormalMode}
-import navigation.FakeNavigator
+import navigation.Navigator
 import pages.ImportOrExportPage
 import play.api.data.Form
 import play.api.libs.json.JsString
@@ -38,10 +38,10 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
   val form = formProvider()
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new ImportOrExportController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+    new ImportOrExportController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new Navigator, FakeIdentifierAction,
+      dataRetrievalAction, formProvider)
 
-  def viewAsString(form: Form[_] = form) = importOrExport(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form) = importOrExport(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages).toString
 
   "ImportOrExport Controller" must {
 
@@ -61,22 +61,31 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
       contentAsString(result) mustBe viewAsString(form.fill(ImportOrExport.values.head))
     }
 
-    "redirect to the next page when BusinessOwner is submitted" in {
+    "redirect to the next page when Import is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", Import))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad.url)
     }
 
-    "redirect to the next page when BusinessRepresentative is submitted" in {
+    "redirect to the next page when Export is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", Export))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad.url)
+    }
+
+    "redirect to the next page when Advice is submitted" in {
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", Advice))
+
+      val result = controller().onSubmit(NormalMode)(postRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.ContactCustomsDutyLiabilityTeamController.onPageLoad.url)
     }
 
 
@@ -90,19 +99,5 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
       contentAsString(result) mustBe viewAsString(boundForm)
     }
 
-    "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", ImportOrExport.options.head.value))
-      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
-
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
   }
 }

@@ -56,7 +56,7 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
     val removedFile = existingFiles.filter(_.id != fileId).seq
     val answers: UserAnswers = request.userAnswers.set(SupportingMaterialFileListPage, removedFile)
     dataCacheConnector.save(answers.cacheMap)
-      .map( _ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)) )
+      .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -71,7 +71,7 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
       }
 
       updatedAnswers.map { userAnswers =>
-        Redirect(navigator.nextPage(ImportOrExportPage, mode)(userAnswers))
+        Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(userAnswers))
       }
     }
 

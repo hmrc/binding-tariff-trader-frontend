@@ -17,7 +17,7 @@
 package mapper
 
 import javax.inject.Singleton
-import models.ImportOrExport.{Export, Import}
+import models.ImportOrExport.{Advice, Export, Import}
 import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import pages._
@@ -132,6 +132,7 @@ class CaseRequestMapper {
   private def toImportOrExport: ImportOrExport => String = {
     case Import => "IMPORT"
     case Export => "EXPORT"
+    case Advice => "ADVICE"
     case _ => throw new IllegalArgumentException
   }
 

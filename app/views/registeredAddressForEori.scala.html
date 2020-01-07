@@ -21,7 +21,8 @@
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: OptionalDataRequest[_], messages: Messages)
+@import models.requests.DataRequest
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: DataRequest[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("registeredAddressForEori.title")}",
@@ -34,9 +35,9 @@
 
         <fieldset>
 
-            @if(request.userEoriNumber.isDefined) {
+            @if(request.eoriNumber.isDefined) {
                 <legend>
-                    @components.heading(messages("registeredAddressForEori.heading", request.userEoriNumber.get))
+                    @components.heading(messages("registeredAddressForEori.heading", request.eoriNumber.get))
 
                     <div role="note" class="application-notice info-notice">
                         <p> @messages("registeredAddressForEori.note") </p>

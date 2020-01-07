@@ -21,7 +21,7 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.ImportOrExportFormProvider
 import javax.inject.Inject
-import models.{Enumerable, Mode}
+import models.{Enumerable, ImportOrExport, Mode, UserAnswers}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
@@ -40,15 +40,14 @@ class ImportOrExportController @Inject()(
                                           navigator: Navigator,
                                           identify: IdentifierAction,
                                           getData: DataRetrievalAction,
-                                          requireData: DataRequiredAction,
                                           formProvider: ImportOrExportFormProvider
                                         ) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData ) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(ImportOrExportPage) match {
+    val preparedForm = request.userAnswers.flatMap(_.get(ImportOrExportPage)) match {
       case Some(value) => form.fill(value)
       case _ => form
     }
@@ -56,16 +55,16 @@ class ImportOrExportController @Inject()(
     Ok(importOrExport(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(importOrExport(appConfig, formWithErrors, mode))),
       value => {
-        val updatedAnswers = request.userAnswers.set(ImportOrExportPage, value)
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(updatedAnswers))
-        )
+        val updatedAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId)).set(ImportOrExportPage, value)
+        dataCacheConnector.save(updatedAnswers.cacheMap).map {
+          _ => Redirect(navigator.nextPage(ImportExportOrAdvicePage, mode)(updatedAnswers))
+        }
       }
     )
 

@@ -16,15 +16,15 @@
 
 package views
 
-import models.requests.IdentifierRequest
+import models.NormalMode
 import views.behaviours.ViewBehaviours
-import views.html.beforeYouStart
+import views.html.contactCustomsDutyLiabilityTeam
 
-class BeforeYouStartViewSpec extends ViewBehaviours {
+class ContactCustomsDutyLiabilityTeamViewSpec extends ViewBehaviours {
 
-  private val messageKeyPrefix = "beforeYouStart"
+  private val messageKeyPrefix = "contactCustomsDutyLiabilityTeam"
 
-  private def createView(eori: Option[String] = Some("eori")) = () => beforeYouStart(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages)
+  private def createView() = () => contactCustomsDutyLiabilityTeam(frontendAppConfig, NormalMode)(fakeRequest, messages)
 
   "BeforeYouStart view" must {
     behave like normalPage(createView(), messageKeyPrefix)()

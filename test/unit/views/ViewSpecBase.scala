@@ -108,4 +108,8 @@ trait ViewSpecBase extends SpecBase {
       assert(!radio.hasAttr("checked") && radio.attr("checked") != "checked", s"\n\nElement $id is checked")
     }
   }
+
+  def assertLinkContainsHref(doc: Document, id: String, href: String): Assertion = {
+    assert(doc.getElementById(id).attr("href").contains(href))
+  }
 }
