@@ -367,7 +367,7 @@ contactCustomsDutyLiabilityTeam.heading = Contact the Customs Duty Liability Tea
 contactCustomsDutyLiabilityTeam.forGeneralAdvice = For general advice on commodity codes, <a href="https://www.gov.uk/guidance/ask-hmrc-for-advice-on-classifying-your-goods">contact the Customs Duty Liability Team</a>
 contactCustomsDutyLiabilityTeam.onlyUseTheApply = Only use the Apply for a Binding Tariff Information ruling service if you are definitely importing or exporting goods.
 importOrExport.checkYourAnswersLabel = Is the item going to be imported or exported?
-importOrExport.error.required = Select if the item is going to be imported or exported
+importOrExport.error.required = Select if you want to import or export an item or contact the Customs Duty Liability Team
 
 checkYourAnswers.applicantRegisteredSection = Your details
 checkYourAnswers.applicantOtherBusiness = Details of the business, organisation or individual you represent
