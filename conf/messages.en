@@ -217,8 +217,10 @@ supportingMaterialFileList.indications.bullet3 = lists of materials
 supportingMaterialFileList.indications.bullet4 = images of the item
 supportingMaterialFileList.indications.bullet5 = images of packaging
 supportingMaterialFileList.error.required = Select yes if you want to upload a supporting document
+supportingMaterialFile.remove.file.text = Remove
+supportingMaterialFile.remove.file.hidden.text = Remove file {0}
 
-uploadSupportingMaterialMultiple.title = Upload a file - GOV.UK
+uploadSupportingMaterialMultiple.title = Upload documents, photographs, manuals, brochures or technical specifications - Apply for a Binding Tariff Information ruling - GOV.UK
 uploadSupportingMaterialMultiple.heading = Upload documents, photographs, manuals, brochures or technical specifications
 uploadSupportingMaterialMultiple.label = Upload a file
 uploadSupportingMaterialMultiple.upload.title =  You can upload:
@@ -373,6 +375,7 @@ checkYourAnswers.informationAboutYourItemSection = Information about your item
 checkYourAnswers.otherInformation = Other information about your item
 
 application.title = Your application for a Binding Tariff Information ruling
+application.title.pdf = Your application for a Binding Tariff Information ruling (PDF) - Apply for a Binding Tariff Information ruling - GOV.UK
 application.submitted = Application submitted
 application.reference = Application reference
 application.section.applicant.heading = Details of the business or organisation
@@ -433,6 +436,7 @@ application.footer.sendingSamples.address.line7 = Essex
 application.footer.sendingSamples.address.line8 = SS99 1AA
 
 pdf.ruling.title = Binding Tariff Information ruling
+pdf.ruling.tab.title = Binding Tariff Information ruling certificate (PDF) - Apply for a Binding Tariff Information ruling - GOV.UK
 pdf.ruling.issuedBy.label = Issued by
 pdf.ruling.issuedBy.text = HMRC Classification Team
 pdf.ruling.section.holder.heading = Holder details
@@ -480,7 +484,7 @@ case.application.status.infoRequested = Info requested
 case.application.status.completed = Completed
 case.application.status.draft = Draft
 
-case.application.viewApplication = View Application
+case.application.viewApplication = View application
 
 case.tabs.rulings = Rulings
 case.rulings.noRulings = BTI rulings will appear here
@@ -500,10 +504,10 @@ case.ruling.status.cancelled = Cancelled
 case.ruling.status.active = Active
 case.ruling.status.expired = Expired
 
-case.ruling.viewRuling = View BTI Ruling
+case.ruling.viewRuling = View BTI ruling
 
-rulingInformation.title = Important information about this BTI ruling - Apply for a Binding Tariff Information ruling - GOV.UK
-rulingInformation.maintitle = Binding Tariff Information ruling
+rulingInformation.title = Binding Tariff Information ruling certificate - Apply for a Binding Tariff Information ruling - GOV.UK
+rulingInformation.maintitle = Binding Tariff Information ruling certificate
 rulingInformation.heading = Important information about BTI ruling
 rulingInformation.summary = Ruling summary
 rulingInformation.commoditySubheading = The commodity code we have issued and why we made this decision
