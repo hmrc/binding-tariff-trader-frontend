@@ -24,7 +24,7 @@
             <dt class="file-list-name" id="files-row-@{index}-title">@file.name</dt>
             <dd class="file-list-size" id="files-row-@{index}-size" >@humanReadableSize(file.size)</dd>
             <dd class="file-list-link" id="files-row-@{index}-remove">
-                <a id="files-row-@{index}-remove-file" class="remove" href="@routes.SupportingMaterialFileListController.onRemove(file.id, mode)"><span style="position: absolute;">Remove</span><span class="visually-hidden">@messages("supportingMaterialFile.remove.file.hidden.text",file.name)</span></a>
+                <a id="files-row-@{index}-remove-file" class="remove" href="@routes.SupportingMaterialFileListController.onRemove(file.id, mode)"><span style="position: absolute;">@messages("supportingMaterialFile.remove.file.text")</span><span class="visually-hidden">@messages("supportingMaterialFile.remove.file.hidden.text",file.name)</span></a>
             </dd>
         </div>
     }

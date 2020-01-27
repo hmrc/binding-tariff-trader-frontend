@@ -217,6 +217,7 @@ supportingMaterialFileList.indications.bullet3 = lists of materials
 supportingMaterialFileList.indications.bullet4 = images of the item
 supportingMaterialFileList.indications.bullet5 = images of packaging
 supportingMaterialFileList.error.required = Select yes if you want to upload a supporting document
+supportingMaterialFile.remove.file.text = Remove
 supportingMaterialFile.remove.file.hidden.text = Remove file {0}
 
 uploadSupportingMaterialMultiple.title = Upload a file - GOV.UK
