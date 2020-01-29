@@ -12,6 +12,7 @@ GET         /rulings                                                   controlle
 
 GET         /sign-out                                                  controllers.SignOutController.startFeedbackSurvey
 GET         /force-sign-out                                            controllers.SignOutController.forceSignOut
+GET         /unauthorised-sign-out                                     controllers.SignOutController.unauthorisedSignOut
 GET         /keep-alive                                                controllers.SignOutController.keepAlive
 GET         /unauthorised                                              controllers.UnauthorisedController.onPageLoad
 

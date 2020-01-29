@@ -24,7 +24,8 @@
   mainClass: Option[String] = None,
   contentClass : Option[String] = Some("grid-row column-two-thirds"),
   scriptElem: Option[Html] = None,
-  hasTimeOut: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages)
+  hasTimeOut: Boolean = true,
+  signOutLink: String = routes.SignOutController.startFeedbackSurvey.url)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @import uk.gov.hmrc.play.views.html.layouts
 
@@ -71,5 +72,6 @@
                contentHeader = contentHeader,
                mainContent = content,
                serviceInfoContent = serviceInfoContent,
-               scriptElem = Some(scriptElement)
+               scriptElem = Some(scriptElement),
+               signOutLink = signOutLink
 )
