@@ -30,7 +30,7 @@
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers, layouts => uiLayouts}
 
 
-@blah = {
+@signOutMarkup = {
 <a href="@signOutLink"> @messages("global.link.signout") </a>
 }
 
@@ -52,7 +52,7 @@
       navTitle = Some(messages("site.service_name")),
       navTitleLink = None,
       showBetaLink = false,
-      navLinks = Some(blah))
+      navLinks = Some(signOutMarkup))
 }
 
 @afterHeader = {}
