@@ -67,16 +67,12 @@ class SignOutControllerSpec extends ControllerSpecBase {
   "Unauthorised sign out controller" must {
 
     "return a redirect and clear session" in {
-      val sessionCookie = Session.encodeAsCookie(Session(Map("key" -> "value")))
-      val request = fakeRequest
-      val reqWithSession = request.withSession(("thing" , "otherThing")).withCookies(sessionCookie)
-
 
       val result: Future[Result] = new SignOutController(frontendAppConfig, mock[DataCacheConnector], FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, messagesApi).unauthorisedSignOut(reqWithSession)
+        new DataRequiredActionImpl, messagesApi).unauthorisedSignOut(fakeRequest)
       status(result) mustBe SEE_OTHER
+      cookies(result).get("mdtp").isDefined mustBe true
       redirectLocation(result).get must endWith( "/applications")
-      session(result).isEmpty mustBe true
     }
 
   }

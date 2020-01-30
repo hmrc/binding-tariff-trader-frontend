@@ -46,10 +46,7 @@ class SignOutController @Inject()(val appConfig: FrontendAppConfig,
   }
 
   def unauthorisedSignOut: Action[AnyContent] = Action.async {
-    implicit request => {
-      val see = Redirect(routes.IndexController.getApplications())
-      successful(see)
-    }
+    successful(Redirect(routes.IndexController.getApplications()).withNewSession)
   }
 
   def keepAlive(): Action[AnyContent] = Action.async {
