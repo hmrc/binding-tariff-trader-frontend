@@ -22,7 +22,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.verify
 import org.mockito.{ArgumentMatchers, Mockito}
 import org.scalatest.mockito.MockitoSugar._
-import play.api.mvc.Result
+import play.api.mvc.{Cookies, Result, Session}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 
@@ -62,5 +62,18 @@ class SignOutControllerSpec extends ControllerSpecBase {
         new DataRequiredActionImpl, messagesApi).forceSignOut(fakeRequestWithEoriAndCache)
       verify(cache).remove(any())
     }
+  }
+
+  "Unauthorised sign out controller" must {
+
+    "return a redirect and clear session" in {
+
+      val result: Future[Result] = new SignOutController(frontendAppConfig, mock[DataCacheConnector], FakeIdentifierAction, getEmptyCacheMap,
+        new DataRequiredActionImpl, messagesApi).unauthorisedSignOut(fakeRequest)
+      status(result) mustBe SEE_OTHER
+      cookies(result).get("mdtp").isDefined mustBe true
+      redirectLocation(result).get must endWith( "/applications")
+    }
+
   }
 }

@@ -22,7 +22,8 @@
     title = messages("unauthorised.title"),
     appConfig = appConfig,
     bodyClasses = None,
-    hasTimeOut = false) {
+    hasTimeOut = false,
+    signOutLink=routes.SignOutController.unauthorisedSignOut.url) {
 
     @components.heading(messages("unauthorised.heading"))
 

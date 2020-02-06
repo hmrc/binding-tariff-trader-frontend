@@ -23,10 +23,16 @@
   contentHeader: Option[Html] = None,
   mainContent: Html = HtmlFormat.empty,
   serviceInfoContent: Html = HtmlFormat.empty,
-  scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages)
+  scriptElem: Option[Html] = None,
+  signOutLink: String)(implicit request: Request[_], messages: Messages)
 
 @import layouts.{govuk_template => hmrcGovUkTemplate}
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers, layouts => uiLayouts}
+
+
+@signOutMarkup = {
+<a href="@signOutLink"> @messages("global.link.signout") </a>
+}
 
 @head = {
     @uiLayouts.head(
@@ -40,16 +46,13 @@
     <script type="text/javascript" src=@routes.Assets.versioned("javascripts/ga-tag-manager.js")></script>
 }
 
-@signOutLink = {
-        <a href="@routes.SignOutController.startFeedbackSurvey"> @messages("global.link.signout") </a>
-}
 
 @insideHeader = {
     @uiLayouts.header_nav(
       navTitle = Some(messages("site.service_name")),
       navTitleLink = None,
       showBetaLink = false,
-      navLinks = Some(signOutLink))
+      navLinks = Some(signOutMarkup))
 }
 
 @afterHeader = {}
