@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json._
 
-case class PreviousCommodityCode (field1: String)
+case class PreviousCommodityCode (previousCommodityCode: String)
 
 object PreviousCommodityCode {
   implicit val format = Json.format[PreviousCommodityCode]

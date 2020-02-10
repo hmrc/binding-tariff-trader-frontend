@@ -85,11 +85,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def previousCommodityCode: Option[AnswerRow] = userAnswers.get(PreviousCommodityCodePage) map {
-    x => AnswerRow("previousCommodityCode.checkYourAnswersLabel", s"${x.field1}", false, routes.PreviousCommodityCodeController.onPageLoad(CheckMode).url)
+    x => AnswerRow("previousCommodityCode.checkYourAnswersLabel", s"${x.previousCommodityCode}", false, routes.PreviousCommodityCodeController.onPageLoad(CheckMode).url)
   }
 
   def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", Seq(x.field1, x.field2, x.field3.orNull), false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", Seq(x.name, x.email, x.phoneNumber.orNull), false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
   }
 
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {

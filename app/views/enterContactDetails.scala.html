@@ -39,21 +39,21 @@
             </legend>
 
             @components.input_text(
-                field = form("field1"),
-                label = Some(messages("enterContactDetails.field1")),
+                field = form("name"),
+                label = Some(messages("enterContactDetails.name")),
                 inputPurpose=Some("name")
             )
 
             @components.input_text(
-                field = form("field2"),
-                label = Some(messages("enterContactDetails.field2")),
+                field = form("email"),
+                label = Some(messages("enterContactDetails.email")),
                 inputPurpose=Some("email")
             )
 
             @components.input_text(
-                field = form("field3"),
-                label = Some(messages("enterContactDetails.field3")),
-                inputPurpose=Some("tel")
+                field = form("phoneNumber"),
+                label = Some(messages("enterContactDetails.phoneNumber")),
+                inputPurpose=Some("phoneNumber")
             )
 
             @components.submit_button()

@@ -23,11 +23,11 @@ class PreviousCommodityCodeFormProviderSpec extends StringFieldBehaviours {
 
   val form = new PreviousCommodityCodeFormProvider()()
 
-  ".field1" must {
+  ".previousCommodityCode" must {
 
-    val fieldName = "field1"
-    val requiredKey = "previousCommodityCode.error.field1.required"
-    val lengthKey = "previousCommodityCode.error.field1.length"
+    val fieldName = "previousCommodityCode"
+    val requiredKey = "previousCommodityCode.error.previousCommodityCode.required"
+    val lengthKey = "previousCommodityCode.error.previousCommodityCode.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(

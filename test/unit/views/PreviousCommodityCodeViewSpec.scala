@@ -44,7 +44,7 @@ class PreviousCommodityCodeViewSpec extends QuestionViewBehaviours[PreviousCommo
       createViewUsingForm,
       messageKeyPrefix,
       routes.PreviousCommodityCodeController.onSubmit(NormalMode).url,
-      "field1"
+      "previousCommodityCode"
     )
   }
 }
