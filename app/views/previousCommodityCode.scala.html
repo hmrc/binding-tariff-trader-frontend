@@ -34,9 +34,9 @@
         @components.error_summary(form.errors)
 
         @components.input_text(
-            field = form("field1"),
+            field = form("previousCommodityCode"),
             labelHtml = Some(components.heading(messages("previousCommodityCode.heading"))),
-            hint = Some(messages("previousCommodityCode.field1.hint"))
+            hint = Some(messages("previousCommodityCode.previousCommodityCode.hint"))
         )
         @components.submit_button()
     }

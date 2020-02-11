@@ -73,7 +73,7 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("field1", "value 1"), ("field2", "value2@me.com"), ("field3", "value 3"))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("name", "value 1"), ("email", "value2@me.com"), ("phoneNumber", "value 3"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -99,7 +99,7 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("field1", "value 1"), ("field2", "value 2"), ("field3", "value 3"))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("name", "value 1"), ("email", "value 2"), ("phoneNumber", "value 3"))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) mustBe SEE_OTHER

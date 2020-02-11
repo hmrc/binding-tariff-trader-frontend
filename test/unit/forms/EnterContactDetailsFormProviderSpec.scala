@@ -24,11 +24,11 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
   val form = new EnterContactDetailsFormProvider()()
 
   // name
-  ".field1" must {
+  ".name" must {
 
-    val fieldName = "field1"
-    val requiredKey = "enterContactDetails.error.field1.required"
-    val lengthKey = "enterContactDetails.error.field1.length"
+    val fieldName = "name"
+    val requiredKey = "enterContactDetails.error.name.required"
+    val lengthKey = "enterContactDetails.error.name.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(
@@ -52,12 +52,12 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
   }
 
   // email address
-  ".field2" must {
+  ".email" must {
 
-    val fieldName = "field2"
-    val requiredKey = "enterContactDetails.error.field2.required"
-    val validKey = "enterContactDetails.error.field2.invalid"
-    val lengthKey = "enterContactDetails.error.field2.length"
+    val fieldName = "email"
+    val requiredKey = "enterContactDetails.error.email.required"
+    val validKey = "enterContactDetails.error.email.invalid"
+    val lengthKey = "enterContactDetails.error.email.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(
@@ -82,10 +82,10 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
   }
 
   // phone number
-  ".field3" must {
+  ".phoneNumber" must {
 
-    val fieldName = "field3"
-    val lengthKey = "enterContactDetails.error.field3.length"
+    val fieldName = "phoneNumber"
+    val lengthKey = "enterContactDetails.error.phoneNumber.length"
     val maxLength = 20
 
     behave like fieldThatBindsValidData(

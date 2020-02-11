@@ -26,13 +26,13 @@ class EnterContactDetailsFormProvider @Inject() extends Mappings with Constraint
 
    def apply(): Form[EnterContactDetails] = Form(
      mapping(
-       "field1" -> text("enterContactDetails.error.field1.required")
-         .verifying(maxLength(100, "enterContactDetails.error.field1.length")),
-       "field2" -> text("enterContactDetails.error.field2.required")
-         .verifying(validEmailAddress("enterContactDetails.error.field2.invalid"))
-         .verifying(maxLength(100, "enterContactDetails.error.field2.length")),
-       "field3" -> optional(text("enterContactDetails.error.field3.required"))
-         .verifying(optionalMaxLength(20, "enterContactDetails.error.field3.length"))
+       "name" -> text("enterContactDetails.error.name.required")
+         .verifying(maxLength(100, "enterContactDetails.error.name.length")),
+       "email" -> text("enterContactDetails.error.email.required")
+         .verifying(validEmailAddress("enterContactDetails.error.email.invalid"))
+         .verifying(maxLength(100, "enterContactDetails.error.email.length")),
+       "phoneNumber" -> optional(text("enterContactDetails.error.phoneNumber.required"))
+         .verifying(optionalMaxLength(20, "enterContactDetails.error.phoneNumber.length"))
      )(EnterContactDetails.apply)(EnterContactDetails.unapply)
    )
 

@@ -96,8 +96,8 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
       }
 
       "return a row with the correct answer for DescribeYourItemPage" in {
-        given(userAnswers.get(DescribeYourItemPage)).willReturn(Option(DescribeYourItem("field1", "field2", None)))
-        checkHelper.describeYourItem.get.answer shouldBe "field1\nfield2"
+        given(userAnswers.get(DescribeYourItemPage)).willReturn(Option(DescribeYourItem("name", "description", None)))
+        checkHelper.describeYourItem.get.answer shouldBe "name\ndescription"
       }
 
       "return a row with the correct answer for PreviousCommodityCodePage" in {
@@ -106,8 +106,8 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
       }
 
       "return a row with the correct answer for EnterContactDetailsPage" in {
-        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("field1", "field2", Some("field3"))))
-        checkHelper.enterContactDetails.get.answer shouldBe "field1\nfield2\nfield3"
+        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
+        checkHelper.enterContactDetails.get.answer shouldBe "name\nemail\nphoneNumber"
       }
 
       "return a row with the correct answer for RegisterBusinessRepresentingPage" in {

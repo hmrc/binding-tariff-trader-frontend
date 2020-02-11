@@ -59,7 +59,7 @@ class CaseRequestMapper {
       confidentialInformation = confidentialInformation,
       importOrExport = importOrExport,
       otherInformation = supportingInformationDetails,
-      reissuedBTIReference = previousCommodityCode.map(_.field1),
+      reissuedBTIReference = previousCommodityCode.map(_.previousCommodityCode),
       relatedBTIReference = commodityCodeRulingReference,
       knownLegalProceedings = legalChallengeDetails,
       envisagedCommodityCode = commodityCodeDigits,
@@ -116,9 +116,9 @@ class CaseRequestMapper {
 
   private def toContact: EnterContactDetails => Contact = { details: EnterContactDetails =>
     Contact(
-      name = details.field1,
-      email = details.field2,
-      phone = details.field3
+      name = details.name,
+      email = details.email,
+      phone = details.phoneNumber
     )
   }
 

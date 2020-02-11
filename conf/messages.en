@@ -153,17 +153,17 @@ registerBusinessRepresenting.error.country.length = Country must be 60 character
 
 enterContactDetails.title = Contact details for this application - Apply for a Binding Tariff Information ruling - GOV.UK
 enterContactDetails.heading = Contact details for this application
-enterContactDetails.field1 = Full name
-enterContactDetails.field2 = Email address
-enterContactDetails.field3 = Telephone number (optional)
+enterContactDetails.name = Full name
+enterContactDetails.email = Email address
+enterContactDetails.phoneNumber = Telephone number (optional)
 enterContactDetails.checkYourAnswersLabel = Contact details
-enterContactDetails.error.field1.required = Enter a full name
-enterContactDetails.error.field2.required = Enter an email address
-enterContactDetails.error.field3.required = Enter a telephone number
-enterContactDetails.error.field2.invalid = Enter an email address in the correct format
-enterContactDetails.error.field1.length = Full name must be 100 characters or less
-enterContactDetails.error.field2.length = Email address must be 100 characters or less
-enterContactDetails.error.field3.length = Direct telephone number must be 20 characters or less
+enterContactDetails.error.name.required = Enter a full name
+enterContactDetails.error.email.required = Enter an email address
+enterContactDetails.error.phoneNumber.required = Enter a telephone number
+enterContactDetails.error.email.invalid = Enter an email address in the correct format
+enterContactDetails.error.name.length = Full name must be 100 characters or less
+enterContactDetails.error.email.length = Email address must be 100 characters or less
+enterContactDetails.error.phoneNumber.length = Direct telephone number must be 20 characters or less
 
 acceptItemInformationList.title = Information you must provide about your item to get the correct commodity code - Apply for a Binding Tariff Information ruling - GOV.UK
 acceptItemInformationList.heading = Information you must provide about your item to get the correct commodity code
@@ -176,11 +176,11 @@ acceptItemInformationList.askfor.item2 = need to send samples
 
 previousCommodityCode.title = What is the reference number for the ruling you want to renew? - Apply for a Binding Tariff Information ruling - GOV.UK
 previousCommodityCode.heading = What is the reference number for the ruling you want to renew?
-previousCommodityCode.field1 = Ruling reference number
-previousCommodityCode.field1.hint = The reference number, for example GB12345678, is on the ruling certificate.
+previousCommodityCode.previousCommodityCode = Ruling reference number
+previousCommodityCode.previousCommodityCode.hint = The reference number, for example GB12345678, is on the ruling certificate.
 previousCommodityCode.checkYourAnswersLabel = Renewal reference number
-previousCommodityCode.error.field1.required = Enter a ruling reference number
-previousCommodityCode.error.field1.length = Previous Binding Tariff Information ruling must be 100 characters or less
+previousCommodityCode.error.previousCommodityCode.required = Enter a ruling reference number
+previousCommodityCode.error.previousCommodityCode.length = Previous Binding Tariff Information ruling must be 100 characters or less
 previousCommodityCode.details.summary = What is my Binding Tariff Information ruling reference number?
 previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling. 
 
