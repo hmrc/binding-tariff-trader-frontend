@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 @import views.html.templates.rulingCertificateTemplate
-@(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, getCountryName: String => Option[String])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${messages("rulingInformation.title")}",
@@ -37,6 +37,6 @@
 
     </br>
 
-    @rulingCertificateTemplate(appConfig, c, c.decision.get, compositeMode = true)
+    @rulingCertificateTemplate(appConfig, c, c.decision.get, getCountryName: String => Option[String], compositeMode = true)
 
 }

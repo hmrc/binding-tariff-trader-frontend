@@ -24,7 +24,7 @@
 @import utils.Dates
 @import java.time.Instant
 
-@(appConfig: FrontendAppConfig, c: Case, d: Decision, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, d: Decision, getCountryName: String => Option[String], compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
@@ -117,7 +117,7 @@
                             @c.application.holder.addressLine2 <br/>
                             @c.application.holder.addressLine3 <br/>
                             @c.application.holder.postcode <br/>
-                            @c.application.holder.country
+                            @messages(getCountryName(c.application.holder.country).mkString)
                         </td>
                     </tr>
                     <tr>

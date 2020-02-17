@@ -24,11 +24,11 @@ import views.html.templates.rulingCertificateTemplate
 class RulingCertificateViewSpec extends ViewSpecBase {
 
   private def createPdfView(c: Case): HtmlFormat.Appendable = {
-    rulingCertificateTemplate(frontendAppConfig, c, c.decision.get)(fakeRequest, messages)
+    rulingCertificateTemplate(frontendAppConfig, c, c.decision.get, s => Some("dummy country name"))(fakeRequest, messages)
   }
 
   private def createHtmlView(c: Case): HtmlFormat.Appendable = {
-    rulingCertificateTemplate(frontendAppConfig, c, c.decision.get, compositeMode = true)(fakeRequest, messages)
+    rulingCertificateTemplate(frontendAppConfig, c, c.decision.get, s => Some("dummy country name"), compositeMode = true)(fakeRequest, messages)
   }
 
   private val rulingCase = oCase.btiCaseWithDecision

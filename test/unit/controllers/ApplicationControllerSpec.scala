@@ -24,7 +24,7 @@ import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import service.{CasesService, FileService, PdfService}
+import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future.{failed, successful}
@@ -34,6 +34,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
   private val pdfService = mock[PdfService]
   private val caseService = mock[CasesService]
   private val fileService = mock[FileService]
+  private val countriesService = new CountriesService
   private val expectedResult = PdfFile("Some content".getBytes)
   private val testCase = oCase.btiCaseExample
   private val testCaseWithRuling = oCase.btiCaseWithDecision
@@ -50,7 +51,8 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
       action,
       pdfService,
       caseService,
-      fileService
+      fileService,
+      countriesService
     )
   }
 
@@ -145,8 +147,8 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
       val result = controller().viewApplication(caseRef, Some(token))(request)
 
       status(result) mustBe OK
-      contentAsString(result) must include ("Your application for a Binding Tariff Information ruling")
-      contentAsString(result) must include ("applicationView.applicationLink")
+      contentAsString(result) must include("Your application for a Binding Tariff Information ruling")
+      contentAsString(result) must include("applicationView.applicationLink")
       contentType(result) mustBe Some("text/html")
     }
 
@@ -246,6 +248,16 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+    }
+
+  }
+
+  "getCountryName" must {
+
+    "return a valid country when given a valid country code" in {
+      val result: Option[String] = controller().getCountryName("IE")
+
+      result mustBe Some("title.ireland")
     }
 
   }

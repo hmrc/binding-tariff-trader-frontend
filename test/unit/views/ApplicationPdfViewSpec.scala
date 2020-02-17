@@ -17,7 +17,7 @@
 package views
 
 import models.response.FilestoreResponse
-import models.{Case, oCase}
+import models.{Case, Country, oCase}
 import org.jsoup.nodes.Document
 import utils.Dates
 import views.html.templates.applicationTemplate
@@ -28,8 +28,8 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
   private val traderCase = oCase.btiCaseExample.copy(application = traderApplication)
   private val agentCase = oCase.btiCaseExample
 
-  private def createPdfView(c: Case, attachments: Seq[FilestoreResponse]) = applicationTemplate(frontendAppConfig, c, attachments)(fakeRequest, messages)
-  private def createHtmlView(c: Case, attachments: Seq[FilestoreResponse]) = applicationTemplate(frontendAppConfig, c, attachments,viewMode = true)(fakeRequest, messages)
+  private def createPdfView(c: Case, attachments: Seq[FilestoreResponse]) = applicationTemplate(frontendAppConfig, c, attachments, None, s => Some("dummy country name"))(fakeRequest, messages)
+  private def createHtmlView(c: Case, attachments: Seq[FilestoreResponse]) = applicationTemplate(frontendAppConfig, c, attachments, None, s => Some("dummy country name"), viewMode = true)(fakeRequest, messages)
 
   "Application pdf view" must {
 

@@ -20,6 +20,7 @@ import controllers.routes
 import forms.RegisteredAddressForEoriFormProvider
 import models.{NormalMode, RegisteredAddressForEori}
 import play.api.data.Form
+import service.CountriesService
 import views.behaviours.QuestionViewBehaviours
 import views.html.registeredAddressForEori
 
@@ -27,14 +28,18 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
 
   private val messageKeyPrefix = "registeredAddressForEori"
 
+  private val countriesService = new CountriesService()
+
   override protected val form = new RegisteredAddressForEoriFormProvider()()
 
+
+
   private def createView = { () =>
-    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithNotOptionalEoriAndCache, messages)
+    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithNotOptionalEoriAndCache, messages)
   }
 
   private def createViewUsingForm = { form: Form[_] =>
-    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithNotOptionalEoriAndCache, messages)
+    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithNotOptionalEoriAndCache, messages)
   }
 
   "RegisteredAddressForEori view" must {

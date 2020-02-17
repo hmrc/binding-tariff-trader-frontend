@@ -18,15 +18,18 @@ package controllers
 
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeIdentifierAction}
 import navigation.FakeNavigator
+import org.mockito.Mockito
+import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Call
 import play.api.test.Helpers._
+import service.CountriesService
 import viewmodels.AnswerSection
 import views.html.check_your_answers
 
-class CheckYourAnswersControllerSpec extends ControllerSpecBase {
+class CheckYourAnswersControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   private def onwardRoute = Call("GET", "/foo")
-
+  private val countriesService = new CountriesService
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CheckYourAnswersController(
       frontendAppConfig,
@@ -34,7 +37,8 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
-      new DataRequiredActionImpl
+      new DataRequiredActionImpl,
+      countriesService
     )
 
   "Check Your Answers Controller" must {

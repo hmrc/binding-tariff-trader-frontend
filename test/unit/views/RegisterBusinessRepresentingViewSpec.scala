@@ -21,6 +21,7 @@ import forms.RegisterBusinessRepresentingFormProvider
 import models.{NormalMode, RegisterBusinessRepresenting}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import service.CountriesService
 import views.behaviours.QuestionViewBehaviours
 import views.html.registerBusinessRepresenting
 
@@ -30,10 +31,11 @@ class RegisterBusinessRepresentingViewSpec extends QuestionViewBehaviours[Regist
 
   override protected val form: Form[RegisterBusinessRepresenting] = new RegisterBusinessRepresentingFormProvider()()
 
+  val countriesService = new CountriesService
 
-  private def createView: () => HtmlFormat.Appendable = () => registerBusinessRepresenting(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  private def createView: () => HtmlFormat.Appendable = () => registerBusinessRepresenting(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequest, messages)
 
-  private def createViewUsingForm: Form[RegisterBusinessRepresenting] => HtmlFormat.Appendable = (form: Form[RegisterBusinessRepresenting]) => registerBusinessRepresenting(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  private def createViewUsingForm: Form[RegisterBusinessRepresenting] => HtmlFormat.Appendable = (form: Form[RegisterBusinessRepresenting]) => registerBusinessRepresenting(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequest, messages)
 
 
   "RegisterBusinessRepresenting view" must {

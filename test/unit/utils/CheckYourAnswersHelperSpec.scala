@@ -22,14 +22,21 @@ import models._
 import models.requests.DataRequest
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import pages._
+import play.api.i18n.MessagesApi
 import play.api.test.FakeRequest
+import service.CountriesService
 import uk.gov.hmrc.play.test.UnitSpec
 
-class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
+class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
+
+  val countriesService = new CountriesService
+
+  val messagesApi = app.injector.instanceOf[MessagesApi]
 
   private val userAnswers = mock[UserAnswers]
-  private val checkHelper = new CheckYourAnswersHelper(userAnswers)
+  private val checkHelper = new CheckYourAnswersHelper(userAnswers, countriesService.getAllCountries, messagesApi)
   private val fileAttachment = FileAttachment("id", "fileName", "mime", 1)
 
   "CheckYourAnswersHelper" when {
@@ -112,8 +119,8 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
 
       "return a row with the correct answer for RegisterBusinessRepresentingPage" in {
         given(userAnswers.get(RegisterBusinessRepresentingPage)).willReturn(
-          Option(RegisterBusinessRepresenting("eoriNumber", "businessName", "addressLine1", "town", "postCode", "country")))
-        checkHelper.registerBusinessRepresenting.get.answer shouldBe "eoriNumber\nbusinessName\naddressLine1\ntown\npostCode\ncountry"
+          Option(RegisterBusinessRepresenting("eoriNumber", "businessName", "addressLine1", "town", "postCode", "IE")))
+        checkHelper.registerBusinessRepresenting.get.answer shouldBe "eoriNumber\nbusinessName\naddressLine1\ntown\npostCode\nIreland"
       }
 
       "return a row with the correct answer for SelectApplicationTypePage" in {
@@ -133,14 +140,14 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar {
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check disabled" in {
         val requestWithoutEori = DataRequest(FakeRequest(), "", None, mock[UserAnswers])
-        given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", "f4", "f5")))
-        checkHelper.registeredAddressForEori(requestWithoutEori).get.answer shouldBe "eori\nf1\nf2\nf3\nf4\nf5"
+        given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", "f4", "IE")))
+        checkHelper.registeredAddressForEori(requestWithoutEori).get.answer shouldBe "eori\nf1\nf2\nf3\nf4\nIreland"
       }
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check enabled" in {
         val requestWithEori = DataRequest(FakeRequest(), "", Some("eori"), mock[UserAnswers])
-        given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", "f4", "f5")))
-        checkHelper.registeredAddressForEori(requestWithEori).get.answer shouldBe "f1\nf2\nf3\nf4\nf5"
+        given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", "f4", "IE")))
+        checkHelper.registeredAddressForEori(requestWithEori).get.answer shouldBe "f1\nf2\nf3\nf4\nIreland"
       }
 
     }
