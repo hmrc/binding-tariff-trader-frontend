@@ -17,8 +17,9 @@
 @import config.FrontendAppConfig
 @import models.response.FilestoreResponse
 @import templates.applicationTemplate
+@import models.Country
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, getCountryName: String => Option[String])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${messages("applicationView.title")}",
@@ -39,6 +40,6 @@
 
     </br>
 
-    @applicationTemplate(appConfig, c, attachments, letterOfAuthority, true)
+    @applicationTemplate(appConfig, c, attachments, letterOfAuthority, getCountryName, true)
 
 }

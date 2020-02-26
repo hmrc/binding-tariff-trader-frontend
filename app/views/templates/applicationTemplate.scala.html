@@ -23,9 +23,10 @@
 @import views.ViewUtils._
 @import utils.Dates
 @import java.time.Instant
+@import models.Country
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, viewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
+@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, getCountryName: String => Option[String], viewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
 val protocol = if(req.secure) "https" else "http"
@@ -135,7 +136,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 @c.application.holder.addressLine2 <br/>
                 @c.application.holder.addressLine3 <br/>
                 @c.application.holder.postcode <br/>
-                @c.application.holder.country
+                @messages(getCountryName(c.application.holder.country).mkString)
 
             </td>
         </tr>
@@ -177,7 +178,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 @agent.eoriDetails.addressLine2 <br/>
                 @agent.eoriDetails.addressLine3 <br/>
                 @agent.eoriDetails.postcode <br/>
-                @agent.eoriDetails.country
+                @messages(getCountryName(agent.eoriDetails.country).mkString)
             <td/>
         </tr>
         <tr>

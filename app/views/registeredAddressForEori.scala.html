@@ -20,14 +20,38 @@
 @import models.requests.OptionalDataRequest
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
+@import play.api.libs.json.{JsObject, Json}
 
 @import models.requests.DataRequest
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: DataRequest[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, countries: List[Country])(implicit request: DataRequest[_], messages: Messages)
+
+
+@scriptElem = {
+<script src="@routes.Assets.versioned("lib/accessible-autocomplete/dist/accessible-autocomplete.min.js")"></script>
+  <script>
+    $(document).ready(function () {
+
+      // Get IE or Edge browser version
+      var version = detectIE();
+
+      if (version !== 11) {
+        var countrySynonymsData = @Html( Json.toJson(countries.map(_.toAutoCompleteJson)).toString )
+        enhanceSelectIntoAutoComplete("country", countrySynonymsData)
+      }
+    });
+  </script>
+}
+
+@linkElem = {
+    <link rel="stylesheet" href="@routes.Assets.versioned("lib/accessible-autocomplete/dist/accessible-autocomplete.min.css")" >
+}
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("registeredAddressForEori.title")}",
     appConfig = appConfig,
-    bodyClasses = None) {
+    bodyClasses = None,
+    inlineScript = Some(scriptElem),
+    inlineLinkElem = Some(linkElem)) {
 
     @helpers.form(action = RegisteredAddressForEoriController.onSubmit(mode)) {
 
@@ -79,11 +103,14 @@
                 inputPurpose=Some("section-registered postal-code")
             )
 
-            @components.input_text(
+            @components.select(
                 field = form("country"),
-                label = Some(messages("registeredAddressForEori.country")),
-                inputPurpose=Some("section-registered country-name")
+                elementOptions = ("","") :: countries.map(c => (c.code,messages(c.countryName))),
+                displayEmptyValue = true,
+                '_label -> messages("registeredAddressForEori.country"),
+                '_errorsAboveInput -> true
             )
+
 
             @components.submit_button()
         </fieldset>

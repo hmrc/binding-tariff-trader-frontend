@@ -27,6 +27,7 @@ import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import service.CountriesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.registeredAddressForEori
 
@@ -40,7 +41,8 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                                    identify: IdentifierAction,
                                                    getData: DataRetrievalAction,
                                                    requireData: DataRequiredAction,
-                                                   formProvider: RegisteredAddressForEoriFormProvider
+                                                   formProvider: RegisteredAddressForEoriFormProvider,
+                                                   countriesService: CountriesService
                                                   ) extends FrontendController with I18nSupport {
 
   private lazy val form: Form[RegisteredAddressForEori] = formProvider()
@@ -54,14 +56,15 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
       case _ => form
     }
 
-    Ok(registeredAddressForEori(appConfig, preparedForm, mode))
+    Ok(registeredAddressForEori(appConfig, preparedForm, mode, countriesService.getAllCountries))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(registeredAddressForEori(appConfig, formWithErrors, mode))),
+        Future.successful(
+          BadRequest(registeredAddressForEori(appConfig, formWithErrors, mode, countriesService.getAllCountries))),
       value => {
         val updatedAnswers = request.userAnswers.set(RegisteredAddressForEoriPage, value)
 

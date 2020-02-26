@@ -18,12 +18,12 @@ package utils
 
 import controllers.routes
 import models.requests.DataRequest
-import models.{CheckMode, UserAnswers}
+import models.{CheckMode, Country, UserAnswers}
 import pages._
+import play.api.i18n.{MessagesApi}
 import viewmodels.AnswerRow
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
-
+class CheckYourAnswersHelper (userAnswers: UserAnswers, countries: List[Country], messagesApi: MessagesApi) {
   def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
     x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name, false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
   }
@@ -95,7 +95,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {
     x =>
       AnswerRow("registerBusinessRepresenting.checkYourAnswersLabel",
-        Seq(x.eoriNumber, x.businessName, x.addressLine1, x.town, x.postCode, x.country),
+        Seq(x.eoriNumber, x.businessName, x.addressLine1, x.town, x.postCode, messagesApi(getCountryName(x.country).mkString)),
         false,
         routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
   }
@@ -113,14 +113,16 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def registeredAddressForEori(implicit request: DataRequest[_]): Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map { x =>
+
     val fields = if (request.eoriNumber.isDefined) {
-      Seq(x.businessName, x.addressLine1, x.townOrCity, x.postcode, x.country)
+      Seq(x.businessName, x.addressLine1, x.townOrCity, x.postcode, messagesApi(getCountryName(x.country).mkString))
     } else {
-      Seq(x.eori, x.businessName, x.addressLine1, x.townOrCity, x.postcode, x.country)
+      Seq(x.eori, x.businessName, x.addressLine1, x.townOrCity, x.postcode, messagesApi(getCountryName(x.country).mkString))
     }
     AnswerRow("registeredAddressForEori.checkYourAnswersLabel", fields, false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }
 
   private def yesNoAnswer(x: Boolean) = if (x) "site.yes" else "site.no"
 
+  def getCountryName(code: String): Option[String] = countries.find(_.code == code).map(_.countryName)
 }

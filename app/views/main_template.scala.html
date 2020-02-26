@@ -24,6 +24,8 @@
   mainClass: Option[String] = None,
   contentClass : Option[String] = Some("grid-row column-two-thirds"),
   scriptElem: Option[Html] = None,
+  inlineScript: Option[Html] = None,
+  inlineLinkElem: Option[Html] = None,
   hasTimeOut: Boolean = true,
   signOutLink: String = routes.SignOutController.startFeedbackSurvey.url)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
@@ -43,6 +45,7 @@
 
 @scriptElement = {
     @scriptElem
+    <script src="@routes.Assets.versioned("javascripts/bindingtarifftraderfrontend.js")"></script>
 
     @if(hasTimeOut && appConfig.enableRefresh) {
         <script id="timeoutDialog">
@@ -60,9 +63,8 @@
         });
         </script>
     }
-
+    @inlineScript
 }
-
 
 @govuk_wrapper(appConfig = appConfig,
                title = title,
@@ -73,5 +75,6 @@
                mainContent = content,
                serviceInfoContent = serviceInfoContent,
                scriptElem = Some(scriptElement),
+               linkElem = inlineLinkElem,
                signOutLink = signOutLink
 )

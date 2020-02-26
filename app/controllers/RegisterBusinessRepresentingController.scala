@@ -27,6 +27,7 @@ import pages.{CheckYourAnswersPage, RegisterBusinessRepresentingPage, UploadWrit
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import service.CountriesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.registerBusinessRepresenting
 
@@ -40,7 +41,8 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
                                                        identify: IdentifierAction,
                                                        getData: DataRetrievalAction,
                                                        requireData: DataRequiredAction,
-                                                       formProvider: RegisterBusinessRepresentingFormProvider
+                                                       formProvider: RegisterBusinessRepresentingFormProvider,
+                                                       countriesService: CountriesService
                                                       ) extends FrontendController with I18nSupport {
 
   private lazy val form: Form[RegisterBusinessRepresenting] = formProvider()
@@ -52,7 +54,7 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
       case _ => form
     }
 
-    Ok(registerBusinessRepresenting(appConfig, preparedForm, mode))
+    Ok(registerBusinessRepresenting(appConfig, preparedForm, mode, countriesService.getAllCountries))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -67,7 +69,7 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[RegisterBusinessRepresenting]) =>
-        Future.successful(BadRequest(registerBusinessRepresenting(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(registerBusinessRepresenting(appConfig, formWithErrors, mode, countriesService.getAllCountries))),
       value => {
         val updatedAnswers = request.userAnswers.set(RegisterBusinessRepresentingPage, value)
         dataCacheConnector.save(updatedAnswers.cacheMap).map { _ =>

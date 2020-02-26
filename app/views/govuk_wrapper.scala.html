@@ -19,6 +19,7 @@
   mainClass: Option[String] = None,
   mainDataAttributes: Option[Html] = None,
   bodyClasses: Option[String] = None,
+  linkElem: Option[Html] = None,
   sidebar: Html = HtmlFormat.empty,
   contentHeader: Option[Html] = None,
   mainContent: Html = HtmlFormat.empty,
@@ -34,9 +35,10 @@
 <a href="@signOutLink"> @messages("global.link.signout") </a>
 }
 
+
 @head = {
     @uiLayouts.head(
-      linkElem = None,
+      linkElem = linkElem,
       headScripts = None)
     <meta name="format-detection" content="telephone=no" />
     <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")' />
@@ -64,7 +66,7 @@
       ssoUrl = None,
       scriptElem = scriptElem,
       gaCalls = None)
-      <script src='@routes.Assets.versioned("javascripts/bindingtarifftraderfrontend-app.min.js")'> </script>
+      <script src='@routes.Assets.versioned("javascripts/bindingtarifftraderfrontend-app.js")'> </script>
 }
 
 @footerTop = {}

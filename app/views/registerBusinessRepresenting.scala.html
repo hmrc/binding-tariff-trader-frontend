@@ -19,13 +19,36 @@
 @import models.{Mode, RegisterBusinessRepresenting}
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
+@import play.api.libs.json.{JsObject, Json}
 
-@(appConfig: FrontendAppConfig, form: Form[RegisterBusinessRepresenting], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[RegisterBusinessRepresenting], mode: Mode, countries: List[Country])(implicit request: Request[_], messages: Messages)
+
+@scriptElem = {
+<script src="@routes.Assets.versioned("lib/accessible-autocomplete/dist/accessible-autocomplete.min.js")"></script>
+  <script>
+    $(document).ready(function () {
+
+      // Get IE or Edge browser version
+      var version = detectIE();
+
+      if (version !== 11) {
+        var countrySynonymsData = @Html( Json.toJson(countries.map(_.toAutoCompleteJson)).toString )
+        enhanceSelectIntoAutoComplete("country", countrySynonymsData)
+      }
+    });
+  </script>
+}
+
+@linkElem = {
+<link rel="stylesheet" href="@routes.Assets.versioned("lib/accessible-autocomplete/dist/accessible-autocomplete.min.css")" >
+}
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("registerBusinessRepresenting.title")}",
     appConfig = appConfig,
-    bodyClasses = None) {
+    bodyClasses = None,
+    inlineScript = Some(scriptElem),
+    inlineLinkElem = Some(linkElem)) {
 
     @helpers.form(action = RegisterBusinessRepresentingController.onSubmit(mode)) {
 
@@ -70,10 +93,12 @@
                 inputPurpose=Some("section-representing postal-code")
             )
 
-            @components.input_text(
+            @components.select(
                 field = form("country"),
-                label = Some(messages("registerBusinessRepresenting.country")),
-                inputPurpose=Some("section-representing country-name")
+                elementOptions = ("","") :: countries.map(c => (c.code,messages(c.countryName))),
+                displayEmptyValue = true,
+                '_label -> messages("registerBusinessRepresenting.country"),
+                '_errorsAboveInput -> true
             )
 
             @components.submit_button()

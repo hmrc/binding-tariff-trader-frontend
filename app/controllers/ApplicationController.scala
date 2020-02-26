@@ -19,11 +19,11 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
-import models.Case
+import models.{Case, Country}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.twirl.api.Html
-import service.{CasesService, FileService, PdfService}
+import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.templates.{applicationTemplate, applicationView, rulingCertificateTemplate, rulingCertificateView}
 
@@ -36,7 +36,8 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                                       identify: IdentifierAction,
                                       pdfService: PdfService,
                                       caseService: CasesService,
-                                      fileService: FileService
+                                      fileService: FileService,
+                                      countriesService: CountriesService
                                      ) extends FrontendController with I18nSupport {
 
   private type Eori = String
@@ -82,6 +83,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
     getApplicationPDForHtml(eori,reference,false)
   }
 
+
   private def getApplicationPDForHtml(eori: Eori, reference: CaseReference, pdf : Boolean)
                                (implicit request: Request[AnyContent]): Future[Result] = {
 
@@ -89,11 +91,11 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
       c <- caseService.getCaseForUser(eori, reference)
       attachments <- fileService.getAttachmentMetadata(c)
       letter <- fileService.getLetterOfAuthority(c)
-      pdf <- pdf match {
-        case true => generatePdf(applicationTemplate(appConfig, c, attachments, letter), s"BTIConfirmation$reference.pdf")
-        case false => successful(Ok(applicationView(appConfig, c, attachments, letter)))
+      out <- pdf match {
+        case true => generatePdf(applicationTemplate(appConfig, c, attachments, letter, getCountryName), s"BTIConfirmation$reference.pdf")
+        case false => successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
       }
-    } yield pdf
+    } yield out
   }
 
   private def generatePdf(htmlContent: Html, filename: String): Future[Result] = {
@@ -108,15 +110,17 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                           (implicit request: Request[AnyContent]): Future[Result] = {
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
       lazy val decision = c.decision.getOrElse(throw new IllegalStateException("Missing decision"))
-      generatePdf(rulingCertificateTemplate(appConfig, c, decision), s"BTIRuling$reference.pdf")
+      generatePdf(rulingCertificateTemplate(appConfig, c, decision, getCountryName), s"BTIRuling$reference.pdf")
     }
   }
 
   def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)
                            (implicit request: Request[AnyContent]): Future[Result] = {
     caseService.getCaseWithRulingForUser(eori, reference) flatMap {
-      c: Case => successful(Ok(rulingCertificateView(appConfig, c)))
+      c: Case => successful(Ok(rulingCertificateView(appConfig, c, getCountryName)))
     }
   }
+
+  def getCountryName(code: String) = countriesService.getAllCountries.find(_.code == code).map(_.countryName)
 
 }

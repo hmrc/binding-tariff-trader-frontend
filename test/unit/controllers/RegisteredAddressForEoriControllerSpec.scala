@@ -26,12 +26,15 @@ import play.api.data.Form
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.Helpers._
+import service.CountriesService
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.registeredAddressForEori
 
 class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
+
+  private val countriesService = new CountriesService()
 
   private lazy val formProvider: RegisteredAddressForEoriFormProvider = new RegisteredAddressForEoriFormProvider()
   private lazy val form: Form[RegisteredAddressForEori] = formProvider()
@@ -45,12 +48,13 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
-      formProvider
+      formProvider,
+      countriesService
     )
   }
 
   private def viewAsString(form: Form[RegisteredAddressForEori] = form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get))): String = {
-    registeredAddressForEori(frontendAppConfig, form, NormalMode)(fakeRequestWithNotOptionalEoriAndCache, messages).toString
+    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithNotOptionalEoriAndCache, messages).toString
   }
 
   "RegisteredAddressForEori Controller" must {
