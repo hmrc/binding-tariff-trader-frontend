@@ -19,7 +19,7 @@ package models
 import play.api.i18n.Messages
 import play.api.libs.json.{JsObject, Json}
 
-case class Country(code: String, countryName: String, alphaTwoCode: String, isEu: Boolean, countrySynonyms: List[String]) {
+case class Country(code: String, countryName: String, alphaTwoCode: String, countrySynonyms: List[String]) {
 
   def toAutoCompleteJson(implicit messages: Messages): JsObject = Json.obj("code" -> code, "displayName" -> messages(countryName), "synonyms" -> countrySynonyms)
 }
