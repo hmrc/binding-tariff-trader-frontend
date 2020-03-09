@@ -257,7 +257,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
     "return a valid country when given a valid country code" in {
       val result: Option[String] = controller().getCountryName("IE")
 
-      result mustBe Some("title.ireland")
+      result mustBe Some("title.irish_republic")
     }
 
   }

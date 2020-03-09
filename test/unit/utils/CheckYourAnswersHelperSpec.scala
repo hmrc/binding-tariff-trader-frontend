@@ -120,7 +120,7 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar with GuiceOn
       "return a row with the correct answer for RegisterBusinessRepresentingPage" in {
         given(userAnswers.get(RegisterBusinessRepresentingPage)).willReturn(
           Option(RegisterBusinessRepresenting("eoriNumber", "businessName", "addressLine1", "town", "postCode", "IE")))
-        checkHelper.registerBusinessRepresenting.get.answer shouldBe "eoriNumber\nbusinessName\naddressLine1\ntown\npostCode\nIreland"
+        checkHelper.registerBusinessRepresenting.get.answer shouldBe "eoriNumber\nbusinessName\naddressLine1\ntown\npostCode\nIrish Republic"
       }
 
       "return a row with the correct answer for SelectApplicationTypePage" in {
@@ -141,13 +141,13 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar with GuiceOn
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check disabled" in {
         val requestWithoutEori = DataRequest(FakeRequest(), "", None, mock[UserAnswers])
         given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", "f4", "IE")))
-        checkHelper.registeredAddressForEori(requestWithoutEori).get.answer shouldBe "eori\nf1\nf2\nf3\nf4\nIreland"
+        checkHelper.registeredAddressForEori(requestWithoutEori).get.answer shouldBe "eori\nf1\nf2\nf3\nf4\nIrish Republic"
       }
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check enabled" in {
         val requestWithEori = DataRequest(FakeRequest(), "", Some("eori"), mock[UserAnswers])
         given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", "f4", "IE")))
-        checkHelper.registeredAddressForEori(requestWithEori).get.answer shouldBe "f1\nf2\nf3\nf4\nIreland"
+        checkHelper.registeredAddressForEori(requestWithEori).get.answer shouldBe "f1\nf2\nf3\nf4\nIrish Republic"
       }
 
     }
