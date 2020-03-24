@@ -67,7 +67,10 @@
                                 }
                             </td>
                             <td id="application-list-row-@{index}-download">
-                                <a id="application-list-row-@{index}-view-application-link" href="@routes.ApplicationController.viewApplication(c.reference)">@messages("case.application.viewApplication")</a>
+                                <a id="application-list-row-@{index}-view-application-link" href="@routes.ApplicationController.viewApplication(c.reference)">
+                                    <span aria-hidden="true">@messages("case.application.viewApplication")</span>
+                                    <span class="visually-hidden">@messages("case.application.viewApplication.hidden", c.reference)</span>
+                                </a>
                             </td>
                         </tr>
                     }
