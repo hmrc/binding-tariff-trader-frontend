@@ -73,11 +73,11 @@ site.service_name = Apply for a Binding Tariff Information ruling
 
 unauthorised.title = Not registered for CDS
 unauthorised.heading = To apply for a Binding Tariff Information (BTI) ruling you need to get access to CDS
-unauthorised.intro1 = Customs Declaration Service (CDS) is the replacement for the Customs Handling Imports and Export Freight (CHIEF) system. 
+unauthorised.intro1 = Customs Declaration Service (CDS) is the replacement for the Customs Handling Imports and Export Freight (CHIEF) system.
 unauthorised.intro2 = In future, you will be able to use CDS to manage your customs interactions. At this time, you will only have access to BTI ruling applications.
 unauthorised.warn_p1 = When you get confirmation of CDS access, you’ll need to return to this page and
 unauthorised.warn_link = restart your application.
-unauthorised.warn_p2 = Access to CDS can take up to 1 hour. Alternatively, you can wait for your confirmation email from CDS before trying again. 
+unauthorised.warn_p2 = Access to CDS can take up to 1 hour. Alternatively, you can wait for your confirmation email from CDS before trying again.
 unauthorised.get.eori_p1 = To get access to CDS you’ll need an
 unauthorised.get.eori_link = Economic Operator and Registration Identification (EORI) number (opens in a new window or tab)
 unauthorised.have.eori_p1 = If you already have an EORI number, you can
@@ -138,7 +138,7 @@ registerBusinessRepresenting.town = Town or city
 registerBusinessRepresenting.postCode = Postcode
 registerBusinessRepresenting.country = Country
 registerBusinessRepresenting.checkYourAnswersLabel =  Their registered details
-registerBusinessRepresenting.error.eoriNumber.required = Enter the EORI number of the business, organisation or individual that you’re representing 
+registerBusinessRepresenting.error.eoriNumber.required = Enter the EORI number of the business, organisation or individual that you’re representing
 registerBusinessRepresenting.error.eoriNumber.format = Enter an EORI number in the correct format
 registerBusinessRepresenting.error.businessName.required = Enter a business, organisation or individual’s name
 registerBusinessRepresenting.error.addressLine1.required = Enter address line 1
@@ -182,7 +182,7 @@ previousCommodityCode.checkYourAnswersLabel = Renewal reference number
 previousCommodityCode.error.previousCommodityCode.required = Enter a ruling reference number
 previousCommodityCode.error.previousCommodityCode.length = Previous Binding Tariff Information ruling must be 100 characters or less
 previousCommodityCode.details.summary = What is my Binding Tariff Information ruling reference number?
-previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling. 
+previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling.
 
 describeYourItem.title = Detailed description of your item - Apply for a Binding Tariff Information ruling - GOV.UK
 describeYourItem.heading = Detailed description of your item
@@ -485,6 +485,7 @@ case.application.status.completed = Completed
 case.application.status.draft = Draft
 
 case.application.viewApplication = View application
+case.application.viewApplication.hidden = View application for reference {0}
 
 case.tabs.rulings = Rulings
 case.rulings.noRulings = BTI rulings will appear here
