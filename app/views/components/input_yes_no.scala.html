@@ -27,8 +27,10 @@
 )(implicit messages: Messages)
 
 
+
+
 <div class="form-group @if(field.hasErrors){form-group-error}">
-    <fieldset  id="@{field.id}">
+    <fieldset id="@{field.id}" @if(field.hasErrors || hint.isDefined){ aria-describedby="@if(hint.isDefined){hint-@{field.id}-input }@if(field.hasErrors){error-message-@{field.id}-input}"}>
         <legend>
             @if(label.isDefined){
                 <div @if(labelClass.isDefined) {class="@labelClass"}>@label</div>
@@ -39,7 +41,7 @@
         @contentHtml.map {content => @content}
 
         @if(hint.isDefined){
-            <div class="form-hint mb-2">@hint</div>
+            <div class="form-hint mb-2" id="hint-@{field.id}-input">@hint</div>
         }
 
         @field.errors.map { error =>
