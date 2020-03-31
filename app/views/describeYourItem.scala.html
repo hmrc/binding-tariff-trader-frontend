@@ -34,21 +34,20 @@
         @components.back_link()
 
         @components.error_summary(form.errors)
-        <fieldset>
-            <legend>
-                @components.heading(messages("describeYourItem.heading"))
-                @components.subheading(messages("describeYourItem.subheading"))
-            </legend>
+
+            <h1 class="heading-xlarge">@messages("describeYourItem.heading")</h1>
 
             @components.input_text(
                 field = form("name"),
+                labelClass = Some("bold"),
                 label = Some(messages("describeYourItem.name"))
             )
 
             @components.input_textarea(
                 field = form("description"),
-                label = descriptionBullets,
-                hint = None,
+                label = Html(messages("describeYourItem.description")),
+                labelClass = Some("bold"),
+                hint = Some(descriptionBullets),
                 inputFormControl = "form-control--full-width",
                 numRows = 15,
                 maxlength = 50000
@@ -63,12 +62,10 @@
             )
 
             @components.submit_button()
-        </fieldset>
     }
 }
 
 @descriptionBullets = {
-    <p>@messages("describeYourItem.description")</p>
     <p>@messages("describeYourItem.paragraph.includes")</p>
     <ul class="list list-bullet">
         <li>@messages("describeYourItem.listItem1")</li>
