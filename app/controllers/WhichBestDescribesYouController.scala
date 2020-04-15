@@ -28,7 +28,7 @@ import navigation.Navigator
 import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Results}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.whichBestDescribesYou
 
@@ -43,8 +43,9 @@ class WhichBestDescribesYouController @Inject()(
                                                  identify: IdentifierAction,
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
-                                                 formProvider: WhichBestDescribesYouFormProvider
-                                               ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                                 formProvider: WhichBestDescribesYouFormProvider,
+                                                 cc: MessagesControllerComponents
+                                               ) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 

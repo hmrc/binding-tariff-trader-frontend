@@ -29,7 +29,7 @@ import views.html.contactCustomsDutyLiabilityTeam
 class ContactCustomsDutyLiabilityTeamController @Inject()(appConfig: FrontendAppConfig,
                                                           override val messagesApi: MessagesApi,
                                                           dataCacheConnector: DataCacheConnector,
-                                                          identify: IdentifierAction) extends FrontendController with I18nSupport {
+                                                          identify: IdentifierAction, cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = identify { implicit request =>
     Ok(contactCustomsDutyLiabilityTeam(appConfig, mode))

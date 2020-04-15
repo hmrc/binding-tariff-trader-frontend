@@ -41,7 +41,7 @@ class ImportOrExportController @Inject()(
                                           identify: IdentifierAction,
                                           getData: DataRetrievalAction,
                                           formProvider: ImportOrExportFormProvider
-                                        ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                        , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 

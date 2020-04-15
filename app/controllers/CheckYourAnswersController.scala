@@ -34,7 +34,7 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
                                            authenticate: IdentifierAction,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction,
-                                           countriesService: CountriesService) extends FrontendController with I18nSupport {
+                                           countriesService: CountriesService, cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (authenticate andThen getData andThen requireData) { implicit request =>
 

@@ -41,7 +41,7 @@ class WhenToSendSampleController @Inject()(
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
                                             formProvider: WhenToSendSampleFormProvider
-                                          ) extends FrontendController with I18nSupport with YesNoBehaviour[ReturnSamples] {
+                                          , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport with YesNoBehaviour[ReturnSamples] {
 
   private lazy val form = formProvider()
 

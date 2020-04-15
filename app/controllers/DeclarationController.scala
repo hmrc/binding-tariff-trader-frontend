@@ -50,7 +50,7 @@ class DeclarationController @Inject()(
                                        caseService: CasesService,
                                        fileService: FileService,
                                        mapper: CaseRequestMapper
-                                     ) extends FrontendController with I18nSupport {
+                                     , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     Ok(declaration(appConfig, mode))

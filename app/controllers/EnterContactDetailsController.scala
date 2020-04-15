@@ -41,7 +41,7 @@ class EnterContactDetailsController @Inject()(appConfig: FrontendAppConfig,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
                                       formProvider: EnterContactDetailsFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                      , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

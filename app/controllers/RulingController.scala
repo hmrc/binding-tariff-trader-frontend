@@ -32,7 +32,7 @@ import scala.concurrent.Future.successful
 class RulingController @Inject()(val appConfig: FrontendAppConfig,
                                  identify: IdentifierAction,
                                  service: CasesService,
-                                 val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
+                                 val messagesApi: MessagesApi, cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   def viewRuling(reference: String): Action[AnyContent] = identify.async { implicit request =>
 

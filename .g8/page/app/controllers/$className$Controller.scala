@@ -15,7 +15,7 @@ class $className;format="cap"$Controller @Inject()(appConfig: FrontendAppConfig,
                                          identify: IdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction
-                                         ) extends FrontendController with I18nSupport {
+                                         , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad = (identify andThen getData andThen requireData) {
     implicit request =>

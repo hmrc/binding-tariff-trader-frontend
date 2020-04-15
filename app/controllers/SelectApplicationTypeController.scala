@@ -43,7 +43,7 @@ class SelectApplicationTypeController @Inject()(
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
                                                  formProvider: SelectApplicationTypeFormProvider
-                                               ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                               , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 

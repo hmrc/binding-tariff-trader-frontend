@@ -31,7 +31,7 @@ class BeforeYouStartController @Inject()(appConfig: FrontendAppConfig,
                                          identify: IdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction
-                                        ) extends FrontendController with I18nSupport {
+                                        , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = identify { implicit request =>
     Ok(beforeYouStart(appConfig))

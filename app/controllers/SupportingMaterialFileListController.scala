@@ -43,7 +43,7 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
                                                      getData: DataRetrievalAction,
                                                      requireData: DataRequiredAction,
                                                      formProvider: SupportingMaterialFileListFormProvider
-                                                    ) extends FrontendController with I18nSupport {
+                                                    , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

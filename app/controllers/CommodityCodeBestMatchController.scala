@@ -41,7 +41,7 @@ class CommodityCodeBestMatchController @Inject()(
                                                   getData: DataRetrievalAction,
                                                   requireData: DataRequiredAction,
                                                   formProvider: CommodityCodeBestMatchFormProvider
-                                                ) extends FrontendController with I18nSupport with YesNoBehaviour[String] {
+                                                , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
 

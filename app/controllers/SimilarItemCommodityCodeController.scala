@@ -41,7 +41,7 @@ class SimilarItemCommodityCodeController @Inject()(
                                                     getData: DataRetrievalAction,
                                                     requireData: DataRequiredAction,
                                                     formProvider: SimilarItemCommodityCodeFormProvider
-                                                  ) extends FrontendController with I18nSupport with YesNoBehaviour[String] {
+                                                  , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
   private lazy val form = formProvider()
 
   override val page = SimilarItemCommodityCodePage

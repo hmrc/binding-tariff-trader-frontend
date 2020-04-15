@@ -26,7 +26,7 @@ import navigation.Navigator
 import pages.{CheckYourAnswersPage, RegisterBusinessRepresentingPage, UploadWrittenAuthorisationPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, MessagesControllerComponents}
 import service.CountriesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.registerBusinessRepresenting
@@ -35,19 +35,19 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppConfig,
-                                                       override val messagesApi: MessagesApi,
                                                        dataCacheConnector: DataCacheConnector,
                                                        navigator: Navigator,
                                                        identify: IdentifierAction,
                                                        getData: DataRetrievalAction,
                                                        requireData: DataRequiredAction,
                                                        formProvider: RegisterBusinessRepresentingFormProvider,
-                                                       countriesService: CountriesService
-                                                      ) extends FrontendController with I18nSupport {
+                                                       countriesService: CountriesService,
+                                                       controllerComponents: MessagesControllerComponents
+                                                      , cc: MessagesControllerComponents)extends FrontendController(cc)(controllerComponents) with I18nSupport {
 
   private lazy val form: Form[RegisterBusinessRepresenting] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[_] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(RegisterBusinessRepresentingPage) match {
       case Some(value) => form.fill(value)
@@ -57,7 +57,7 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
     Ok(registerBusinessRepresenting(appConfig, preparedForm, mode, countriesService.getAllCountries))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[_] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def hasLetterOfAuth: Boolean = {
       request.userAnswers.get(UploadWrittenAuthorisationPage).isDefined
@@ -67,7 +67,7 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
       mode == CheckMode
     }
 
-    form.bindFromRequest().fold(
+    form.bindFromRequest.fold(
       (formWithErrors: Form[RegisterBusinessRepresenting]) =>
         Future.successful(BadRequest(registerBusinessRepresenting(appConfig, formWithErrors, mode, countriesService.getAllCountries))),
       value => {

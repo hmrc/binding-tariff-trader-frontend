@@ -41,7 +41,7 @@ class DescribeYourItemController @Inject()(appConfig: FrontendAppConfig,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
                                       formProvider: DescribeYourItemFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                      , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

@@ -40,7 +40,7 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                        requireData: DataRequiredAction,
                                        dataCacheConnector: DataCacheConnector,
                                        pdfService: PdfService
-                                      ) extends FrontendController with I18nSupport {
+                                      , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 

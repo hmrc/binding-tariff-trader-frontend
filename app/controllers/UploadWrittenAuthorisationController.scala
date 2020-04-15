@@ -46,7 +46,7 @@ class UploadWrittenAuthorisationController @Inject()(
                                                       requireData: DataRequiredAction,
                                                       formProvider: UploadWrittenAuthorisationFormProvider,
                                                       fileService: FileService
-                                                    ) extends FrontendController with I18nSupport {
+                                                    , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

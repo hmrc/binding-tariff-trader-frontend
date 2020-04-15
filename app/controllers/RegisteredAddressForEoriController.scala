@@ -43,7 +43,7 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                                    requireData: DataRequiredAction,
                                                    formProvider: RegisteredAddressForEoriFormProvider,
                                                    countriesService: CountriesService
-                                                  ) extends FrontendController with I18nSupport {
+                                                  , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   private lazy val form: Form[RegisteredAddressForEori] = formProvider()
 

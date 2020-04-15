@@ -26,7 +26,7 @@ import navigation.Navigator
 import pages.{AcceptItemInformationPage, PreviousCommodityCodePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.previousCommodityCode
 
@@ -40,22 +40,22 @@ class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
                                       identify: IdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
-                                      formProvider: PreviousCommodityCodeFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                      formProvider: PreviousCommodityCodeFormProvider,
+                                      controllerComponents: MessagesControllerComponents
+                                      , cc: MessagesControllerComponents)extends FrontendController(cc)(controllerComponents) with I18nSupport {
 
   private lazy val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[_] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(PreviousCommodityCodePage) match {
       case Some(value) => form.fill(value)
       case _ => form
     }
-
     Ok(previousCommodityCode(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[_] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>

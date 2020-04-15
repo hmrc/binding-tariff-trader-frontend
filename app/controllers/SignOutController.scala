@@ -33,7 +33,7 @@ class SignOutController @Inject()(val appConfig: FrontendAppConfig,
                                   identify: IdentifierAction,
                                   getData: DataRetrievalAction,
                                   requireData: DataRequiredAction,
-                                  val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
+                                  val messagesApi: MessagesApi, cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   def startFeedbackSurvey: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     clearDataCache(request)

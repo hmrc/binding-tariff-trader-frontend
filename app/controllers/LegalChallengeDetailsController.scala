@@ -42,7 +42,7 @@ class LegalChallengeDetailsController @Inject()(
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
                                         formProvider: LegalChallengeDetailsFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                      , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

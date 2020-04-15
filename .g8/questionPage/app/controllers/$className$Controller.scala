@@ -24,7 +24,7 @@ class $className$Controller @Inject()(appConfig: FrontendAppConfig,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
                                       formProvider: $className$FormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                      , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   val form = formProvider()
 

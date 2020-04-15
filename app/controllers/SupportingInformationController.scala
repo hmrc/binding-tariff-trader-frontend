@@ -41,7 +41,7 @@ class SupportingInformationController @Inject()(
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
                                                  formProvider: SupportingInformationFormProvider
-                                               ) extends FrontendController with I18nSupport with YesNoBehaviour[String] {
+                                               , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
 
