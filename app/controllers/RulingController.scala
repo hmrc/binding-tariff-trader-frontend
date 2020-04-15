@@ -21,7 +21,7 @@ import controllers.actions.IdentifierAction
 import javax.inject.Inject
 import models.Case
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CasesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.ruling_information
@@ -32,13 +32,13 @@ import scala.concurrent.Future.successful
 class RulingController @Inject()(val appConfig: FrontendAppConfig,
                                  identify: IdentifierAction,
                                  service: CasesService,
-                                 val messagesApi: MessagesApi, cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
+                                 cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   def viewRuling(reference: String): Action[AnyContent] = identify.async { implicit request =>
 
     request.eoriNumber match {
       case Some(eori: String) =>
-        service.getCaseForUser(eori,reference) flatMap {
+        service.getCaseForUser(eori, reference) flatMap {
           c: Case => successful(Ok(ruling_information(appConfig, c)))
         }
 

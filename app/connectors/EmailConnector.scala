@@ -32,7 +32,7 @@ class EmailConnector @Inject()(configuration: FrontendAppConfig, client: HttpCli
 
   def send[E >: Email[Any]](e: E)(implicit hc: HeaderCarrier, writes: Writes[E]): Future[Unit] = {
     val url = s"${configuration.emailUrl}/hmrc/email"
-    client.POST(url = url, body = e).map(_ => ())
+    client.POST(url = url, body = e, hc.headers).map(_ => ())
   }
 
 }

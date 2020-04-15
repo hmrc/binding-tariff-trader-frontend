@@ -27,7 +27,7 @@ import navigation.Navigator
 import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Results}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.selectApplicationType
 
@@ -42,8 +42,9 @@ class SelectApplicationTypeController @Inject()(
                                                  identify: IdentifierAction,
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
-                                                 formProvider: SelectApplicationTypeFormProvider
-                                               , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
+                                                 formProvider: SelectApplicationTypeFormProvider,
+                                                 cc: MessagesControllerComponents
+                                               ) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 

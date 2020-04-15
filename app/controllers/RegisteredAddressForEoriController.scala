@@ -26,7 +26,7 @@ import navigation.Navigator
 import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CountriesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.registeredAddressForEori
@@ -42,8 +42,8 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                                    getData: DataRetrievalAction,
                                                    requireData: DataRequiredAction,
                                                    formProvider: RegisteredAddressForEoriFormProvider,
-                                                   countriesService: CountriesService
-                                                  , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
+                                                   countriesService: CountriesService,
+                                                   cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
 
   private lazy val form: Form[RegisteredAddressForEori] = formProvider()
 

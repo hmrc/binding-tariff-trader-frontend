@@ -29,7 +29,7 @@ import models.requests.OptionalDataRequest
 import navigation.Navigator
 import pages.{ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -49,8 +49,8 @@ class DeclarationController @Inject()(
                                        getData: DataRetrievalAction,
                                        caseService: CasesService,
                                        fileService: FileService,
-                                       mapper: CaseRequestMapper
-                                     , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
+                                       mapper: CaseRequestMapper,
+                                       cc: MessagesControllerComponents) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     Ok(declaration(appConfig, mode))
@@ -59,7 +59,7 @@ class DeclarationController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
 
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
-    val newCaseRequest = mapper.map(answers)
+  val newCaseRequest = mapper.map(answers)
 
     val attachments: Seq[FileAttachment] = answers
       .get(SupportingMaterialFileListPage)

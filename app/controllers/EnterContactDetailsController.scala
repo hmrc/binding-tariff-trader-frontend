@@ -27,21 +27,23 @@ import forms.EnterContactDetailsFormProvider
 import models.Mode
 import pages.{EnterContactDetailsPage, WhichBestDescribesYouPage}
 import navigation.Navigator
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import views.html.enterContactDetails
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class EnterContactDetailsController @Inject()(appConfig: FrontendAppConfig,
-                                      override val messagesApi: MessagesApi,
-                                      dataCacheConnector: DataCacheConnector,
-                                      navigator: Navigator,
-                                      identify: IdentifierAction,
-                                      getData: DataRetrievalAction,
-                                      requireData: DataRequiredAction,
-                                      formProvider: EnterContactDetailsFormProvider
-                                      , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
+class EnterContactDetailsController @Inject()(
+                                               appConfig: FrontendAppConfig,
+                                               override val messagesApi: MessagesApi,
+                                               dataCacheConnector: DataCacheConnector,
+                                               navigator: Navigator,
+                                               identify: IdentifierAction,
+                                               getData: DataRetrievalAction,
+                                               requireData: DataRequiredAction,
+                                               formProvider: EnterContactDetailsFormProvider,
+                                               cc: MessagesControllerComponents
+                                             ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

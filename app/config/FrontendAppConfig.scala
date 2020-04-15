@@ -22,12 +22,16 @@ import play.api.Mode.Mode
 import play.api.i18n.Lang
 import play.api.mvc.Call
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class FrontendAppConfig @Inject() (override val runModeConfiguration: Configuration, environment: Environment) extends ServicesConfig {
+class FrontendAppConfig @Inject()(
+                                   val runModeConfiguration: Configuration,
+                                   environment: Environment,
+                                   serviceConfig: ServicesConfig
+                                 ) {
 
-  override protected def mode: Mode = environment.mode
+  protected def mode: Mode = environment.mode
 
   private def loadConfig(key: String): String = {
     runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
@@ -43,14 +47,14 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val betaFeedbackUrl = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
   lazy val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
 
-  lazy val authUrl: String = baseUrl("auth")
+  lazy val authUrl: String = serviceConfig.baseUrl("auth")
   lazy val loginUrl: String = loadConfig("urls.login")
   lazy val loginContinueUrl: String = loadConfig("urls.loginContinue")
-  lazy val bindingTariffClassificationUrl: String = baseUrl("binding-tariff-classification")
-  lazy val bindingTariffFileStoreUrl: String = baseUrl("binding-tariff-filestore")
-  lazy val emailUrl: String = baseUrl("email")
-  lazy val pdfGeneratorUrl: String = baseUrl("pdf-generator-service")
-  lazy val isCdsEnrolmentCheckEnabled: Boolean = getBoolean("cdsEnrolmentCheckEnabled")
+  lazy val bindingTariffClassificationUrl: String = serviceConfig.baseUrl("binding-tariff-classification")
+  lazy val bindingTariffFileStoreUrl: String = serviceConfig.baseUrl("binding-tariff-filestore")
+  lazy val emailUrl: String = serviceConfig.baseUrl("email")
+  lazy val pdfGeneratorUrl: String = serviceConfig.baseUrl("pdf-generator-service")
+  lazy val isCdsEnrolmentCheckEnabled: Boolean = serviceConfig.getBoolean("cdsEnrolmentCheckEnabled")
 
   lazy val fileUploadMaxSize: Int = loadConfig("fileupload.maxSize").toInt
   lazy val fileUploadMimeTypes: Set[String] = loadConfig("fileupload.mimeTypes").split(",").map(_.trim).toSet
@@ -62,16 +66,16 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val cdsRegisterUrl: String = s"$cdsUrl/customs/register-for-cds"
 
   private lazy val feedbackUrl: String = loadConfig("feedback-frontend.host")
-  private lazy val feedbackServiceName : String = "ABTIR"
+  private lazy val feedbackServiceName: String = "ABTIR"
   lazy val feedbackSurvey: String = s"$feedbackUrl/feedback/$feedbackServiceName"
 
   lazy val apiToken: String = loadConfig("auth.api-token")
   lazy val aesKey: String = loadConfig("auth.aes-key")
 
-  lazy val timeOutSeconds : Int = runModeConfiguration.getInt("timeoutDialog.timeoutSeconds").getOrElse(780)
+  lazy val timeOutSeconds: Int = runModeConfiguration.getInt("timeoutDialog.timeoutSeconds").getOrElse(780)
   lazy val timeOutCountDownSeconds: Int = runModeConfiguration.getInt("timeoutDialog.time-out-countdown-seconds").getOrElse(120)
   lazy val refreshInterval: Int = timeOutSeconds + 10
-  lazy val enableRefresh: Boolean= runModeConfiguration.getBoolean("timeoutDialog.enableRefresh").getOrElse(true)
+  lazy val enableRefresh: Boolean = runModeConfiguration.getBoolean("timeoutDialog.enableRefresh").getOrElse(true)
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),

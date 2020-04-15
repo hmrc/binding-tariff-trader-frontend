@@ -42,8 +42,8 @@ class RegisterBusinessRepresentingController @Inject()(appConfig: FrontendAppCon
                                                        requireData: DataRequiredAction,
                                                        formProvider: RegisterBusinessRepresentingFormProvider,
                                                        countriesService: CountriesService,
-                                                       controllerComponents: MessagesControllerComponents
-                                                      , cc: MessagesControllerComponents)extends FrontendController(cc)(controllerComponents) with I18nSupport {
+                                                       controllerComponents: MessagesControllerComponents,
+                                                       cc: MessagesControllerComponents)extends FrontendController(cc)(controllerComponents) with I18nSupport {
 
   private lazy val form: Form[RegisterBusinessRepresenting] = formProvider()
 
