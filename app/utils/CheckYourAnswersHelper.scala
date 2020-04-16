@@ -29,6 +29,7 @@ class CheckYourAnswersHelper(
                               messagesApi: MessagesApi,
                               implicit val lang: Lang
                             ) {
+
   def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
     x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name, false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
   }

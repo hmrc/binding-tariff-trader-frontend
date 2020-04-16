@@ -22,12 +22,11 @@ import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import javax.inject.Inject
 import models.{FileAttachment, Mode}
-import navigation.Navigator
 import pages._
 import play.api.data.FormError
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MultipartFormData, Result}
+import play.api.mvc._
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
@@ -45,11 +44,11 @@ class UploadSupportingMaterialMultipleController @Inject()(
                                                             requireData: DataRequiredAction,
                                                             formProvider: UploadSupportingMaterialMultipleFormProvider,
                                                             fileService: FileService,
-                                                            cc: MessagesControllerComponents,
-                                                            implicit val lang: Lang
+                                                            cc: MessagesControllerComponents
                                                           ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
+  private implicit val lang: Lang = appConfig.defaultLang
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 

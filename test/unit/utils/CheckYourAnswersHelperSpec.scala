@@ -16,6 +16,7 @@
 
 package utils
 
+import config.FrontendAppConfig
 import models.SelectApplicationType.NewCommodity
 import models.WhichBestDescribesYou.BusinessOwner
 import models._
@@ -35,7 +36,8 @@ class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar with GuiceOn
   val countriesService = new CountriesService
 
   implicit val cc: MessagesControllerComponents = app.injector.instanceOf[MessagesControllerComponents]
-  implicit val lang: Lang = app.injector.instanceOf[Lang]
+  implicit val appConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+  implicit val lang: Lang = appConfig.defaultLang
 
   val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
 

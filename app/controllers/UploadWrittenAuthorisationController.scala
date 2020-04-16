@@ -46,11 +46,11 @@ class UploadWrittenAuthorisationController @Inject()(
                                                       requireData: DataRequiredAction,
                                                       formProvider: UploadWrittenAuthorisationFormProvider,
                                                       fileService: FileService,
-                                                      cc: MessagesControllerComponents,
-                                                      implicit val lang:Lang
+                                                      cc: MessagesControllerComponents
                                                     ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
+  private implicit val lang: Lang = appConfig.defaultLang
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 

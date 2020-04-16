@@ -65,8 +65,7 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
       new DataRequiredActionImpl,
       formProvider,
       fileService,
-      cc,
-      lang
+      cc
     )
 
   private def onwardRoute = Call("GET", "/foo")

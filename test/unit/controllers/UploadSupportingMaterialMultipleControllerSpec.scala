@@ -59,8 +59,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       new DataRequiredActionImpl,
       formProvider,
       fileService,
-      cc,
-      lang
+      cc
     )
 
   override protected def beforeEach(): Unit = {

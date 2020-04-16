@@ -34,8 +34,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
       dataRetrievalAction,
       new DataRequiredActionImpl,
       countriesService,
-      cc,
-      lang
+      cc
     )
 
   "Check Your Answers Controller" must {

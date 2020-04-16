@@ -39,13 +39,13 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   private val connector = mock[BindingTariffFilestoreConnector]
 //  private val messagesApi = injector.instanceOf[MessagesApi]
-  private val configuration = mock[FrontendAppConfig]
+  private val configuration = injector.instanceOf[FrontendAppConfig]
 
   private val fileSizeSmall = 10
   private val fileSizeMax = 1000
   private val fileSizeLarge = 1100
 
-  private val service = new FileService(connector, messagesApi, configuration, lang)
+  private val service = new FileService(connector, messagesApi, configuration)
   private implicit val headers: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeEach(): Unit = {

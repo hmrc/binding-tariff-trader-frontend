@@ -34,9 +34,10 @@ class CheckYourAnswersController @Inject()(
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
                                             countriesService: CountriesService,
-                                            cc: MessagesControllerComponents,
-                                            val lang: Lang
+                                            cc: MessagesControllerComponents
                                           ) extends FrontendController(cc) with I18nSupport {
+
+  private implicit val lang: Lang = appConfig.defaultLang
 
   def onPageLoad(): Action[AnyContent] = (authenticate andThen getData andThen requireData) { implicit request =>
 
