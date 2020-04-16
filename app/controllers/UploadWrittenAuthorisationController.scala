@@ -25,9 +25,9 @@ import models.{FileAttachment, Mode}
 import navigation.Navigator
 import pages._
 import play.api.data.FormError
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{Action, AnyContent, MultipartFormData, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MultipartFormData, Result}
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadWrittenAuthorisation
@@ -45,8 +45,10 @@ class UploadWrittenAuthorisationController @Inject()(
                                                       getData: DataRetrievalAction,
                                                       requireData: DataRequiredAction,
                                                       formProvider: UploadWrittenAuthorisationFormProvider,
-                                                      fileService: FileService
-                                                    , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
+                                                      fileService: FileService,
+                                                      cc: MessagesControllerComponents,
+                                                      implicit val lang:Lang
+                                                    ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

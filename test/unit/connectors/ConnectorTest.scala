@@ -19,39 +19,42 @@ package connectors
 import akka.actor.ActorSystem
 import config.FrontendAppConfig
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
-import play.api.Environment
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.Injector
 import play.api.libs.ws.WSClient
-import play.api.test.FakeApplication
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
+import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-trait ConnectorTest extends UnitSpec with WiremockTestServer
- with MockitoSugar with ResourceFiles {
-
-  override lazy val fakeApplication = FakeApplication()
+trait ConnectorTest
+  extends UnitSpec
+    with WiremockTestServer
+    with MockitoSugar
+    with ResourceFiles
+    with WithFakeApplication {
 
   protected lazy val injector: Injector = fakeApplication.injector
-
-  private val actorSystem = ActorSystem.create("testActorSystem")
-
-  protected implicit val realConfig: FrontendAppConfig = fakeApplication.injector.instanceOf[FrontendAppConfig]
   protected val appConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
+  protected implicit val realConfig: FrontendAppConfig = fakeApplication.injector.instanceOf[FrontendAppConfig]
   protected val fakeAuthToken = "AUTH_TOKEN"
+  protected val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
+  protected val authenticatedHttpClient = new AuthenticatedHttpClient(
+    auditing,
+    wsClient,
+    actorSystem
+  )
+  protected val standardHttpClient = new DefaultHttpClient(
+    fakeApplication.configuration,
+    auditing,
+    wsClient,
+    actorSystem
+  )
 
   protected implicit val hc: HeaderCarrier = HeaderCarrier()
-
-  private val environment = injector.instanceOf[Environment]
-  private val auditConnector = new DefaultAuditConnector(fakeApplication.configuration, environment)
-
-  protected val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
-
-  protected val authenticatedHttpClient = new AuthenticatedHttpClient(auditConnector, wsClient, actorSystem)
-  protected val standardHttpClient = new DefaultHttpClient(fakeApplication.configuration, auditConnector, wsClient, actorSystem)
+  private val actorSystem = ActorSystem.create("testActorSystem")
+  private val auditing = injector.instanceOf[HttpAuditing]
 
   override def beforeAll(): Unit = {
     super.beforeAll()

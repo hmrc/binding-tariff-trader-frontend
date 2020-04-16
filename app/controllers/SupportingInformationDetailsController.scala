@@ -27,7 +27,7 @@ import forms.SupportingInformationDetailsFormProvider
 import models.Mode
 import pages.{CheckYourAnswersPage, SupportingInformationDetailsPage}
 import navigation.Navigator
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import views.html.supportingInformationDetails
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,8 +41,9 @@ class SupportingInformationDetailsController @Inject()(
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        formProvider: SupportingInformationDetailsFormProvider
-                                      , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
+                                        formProvider: SupportingInformationDetailsFormProvider,
+                                        cc: MessagesControllerComponents
+                                                      ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

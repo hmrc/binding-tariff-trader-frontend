@@ -25,8 +25,6 @@ import views.html.beforeYouStart
 
 class BeforeYouStartControllerSpec extends ControllerSpecBase {
 
-  private def onwardRoute = Call("GET", "/foo")
-
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, identifier: IdentifierAction = FakeIdentifierAction) =
     new BeforeYouStartController(
       frontendAppConfig,
@@ -34,8 +32,11 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
       new FakeNavigator(onwardRoute),
       identifier,
       dataRetrievalAction,
-      new DataRequiredActionImpl
+      new DataRequiredActionImpl,
+      cc
     )
+
+  private def onwardRoute = Call("GET", "/foo")
 
   private def viewAsString(eori: Option[String]) = beforeYouStart(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages).toString
 
@@ -44,15 +45,15 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
     "return OK and the correct view for a GET - with EORI" in {
       val result = controller(identifier = FakeIdentifierAction(Some("eori"))).onPageLoad(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString(Some("eori"))
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString(Some("eori"))
     }
 
     "return OK and the correct view for a GET - without EORI" in {
       val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString(None)
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString(None)
     }
 
   }

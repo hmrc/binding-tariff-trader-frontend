@@ -18,7 +18,8 @@ lazy val root = (project in file("."))
     targetJvm := "jvm-1.8",
     RoutesKeys.routesImport += "models._",
     PlayKeys.playDefaultPort := 9582,
-    scalacOptions ++= Seq("-Xfatal-warnings", "-feature"),
+//    TODO uncomment this adn this warnings in views
+//    scalacOptions ++= Seq("-Xfatal-warnings", "-feature"),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(true),

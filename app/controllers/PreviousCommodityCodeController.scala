@@ -33,20 +33,21 @@ import views.html.previousCommodityCode
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
-                                      override val messagesApi: MessagesApi,
-                                      dataCacheConnector: DataCacheConnector,
-                                      navigator: Navigator,
-                                      identify: IdentifierAction,
-                                      getData: DataRetrievalAction,
-                                      requireData: DataRequiredAction,
-                                      formProvider: PreviousCommodityCodeFormProvider,
-                                      controllerComponents: MessagesControllerComponents
-                                      , cc: MessagesControllerComponents)extends FrontendController(cc)(controllerComponents) with I18nSupport {
+class PreviousCommodityCodeController @Inject()(
+                                                 appConfig: FrontendAppConfig,
+                                                 override val messagesApi: MessagesApi,
+                                                 dataCacheConnector: DataCacheConnector,
+                                                 navigator: Navigator,
+                                                 identify: IdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 formProvider: PreviousCommodityCodeFormProvider,
+                                                 cc: MessagesControllerComponents
+                                               ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[_] = (identify andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(PreviousCommodityCodePage) match {
       case Some(value) => form.fill(value)
@@ -55,7 +56,7 @@ class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
     Ok(previousCommodityCode(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[_] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>

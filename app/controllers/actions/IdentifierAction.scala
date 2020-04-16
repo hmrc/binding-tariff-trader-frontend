@@ -38,7 +38,8 @@ trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with
 class AuthenticatedIdentifierAction @Inject()(
                                                override val authConnector: AuthConnector,
                                                cc: ControllerComponents,
-                                               config: FrontendAppConfig)(implicit ec: ExecutionContext)
+                                               config: FrontendAppConfig
+                                             )(implicit ec: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions {
 
 

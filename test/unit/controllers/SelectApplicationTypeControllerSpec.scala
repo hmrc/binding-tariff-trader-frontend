@@ -16,24 +16,21 @@
 
 package controllers
 
-import play.api.data.Form
-import play.api.libs.json.JsString
-import uk.gov.hmrc.http.cache.client.CacheMap
-import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import play.api.test.Helpers._
 import forms.SelectApplicationTypeFormProvider
-import models.NormalMode
-import models.SelectApplicationType
+import models.{NormalMode, SelectApplicationType}
 import models.SelectApplicationType.{NewCommodity, PreviousCommodity}
+import navigation.FakeNavigator
 import pages.SelectApplicationTypePage
+import play.api.data.Form
+import play.api.libs.json.JsString
 import play.api.mvc.Call
+import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.selectApplicationType
 
 class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
-
-  private def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new SelectApplicationTypeFormProvider()
   private val form = formProvider()
@@ -43,10 +40,16 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
       frontendAppConfig,
       messagesApi,
       FakeDataCacheConnector,
-      new FakeNavigator(onwardRoute), FakeIdentifierAction,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
       dataRetrievalAction,
-      new DataRequiredActionImpl, formProvider)
+      new DataRequiredActionImpl,
+      formProvider,
+      cc
+    )
   }
+
+  private def onwardRoute = Call("GET", "/foo")
 
   private def viewAsString(form: Form[_] = form): String = {
     selectApplicationType(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
@@ -57,8 +60,8 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString()
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
@@ -67,7 +70,7 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(SelectApplicationType.values.head))
+      contentAsString(result) shouldBe viewAsString(form.fill(SelectApplicationType.values.head))
     }
 
     "redirect to the next page when new commodity data is submitted" in {
@@ -75,8 +78,8 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "redirect to the next page when previous commodity data is submitted" in {
@@ -84,8 +87,8 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
 
@@ -95,23 +98,23 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe BAD_REQUEST
-      contentAsString(result) mustBe viewAsString(boundForm)
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) shouldBe viewAsString(boundForm)
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
       val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", SelectApplicationType.options.head.value))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
   }
 }

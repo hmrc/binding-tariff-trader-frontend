@@ -24,7 +24,7 @@ import org.mockito.BDDMockito._
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Call
 import play.twirl.api.Html
 import uk.gov.hmrc.play.test.UnitSpec

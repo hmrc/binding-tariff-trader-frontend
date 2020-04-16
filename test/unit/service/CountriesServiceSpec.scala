@@ -16,12 +16,11 @@
 
 package service
 
+import base.SpecBase
 import models.Country
-import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import uk.gov.hmrc.play.test.UnitSpec
 
-class CountriesServiceSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
+class CountriesServiceSpec extends SpecBase {
 
   val expectedCountriesList = List(
     Country("AE0", "title.abu_dhabi", "AE0", Nil),
@@ -321,10 +320,10 @@ class CountriesServiceSpec extends UnitSpec with MockitoSugar with GuiceOneAppPe
 
   "getAllCountries" should {
 
-    val countriesService = app.injector.instanceOf[CountriesService] //CountriesService.getAllCountries
+    val countriesService = injector.instanceOf[CountriesService]
 
     "return the expected countries" in {
-      countriesService.getAllCountries shouldEqual expectedCountriesList
+      countriesService.getAllCountries shouldBe expectedCountriesList
     }
   }
 }

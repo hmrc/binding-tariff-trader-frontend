@@ -29,7 +29,6 @@ import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers.{any, refEq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
 import pages.{DeclarationPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
 import play.api.libs.json.{JsString, Json}
@@ -42,10 +41,8 @@ import views.html.declaration
 
 import scala.concurrent.Future.{failed, successful}
 
-class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar with BeforeAndAfterEach {
-
-  private def onwardRoute = Call("GET", "/foo")
-
+class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
+  private lazy val error = new IllegalStateException("expected error")
   private val testAnswer = "answer"
 
   private val mapper = mock[CaseRequestMapper]
@@ -60,8 +57,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
   private val contact = mock[Contact]
 
   private implicit val mat: Materializer = fakeApplication.materializer
-
-  private lazy val error = new IllegalStateException("expected error")
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -93,20 +88,36 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
     when(fileService.publish(any[Seq[FileAttachment]])(any[HeaderCarrier])).thenReturn(successful(Seq(publishedAttachment)))
   }
 
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): DeclarationController = {
+    new DeclarationController(
+      frontendAppConfig,
+      messagesApi,
+      FakeDataCacheConnector,
+      auditService,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      casesService,
+      fileService,
+      mapper,
+      cc
+    )
+  }
+
   "Declaration Controller" must {
 
     "return OK and the correct view for a GET" in {
       val result = await(controller().onPageLoad(NormalMode)(fakeRequest))
 
-      result.header.status mustBe Status.OK
-      bodyOf(result) mustBe viewAsString
+      result.header.status shouldBe Status.OK
+      bodyOf(result) shouldBe viewAsString
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
       val result = await(controller(extractDataFromCache).onPageLoad(NormalMode)(fakeRequest))
 
-      result.header.status mustBe Status.OK
-      bodyOf(result) mustBe viewAsString
+      result.header.status shouldBe Status.OK
+      bodyOf(result) shouldBe viewAsString
     }
 
     "return OK and the correct view for a POST" in {
@@ -115,8 +126,8 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
 
       val result = await(controller(extractDataFromCache).onSubmit(NormalMode)(fakeRequest))
 
-      result.header.status mustBe Status.SEE_OTHER
-      result.header.headers(LOCATION) mustBe "/foo"
+      result.header.status shouldBe Status.SEE_OTHER
+      result.header.headers(LOCATION) shouldBe "/foo"
     }
 
     "send the expected explicit audit events when the BTI application has been submitted successfully" in {
@@ -140,7 +151,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
       val caught = intercept[error.type] {
         await(c.onSubmit(NormalMode)(req))
       }
-      caught mustBe error
+      caught shouldBe error
 
       verify(auditService, never).auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier])
       verifyNoMoreInteractions(auditService)
@@ -148,20 +159,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
 
   }
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): DeclarationController = {
-    new DeclarationController(
-      frontendAppConfig,
-      messagesApi,
-      FakeDataCacheConnector,
-      auditService,
-      new FakeNavigator(onwardRoute),
-      FakeIdentifierAction,
-      dataRetrievalAction,
-      casesService,
-      fileService,
-      mapper
-    )
-  }
+  private def onwardRoute = Call("GET", "/foo")
 
   private def extractDataFromCache: DataRetrievalAction = {
     val validData = Map(
@@ -169,11 +167,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with MockitoSugar wit
       UploadSupportingMaterialMultiplePage.toString -> Json.toJson(Seq(attachment))
     )
     new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-  }
-
-  private def bodyOf(result: Result)(implicit mat: Materializer): String = {
-    val bodyBytes: ByteString = await(result.body.consumeData)
-    bodyBytes.decodeString(Charset.defaultCharset().name)
   }
 
   private def viewAsString: String = {

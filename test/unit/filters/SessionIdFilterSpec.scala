@@ -25,7 +25,7 @@ import play.api.Application
 import play.api.http.{DefaultHttpFilters, HttpFilters}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import play.api.mvc.{Action, Results}
+import play.api.mvc.{DefaultActionBuilder, Results}
 import play.api.routing.Router
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -37,40 +37,18 @@ object SessionIdFilterSpec {
 
   lazy val sessionId = "28836767-a008-46be-ac18-695ab140e705"
 
-  class Filters @Inject() (sessionId: SessionIdFilter) extends DefaultHttpFilters(sessionId)
+  class Filters @Inject()(sessionId: SessionIdFilter) extends DefaultHttpFilters(sessionId)
 
-  class TestSessionIdFilter @Inject() (
-                                        override val mat: Materializer,
-                                        ec: ExecutionContext
-                                      ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec)
+  class TestSessionIdFilter @Inject()(
+                                       override val mat: Materializer,
+                                       ec: ExecutionContext
+                                     ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec)
+
 }
 
 class SessionIdFilterSpec extends SpecBase {
 
   import SessionIdFilterSpec._
-
-  val router: Router = {
-
-    import play.api.routing.sird._
-
-    Router.from {
-      case GET(p"/test") => Action {
-        request =>
-          val fromHeader = request.headers.get(HeaderNames.xSessionId).getOrElse("")
-          val fromSession = request.session.get(SessionKeys.sessionId).getOrElse("")
-          Results.Ok(
-            Json.obj(
-              "fromHeader" -> fromHeader,
-              "fromSession" -> fromSession
-            )
-          )
-      }
-      case GET(p"/test2") => Action {
-        implicit request =>
-          Results.Ok.addingToSession("foo" -> "bar")
-      }
-    }
-  }
 
   override lazy val fakeApplication: Application = {
 
@@ -84,6 +62,30 @@ class SessionIdFilterSpec extends SpecBase {
       .router(router)
       .build()
   }
+  val router: Router = {
+
+    import play.api.routing.sird._
+
+    val action = DefaultActionBuilder(cc.parsers.defaultBodyParser)(cc.executionContext)
+
+    Router.from {
+      case GET(p"/test") => action {
+        request =>
+          val fromHeader = request.headers.get(HeaderNames.xSessionId).getOrElse("")
+          val fromSession = request.session.get(SessionKeys.sessionId).getOrElse("")
+          Results.Ok(
+            Json.obj(
+              "fromHeader" -> fromHeader,
+              "fromSession" -> fromSession
+            )
+          )
+      }
+      case GET(p"/test2") => action {
+        implicit request =>
+          Results.Ok.addingToSession("foo" -> "bar")
+      }
+    }
+  }
 
   ".apply" must {
 
@@ -93,8 +95,8 @@ class SessionIdFilterSpec extends SpecBase {
 
       val body = contentAsJson(result)
 
-      (body \ "fromHeader").as[String] mustEqual s"session-$sessionId"
-      (body \ "fromSession").as[String] mustEqual s"session-$sessionId"
+      (body \ "fromHeader").as[String] shouldBe s"session-$sessionId"
+      (body \ "fromSession").as[String] shouldBe s"session-$sessionId"
     }
 
     "not override a sessionId if one doesn't already exist" in {
@@ -103,20 +105,20 @@ class SessionIdFilterSpec extends SpecBase {
 
       val body = contentAsJson(result)
 
-      (body \ "fromHeader").as[String] mustEqual ""
-      (body \ "fromSession").as[String] mustEqual "foo"
+      (body \ "fromHeader").as[String] shouldBe ""
+      (body \ "fromSession").as[String] shouldBe "foo"
     }
 
     "not override other session values from the response" in {
 
       val Some(result) = route(fakeApplication, FakeRequest(GET, "/test2"))
-      session(result).data must contain("foo" -> "bar")
+      session(result).data should contain("foo" -> "bar")
     }
 
     "not override other session values from the request" in {
 
       val Some(result) = route(fakeApplication, FakeRequest(GET, "/test").withSession("foo" -> "bar"))
-      session(result).data must contain("foo" -> "bar")
+      session(result).data should contain("foo" -> "bar")
     }
   }
 

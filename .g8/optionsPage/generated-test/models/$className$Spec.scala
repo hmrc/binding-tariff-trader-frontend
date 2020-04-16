@@ -6,7 +6,7 @@ import org.scalatest.prop.PropertyChecks
 import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json.{JsError, JsString, Json}
 
-class $className$Spec extends WordSpec with MustMatchers with PropertyChecks with OptionValues {
+class $className$Spec extends WordSpec with MustMatchers with ScalaCheckDrivenPropertyChecks with OptionValues {
 
   "$className$" must {
 

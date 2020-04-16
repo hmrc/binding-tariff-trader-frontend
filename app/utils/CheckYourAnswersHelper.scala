@@ -20,10 +20,15 @@ import controllers.routes
 import models.requests.DataRequest
 import models.{CheckMode, Country, UserAnswers}
 import pages._
-import play.api.i18n.{MessagesApi}
+import play.api.i18n.{Lang, MessagesApi}
 import viewmodels.AnswerRow
 
-class CheckYourAnswersHelper (userAnswers: UserAnswers, countries: List[Country], messagesApi: MessagesApi) {
+class CheckYourAnswersHelper(
+                              userAnswers: UserAnswers,
+                              countries: List[Country],
+                              messagesApi: MessagesApi,
+                              implicit val lang: Lang
+                            ) {
   def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
     x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name, false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
   }

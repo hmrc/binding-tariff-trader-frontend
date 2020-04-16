@@ -44,7 +44,7 @@ object oCase {
     sampleToBeReturned = false
   )
 
-  def decisionExample(exp : Option[String] = Some("This is some explanation")) = {
+  def decisionExample(exp: Option[String] = Some("This is some explanation")) = {
     Decision(
       bindingCommodityCode = "commodity-code-123",
       effectiveStartDate = Some(Instant.now),

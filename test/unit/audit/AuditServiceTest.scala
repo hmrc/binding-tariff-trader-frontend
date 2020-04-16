@@ -19,7 +19,7 @@ package audit
 import audit.AuditPayloadType.BTIApplicationSubmission
 import models._
 import org.mockito.Mockito.verify
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
 import uk.gov.hmrc.play.test.UnitSpec

@@ -21,7 +21,6 @@ import models.requests.IdentifierRequest
 import models.{Case, PdfFile, oCase}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
@@ -29,7 +28,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future.{failed, successful}
 
-class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
+class ApplicationControllerSpec extends ControllerSpecBase {
 
   private val pdfService = mock[PdfService]
   private val caseService = mock[CasesService]
@@ -52,7 +51,8 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
       pdfService,
       caseService,
       fileService,
-      countriesService
+      countriesService,
+      cc
     )
   }
 
@@ -78,7 +78,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
   }
 
 
-  private def givenThePdfServiceDecodesTheTokenWith(eori: String, reference: String): Unit = {
+  private def givenThePdfServiceDecodesTheTokenWith(eori: String): Unit = {
     when(pdfService.decodeToken(any[String])).thenReturn(Some(eori))
   }
 
@@ -93,7 +93,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
   "Application Pdf" must {
 
     "return PdfService result" in {
-      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
+      givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseServiceFindsTheCase()
       givenTheFileServiceFindsTheAttachments()
       givenTheFileServiceHaveNoLetterOfAuthority()
@@ -101,19 +101,19 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller().applicationPdf(caseRef, Some(token))(request)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe "Some content"
-      contentType(result) mustBe Some("application/pdf")
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe "Some content"
+      contentType(result) shouldBe Some("application/pdf")
     }
 
     "error when case not found" in {
-      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
+      givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
         await(controller().applicationPdf(caseRef, Some(token))(request))
       }
-      caught.getMessage mustBe "Case not found"
+      caught.getMessage shouldBe "Case not found"
     }
 
     "redirect to session expired when the token is invalid" in {
@@ -121,8 +121,8 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
     "redirect to unauthorized when the token is empty and session EORI is not present" in {
@@ -130,8 +130,8 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, None)(request)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad().url)
     }
 
   }
@@ -139,27 +139,27 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
   "Application View" must {
 
     "return application view result" in {
-      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
+      givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseServiceFindsTheCase()
       givenTheFileServiceFindsTheAttachments()
       givenTheFileServiceHaveNoLetterOfAuthority()
 
       val result = controller().viewApplication(caseRef, Some(token))(request)
 
-      status(result) mustBe OK
-      contentAsString(result) must include("Your application for a Binding Tariff Information ruling")
-      contentAsString(result) must include("applicationView.applicationLink")
-      contentType(result) mustBe Some("text/html")
+      status(result) shouldBe OK
+      contentAsString(result) should include("Your application for a Binding Tariff Information ruling")
+      contentAsString(result) should include("applicationView.applicationLink")
+      contentType(result) shouldBe Some("text/html")
     }
 
     "error when case not found" in {
-      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
+      givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
         await(controller().viewApplication(caseRef, Some(token))(request))
       }
-      caught.getMessage mustBe "Case not found"
+      caught.getMessage shouldBe "Case not found"
     }
 
     "redirect to session expired when the token is invalid" in {
@@ -167,8 +167,8 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
   }
 
@@ -176,25 +176,25 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
   "Ruling Pdf" must {
 
     "return PdfService result" in {
-      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
+      givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseWithRulingFindsTheCaseWithRuling()
       givenThePdfServiceGeneratesThePdf()
 
       val result = controller().rulingCertificatePdf(caseRef, Some(token))(request)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe "Some content"
-      contentType(result) mustBe Some("application/pdf")
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe "Some content"
+      contentType(result) shouldBe Some("application/pdf")
     }
 
     "error when case not found" in {
-      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
+      givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
         await(controller().rulingCertificatePdf(caseRef, Some(token))(request))
       }
-      caught.getMessage mustBe "Case not found"
+      caught.getMessage shouldBe "Case not found"
     }
 
     "redirect to session expired when the token is invalid" in {
@@ -202,8 +202,8 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller(FakeIdentifierAction(None)).rulingCertificatePdf(caseRef, Some(token))(request)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
     "redirect to unauthorized when the token is empty and session EORI is not present" in {
@@ -211,8 +211,8 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller(FakeIdentifierAction(None)).rulingCertificatePdf(caseRef, None)(request)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad().url)
     }
 
   }
@@ -220,25 +220,25 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
   "Ruling View" must {
 
     "return ruling view result" in {
-      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
+      givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseWithRulingFindsTheCaseWithRuling()
 
       val result = controller().viewRulingCertificate(caseRef, Some(token))(request)
 
-      status(result) mustBe OK
-      contentAsString(result) must include("Binding Tariff Information ruling")
-      contentAsString(result) must include("rulingInformation.certificateLink")
-      contentType(result) mustBe Some("text/html")
+      status(result) shouldBe OK
+      contentAsString(result) should include("Binding Tariff Information ruling")
+      contentAsString(result) should include("rulingInformation.certificateLink")
+      contentType(result) shouldBe Some("text/html")
     }
 
     "error when case not found" in {
-      givenThePdfServiceDecodesTheTokenWith("eori", "reference")
+      givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseServiceDoesNotFindTheCase()
 
       val caught: Exception = intercept[Exception] {
         await(controller().viewRulingCertificate(caseRef, Some(token))(request))
       }
-      caught.getMessage mustBe "Case not found"
+      caught.getMessage shouldBe "Case not found"
     }
 
     "redirect to session expired when the token is invalid" in {
@@ -246,8 +246,8 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller(FakeIdentifierAction(None)).viewRulingCertificate(caseRef, Some(token))(request)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
   }
@@ -257,7 +257,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with MockitoSugar {
     "return a valid country when given a valid country code" in {
       val result: Option[String] = controller().getCountryName("IE")
 
-      result mustBe Some("title.irish_republic")
+      result shouldBe Some("title.irish_republic")
     }
 
   }

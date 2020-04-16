@@ -20,14 +20,17 @@ import com.codahale.metrics.SharedMetricRegistries
 import config.FrontendAppConfig
 import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import play.api.i18n.{Messages, MessagesApi}
+import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
+import play.api.libs.Files.TemporaryFileCreator
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.test.WithFakeApplication
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-trait SpecBase extends PlaySpec with WithFakeApplication {
+trait SpecBase extends UnitSpec with WithFakeApplication with MockitoSugar {
 
   SharedMetricRegistries.clear()
 
@@ -35,9 +38,8 @@ trait SpecBase extends PlaySpec with WithFakeApplication {
 
   def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
-  def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
-
-  def fakeRequest = FakeRequest()
+  implicit val cc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
+  implicit val lang: Lang = injector.instanceOf[Lang]
 
   def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
 
@@ -45,5 +47,12 @@ trait SpecBase extends PlaySpec with WithFakeApplication {
 
   def fakeRequestWithEoriAndCache = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), Some(UserAnswers(CacheMap("id", Map.empty))))
 
+  def fakeRequest = FakeRequest()
+
   def messages: Messages = messagesApi.preferred(fakeRequest)
+
+  def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
+
+  def tempFileCreator: TemporaryFileCreator = injector.instanceOf[TemporaryFileCreator]
+
 }

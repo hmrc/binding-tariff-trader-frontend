@@ -23,8 +23,9 @@ class $className;format="cap"$Controller @Inject()(appConfig: FrontendAppConfig,
                                          identify: IdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
-                                         formProvider: $className$FormProvider
-                                         , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
+                                         formProvider: $className$FormProvider,
+                                         cc: MessagesControllerComponents
+                                         ) extends FrontendController(cc) with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 

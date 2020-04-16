@@ -19,8 +19,7 @@ package controllers
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import navigation.Navigator
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CountriesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -28,18 +27,20 @@ import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.check_your_answers
 
-class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
-                                           override val messagesApi: MessagesApi,
-                                           navigator: Navigator,
-                                           authenticate: IdentifierAction,
-                                           getData: DataRetrievalAction,
-                                           requireData: DataRequiredAction,
-                                           countriesService: CountriesService,
-                                           cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
+class CheckYourAnswersController @Inject()(
+                                            appConfig: FrontendAppConfig,
+                                            override val messagesApi: MessagesApi,
+                                            authenticate: IdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            countriesService: CountriesService,
+                                            cc: MessagesControllerComponents,
+                                            val lang: Lang
+                                          ) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (authenticate andThen getData andThen requireData) { implicit request =>
 
-    val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountries, messagesApi)
+    val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountries, messagesApi, lang)
 
     val sections = Seq(
       AnswerSection(

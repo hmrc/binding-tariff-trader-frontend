@@ -25,31 +25,36 @@ import navigation.Navigator
 import pages.ImportOrExportPage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.Call
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.importOrExport
 
 class ImportOrExportControllerSpec extends ControllerSpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
+  private val formProvider = new ImportOrExportFormProvider()
+  private val form = formProvider()
 
-  val formProvider = new ImportOrExportFormProvider()
-  val form = formProvider()
+  private def viewAsString(form: Form[_] = form): String = importOrExport(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages).toString
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new ImportOrExportController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new Navigator, FakeIdentifierAction,
-      dataRetrievalAction, formProvider)
-
-  def viewAsString(form: Form[_] = form) = importOrExport(frontendAppConfig, form, NormalMode)(fakeRequestWithEori, messages).toString
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+    new ImportOrExportController(
+      frontendAppConfig,
+      messagesApi,
+      FakeDataCacheConnector,
+      new Navigator,
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      formProvider,
+      cc
+    )
 
   "ImportOrExport Controller" must {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString()
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
@@ -58,7 +63,7 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(ImportOrExport.values.head))
+      contentAsString(result) shouldBe viewAsString(form.fill(ImportOrExport.values.head))
     }
 
     "redirect to the next page when Import is submitted" in {
@@ -66,8 +71,8 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad.url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
     }
 
     "redirect to the next page when Export is submitted" in {
@@ -75,8 +80,8 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad.url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
     }
 
     "redirect to the next page when Advice is submitted" in {
@@ -84,8 +89,8 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.ContactCustomsDutyLiabilityTeamController.onPageLoad.url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.ContactCustomsDutyLiabilityTeamController.onPageLoad().url)
     }
 
 
@@ -95,8 +100,8 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe BAD_REQUEST
-      contentAsString(result) mustBe viewAsString(boundForm)
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) shouldBe viewAsString(boundForm)
     }
 
   }

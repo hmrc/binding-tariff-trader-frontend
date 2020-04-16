@@ -21,16 +21,17 @@ import org.mockito.ArgumentMatchers.{any, refEq}
 import org.mockito.Mockito.{verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{MustMatchers, OptionValues, WordSpec}
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.libs.json.JsString
 import repositories.{ReactiveMongoRepository, SessionRepository}
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
-class MongoCacheConnectorSpec extends WordSpec with MustMatchers with PropertyChecks
+class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheckDrivenPropertyChecks
   with Generators with MockitoSugar with ScalaFutures with OptionValues {
 
   ".save" must {

@@ -16,22 +16,24 @@
 
 package controllers.actions
 
-import play.api.mvc.{Controller, Result}
+import base.SpecBase
+import controllers.routes
+import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import base.SpecBase
-import controllers.routes
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 class AuthActionSpec extends SpecBase {
 
-  private class Harness(authAction: IdentifierAction) extends Controller {
-    def onPageLoad() = authAction { _ => Ok }
+  private class Harness(authAction: IdentifierAction) extends BaseController {
+    def onPageLoad(): Action[AnyContent] = authAction { _ => Ok }
+
+    override protected def controllerComponents: ControllerComponents = cc
   }
 
   "Auth Action" when {
@@ -40,8 +42,8 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to log in " in {
         val result: Future[Result] = handleAuthError(MissingBearerToken())
 
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).get must beTheLoginPage
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get should beTheLoginPage
       }
     }
 
@@ -49,8 +51,8 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to log in " in {
         val result: Future[Result] = handleAuthError(BearerTokenExpired())
 
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).get must beTheLoginPage
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get should beTheLoginPage
       }
     }
 
@@ -58,8 +60,8 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to log in " in {
         val result: Future[Result] = handleAuthError(InvalidBearerToken())
 
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).get must beTheLoginPage
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get should beTheLoginPage
       }
     }
 
@@ -67,8 +69,8 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to log in " in {
         val result: Future[Result] = handleAuthError(SessionRecordNotFound())
 
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).get must beTheLoginPage
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get should beTheLoginPage
       }
     }
 
@@ -76,8 +78,8 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to the unauthorised page" in {
         val result: Future[Result] = handleAuthError(InsufficientEnrolments())
 
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe unauthorisedLocation
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe unauthorisedLocation
       }
     }
 
@@ -85,8 +87,8 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to the unauthorised page" in {
         val result: Future[Result] = handleAuthError(InsufficientConfidenceLevel())
 
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe unauthorisedLocation
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe unauthorisedLocation
       }
     }
 
@@ -94,8 +96,8 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to the unauthorised page" in {
         val result: Future[Result] = handleAuthError(UnsupportedAuthProvider())
 
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe unauthorisedLocation
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe unauthorisedLocation
       }
     }
 
@@ -103,8 +105,8 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to the unauthorised page" in {
         val result: Future[Result] = handleAuthError(UnsupportedAffinityGroup())
 
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe unauthorisedLocation
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe unauthorisedLocation
       }
     }
 
@@ -112,8 +114,8 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to the unauthorised page" in {
         val result: Future[Result] = handleAuthError(UnsupportedCredentialRole())
 
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe unauthorisedLocation
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe unauthorisedLocation
       }
     }
 
@@ -128,7 +130,11 @@ class AuthActionSpec extends SpecBase {
   }
 
   private def handleAuthError(exc: AuthorisationException): Future[Result] = {
-    val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(exc), frontendAppConfig)
+    val authAction = new AuthenticatedIdentifierAction(
+      new FakeFailingAuthConnector(exc),
+      cc,
+      frontendAppConfig
+    )
     val controller = new Harness(authAction)
     controller.onPageLoad()(fakeRequest)
   }

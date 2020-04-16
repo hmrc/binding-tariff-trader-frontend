@@ -37,8 +37,9 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                                       pdfService: PdfService,
                                       caseService: CasesService,
                                       fileService: FileService,
-                                      countriesService: CountriesService
-                                     , cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
+                                      countriesService: CountriesService,
+                                      cc: MessagesControllerComponents
+                                     ) extends FrontendController(cc) with I18nSupport {
 
   private type Eori = String
   private type CaseReference = String

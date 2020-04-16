@@ -21,14 +21,12 @@ import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models.FileAttachment.format
 import models.{FileAttachment, NormalMode}
-import navigation.FakeNavigator
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.Matchers._
-import org.scalatest.mockito.MockitoSugar
 import pages.SupportingMaterialFileListPage
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
@@ -43,28 +41,32 @@ import views.html.uploadSupportingMaterialMultiple
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with MockitoSugar with BeforeAndAfterEach {
-
-  def onwardRoute = Call("GET", "/foo")
-
+class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
   private val fileService = mock[FileService]
   private val cacheConnector = mock[DataCacheConnector]
   private val formProvider = new UploadSupportingMaterialMultipleFormProvider()
   private val form = formProvider()
+
   private implicit val headers: HeaderCarrier = HeaderCarrier()
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new UploadSupportingMaterialMultipleController(
       frontendAppConfig,
       messagesApi,
       cacheConnector,
-      new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      fileService
+      fileService,
+      cc,
+      lang
     )
+
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(fileService)
+  }
 
   private def viewAsString(form: Form[_] = form): String = uploadSupportingMaterialMultiple(
     frontendAppConfig,
@@ -72,23 +74,18 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     NormalMode
   )(fakeRequest, messages).toString
 
-  override protected def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(fileService)
-  }
-
   "UploadSupportingMaterialMultiple Controller" must {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString()
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString()
     }
 
     "respond with accepted and add next page on the location header  when valid data is submitted" in {
       // Given A Form
-      val file = TemporaryFile("example-file.txt")
+      val file = tempFileCreator.create("example-file.txt")
       val filePart = FilePart[TemporaryFile](key = "file-input", "file.txt", contentType = Some("text/plain"), ref = file)
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
@@ -103,15 +100,15 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       // Then
-      status(result) mustBe SEE_OTHER
+      status(result) shouldBe SEE_OTHER
 
       val cache = theCacheSaved
-      cache.getEntry[Seq[FileAttachment]](SupportingMaterialFileListPage) mustBe Some(Seq(FileAttachment("id", "file-name", "type", file.file.length())))
+      cache.getEntry[Seq[FileAttachment]](SupportingMaterialFileListPage) shouldBe Some(Seq(FileAttachment("id", "file-name", "type", file.toPath.toFile.length())))
     }
 
     "respond with bad request if a file has wrong extension" in {
       // Given A Form
-      val file = TemporaryFile("example-file.txt")
+      val file = tempFileCreator.create("example-file.txt")
       val filePart = FilePart[TemporaryFile](key = "file-input", "file.3gp", contentType = Some("video/3gpp"), ref = file)
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
@@ -125,7 +122,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       // Then
-      status(result) mustBe BAD_REQUEST
+      status(result) shouldBe BAD_REQUEST
       contentAsString(result) should include("message something went wrong")
     }
 
@@ -141,25 +138,25 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       // Then
-      status(result) mustBe BAD_REQUEST
+      status(result) shouldBe BAD_REQUEST
       contentAsString(result) should include("You must select a file")
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
       val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val filePart = FilePart[TemporaryFile](key = "file-input", "file.txt", contentType = Some("text/plain"), ref = TemporaryFile("example-file.txt"))
+      val filePart = FilePart[TemporaryFile](key = "file-input", "file.txt", contentType = Some("text/plain"), ref = tempFileCreator.create("example-file.txt"))
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
   }
 

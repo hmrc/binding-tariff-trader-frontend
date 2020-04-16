@@ -32,24 +32,33 @@ import views.html.returnSamples
 
 class ReturnSamplesControllerSpec extends ControllerSpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
+  private def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ReturnSamplesFormProvider()
-  val form = formProvider()
+  private val formProvider = new ReturnSamplesFormProvider()
+  private val form = formProvider()
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new ReturnSamplesController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+    new ReturnSamplesController(
+      frontendAppConfig,
+      messagesApi,
+      FakeDataCacheConnector,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl,
+      formProvider,
+      cc
+    )
 
-  def viewAsString(form: Form[_] = form) = returnSamples(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form): String = returnSamples(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
 
   "ReturnSamples Controller" must {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString()
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
@@ -58,7 +67,7 @@ class ReturnSamplesControllerSpec extends ControllerSpecBase {
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(ReturnSamples.values.head))
+      contentAsString(result) shouldBe viewAsString(form.fill(ReturnSamples.values.head))
     }
 
     "redirect to the next page when valid data is submitted" in {
@@ -66,8 +75,8 @@ class ReturnSamplesControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
@@ -76,23 +85,23 @@ class ReturnSamplesControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe BAD_REQUEST
-      contentAsString(result) mustBe viewAsString(boundForm)
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) shouldBe viewAsString(boundForm)
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
       val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", ReturnSamples.options.head.value))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
   }
 }

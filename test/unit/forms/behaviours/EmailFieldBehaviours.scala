@@ -18,9 +18,10 @@ package forms.behaviours
 
 import forms.FormSpec
 import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.data.{Form, FormError}
 
-trait EmailFieldBehaviours extends FormSpec with PropertyChecks {
+trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks {
 
   protected def validEmailFieldWithMaxLength(form: Form[_],
                                              fieldName: String,

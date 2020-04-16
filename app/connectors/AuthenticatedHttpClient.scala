@@ -23,55 +23,58 @@ import play.api.libs.json.Writes
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.audit.http.HttpAuditing
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @Singleton
-class AuthenticatedHttpClient @Inject()(auditConnector: HttpAuditing, wsClient: WSClient, actorSystem: ActorSystem)
-                                       (implicit val config: FrontendAppConfig, ec: ExecutionContext)
-  extends DefaultHttpClient(config.runModeConfiguration, auditConnector, wsClient, actorSystem)
+class AuthenticatedHttpClient @Inject()(
+                                         httpAuditing: HttpAuditing,
+                                         wsClient: WSClient,
+                                         actorSystem: ActorSystem
+                                       )(implicit val config: FrontendAppConfig)
+  extends DefaultHttpClient(config.runModeConfiguration, httpAuditing, wsClient, actorSystem)
     with InjectAuthHeader {
 
   def doGet(url: String)
            (implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doGet(url)(addAuth, ec)
+    super.doGet(url)(addAuth, global)
   }
 
   def doPost[A](url: String, body: A, headers: Seq[(String, String)])
                (implicit rds: Writes[A], hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doPost(url, body, headers)(rds, addAuth, ec)
+    super.doPost(url, body, headers)(rds, addAuth, global)
   }
 
   def doFormPost(url: String, body: Map[String, Seq[String]])
                 (implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doFormPost(url, body)(addAuth, ec)
+    super.doFormPost(url, body)(addAuth, global)
   }
 
   def doPostString(url: String, body: String, headers: Seq[(String, String)])
                   (implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doPostString(url, body, headers)(addAuth, ec)
+    super.doPostString(url, body, headers)(addAuth, global)
   }
 
   def doEmptyPost[A](url: String)
                     (implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doEmptyPost(url)(addAuth, ec)
+    super.doEmptyPost(url)(addAuth, global)
   }
 
   def doPut[A](url: String, body: A)
               (implicit rds: Writes[A], hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doPut(url, body)(rds, addAuth, ec)
+    super.doPut(url, body)(rds, addAuth, global)
   }
 
   def doDelete(url: String)
               (implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doDelete(url)(addAuth, ec)
+    super.doDelete(url)(addAuth, global)
   }
 
   def doPatch[A](url: String, body: A)
                 (implicit rds: Writes[A], hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doPatch(url, body)(rds, addAuth, ec)
+    super.doPatch(url, body)(rds, addAuth, global)
   }
 
 }

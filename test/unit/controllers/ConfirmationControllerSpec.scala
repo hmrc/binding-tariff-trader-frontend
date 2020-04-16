@@ -21,7 +21,6 @@ import controllers.actions._
 import models.Confirmation
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
 import pages.ConfirmationPage
 import play.api.test.Helpers._
 import service.PdfService
@@ -30,7 +29,7 @@ import views.html.confirmation
 
 import scala.concurrent.Future
 
-class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
+class ConfirmationControllerSpec extends ControllerSpecBase {
 
   private val cache = mock[DataCacheConnector]
   private val cacheMap = mock[CacheMap]
@@ -44,7 +43,8 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
       dataRetrievalAction,
       new DataRequiredActionImpl,
       cache,
-      pdfService
+      pdfService,
+      cc
     )
   }
 
@@ -61,8 +61,8 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString
       verify(cache).remove(cacheMap)
     }
 
@@ -71,8 +71,8 @@ class ConfirmationControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller().onPageLoad(fakeRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some("/binding-tariff-application/this-service-has-been-reset")
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some("/binding-tariff-application/this-service-has-been-reset")
     }
 
   }

@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 import models._
 import models.response.FilestoreResponse
 import play.api.Logger
-import play.api.i18n.MessagesApi
+import play.api.i18n.{Lang, MessagesApi}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import uk.gov.hmrc.http.HeaderCarrier
@@ -32,18 +32,23 @@ import scala.concurrent.Future
 import scala.concurrent.Future.{sequence, successful}
 
 @Singleton
-class FileService @Inject()(connector: BindingTariffFilestoreConnector, messagesApi: MessagesApi, configuration: FrontendAppConfig) {
+class FileService @Inject()(
+                             connector: BindingTariffFilestoreConnector,
+                             messagesApi: MessagesApi,
+                             configuration: FrontendAppConfig,
+                             implicit val lang: Lang
+                           ) {
 
   def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
-    connector.upload(f).map(toFileAttachment(f.ref.file.length))
-  }
-
-  private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
-    r => FileAttachment(r.id, r.fileName, r.mimeType, size)
+    connector.upload(f).map(toFileAttachment(f.ref.path.toFile.length))
   }
 
   def refresh(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FileAttachment] = {
     connector.get(file).map(toFileAttachment(file.size))
+  }
+
+  private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
+    r => FileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
   def getAttachmentMetadata(c: Case)(implicit hc: HeaderCarrier): Future[Seq[FilestoreResponse]] = {
@@ -88,7 +93,7 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
   }
 
   private def hasInvalidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = {
-    _.ref.file.length > configuration.fileUploadMaxSize
+    _.ref.path.toFile.length > configuration.fileUploadMaxSize
   }
 
   private def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>

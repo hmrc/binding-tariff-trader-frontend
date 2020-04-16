@@ -51,37 +51,37 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
       val doc = asDocument(createPdfView(traderCase.copy(application = traderApplication.copy(
         reissuedBTIReference = Some("REISSUE1234"))), Seq.empty))
 
-      doc.getElementById("application.reissuedBTIReference").text() mustBe "REISSUE1234"
+      doc.getElementById("application.reissuedBTIReference").text() shouldBe "REISSUE1234"
     }
 
     "contain the details for uploaded files" in {
-      asDocument(createPdfView(traderCase, Seq.empty)).getElementById("application.attachments").text() mustBe "None"
+      asDocument(createPdfView(traderCase, Seq.empty)).getElementById("application.attachments").text() shouldBe "None"
 
       val docFiles = asDocument(createPdfView(traderCase, Seq(
         FilestoreResponse("id", "pdfFile.pdf", "application/pdf"),
         FilestoreResponse("id", "image.jpg", "image/jpg"))))
-      docFiles.getElementById("application.attachments").text() mustBe "pdfFile.pdf image.jpg"
+      docFiles.getElementById("application.attachments").text() shouldBe "pdfFile.pdf image.jpg"
     }
 
     "contain the details for related BTI case" in {
       val doc = asDocument(createPdfView(traderCase.copy(application = traderApplication.copy(
         relatedBTIReference = Some("RELATED1234"))), Seq.empty))
 
-      doc.getElementById("application.relatedBTIReference").text() mustBe "RELATED1234"
+      doc.getElementById("application.relatedBTIReference").text() shouldBe "RELATED1234"
     }
 
     "contain the details for legal problems" in {
       val doc = asDocument(createPdfView(traderCase.copy(application = traderApplication.copy(
         knownLegalProceedings = Some("Legal problems"))), Seq.empty))
 
-      doc.getElementById("application.knownLegalProceedings").text() mustBe "Legal problems"
+      doc.getElementById("application.knownLegalProceedings").text() shouldBe "Legal problems"
     }
 
     "contain the details for other information" in {
       val doc = asDocument(createPdfView(traderCase.copy(application = traderApplication.copy(
         otherInformation = Some("Other information"))), Seq.empty))
 
-      doc.getElementById("application.otherInformation").text() mustBe "Other information"
+      doc.getElementById("application.otherInformation").text() shouldBe "Other information"
     }
 
     "contain the optional hmrc logo" in {
@@ -125,8 +125,8 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
   }
 
   private def containsCommonSections(doc: Document) = {
-    doc.getElementById("application.submitted").text() mustBe s"${Dates.format(oCase.btiCaseExample.createdDate)}"
-    doc.getElementById("application.casereference").text() mustBe s"${oCase.btiCaseExample.reference}"
+    doc.getElementById("application.submitted").text() shouldBe s"${Dates.format(oCase.btiCaseExample.createdDate)}"
+    doc.getElementById("application.casereference").text() shouldBe s"${oCase.btiCaseExample.reference}"
     assertRenderedById(doc, "application.section.applicant.heading")
     assertRenderedById(doc, "application.section.aboutItem.heading")
     assertRenderedById(doc, "application.section.other.heading")
