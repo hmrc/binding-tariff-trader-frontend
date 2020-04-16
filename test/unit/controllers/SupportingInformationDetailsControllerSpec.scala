@@ -38,7 +38,6 @@ class SupportingInformationDetailsControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new SupportingInformationDetailsController(
       frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,

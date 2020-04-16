@@ -29,7 +29,6 @@ import views.html.check_your_answers
 
 class CheckYourAnswersController @Inject()(
                                             appConfig: FrontendAppConfig,
-                                            override val messagesApi: MessagesApi,
                                             authenticate: IdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,

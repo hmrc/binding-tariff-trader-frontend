@@ -52,7 +52,6 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new UploadSupportingMaterialMultipleController(
       frontendAppConfig,
-      messagesApi,
       cacheConnector,
       FakeIdentifierAction,
       dataRetrievalAction,

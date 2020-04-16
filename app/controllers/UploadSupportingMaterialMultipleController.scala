@@ -37,7 +37,6 @@ import scala.concurrent.Future.successful
 
 class UploadSupportingMaterialMultipleController @Inject()(
                                                             appConfig: FrontendAppConfig,
-                                                            override val messagesApi: MessagesApi,
                                                             dataCacheConnector: DataCacheConnector,
                                                             identify: IdentifierAction,
                                                             getData: DataRetrievalAction,

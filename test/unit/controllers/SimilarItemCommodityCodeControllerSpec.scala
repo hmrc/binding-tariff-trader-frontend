@@ -37,7 +37,6 @@ class SimilarItemCommodityCodeControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new SimilarItemCommodityCodeController(
       frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,

@@ -33,7 +33,6 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new SupportingMaterialFileListController(
       frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       new Navigator,
       FakeIdentifierAction,

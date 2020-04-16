@@ -25,7 +25,6 @@ import views.html.contactCustomsDutyLiabilityTeam
 class ContactCustomsDutyLiabilityTeamControllerSpec extends ControllerSpecBase {
   def controller() = new ContactCustomsDutyLiabilityTeamController(
       frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       FakeIdentifierAction,
       cc

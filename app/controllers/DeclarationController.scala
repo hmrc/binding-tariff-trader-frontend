@@ -41,7 +41,6 @@ import scala.concurrent.Future.successful
 
 class DeclarationController @Inject()(
                                        appConfig: FrontendAppConfig,
-                                       override val messagesApi: MessagesApi,
                                        dataCacheConnector: DataCacheConnector,
                                        auditService: AuditService,
                                        navigator: Navigator,

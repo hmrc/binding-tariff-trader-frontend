@@ -35,7 +35,6 @@ import scala.concurrent.Future
 
 class LegalChallengeDetailsController @Inject()(
                                                  appConfig: FrontendAppConfig,
-                                                 override val messagesApi: MessagesApi,
                                                  dataCacheConnector: DataCacheConnector,
                                                  navigator: Navigator,
                                                  identify: IdentifierAction,

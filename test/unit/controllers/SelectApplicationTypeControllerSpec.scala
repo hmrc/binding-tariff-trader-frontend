@@ -38,7 +38,6 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): SelectApplicationTypeController = {
     new SelectApplicationTypeController(
       frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,

@@ -36,7 +36,6 @@ import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
 class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfig,
-                                                     override val messagesApi: MessagesApi,
                                                      dataCacheConnector: DataCacheConnector,
                                                      navigator: Navigator,
                                                      identify: IdentifierAction,

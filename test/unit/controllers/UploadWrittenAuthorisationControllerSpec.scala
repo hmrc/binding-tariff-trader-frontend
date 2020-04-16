@@ -57,7 +57,6 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new UploadWrittenAuthorisationController(
       frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,

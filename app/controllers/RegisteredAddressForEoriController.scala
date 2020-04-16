@@ -35,7 +35,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
-                                                   override val messagesApi: MessagesApi,
                                                    dataCacheConnector: DataCacheConnector,
                                                    navigator: Navigator,
                                                    identify: IdentifierAction,

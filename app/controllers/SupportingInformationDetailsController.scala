@@ -35,7 +35,6 @@ import scala.concurrent.Future
 
 class SupportingInformationDetailsController @Inject()(
                                         appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
                                         dataCacheConnector: DataCacheConnector,
                                         navigator: Navigator,
                                         identify: IdentifierAction,

@@ -38,7 +38,6 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
     new ConfirmationController(
       frontendAppConfig,
-      messagesApi,
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,

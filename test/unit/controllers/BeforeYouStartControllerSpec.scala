@@ -28,7 +28,6 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, identifier: IdentifierAction = FakeIdentifierAction) =
     new BeforeYouStartController(
       frontendAppConfig,
-      messagesApi,
       new FakeNavigator(onwardRoute),
       identifier,
       dataRetrievalAction,

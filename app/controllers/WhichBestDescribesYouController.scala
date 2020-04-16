@@ -37,7 +37,6 @@ import scala.concurrent.Future
 
 class WhichBestDescribesYouController @Inject()(
                                                  appConfig: FrontendAppConfig,
-                                                 override val messagesApi: MessagesApi,
                                                  dataCacheConnector: DataCacheConnector,
                                                  navigator: Navigator,
                                                  identify: IdentifierAction,

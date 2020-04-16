@@ -27,7 +27,6 @@ class AcceptItemInformationListControllerSpec extends ControllerSpecBase {
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new AcceptItemInformationListController(
       frontendAppConfig,
-      messagesApi,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

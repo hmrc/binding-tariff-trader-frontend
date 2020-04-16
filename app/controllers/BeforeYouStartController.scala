@@ -26,7 +26,6 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.beforeYouStart
 
 class BeforeYouStartController @Inject()(appConfig: FrontendAppConfig,
-                                         override val messagesApi: MessagesApi,
                                          navigator: Navigator,
                                          identify: IdentifierAction,
                                          getData: DataRetrievalAction,

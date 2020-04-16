@@ -46,7 +46,6 @@ class ApplicationControllerSpec extends ControllerSpecBase {
   private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): ApplicationController = {
     new ApplicationController(
       frontendAppConfig,
-      messagesApi,
       action,
       pdfService,
       caseService,

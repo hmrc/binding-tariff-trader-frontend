@@ -27,7 +27,6 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.contactCustomsDutyLiabilityTeam
 
 class ContactCustomsDutyLiabilityTeamController @Inject()(appConfig: FrontendAppConfig,
-                                                          override val messagesApi: MessagesApi,
                                                           dataCacheConnector: DataCacheConnector,
                                                           identify: IdentifierAction,
                                                           cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {

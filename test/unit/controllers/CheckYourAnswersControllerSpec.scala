@@ -29,7 +29,6 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CheckYourAnswersController(
       frontendAppConfig,
-      messagesApi,
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,

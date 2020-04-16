@@ -91,7 +91,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): DeclarationController = {
     new DeclarationController(
       frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       auditService,
       new FakeNavigator(onwardRoute),

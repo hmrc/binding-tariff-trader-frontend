@@ -32,7 +32,6 @@ import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
-                                      override val messagesApi: MessagesApi,
                                       identify: IdentifierAction,
                                       pdfService: PdfService,
                                       caseService: CasesService,

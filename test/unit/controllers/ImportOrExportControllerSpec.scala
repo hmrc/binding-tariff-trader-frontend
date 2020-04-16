@@ -39,7 +39,6 @@ class ImportOrExportControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new ImportOrExportController(
       frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       new Navigator,
       FakeIdentifierAction,
