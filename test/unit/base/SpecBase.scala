@@ -39,7 +39,8 @@ trait SpecBase extends UnitSpec with WithFakeApplication with MockitoSugar {
   def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
   implicit val cc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
-  implicit val lang: Lang = injector.instanceOf[Lang]
+  implicit val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+  implicit val lang: Lang = appConfig.defaultLang
 
   def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
 

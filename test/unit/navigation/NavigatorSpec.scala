@@ -24,7 +24,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.Mockito._
 import pages._
 
-class NavigatorSpec extends SpecBase with MockitoSugar {
+class NavigatorSpec extends SpecBase {
 
   val navigator = new Navigator
 
