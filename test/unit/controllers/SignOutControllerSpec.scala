@@ -17,22 +17,31 @@
 package controllers
 
 import connectors.DataCacheConnector
-import controllers.actions.{DataRequiredActionImpl, FakeIdentifierAction}
+import controllers.actions.FakeIdentifierAction
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito
 import org.mockito.Mockito.verify
+import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
-class SignOutControllerSpec extends ControllerSpecBase {
+class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
+
+  private val dataCache: DataCacheConnector = mock[DataCacheConnector]
+
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+
+    Mockito.reset(dataCache)
+  }
 
   private def controller = new SignOutController(
     frontendAppConfig,
-    mock[DataCacheConnector],
+    dataCache,
     FakeIdentifierAction,
     getEmptyCacheMap,
-    new DataRequiredActionImpl,
     cc
   )
 
@@ -45,9 +54,8 @@ class SignOutControllerSpec extends ControllerSpecBase {
     }
 
     "clear user cache when present" in {
-      val cache = mock[DataCacheConnector]
       controller.startFeedbackSurvey(fakeRequestWithEoriAndCache)
-      verify(cache).remove(any())
+      verify(dataCache).remove(any())
     }
   }
 
@@ -61,9 +69,8 @@ class SignOutControllerSpec extends ControllerSpecBase {
     }
 
     "clear user cache when present" in {
-      val cache = mock[DataCacheConnector]
       controller.forceSignOut(fakeRequestWithEoriAndCache)
-      verify(cache).remove(any())
+      verify(dataCache).remove(any())
     }
   }
 
@@ -72,8 +79,10 @@ class SignOutControllerSpec extends ControllerSpecBase {
     "return a redirect and clear session" in {
       val result: Future[Result] = controller.unauthorisedSignOut(fakeRequest)
       status(result) shouldBe SEE_OTHER
-      cookies(result).get("mdtp").isDefined shouldBe true
       redirectLocation(result).get should endWith("/applications")
+
+      println(cookies(result))
+      cookies(result).get("mdtp").isDefined shouldBe true
     }
 
   }

@@ -16,6 +16,7 @@
 
 package controllers.actions
 
+import base.SpecBase
 import models.requests.IdentifierRequest
 import play.api.mvc.{AnyContent, BodyParser, Request, Result}
 
@@ -24,13 +25,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class BaseFakeIdentifierAction(
                                 eori: Option[String] = Some("eori-789012")
-                              ) extends IdentifierAction {
+                              ) extends IdentifierAction with SpecBase {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
     block(IdentifierRequest(request, "id", eori))
   }
 
-  override def parser: BodyParser[AnyContent] = ???
+  override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
 
   override protected def executionContext: ExecutionContext = global
 }

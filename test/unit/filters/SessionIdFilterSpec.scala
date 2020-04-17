@@ -21,15 +21,20 @@ import java.util.UUID
 import akka.stream.Materializer
 import base.SpecBase
 import com.google.inject.Inject
+import org.scalatest.WordSpec
+import org.scalatestplus.play.OneAppPerSuite
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.{DefaultHttpFilters, HttpFilters}
+import play.api.inject._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import play.api.mvc.{DefaultActionBuilder, Results, SessionCookieBaker}
+import play.api.mvc.{Action, DefaultActionBuilder, DefaultSessionCookieBaker, Results, SessionCookieBaker}
 import play.api.routing.Router
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.{HeaderNames, SessionKeys}
+import uk.gov.hmrc.http.{HeaderNames, HttpVerbs, SessionKeys}
+import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext
 
@@ -47,30 +52,15 @@ object SessionIdFilterSpec {
 
 }
 
-class SessionIdFilterSpec extends SpecBase {
-
+class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
   import SessionIdFilterSpec._
 
-  override lazy val fakeApplication: Application = {
-
-    import play.api.inject._
-
-    new GuiceApplicationBuilder()
-      .overrides(
-        bind[HttpFilters].to[SessionIdFilterSpec.Filters],
-        bind[SessionIdFilter].to[TestSessionIdFilter]
-      )
-      .router(router)
-      .build()
-  }
   val router: Router = {
 
     import play.api.routing.sird._
 
-    val action = DefaultActionBuilder(cc.parsers.defaultBodyParser)(cc.executionContext)
-
     Router.from {
-      case GET(p"/test") => action {
+      case GET(p"/test") => Action {
         request =>
           val fromHeader = request.headers.get(HeaderNames.xSessionId).getOrElse("")
           val fromSession = request.session.get(SessionKeys.sessionId).getOrElse("")
@@ -81,18 +71,31 @@ class SessionIdFilterSpec extends SpecBase {
             )
           )
       }
-      case GET(p"/test2") => action {
+      case GET(p"/test2") => Action {
         implicit request =>
           Results.Ok.addingToSession("foo" -> "bar")
       }
     }
   }
 
+  override lazy val fakeApplication: Application = {
+
+    import play.api.inject._
+
+    new GuiceApplicationBuilder()
+      .overrides(
+        bind[HttpFilters].to[Filters],
+        bind[SessionIdFilter].to[TestSessionIdFilter]
+      )
+      .router(router)
+      .build()
+  }
+
   ".apply" must {
 
     "add a sessionId if one doesn't already exist" in {
 
-      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test"))
+      val Some(result) = route(fakeApplication, FakeRequest(HttpVerbs.GET, "/test"))
 
       val body = contentAsJson(result)
 
@@ -102,7 +105,7 @@ class SessionIdFilterSpec extends SpecBase {
 
     "not override a sessionId if one doesn't already exist" in {
 
-      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test").withSession(SessionKeys.sessionId -> "foo"))
+      val Some(result) = route(fakeApplication, FakeRequest(HttpVerbs.GET, "/test").withSession(SessionKeys.sessionId -> "foo"))
 
       val body = contentAsJson(result)
 
@@ -112,13 +115,13 @@ class SessionIdFilterSpec extends SpecBase {
 
     "not override other session values from the response" in {
 
-      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test2"))
+      val Some(result) = route(fakeApplication, FakeRequest(HttpVerbs.GET, "/test2"))
       session(result).data should contain("foo" -> "bar")
     }
 
     "not override other session values from the request" in {
 
-      val Some(result) = route(fakeApplication, FakeRequest(GET, "/test").withSession("foo" -> "bar"))
+      val Some(result) = route(fakeApplication, FakeRequest(HttpVerbs.GET, "/test").withSession("foo" -> "bar"))
       session(result).data should contain("foo" -> "bar")
     }
   }

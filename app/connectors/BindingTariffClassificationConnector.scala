@@ -28,16 +28,18 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppConfig, client: AuthenticatedHttpClient) {
+class BindingTariffClassificationConnector @Inject()(
+                                                      client: AuthenticatedHttpClient
+                                                    )(implicit configuration: FrontendAppConfig) extends InjectAuthHeader {
 
   def createCase(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
     val url = s"${configuration.bindingTariffClassificationUrl}/cases"
-    client.POST[NewCaseRequest, Case](url = url, body = c)
+    client.POST[NewCaseRequest, Case](url = url, body = c)(implicitly, implicitly, addAuth, implicitly)
   }
 
   def findCase(reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] = {
     val url = s"${configuration.bindingTariffClassificationUrl}/cases/$reference"
-    client.GET[Option[Case]](url)
+    client.GET[Option[Case]](url)(implicitly, addAuth, implicitly)
   }
 
   def findCasesBy(eori: String, status: Set[CaseStatus], pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] = {
@@ -45,7 +47,6 @@ class BindingTariffClassificationConnector @Inject()(configuration: FrontendAppC
     val url = s"${configuration.bindingTariffClassificationUrl}/cases?eori=$eori&status=${status.mkString(",")}" +
       s"&sort_by=${sort.field}&sort_direction=${sort.direction}" +
       s"&page=${pagination.page}&page_size=${pagination.pageSize}"
-
-    client.GET[Paged[Case]](url)
+    client.GET[Paged[Case]](url)(implicitly, addAuth, implicitly)
   }
 }

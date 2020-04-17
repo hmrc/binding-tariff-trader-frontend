@@ -47,8 +47,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     "contain the answers for a trader" in {
       val text = asDocument(createTraderView()).text()
 
-      text shouldBe include("Your details")
-      text shouldBe include(traderAnswer)
+      text should include("Your details")
+      text should include(traderAnswer)
       text should not include "Details of the business, organisation or individual you represent"
     }
 

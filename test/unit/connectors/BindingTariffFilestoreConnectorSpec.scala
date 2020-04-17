@@ -26,7 +26,7 @@ import play.api.mvc.MultipartFormData
 
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
-  private val connector = new BindingTariffFilestoreConnector(appConfig, wsClient, authenticatedHttpClient)
+  private def connector = new BindingTariffFilestoreConnector(wsClient, authenticatedHttpClient)
 
   def tempFileCreator: TemporaryFileCreator = injector.instanceOf[TemporaryFileCreator]
 

@@ -33,7 +33,6 @@ class SignOutController @Inject()(
                                    dataCacheConnector: DataCacheConnector,
                                    identify: IdentifierAction,
                                    getData: DataRetrievalAction,
-                                   requireData: DataRequiredAction,
                                    cc: MessagesControllerComponents
                                  ) extends FrontendController(cc) with I18nSupport {
 
@@ -47,15 +46,15 @@ class SignOutController @Inject()(
     successful(Results.Redirect(routes.SessionExpiredController.onPageLoad()).withNewSession)
   }
 
-  def unauthorisedSignOut: Action[AnyContent] = Action.async {
-    successful(Redirect(routes.IndexController.getApplications()).withNewSession)
+  def unauthorisedSignOut: Action[AnyContent] = Action { implicit request =>
+    Redirect(routes.IndexController.getApplications()).withNewSession
   }
 
-  def keepAlive(): Action[AnyContent] = Action.async {
-    implicit request => Future.successful(Ok("OK"))
+  def keepAlive(): Action[AnyContent] = Action.async { implicit request =>
+    successful(Ok("OK"))
   }
 
-  private def clearDataCache(request: OptionalDataRequest[AnyContent]) = {
+  private def clearDataCache(request: OptionalDataRequest[AnyContent]): Option[Future[Boolean]] = {
     request.userAnswers map { answer => dataCacheConnector.remove(answer.cacheMap) }
   }
 }

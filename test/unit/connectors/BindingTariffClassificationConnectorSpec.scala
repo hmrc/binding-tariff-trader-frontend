@@ -25,7 +25,7 @@ import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
 class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
-  private val connector = new BindingTariffClassificationConnector(appConfig, authenticatedHttpClient)
+  private val connector = new BindingTariffClassificationConnector(authenticatedHttpClient)
 
   "Connector 'Create Case'" should {
     val request = oCase.newBtiCaseExample

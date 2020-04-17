@@ -36,47 +36,6 @@ class AuthenticatedHttpClient @Inject()(
                                        )(implicit val config: FrontendAppConfig)
   extends DefaultHttpClient(config.runModeConfiguration, httpAuditing, wsClient, actorSystem)
     with InjectAuthHeader {
-
-  def doGet(url: String)
-           (implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doGet(url)(addAuth, global)
-  }
-
-  def doPost[A](url: String, body: A, headers: Seq[(String, String)])
-               (implicit rds: Writes[A], hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doPost(url, body, headers)(rds, addAuth, global)
-  }
-
-  def doFormPost(url: String, body: Map[String, Seq[String]])
-                (implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doFormPost(url, body)(addAuth, global)
-  }
-
-  def doPostString(url: String, body: String, headers: Seq[(String, String)])
-                  (implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doPostString(url, body, headers)(addAuth, global)
-  }
-
-  def doEmptyPost[A](url: String)
-                    (implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doEmptyPost(url)(addAuth, global)
-  }
-
-  def doPut[A](url: String, body: A)
-              (implicit rds: Writes[A], hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doPut(url, body)(rds, addAuth, global)
-  }
-
-  def doDelete(url: String)
-              (implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doDelete(url)(addAuth, global)
-  }
-
-  def doPatch[A](url: String, body: A)
-                (implicit rds: Writes[A], hc: HeaderCarrier): Future[HttpResponse] = {
-    super.doPatch(url, body)(rds, addAuth, global)
-  }
-
 }
 
 trait InjectAuthHeader {
@@ -86,12 +45,12 @@ trait InjectAuthHeader {
   def addAuth(implicit config: FrontendAppConfig, hc: HeaderCarrier): HeaderCarrier = {
     hc.headers.toMap.get(headerName) match {
       case Some(_) => hc
-      case _ => hc.withExtraHeaders(authHeaders)
+      case _ => hc.withExtraHeaders(authHeaders(config.apiToken))
     }
   }
 
-  def authHeaders(implicit config: FrontendAppConfig): (String, String) = {
-    headerName -> config.apiToken
+  def authHeaders(apiToken: String): (String, String) = {
+    headerName -> apiToken
   }
 
 }
