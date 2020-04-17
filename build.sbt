@@ -46,7 +46,6 @@ lazy val root = (project in file("."))
   )
 
 lazy val allPhases = "tt->test;test->test;test->compile;compile->compile"
-lazy val allItPhases = "tit->it;it->it;it->compile;compile->compile"
 
 lazy val TemplateTest = config("tt") extend Test
 

@@ -22,7 +22,7 @@ object AppDependencies {
 
   )
 
-  private lazy val scope: String = "test,it"
+  private lazy val scope: String = "test"
 
   val test = Seq(
     "com.github.tomakehurst"     % "wiremock-jre8"          % "2.26.1"            % scope,
