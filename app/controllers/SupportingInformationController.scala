@@ -25,7 +25,7 @@ import models.Mode
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.supportingInformation
@@ -41,7 +41,7 @@ class SupportingInformationController @Inject()(
                                                  requireData: DataRequiredAction,
                                                  formProvider: SupportingInformationFormProvider,
                                                  cc: MessagesControllerComponents
-                                               )extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
+                                               ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
 

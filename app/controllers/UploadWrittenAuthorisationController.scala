@@ -25,9 +25,9 @@ import models.{FileAttachment, Mode}
 import navigation.Navigator
 import pages._
 import play.api.data.FormError
-import play.api.i18n.{I18nSupport, Lang, MessagesApi}
+import play.api.i18n.{I18nSupport, Lang}
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MultipartFormData, Result}
+import play.api.mvc._
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadWrittenAuthorisation

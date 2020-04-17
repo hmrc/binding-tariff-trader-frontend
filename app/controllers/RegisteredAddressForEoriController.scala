@@ -21,11 +21,11 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisteredAddressForEoriFormProvider
 import javax.inject.Inject
-import models.{Mode, RegisteredAddressForEori, UserAnswers}
+import models.{Mode, RegisteredAddressForEori}
 import navigation.Navigator
 import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CountriesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -42,7 +42,8 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                                    requireData: DataRequiredAction,
                                                    formProvider: RegisteredAddressForEoriFormProvider,
                                                    countriesService: CountriesService,
-                                                   cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
+                                                   cc: MessagesControllerComponents
+                                                  ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form: Form[RegisteredAddressForEori] = formProvider()
 

@@ -24,7 +24,7 @@ import javax.inject.Inject
 import models.{FileAttachment, Mode}
 import pages._
 import play.api.data.FormError
-import play.api.i18n.{I18nSupport, Lang, MessagesApi}
+import play.api.i18n.{I18nSupport, Lang}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc._
 import service.FileService

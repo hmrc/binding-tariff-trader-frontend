@@ -23,7 +23,7 @@ import javax.inject.Inject
 import models.Confirmation
 import pages.ConfirmationPage
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.PdfService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -33,13 +33,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
-class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
-                                       identify: IdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       dataCacheConnector: DataCacheConnector,
-                                       pdfService: PdfService,
-                                       cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport {
+class ConfirmationController @Inject()(
+                                        appConfig: FrontendAppConfig,
+                                        identify: IdentifierAction,
+                                        getData: DataRetrievalAction,
+                                        requireData: DataRequiredAction,
+                                        dataCacheConnector: DataCacheConnector,
+                                        pdfService: PdfService,
+                                        cc: MessagesControllerComponents
+                                      ) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 

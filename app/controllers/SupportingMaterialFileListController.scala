@@ -26,7 +26,7 @@ import models.{FileAttachment, Mode, UserAnswers}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.supportingMaterialFileList
@@ -43,12 +43,16 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
                                                      requireData: DataRequiredAction,
                                                      formProvider: SupportingMaterialFileListFormProvider,
                                                      cc: MessagesControllerComponents
-                                                    )extends FrontendController(cc) with I18nSupport {
+                                                    ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     Ok(supportingMaterialFileList(appConfig, form, existingFiles, mode))
+  }
+
+  private def existingFiles(implicit request: DataRequest[AnyContent]): Seq[FileAttachment] = {
+    request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
   }
 
   def onRemove(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -83,10 +87,6 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
         case false => defaultCachePageAndRedirect
       }
     )
-  }
-
-  private def existingFiles(implicit request: DataRequest[AnyContent]): Seq[FileAttachment] = {
-    request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
   }
 
 }

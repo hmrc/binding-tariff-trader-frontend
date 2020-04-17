@@ -25,17 +25,12 @@ import views.html.beforeYouStart
 
 class BeforeYouStartControllerSpec extends ControllerSpecBase {
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, identifier: IdentifierAction = FakeIdentifierAction) =
+  private def controller(identifier: IdentifierAction = FakeIdentifierAction) =
     new BeforeYouStartController(
       frontendAppConfig,
-      new FakeNavigator(onwardRoute),
       identifier,
-      dataRetrievalAction,
-      new DataRequiredActionImpl,
       cc
     )
-
-  private def onwardRoute = Call("GET", "/foo")
 
   private def viewAsString(eori: Option[String]) = beforeYouStart(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages).toString
 

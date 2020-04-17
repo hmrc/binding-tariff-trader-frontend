@@ -16,19 +16,17 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions.FakeIdentifierAction
 import models.NormalMode
-import play.api.test.Helpers.{status, _}
+import play.api.test.Helpers._
 import views.html.contactCustomsDutyLiabilityTeam
 
 class ContactCustomsDutyLiabilityTeamControllerSpec extends ControllerSpecBase {
   def controller() = new ContactCustomsDutyLiabilityTeamController(
-      frontendAppConfig,
-      FakeDataCacheConnector,
-      FakeIdentifierAction,
-      cc
-    )
+    frontendAppConfig,
+    FakeIdentifierAction,
+    cc
+  )
 
   def viewAsString(): String = contactCustomsDutyLiabilityTeam(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
 

@@ -25,7 +25,7 @@ import models.Mode
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.commodityCodeBestMatch
@@ -40,7 +40,8 @@ class CommodityCodeBestMatchController @Inject()(
                                                   getData: DataRetrievalAction,
                                                   requireData: DataRequiredAction,
                                                   formProvider: CommodityCodeBestMatchFormProvider,
-                                                  cc: MessagesControllerComponents)extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
+                                                  cc: MessagesControllerComponents
+                                                ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   private lazy val form = formProvider()
 
@@ -64,7 +65,7 @@ class CommodityCodeBestMatchController @Inject()(
       Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode)))
     }
 
-    form.bindFromRequest().fold( badRequest, submitAnswer(_, mode))
+    form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
   }
 
 }

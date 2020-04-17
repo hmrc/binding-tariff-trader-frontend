@@ -27,14 +27,11 @@ class AcceptItemInformationListControllerSpec extends ControllerSpecBase {
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new AcceptItemInformationListController(
       frontendAppConfig,
-      new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
       cc
     )
-
-  private def onwardRoute = Call("GET", "/foo")
 
   def viewAsString(): String = acceptItemInformationList(frontendAppConfig)(fakeRequest, messages).toString
 
