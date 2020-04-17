@@ -27,11 +27,12 @@ import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
+import scala.io.Source
+
 trait ConnectorTest
   extends UnitSpec
     with WiremockTestServer
     with MockitoSugar
-    with ResourceFiles
     with WithFakeApplication {
 
   protected lazy val injector: Injector = fakeApplication.injector
@@ -67,4 +68,8 @@ trait ConnectorTest
     when(appConfig.apiToken) thenReturn fakeAuthToken
   }
 
+    protected def fromResource(path: String): String = {
+      val url = getClass.getClassLoader.getResource(path)
+      Source.fromURL(url, "UTF-8").getLines().mkString
+  }
 }
