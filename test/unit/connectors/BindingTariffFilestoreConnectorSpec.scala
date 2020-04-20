@@ -21,14 +21,12 @@ import models.response.FilestoreResponse
 import models.{Attachment, FileAttachment}
 import org.mockito.BDDMockito.given
 import play.api.http.Status
-import play.api.libs.Files.{TemporaryFile, TemporaryFileCreator}
+import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
   private def connector = new BindingTariffFilestoreConnector(wsClient, authenticatedHttpClient)
-
-  def tempFileCreator: TemporaryFileCreator = injector.instanceOf[TemporaryFileCreator]
 
   "Connector" should {
 

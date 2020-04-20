@@ -20,15 +20,14 @@ import com.codahale.metrics.SharedMetricRegistries
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.configureFor
 import org.scalatest.{BeforeAndAfterAll, Suite}
-import uk.gov.hmrc.play.test.WithFakeApplication
 
-trait WiremockTestServer extends WithFakeApplication with BeforeAndAfterAll {
+trait WiremockTestServer extends BeforeAndAfterAll {
   self: Suite =>
 
-  private val wireHost = "localhost"
   protected val wirePort = 20001
+  protected val wireHost = "localhost"
   protected val wireMockUrl = s"http://$wireHost:$wirePort"
-  private val wireMockServer = new WireMockServer(wirePort)
+  protected val wireMockServer = new WireMockServer(wirePort)
 
   override def beforeAll(): Unit = {
     super.beforeAll()

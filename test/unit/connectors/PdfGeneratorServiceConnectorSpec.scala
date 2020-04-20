@@ -23,7 +23,7 @@ import play.twirl.api.Html
 
 class PdfGeneratorServiceConnectorSpec extends ConnectorTest {
 
-  private val pdfTemplate = mock[Html]
+  private val pdfTemplate = Html("")
 
   private val connector = new PdfGeneratorServiceConnector(appConfig, wsClient)
 
