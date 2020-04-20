@@ -34,8 +34,7 @@ class AuthenticatedHttpClient @Inject()(
                                          wsClient: WSClient,
                                          actorSystem: ActorSystem
                                        )(implicit val config: FrontendAppConfig)
-  extends DefaultHttpClient(config.runModeConfiguration, httpAuditing, wsClient, actorSystem)
-    with InjectAuthHeader {
+  extends DefaultHttpClient(config.runModeConfiguration, httpAuditing, wsClient, actorSystem) {
 }
 
 trait InjectAuthHeader {

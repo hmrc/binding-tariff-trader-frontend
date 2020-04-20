@@ -21,16 +21,16 @@ import config.FrontendAppConfig
 import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.PlaySpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.libs.Files.TemporaryFileCreator
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.play.test.UnitSpec
 
-trait SpecBase extends UnitSpec with WithFakeApplication with MockitoSugar {
+trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
 
   SharedMetricRegistries.clear()
 
@@ -46,9 +46,9 @@ trait SpecBase extends UnitSpec with WithFakeApplication with MockitoSugar {
 
   def fakeRequestWithNotOptionalEoriAndCache = DataRequest(fakeRequest, "id", Some("eori-789012"), UserAnswers(CacheMap("id", Map.empty)))
 
-  def fakeRequestWithEoriAndCache = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), Some(UserAnswers(CacheMap("id", Map.empty))))
-
   def fakeRequest = FakeRequest()
+
+  def fakeRequestWithEoriAndCache = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), Some(UserAnswers(CacheMap("id", Map.empty))))
 
   def messages: Messages = messagesApi.preferred(fakeRequest)
 

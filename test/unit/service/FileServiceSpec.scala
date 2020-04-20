@@ -28,7 +28,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
-import play.api.libs.Files.{SingletonTemporaryFileCreator, TemporaryFile}
+import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
 import uk.gov.hmrc.http.HeaderCarrier
@@ -38,20 +38,24 @@ import scala.concurrent.Future.{failed, successful}
 class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   private val connector = mock[BindingTariffFilestoreConnector]
-//  private val messagesApi = injector.instanceOf[MessagesApi]
-  private val configuration = injector.instanceOf[FrontendAppConfig]
+  private val configuration = mock[FrontendAppConfig]
 
   private val fileSizeSmall = 10
   private val fileSizeMax = 1000
   private val fileSizeLarge = 1100
 
-  private val service = new FileService(connector, messagesApi, configuration)
+  private val service = new FileService(connector, cc, configuration)
   private implicit val headers: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
     reset(connector)
   }
+
+  private def createFileOfType(extension: String, mimeType: String) = {
+    createFile(extension, mimeType, fileSizeSmall)
+  }
+
 
   "Upload" should {
     val fileUploading = MultipartFormData.FilePart[TemporaryFile]("key", "filename", Some("type"), tempFileCreator.create())
@@ -93,11 +97,11 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
     "Return Stored Attachment" in {
       val c = aCase(withLetterOfAuthWithId("1"))
-      val expectedAtt = anAttachmentWithId("1")
+      val expectedAtt = Some(someMetadataWithId("1"))
 
-      given(connector.get(any[Attachment])(any[HeaderCarrier])) willReturn successful(Some(someMetadataWithId("1")))
+      given(connector.get(any[Attachment])(any[HeaderCarrier])) willReturn successful(expectedAtt)
 
-      await(service.getLetterOfAuthority(c)) shouldBe Some(someMetadataWithId("1"))
+      await(service.getLetterOfAuthority(c)) shouldBe expectedAtt
     }
 
     "Return None for missing letter" in {
@@ -154,7 +158,6 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
     "Reject invalid file type" in {
       val file = createFileOfType("invalid", "audio/mpeg")
-//      given(messagesApi.apply("uploadWrittenAuthorisation.error.fileType")).willReturn("some error message")
       service.validate(file) shouldBe Left(messagesApi("uploadWrittenAuthorisation.error.fileType"))
     }
 
@@ -171,7 +174,6 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
     "Reject large file" in {
       val file = createFileOfSize(fileSizeLarge)
-//      given(messagesApi.apply("uploadWrittenAuthorisation.error.size")).willReturn("some error message")
       service.validate(file) shouldBe Left(messagesApi("uploadWrittenAuthorisation.error.size"))
     }
   }
@@ -187,17 +189,14 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
     }
   }
 
-  private def createFileOfType(extension: String, mimeType: String) = {
-    createFile(extension, mimeType, fileSizeSmall)
-  }
-
   private def createFileOfSize(numBytes: Int) = {
     createFile("txt", "text/plain", numBytes)
   }
 
   private def createFile(extension: String, mimeType: String, numBytes: Int) = {
     val filename = "example." + extension
-    val file = SingletonTemporaryFileCreator.create(createTemporaryFile(numBytes).toPath)
+    val tempFile = createTemporaryFile(numBytes).toPath
+    val file = tempFileCreator.create(tempFile)
     val filePart = FilePart[TemporaryFile](key = "file-key", filename, contentType = Some(mimeType), ref = file)
     val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
     form.file("file-key").get
