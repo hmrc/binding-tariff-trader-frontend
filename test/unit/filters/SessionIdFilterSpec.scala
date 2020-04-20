@@ -19,17 +19,13 @@ package filters
 import java.util.UUID
 
 import akka.stream.Materializer
-import base.SpecBase
 import com.google.inject.Inject
-import org.scalatest.WordSpec
-import org.scalatestplus.play.OneAppPerSuite
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.{DefaultHttpFilters, HttpFilters}
-import play.api.inject._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import play.api.mvc.{Action, DefaultActionBuilder, DefaultSessionCookieBaker, Results, SessionCookieBaker}
+import play.api.mvc.{Action, Results}
 import play.api.routing.Router
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -46,9 +42,8 @@ object SessionIdFilterSpec {
 
   class TestSessionIdFilter @Inject()(
                                        override val mat: Materializer,
-                                       ec: ExecutionContext,
-                                       cookie: SessionCookieBaker
-                                     ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec, cookie)
+                                       ec: ExecutionContext
+                                     ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec)
 
 }
 
@@ -84,7 +79,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     new GuiceApplicationBuilder()
       .overrides(
-        bind[HttpFilters].to[Filters],
+        bind[HttpFilters].to[SessionIdFilterSpec.Filters],
         bind[SessionIdFilter].to[TestSessionIdFilter]
       )
       .router(router)
@@ -99,6 +94,11 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
       val body = contentAsJson(result)
 
+      println("body :::::::::::::::::")
+      println("body :::::::::::::::::" + body)
+      println("body :::::::::::::::::")
+
+
       (body \ "fromHeader").as[String] shouldBe s"session-$sessionId"
       (body \ "fromSession").as[String] shouldBe s"session-$sessionId"
     }
@@ -108,6 +108,10 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
       val Some(result) = route(fakeApplication, FakeRequest(HttpVerbs.GET, "/test").withSession(SessionKeys.sessionId -> "foo"))
 
       val body = contentAsJson(result)
+      println("second :::::::::: ")
+      println("second :::::::::: " + body)
+      println("second :::::::::: ")
+
 
       (body \ "fromHeader").as[String] shouldBe ""
       (body \ "fromSession").as[String] shouldBe "foo"
