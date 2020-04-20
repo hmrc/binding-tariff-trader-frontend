@@ -20,12 +20,14 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import models._
 import org.apache.http.HttpStatus
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.Upstream5xxResponse
+import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
 class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
-  private val connector = new BindingTariffClassificationConnector(authenticatedHttpClient)
+  private val connector = new BindingTariffClassificationConnector(authenticatedHttpClient)(appConfig)
+
+  private def withHeaderCarrier(key: String, value: String) = HeaderCarrier(extraHeaders = Seq(key -> value))
 
   "Connector 'Create Case'" should {
     val request = oCase.newBtiCaseExample
@@ -43,7 +45,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.createCase(request)) shouldBe response
+      await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", realConfig.apiToken))) shouldBe response
 
       verify(
         postRequestedFor(urlEqualTo("/cases"))
@@ -61,7 +63,9 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.findCase("id")) shouldBe Some(oCase.btiCaseExample)
+      await(
+        connector.findCase("id")(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+      ) shouldBe Some(oCase.btiCaseExample)
 
       verify(
         getRequestedFor(urlEqualTo("/cases/id"))
@@ -77,7 +81,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       intercept[Upstream5xxResponse] {
-        await(connector.createCase(request))
+        await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", realConfig.apiToken)))
       }
 
       verify(
@@ -100,7 +104,15 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW, CaseStatus.OPEN), SearchPagination(2), Sort())) shouldBe Paged.empty[Case]
+      await(
+        connector.findCasesBy(
+          "eori1234567",
+          Set(CaseStatus.NEW,
+            CaseStatus.OPEN),
+          SearchPagination(2),
+          Sort()
+        )(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+      ) shouldBe Paged.empty[Case]
 
       verify(
         getRequestedFor(urlEqualTo(url))
@@ -118,7 +130,15 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW, CaseStatus.OPEN), SearchPagination(2), Sort())) shouldBe Paged(Seq(oCase.btiCaseExample))
+      await(
+        connector.findCasesBy(
+          "eori1234567",
+          Set(CaseStatus.NEW,
+            CaseStatus.OPEN),
+          SearchPagination(2),
+          Sort()
+        )(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+      ) shouldBe Paged(Seq(oCase.btiCaseExample))
 
       verify(
         getRequestedFor(urlEqualTo(url))
@@ -136,7 +156,13 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       intercept[Upstream5xxResponse] {
-        await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW), NoPagination(), Sort()))
+        await(
+          connector.findCasesBy(
+            "eori1234567",
+            Set(CaseStatus.NEW),
+            NoPagination(),
+            Sort()
+          )(withHeaderCarrier("X-Api-Token", realConfig.apiToken)))
       }
 
       verify(
