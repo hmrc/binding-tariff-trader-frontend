@@ -74,9 +74,6 @@ trait ConnectorTest
 
   protected def fromResource(path: String): String = {
     val url = getClass.getClassLoader.getResource(path)
-    val source = Source.fromURL(url, "UTF-8")
-    val lines = source.getLines()
-    source.close()
-    lines.mkString
+    Source.fromURL(url, "UTF-8").getLines().mkString
   }
 }

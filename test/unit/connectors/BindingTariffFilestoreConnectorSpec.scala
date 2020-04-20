@@ -23,10 +23,13 @@ import org.mockito.BDDMockito.given
 import play.api.http.Status
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
+import uk.gov.hmrc.http.HeaderCarrier
 
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
-  private def connector = new BindingTariffFilestoreConnector(wsClient, authenticatedHttpClient)
+  private def connector = new BindingTariffFilestoreConnector(wsClient, authenticatedHttpClient)(appConfig)
+
+  private def withHeaderCarrier(key: String, value: String) = HeaderCarrier(extraHeaders = Seq(key -> value))
 
   "Connector" should {
 
@@ -64,7 +67,10 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           )
       )
 
-      await(connector.get(FileAttachment("id", "name", "type", 0))) shouldBe FilestoreResponse(
+
+      await(
+        connector.get(FileAttachment("id", "name", "type", 0))(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+      ) shouldBe FilestoreResponse(
         id = "id",
         fileName = "file-name.txt",
         mimeType = "text/plain"
@@ -87,7 +93,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
             .willReturn(aResponse().withStatus(Status.NOT_FOUND))
         )
 
-        await(connector.get(att)) shouldBe None
+        await(connector.get(att)(withHeaderCarrier("X-Api-Token", realConfig.apiToken))) shouldBe None
 
         verify(
           getRequestedFor(urlEqualTo("/file/id"))
@@ -108,7 +114,9 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
             )
         )
 
-        await(connector.get(att)) shouldBe Some(
+        await(
+          connector.get(att)(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+        ) shouldBe Some(
           FilestoreResponse(
             id = "id",
             fileName = "name",
@@ -135,7 +143,9 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           )
       )
 
-      await(connector.get(FileAttachment("id", "name", "type", 0))) shouldBe FilestoreResponse(
+      await(
+        connector.get(FileAttachment("id", "name", "type", 0))(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+      ) shouldBe FilestoreResponse(
         id = "id",
         fileName = "file-name.txt",
         mimeType = "text/plain"
@@ -157,7 +167,9 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           )
       )
 
-      await(connector.getFileMetadata(Seq(Attachment("id1"), Attachment("id2")))) shouldBe Seq(
+      await(
+        connector.getFileMetadata(Seq(Attachment("id1"), Attachment("id2")))(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+      ) shouldBe Seq(
         FilestoreResponse(
           id = "id1",
           fileName = "file-name1.txt",
