@@ -94,11 +94,6 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
       val body = contentAsJson(result)
 
-      println("body :::::::::::::::::")
-      println("body :::::::::::::::::" + body)
-      println("body :::::::::::::::::")
-
-
       (body \ "fromHeader").as[String] shouldBe s"session-$sessionId"
       (body \ "fromSession").as[String] shouldBe s"session-$sessionId"
     }
@@ -108,10 +103,6 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
       val Some(result) = route(fakeApplication, FakeRequest(HttpVerbs.GET, "/test").withSession(SessionKeys.sessionId -> "foo"))
 
       val body = contentAsJson(result)
-      println("second :::::::::: ")
-      println("second :::::::::: " + body)
-      println("second :::::::::: ")
-
 
       (body \ "fromHeader").as[String] shouldBe ""
       (body \ "fromSession").as[String] shouldBe "foo"
