@@ -16,45 +16,35 @@
 
 package connectors
 
+import com.codahale.metrics.SharedMetricRegistries
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
+import com.github.tomakehurst.wiremock.client.WireMock.configureFor
 import org.scalatest.{BeforeAndAfterAll, Suite}
-
 
 trait WiremockTestServer extends BeforeAndAfterAll {
   self: Suite =>
 
-  protected val wireMockServer = new WireMockServer(options().dynamicPort())
-  protected def wireMockUrl: String = wireMockServer.baseUrl()
+  protected val wirePort = 20001
+  protected val wireHost = "localhost"
+  protected val wireMockUrl = s"http://$wireHost:$wirePort"
+  protected val wireMockServer = new WireMockServer(wirePort)
 
   override def beforeAll(): Unit = {
     super.beforeAll()
 
     wireMockServer.start()
+    configureFor(wireHost, wirePort)
 
-    if (System.getProperty("os.name").toLowerCase().startsWith("mac os x")) Thread.sleep(10000)
+    if (System.getProperty("os.name").toLowerCase().startsWith("mac os x"))
+      Thread.sleep(10000)
+
   }
 
   override def afterAll(): Unit = {
     super.afterAll()
 
     wireMockServer.resetAll()
-
     wireMockServer.stop()
-    wireMockServer.shutdown()
   }
 
-  private def waitWireMockServerOrException(status: Boolean): Unit = {
-    val microSleep = 100
-    var times = 0
-    while (wireMockServer.isRunning != status) {
-      times = times + 1
-      Thread.sleep(microSleep)
-
-      if (times > microSleep / 2)
-        throw new RuntimeException("Can't start wire mock please re-run tests!")
-    }
-
-    Thread.sleep(250)
-  }
 }
