@@ -18,10 +18,10 @@ package controllers
 
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import javax.inject.Inject
 import models.requests.OptionalDataRequest
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
@@ -46,11 +46,11 @@ class SignOutController @Inject()(
     successful(Results.Redirect(routes.SessionExpiredController.onPageLoad()).withNewSession)
   }
 
-  def unauthorisedSignOut: Action[AnyContent] = Action { implicit request =>
+  def unauthorisedSignOut: Action[AnyContent] = Action {
     Redirect(routes.IndexController.getApplications()).withNewSession
   }
 
-  def keepAlive(): Action[AnyContent] = Action.async { implicit request =>
+  def keepAlive(): Action[AnyContent] = Action.async {
     successful(Ok("OK"))
   }
 

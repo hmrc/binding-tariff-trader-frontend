@@ -17,9 +17,8 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock.configureFor
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite}
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
+import org.scalatest.{BeforeAndAfterAll, Suite}
 
 
 trait WiremockTestServer extends BeforeAndAfterAll {
@@ -33,7 +32,7 @@ trait WiremockTestServer extends BeforeAndAfterAll {
 
     wireMockServer.start()
 
-    Thread.sleep(10000)
+    if (System.getProperty("os.name").toLowerCase().startsWith("mac os x")) Thread.sleep(10000)
   }
 
   override def afterAll(): Unit = {

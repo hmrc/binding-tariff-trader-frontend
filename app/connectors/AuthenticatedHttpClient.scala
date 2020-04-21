@@ -19,14 +19,10 @@ package connectors
 import akka.actor.ActorSystem
 import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.Writes
 import play.api.libs.ws.WSClient
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 @Singleton
 class AuthenticatedHttpClient @Inject()(

@@ -17,7 +17,6 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions.IdentifierAction
 import javax.inject.Inject
 import models.Mode

@@ -16,7 +16,6 @@
 
 @import config.FrontendAppConfig
 @import models.response.FilestoreResponse
-@import models.Country
 
 @(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, getCountryName: String => Option[String])(implicit request: Request[_], messages: Messages)
 

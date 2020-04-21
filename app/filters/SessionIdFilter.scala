@@ -20,7 +20,6 @@ import java.util.UUID
 
 import akka.stream.Materializer
 import com.google.inject.Inject
-import play.api.http.HeaderNames
 import play.api.mvc._
 import play.api.mvc.request.{Cell, RequestAttrKey}
 import uk.gov.hmrc.http.{SessionKeys, HeaderNames => HMRCHeaderNames}

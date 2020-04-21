@@ -17,9 +17,9 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.{Mode, RegisterBusinessRepresenting}
+@import play.api.libs.json.Json
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
-@import play.api.libs.json.{JsObject, Json}
 
 @(appConfig: FrontendAppConfig, form: Form[RegisterBusinessRepresenting], mode: Mode, countries: List[Country])(implicit request: Request[_], messages: Messages)
 

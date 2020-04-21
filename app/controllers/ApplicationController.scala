@@ -19,8 +19,8 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
-import models.{Case, Country}
-import play.api.i18n.{I18nSupport, MessagesApi}
+import models.Case
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}

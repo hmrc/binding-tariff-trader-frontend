@@ -20,7 +20,9 @@ import controllers.actions._
 import models.requests.IdentifierRequest
 import models.{Case, PdfFile, oCase}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito
 import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
@@ -28,7 +30,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future.{failed, successful}
 
-class ApplicationControllerSpec extends ControllerSpecBase {
+class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
   private val pdfService = mock[PdfService]
   private val caseService = mock[CasesService]
@@ -42,6 +44,15 @@ class ApplicationControllerSpec extends ControllerSpecBase {
   private val userEori = "eori-789012"
 
   private val request = IdentifierRequest(fakeRequest, "id", Some(userEori))
+
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+    Mockito.reset(
+      pdfService,
+      caseService,
+      fileService
+    )
+  }
 
   private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): ApplicationController = {
     new ApplicationController(
@@ -88,6 +99,7 @@ class ApplicationControllerSpec extends ControllerSpecBase {
   private def givenThePdfServiceGeneratesThePdf(): Unit = {
     when(pdfService.generatePdf(any[Html])).thenReturn(successful(expectedResult))
   }
+
 
   "Application Pdf" must {
 

@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
 import javax.inject.Inject
 import models._
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CasesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController

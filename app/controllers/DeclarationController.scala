@@ -28,7 +28,7 @@ import models._
 import models.requests.OptionalDataRequest
 import navigation.Navigator
 import pages.{ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier

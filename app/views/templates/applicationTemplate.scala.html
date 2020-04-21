@@ -15,16 +15,8 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
-@import controllers.routes._
-@import models.ReturnSamples
-@import models.Mode
 @import models.response.FilestoreResponse
-@import views.ViewUtils._
 @import utils.Dates
-@import java.time.Instant
-@import models.Country
-
 
 @(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, getCountryName: String => Option[String], viewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
