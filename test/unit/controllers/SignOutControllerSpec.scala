@@ -80,9 +80,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
       val result: Future[Result] = controller.unauthorisedSignOut(fakeRequest)
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).get should endWith("/applications")
-
-      println(cookies(result))
-      cookies(result).get("mdtp").isDefined shouldBe true
+      cookies(result).size shouldBe 0
     }
 
   }
