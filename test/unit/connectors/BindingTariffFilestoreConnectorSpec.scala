@@ -27,7 +27,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
-  private def connector = new BindingTariffFilestoreConnector(wsClient, authenticatedHttpClient)(appConfig)
+  private def connector = new BindingTariffFilestoreConnector(wsClient, authenticatedHttpClient)(mockConfig)
 
   private def withHeaderCarrier(key: String, value: String) = HeaderCarrier(extraHeaders = Seq(key -> value))
 
@@ -53,7 +53,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
       verify(
         postRequestedFor(urlEqualTo("/file"))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
@@ -69,7 +69,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
 
       await(
-        connector.get(FileAttachment("id", "name", "type", 0))(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+        connector.get(FileAttachment("id", "name", "type", 0))(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
       ) shouldBe FilestoreResponse(
         id = "id",
         fileName = "file-name.txt",
@@ -79,7 +79,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
       verify(
         getRequestedFor(urlEqualTo("/file/id"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
@@ -93,11 +93,11 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
             .willReturn(aResponse().withStatus(Status.NOT_FOUND))
         )
 
-        await(connector.get(att)(withHeaderCarrier("X-Api-Token", realConfig.apiToken))) shouldBe None
+        await(connector.get(att)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))) shouldBe None
 
         verify(
           getRequestedFor(urlEqualTo("/file/id"))
-            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+            .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
         )
       }
 
@@ -115,7 +115,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         )
 
         await(
-          connector.get(att)(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+          connector.get(att)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
         ) shouldBe Some(
           FilestoreResponse(
             id = "id",
@@ -128,7 +128,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
         verify(
           getRequestedFor(urlEqualTo("/file/id"))
-            .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+            .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
         )
       }
     }
@@ -144,7 +144,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.get(FileAttachment("id", "name", "type", 0))(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+        connector.get(FileAttachment("id", "name", "type", 0))(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
       ) shouldBe FilestoreResponse(
         id = "id",
         fileName = "file-name.txt",
@@ -153,7 +153,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
       verify(
         getRequestedFor(urlEqualTo("/file/id"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
@@ -168,7 +168,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.getFileMetadata(Seq(Attachment("id1"), Attachment("id2")))(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+        connector.getFileMetadata(Seq(Attachment("id1"), Attachment("id2")))(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
       ) shouldBe Seq(
         FilestoreResponse(
           id = "id1",
@@ -182,7 +182,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
       verify(
         getRequestedFor(urlEqualTo("/file?id=id1&id=id2"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 

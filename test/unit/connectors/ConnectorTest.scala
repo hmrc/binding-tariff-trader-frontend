@@ -17,38 +17,29 @@
 package connectors
 
 import akka.actor.ActorSystem
+import base.SpecBase
 import config.FrontendAppConfig
 import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.inject.Injector
-import play.api.libs.Files.TemporaryFileCreator
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.io.Source
 
 trait ConnectorTest
-  extends UnitSpec
-    with WiremockTestServer
-    with MockitoSugar
-    with GuiceOneAppPerSuite {
+  extends SpecBase
+    with WiremockTestServer {
 
-  protected lazy val injector: Injector = fakeApplication.injector
-  protected lazy val appConfig: FrontendAppConfig = mock[FrontendAppConfig]
-  def tempFileCreator: TemporaryFileCreator = injector.instanceOf[TemporaryFileCreator]
+  protected lazy val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
-  protected implicit val realConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
   protected lazy val fakeAuthToken = "AUTH_TOKEN"
   protected lazy val wsClient: WSClient = injector.instanceOf[WSClient]
   protected lazy val authenticatedHttpClient = new AuthenticatedHttpClient(
     auditing,
     wsClient,
     actorSystem
-  )(realConfig)
+  )(appConfig)
 
   protected lazy val standardHttpClient = new DefaultHttpClient(
     fakeApplication.configuration,
@@ -64,12 +55,12 @@ trait ConnectorTest
   override def beforeAll(): Unit = {
     super.beforeAll()
 
-    when(appConfig.bindingTariffFileStoreUrl) thenReturn wireMockUrl
-    when(appConfig.bindingTariffClassificationUrl) thenReturn wireMockUrl
-    when(appConfig.pdfGeneratorUrl) thenReturn wireMockUrl
-    when(appConfig.emailUrl) thenReturn wireMockUrl
+    when(mockConfig.bindingTariffFileStoreUrl) thenReturn wireMockUrl
+    when(mockConfig.bindingTariffClassificationUrl) thenReturn wireMockUrl
+    when(mockConfig.pdfGeneratorUrl) thenReturn wireMockUrl
+    when(mockConfig.emailUrl) thenReturn wireMockUrl
 
-    when(appConfig.apiToken) thenReturn fakeAuthToken
+    when(mockConfig.apiToken) thenReturn fakeAuthToken
   }
 
   protected def fromResource(path: String): String = {

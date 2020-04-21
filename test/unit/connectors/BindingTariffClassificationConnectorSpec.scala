@@ -25,7 +25,7 @@ import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
 class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
-  private val connector = new BindingTariffClassificationConnector(authenticatedHttpClient)(appConfig)
+  private val connector = new BindingTariffClassificationConnector(authenticatedHttpClient)(mockConfig)
 
   private def withHeaderCarrier(key: String, value: String) = HeaderCarrier(extraHeaders = Seq(key -> value))
 
@@ -45,11 +45,11 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", realConfig.apiToken))) shouldBe response
+      await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))) shouldBe response
 
       verify(
         postRequestedFor(urlEqualTo("/cases"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
@@ -64,12 +64,12 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.findCase("id")(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+        connector.findCase("id")(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
       ) shouldBe Some(oCase.btiCaseExample)
 
       verify(
         getRequestedFor(urlEqualTo("/cases/id"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
@@ -81,12 +81,12 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       intercept[Upstream5xxResponse] {
-        await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", realConfig.apiToken)))
+        await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", appConfig.apiToken)))
       }
 
       verify(
         postRequestedFor(urlEqualTo("/cases"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
   }
@@ -111,12 +111,12 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
             CaseStatus.OPEN),
           SearchPagination(2),
           Sort()
-        )(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+        )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
       ) shouldBe Paged.empty[Case]
 
       verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
@@ -137,12 +137,12 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
             CaseStatus.OPEN),
           SearchPagination(2),
           Sort()
-        )(withHeaderCarrier("X-Api-Token", realConfig.apiToken))
+        )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
       ) shouldBe Paged(Seq(oCase.btiCaseExample))
 
       verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
@@ -162,12 +162,12 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
             Set(CaseStatus.NEW),
             NoPagination(),
             Sort()
-          )(withHeaderCarrier("X-Api-Token", realConfig.apiToken)))
+          )(withHeaderCarrier("X-Api-Token", appConfig.apiToken)))
       }
 
       verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 

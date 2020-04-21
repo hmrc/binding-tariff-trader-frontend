@@ -16,30 +16,19 @@
 
 package utils
 
-import config.FrontendAppConfig
+import base.SpecBase
 import models.SelectApplicationType.NewCommodity
 import models.WhichBestDescribesYou.BusinessOwner
 import models._
 import models.requests.DataRequest
 import org.mockito.BDDMockito.given
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import pages._
-import play.api.i18n.{Lang, MessagesApi}
-import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import service.CountriesService
-import uk.gov.hmrc.play.test.UnitSpec
 
-class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
+class CheckYourAnswersHelperSpec extends SpecBase {
 
   val countriesService = new CountriesService
-
-  implicit val cc: MessagesControllerComponents = app.injector.instanceOf[MessagesControllerComponents]
-  implicit val appConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
-  implicit val lang: Lang = appConfig.defaultLang
-
-  val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
 
   private val userAnswers = mock[UserAnswers]
   private val checkHelper = new CheckYourAnswersHelper(
