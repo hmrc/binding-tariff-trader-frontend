@@ -33,7 +33,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     val request = oCase.newBtiCaseExample
     val requestJSON = Json.toJson(request).toString()
 
-    "Create valid case" in {
+    "Create valid case with x-api-token" in {
       val response = oCase.btiCaseExample
       val responseJSON = Json.toJson(response).toString()
 
@@ -45,15 +45,15 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))) shouldBe response
+      await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", "custom token"))) shouldBe response
 
       verify(
         postRequestedFor(urlEqualTo("/cases"))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo("custom token"))
       )
     }
 
-    "Find valid case" in {
+    "Find valid case with x-api-token" in {
       val responseJSON = Json.toJson(oCase.btiCaseExample).toString()
 
       stubFor(get(urlEqualTo("/cases/id"))
@@ -73,7 +73,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
     }
 
-    "propagate errors" in {
+    "propagate errors with x-api-token" in {
       stubFor(post(urlEqualTo("/cases"))
         .willReturn(aResponse()
           .withStatus(HttpStatus.SC_BAD_GATEWAY)
@@ -89,8 +89,62 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
-  }
 
+    "Create valid case without x-api-token" in {
+      val response = oCase.btiCaseExample
+      val responseJSON = Json.toJson(response).toString()
+
+      stubFor(post(urlEqualTo("/cases"))
+        .withRequestBody(equalToJson(requestJSON))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_OK)
+          .withBody(responseJSON)
+        )
+      )
+
+      await(connector.createCase(request)(hc)) shouldBe response
+
+      verify(
+        postRequestedFor(urlEqualTo("/cases"))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+    "Find valid case without x-api-token" in {
+      val responseJSON = Json.toJson(oCase.btiCaseExample).toString()
+
+      stubFor(get(urlEqualTo("/cases/id"))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_OK)
+          .withBody(responseJSON)
+        )
+      )
+
+      await(connector.findCase("id")(hc)) shouldBe Some(oCase.btiCaseExample)
+
+      verify(
+        getRequestedFor(urlEqualTo("/cases/id"))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+    "propagate errors without x-api-token" in {
+      stubFor(post(urlEqualTo("/cases"))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_BAD_GATEWAY)
+        )
+      )
+
+      intercept[Upstream5xxResponse] {
+        await(connector.createCase(request)(hc))
+      }
+
+      verify(
+        postRequestedFor(urlEqualTo("/cases"))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+  }
 
   "Connector 'Find Cases By'" should {
 

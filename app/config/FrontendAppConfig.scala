@@ -17,19 +17,15 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
-import play.api.Mode
+import play.api.Configuration
 import play.api.i18n.Lang
-import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
 class FrontendAppConfig @Inject()(
                                    val runModeConfiguration: Configuration,
-                                   environment: Environment,
                                    serviceConfig: ServicesConfig
                                  ) {
-
-  protected def mode: Mode = environment.mode
 
   private def loadConfig(key: String): String = {
     runModeConfiguration.getOptional[String](key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
@@ -80,5 +76,5 @@ class FrontendAppConfig @Inject()(
     "cymraeg" -> Lang("cy")
   )
 
-  def defaultLang = languageMap.getOrElse("english", Lang("en"))
+  def defaultLang: Lang = languageMap.getOrElse("english", Lang("en"))
 }
