@@ -48,17 +48,23 @@ object SessionIdFilterSpec {
 }
 
 class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
-  import SessionIdFilterSpec._
 
-  private lazy val baseApp = new GuiceApplicationBuilder().build()
-  private lazy val cc = baseApp.injector.instanceOf[MessagesControllerComponents]
+  override lazy val fakeApplication: Application = GuiceApplicationBuilder()
+    .overrides(
+      play.api.inject.bind[HttpFilters].to[SessionIdFilterSpec.Filters],
+      play.api.inject.bind[SessionIdFilter].to[SessionIdFilterSpec.TestSessionIdFilter]
+    )
+    .router(router)
+    .build()
+  private lazy val sessionId = SessionIdFilterSpec.sessionId
+  private lazy val realApp = GuiceApplicationBuilder()
+    .configure(
+      "metrics.jvm" -> false,
+      "metrics.enabled" -> false
+    ).build()
+  private lazy val cc = realApp.injector.instanceOf[MessagesControllerComponents]
 
-  def Action: ActionBuilder[MessagesRequest, AnyContent] = {
-    cc.messagesActionBuilder.compose(cc.actionBuilder)
-  }
-
-  val router: Router = {
-
+  private val router: Router = {
     import play.api.routing.sird._
 
     Router.from {
@@ -80,18 +86,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
     }
   }
 
-  override lazy val fakeApplication: Application = {
-
-    import play.api.inject._
-
-    new GuiceApplicationBuilder()
-      .overrides(
-        bind[HttpFilters].to[SessionIdFilterSpec.Filters],
-        bind[SessionIdFilter].to[TestSessionIdFilter]
-      )
-      .router(router)
-      .build()
-  }
+  private def Action: ActionBuilder[MessagesRequest, AnyContent] = cc.messagesActionBuilder.compose(cc.actionBuilder)
 
   ".apply" must {
 
