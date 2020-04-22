@@ -16,6 +16,9 @@
 
 package base
 
+import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import config.FrontendAppConfig
 import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
@@ -30,6 +33,7 @@ import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.test.UnitSpec
+import unit.base.WireMockObject
 
 trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
 
@@ -60,5 +64,7 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
   def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
 
   def tempFileCreator: TemporaryFileCreator = injector.instanceOf[TemporaryFileCreator]
+
+  WireMockObject.start()
 
 }

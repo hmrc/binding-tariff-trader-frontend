@@ -20,16 +20,18 @@ import akka.actor.ActorSystem
 import base.SpecBase
 import config.FrontendAppConfig
 import org.mockito.Mockito.when
+import org.scalatest.BeforeAndAfterAll
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import unit.base.WireMockObject
 
 import scala.io.Source
 
 trait ConnectorTest
   extends SpecBase
-    with WiremockTestServer {
+    with BeforeAndAfterAll {
 
   protected lazy val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
@@ -55,10 +57,10 @@ trait ConnectorTest
   override def beforeAll(): Unit = {
     super.beforeAll()
 
-    when(mockConfig.bindingTariffFileStoreUrl) thenReturn wireMockUrl
-    when(mockConfig.bindingTariffClassificationUrl) thenReturn wireMockUrl
-    when(mockConfig.pdfGeneratorUrl) thenReturn wireMockUrl
-    when(mockConfig.emailUrl) thenReturn wireMockUrl
+    when(mockConfig.bindingTariffFileStoreUrl) thenReturn WireMockObject.wireMockUrl
+    when(mockConfig.bindingTariffClassificationUrl) thenReturn WireMockObject.wireMockUrl
+    when(mockConfig.pdfGeneratorUrl) thenReturn WireMockObject.wireMockUrl
+    when(mockConfig.emailUrl) thenReturn WireMockObject.wireMockUrl
 
     when(mockConfig.apiToken) thenReturn fakeAuthToken
   }
