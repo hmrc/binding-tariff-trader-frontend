@@ -135,7 +135,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
     "Publish" in {
       stubFor(
-        get("/file/id")
+        post("/file/id/publish")
           .willReturn(
             aResponse()
               .withStatus(Status.ACCEPTED)
@@ -144,7 +144,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.get(FileAttachment("id", "name", "type", 0))(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        connector.publish(FileAttachment("id", "name", "type", 0))(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
       ) shouldBe FilestoreResponse(
         id = "id",
         fileName = "file-name.txt",
