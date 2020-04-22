@@ -1,4 +1,103 @@
+// Find first ancestor of el with tagName
+// or undefined if not found
+function upTo(el, tagName) {
+    tagName = tagName.toLowerCase();
+
+    while (el && el.parentNode) {
+      el = el.parentNode;
+      if (el.tagName && el.tagName.toLowerCase() == tagName) {
+        return el;
+      }
+    }
+
+    // Many DOM methods return null if they don't
+    // find the element they are searching for
+    // It would be OK to omit the following and just
+    // return undefined
+    return null;
+  }
+
 $(document).ready(function () {
+
+    // =====================================================
+    // Country autocomplete
+    // =====================================================
+
+    if (typeof accessibleAutocomplete != 'undefined' && document.querySelector('.js-autocomplete') != null) {
+        // load autocomplete
+        accessibleAutocomplete.enhanceSelectElement({
+            selectElement: document.querySelector('.js-autocomplete')
+        });
+
+        // =====================================================
+        // Polyfill autocomplete once loaded
+        // =====================================================
+        var checkForLoad = setInterval(checkForAutocompleteLoad, 50);
+        var originalSelect = document.querySelector('.js-autocomplete');
+        var parentForm = upTo(originalSelect, 'form');
+
+        function polyfillAutocomplete(){
+            console.log('polyfilling')
+            var combo = parentForm.querySelector('[role="combobox"]');
+            // =====================================================
+            // Update autocomplete once loaded with fallback's aria attributes
+            // Ensures hint and error are read out before usage instructions
+            // =====================================================
+            if(originalSelect && originalSelect.getAttribute('aria-describedby') > ""){
+                if(parentForm){
+                    if(combo){
+                        combo.setAttribute('aria-describedby', originalSelect.getAttribute('aria-describedby') + ' ' + combo.getAttribute('aria-describedby'));
+                    }
+                }
+            }
+
+            // =====================================================
+            // Ensure when user replaces valid answer with a non-valid answer, then valid answer is not retained
+            // =====================================================
+            var holdSubmit = true;
+            parentForm.addEventListener('submit', function(e){
+                if(holdSubmit){
+                    e.preventDefault()
+                    if(originalSelect.querySelectorAll('[selected]').length > 0 || originalSelect.value > ""){
+
+                        var resetSelect = false;
+
+                        // if(originalSelect.value > "" && combo.value == ""){
+                        //     resetSelect = true;
+                        // }
+
+                        if(originalSelect.value){
+                            if(combo.value != originalSelect.querySelector('option[value="' + originalSelect.value +'"]').text){
+                                resetSelect = true;
+                            }
+                        }
+                        if(resetSelect){
+                            originalSelect.value = "";
+                            if(originalSelect.querySelectorAll('[selected]').length > 0){
+                                originalSelect.querySelectorAll('[selected]')[0].removeAttribute('selected');
+                            }
+                        }
+                    }
+
+                    holdSubmit = false;
+                    //parentForm.submit();
+                    HTMLFormElement.prototype.submit.call(parentForm); // because submit buttons have id of "submit" which masks the form's natural form.submit() function
+                }
+            })
+
+        }
+        function checkForAutocompleteLoad(){
+            if(parentForm.querySelector('[role="combobox"]')){
+                clearInterval(checkForLoad)
+                polyfillAutocomplete();
+            }
+        }
+
+
+    }
+
+
+
 
 
     // =====================================================
@@ -10,9 +109,10 @@ $(document).ready(function () {
     showHideContent.init()
 
     // =====================================================
-    // Handle number inputs
+    // Initialise link as button polyfill
+    // Adds button functionality to links styled as buttons
     // =====================================================
-    numberInputs();
+    GOVUK.shimLinksWithButtonRole.init()
 
     // =====================================================
     // Back link mimics browser back functionality
@@ -31,21 +131,6 @@ $(document).ready(function () {
             window.history.back();
         }
     })
-
-    // =====================================================
-    // DAC Report - anchor tags with role button should behave like a button element and submit when user presses Space (code 32)
-    // =====================================================
-    $('a[role="button"]')
-        .on('keydown', function (e) {
-            if (e.which === 32) {
-                e.preventDefault();
-                e.target.click();
-            }
-        })
-        .attr({
-            draggable: "false"
-        });
-
 
     //======================================================
     // Move immediate focus to any error summary
@@ -138,117 +223,3 @@ $(document).ready(function () {
     }
 });
 
-
-function numberInputs() {
-    // =====================================================
-    // Set currency fields to number inputs on touch devices
-    // this ensures on-screen keyboards display the correct style
-    // don't do this for FF as it has issues with trailing zeroes
-    // =====================================================
-    if ($('html.touchevents').length > 0 && window.navigator.userAgent.indexOf("Firefox") == -1) {
-        $('[data-type="currency"] > input[type="text"], [data-type="percentage"] > input[type="text"]').each(function () {
-            $(this).attr('type', 'number');
-            $(this).attr('step', 'any');
-            $(this).attr('min', '0');
-        });
-    }
-
-    // =====================================================
-    // Disable mouse wheel and arrow keys (38,40) for number inputs to prevent mis-entry
-    // also disable commas (188) as they will silently invalidate entry on Safari 10.0.3 and IE11
-    // =====================================================
-    $("form").on("focus", "input[type=number]", function (e) {
-        $(this).on('wheel', function (e) {
-            e.preventDefault();
-        });
-    });
-    $("form").on("blur", "input[type=number]", function (e) {
-        $(this).off('wheel');
-    });
-    $("form").on("keydown", "input[type=number]", function (e) {
-        if (e.which == 38 || e.which == 40 || e.which == 188)
-            e.preventDefault();
-    });
-}
-
-
-
-// ================================================================================
-//  Function to enhance any select element into an accessible auto-complete (by id)
-// ================================================================================
-function enhanceSelectIntoAutoComplete(selectElementId, dataSource, submitOnConfirm = false) {
-
-  accessibleAutocomplete.enhanceSelectElement({
-    selectElement: document.querySelector('#' + selectElementId),
-    displayMenu: 'inline',
-    minLength: 2,
-    source: customSuggest,
-    confirmOnBlur: true,
-    onConfirm: function(confirmed) {
-
-      //Workaround the bug sending confirmed = undefined when confirmOnBlur == true
-      let foundInData = dataSource.find(e => e.displayName === $('#'+selectElementId).val())
-      let element = !!confirmed ? confirmed : foundInData
-
-      if(!!element) {
-        $('select[name="'+selectElementId+'"]').val(element.code);
-        if(submitOnConfirm) {
-          window.setTimeout(function(){
-            $('form').submit();
-          }, 100);
-        }
-      }
-      else {
-        $('select[name="'+selectElementId+'"]').val('')
-      }
-    },
-    templates: {
-      inputValue: function(result) {
-        return (!!result && result.displayName ? result.displayName : '');
-      },
-      suggestion: function(result) {
-        return !!result.displayName ? result.displayName : result;
-      }
-    }
-  })
-
-  function customSuggest (query, syncResults) {
-    var results = dataSource
-    syncResults(query ? results.filter(function (result) {
-      return (result.synonyms.findIndex( function(s) { return s.toLowerCase().indexOf(query.toLowerCase()) !== -1 } ) !== -1 ) || (result.displayName.toLowerCase().indexOf(query.toLowerCase()) !== -1)
-    }) : [])
-  }
-
-}
-
-function onKeypressButton(e) {
-    // Need both, 'keyCode' and 'which' to work in all browsers.
-    var code = e.keyCode || e.which,
-    spaceKey = 32;
-    //If user press space key:
-    if (code == spaceKey) {
-        // Do same thing as onclick:
-        $(e.currentTarget)[0].click();
-        e.preventDefault();
-        e.stopImmediatePropagation();
-    }
-}
-
-/**
- * detect IE
- * returns version of IE or false, if browser is not Internet Explorer
- * https://codepen.io/gapcode/pen/vEJNZN
- */
-function detectIE() {
-  var ua = window.navigator.userAgent;
-
-  var trident = ua.indexOf('Trident/');
-  if (trident > 0) {
-    // IE 11 => return version number
-    var rv = ua.indexOf('rv:');
-    return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
-  }
-
-  // other browser
-  return false;
-}
