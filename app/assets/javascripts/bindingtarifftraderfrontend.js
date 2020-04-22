@@ -37,7 +37,6 @@ $(document).ready(function () {
         var parentForm = upTo(originalSelect, 'form');
 
         function polyfillAutocomplete(){
-            console.log('polyfilling')
             var combo = parentForm.querySelector('[role="combobox"]');
             // =====================================================
             // Update autocomplete once loaded with fallback's aria attributes
