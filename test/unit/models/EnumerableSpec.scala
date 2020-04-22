@@ -17,7 +17,6 @@
 package models
 
 import org.scalatest.{EitherValues, MustMatchers, OptionValues, WordSpec}
-import play.api.data.validation.ValidationError
 import play.api.libs.json._
 
 object EnumerableSpec {

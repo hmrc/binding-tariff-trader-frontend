@@ -17,7 +17,7 @@
 package views
 
 import models.{Case, oCase}
-import play.twirl.api.{Html, HtmlFormat}
+import play.twirl.api.HtmlFormat
 import utils.Dates
 import views.behaviours.ViewBehaviours
 import views.html.ruling_information
@@ -28,7 +28,6 @@ class RulingInformationViewSpec extends ViewBehaviours {
 
   private val rulingCase = oCase.btiCaseWithDecision
   private val rulingCaseNoExplanation = oCase.btiCaseWithDecisionNoExplanation
-  private val holder = rulingCase.application.holder
   private val ruling = rulingCase.decision.getOrElse(throw new Exception("Bad test data"))
 
 

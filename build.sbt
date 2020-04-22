@@ -47,6 +47,6 @@ lazy val root = (project in file("."))
 // Coverage configuration
 coverageExcludedFiles := "<empty>;Reverse.*;.*filters.*;.*handlers.*;.*components.*;.*repositories.*;" +
   ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;"
-coverageMinimum := 90
+coverageMinimum := 94
 coverageFailOnMinimum := true
 coverageHighlighting := true

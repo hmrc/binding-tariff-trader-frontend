@@ -18,14 +18,12 @@ package controllers
 
 import controllers.actions._
 import models.requests.IdentifierRequest
-import navigation.FakeNavigator
-import play.api.mvc.Call
 import play.api.test.Helpers._
 import views.html.beforeYouStart
 
 class BeforeYouStartControllerSpec extends ControllerSpecBase {
 
-  private def controller(identifier: IdentifierAction = FakeIdentifierAction) =
+  private def controller(identifier: IdentifierAction) =
     new BeforeYouStartController(
       frontendAppConfig,
       identifier,

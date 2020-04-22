@@ -26,12 +26,11 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.Matchers._
 import pages.SupportingMaterialFileListPage
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
+import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
-import play.api.mvc.{Call, MultipartFormData}
 import play.api.test.Helpers._
 import service.FileService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -46,8 +45,6 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
   private val cacheConnector = mock[DataCacheConnector]
   private val formProvider = new UploadSupportingMaterialMultipleFormProvider()
   private val form = formProvider()
-
-  private implicit val headers: HeaderCarrier = HeaderCarrier()
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new UploadSupportingMaterialMultipleController(

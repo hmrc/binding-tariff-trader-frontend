@@ -16,10 +16,7 @@
 
 package controllers
 
-import java.nio.charset.Charset
-
 import akka.stream.Materializer
-import akka.util.ByteString
 import audit.AuditService
 import connectors.FakeDataCacheConnector
 import controllers.actions._
@@ -32,7 +29,7 @@ import org.scalatest.BeforeAndAfterEach
 import pages.{DeclarationPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
 import play.api.libs.json.{JsString, Json}
-import play.api.mvc.{Call, Result}
+import play.api.mvc.Call
 import play.api.test.Helpers._
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier

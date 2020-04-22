@@ -51,7 +51,7 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private def viewAsString(form: Form[RegisterBusinessRepresenting] = form) = registerBusinessRepresenting(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequest, messages).toString
+  private def viewAsString(form: Form[RegisterBusinessRepresenting]) = registerBusinessRepresenting(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequest, messages).toString
 
   "RegisterBusinessRepresenting Controller" must {
 

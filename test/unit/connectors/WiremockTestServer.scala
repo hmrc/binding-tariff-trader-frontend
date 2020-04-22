@@ -16,7 +16,6 @@
 
 package connectors
 
-import com.codahale.metrics.SharedMetricRegistries
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.configureFor
 import org.scalatest.{BeforeAndAfterAll, Suite}

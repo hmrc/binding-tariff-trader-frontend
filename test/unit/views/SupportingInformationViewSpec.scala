@@ -17,10 +17,10 @@
 package views
 
 import controllers.routes
-import play.api.data.Form
 import forms.SupportingInformationFormProvider
 import models.NormalMode
-import views.behaviours.{ViewBehaviours, YesNoViewBehaviours}
+import play.api.data.Form
+import views.behaviours.YesNoViewBehaviours
 import views.html.supportingInformation
 
 class SupportingInformationViewSpec extends YesNoViewBehaviours {
@@ -29,9 +29,9 @@ class SupportingInformationViewSpec extends YesNoViewBehaviours {
 
   val form = new SupportingInformationFormProvider()()
 
-  def createView = () => supportingInformation(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  private def createView = () => supportingInformation(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => supportingInformation(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  private def createViewUsingForm = (form: Form[_]) => supportingInformation(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "SupportingInformation view" must {
     behave like normalPage(createView, messageKeyPrefix)()

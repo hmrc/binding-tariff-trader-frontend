@@ -18,7 +18,6 @@ package controllers
 
 import base.SpecBase
 import controllers.actions.FakeDataRetrievalAction
-import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 trait ControllerSpecBase extends SpecBase {

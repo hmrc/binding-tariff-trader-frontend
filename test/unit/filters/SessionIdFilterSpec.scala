@@ -25,7 +25,7 @@ import play.api.Application
 import play.api.http.{DefaultHttpFilters, HttpFilters}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import play.api.mvc.{Action, Results}
+import play.api.mvc._
 import play.api.routing.Router
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -49,6 +49,13 @@ object SessionIdFilterSpec {
 
 class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
   import SessionIdFilterSpec._
+
+  private lazy val baseApp = new GuiceApplicationBuilder().build()
+  private lazy val cc = baseApp.injector.instanceOf[MessagesControllerComponents]
+
+  def Action: ActionBuilder[MessagesRequest, AnyContent] = {
+    cc.messagesActionBuilder.compose(cc.actionBuilder)
+  }
 
   val router: Router = {
 

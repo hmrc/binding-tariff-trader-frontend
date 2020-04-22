@@ -17,7 +17,7 @@
 package views
 
 import models.response.FilestoreResponse
-import models.{Case, Country, oCase}
+import models.{Case, oCase}
 import org.jsoup.nodes.Document
 import utils.Dates
 import views.html.templates.applicationTemplate

@@ -18,7 +18,6 @@ package service
 
 import base.SpecBase
 import models.Country
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 class CountriesServiceSpec extends SpecBase {
 

@@ -17,8 +17,6 @@
 package controllers
 
 import controllers.actions._
-import navigation.FakeNavigator
-import play.api.mvc.Call
 import play.api.test.Helpers._
 import views.html.acceptItemInformationList
 

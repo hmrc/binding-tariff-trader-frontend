@@ -25,7 +25,6 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.Matchers._
 import org.scalatestplus.mockito.MockitoSugar
 import pages.UploadWrittenAuthorisationPage
 import play.api.data.Form
@@ -47,7 +46,6 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
   private val cacheConnector = mock[DataCacheConnector]
   private val formProvider = new UploadWrittenAuthorisationFormProvider()
   private val form = formProvider()
-  private val testAnswer = "answer"
 
   override protected def afterEach(): Unit = {
     super.beforeEach()

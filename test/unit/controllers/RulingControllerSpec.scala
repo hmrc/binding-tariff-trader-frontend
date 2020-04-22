@@ -20,7 +20,7 @@ import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import models.oCase
 import org.mockito.ArgumentMatchers.any
 import org.mockito.BDDMockito.given
-import play.api.test.Helpers.{redirectLocation, status, _}
+import play.api.test.Helpers.{redirectLocation, _}
 import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
 

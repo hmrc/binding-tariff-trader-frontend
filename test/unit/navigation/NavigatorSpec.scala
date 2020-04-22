@@ -20,7 +20,6 @@ import base.SpecBase
 import controllers.routes
 import models.ImportOrExport.{Advice, Import}
 import models.{ImportOrExport, _}
-import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.Mockito._
 import pages._
 

@@ -17,7 +17,6 @@
 package forms.behaviours
 
 import forms.FormSpec
-import org.scalatest.prop.PropertyChecks
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.data.{Form, FormError}
 
