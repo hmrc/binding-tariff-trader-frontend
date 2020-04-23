@@ -16,9 +16,6 @@
 
 package base
 
-import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import config.FrontendAppConfig
 import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
