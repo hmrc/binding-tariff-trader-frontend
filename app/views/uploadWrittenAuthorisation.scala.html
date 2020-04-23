@@ -35,19 +35,14 @@
 
         @components.heading(messages("uploadWrittenAuthorisation.heading"))
 
-        <div class="form-group">
-            <fieldset>
-                <div aria-label="Information">
-                    <p> @messages("uploadWrittenAuthorisation.upload.title") </p>
-                    <ul class="list list-bullet">
-                        <li>@messages("uploadWrittenAuthorisation.upload.timeLimit")</li>
-                        <li>@messages("uploadWrittenAuthorisation.upload.document")</li>
-                        <li>@messages("uploadWrittenAuthorisation.upload.restrictionSize")</li>
-                        <li>@messages("uploadWrittenAuthorisation.upload.typeOfFiles")</li>
-                    </ul>
-                </div>
-            </fieldset>
-        </div>
+        <p> @messages("uploadWrittenAuthorisation.upload.title") </p>
+        <ul class="list list-bullet">
+            <li>@messages("uploadWrittenAuthorisation.upload.timeLimit")</li>
+            <li>@messages("uploadWrittenAuthorisation.upload.document")</li>
+            <li>@messages("uploadWrittenAuthorisation.upload.restrictionSize")</li>
+            <li>@messages("uploadWrittenAuthorisation.upload.typeOfFiles")</li>
+        </ul>
+
 
         <div class="mt-3">
                 @components.input_file(
