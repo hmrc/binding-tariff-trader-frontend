@@ -16,9 +16,7 @@
 
 @import utils.Dates
 
-@import views.html.components.pagination
 @(cases: Paged[Case])(implicit messages: Messages)
-
 
 @paginate(containerClass : String, idPrefix: String) = {
     @pagination(

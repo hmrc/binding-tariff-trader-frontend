@@ -16,18 +16,17 @@
 
 package service
 
+import base.SpecBase
 import config.{Crypto, FrontendAppConfig}
 import connectors.PdfGeneratorServiceConnector
 import models.PdfFile
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
-import org.scalatest.mockito.MockitoSugar
 import play.twirl.api.Html
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future._
 
-class PdfServiceSpec extends UnitSpec with MockitoSugar {
+class PdfServiceSpec extends SpecBase {
 
   private val pdfHtml = mock[Html]
   private val config = mock[FrontendAppConfig]

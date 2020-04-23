@@ -16,7 +16,6 @@
 
 package controllers
 
-import controllers.actions.FakeIdentifierAction
 import play.api.test.Helpers._
 import views.html.unauthorised
 
@@ -24,13 +23,19 @@ class UnauthorisedControllerSpec extends ControllerSpecBase {
 
   "Unauthorised Controller" must {
     "return 200 for a GET" in {
-      val result = new UnauthorisedController(frontendAppConfig, FakeIdentifierAction, messagesApi).onPageLoad()(fakeRequest)
-      status(result) mustBe OK
+      val result = new UnauthorisedController(
+        frontendAppConfig,
+        cc
+      ).onPageLoad()(fakeRequest)
+      status(result) shouldBe OK
     }
 
     "return the correct view for a GET" in {
-      val result = new UnauthorisedController(frontendAppConfig, FakeIdentifierAction, messagesApi).onPageLoad()(fakeRequest)
-      contentAsString(result) mustBe unauthorised(frontendAppConfig)(fakeRequest, messages).toString
+      val result = new UnauthorisedController(
+        frontendAppConfig,
+        cc
+      ).onPageLoad()(fakeRequest)
+      contentAsString(result) shouldBe unauthorised(frontendAppConfig)(fakeRequest, messages).toString
     }
   }
 }

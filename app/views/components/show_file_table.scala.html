@@ -16,7 +16,7 @@
 
 @import views.ViewUtils._
 
-@(files: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(files: Seq[FileAttachment], mode: Mode)(implicit messages: Messages)
 
 <dl class="file-list mb-5">
     @for((file: FileAttachment, index: Int) <- files.zipWithIndex) {

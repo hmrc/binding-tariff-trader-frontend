@@ -20,18 +20,20 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import models._
 import org.apache.http.HttpStatus
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.Upstream5xxResponse
+import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
 
 class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
-  private val connector = new BindingTariffClassificationConnector(appConfig, authenticatedHttpClient)
+  private val connector = new BindingTariffClassificationConnector(authenticatedHttpClient)(mockConfig)
+
+  private def withHeaderCarrier(key: String, value: String) = HeaderCarrier(extraHeaders = Seq(key -> value))
 
   "Connector 'Create Case'" should {
     val request = oCase.newBtiCaseExample
     val requestJSON = Json.toJson(request).toString()
 
-    "Create valid case" in {
+    "Create valid case with x-api-token" in {
       val response = oCase.btiCaseExample
       val responseJSON = Json.toJson(response).toString()
 
@@ -43,15 +45,15 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.createCase(request)) shouldBe response
+      await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", "custom token"))) shouldBe response
 
       verify(
         postRequestedFor(urlEqualTo("/cases"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo("custom token"))
       )
     }
 
-    "Find valid case" in {
+    "Find valid case with x-api-token" in {
       val responseJSON = Json.toJson(oCase.btiCaseExample).toString()
 
       stubFor(get(urlEqualTo("/cases/id"))
@@ -61,15 +63,17 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.findCase("id")) shouldBe Some(oCase.btiCaseExample)
+      await(
+        connector.findCase("id")(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+      ) shouldBe Some(oCase.btiCaseExample)
 
       verify(
         getRequestedFor(urlEqualTo("/cases/id"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
-    "propagate errors" in {
+    "propagate errors with x-api-token" in {
       stubFor(post(urlEqualTo("/cases"))
         .willReturn(aResponse()
           .withStatus(HttpStatus.SC_BAD_GATEWAY)
@@ -77,16 +81,70 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       intercept[Upstream5xxResponse] {
-        await(connector.createCase(request))
+        await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", appConfig.apiToken)))
       }
 
       verify(
         postRequestedFor(urlEqualTo("/cases"))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+    "Create valid case without x-api-token" in {
+      val response = oCase.btiCaseExample
+      val responseJSON = Json.toJson(response).toString()
+
+      stubFor(post(urlEqualTo("/cases"))
+        .withRequestBody(equalToJson(requestJSON))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_OK)
+          .withBody(responseJSON)
+        )
+      )
+
+      await(connector.createCase(request)(hc)) shouldBe response
+
+      verify(
+        postRequestedFor(urlEqualTo("/cases"))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+    "Find valid case without x-api-token" in {
+      val responseJSON = Json.toJson(oCase.btiCaseExample).toString()
+
+      stubFor(get(urlEqualTo("/cases/id"))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_OK)
+          .withBody(responseJSON)
+        )
+      )
+
+      await(connector.findCase("id")(hc)) shouldBe Some(oCase.btiCaseExample)
+
+      verify(
+        getRequestedFor(urlEqualTo("/cases/id"))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+    "propagate errors without x-api-token" in {
+      stubFor(post(urlEqualTo("/cases"))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_BAD_GATEWAY)
+        )
+      )
+
+      intercept[Upstream5xxResponse] {
+        await(connector.createCase(request)(hc))
+      }
+
+      verify(
+        postRequestedFor(urlEqualTo("/cases"))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
   }
-
 
   "Connector 'Find Cases By'" should {
 
@@ -100,11 +158,19 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW, CaseStatus.OPEN), SearchPagination(2), Sort())) shouldBe Paged.empty[Case]
+      await(
+        connector.findCasesBy(
+          "eori1234567",
+          Set(CaseStatus.NEW,
+            CaseStatus.OPEN),
+          SearchPagination(2),
+          Sort()
+        )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+      ) shouldBe Paged.empty[Case]
 
       verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
@@ -118,11 +184,19 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       )
 
-      await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW, CaseStatus.OPEN), SearchPagination(2), Sort())) shouldBe Paged(Seq(oCase.btiCaseExample))
+      await(
+        connector.findCasesBy(
+          "eori1234567",
+          Set(CaseStatus.NEW,
+            CaseStatus.OPEN),
+          SearchPagination(2),
+          Sort()
+        )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+      ) shouldBe Paged(Seq(oCase.btiCaseExample))
 
       verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
@@ -136,12 +210,18 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       intercept[Upstream5xxResponse] {
-        await(connector.findCasesBy("eori1234567", Set(CaseStatus.NEW), NoPagination(), Sort()))
+        await(
+          connector.findCasesBy(
+            "eori1234567",
+            Set(CaseStatus.NEW),
+            NoPagination(),
+            Sort()
+          )(withHeaderCarrier("X-Api-Token", appConfig.apiToken)))
       }
 
       verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(realConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 

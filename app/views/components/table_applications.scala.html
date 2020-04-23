@@ -15,70 +15,96 @@
  *@
 
 @import utils.Dates
-@import views.html.components.pagination
-@(cases: Paged[Case])(implicit messages: Messages)
 
-@paginate(containerClass : String, idPrefix: String) = {
-    @pagination(
-        id = s"$idPrefix-applications-pagination",
-        singularName =  messages("case.applications.pagination.singular"),
-        pluralName = messages("case.applications.pagination.plural"),
-        pager = cases,
-        containerClass = Some(containerClass),
-        onChange = page => controllers.routes.IndexController.getApplications(page)
-    )
-}
+@(
+        cases: Paged[Case]
+)(implicit messages: Messages)
 
-@if(cases.isEmpty){
-    <div id="application-list-empty" class="tabs__panel">
-        <div class="bold-small my-3 pl-1">
+    @paginate(containerClass: String, idPrefix: String) = {
+        @pagination(
+            id = s"$idPrefix-applications-pagination",
+            singularName = messages("case.applications.pagination.singular"),
+            pluralName = messages("case.applications.pagination.plural"),
+            pager = cases,
+            containerClass = Some(containerClass),
+            onChange = page => controllers.routes.IndexController.getApplications(page)
+        )
+    }
+
+    @if(cases.isEmpty) {
+        <div id="application-list-empty" class="tabs__panel">
+            <div class="bold-small my-3 pl-1">
             @messages("case.tabs.applications.notSubmitted")
+            </div>
         </div>
-    </div>
-}else{
-    <div id="application-list" class="tabs__panel">
-        <div class="tabs__panel__content">
+    } else {
+        <div id="application-list" class="tabs__panel">
+            <div class="tabs__panel__content">
 
-            @paginate("mb-2", "top")
+                @paginate("mb-2", "top")
 
-            <table id="applications-list-table">
-                <thead>
-                    <tr>
-                        <th scope="col">@messages("case.tabs.applications.table.reference")</th>
-                        <th scope="col">@messages("case.tabs.applications.table.itemName")</th>
-                        <th scope="col">@messages("case.tabs.applications.table.dateSubmitted")</th>
-                        <th scope="col">@messages("case.tabs.applications.table.status")</th>
-                        <th scope="col">@messages("case.tabs.applications.table.download")</th>
-                    </tr>
-                </thead>
-                <tbody id="application-list-body">
-                         @for((c: Case, index: Int) <- cases.results.zipWithIndex) {
-                        <tr id="application-list-row-@{index}">
-                            <td id="application-list-row-@{index}-reference">@c.reference</td>
-                            <td id="application-list-row-@{index}-item_name">@c.application.goodName</td>
-                            <td id="application-list-row-@{index}-date_submitted">@Dates.format(c.createdDate)</td>
-                            <td id="application-list-row-@{index}-status">
-                                @c.status match {
-                                    case CaseStatus.NEW | CaseStatus.OPEN | CaseStatus.SUSPENDED => { @messages("case.application.status.inProgress") }
-                                    case CaseStatus.SUPPRESSED | CaseStatus.REJECTED => { @messages("case.application.status.rejected") }
-                                    case CaseStatus.REFERRED => { <span class="color-red"> @messages("case.application.status.infoRequested") </span> }
-                                    case CaseStatus.COMPLETED | CaseStatus.CANCELLED => { <span class="color-green"> @messages("case.application.status.completed") </span> }
-                                    case CaseStatus.DRAFT  => { @messages("case.application.status.draft") }
+                <table id="applications-list-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">@messages("case.tabs.applications.table.reference")</th>
+                            <th scope="col">@messages("case.tabs.applications.table.itemName")</th>
+                            <th scope="col">@messages("case.tabs.applications.table.dateSubmitted")</th>
+                            <th scope="col">@messages("case.tabs.applications.table.status")</th>
+                            <th scope="col">@messages("case.tabs.applications.table.download")</th>
+                        </tr>
+                    </thead>
+                    <tbody id="application-list-body">
+                    @for((c: Case, index: Int) <- cases.results.zipWithIndex) {
+                        <tr id="application-list-row-@{
+                            index
+                        }">
+                            <td id="application-list-row-@{
+                                index
+                            }-reference">@c.reference</td>
+                            <td id="application-list-row-@{
+                                index
+                            }-item_name">@c.application.goodName</td>
+                            <td id="application-list-row-@{
+                                index
+                            }-date_submitted">@Dates.format(c.createdDate)</td>
+                            <td id="application-list-row-@{
+                                index
+                            }-status">
+                            @c.status match {
+                                case CaseStatus.NEW | CaseStatus.OPEN | CaseStatus.SUSPENDED => {
+                                    @messages("case.application.status.inProgress")
                                 }
+                                case CaseStatus.SUPPRESSED | CaseStatus.REJECTED => {
+                                    @messages("case.application.status.rejected")
+                                }
+                                case CaseStatus.REFERRED => {
+                                    <span class="color-red"> @messages("case.application.status.infoRequested") </span>
+                                }
+                                case CaseStatus.COMPLETED | CaseStatus.CANCELLED => {
+                                    <span class="color-green"> @messages("case.application.status.completed") </span>
+                                }
+                                case CaseStatus.DRAFT => {
+                                    @messages("case.application.status.draft")
+                                }
+                            }
                             </td>
-                            <td id="application-list-row-@{index}-download">
-                                <a id="application-list-row-@{index}-view-application-link" href="@routes.ApplicationController.viewApplication(c.reference)">
+                            <td id="application-list-row-@{
+                                index
+                            }-download">
+                                <a id="application-list-row-@{
+                                    index
+                                }-view-application-link" href="@routes.ApplicationController.viewApplication(c.reference)">
                                     <span aria-hidden="true">@messages("case.application.viewApplication")</span>
                                     <span class="visually-hidden">@messages("case.application.viewApplication.hidden", c.reference)</span>
                                 </a>
                             </td>
                         </tr>
                     }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
 
-            @paginate("mt-2", "bottom")
+                @paginate("mt-2", "bottom")
 
+            </div>
         </div>
-    </div>
-}
+    }

@@ -17,51 +17,56 @@
 package connectors
 
 import akka.actor.ActorSystem
+import base.SpecBase
 import config.FrontendAppConfig
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
-import play.api.Environment
-import play.api.inject.Injector
+import org.scalatest.BeforeAndAfterAll
 import play.api.libs.ws.WSClient
-import play.api.test.FakeApplication
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
+import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.test.UnitSpec
+import unit.base.WireMockObject
 
-trait ConnectorTest extends UnitSpec with WiremockTestServer
- with MockitoSugar with ResourceFiles {
+import scala.io.Source
 
-  override lazy val fakeApplication = FakeApplication()
+trait ConnectorTest
+  extends SpecBase
+    with BeforeAndAfterAll {
 
-  protected lazy val injector: Injector = fakeApplication.injector
+  protected lazy val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
-  private val actorSystem = ActorSystem.create("testActorSystem")
+  protected lazy val fakeAuthToken = "AUTH_TOKEN"
+  protected lazy val wsClient: WSClient = injector.instanceOf[WSClient]
+  protected lazy val authenticatedHttpClient = new AuthenticatedHttpClient(
+    auditing,
+    wsClient,
+    actorSystem
+  )(appConfig)
 
-  protected implicit val realConfig: FrontendAppConfig = fakeApplication.injector.instanceOf[FrontendAppConfig]
-  protected val appConfig: FrontendAppConfig = mock[FrontendAppConfig]
-
-  protected val fakeAuthToken = "AUTH_TOKEN"
+  protected lazy val standardHttpClient = new DefaultHttpClient(
+    fakeApplication.configuration,
+    auditing,
+    wsClient,
+    actorSystem
+  )
 
   protected implicit val hc: HeaderCarrier = HeaderCarrier()
-
-  private val environment = injector.instanceOf[Environment]
-  private val auditConnector = new DefaultAuditConnector(fakeApplication.configuration, environment)
-
-  protected val wsClient: WSClient = fakeApplication.injector.instanceOf[WSClient]
-
-  protected val authenticatedHttpClient = new AuthenticatedHttpClient(auditConnector, wsClient, actorSystem)
-  protected val standardHttpClient = new DefaultHttpClient(fakeApplication.configuration, auditConnector, wsClient, actorSystem)
+  private lazy val actorSystem = ActorSystem.create("testActorSystem")
+  private lazy val auditing = injector.instanceOf[HttpAuditing]
 
   override def beforeAll(): Unit = {
     super.beforeAll()
 
-    when(appConfig.bindingTariffFileStoreUrl) thenReturn wireMockUrl
-    when(appConfig.bindingTariffClassificationUrl) thenReturn wireMockUrl
-    when(appConfig.pdfGeneratorUrl) thenReturn wireMockUrl
-    when(appConfig.emailUrl) thenReturn wireMockUrl
+    when(mockConfig.bindingTariffFileStoreUrl) thenReturn WireMockObject.wireMockUrl
+    when(mockConfig.bindingTariffClassificationUrl) thenReturn WireMockObject.wireMockUrl
+    when(mockConfig.pdfGeneratorUrl) thenReturn WireMockObject.wireMockUrl
+    when(mockConfig.emailUrl) thenReturn WireMockObject.wireMockUrl
 
-    when(appConfig.apiToken) thenReturn fakeAuthToken
+    when(mockConfig.apiToken) thenReturn fakeAuthToken
   }
 
+  protected def fromResource(path: String): String = {
+    val url = getClass.getClassLoader.getResource(path)
+    Source.fromURL(url, "UTF-8").getLines().mkString
+  }
 }

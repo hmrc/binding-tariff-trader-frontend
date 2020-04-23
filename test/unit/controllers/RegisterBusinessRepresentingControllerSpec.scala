@@ -19,11 +19,8 @@ package controllers
 import connectors.FakeDataCacheConnector
 import controllers.actions._
 import forms.RegisterBusinessRepresentingFormProvider
-import models.{Country, NormalMode, RegisterBusinessRepresenting}
+import models.{NormalMode, RegisterBusinessRepresenting}
 import navigation.FakeNavigator
-import org.scalatest.mock
-import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import pages.RegisterBusinessRepresentingPage
 import play.api.data.Form
 import play.api.libs.json.Json
@@ -33,26 +30,35 @@ import service.CountriesService
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.registerBusinessRepresenting
 
-class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase with MockitoSugar{
+class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
-
+  val countriesService = new CountriesService
   private val formProvider = new RegisterBusinessRepresentingFormProvider()
   private val form: Form[RegisterBusinessRepresenting] = formProvider()
-  val countriesService = new CountriesService
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new RegisterBusinessRepresentingController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, countriesService)
+    new RegisterBusinessRepresentingController(
+      frontendAppConfig,
+      FakeDataCacheConnector,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl,
+      formProvider,
+      countriesService,
+      cc
+    )
 
-  private def viewAsString(form: Form[RegisterBusinessRepresenting] = form) = registerBusinessRepresenting(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequest, messages).toString
+  private def onwardRoute = Call("GET", "/foo")
+
+  private def viewAsString(form: Form[RegisterBusinessRepresenting]) = registerBusinessRepresenting(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequest, messages).toString
 
   "RegisterBusinessRepresenting Controller" must {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe OK
+      status(result) shouldBe OK
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
@@ -70,7 +76,7 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase with
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(RegisterBusinessRepresenting("validEori123", "valid-business-name", "valid-address-line", "valid-town", "valid-post-code", "valid-country")))
+      contentAsString(result) shouldBe viewAsString(form.fill(RegisterBusinessRepresenting("validEori123", "valid-business-name", "valid-address-line", "valid-town", "valid-post-code", "valid-country")))
     }
 
     "redirect to the next page when valid data is submitted" in {
@@ -85,8 +91,8 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase with
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
@@ -95,15 +101,15 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase with
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe BAD_REQUEST
-      contentAsString(result) mustBe viewAsString(boundForm)
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) shouldBe viewAsString(boundForm)
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
       val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
@@ -118,8 +124,8 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase with
 
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
   }
 }

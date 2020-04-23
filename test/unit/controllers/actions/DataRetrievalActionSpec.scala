@@ -21,7 +21,7 @@ import connectors.DataCacheConnector
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -45,7 +45,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, "id", Some("eori-789012")))
 
         whenReady(futureResult) {
-          _.userAnswers.isEmpty mustBe true
+          _.userAnswers.isEmpty shouldBe true
         }
       }
 
@@ -61,7 +61,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, "id", Some("eori-789012")))
 
         whenReady(futureResult) {
-          _.userAnswers.isDefined mustBe true
+          _.userAnswers.isDefined shouldBe true
         }
       }
 

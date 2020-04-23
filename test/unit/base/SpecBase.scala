@@ -16,34 +16,52 @@
 
 package base
 
-import com.codahale.metrics.SharedMetricRegistries
 import config.FrontendAppConfig
 import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
-import org.scalatestplus.play.PlaySpec
-import play.api.i18n.{Messages, MessagesApi}
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Application
+import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
+import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.Files.TemporaryFileCreator
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.test.WithFakeApplication
+import uk.gov.hmrc.play.test.UnitSpec
+import unit.base.WireMockObject
 
-trait SpecBase extends PlaySpec with WithFakeApplication {
+trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
 
-  SharedMetricRegistries.clear()
+  override def fakeApplication: Application = GuiceApplicationBuilder()
+    .configure(
+    "metrics.jvm" -> false,
+    "metrics.enabled" -> false
+  ).build()
 
   protected lazy val injector: Injector = fakeApplication.injector
 
   def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
-  def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
-
-  def fakeRequest = FakeRequest()
+  implicit val cc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
+  implicit val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+  implicit val lang: Lang = appConfig.defaultLang
 
   def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
 
   def fakeRequestWithNotOptionalEoriAndCache = DataRequest(fakeRequest, "id", Some("eori-789012"), UserAnswers(CacheMap("id", Map.empty)))
 
+  def fakeRequest = FakeRequest()
+
   def fakeRequestWithEoriAndCache = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), Some(UserAnswers(CacheMap("id", Map.empty))))
 
   def messages: Messages = messagesApi.preferred(fakeRequest)
+
+  def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
+
+  def tempFileCreator: TemporaryFileCreator = injector.instanceOf[TemporaryFileCreator]
+
+  WireMockObject.start()
+
 }

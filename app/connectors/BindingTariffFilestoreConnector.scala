@@ -34,7 +34,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class BindingTariffFilestoreConnector @Inject()(appConfig: FrontendAppConfig, ws: WSClient, http: AuthenticatedHttpClient) {
+class BindingTariffFilestoreConnector @Inject()(
+                                                 ws: WSClient,
+                                                 client: AuthenticatedHttpClient
+                                               )(implicit appConfig: FrontendAppConfig) extends InjectAuthHeader {
 
   def upload(file: MultipartFormData.FilePart[TemporaryFile])
             (implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
@@ -43,23 +46,23 @@ class BindingTariffFilestoreConnector @Inject()(appConfig: FrontendAppConfig, ws
       "file",
       file.filename,
       file.contentType,
-      FileIO.fromPath(file.ref.file.toPath)
+      FileIO.fromPath(file.ref.path)
     )
 
     ws.url(s"${appConfig.bindingTariffFileStoreUrl}/file")
-      .withHeaders(hc.headers: _*)
-      .withHeaders(http.authHeaders(appConfig))
+      .addHttpHeaders(hc.headers: _*)
+      .addHttpHeaders(authHeaders(appConfig.apiToken))
       .post(Source(List(filePart)))
       .map(response => Json.fromJson[FilestoreResponse](Json.parse(response.body)).get)
 
   }
 
   def get(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
-    http.GET[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}")
+    client.GET[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}")(implicitly, addAuth, implicitly)
   }
 
   def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
-    http.POSTEmpty[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish")
+    client.POSTEmpty[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish")(implicitly, addAuth, implicitly)
   }
 
   def getFileMetadata(attachments: Seq[Attachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[FilestoreResponse]] = {
@@ -68,12 +71,12 @@ class BindingTariffFilestoreConnector @Inject()(appConfig: FrontendAppConfig, ws
     } else {
       val query = s"?${attachments.map(att => s"id=${att.id}").mkString("&")}"
       val url = s"${appConfig.bindingTariffFileStoreUrl}/file$query"
-      http.GET[Seq[FilestoreResponse]](url)
+      client.GET[Seq[FilestoreResponse]](url)(implicitly, addAuth, implicitly)
     }
   }
 
   def get(attachment: Attachment)(implicit headerCarrier: HeaderCarrier): Future[Option[FilestoreResponse]] = {
-    http.GET[Option[FilestoreResponse]](s"${appConfig.bindingTariffFileStoreUrl}/file/${attachment.id}")
+    client.GET[Option[FilestoreResponse]](s"${appConfig.bindingTariffFileStoreUrl}/file/${attachment.id}")(implicitly, addAuth, implicitly)
   }
 
 }

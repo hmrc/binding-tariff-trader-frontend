@@ -25,8 +25,8 @@ import models.{Mode, ReturnSamples}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.whenToSendSample
 
@@ -34,14 +34,14 @@ import scala.concurrent.Future
 
 class WhenToSendSampleController @Inject()(
                                             appConfig: FrontendAppConfig,
-                                            override val messagesApi: MessagesApi,
                                             override val dataCacheConnector: DataCacheConnector,
                                             override val navigator: Navigator,
                                             identify: IdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
-                                            formProvider: WhenToSendSampleFormProvider
-                                          ) extends FrontendController with I18nSupport with YesNoBehaviour[ReturnSamples] {
+                                            formProvider: WhenToSendSampleFormProvider,
+                                            cc: MessagesControllerComponents
+                                          ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[ReturnSamples] {
 
   private lazy val form = formProvider()
 

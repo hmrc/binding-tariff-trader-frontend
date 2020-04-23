@@ -19,8 +19,8 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
-import models.{Case, Country}
-import play.api.i18n.{I18nSupport, MessagesApi}
+import models.Case
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
@@ -32,13 +32,13 @@ import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
-                                      override val messagesApi: MessagesApi,
                                       identify: IdentifierAction,
                                       pdfService: PdfService,
                                       caseService: CasesService,
                                       fileService: FileService,
-                                      countriesService: CountriesService
-                                     ) extends FrontendController with I18nSupport {
+                                      countriesService: CountriesService,
+                                      cc: MessagesControllerComponents
+                                     ) extends FrontendController(cc) with I18nSupport {
 
   private type Eori = String
   private type CaseReference = String

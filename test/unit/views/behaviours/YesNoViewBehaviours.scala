@@ -30,8 +30,8 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
         "contain a legend for the question" in {
           val doc = asDocument(createView(form))
           val legends = doc.getElementsByTag("legend")
-          legends.size mustBe 1
-          legends.first.text must include (expectedLegend)
+          legends.size shouldBe 1
+          legends.first.text should include (expectedLegend)
         }
 
         "contain an input for the value" in {
@@ -69,7 +69,7 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
         "show an error in the value field's label" in {
           val doc = asDocument(createView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("error-message").first
-          errorSpan.text mustBe messages(errorMessage)
+          errorSpan.text shouldBe messages(errorMessage)
         }
 
         "show an error prefix in the browser title" in {

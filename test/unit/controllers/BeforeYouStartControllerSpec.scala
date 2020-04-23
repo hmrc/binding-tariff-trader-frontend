@@ -18,23 +18,16 @@ package controllers
 
 import controllers.actions._
 import models.requests.IdentifierRequest
-import navigation.FakeNavigator
-import play.api.mvc.Call
 import play.api.test.Helpers._
 import views.html.beforeYouStart
 
 class BeforeYouStartControllerSpec extends ControllerSpecBase {
 
-  private def onwardRoute = Call("GET", "/foo")
-
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, identifier: IdentifierAction = FakeIdentifierAction) =
+  private def controller(identifier: IdentifierAction) =
     new BeforeYouStartController(
       frontendAppConfig,
-      messagesApi,
-      new FakeNavigator(onwardRoute),
       identifier,
-      dataRetrievalAction,
-      new DataRequiredActionImpl
+      cc
     )
 
   private def viewAsString(eori: Option[String]) = beforeYouStart(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages).toString
@@ -44,15 +37,15 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase {
     "return OK and the correct view for a GET - with EORI" in {
       val result = controller(identifier = FakeIdentifierAction(Some("eori"))).onPageLoad(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString(Some("eori"))
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString(Some("eori"))
     }
 
     "return OK and the correct view for a GET - without EORI" in {
       val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString(None)
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString(None)
     }
 
   }

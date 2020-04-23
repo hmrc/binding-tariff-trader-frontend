@@ -15,23 +15,10 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
-@import controllers.routes._
-@import models.ReturnSamples
-@import models.Mode
 @import models.response.FilestoreResponse
-@import views.ViewUtils._
 @import utils.Dates
-@import java.time.Instant
-@import models.Country
-
 
 @(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, getCountryName: String => Option[String], viewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
-
-@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
-val protocol = if(req.secure) "https" else "http"
-s"$protocol://${req.host}${routes.Assets.versioned(path)}"
-}
 
 @sectionHeading(headerId: String) = {
 <h2 id=@headerId>@messages(headerId)</h2>

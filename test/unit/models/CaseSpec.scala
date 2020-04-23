@@ -19,9 +19,9 @@ package models
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-import org.scalatest.{MustMatchers, WordSpec}
+import base.SpecBase
 
-class CaseSpec extends WordSpec with MustMatchers {
+class CaseSpec extends SpecBase {
 
   private def decisionWithEndDate(date: Instant) = {
     val c = oCase.btiCaseWithDecision
@@ -34,45 +34,45 @@ class CaseSpec extends WordSpec with MustMatchers {
     val pastDate = Instant.now().minus(1, ChronoUnit.DAYS)
 
     "active decision returns true when end date is in the future" in {
-      decisionWithEndDate(futureDate).hasActiveDecision mustBe true
+      decisionWithEndDate(futureDate).hasActiveDecision shouldBe true
     }
 
     "active decision returns false when end date is in the past" in {
-      decisionWithEndDate(pastDate).hasActiveDecision mustBe false
+      decisionWithEndDate(pastDate).hasActiveDecision shouldBe false
     }
 
     "expired decision returns false when end date is in the future" in {
-      decisionWithEndDate(futureDate).hasExpiredDecision mustBe false
+      decisionWithEndDate(futureDate).hasExpiredDecision shouldBe false
     }
 
     "expired decision returns true when end date is in the past" in {
-      decisionWithEndDate(pastDate).hasExpiredDecision mustBe true
+      decisionWithEndDate(pastDate).hasExpiredDecision shouldBe true
     }
 
     "hasEori returns true for trader" in {
       val traderCase = oCase.btiCaseExample.copy(application = oCase.btiApplicationExample.copy(agent = None))
-      traderCase.hasEoriNumber(traderCase.application.holder.eori) mustBe true
+      traderCase.hasEoriNumber(traderCase.application.holder.eori) shouldBe true
     }
 
     "hasEori returns true for agent" in {
       val agentCase = oCase.btiCaseExample
-      agentCase.hasEoriNumber(agentCase.application.agent.get.eoriDetails.eori) mustBe true
+      agentCase.hasEoriNumber(agentCase.application.agent.get.eoriDetails.eori) shouldBe true
     }
 
     "hasEori returns false for another user" in {
-      oCase.btiCaseExample.hasEoriNumber("????") mustBe false
+      oCase.btiCaseExample.hasEoriNumber("????") shouldBe false
     }
 
     "hasRuling returns false for case with no decision" in {
-      oCase.btiCaseExample.hasRuling mustBe false
+      oCase.btiCaseExample.hasRuling shouldBe false
     }
 
     "hasRuling returns false for case with wrong status" in {
-      oCase.btiCaseWithDecision.copy(status = CaseStatus.OPEN).hasRuling mustBe false
+      oCase.btiCaseWithDecision.copy(status = CaseStatus.OPEN).hasRuling shouldBe false
     }
 
     "hasRuling returns true for case with decision" in {
-      oCase.btiCaseWithDecision.hasRuling mustBe true
+      oCase.btiCaseWithDecision.hasRuling shouldBe true
     }
   }
 }

@@ -16,27 +16,27 @@
 
 package utils
 
+import base.SpecBase
 import models.SelectApplicationType.NewCommodity
 import models.WhichBestDescribesYou.BusinessOwner
 import models._
 import models.requests.DataRequest
 import org.mockito.BDDMockito.given
-import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import pages._
-import play.api.i18n.MessagesApi
 import play.api.test.FakeRequest
 import service.CountriesService
-import uk.gov.hmrc.play.test.UnitSpec
 
-class CheckYourAnswersHelperSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerSuite {
+class CheckYourAnswersHelperSpec extends SpecBase {
 
   val countriesService = new CountriesService
 
-  val messagesApi = app.injector.instanceOf[MessagesApi]
-
   private val userAnswers = mock[UserAnswers]
-  private val checkHelper = new CheckYourAnswersHelper(userAnswers, countriesService.getAllCountries, messagesApi)
+  private val checkHelper = new CheckYourAnswersHelper(
+    userAnswers,
+    countriesService.getAllCountries,
+    messagesApi,
+    lang
+  )
   private val fileAttachment = FileAttachment("id", "fileName", "mime", 1)
 
   "CheckYourAnswersHelper" when {

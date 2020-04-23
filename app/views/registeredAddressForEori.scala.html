@@ -17,12 +17,10 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import models.requests.OptionalDataRequest
+@import models.requests.DataRequest
+@import play.api.libs.json.Json
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
-@import play.api.libs.json.{JsObject, Json}
-
-@import models.requests.DataRequest
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, countries: List[Country])(implicit request: DataRequest[_], messages: Messages)
 
 

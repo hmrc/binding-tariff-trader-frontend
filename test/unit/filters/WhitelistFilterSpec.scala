@@ -21,13 +21,13 @@ import com.typesafe.config.ConfigException
 import generators.Generators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.prop.PropertyChecks
-import org.scalatest.{FreeSpec, MustMatchers}
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.Configuration
 import play.api.mvc.Call
+import uk.gov.hmrc.play.test.UnitSpec
 
-class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks with MockitoSugar with Generators {
+class WhitelistFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks with MockitoSugar with Generators {
 
   val mockMaterializer = mock[Materializer]
 
@@ -38,9 +38,9 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
     } yield (key, value)
   )
 
-  "the list of whitelisted IP addresses" - {
+  "the list of whitelisted IP addresses" should {
 
-    "must throw an exception" - {
+    "must throw an exception" should {
 
       "when the underlying config value is not there" in {
 
@@ -63,7 +63,7 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
       }
     }
 
-    "must be empty" - {
+    "must be empty" should {
 
       "when the underlying config value is empty" in {
 
@@ -77,12 +77,12 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
           )
 
           val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
-          whitelistFilter.whitelist mustBe empty
+          whitelistFilter.whitelist shouldBe empty
         }
       }
     }
 
-    "must contain all of the values" - {
+    "must contain all of the values" should {
 
       "when given a comma-separated list of values" in {
 
@@ -101,15 +101,15 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
           )
 
           val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
-          whitelistFilter.whitelist must contain theSameElementsAs ips
+          whitelistFilter.whitelist should contain theSameElementsAs ips
         }
       }
     }
   }
 
-  "the destination for non-whitelisted visitors" - {
+  "the destination for non-whitelisted visitors" should {
 
-    "must throw an exception" - {
+    "must throw an exception" should {
 
       "when the underlying config value is not there" in {
 
@@ -145,14 +145,14 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
         )
 
         val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
-        whitelistFilter.destination mustEqual Call("GET", destination)
+        whitelistFilter.destination shouldBe Call("GET", destination)
       }
     }
   }
 
-  "the list of excluded paths" - {
+  "the list of excluded paths" should {
 
-    "must throw an exception" - {
+    "must throw an exception" should {
 
       "when the underlying config value is not there" in {
 
@@ -175,7 +175,7 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
       }
     }
 
-    "must return Calls to all of the values" - {
+    "must return Calls to all of the values" should {
 
       "when given a comma-separated list of values" in {
 
@@ -196,7 +196,7 @@ class WhitelistFilterSpec extends FreeSpec with MustMatchers with PropertyChecks
           val expectedCalls = excludedPaths.map(Call("GET", _))
 
           val whitelistFilter = new WhitelistFilter(config, mockMaterializer)
-          whitelistFilter.excludedPaths must contain theSameElementsAs expectedCalls
+          whitelistFilter.excludedPaths should contain theSameElementsAs expectedCalls
         }
       }
     }

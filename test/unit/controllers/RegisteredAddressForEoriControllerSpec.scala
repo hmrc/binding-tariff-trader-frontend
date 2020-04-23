@@ -32,26 +32,25 @@ import views.html.registeredAddressForEori
 
 class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 
-  private def onwardRoute = Call("GET", "/foo")
-
-  private val countriesService = new CountriesService()
-
   private lazy val formProvider: RegisteredAddressForEoriFormProvider = new RegisteredAddressForEoriFormProvider()
   private lazy val form: Form[RegisteredAddressForEori] = formProvider()
+  private val countriesService = new CountriesService()
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) = {
     new RegisteredAddressForEoriController(
       frontendAppConfig,
-      messagesApi,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      countriesService
+      countriesService,
+      cc
     )
   }
+
+  private def onwardRoute = Call("GET", "/foo")
 
   private def viewAsString(form: Form[RegisteredAddressForEori] = form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get))): String = {
     registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithNotOptionalEoriAndCache, messages).toString
@@ -62,8 +61,8 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString()
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
@@ -72,7 +71,7 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get, "businessName", "addressLine1", "townOrCity", "postcode", "country")))
+      contentAsString(result) shouldBe viewAsString(form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get, "businessName", "addressLine1", "townOrCity", "postcode", "country")))
     }
 
     "redirect to the next page when valid data is submitted" in {
@@ -80,8 +79,8 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
@@ -90,8 +89,8 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe BAD_REQUEST
-      contentAsString(result) mustBe viewAsString(boundForm)
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) shouldBe viewAsString(boundForm)
     }
   }
 

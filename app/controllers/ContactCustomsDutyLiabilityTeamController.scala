@@ -17,19 +17,19 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
-import controllers.actions.{DataRetrievalAction, IdentifierAction}
+import controllers.actions.IdentifierAction
 import javax.inject.Inject
 import models.Mode
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.contactCustomsDutyLiabilityTeam
 
-class ContactCustomsDutyLiabilityTeamController @Inject()(appConfig: FrontendAppConfig,
-                                                          override val messagesApi: MessagesApi,
-                                                          dataCacheConnector: DataCacheConnector,
-                                                          identify: IdentifierAction) extends FrontendController with I18nSupport {
+class ContactCustomsDutyLiabilityTeamController @Inject()(
+                                                           appConfig: FrontendAppConfig,
+                                                           identify: IdentifierAction,
+                                                           cc: MessagesControllerComponents
+                                                         ) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = identify { implicit request =>
     Ok(contactCustomsDutyLiabilityTeam(appConfig, mode))

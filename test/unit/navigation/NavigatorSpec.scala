@@ -20,11 +20,10 @@ import base.SpecBase
 import controllers.routes
 import models.ImportOrExport.{Advice, Import}
 import models.{ImportOrExport, _}
-import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._
 import pages._
 
-class NavigatorSpec extends SpecBase with MockitoSugar {
+class NavigatorSpec extends SpecBase {
 
   val navigator = new Navigator
 
@@ -35,7 +34,7 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
       "go to Index from a page that doesn't exist in the route map" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) mustBe routes.IndexController.getApplications()
+        navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) shouldBe routes.IndexController.getApplications()
       }
 
       "go to contactCustomsDutyLiabilityTeam page when Advice option is selected" in {
@@ -43,7 +42,7 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
 
         when(mockUserAnswers.get[ImportOrExport](ImportOrExportPage)).thenReturn(Some(Advice))
 
-        navigator.nextPage(ImportExportOrAdvicePage, NormalMode)(mockUserAnswers) mustBe routes.ContactCustomsDutyLiabilityTeamController.onPageLoad()
+        navigator.nextPage(ImportExportOrAdvicePage, NormalMode)(mockUserAnswers) shouldBe routes.ContactCustomsDutyLiabilityTeamController.onPageLoad()
       }
 
       "go to the next page (Information you need) when import or export option is selected" in {
@@ -51,7 +50,7 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
 
         when(mockUserAnswers.get[ImportOrExport](ImportOrExportPage)).thenReturn(Some(Import))
 
-        navigator.nextPage(ImportExportOrAdvicePage, NormalMode)(mockUserAnswers) mustBe routes.BeforeYouStartController.onPageLoad()
+        navigator.nextPage(ImportExportOrAdvicePage, NormalMode)(mockUserAnswers) shouldBe routes.BeforeYouStartController.onPageLoad()
       }
     }
 
@@ -60,7 +59,7 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
       "go to CheckYourAnswers from a page that doesn't exist in the edit route map" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, CheckMode)(mock[UserAnswers]) mustBe routes.CheckYourAnswersController.onPageLoad()
+        navigator.nextPage(UnknownPage, CheckMode)(mock[UserAnswers]) shouldBe routes.CheckYourAnswersController.onPageLoad()
       }
     }
   }

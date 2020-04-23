@@ -19,6 +19,7 @@ package service
 import java.io.File
 import java.nio.file.Files
 
+import base.SpecBase
 import config.FrontendAppConfig
 import connectors.BindingTariffFilestoreConnector
 import models._
@@ -27,27 +28,23 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
-import play.api.i18n.MessagesApi
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future.{failed, successful}
 
-class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   private val connector = mock[BindingTariffFilestoreConnector]
-  private val messagesApi = mock[MessagesApi]
   private val configuration = mock[FrontendAppConfig]
 
   private val fileSizeSmall = 10
   private val fileSizeMax = 1000
   private val fileSizeLarge = 1100
 
-  private val service = new FileService(connector, messagesApi, configuration)
+  private val service = new FileService(connector, cc, configuration)
   private implicit val headers: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeEach(): Unit = {
@@ -55,8 +52,13 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
     reset(connector)
   }
 
+  private def createFileOfType(extension: String, mimeType: String) = {
+    createFile(extension, mimeType, fileSizeSmall)
+  }
+
+
   "Upload" should {
-    val fileUploading = MultipartFormData.FilePart[TemporaryFile]("key", "filename", Some("type"), TemporaryFile())
+    val fileUploading = MultipartFormData.FilePart[TemporaryFile]("key", "filename", Some("type"), tempFileCreator.create())
     val connectorResponse = FilestoreResponse("id", "filename-updated", "type")
     val fileUploaded = FileAttachment("id", "filename-updated", "type", 0)
 
@@ -95,11 +97,11 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
 
     "Return Stored Attachment" in {
       val c = aCase(withLetterOfAuthWithId("1"))
-      val expectedAtt = anAttachmentWithId("1")
+      val expectedAtt = Some(someMetadataWithId("1"))
 
-      given(connector.get(any[Attachment])(any[HeaderCarrier])) willReturn successful(Some(someMetadataWithId("1")))
+      given(connector.get(any[Attachment])(any[HeaderCarrier])) willReturn successful(expectedAtt)
 
-      await(service.getLetterOfAuthority(c)) shouldBe Some(someMetadataWithId("1"))
+      await(service.getLetterOfAuthority(c)) shouldBe expectedAtt
     }
 
     "Return None for missing letter" in {
@@ -155,9 +157,8 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
     }
 
     "Reject invalid file type" in {
-      val file = createFileOfType("mp3", "audio/mpeg")
-      given(messagesApi.apply("uploadWrittenAuthorisation.error.fileType")).willReturn("some error message")
-      service.validate(file) shouldBe Left("some error message")
+      val file = createFileOfType("invalid", "audio/mpeg")
+      service.validate(file) shouldBe Left(messagesApi("uploadWrittenAuthorisation.error.fileType"))
     }
 
   }
@@ -173,8 +174,7 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
 
     "Reject large file" in {
       val file = createFileOfSize(fileSizeLarge)
-      given(messagesApi.apply("uploadWrittenAuthorisation.error.size")).willReturn("some error message")
-      service.validate(file) shouldBe Left("some error message")
+      service.validate(file) shouldBe Left(messagesApi("uploadWrittenAuthorisation.error.size"))
     }
   }
 
@@ -189,13 +189,14 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
     }
   }
 
-  private def createFileOfType(extension: String, mimeType: String) = {
-    createFile(extension, mimeType, fileSizeSmall)
+  private def createFileOfSize(numBytes: Int) = {
+    createFile("txt", "text/plain", numBytes)
   }
 
   private def createFile(extension: String, mimeType: String, numBytes: Int) = {
     val filename = "example." + extension
-    val file = new TemporaryFile(createTemporaryFile(numBytes))
+    val tempFile = createTemporaryFile(numBytes).toPath
+    val file = tempFileCreator.create(tempFile)
     val filePart = FilePart[TemporaryFile](key = "file-key", filename, contentType = Some(mimeType), ref = file)
     val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
     form.file("file-key").get
@@ -206,10 +207,6 @@ class FileServiceSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach
     temporaryFile.deleteOnExit()
     Files.write(temporaryFile.toPath, Array.fill(size)('A'.toByte))
     temporaryFile
-  }
-
-  private def createFileOfSize(numBytes: Int) = {
-    createFile("txt", "text/plain", numBytes)
   }
 
   private def aCase(modifiers: (Case => Case)*): Case = {

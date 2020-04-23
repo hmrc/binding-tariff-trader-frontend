@@ -18,11 +18,11 @@ package models
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatest.prop.PropertyChecks
 import org.scalatest.{MustMatchers, OptionValues, WordSpec}
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.libs.json.{JsError, JsString, Json}
 
-class ImportOrExportSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues {
+class ImportOrExportSpec extends WordSpec with MustMatchers with ScalaCheckDrivenPropertyChecks with OptionValues {
 
   "ImportOrExport" must {
 

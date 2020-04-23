@@ -20,40 +20,44 @@ import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import models.oCase
 import org.mockito.ArgumentMatchers.any
 import org.mockito.BDDMockito.given
-import org.scalatest.mockito.MockitoSugar
-import play.api.test.Helpers.{redirectLocation, status, _}
+import play.api.test.Helpers.{redirectLocation, _}
 import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-class RulingControllerSpec extends ControllerSpecBase with MockitoSugar {
+class RulingControllerSpec extends ControllerSpecBase {
 
-  private val casesService = mock[CasesService]
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
+  private val casesService = mock[CasesService]
 
-  def controller(identifier: IdentifierAction = FakeIdentifierAction) =
-    new RulingController(frontendAppConfig, identifier, casesService, messagesApi)
+  private def controller(identifier: IdentifierAction = FakeIdentifierAction) =
+    new RulingController(
+      frontendAppConfig,
+      identifier,
+      casesService,
+      cc
+    )
 
 
   "Ruling Controller" must {
 
     "return OK and the correct view for a GET" in {
       given(casesService.getCaseForUser(any[String], any[String])(any[HeaderCarrier]))
-            .willReturn(Future.successful(oCase.btiCaseWithDecision))
+        .willReturn(Future.successful(oCase.btiCaseWithDecision))
       val result = controller().viewRuling("a-ruling")(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) must include(oCase.btiCaseWithDecision.reference)
-      contentAsString(result) must include(oCase.btiCaseWithDecision.decision.get.bindingCommodityCode)
+      status(result) shouldBe OK
+      contentAsString(result) should include(oCase.btiCaseWithDecision.reference)
+      contentAsString(result) should include(oCase.btiCaseWithDecision.decision.get.bindingCommodityCode)
     }
 
     "redirect to BeforeYouStart when EORI unavailable" in {
 
       val result = controller(givenUserDoesntHaveAnEORI).viewRuling("aruling")(fakeRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
     }
   }
 }

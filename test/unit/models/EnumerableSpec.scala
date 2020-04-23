@@ -16,14 +16,15 @@
 
 package models
 
-import org.scalatest.{EitherValues, OptionValues, MustMatchers, WordSpec}
-import play.api.data.validation.ValidationError
+import org.scalatest.{EitherValues, MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json._
 
 object EnumerableSpec {
 
   sealed trait Foo
+
   case object Bar extends Foo
+
   case object Baz extends Foo
 
   object Foo {
@@ -33,6 +34,7 @@ object EnumerableSpec {
     implicit val fooEnumerable: Enumerable[Foo] =
       Enumerable(values.toSeq.map(v => v.toString -> v): _*)
   }
+
 }
 
 class EnumerableSpec extends WordSpec with MustMatchers with EitherValues with OptionValues with Enumerable.Implicits {
@@ -53,7 +55,7 @@ class EnumerableSpec extends WordSpec with MustMatchers with EitherValues with O
     }
 
     "fail to bind for invalid values" in {
-      Json.fromJson[Foo](JsString("invalid")).asEither.left.value must contain(JsPath -> Seq(ValidationError("error.invalid")))
+      Json.fromJson[Foo](JsString("invalid")).asEither.left.value must contain(JsPath -> Seq(JsonValidationError("error.invalid")))
     }
   }
 

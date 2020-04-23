@@ -16,6 +16,7 @@
 
 package service
 
+import base.SpecBase
 import connectors.{BindingTariffClassificationConnector, EmailConnector}
 import models.CaseStatus.CaseStatus
 import models._
@@ -23,14 +24,12 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
-import play.api.libs.json.Writes
+import play.api.libs.json.{Reads, Writes}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 
-class CasesServiceSpec extends UnitSpec with MockitoSugar {
+class CasesServiceSpec extends SpecBase {
 
   private val existingCase = mock[Case]
   private val newCase = mock[NewCaseRequest]
@@ -55,7 +54,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
     "delegate to connector" in {
       given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
-      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Any]])).willReturn(Future.successful(()))
+      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Any]], any[Reads[Email[_]]])).willReturn(Future.successful(()))
 
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
 
@@ -70,7 +69,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
     "handle error with email silently" in {
       given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
-      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Any]])).willReturn(Future.failed(new RuntimeException("Error")))
+      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Any]], any[Reads[Email[_]]])).willReturn(Future.failed(new RuntimeException("Error")))
 
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
     }
@@ -87,7 +86,7 @@ class CasesServiceSpec extends UnitSpec with MockitoSugar {
 
     def theEmailSent: ApplicationSubmittedEmail = {
       val captor: ArgumentCaptor[ApplicationSubmittedEmail] = ArgumentCaptor.forClass(classOf[ApplicationSubmittedEmail])
-      verify(emailConnector).send(captor.capture())(any[HeaderCarrier], any[Writes[Any]])
+      verify(emailConnector).send(captor.capture())(any[HeaderCarrier], any[Writes[Any]], any[Reads[Email[_]]])
       captor.getValue
     }
   }
