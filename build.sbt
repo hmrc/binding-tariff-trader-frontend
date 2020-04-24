@@ -2,27 +2,35 @@ import play.sbt.routes.RoutesKeys
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, targetJvm}
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
+import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, targetJvm}
+import uk.gov.hmrc.PublishingSettings._
+import uk.gov.hmrc.SbtAutoBuildPlugin
+import uk.gov.hmrc.gitstamp.GitStampPlugin._
+import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
+import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
+import uk.gov.hmrc.versioning.SbtGitVersioning
 
 lazy val appName: String = "binding-tariff-trader-frontend"
 
 resolvers += "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases/"
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin, SbtArtifactory, SbtPlugin)
+  .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin, SbtArtifactory)
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
   .settings(majorVersion := 0)
   .settings(
+    commonSettings,
     name := appName,
-    scalaVersion := "2.12.8",
+    scalaVersion := "2.12.10",
     targetJvm := "jvm-1.8",
     RoutesKeys.routesImport += "models._",
     PlayKeys.playDefaultPort := 9582,
     scalacOptions ++= Seq("-Ywarn-unused-import", "-deprecation"),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(true),
+    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     parallelExecution in Test := false,
     concurrentRestrictions in Global += Tags.limit(Tags.Test, 1),
     fork in Test := false,
@@ -52,3 +60,5 @@ coverageExcludedFiles := "<empty>;Reverse.*;.*filters.*;.*handlers.*;.*component
 coverageMinimum := 94
 coverageFailOnMinimum := true
 coverageHighlighting := true
+
+lazy val commonSettings: Seq[Setting[_]] = publishingSettings ++ gitStampSettings
