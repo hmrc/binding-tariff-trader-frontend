@@ -17,9 +17,9 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.{Mode, RegisterBusinessRepresenting}
+@import play.api.libs.json.Json
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
-@import play.api.libs.json.{JsObject, Json}
 
 @(appConfig: FrontendAppConfig, form: Form[RegisterBusinessRepresenting], mode: Mode, countries: List[Country])(implicit request: Request[_], messages: Messages)
 
@@ -45,29 +45,29 @@
                 <p> @messages("registerBusinessRepresenting.note")</p>
             </div>
 
-            @components.input_text(
-                field = form("eoriNumber"),
-                hint  = Some(messages("registerBusinessRepresenting.eoriNumber.hint")),
-                label = Some(messages("registerBusinessRepresenting.eoriNumber"))
-            )
+        @components.input_text(
+            field = form("eoriNumber"),
+            hint  = Some(messages("registerBusinessRepresenting.eoriNumber.hint")),
+            label = Some(messages("registerBusinessRepresenting.eoriNumber"))
+        )
 
-            @components.input_text(
-                field = form("businessName"),
-                label = Some(messages("registerBusinessRepresenting.businessName")),
-                inputPurpose=Some("section-representing organization")
-            )
+        @components.input_text(
+            field = form("businessName"),
+            label = Some(messages("registerBusinessRepresenting.businessName")),
+            inputPurpose=Some("section-representing organization")
+        )
 
-            @components.input_text(
-                field = form("addressLine1"),
-                label = Some(messages("registerBusinessRepresenting.addressLine1")),
-                inputPurpose=Some("section-representing address-line1")
-            )
+        @components.input_text(
+            field = form("addressLine1"),
+            label = Some(messages("registerBusinessRepresenting.addressLine1")),
+            inputPurpose=Some("section-representing address-line1")
+        )
 
-            @components.input_text(
-                field = form("town"),
-                label = Some(messages("registerBusinessRepresenting.town")),
-                inputPurpose=Some("section-representing address-level1")
-            )
+        @components.input_text(
+            field = form("town"),
+            label = Some(messages("registerBusinessRepresenting.town")),
+            inputPurpose=Some("section-representing address-level1")
+        )
 
             @components.input_text(
                 field = form("postCode"),

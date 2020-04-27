@@ -18,22 +18,23 @@ package controllers
 
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import javax.inject.Inject
 import models.requests.OptionalDataRequest
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Results}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
-class SignOutController @Inject()(val appConfig: FrontendAppConfig,
-                                  dataCacheConnector: DataCacheConnector,
-                                  identify: IdentifierAction,
-                                  getData: DataRetrievalAction,
-                                  requireData: DataRequiredAction,
-                                  val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
+class SignOutController @Inject()(
+                                   val appConfig: FrontendAppConfig,
+                                   dataCacheConnector: DataCacheConnector,
+                                   identify: IdentifierAction,
+                                   getData: DataRetrievalAction,
+                                   cc: MessagesControllerComponents
+                                 ) extends FrontendController(cc) with I18nSupport {
 
   def startFeedbackSurvey: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     clearDataCache(request)
@@ -45,15 +46,15 @@ class SignOutController @Inject()(val appConfig: FrontendAppConfig,
     successful(Results.Redirect(routes.SessionExpiredController.onPageLoad()).withNewSession)
   }
 
-  def unauthorisedSignOut: Action[AnyContent] = Action.async {
-    successful(Redirect(routes.IndexController.getApplications()).withNewSession)
+  def unauthorisedSignOut: Action[AnyContent] = Action {
+    Redirect(routes.IndexController.getApplications()).withNewSession
   }
 
   def keepAlive(): Action[AnyContent] = Action.async {
-    implicit request => Future.successful(Ok("OK"))
+    successful(Ok("OK"))
   }
 
-  private def clearDataCache(request: OptionalDataRequest[AnyContent]) = {
+  private def clearDataCache(request: OptionalDataRequest[AnyContent]): Option[Future[Boolean]] = {
     request.userAnswers map { answer => dataCacheConnector.remove(answer.cacheMap) }
   }
 }

@@ -65,7 +65,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
       "rendered with a valid form" must {
         "include the form's value in the value input" in {
           val doc = asDocument(createView(form.fill(answer)))
-          doc.getElementById("value").attr("value") mustBe answer
+          doc.getElementById("value").attr("value") shouldBe answer
         }
       }
 
@@ -79,7 +79,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         "show an error in the value field's label" in {
           val doc = asDocument(createView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("error-message").first
-          errorSpan.text mustBe messages(errorMessage)
+          errorSpan.text shouldBe messages(errorMessage)
         }
 
         "show an error prefix in the browser title" in {
@@ -115,7 +115,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
       "rendered with a valid form" must {
         "include the form's value in the value input" in {
           val doc = asDocument(createView(form.fill(answer)))
-          doc.getElementById("value").text() mustBe answer
+          doc.getElementById("value").text() shouldBe answer
         }
       }
 
@@ -129,7 +129,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         "show an error in the value field's label" in {
           val doc = asDocument(createView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("error-message").first
-          errorSpan.text mustBe messages(errorMessage)
+          errorSpan.text shouldBe messages(errorMessage)
         }
 
         "show an error prefix in the browser title" in {

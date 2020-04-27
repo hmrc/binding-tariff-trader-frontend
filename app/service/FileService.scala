@@ -22,9 +22,9 @@ import javax.inject.{Inject, Singleton}
 import models._
 import models.response.FilestoreResponse
 import play.api.Logger
-import play.api.i18n.MessagesApi
+import play.api.i18n.Lang
 import play.api.libs.Files.TemporaryFile
-import play.api.mvc.MultipartFormData
+import play.api.mvc.{MessagesControllerComponents, MultipartFormData}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,18 +32,25 @@ import scala.concurrent.Future
 import scala.concurrent.Future.{sequence, successful}
 
 @Singleton
-class FileService @Inject()(connector: BindingTariffFilestoreConnector, messagesApi: MessagesApi, configuration: FrontendAppConfig) {
+class FileService @Inject()(
+                             connector: BindingTariffFilestoreConnector,
+                             cc: MessagesControllerComponents,
+                             appConfig: FrontendAppConfig
+                           ) {
+
+  private val messagesApi = cc.messagesApi
+  private implicit val lang = Lang.defaultLang
 
   def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
-    connector.upload(f).map(toFileAttachment(f.ref.file.length))
-  }
-
-  private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
-    r => FileAttachment(r.id, r.fileName, r.mimeType, size)
+    connector.upload(f).map(toFileAttachment(f.ref.path.toFile.length))
   }
 
   def refresh(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FileAttachment] = {
     connector.get(file).map(toFileAttachment(file.size))
+  }
+
+  private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
+    r => FileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
   def getAttachmentMetadata(c: Case)(implicit hc: HeaderCarrier): Future[Seq[FilestoreResponse]] = {
@@ -88,12 +95,12 @@ class FileService @Inject()(connector: BindingTariffFilestoreConnector, messages
   }
 
   private def hasInvalidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = {
-    _.ref.file.length > configuration.fileUploadMaxSize
+    _.ref.path.toFile.length > appConfig.fileUploadMaxSize
   }
 
   private def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
     f.contentType match {
-      case Some(c: String) if configuration.fileUploadMimeTypes.contains(c) => false
+      case Some(c: String) if appConfig.fileUploadMimeTypes.contains(c) => false
       case _ => true
     }
   }

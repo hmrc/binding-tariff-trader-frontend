@@ -22,23 +22,24 @@ import models._
 import models.oCase._
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
-import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers._
 import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
+class IndexControllerSpec extends ControllerSpecBase {
 
-  private val casesService = mock[CasesService]
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
-  private def controller(identifier: IdentifierAction = FakeIdentifierAction): IndexController = new IndexController(
-    frontendAppConfig,
-    identifier,
-    casesService,
-    messagesApi
-  )
+  private val casesService = mock[CasesService]
+
+  private def controller(identifier: IdentifierAction = FakeIdentifierAction): IndexController =
+    new IndexController(
+      frontendAppConfig,
+      identifier,
+      casesService,
+      cc
+    )
 
   "Index Controller - Get Applications" must {
 
@@ -49,8 +50,8 @@ class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller().getApplications(page = 1)(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) must include("applications-list-table")
+      status(result) shouldBe OK
+      contentAsString(result) should include("applications-list-table")
     }
 
     "return 200 and show no results for a GET when no applications are found" in {
@@ -59,16 +60,16 @@ class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller().getApplications(page = 1)(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) must include("application-list-empty")
+      status(result) shouldBe OK
+      contentAsString(result) should include("application-list-empty")
 
     }
 
     "redirect to BeforeYouStart when EORI unavailable" in {
       val result = controller(givenUserDoesntHaveAnEORI).getApplications(page = 1)(fakeRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
     }
 
   }
@@ -82,8 +83,8 @@ class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller().getRulings(page = 1)(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) must include("rulings-list-table")
+      status(result) shouldBe OK
+      contentAsString(result) should include("rulings-list-table")
     }
 
     "return 200 and show no results  for a GET when no rulings are found" in {
@@ -93,15 +94,15 @@ class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
       val result = controller().getRulings(page = 1)(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) must include("ruling-list-empty")
+      status(result) shouldBe OK
+      contentAsString(result) should include("ruling-list-empty")
     }
 
     "redirect to BeforeYouStart when EORI unavailable" in {
       val result = controller(givenUserDoesntHaveAnEORI).getRulings(page = 1)(fakeRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.BeforeYouStartController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
     }
 
   }

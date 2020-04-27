@@ -16,8 +16,8 @@
 
 @import views.PaginationUtil
 
-
-@(id: String = "pagination",
+@(
+        id: String = "pagination",
         singularName: String = "result",
         pluralName: String = "results",
         pager: Paged[_],
@@ -29,69 +29,77 @@
 
 <div id="@id" class="grid-row @containerClass.getOrElse("")">
 
- <div class="column-one-half">
-  @if(pager.nonEmpty) {
-   @if(pager.pageCount == 1) {
-    <div id="@id-one" class="@counterClass.getOrElse("")">
-     <span>Showing</span>
-     <span id="@id-total" class="bold">@{pager.resultCount}</span>
-     <span>
-     @if(pager.resultCount == 1){
-      @singularName
-     } else {
-      @pluralName
-     }
-     </span>
-    </div>
-   } else {
-    <div id="@id-some" class="@counterClass.getOrElse("")">
-     <span>Showing</span>
-     <span id="@id-start">@{(pager.pageIndex-1) * pager.pageSize + 1}</span>
-     <span>-</span>
-     <span id="@id-end">@{(pager.pageIndex-1) * pager.pageSize + pager.size}</span>
-     <span>of</span>
-     <span id="@id-total" class="bold">@{pager.resultCount}</span>
-     <span>
-     @if(pager.resultCount == 1){
-      @singularName
-     } else {
-      @pluralName
-     }
-     </span>
-    </div>
-   }
-  } else {
-   <div id="@id-none">
-    <span>Showing</span>
-    <span>No @{pluralName}</span>
-   </div>
-  }
-
- </div>
-
- @if(pager.pageCount > 1) {
-  <div id="@id-links" class="column-one-half align-right @linksClass.getOrElse("")">
-  @defining(pager.pageCount) { pageCount: Int =>
-   @* Previous Page *@
-   @if(pager.pageIndex > 1) {
-    <a id="@id-page_back" class="mr-5" href="@onChange(pager.pageIndex - 1)">Previous</a>
-   }
-
-   @* Surrounding 5 Pages *@
-   @for(pageIndex <- PaginationUtil.surroundingPages(pager.pageIndex, pager.pageCount, 5)) {
-    @if(pageIndex == pager.pageIndex) {
-     <span id="@id-page_current" class="mx-5">@pageIndex</span>
+    <div class="column-one-half">
+    @if(pager.nonEmpty) {
+        @if(pager.pageCount == 1) {
+            <div id="@id-one" class="@counterClass.getOrElse("")">
+                <span>Showing</span>
+                <span id="@id-total" class="bold">@{
+                    pager.resultCount
+                }</span>
+                <span>
+                @if(pager.resultCount == 1) {
+                    @singularName
+                } else {
+                    @pluralName
+                }
+                </span>
+            </div>
+        } else {
+            <div id="@id-some" class="@counterClass.getOrElse("")">
+                <span>Showing</span>
+                <span id="@id-start">@{
+                    (pager.pageIndex - 1) * pager.pageSize + 1
+                }</span>
+                <span>-</span>
+                <span id="@id-end">@{
+                    (pager.pageIndex - 1) * pager.pageSize + pager.size
+                }</span>
+                <span>of</span>
+                <span id="@id-total" class="bold">@{
+                    pager.resultCount
+                }</span>
+                <span>
+                @if(pager.resultCount == 1) {
+                    @singularName
+                } else {
+                    @pluralName
+                }
+                </span>
+            </div>
+        }
     } else {
-     <a id="@id-page_@pageIndex" class="mx-5" href="@onChange(pageIndex)">@pageIndex</a>
+        <div id="@id-none">
+            <span>Showing</span>
+            <span>No @{
+                pluralName
+            }</span>
+        </div>
     }
-   }
 
-   @* Next Page *@
-   @if(pager.pageIndex < pageCount) {
-    <a id="@id-page_next" class="ml-5" href="@onChange(pager.pageIndex + 1)">Next</a>
-   }
+    </div>
 
-  }
-  </div>
- }
+    @if(pager.pageCount > 1) {
+        <div id="@id-links" class="column-one-half align-right @linksClass.getOrElse("")">
+        @defining(pager.pageCount) { pageCount: Int =>
+            @* Previous Page *@
+            @if(pager.pageIndex > 1) {
+                <a id="@id-page_back" class="mr-5" href="@onChange(pager.pageIndex - 1)">Previous</a>
+            }
+            @* Surrounding 5 Pages *@
+            @for(pageIndex <- PaginationUtil.surroundingPages(pager.pageIndex, pager.pageCount, 5)) {
+                @if(pageIndex == pager.pageIndex) {
+                    <span id="@id-page_current" class="mx-5">@pageIndex</span>
+                } else {
+                    <a id="@id-page_@pageIndex" class="mx-5" href="@onChange(pageIndex)">@pageIndex</a>
+                }
+            }
+            @* Next Page *@
+            @if(pager.pageIndex < pageCount) {
+                <a id="@id-page_next" class="ml-5" href="@onChange(pager.pageIndex + 1)">Next</a>
+            }
+
+        }
+        </div>
+    }
 </div>

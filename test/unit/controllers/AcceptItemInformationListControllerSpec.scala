@@ -17,28 +17,29 @@
 package controllers
 
 import controllers.actions._
-import navigation.FakeNavigator
-import play.api.mvc.Call
 import play.api.test.Helpers._
-import views.html.{acceptItemInformationList, beforeYouStart}
+import views.html.acceptItemInformationList
 
 class AcceptItemInformationListControllerSpec extends ControllerSpecBase {
 
-  private def onwardRoute = Call("GET", "/foo")
-
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new AcceptItemInformationListController(frontendAppConfig,  messagesApi,  new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl)
+    new AcceptItemInformationListController(
+      frontendAppConfig,
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl,
+      cc
+    )
 
-  def viewAsString() = acceptItemInformationList(frontendAppConfig)(fakeRequest, messages).toString
+  def viewAsString(): String = acceptItemInformationList(frontendAppConfig)(fakeRequest, messages).toString
 
   "AcceptItemInformationList Controller" must {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString()
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString()
     }
   }
 }

@@ -17,16 +17,15 @@
 package audit
 
 import audit.AuditPayloadType.BTIApplicationSubmission
+import base.SpecBase
 import models._
 import org.mockito.Mockito.verify
-import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class AuditServiceTest extends UnitSpec with MockitoSugar {
+class AuditServiceTest extends SpecBase {
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val auditConnector: DefaultAuditConnector = mock[DefaultAuditConnector]

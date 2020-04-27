@@ -18,11 +18,11 @@ package models
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatest.prop.PropertyChecks
 import org.scalatest.{MustMatchers, OptionValues, WordSpec}
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, JsString, Json}
 
-class SelectApplicationTypeSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues {
+class SelectApplicationTypeSpec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues {
 
   "SelectApplicationType" must {
 
@@ -30,10 +30,9 @@ class SelectApplicationTypeSpec extends WordSpec with MustMatchers with Property
 
       val gen = Gen.oneOf(SelectApplicationType.values.toSeq)
 
-      forAll(gen) {
-        selectApplicationType =>
+      forAll(gen) { selectApplicationType =>
 
-          JsString(selectApplicationType.toString).validate[SelectApplicationType].asOpt.value mustEqual selectApplicationType
+        JsString(selectApplicationType.toString).validate[SelectApplicationType].asOpt.value mustEqual selectApplicationType
       }
     }
 

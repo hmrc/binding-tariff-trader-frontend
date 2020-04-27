@@ -57,14 +57,14 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
 
     "show the expected text" in {
       val text = asDocument(createViewUsingForm(form)).text()
-      text must include("What is the registered name and address for this EORI number? - Apply for a Binding Tariff Information ruling - GOV.UK")
-      text must include("What is the registered name and address for EORI number eori-789012?")
-      text must include("The details you enter must match the exact format of the registered EORI address")
-      text must include("Business, organisation or individual’s name")
-      text must include("Address line 1")
-      text must include("Town or city")
-      text must include("Postcode")
-      text must include("Country")
+      text should include("What is the registered name and address for this EORI number? - Apply for a Binding Tariff Information ruling - GOV.UK")
+      text should include("What is the registered name and address for EORI number eori-789012?")
+      text should include("The details you enter must match the exact format of the registered EORI address")
+      text should include("Business, organisation or individual’s name")
+      text should include("Address line 1")
+      text should include("Town or city")
+      text should include("Postcode")
+      text should include("Country")
     }
   }
 

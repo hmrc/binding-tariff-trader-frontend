@@ -16,27 +16,27 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
-import controllers.actions.{DataRetrievalAction, FakeIdentifierAction}
+import controllers.actions.FakeIdentifierAction
 import models.NormalMode
-import play.api.test.Helpers.{status, _}
+import play.api.test.Helpers._
 import views.html.contactCustomsDutyLiabilityTeam
 
 class ContactCustomsDutyLiabilityTeamControllerSpec extends ControllerSpecBase {
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new ContactCustomsDutyLiabilityTeamController(frontendAppConfig, messagesApi,
-      FakeDataCacheConnector,
-      FakeIdentifierAction)
+  def controller() = new ContactCustomsDutyLiabilityTeamController(
+    frontendAppConfig,
+    FakeIdentifierAction,
+    cc
+  )
 
-  def viewAsString() = contactCustomsDutyLiabilityTeam(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(): String = contactCustomsDutyLiabilityTeam(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
 
   "ContactCustomsDutyLiabilityTeamControllerSpec" must {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString()
+      status(result) shouldBe OK
+      contentAsString(result) shouldBe viewAsString()
     }
   }
 

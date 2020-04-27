@@ -44,7 +44,7 @@ trait IntViewBehaviours extends QuestionViewBehaviours[Int] {
       "rendered with a valid form" must {
         "include the form's value in the value input" in {
           val doc = asDocument(createView(form.fill(number)))
-          doc.getElementById("value").attr("value") mustBe number.toString
+          doc.getElementById("value").attr("value") shouldBe number.toString
         }
       }
 
@@ -58,7 +58,7 @@ trait IntViewBehaviours extends QuestionViewBehaviours[Int] {
         "show an error in the value field's label" in {
           val doc = asDocument(createView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("error-message").first
-          errorSpan.text mustBe messages(errorMessage)
+          errorSpan.text shouldBe messages(errorMessage)
         }
 
         "show an error prefix in the browser title" in {

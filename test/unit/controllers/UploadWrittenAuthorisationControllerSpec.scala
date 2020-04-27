@@ -25,7 +25,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.UploadWrittenAuthorisationPage
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
@@ -37,43 +37,47 @@ import service.FileService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.uploadWrittenAuthorisation
-import org.scalatest.Matchers._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with MockitoSugar with BeforeAndAfterEach {
 
-  private def onwardRoute = Call("GET", "/foo")
-
   private val fileService = mock[FileService]
   private val cacheConnector = mock[DataCacheConnector]
+  private val formProvider = new UploadWrittenAuthorisationFormProvider()
+  private val form = formProvider()
 
   override protected def afterEach(): Unit = {
     super.beforeEach()
     reset(fileService)
   }
 
-  private val formProvider = new UploadWrittenAuthorisationFormProvider()
-  private val form = formProvider()
-
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new UploadWrittenAuthorisationController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, fileService)
+    new UploadWrittenAuthorisationController(
+      frontendAppConfig,
+      FakeDataCacheConnector,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl,
+      formProvider,
+      fileService,
+      cc
+    )
+
+  private def onwardRoute = Call("GET", "/foo")
 
   private def viewAsString(form: Form[_] = form, file: Option[FileAttachment] = None): String =
     uploadWrittenAuthorisation(frontendAppConfig, form, file, NormalMode)(fakeRequest, messages).toString
-
-  private val testAnswer = "answer"
 
   "UploadWrittenAuthorisation Controller" must {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe OK
+      status(result) shouldBe OK
       val result1 = contentAsString(result)
-      result1 mustBe viewAsString()
+      result1 shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
@@ -85,13 +89,13 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) mustBe viewAsString(form, Some(file))
+      contentAsString(result) shouldBe viewAsString(form, Some(file))
     }
 
     "redirect to the next page when valid data is submitted" in {
 
       //Given
-      val file = TemporaryFile("example-file.txt")
+      val file = tempFileCreator.create("example-file.txt")
       val filePart = FilePart[TemporaryFile](key = "letter-of-authority", "file.txt", contentType = Some("text/plain"), ref = file)
       val form: MultipartFormData[TemporaryFile] = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
@@ -102,12 +106,12 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
       val savedCacheMap = mock[CacheMap]
       given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
 
-     // When
+      // When
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       // Then
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "redirect to the next page when no data is submitted but existing file in data cache" in {
@@ -123,8 +127,8 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
 
       val result = controller(getRelevantData).onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(onwardRoute.url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "return a Bad Request when invalid data is submitted" in {
@@ -135,12 +139,12 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe BAD_REQUEST
+      status(result) shouldBe BAD_REQUEST
     }
 
     "return a Bad Request when invalid file type is submitted" in {
 
-      val file = TemporaryFile("example-file.mp3")
+      val file = tempFileCreator.create("example-file.mp3")
       val filePart = FilePart[TemporaryFile](key = "letter-of-authority", "example-file.mp3", contentType = Some("audio/mpeg"), ref = file)
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
@@ -149,26 +153,26 @@ class UploadWrittenAuthorisationControllerSpec extends ControllerSpecBase with M
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe BAD_REQUEST
+      status(result) shouldBe BAD_REQUEST
 
-      contentAsString(result) should include ("some error message about bad file")
+      contentAsString(result) should include("some error message about bad file")
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
       val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"), ref = TemporaryFile("example-file.txt"))
+      val filePart = FilePart[TemporaryFile](key = "file", "file.txt", contentType = Some("text/plain"), ref = tempFileCreator.create("example-file.txt"))
       val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
       val postRequest = fakeRequest.withBody(form)
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
   }

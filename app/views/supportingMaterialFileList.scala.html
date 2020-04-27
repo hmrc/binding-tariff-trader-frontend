@@ -50,10 +50,14 @@
                 labelHtml = Some(addAnotherFile)
             )
         } else {
+            <h1 class="heading-xlarge">@messages("supportingMaterialFileList.heading")</h1>
+
+            @indicationsContent
+
             @components.input_yes_no(
                 field = form("add-file-choice"),
-                labelHtml = Some(components.heading(messages("supportingMaterialFileList.heading"))),
-                contentHtml = Some(indicationsContent)
+                label = Some(messages("supportingMaterialFileList.heading")),
+                labelClass = Some("visually-hidden")
             )
         }
 

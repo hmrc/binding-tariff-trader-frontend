@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.Upstream5xxResponse
 
 class EmailConnectorSpec extends ConnectorTest {
 
-  private val connector = new EmailConnector(appConfig, standardHttpClient)
+  private val connector = new EmailConnector(mockConfig, standardHttpClient)
 
   private val email = ApplicationSubmittedEmail(Seq("user@domain.com"), ApplicationSubmittedParameters("ref", "name"))
 

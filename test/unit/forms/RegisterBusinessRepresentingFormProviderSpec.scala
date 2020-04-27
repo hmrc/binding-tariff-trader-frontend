@@ -27,7 +27,6 @@ class RegisterBusinessRepresentingFormProviderSpec extends StringFieldBehaviours
 
     val fieldName = "eoriNumber"
     val requiredKey = "registerBusinessRepresenting.error.eoriNumber.required"
-    val lengthKey = "registerBusinessRepresenting.error.eoriNumber.format"
 
     "pass when a valid eori is inserted" in {
       val validEori = "GB123456789000000"

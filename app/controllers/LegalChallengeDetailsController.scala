@@ -16,33 +16,33 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.LegalChallengeDetailsFormProvider
+import javax.inject.Inject
 import models.Mode
-import pages.{LegalChallengeDetailsPage, SupportingInformationPage}
 import navigation.Navigator
-import play.api.mvc.{Action, AnyContent}
+import pages.{LegalChallengeDetailsPage, SupportingInformationPage}
+import play.api.data.Form
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.legalChallengeDetails
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class LegalChallengeDetailsController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: LegalChallengeDetailsFormProvider
-                                      ) extends FrontendController with I18nSupport {
+                                                 appConfig: FrontendAppConfig,
+                                                 dataCacheConnector: DataCacheConnector,
+                                                 navigator: Navigator,
+                                                 identify: IdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 formProvider: LegalChallengeDetailsFormProvider,
+                                                 cc: MessagesControllerComponents
+                                               ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

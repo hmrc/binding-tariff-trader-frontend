@@ -25,23 +25,24 @@ import models.Mode
 import navigation.Navigator
 import pages.{AcceptItemInformationPage, PreviousCommodityCodePage}
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.previousCommodityCode
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
-                                      override val messagesApi: MessagesApi,
-                                      dataCacheConnector: DataCacheConnector,
-                                      navigator: Navigator,
-                                      identify: IdentifierAction,
-                                      getData: DataRetrievalAction,
-                                      requireData: DataRequiredAction,
-                                      formProvider: PreviousCommodityCodeFormProvider
-                                      ) extends FrontendController with I18nSupport {
+class PreviousCommodityCodeController @Inject()(
+                                                 appConfig: FrontendAppConfig,
+                                                 dataCacheConnector: DataCacheConnector,
+                                                 navigator: Navigator,
+                                                 identify: IdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 formProvider: PreviousCommodityCodeFormProvider,
+                                                 cc: MessagesControllerComponents
+                                               ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -51,7 +52,6 @@ class PreviousCommodityCodeController @Inject()(appConfig: FrontendAppConfig,
       case Some(value) => form.fill(value)
       case _ => form
     }
-
     Ok(previousCommodityCode(appConfig, preparedForm, mode))
   }
 

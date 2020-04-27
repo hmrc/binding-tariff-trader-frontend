@@ -16,32 +16,33 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
 import forms.DescribeYourItemFormProvider
+import javax.inject.Inject
 import models.Mode
-import pages.{DescribeYourItemPage, SupportingMaterialFileListPage}
 import navigation.Navigator
-import play.api.mvc.{Action, AnyContent}
+import pages.{DescribeYourItemPage, SupportingMaterialFileListPage}
+import play.api.data.Form
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.describeYourItem
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DescribeYourItemController @Inject()(appConfig: FrontendAppConfig,
-                                      override val messagesApi: MessagesApi,
-                                      dataCacheConnector: DataCacheConnector,
-                                      navigator: Navigator,
-                                      identify: IdentifierAction,
-                                      getData: DataRetrievalAction,
-                                      requireData: DataRequiredAction,
-                                      formProvider: DescribeYourItemFormProvider
-                                      ) extends FrontendController with I18nSupport {
+class DescribeYourItemController @Inject()(
+                                            appConfig: FrontendAppConfig,
+                                            dataCacheConnector: DataCacheConnector,
+                                            navigator: Navigator,
+                                            identify: IdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            formProvider: DescribeYourItemFormProvider,
+                                            cc: MessagesControllerComponents
+                                          ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

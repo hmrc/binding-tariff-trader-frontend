@@ -25,8 +25,8 @@ import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.{ReturnSamplesPage, SimilarItemCommodityCodePage}
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.returnSamples
 
@@ -34,15 +34,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ReturnSamplesController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: ReturnSamplesFormProvider
-                                      ) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                         appConfig: FrontendAppConfig,
+                                         dataCacheConnector: DataCacheConnector,
+                                         navigator: Navigator,
+                                         identify: IdentifierAction,
+                                         getData: DataRetrievalAction,
+                                         requireData: DataRequiredAction,
+                                         formProvider: ReturnSamplesFormProvider,
+                                         cc: MessagesControllerComponents
+                                       ) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
 
   private lazy val form = formProvider()
 

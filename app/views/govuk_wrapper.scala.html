@@ -14,16 +14,17 @@
  * limitations under the License.
  *@
 
+@import play.twirl.api.HtmlFormat._
 @(appConfig: config.FrontendAppConfig,
   title: String,
   mainClass: Option[String] = None,
   mainDataAttributes: Option[Html] = None,
   bodyClasses: Option[String] = None,
   linkElem: Option[Html] = None,
-  sidebar: Html = HtmlFormat.empty,
+  sidebar: Html = empty,
   contentHeader: Option[Html] = None,
-  mainContent: Html = HtmlFormat.empty,
-  serviceInfoContent: Html = HtmlFormat.empty,
+  mainContent: Html = empty,
+  serviceInfoContent: Html = empty,
   scriptElem: Option[Html] = None,
   signOutLink: String)(implicit request: Request[_], messages: Messages)
 
@@ -42,10 +43,8 @@
       headScripts = None)
     <meta name="format-detection" content="telephone=no" />
     <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")' />
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NDJKHWK" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <script type="text/javascript" src=@routes.Assets.versioned("javascripts/ga-tag-manager.js")></script>
+
+
 }
 
 
@@ -68,6 +67,10 @@
       gaCalls = None)
       <script src="@routes.Assets.versioned("lib/accessible-autocomplete/dist/accessible-autocomplete.min.js")"></script>
       <script src='@routes.Assets.versioned("javascripts/bindingtarifftraderfrontend-app.js")'> </script>
+      <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NDJKHWK" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      </noscript>
+      <script type="text/javascript" src=@routes.Assets.versioned("javascripts/ga-tag-manager.js")></script>
 }
 
 @footerTop = {}

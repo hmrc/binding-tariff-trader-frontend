@@ -17,35 +17,30 @@
 package controllers
 
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeIdentifierAction}
-import navigation.FakeNavigator
-import org.mockito.Mockito
-import org.scalatest.mockito.MockitoSugar
-import play.api.mvc.Call
 import play.api.test.Helpers._
 import service.CountriesService
 import viewmodels.AnswerSection
 import views.html.check_your_answers
 
-class CheckYourAnswersControllerSpec extends ControllerSpecBase with MockitoSugar {
+class CheckYourAnswersControllerSpec extends ControllerSpecBase {
 
-  private def onwardRoute = Call("GET", "/foo")
   private val countriesService = new CountriesService
+
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CheckYourAnswersController(
       frontendAppConfig,
-      messagesApi,
-      new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
-      countriesService
+      countriesService,
+      cc
     )
 
   "Check Your Answers Controller" must {
 
     "return 200 and the correct view for a GET" in {
       val result = controller().onPageLoad()(fakeRequest)
-      status(result) mustBe OK
+      status(result) shouldBe OK
 
       val expectedSections = Seq(
         AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq.empty),
@@ -53,14 +48,14 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with MockitoSuga
         AnswerSection(Some("checkYourAnswers.informationAboutYourItemSection"), Seq.empty),
         AnswerSection(Some("checkYourAnswers.otherInformation"), Seq.empty)
       )
-      contentAsString(result) mustBe check_your_answers(frontendAppConfig, expectedSections)(fakeRequest, messages).toString
+      contentAsString(result) shouldBe check_your_answers(frontendAppConfig, expectedSections)(fakeRequest, messages).toString
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
       val result = controller(dontGetAnyData).onPageLoad()(fakeRequest)
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
   }

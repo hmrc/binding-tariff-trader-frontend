@@ -17,62 +17,70 @@
 package controllers
 
 import connectors.DataCacheConnector
-import controllers.actions.{DataRequiredActionImpl, FakeIdentifierAction}
+import controllers.actions.FakeIdentifierAction
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito
 import org.mockito.Mockito.verify
-import org.mockito.{ArgumentMatchers, Mockito}
-import org.scalatest.mockito.MockitoSugar._
-import play.api.mvc.{Cookies, Result, Session}
+import org.scalatest.BeforeAndAfterEach
+import play.api.mvc.Result
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
-class SignOutControllerSpec extends ControllerSpecBase {
+class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
+
+  private val dataCache: DataCacheConnector = mock[DataCacheConnector]
+
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+
+    Mockito.reset(dataCache)
+  }
+
+  private def controller = new SignOutController(
+    frontendAppConfig,
+    dataCache,
+    FakeIdentifierAction,
+    getEmptyCacheMap,
+    cc
+  )
 
   "Sign out controller" must {
 
     "return 200 for a start feedback survey" in {
-      val result: Future[Result] = new SignOutController(frontendAppConfig, mock[DataCacheConnector], FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, messagesApi).startFeedbackSurvey(fakeRequestWithEori)
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result).get must endWith( "/feedback/ABTIR")
+      val result: Future[Result] = controller.startFeedbackSurvey(fakeRequestWithEori)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result).get should endWith("/feedback/ABTIR")
     }
 
     "clear user cache when present" in {
-      val cache = mock[DataCacheConnector]
-      new SignOutController(frontendAppConfig, cache, FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, messagesApi).startFeedbackSurvey(fakeRequestWithEoriAndCache)
-      verify(cache).remove(any())
+      controller.startFeedbackSurvey(fakeRequestWithEoriAndCache)
+      verify(dataCache).remove(any())
     }
   }
+
 
   "Force sign out controller" must {
 
     "return 200 for a start feedback survey" in {
-      val result: Future[Result] = new SignOutController(frontendAppConfig, mock[DataCacheConnector], FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, messagesApi).forceSignOut(fakeRequestWithEori)
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result).get must endWith( "/this-service-has-been-reset")
+      val result: Future[Result] = controller.forceSignOut(fakeRequestWithEori)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result).get should endWith("/this-service-has-been-reset")
     }
 
     "clear user cache when present" in {
-      val cache = mock[DataCacheConnector]
-      new SignOutController(frontendAppConfig, cache, FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, messagesApi).forceSignOut(fakeRequestWithEoriAndCache)
-      verify(cache).remove(any())
+      controller.forceSignOut(fakeRequestWithEoriAndCache)
+      verify(dataCache).remove(any())
     }
   }
 
   "Unauthorised sign out controller" must {
 
     "return a redirect and clear session" in {
-
-      val result: Future[Result] = new SignOutController(frontendAppConfig, mock[DataCacheConnector], FakeIdentifierAction, getEmptyCacheMap,
-        new DataRequiredActionImpl, messagesApi).unauthorisedSignOut(fakeRequest)
-      status(result) mustBe SEE_OTHER
-      cookies(result).get("mdtp").isDefined mustBe true
-      redirectLocation(result).get must endWith( "/applications")
+      val result: Future[Result] = controller.unauthorisedSignOut(fakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result).get should endWith("/applications")
+      cookies(result).size shouldBe 0
     }
 
   }
