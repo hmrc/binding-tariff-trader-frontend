@@ -19,6 +19,7 @@
 @(
         field: Field,
         labelHtml: Option[Html] = None,
+        labelClass: Option[String] = Some(""),
         contentHtml: Option[Html] = None,
         hint: Option[Html] = None,
         trackGa: Boolean = false,
@@ -26,21 +27,21 @@
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
-    <fieldset id="@{field.id}">
-        <legend>
+    <fieldset id="@{field.id}" @if(field.hasErrors || hint.isDefined){aria-descibedby="@if(field.hasErrors){error-message-@{field.id}-input} @if(hint.isDefined){@{field.id}-hint}"}>
+        <legend @if(labelClass.isDefined){class="@labelClass"}>
             @if(labelHtml.isDefined){
                @labelHtml
             }
-            @if(contentHtml.isDefined){
-                @contentHtml
-            }
-            @if(hint.isDefined){
-                <div class="form-hint mb-2">@hint</div>
-            }
-            @field.errors.map { error =>
-                <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
-            }
         </legend>
+        @if(contentHtml.isDefined){
+            @contentHtml
+        }
+        @if(hint.isDefined){
+            <div class="form-hint mb-2" id="@{field.id}-hint">@hint</div>
+        }
+        @field.errors.map { error =>
+            <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
+        }
         @for(input <- inputs) {
             <div class="multiple-choice">
                 <input id="@{input.id}" type="radio" name="@{field.id}" value="@{input.value}" @if(field.value.contains(input.value)){checked="checked"} @if(trackGa){data-journey-click="binding-tariff-trader-frontend:click:@{input.id}"} />
