@@ -55,54 +55,52 @@
         @components.back_link()
 
         @components.error_summary(form.errors)
-        <fieldset>
-            <legend>
-                @components.heading(messages("registerBusinessRepresenting.heading"))
-                <div role="note" class="application-notice info-notice">
-                    <p> @messages("registerBusinessRepresenting.note")</p>
-                </div>
-            </legend>
 
-            @components.input_text(
-                field = form("eoriNumber"),
-                hint  = Some(messages("registerBusinessRepresenting.eoriNumber.hint")),
-                label = Some(messages("registerBusinessRepresenting.eoriNumber"))
-            )
+        @components.heading(messages("registerBusinessRepresenting.heading"))
+        <div role="note" class="application-notice info-notice">
+            <p> @messages("registerBusinessRepresenting.note")</p>
+        </div>
 
-            @components.input_text(
-                field = form("businessName"),
-                label = Some(messages("registerBusinessRepresenting.businessName")),
-                inputPurpose=Some("section-representing organization")
-            )
 
-            @components.input_text(
-                field = form("addressLine1"),
-                label = Some(messages("registerBusinessRepresenting.addressLine1")),
-                inputPurpose=Some("section-representing address-line1")
-            )
+        @components.input_text(
+            field = form("eoriNumber"),
+            hint  = Some(messages("registerBusinessRepresenting.eoriNumber.hint")),
+            label = Some(messages("registerBusinessRepresenting.eoriNumber"))
+        )
 
-            @components.input_text(
-                field = form("town"),
-                label = Some(messages("registerBusinessRepresenting.town")),
-                inputPurpose=Some("section-representing address-level1")
-            )
+        @components.input_text(
+            field = form("businessName"),
+            label = Some(messages("registerBusinessRepresenting.businessName")),
+            inputPurpose=Some("section-representing organization")
+        )
 
-            @components.input_text(
-                field = form("postCode"),
-                label = Some(messages("registerBusinessRepresenting.postCode")),
-                inputPurpose=Some("section-representing postal-code")
-            )
+        @components.input_text(
+            field = form("addressLine1"),
+            label = Some(messages("registerBusinessRepresenting.addressLine1")),
+            inputPurpose=Some("section-representing address-line1")
+        )
 
-            @components.select(
-                field = form("country"),
-                elementOptions = ("","") :: countries.map(c => (c.code,messages(c.countryName))),
-                displayEmptyValue = true,
-                '_label -> messages("registerBusinessRepresenting.country"),
-                '_errorsAboveInput -> true
-            )
+        @components.input_text(
+            field = form("town"),
+            label = Some(messages("registerBusinessRepresenting.town")),
+            inputPurpose=Some("section-representing address-level1")
+        )
 
-            @components.submit_button()
+        @components.input_text(
+            field = form("postCode"),
+            label = Some(messages("registerBusinessRepresenting.postCode")),
+            inputPurpose=Some("section-representing postal-code")
+        )
 
-        </fieldset>
+        @components.select(
+            field = form("country"),
+            elementOptions = ("","") :: countries.map(c => (c.code,messages(c.countryName))),
+            displayEmptyValue = true,
+            '_label -> messages("registerBusinessRepresenting.country"),
+            '_errorsAboveInput -> true
+        )
+
+        @components.submit_button()
+
     }
 }

@@ -55,21 +55,19 @@
 
         @components.error_summary(form.errors)
 
-        <fieldset>
-
             @if(request.eoriNumber.isDefined) {
-                <legend>
-                    @components.heading(messages("registeredAddressForEori.heading", request.eoriNumber.get))
 
-                    <div role="note" class="application-notice info-notice">
-                        <p> @messages("registeredAddressForEori.note") </p>
-                    </div>
-                </legend>
+                @components.heading(messages("registeredAddressForEori.heading", request.eoriNumber.get))
+
+                <div role="note" class="application-notice info-notice">
+                    <p> @messages("registeredAddressForEori.note") </p>
+                </div>
+
                 @components.input_hidden(field = form("eori"))
             } else {
-                <legend>
-                    @components.heading(messages("registeredAddressForEori.headingNoEORI"))
-                </legend>
+
+                @components.heading(messages("registeredAddressForEori.headingNoEORI"))
+
                 @components.input_text(
                     field = form("eori"),
                     hint  = Some(messages("registeredAddressForEori.eori.hint")),
@@ -111,6 +109,5 @@
 
 
             @components.submit_button()
-        </fieldset>
     }
 }
