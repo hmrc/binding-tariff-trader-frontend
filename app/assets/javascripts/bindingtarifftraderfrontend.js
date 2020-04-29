@@ -23,10 +23,11 @@ $(document).ready(function () {
     // Country autocomplete
     // =====================================================
 
-    if (typeof accessibleAutocomplete != 'undefined' && document.querySelector('.js-autocomplete') != null) {
+    if (typeof openregisterLocationPicker != 'undefined' && document.querySelector('.js-autocomplete') != null) {
         // load autocomplete
-        accessibleAutocomplete.enhanceSelectElement({
-            selectElement: document.querySelector('.js-autocomplete')
+        openregisterLocationPicker({
+            selectElement: document.querySelector('.js-autocomplete'),
+            url: '/binding-tariff-application/assets/javascripts/location-autocomplete-graph.json'
         });
 
         // =====================================================

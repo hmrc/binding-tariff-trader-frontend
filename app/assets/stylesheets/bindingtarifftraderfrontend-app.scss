@@ -9,7 +9,11 @@
 @import 'partials/_upload_help';
 @import 'partials/_registerBusinessRepresenting';
 @import 'partials/_tabs';
+
+// https://github.com/alphagov/govuk-country-and-territory-autocomplete
 @import 'partials/_autocomplete';
+// modifications to above
+@import 'partials/_autocomplete_modifications';
 
 // WCAG 2.1 Updates
 @import 'partials/_palette';

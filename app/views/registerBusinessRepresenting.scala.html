@@ -23,15 +23,10 @@
 
 @(appConfig: FrontendAppConfig, form: Form[RegisterBusinessRepresenting], mode: Mode, countries: List[Country])(implicit request: Request[_], messages: Messages)
 
-@linkElem = {
-    <link rel="stylesheet" href="@routes.Assets.versioned("lib/accessible-autocomplete/dist/accessible-autocomplete.min.css")" >
-}
-
 @main_template(
     title = s"${errorPrefix(form)} ${messages("registerBusinessRepresenting.title")}",
     appConfig = appConfig,
-    bodyClasses = None,
-    inlineLinkElem = Some(linkElem)) {
+    bodyClasses = None) {
 
     @helpers.form(action = RegisterBusinessRepresentingController.onSubmit(mode)) {
 

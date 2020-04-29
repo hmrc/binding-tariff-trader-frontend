@@ -1,0 +1,16 @@
+// ensures the data entry and the ghost autocomplete stay on top of each other and that the latter can be seen under the former
+.autocomplete__input[type="text"] {
+    z-index: 1;
+    width: 100%;
+    background-color: transparent;
+}
+.autocomplete__hint {
+    left: 0;
+    z-index: 0;
+}
+
+// we are using wrapping divs with widths to constrain the autocomplete
+// this ensure if js is not avilable, this does not affect the standard select
+.govuk-\!-width-one-half select.form-control {
+    width: 100%;
+}
