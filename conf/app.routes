@@ -119,3 +119,5 @@ GET         /applications/:reference/ruling                            controlle
 GET         /applications/:reference/ruling/pdf                        controllers.ApplicationController.rulingCertificatePdf(reference: String, token: Option[String] ?= None)
 
 GET         /rulings/:reference                                        controllers.RulingController.viewRuling(reference: String)
+
+GET        /accessibility                                              controllers.AccessibilityController.onPageLoad
