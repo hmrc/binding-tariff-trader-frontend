@@ -65,8 +65,17 @@ Run `sm --start PDF_GENERATOR_SERVICE -r 1.20.0`
 
 ### Testing
 
-Run `./run_all_tests.sh`
-or `sbt test it:test`
+Run `./run_all_tests.sh` or `sbt test it:test`
+
+Known issue:
+
+When you trying to run testOnly in sbt shell, and you get
+```
+[info]   com.github.tomakehurst.wiremock.common.FatalStartupException: java.lang.RuntimeException: java.io.IOException: Failed to bind to localhost/127.0.0.1:20001
+
+```
+
+you should restart sbt shell every time, at this moment of time it happens only in test clases in ```connectors``` package because of ``ConnectorTest`` is starting wiremock server at initialization of class ```WireMockObject.start()``` so wire mock work correctly.
 
 ### Changes
 

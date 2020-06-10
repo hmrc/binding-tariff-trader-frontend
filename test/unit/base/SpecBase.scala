@@ -62,6 +62,5 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
 
   def tempFileCreator: TemporaryFileCreator = injector.instanceOf[TemporaryFileCreator]
 
-  WireMockObject.start()
 
 }

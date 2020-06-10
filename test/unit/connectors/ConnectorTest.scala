@@ -33,6 +33,8 @@ trait ConnectorTest
   extends SpecBase
     with BeforeAndAfterAll {
 
+  WireMockObject.start()
+
   protected lazy val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   protected lazy val fakeAuthToken = "AUTH_TOKEN"
