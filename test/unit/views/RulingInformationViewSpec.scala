@@ -17,6 +17,7 @@
 package views
 
 import models.{Case, oCase}
+import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import utils.Dates
 import views.behaviours.ViewBehaviours
@@ -25,20 +26,22 @@ import views.html.ruling_information
 class RulingInformationViewSpec extends ViewBehaviours {
 
   private def createView(c: Case): () => HtmlFormat.Appendable = () => ruling_information(frontendAppConfig, c)(fakeRequest, messages)
+  private def getElementText(doc: Document, id: String): String = doc.getElementById(id).text().trim
 
-  private val rulingCase = oCase.btiCaseWithDecision
-  private val rulingCaseNoExplanation = oCase.btiCaseWithDecisionNoExplanation
-  private val ruling = rulingCase.decision.getOrElse(throw new Exception("Bad test data"))
+  private val rulingCaseWithDecision = oCase.btiCaseWithDecision
+  private val rulingCaseWithoutDecision = oCase.btiCaseWithDecision.copy(decision = None)
+  private val rulingCaseWithDecisionNoExplanation = oCase.btiCaseWithDecisionNoExplanation
+  private val ruling = rulingCaseWithDecision.decision.getOrElse(throw new Exception("Bad test data"))
 
 
   "Ruling Information View" must {
 
     "show the expected element values" in {
 
-      val doc = asDocument(createView(rulingCase).apply())
-      assertContainsText(doc,rulingCase.reference)
-      assertContainsText(doc,rulingCase.application.holder.businessName)
-      assertContainsText(doc,rulingCase.application.holder.businessName)
+      val doc = asDocument(createView(rulingCaseWithDecision).apply())
+      assertContainsText(doc,rulingCaseWithDecision.reference)
+      assertContainsText(doc,rulingCaseWithDecision.application.holder.businessName)
+      assertContainsText(doc,rulingCaseWithDecision.application.holder.businessName)
       assertContainsText(doc,Dates.format(ruling.effectiveStartDate))
       assertContainsText(doc,Dates.format(ruling.effectiveEndDate))
 
@@ -53,11 +56,74 @@ class RulingInformationViewSpec extends ViewBehaviours {
     }
 
     "show the surrounding text but nothing between when no explanation present" in {
-      val doc = asDocument(createView(rulingCaseNoExplanation).apply())
+      val doc = asDocument(createView(rulingCaseWithDecisionNoExplanation).apply())
 
       assertRenderedById(doc, "rulingInformation.commodityCode")
       assertNotRenderedById(doc, "rulingInformation.explanation")
       assertRenderedById(doc, "rulingInformation.commoditySuffix")
+    }
+
+    "show start date when there is decision" in {
+      val doc = asDocument(createView(rulingCaseWithDecision).apply())
+      val expected = Dates.format(rulingCaseWithDecision.decision.get.effectiveStartDate)
+
+      getElementText(doc, "rulingInformation.startDate") shouldBe expected
+    }
+
+    "show start date when there is no decision" in {
+      val doc = asDocument(createView(rulingCaseWithoutDecision).apply())
+      val expected = ""
+
+      getElementText(doc, "rulingInformation.startDate") shouldBe expected
+    }
+
+    "show expiry date when there is decision" in {
+      val doc = asDocument(createView(rulingCaseWithDecision).apply())
+      val expected = Dates.format(rulingCaseWithDecision.decision.get.effectiveEndDate)
+
+      getElementText(doc, "rulingInformation.expiryDate") shouldBe expected
+    }
+
+    "show expiry date when there is no decision" in {
+      val doc = asDocument(createView(rulingCaseWithoutDecision).apply())
+      val expected = ""
+
+      getElementText(doc, "rulingInformation.expiryDate") shouldBe expected
+    }
+
+    "show bindingCommodityCode when there is decision" in {
+      val doc = asDocument(createView(rulingCaseWithDecision).apply())
+      val expected = rulingCaseWithDecision.decision.get.bindingCommodityCode
+
+      getElementText(doc, "rulingInformation.commodityCode") shouldBe expected
+    }
+
+    "show bindingCommodityCode when there is no decision" in {
+      val doc = asDocument(createView(rulingCaseWithoutDecision).apply())
+      val expected = ""
+
+      getElementText(doc, "rulingInformation.commodityCode") shouldBe expected
+    }
+
+    "show explanation when there is decision and explanation" in {
+      val doc = asDocument(createView(rulingCaseWithDecision).apply())
+      val expected = rulingCaseWithDecision.decision.get.explanation.get
+
+      getElementText(doc, "rulingInformation.explanation") shouldBe expected
+    }
+
+    "show explanation when there is decision and no explanation" in {
+      val doc = asDocument(createView(rulingCaseWithDecisionNoExplanation).apply())
+      val expected = null
+
+      doc.getElementById("rulingInformation.explanation") should be(expected)
+    }
+
+    "show explanation when there is no decision" in {
+      val doc = asDocument(createView(rulingCaseWithoutDecision).apply())
+      val expected = null
+
+      doc.getElementById("rulingInformation.explanation") should be(expected)
     }
   }
 }

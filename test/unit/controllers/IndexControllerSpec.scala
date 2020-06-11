@@ -20,6 +20,7 @@ import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import models.CaseStatus.CaseStatus
 import models._
 import models.oCase._
+import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import play.api.test.Helpers._
@@ -76,7 +77,7 @@ class IndexControllerSpec extends ControllerSpecBase {
 
   "Index Controller - Get Rulings" should {
 
-    "return the correct view for a load rulings" in {
+    "return the correct view for a load rulings with decision" in {
 
       given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
         .willReturn(Future.successful(Paged(Seq(btiCaseWithDecision), 1, 10, 0)))
@@ -103,6 +104,43 @@ class IndexControllerSpec extends ControllerSpecBase {
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
+    }
+
+    "return the correct view for a load rulings without decision" in {
+
+      given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq(btiCaseWithDecision.copy(decision = None)), 1, 10, 0)))
+
+      val result = controller().getRulings(page = 1)(fakeRequest)
+
+      status(result) shouldBe OK
+      contentAsString(result) should include("rulings-list-table")
+    }
+
+    for(caseStatus <- CaseStatus.values.toSeq) {
+      s"return the correct view for a load rulings and case status in table => '$caseStatus'" in {
+        val testCase = btiCaseWithDecision.copy(status = caseStatus)
+        given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+          .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+
+        val result = controller().getRulings(page = 1)(fakeRequest)
+
+        status(result) shouldBe OK
+
+        val doc = Jsoup.parse(contentAsString(result))
+        val actualStatus = doc.getElementById("rulings-list-row-0-status").text().trim
+
+        val expectedStatus = testCase.status match {
+          case CaseStatus.CANCELLED => messages("case.ruling.status.cancelled")
+          case CaseStatus.COMPLETED if testCase.hasActiveDecision => messages("case.ruling.status.active")
+          case CaseStatus.COMPLETED if testCase.hasExpiredDecision => messages("case.ruling.status.expired")
+          case CaseStatus.REJECTED => messages("case.ruling.status.rejected")
+          case CaseStatus.SUSPENDED => messages("case.ruling.status.suspended")
+          case _ => testCase.status.toString.toLowerCase.capitalize
+        }
+
+        actualStatus shouldBe expectedStatus
+      }
     }
 
   }

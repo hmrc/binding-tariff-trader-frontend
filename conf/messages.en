@@ -502,6 +502,8 @@ case.rulings.pagination.singular = ruling
 case.rulings.pagination.plural = rulings
 
 case.ruling.status.cancelled = Cancelled
+case.ruling.status.rejected = Closed
+case.ruling.status.suspended = Closed
 case.ruling.status.active = Active
 case.ruling.status.expired = Expired
 

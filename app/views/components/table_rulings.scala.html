@@ -65,8 +65,10 @@
                                 @c.status match {
                                     case CaseStatus.CANCELLED => { <span class="color-red"> @messages("case.ruling.status.cancelled") </span> }
                                     case CaseStatus.COMPLETED if c.hasActiveDecision => { <span class="color-green"> @messages("case.ruling.status.active") </span> }
-                                    case CaseStatus.COMPLETED if c.hasExpiredDecision =>{ @messages("case.ruling.status.expired") }
-                                    case _ => { @c.status }
+                                    case CaseStatus.COMPLETED if c.hasExpiredDecision => { @messages("case.ruling.status.expired") }
+                                    case CaseStatus.REJECTED => { @messages("case.ruling.status.rejected") }
+                                    case CaseStatus.SUSPENDED => { @messages("case.ruling.status.suspended") }
+                                    case _ => { @c.status.toString.toLowerCase.capitalize }
                                 }
                             </td>
                             <td id="rulings-list-row-@{index}-view">
