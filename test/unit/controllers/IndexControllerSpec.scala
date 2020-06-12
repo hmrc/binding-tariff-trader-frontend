@@ -73,6 +73,72 @@ class IndexControllerSpec extends ControllerSpecBase {
       redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
     }
 
+    "return the correct view for a load rulings without decision" in {
+
+      given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq(btiCaseWithDecision.copy(decision = None)), 1, 10, 0)))
+
+      val result = controller().getApplications(page = 1)(fakeRequest)
+
+      status(result) shouldBe OK
+      contentAsString(result) should include("applications-list-table")
+    }
+
+    for(caseStatus <- CaseStatus.values.toSeq) {
+      s"return the correct view with correct ruling status in table for case status '$caseStatus'" in {
+        val testCase = btiCaseWithDecision.copy(status = caseStatus)
+        given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+          .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+
+        val result = controller().getApplications(page = 1)(fakeRequest)
+
+        status(result) shouldBe OK
+
+        val doc = Jsoup.parse(contentAsString(result))
+        val actualStatus = doc.getElementById("application-list-row-0-status").text().trim
+
+        val expectedStatus = testCase.status match {
+          case CaseStatus.NEW | CaseStatus.OPEN => {
+            messages("case.application.status.inProgress")
+          }
+          case CaseStatus.SUPPRESSED | CaseStatus.REJECTED => {
+            messages("case.application.status.rejected")
+          }
+          case CaseStatus.REFERRED => {
+            messages("case.application.status.infoRequested")
+          }
+          case CaseStatus.COMPLETED | CaseStatus.CANCELLED => {
+            messages("case.application.status.completed")
+          }
+          case CaseStatus.DRAFT => {
+            messages("case.application.status.draft")
+          }
+          case CaseStatus.SUSPENDED => {
+            messages("case.application.status.suspended")
+          }
+          case _ => ""
+        }
+
+        actualStatus shouldBe expectedStatus
+      }
+
+      s"return the correct view with case bti ruling link in table for case status '$caseStatus'" in {
+        val testCase = btiCaseWithDecision.copy(status = caseStatus)
+        given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+          .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+
+        val result = controller().getApplications(page = 1)(fakeRequest)
+
+        status(result) shouldBe OK
+
+        val doc = Jsoup.parse(contentAsString(result))
+        val actualLinkText = doc.getElementById("application-list-row-0-download").text().trim
+        val expectedLinkText = messages("case.application.viewApplication")
+
+        actualLinkText should startWith(expectedLinkText)
+      }
+    }
+
   }
 
   "Index Controller - Get Rulings" should {
@@ -118,7 +184,7 @@ class IndexControllerSpec extends ControllerSpecBase {
     }
 
     for(caseStatus <- CaseStatus.values.toSeq) {
-      s"return the correct view for a load rulings and case status in table => '$caseStatus'" in {
+      s"return the correct view with correct ruling status in table for case status '$caseStatus'" in {
         val testCase = btiCaseWithDecision.copy(status = caseStatus)
         given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
           .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
@@ -140,6 +206,22 @@ class IndexControllerSpec extends ControllerSpecBase {
         }
 
         actualStatus shouldBe expectedStatus
+      }
+
+      s"return the correct view with case bti ruling link in table for case status '$caseStatus'" in {
+        val testCase = btiCaseWithDecision.copy(status = caseStatus)
+        given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+          .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+
+        val result = controller().getRulings(page = 1)(fakeRequest)
+
+        status(result) shouldBe OK
+
+        val doc = Jsoup.parse(contentAsString(result))
+        val actualLinkText = doc.getElementById("rulings-list-row-0-view").text().trim
+        val expectedLinkText = if(Set(CaseStatus.REJECTED, CaseStatus.SUSPENDED).contains(testCase.status)) { "" } else { messages("case.ruling.viewRuling") }
+
+        actualLinkText shouldBe expectedLinkText
       }
     }
 

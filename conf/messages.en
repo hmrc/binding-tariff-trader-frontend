@@ -483,6 +483,7 @@ case.application.status.rejected = Rejected
 case.application.status.infoRequested = Info requested
 case.application.status.completed = Completed
 case.application.status.draft = Draft
+case.application.status.suspended = Suspended
 
 case.application.viewApplication = View application
 case.application.viewApplication.hidden = View application for reference {0}
