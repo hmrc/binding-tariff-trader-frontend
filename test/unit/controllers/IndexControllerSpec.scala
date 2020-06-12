@@ -202,6 +202,7 @@ class IndexControllerSpec extends ControllerSpecBase {
           case CaseStatus.COMPLETED if testCase.hasExpiredDecision => messages("case.ruling.status.expired")
           case CaseStatus.REJECTED => messages("case.ruling.status.rejected")
           case CaseStatus.SUSPENDED => messages("case.ruling.status.suspended")
+          case CaseStatus.NEW | CaseStatus.OPEN | CaseStatus.REFERRED => { messages("case.ruling.status.in.progress") }
           case _ => testCase.status.toString.toLowerCase.capitalize
         }
 
@@ -219,7 +220,8 @@ class IndexControllerSpec extends ControllerSpecBase {
 
         val doc = Jsoup.parse(contentAsString(result))
         val actualLinkText = doc.getElementById("rulings-list-row-0-view").text().trim
-        val expectedLinkText = if(Set(CaseStatus.REJECTED, CaseStatus.SUSPENDED).contains(testCase.status)) { "" } else { messages("case.ruling.viewRuling") }
+        val notShowLinkStatuses = Set(CaseStatus.REJECTED, CaseStatus.SUSPENDED, CaseStatus.NEW, CaseStatus.OPEN, CaseStatus.REFERRED)
+        val expectedLinkText = if(notShowLinkStatuses.contains(testCase.status)) { "" } else { messages("case.ruling.viewRuling") }
 
         actualLinkText shouldBe expectedLinkText
       }

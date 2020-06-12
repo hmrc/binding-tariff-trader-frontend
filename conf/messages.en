@@ -507,6 +507,7 @@ case.ruling.status.rejected = Closed
 case.ruling.status.suspended = Closed
 case.ruling.status.active = Active
 case.ruling.status.expired = Expired
+case.ruling.status.in.progress = In progress
 
 case.ruling.viewRuling = View BTI ruling
 
