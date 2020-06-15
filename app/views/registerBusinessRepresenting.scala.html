@@ -23,32 +23,10 @@
 
 @(appConfig: FrontendAppConfig, form: Form[RegisterBusinessRepresenting], mode: Mode, countries: List[Country])(implicit request: Request[_], messages: Messages)
 
-@scriptElem = {
-<script src="@routes.Assets.versioned("lib/accessible-autocomplete/dist/accessible-autocomplete.min.js")"></script>
-  <script>
-    $(document).ready(function () {
-
-      // Get IE or Edge browser version
-      var version = detectIE();
-
-      if (version !== 11) {
-        var countrySynonymsData = @Html( Json.toJson(countries.map(_.toAutoCompleteJson)).toString )
-        enhanceSelectIntoAutoComplete("country", countrySynonymsData)
-      }
-    });
-  </script>
-}
-
-@linkElem = {
-<link rel="stylesheet" href="@routes.Assets.versioned("lib/accessible-autocomplete/dist/accessible-autocomplete.min.css")" >
-}
-
 @main_template(
     title = s"${errorPrefix(form)} ${messages("registerBusinessRepresenting.title")}",
     appConfig = appConfig,
-    bodyClasses = None,
-    inlineScript = Some(scriptElem),
-    inlineLinkElem = Some(linkElem)) {
+    bodyClasses = None) {
 
     @helpers.form(action = RegisterBusinessRepresentingController.onSubmit(mode)) {
 
@@ -56,11 +34,11 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("registerBusinessRepresenting.heading"))
-        <div role="note" class="application-notice info-notice">
-            <p> @messages("registerBusinessRepresenting.note")</p>
-        </div>
+            @components.heading(messages("registerBusinessRepresenting.heading"))
 
+            <div role="note" class="application-notice info-notice">
+                <p> @messages("registerBusinessRepresenting.note")</p>
+            </div>
 
         @components.input_text(
             field = form("eoriNumber"),
@@ -86,21 +64,21 @@
             inputPurpose=Some("section-representing address-level1")
         )
 
-        @components.input_text(
-            field = form("postCode"),
-            label = Some(messages("registerBusinessRepresenting.postCode")),
-            inputPurpose=Some("section-representing postal-code")
-        )
+            @components.input_text(
+                field = form("postCode"),
+                label = Some(messages("registerBusinessRepresenting.postCode")),
+                inputPurpose=Some("section-representing postal-code")
+            )
+            <div class="govuk-!-width-one-half">
+                @components.select(
+                    field = form("country"),
+                    elementOptions = ("","") :: countries.map(c => (c.code,messages(c.countryName))),
+                    displayEmptyValue = true,
+                    '_label -> messages("registerBusinessRepresenting.country"),
+                    '_selectClass -> "js-autocomplete"
+                )
+            </div>
 
-        @components.select(
-            field = form("country"),
-            elementOptions = ("","") :: countries.map(c => (c.code,messages(c.countryName))),
-            displayEmptyValue = true,
-            '_label -> messages("registerBusinessRepresenting.country"),
-            '_errorsAboveInput -> true
-        )
-
-        @components.submit_button()
-
+            @components.submit_button()
     }
 }

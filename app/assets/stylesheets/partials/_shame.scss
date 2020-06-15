@@ -19,3 +19,13 @@ address {
 	font-style: normal;
 	margin-bottom: 30px;
 }
+
+
+/*
+============================
+Fix for the Beta banner
+============================
+*/
+.beta-banner p {
+  word-break: normal;
+  }

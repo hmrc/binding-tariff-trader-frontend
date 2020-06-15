@@ -1,5 +1,7 @@
 @import 'partials/_variables';
 @import 'partials/_base';
+@import 'partials/_govuk_widths';
+@import 'partials/_govuk_padding_margin';
 @import 'partials/_forms';
 @import 'partials/_typography';
 @import 'partials/_utilities';
@@ -8,16 +10,11 @@
 @import 'partials/_registerBusinessRepresenting';
 @import 'partials/_tabs';
 
+// https://github.com/alphagov/govuk-country-and-territory-autocomplete
+@import 'partials/_autocomplete';
+// modifications to above
+@import 'partials/_autocomplete_modifications';
+
 // WCAG 2.1 Updates
 @import 'partials/_palette';
 @import 'partials/_focus';
-
-
-/*
-============================
-Fix for the Beta banner
-============================
-*/
-.beta-banner p {
-word-break: normal;
-}
