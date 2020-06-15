@@ -17,10 +17,17 @@
 package service
 
 import models.Country
+import play.api.i18n.Messages
+import play.api.libs.json.JsObject
 
-class CountriesService {
+class CountriesService  {
 
   def getAllCountries: List[Country] = countries
+
+  def autoCompleteSynonymCountries(implicit messages: Messages): JsObject = {
+      countries.flatMap(country => country.toNewAutoCompleteJson)
+        .foldLeft(JsObject.empty){(countryList, c) => countryList.+(c) }
+  }
 
   private val countries = List(
     Country("AE0", "title.abu_dhabi", "AE0", Nil),
