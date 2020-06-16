@@ -17,9 +17,7 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-ui"                          % "8.8.0-play-26",
     "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.26.0-play-26",
     "uk.gov.hmrc"       %% "play-whitelist-filter"            % "3.1.0-play-26",
-    "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.10.0-play-26",
-    "org.webjars.npm"   %  "accessible-autocomplete"          % "2.0.2"
-
+    "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.10.0-play-26"
   )
 
   private lazy val scope: String = "test"
