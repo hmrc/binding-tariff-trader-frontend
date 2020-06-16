@@ -155,3 +155,12 @@ override character count display
         display: block;
     }
 }
+/*
+margin added to item, description and confidential information label on describe your item page
+*/
+.confidential-info-label {
+    margin: 0px 0px 8px 0px;
+}
+.confidential-item-label {
+    margin: 0px;
+}
