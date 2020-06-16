@@ -44,7 +44,7 @@ class IndexController @Inject()(
     CaseStatus.SUPPRESSED, CaseStatus.REFERRED, CaseStatus.REJECTED,
     CaseStatus.CANCELLED, CaseStatus.SUSPENDED, CaseStatus.COMPLETED
   )
-  private val rulingStatuses = Set(CaseStatus.CANCELLED, CaseStatus.COMPLETED)
+  private val rulingStatuses = Set(CaseStatus.REJECTED, CaseStatus.SUSPENDED, CaseStatus.CANCELLED, CaseStatus.COMPLETED)
 
   def getApplications(page: Int): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
