@@ -134,3 +134,13 @@ details summary {
   direction: ltr;
   cursor: pointer;
 }
+/* fixed Remove link overflow issue on mobile device */
+@media screen and (max-width: 767px) {
+    .file-list-size {
+        width: 20%;
+        padding-right: 2px;
+    }
+    .file-list-link {
+        width: 20%;
+    }
+}
