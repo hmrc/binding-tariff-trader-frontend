@@ -68,11 +68,12 @@
                                     case CaseStatus.COMPLETED if c.hasExpiredDecision => { @messages("case.ruling.status.expired") }
                                     case CaseStatus.REJECTED => { @messages("case.ruling.status.rejected") }
                                     case CaseStatus.SUSPENDED => { @messages("case.ruling.status.suspended") }
+                                    case CaseStatus.NEW | CaseStatus.OPEN | CaseStatus.REFERRED => { @messages("case.ruling.status.in.progress") }
                                     case _ => { @c.status.toString.toLowerCase.capitalize }
                                 }
                             </td>
                             <td id="rulings-list-row-@{index}-view">
-                            @if(!Set(CaseStatus.REJECTED, CaseStatus.SUSPENDED).contains(c.status)) {
+                            @if(!Set(CaseStatus.REJECTED, CaseStatus.SUSPENDED, CaseStatus.NEW, CaseStatus.OPEN, CaseStatus.REFERRED).contains(c.status)) {
                                 <a id="rulings-list-row-@{index}-view-link" href="@routes.RulingController.viewRuling(c.reference)">@messages("case.ruling.viewRuling")</a>
                             }
                             </td>
