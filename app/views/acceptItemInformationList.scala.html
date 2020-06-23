@@ -28,7 +28,9 @@
 
         @components.heading(messages("acceptItemInformationList.heading"))
 
-        @components.icon_important("acceptItemInformationList.important")
+        <div class="notice application-notice info-notice">
+            <p> @messages("acceptItemInformationList.important") </p>
+        </div>
 
         <p>@messages("acceptItemInformationList.askfor.paragraph0")</p>
         <p>@messages("acceptItemInformationList.askfor.paragraph1")</p>
