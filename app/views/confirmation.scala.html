@@ -31,9 +31,7 @@
     </div>
 
     <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
-    <ul class="list">
-        <li><a id="confirmation-pdf-link" target="_blank" href="@routes.ApplicationController.applicationPdf(confirmation.reference, Some(pdfToken))">@messages("confirmation.download.link.PDF")</a></li>
-    </ul>
+            <a id="confirmation-pdf-link" target="_blank" href="@routes.ApplicationController.applicationPdf(confirmation.reference, Some(pdfToken))">@messages("confirmation.download.link.PDF")</a>
 
     @if(confirmation.sendingSamples) {
         <h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
