@@ -339,7 +339,7 @@ confirmation.paragraph.whatNext1 = You can sign in to check the status of your a
 
 confirmation.yourRefNumber = Your application reference
 confirmation.paragraph.confirmationEmail = We have sent your confirmation email to {0}
-confirmation.download.link.PDF = Download a PDF of the application
+confirmation.download.link.PDF = Download a PDF of the application (opens in a new window or tab)
 confirmation.download.link.accessibleText = Download an accessible text file of the application
 
 uploadWrittenAuthorisation.title = Upload written authorisation from the business, organisation or individual you’re representing - Apply for a Binding Tariff Information ruling - GOV.UK
