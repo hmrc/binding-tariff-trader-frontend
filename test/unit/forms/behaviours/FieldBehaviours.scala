@@ -42,15 +42,42 @@ trait FieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks with 
                      requiredError: FormError): Unit = {
 
     "not bind when key is not present at all" in {
-
       val result = form.bind(emptyForm).apply(fieldName)
       result.errors shouldEqual Seq(requiredError)
     }
 
     "not bind blank values" in {
-
       val result = form.bind(Map(fieldName -> "")).apply(fieldName)
       result.errors shouldEqual Seq(requiredError)
+    }
+  }
+
+  def postcodeField(form: Form[_], fieldName: String, requiredError: Seq[FormError]): Unit = {
+
+    "bind when key is not present at all and country is not GB" in {
+      val result = form.bind(emptyForm).apply(fieldName)
+      result.errors shouldEqual Seq()
+    }
+
+    "bind when key is present and country is not GB" in {
+      val result = form.bind(Map(fieldName -> "", "country" -> "MD")).apply(fieldName)
+
+      result.errors shouldEqual Seq()
+    }
+
+    "bind blank values" in {
+      val result = form.bind(Map(fieldName -> "")).apply(fieldName)
+      result.errors shouldEqual Seq()
+    }
+
+    "bind when key is valid post code and country is GB" in {
+      val result = form.bind(Map(fieldName -> "AA1 2BB", "country" -> "GB")).apply(fieldName)
+      result.errors shouldEqual Seq()
+    }
+
+    "not bind when key is invalid post code and country is GB" in {
+      val result = form.bind(Map(fieldName -> "postcode", "country" -> "GB")).apply(fieldName)
+      result.errors shouldEqual requiredError
     }
   }
 

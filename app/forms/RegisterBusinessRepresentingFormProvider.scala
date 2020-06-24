@@ -27,7 +27,6 @@ class RegisterBusinessRepresentingFormProvider @Inject() extends Mappings {
   private val businessMaxLength = 100
   private val addressMaxLength = 70
   private val townMaxLength = 35
-  private val postCodeMaxLength = 9
   private val countryMaxLength = 60
 
   def apply(): Form[RegisterBusinessRepresenting] = Form(
@@ -40,8 +39,8 @@ class RegisterBusinessRepresentingFormProvider @Inject() extends Mappings {
         .verifying(maxLength(addressMaxLength, "registerBusinessRepresenting.error.addressLine1.length")),
       "town" -> text("registerBusinessRepresenting.error.town.required")
         .verifying(maxLength(townMaxLength, "registerBusinessRepresenting.error.town.length")),
-      "postCode" -> text("registerBusinessRepresenting.error.postCode.required")
-        .verifying(maxLength(postCodeMaxLength, "registerBusinessRepresenting.error.postCode.length")),
+      "postCode" -> postcodeText("registerBusinessRepresenting.error.postcode.gb")
+        .verifying(optionalPostCodeMaxLength("registerBusinessRepresenting.error.postCode.length")),
       "country" -> text("registerBusinessRepresenting.error.country.required")
         .verifying(maxLength(countryMaxLength, "registerBusinessRepresenting.error.country.length"))
     )(RegisterBusinessRepresenting.apply)(RegisterBusinessRepresenting.unapply)

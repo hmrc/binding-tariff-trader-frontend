@@ -19,10 +19,32 @@ package forms.mappings
 import play.api.data.FormError
 import play.api.data.format.Formatter
 import models.Enumerable
+import utils.PostcodeValidator
 
 import scala.util.control.Exception.nonFatalCatch
 
 trait Formatters {
+
+  private[mappings] def postcodeFormatter(errorKey: String): Formatter[Option[String]] = new Formatter[Option[String]] {
+
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Option[String]] = {
+      lazy val country = data.getOrElse("country", "").trim.toUpperCase
+      lazy val postCode = data.get(key)
+
+      //validate only GB postcodes
+      if (country == "GB" && !PostcodeValidator.validate(postCode.getOrElse(""))) {
+        //if invalid gb postcode set error
+          Left(Seq(FormError(key, errorKey)))
+      } else {
+        //if is empty or non gb country set as is, empty or user input one
+        Right(postCode)
+        }
+    }
+
+    override def unbind(key: String, value: Option[String]): Map[String, String] =
+      Map(key -> value.getOrElse(""))
+
+  }
 
   private[mappings] def stringFormatter(errorKey: String): Formatter[String] = new Formatter[String] {
 
@@ -41,7 +63,7 @@ trait Formatters {
 
       private val baseFormatter = stringFormatter(requiredKey)
 
-      override def bind(key: String, data: Map[String, String]) =
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Boolean] =
         baseFormatter
           .bind(key, data)
           .right.flatMap {
@@ -60,7 +82,7 @@ trait Formatters {
 
       private val baseFormatter = stringFormatter(requiredKey)
 
-      override def bind(key: String, data: Map[String, String]) =
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] =
         baseFormatter
           .bind(key, data)
           .right.map(_.replace(",", ""))
@@ -73,7 +95,7 @@ trait Formatters {
               .left.map(_ => Seq(FormError(key, nonNumericKey)))
         }
 
-      override def unbind(key: String, value: Int) =
+      override def unbind(key: String, value: Int): Map[String, String] =
         baseFormatter.unbind(key, value.toString)
     }
 

@@ -25,6 +25,9 @@ trait Mappings extends Formatters with Constraints {
   protected def text(errorKey: String = "error.required"): FieldMapping[String] =
     of(stringFormatter(errorKey))
 
+  protected def postcodeText(errorKey: String): FieldMapping[Option[String]] =
+    of(postcodeFormatter(errorKey))
+
   protected def int(requiredKey: String = "error.required",
                     wholeNumberKey: String = "error.wholeNumber",
                     nonNumericKey: String = "error.nonNumeric"): FieldMapping[Int] =

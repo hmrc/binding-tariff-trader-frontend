@@ -68,7 +68,7 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
           "valid-business-name",
           "valid-address-line",
           "valid-town",
-          "valid-post-code",
+          Some("valid-post-code"),
           "valid-country")
         )
       )
@@ -76,7 +76,7 @@ class RegisterBusinessRepresentingControllerSpec extends ControllerSpecBase {
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) shouldBe viewAsString(form.fill(RegisterBusinessRepresenting("validEori123", "valid-business-name", "valid-address-line", "valid-town", "valid-post-code", "valid-country")))
+      contentAsString(result) shouldBe viewAsString(form.fill(RegisterBusinessRepresenting("validEori123", "valid-business-name", "valid-address-line", "valid-town", Some("valid-post-code"), "valid-country")))
     }
 
     "redirect to the next page when valid data is submitted" in {
