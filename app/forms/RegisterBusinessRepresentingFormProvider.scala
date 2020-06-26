@@ -39,8 +39,10 @@ class RegisterBusinessRepresentingFormProvider @Inject() extends Mappings {
         .verifying(maxLength(addressMaxLength, "registerBusinessRepresenting.error.addressLine1.length")),
       "town" -> text("registerBusinessRepresenting.error.town.required")
         .verifying(maxLength(townMaxLength, "registerBusinessRepresenting.error.town.length")),
-      "postCode" -> postcodeText("registerBusinessRepresenting.error.postcode.gb")
-        .verifying(optionalPostCodeMaxLength("registerBusinessRepresenting.error.postCode.length")),
+      "postCode" -> postcodeText(
+        "registerBusinessRepresenting.error.postCode.required",
+        "registerBusinessRepresenting.error.postCode.gb"
+      ).verifying(optionalPostCodeMaxLength("registerBusinessRepresenting.error.postCode.length")),
       "country" -> text("registerBusinessRepresenting.error.country.required")
         .verifying(maxLength(countryMaxLength, "registerBusinessRepresenting.error.country.length"))
     )(RegisterBusinessRepresenting.apply)(RegisterBusinessRepresenting.unapply)

@@ -25,19 +25,25 @@ import scala.util.control.Exception.nonFatalCatch
 
 trait Formatters {
 
-  private[mappings] def postcodeFormatter(errorKey: String): Formatter[Option[String]] = new Formatter[Option[String]] {
+  private[mappings] def postcodeFormatter(
+                                           emptyPostcodeErrorKey: String,
+                                           notValidPostcodeErrorKey: String
+                                         ): Formatter[Option[String]] = new Formatter[Option[String]] {
 
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Option[String]] = {
       lazy val country = data.getOrElse("country", "").trim.toUpperCase
-      lazy val postCode = data.get(key)
+      lazy val postCode = data.getOrElse(key, "").trim
 
       //validate only GB postcodes
-      if (country == "GB" && !PostcodeValidator.validate(postCode.getOrElse(""))) {
-        //if invalid gb postcode set error
-          Left(Seq(FormError(key, errorKey)))
+      if (country == "GB" && postCode.isEmpty) {
+        //if country is gb and no postcode was entered
+        Left(Seq(FormError(key, emptyPostcodeErrorKey)))
+      } else if (country == "GB" && !PostcodeValidator.validate(postCode)) {
+        //if invalid gb postcode
+          Left(Seq(FormError(key, notValidPostcodeErrorKey)))
       } else {
         //if is empty or non gb country set as is, empty or user input one
-        Right(postCode)
+        Right(Some(postCode))
         }
     }
 

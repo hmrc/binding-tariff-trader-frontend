@@ -134,7 +134,8 @@ class RegisterBusinessRepresentingFormProviderSpec extends StringFieldBehaviours
   ".postCode" must {
 
     val fieldName = "postCode"
-    val invalidPostcodeKey = "registerBusinessRepresenting.error.postcode.gb"
+    val requirePostcodeKey = "registerBusinessRepresenting.error.postCode.required"
+    val invalidPostcodeKey = "registerBusinessRepresenting.error.postCode.gb"
     val lengthKey = "registerBusinessRepresenting.error.postCode.length"
     val maxLength = 19
 
@@ -154,7 +155,8 @@ class RegisterBusinessRepresentingFormProviderSpec extends StringFieldBehaviours
     behave like postcodeField(
       form,
       fieldName,
-      requiredError = Seq(FormError(fieldName, invalidPostcodeKey))
+      Seq(FormError(fieldName, requirePostcodeKey)),
+      Seq(FormError(fieldName, invalidPostcodeKey))
     )
   }
 
