@@ -17,7 +17,7 @@
 package models
 
 import play.api.i18n.Messages
-import play.api.libs.json.{JsArray, JsObject, JsValue, Json}
+import play.api.libs.json._
 
 case class Country(code: String, countryName: String, alphaTwoCode: String, countrySynonyms: List[String]) {
 

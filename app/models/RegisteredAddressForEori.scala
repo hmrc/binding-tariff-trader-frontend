@@ -18,10 +18,10 @@ package models
 
 import play.api.libs.json._
 
-case class RegisteredAddressForEori(eori: String, businessName: String, addressLine1: String, townOrCity: String, postcode: String, country: String)
+case class RegisteredAddressForEori(eori: String, businessName: String, addressLine1: String, townOrCity: String, postcode: Option[String], country: String)
 
 object RegisteredAddressForEori {
   implicit val format: OFormat[RegisteredAddressForEori] = Json.format[RegisteredAddressForEori]
 
-  def apply(eori: String): RegisteredAddressForEori = RegisteredAddressForEori(eori, "", "", "", "", "")
+  def apply(eori: String): RegisteredAddressForEori = RegisteredAddressForEori(eori, "", "", "", None, "")
 }

@@ -132,7 +132,7 @@ class CaseRequestMapperTest extends UnitSpec {
               "Agent Business Name",
               "Agent Address Line 1",
               "Agent Town",
-              "Agent Post Code",
+              Some("Agent Post Code"),
               "Agent Country"
             )
           ),
@@ -162,7 +162,7 @@ class CaseRequestMapperTest extends UnitSpec {
               "Trader Business Name",
               "Trader Address Line 1",
               "Trader Town",
-              "Trader Post Code",
+              Some("Trader Post Code"),
               "Trader Country"
             )
           ),
@@ -196,7 +196,7 @@ class CaseRequestMapperTest extends UnitSpec {
               "Trader Business Name",
               "Trader Address Line 1",
               "Trader Town",
-              "Trader Post Code",
+              Some("Trader Post Code"),
               "Trader Country"
             )
           ),
@@ -231,7 +231,7 @@ class CaseRequestMapperTest extends UnitSpec {
               "Trader Business Name",
               "Trader Address Line 1",
               "Trader Town",
-              "Trader Post Code",
+              Some("Trader Post Code"),
               "Trader Country"
             )
           ),

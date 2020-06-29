@@ -117,9 +117,10 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
   ".postcode" must {
 
     val fieldName = "postcode"
-    val requiredKey = "registeredAddressForEori.error.postcode.required"
     val lengthKey = "registeredAddressForEori.error.postcode.length"
-    val maxLength = 9
+    val requirePostcodeKey = "registeredAddressForEori.error.postcode.required"
+    val invalidPostcodeKey = "registeredAddressForEori.error.postcode.gb"
+    val maxLength = 19
 
     behave like fieldThatBindsValidData(
       form,
@@ -134,10 +135,11 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
-    behave like mandatoryField(
+    behave like postcodeField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      Seq(FormError(fieldName, requirePostcodeKey)),
+      Seq(FormError(fieldName, invalidPostcodeKey))
     )
   }
 

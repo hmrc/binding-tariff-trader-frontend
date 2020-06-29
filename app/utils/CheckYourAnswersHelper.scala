@@ -101,7 +101,7 @@ class CheckYourAnswersHelper(
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {
     x =>
       AnswerRow("registerBusinessRepresenting.checkYourAnswersLabel",
-        Seq(x.eoriNumber, x.businessName, x.addressLine1, x.town, x.postCode, messagesApi(getCountryName(x.country).mkString)),
+        Seq(x.eoriNumber, x.businessName, x.addressLine1, x.town, x.postCode.getOrElse(""), messagesApi(getCountryName(x.country).mkString)),
         false,
         routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
   }
@@ -121,9 +121,9 @@ class CheckYourAnswersHelper(
   def registeredAddressForEori(implicit request: DataRequest[_]): Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map { x =>
 
     val fields = if (request.eoriNumber.isDefined) {
-      Seq(x.businessName, x.addressLine1, x.townOrCity, x.postcode, messagesApi(getCountryName(x.country).mkString))
+      Seq(x.businessName, x.addressLine1, x.townOrCity, x.postcode.getOrElse(""), messagesApi(getCountryName(x.country).mkString))
     } else {
-      Seq(x.eori, x.businessName, x.addressLine1, x.townOrCity, x.postcode, messagesApi(getCountryName(x.country).mkString))
+      Seq(x.eori, x.businessName, x.addressLine1, x.townOrCity, x.postcode.getOrElse(""), messagesApi(getCountryName(x.country).mkString))
     }
     AnswerRow("registeredAddressForEori.checkYourAnswersLabel", fields, false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }

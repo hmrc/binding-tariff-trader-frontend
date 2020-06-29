@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-sbt -mem 2048 compile coverage test coverageOff coverageReport
+sbt -mem 2048 scalastyle compile coverage test coverageOff coverageReport

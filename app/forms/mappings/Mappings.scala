@@ -16,14 +16,20 @@
 
 package forms.mappings
 
+import models.Enumerable
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
-import models.Enumerable
 
 trait Mappings extends Formatters with Constraints {
 
   protected def text(errorKey: String = "error.required"): FieldMapping[String] =
     of(stringFormatter(errorKey))
+
+  protected def postcodeText(
+                              emptyPostcodeErrorKey: String,
+                              notValidPostcodeErrorKey: String
+                            ): FieldMapping[Option[String]] =
+    of(postcodeFormatter(emptyPostcodeErrorKey, notValidPostcodeErrorKey))
 
   protected def int(requiredKey: String = "error.required",
                     wholeNumberKey: String = "error.wholeNumber",

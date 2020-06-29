@@ -21,6 +21,8 @@ import play.api.data.validation.{Constraint, Invalid, Valid}
 
 trait Constraints {
 
+  private val postCodeMaxLength = 19
+
   protected def firstError[A](constraints: Constraint[A]*): Constraint[A] = {
     Constraint { input: A =>
       constraints
@@ -84,6 +86,10 @@ trait Constraints {
       case str: String if str.length <= maximum => Valid
       case _ => Invalid(errorKey, maximum)
     }
+  }
+
+  protected def optionalPostCodeMaxLength(errorKey: String): Constraint[Option[String]] = {
+    optionalMaxLength(postCodeMaxLength, errorKey)
   }
 
   protected def optionalMaxLength(maximum: Int, errorKey: String): Constraint[Option[String]] = {

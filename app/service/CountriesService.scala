@@ -26,7 +26,7 @@ class CountriesService  {
 
   def autoCompleteSynonymCountries(implicit messages: Messages): JsObject = {
       countries.flatMap(country => country.toNewAutoCompleteJson)
-        .foldLeft(JsObject.empty){(countryList, c) => countryList.+(c) }
+        .foldLeft(JsObject.empty){(countryList, c) => countryList + (c) }
   }
 
   private val countries = List(
