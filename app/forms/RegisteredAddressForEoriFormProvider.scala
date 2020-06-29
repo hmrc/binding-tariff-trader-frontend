@@ -38,7 +38,7 @@ class RegisteredAddressForEoriFormProvider @Inject() extends Mappings {
         "registeredAddressForEori.error.postcode.gb"
       ).verifying(optionalPostCodeMaxLength("registeredAddressForEori.error.postcode.length")),
       "country" -> text("registeredAddressForEori.error.country.required")
-     )(RegisteredAddressForEori.apply)(RegisteredAddressForEori.unapply).verifying()
+     )(RegisteredAddressForEori.apply)(RegisteredAddressForEori.unapply)
    )
 
 }
