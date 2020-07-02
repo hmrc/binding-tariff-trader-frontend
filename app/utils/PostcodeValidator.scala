@@ -24,9 +24,10 @@ object PostcodeValidator {
   private val postcodeRegex = regexString.r
 
   def validate(candidate: String): Boolean = {
-    Logger.debug(s"Validate postcode '$candidate' as it should be GB postcode...")
+    val postcode = candidate.trim.toUpperCase
+    Logger.debug(s"Validate postcode '$postcode' as it should be GB postcode...")
 
-    val result = candidate match {
+    val result = postcode match {
       case postcodeRegex(_ *) => true
       case _                  => false
     }

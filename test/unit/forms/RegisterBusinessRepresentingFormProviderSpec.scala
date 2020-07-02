@@ -156,7 +156,8 @@ class RegisterBusinessRepresentingFormProviderSpec extends StringFieldBehaviours
       form,
       fieldName,
       Seq(FormError(fieldName, requirePostcodeKey)),
-      Seq(FormError(fieldName, invalidPostcodeKey))
+      Seq(FormError(fieldName, invalidPostcodeKey)),
+      Seq(FormError(fieldName, lengthKey, Seq(maxLength)))
     )
   }
 

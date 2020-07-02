@@ -28,7 +28,14 @@ class PostcodeValidatorSpec extends SpecBase {
     "A1A 1AA",
     "A1 1AA",
     "GIR 0AA",
-    "BN21FG"
+    "BN21FG",
+    "aa11 1aa",
+    "aa11 1AA",
+    "aa111AA",
+    "aa111aa",
+    " aa111aa",
+    "aa111aa ",
+    " aa111aa "
   )
 
   val invalidPostcodes = Seq(
