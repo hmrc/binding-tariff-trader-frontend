@@ -111,7 +111,7 @@ registeredAddressForEori.error.postcode.required = Enter a postcode
 registeredAddressForEori.error.country.required = Enter a country
 registeredAddressForEori.error.addressLine1.length = Address line 1 must be 70 characters or less
 registeredAddressForEori.error.townOrCity.length = Town or city must be 35 characters or less
-registeredAddressForEori.error.postcode.length = Postcode must be {0} characters or less
+registeredAddressForEori.error.postcode.length = Postcode must be {0} characters or fewer
 registeredAddressForEori.error.postcode.gb = Enter a real postcode
 
 whichBestDescribesYou.title = Who is this application for? - Apply for a Binding Tariff Information ruling - GOV.UK
@@ -149,7 +149,7 @@ registerBusinessRepresenting.error.country.required = Enter a country
 registerBusinessRepresenting.error.businessName.length = Business or organisation name must be 100 characters or less
 registerBusinessRepresenting.error.addressLine1.length = Address line 1 must be 70 characters or less
 registerBusinessRepresenting.error.town.length = Town or city must be 35 characters or less
-registerBusinessRepresenting.error.postCode.length = Postcode must be {0} characters or less
+registerBusinessRepresenting.error.postCode.length = Postcode must be {0} characters or fewer
 registerBusinessRepresenting.error.country.length = Country must be 60 characters or less
 registerBusinessRepresenting.error.postCode.gb = Enter a real postcode
 
