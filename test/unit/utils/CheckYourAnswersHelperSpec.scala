@@ -135,7 +135,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
 
       "return a row with the correct answer for WhichBestDescribesYouPage" in {
         given(userAnswers.get(WhichBestDescribesYouPage)).willReturn(Option(BusinessOwner))
-        checkHelper.whichBestDescribesYou.get.answer shouldBe "whichBestDescribesYou.businessOwner"
+        checkHelper.whichBestDescribesYou shouldBe None
       }
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check disabled" in {
