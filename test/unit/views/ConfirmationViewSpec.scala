@@ -48,10 +48,10 @@ class ConfirmationViewSpec extends ViewBehaviours {
       val text = asDocument(createViewNoSamples()).text()
 
       text should include("referenceNoSample")
-      text should include("We have sent your confirmation email to marisa.nosample@example.test")
-      text should not include "Your application will not be processed until we receive your samples"
+      text should include(messages("confirmation.paragraph.confirmationEmail", "marisa.nosample@example.test"))
+      text should not include messages("confirmation.sendingSamples.important")
       text should not include "21 Victoria Avenue"
-      text should include("We will give you your ruling within 30 to 60 days.")
+      text should include(messages("confirmation.paragraph.whatNext0.nosample"))
     }
   }
 }
