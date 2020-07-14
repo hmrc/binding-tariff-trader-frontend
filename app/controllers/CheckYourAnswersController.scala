@@ -47,8 +47,8 @@ class CheckYourAnswersController @Inject()(
         Some("checkYourAnswers.applicantRegisteredSection"),
         Seq(
           checkYourAnswersHelper.registeredAddressForEori,
-          checkYourAnswersHelper.enterContactDetails,
-          checkYourAnswersHelper.whichBestDescribesYou
+          checkYourAnswersHelper.enterContactDetails
+//          checkYourAnswersHelper.whichBestDescribesYou
         ).flatten
       ),
       AnswerSection(

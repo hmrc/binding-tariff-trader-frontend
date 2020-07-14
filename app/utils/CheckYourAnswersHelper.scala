@@ -114,9 +114,10 @@ class CheckYourAnswersHelper(
     x => AnswerRow("importOrExport.checkYourAnswersLabel", s"importOrExport.$x", true, routes.ImportOrExportController.onPageLoad(CheckMode).url)
   }
 
-  def whichBestDescribesYou: Option[AnswerRow] = userAnswers.get(WhichBestDescribesYouPage) map {
-    x => AnswerRow("whichBestDescribesYou.checkYourAnswersLabel", s"whichBestDescribesYou.$x", true, routes.WhichBestDescribesYouController.onPageLoad(CheckMode).url)
-  }
+  def whichBestDescribesYou: Option[AnswerRow] = None
+//    userAnswers.get(WhichBestDescribesYouPage) map {
+//    x => AnswerRow("whichBestDescribesYou.checkYourAnswersLabel", s"whichBestDescribesYou.$x", true, routes.WhichBestDescribesYouController.onPageLoad(CheckMode).url)
+//  }
 
   def registeredAddressForEori(implicit request: DataRequest[_]): Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map { x =>
 
