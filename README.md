@@ -32,7 +32,7 @@ The Front-end microrservice for the BTI Application journey on GOV.UK
 
 Run `sbt run` to boot the app
 
-Go to http://localhost:9000/binding-tariff-application/
+Go to http://localhost:9000/advance-tariff-application/
 
 You will be redirected to the Auth Stub.
 
@@ -42,7 +42,7 @@ This application runs on port 9582
 
 Run `sm --start BINDING_TARIFF_TRADER_FRONTEND -r`
 
-Go to http://localhost:9582/binding-tariff-application/
+Go to http://localhost:9582/advance-tariff-application/
 
 You will be redirected to the Auth Stub.
 
