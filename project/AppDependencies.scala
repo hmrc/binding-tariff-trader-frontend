@@ -15,7 +15,7 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-health"                      % "3.15.0-play-26",
     "uk.gov.hmrc"       %% "play-language"                    % "4.2.0-play-26",
     "uk.gov.hmrc"       %% "play-ui"                          % "8.8.0-play-26",
-    "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.26.0-play-26",
+    "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.30.0-play-26",
     "uk.gov.hmrc"       %% "play-whitelist-filter"            % "3.1.0-play-26",
     "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.10.0-play-26"
   )
