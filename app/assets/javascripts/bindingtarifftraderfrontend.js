@@ -27,7 +27,7 @@ $(document).ready(function () {
         // load autocomplete
         openregisterLocationPicker({
             selectElement: document.querySelector('.js-autocomplete'),
-            url: '/binding-tariff-application/countries-json'
+            url: '/advance-tariff-application/countries-json'
         });
 
         // =====================================================
