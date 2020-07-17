@@ -24,7 +24,7 @@ var fileList = (function () {
     var postForm = function (fileForm) {
 
         $.ajax({
-            url: '/advance-tariff-application/uploadSupportingMaterialMultiple',
+            url: '/binding-tariff-application/uploadSupportingMaterialMultiple',
             enctype: 'multipart/form-data',
             type: 'POST',
             data: fileForm,

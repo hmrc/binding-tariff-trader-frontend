@@ -71,7 +71,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
       val result = controller().onPageLoad(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some("/binding-tariff-application/this-service-has-been-reset")
     }
 
   }

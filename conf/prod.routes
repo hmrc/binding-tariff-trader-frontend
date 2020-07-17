@@ -1,6 +1,6 @@
 # Add all the application routes to the app.routes file
 
-->         /advance-tariff-application         app.Routes
+->         /binding-tariff-application         app.Routes
 ->         /                                   health.Routes
 ->         /template                           template.Routes
 

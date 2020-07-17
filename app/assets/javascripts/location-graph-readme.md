@@ -6,7 +6,7 @@ Go to a page with the country input and run the below js in the console.
 It will output new json to the console. Replace the `location-autocomplete-graph.json` contents with this.
 
 <pre><code>
-fetch('/advance-tariff-application/assets/javascripts/location-autocomplete-graph.json')
+fetch('/binding-tariff-application/assets/javascripts/location-autocomplete-graph.json')
 .then(function(response) {
     return response.json();
 })

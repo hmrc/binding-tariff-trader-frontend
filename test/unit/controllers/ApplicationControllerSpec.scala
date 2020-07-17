@@ -158,7 +158,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller().viewApplication(caseRef, Some(token))(request)
 
       status(result) shouldBe OK
-      contentAsString(result) should include(messages("application.title"))
+      contentAsString(result) should include("Your application for a Binding Tariff Information ruling")
       contentAsString(result) should include("applicationView.applicationLink")
       contentType(result) shouldBe Some("text/html")
     }
