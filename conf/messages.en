@@ -279,7 +279,7 @@ similarItemCommodityCode.yesAwareSimilarCode = Yes
 similarItemCommodityCode.noNotAware = No
 similarItemCommodityCode.checkYourAnswersLabel = Do you know of a similar item that already has a ruling?
 similarItemCommodityCode.error.required = Select yes if you know of a similar item that has an Advance Tariff Ruling
-similarItemCommodityCode.bodyText = It can help us classify your goods and match with other rulings if:
+similarItemCommodityCode.bodyText = It can help us to classify your goods and match with other rulings if:
 similarItemCommodityCode.listItem1 = your business or organisation operates in other countries and you have a ruling for that country
 similarItemCommodityCode.listItem2 = you know of a similar item with a ruling
 
@@ -437,8 +437,8 @@ application.footer.sendingSamples.address.line6 = Southend-on-Sea
 application.footer.sendingSamples.address.line7 = Essex
 application.footer.sendingSamples.address.line8 = SS99 1AA
 
-pdf.ruling.title = Binding Tariff Information ruling
-pdf.ruling.tab.title = Binding Tariff Information ruling certificate (PDF) - Manage your Advance Tariff Rulings - GOV.UK
+pdf.ruling.title = Advance Tariff Ruling
+pdf.ruling.tab.title = Advance Tariff Ruling certificate (PDF) - Manage your Advance Tariff Rulings - GOV.UK
 pdf.ruling.issuedBy.label = Issued by
 pdf.ruling.issuedBy.text = HMRC Classification Team
 pdf.ruling.section.holder.heading = Holder details
