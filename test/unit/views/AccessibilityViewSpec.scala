@@ -76,7 +76,7 @@ class AccessibilityViewSpec extends ViewBehaviours{
 
     "contain correct number of bullet points display on the page" in {
       val doc = asDocument(view())
-      assert(doc.getElementsByClass("acceList_item").eachText().size() == 12 ,"expected list of elements is 12")
+      assert(doc.getElementsByClass("acceList_item").eachText().size() == 10 ,"expected list of elements is 10")
     }
 
   }
