@@ -39,23 +39,22 @@
     }
 
     @if(elements.args.contains('_additionalTitleText)){<p>@elements.args.get('_additionalTitleText)</p>}
-    @if(elements.args.contains('_errorsAboveInput)){
-        @elements.errors.map { error => <span style="display: block" id="error-message-@{field.id}-input" class="error-message">@Messages(error)</span>}
+    @if(elements.hasErrors){
+        @elements.errors.map { error => <div id="error-message-@{field.id}-input" class="error-message">@Messages(error)</div>}
     }
-    <select aria-describedby="hint-@elements.field.name" id="@elements.field.name" name="@elements.field.name" class="@elements.args.get('_selectClass) form-control">
+    <select @if(elements.hasErrors || elements.args.contains('_inputHint)){aria-describedby="@if(elements.args.contains('_inputHint) ){hint-@elements.field.name} @if(elements.hasErrors){error-message-@{field.id}-input}"} id="@elements.field.name" name="@elements.field.name" class="@elements.args.get('_selectClass) form-control">
         @if(displayEmptyValue) {
             <option value="">@elements.args.get('_emptyValueText)</option>
         }
         @for(option <- elementOptions) {
-            <option
-                    id="@elements.field.name-@(option._1.toLowerCase.map(x => if(x == ' ') '-' else x).filterNot(x => "()".contains(x)))"
-                    value="@option._1"
-            @if(value==option._1){selected="selected"}
-            >@option._2</option>
+            @if(option._2){
+                <option
+                        id="@elements.field.name-@(option._1.toLowerCase.map(x => if(x == ' ') '-' else x).filterNot(x => "()".contains(x)))"
+                        value="@option._1"
+                @if(value==option._1){selected="selected"}
+                >@option._2</option>
+            }
         }
     </select>
-    @if(!elements.args.contains('_errorsAboveInput)){
-        @elements.errors.map { error => <span style="display: block" class="error-notification">@Messages(error)</span>}
-    }
 
 </div>

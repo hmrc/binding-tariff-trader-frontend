@@ -17,11 +17,30 @@
 package models
 
 import play.api.i18n.Messages
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json._
 
 case class Country(code: String, countryName: String, alphaTwoCode: String, countrySynonyms: List[String]) {
 
   def toAutoCompleteJson(implicit messages: Messages): JsObject = Json.obj("code" -> code, "displayName" -> messages(countryName), "synonyms" -> countrySynonyms)
+
+  def toNewAutoCompleteJson(implicit messages: Messages): Seq[(String, JsObject)] = s"country:$code" ->
+      Json.obj(
+        "edges" -> Json.obj("from" -> JsArray()),
+      "meta" ->
+        Json.obj("canonical" -> true, "canonical-mask" -> 1, "display-name" -> true, "stable-name" -> true),
+      "names" ->
+        Json.obj("cy" -> false, "en-GB" -> messages(countryName))
+      )::
+      countrySynonyms.map(syn =>
+        {
+          s"nym:$syn" ->
+            Json.obj(
+              "edges" -> Json.obj("from" -> Json.arr(s"country:$code")),
+          "meta" ->
+            Json.obj("canonical" -> false, "canonical-mask" -> 0, "display-name" -> false, "stable-name" -> false),
+          "names" ->
+            Json.obj("cy" -> false, "en-GB" -> syn)
+            )})
 }
 
 object Country {

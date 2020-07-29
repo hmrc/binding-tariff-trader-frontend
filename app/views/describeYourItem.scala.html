@@ -39,14 +39,14 @@
 
             @components.input_text(
                 field = form("name"),
-                labelClass = Some("bold"),
+                labelClass = Some("heading-medium"),
                 label = Some(messages("describeYourItem.name"))
             )
 
             @components.input_textarea(
                 field = form("description"),
                 label = Html(messages("describeYourItem.description")),
-                labelClass = Some("bold"),
+                labelClass = Some("heading-medium"),
                 hint = Some(descriptionBullets),
                 inputFormControl = "form-control--full-width",
                 numRows = 15,
@@ -55,7 +55,8 @@
 
             @components.input_textarea(
                 field = form("confidentialInformation"),
-                label = components.subheading(messages("describeYourItem.confidentialInformation")),
+                label = Html(messages("describeYourItem.confidentialInformation")),
+                labelClass = Some("heading-medium"),
                 hint = Some(Html(messages("describeYourItem.confidentialInformation.hint"))),
                 inputFormControl = "form-control--full-width",
                 maxlength = 30000

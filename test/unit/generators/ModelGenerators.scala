@@ -87,7 +87,7 @@ trait ModelGenerators {
         town <- arbitrary[String]
         postCode <- arbitrary[String]
         country <- arbitrary[String]
-      } yield RegisterBusinessRepresenting(eoriNumber, businessName, addressLine1, town, postCode, country)
+      } yield RegisterBusinessRepresenting(eoriNumber, businessName, addressLine1, town, Some(postCode), country)
     }
 
   implicit lazy val arbitrarySelectApplicationType: Arbitrary[SelectApplicationType] =
@@ -112,7 +112,7 @@ trait ModelGenerators {
         businessName <- arbitrary[String]
         addressLine1 <- arbitrary[String]
         town <- arbitrary[String]
-        postcode <- arbitrary[String]
+        postcode <- arbitrary[Option[String]]
         country <- arbitrary[String]
       } yield RegisteredAddressForEori(eori, businessName, addressLine1, town, postcode, country)
     }

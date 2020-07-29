@@ -33,8 +33,10 @@ class RegisteredAddressForEoriFormProvider @Inject() extends Mappings {
         .verifying(maxLength(70, "registeredAddressForEori.error.addressLine1.length")),
       "townOrCity" -> text("registeredAddressForEori.error.townOrCity.required")
         .verifying(maxLength(35, "registeredAddressForEori.error.townOrCity.length")),
-      "postcode" -> text("registeredAddressForEori.error.postcode.required")
-        .verifying(maxLength(9, "registeredAddressForEori.error.postcode.length")),
+      "postcode" -> postcodeText(
+        "registeredAddressForEori.error.postcode.required",
+        "registeredAddressForEori.error.postcode.gb"
+      ).verifying(optionalPostCodeMaxLength("registeredAddressForEori.error.postcode.length")),
       "country" -> text("registeredAddressForEori.error.country.required")
      )(RegisteredAddressForEori.apply)(RegisteredAddressForEori.unapply)
    )

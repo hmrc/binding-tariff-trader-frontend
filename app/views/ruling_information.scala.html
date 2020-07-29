@@ -48,23 +48,23 @@
         <div class="grid-row">
             <div class="grid-full-width">
                 <div class="column-one-third">@messages("rulingInformation.startDate")</div>
-                <div id="rulingInformation.startDate" class="column-two-thirds">@Dates.format(c.decision.get.effectiveStartDate)</div>
+                <div id="rulingInformation.startDate" class="column-two-thirds">@c.decision.fold("")(decision => Dates.format(decision.effectiveStartDate))</div>
             </div>
         </div>
         </br>
         <div class="grid-row">
             <div class="grid-full-width">
                 <div class="column-one-third">@messages("rulingInformation.expiryDate")</div>
-                <div id="rulingInformation.expiryDate" class="column-two-thirds">@Dates.format(c.decision.get.effectiveEndDate)</div>
+                <div id="rulingInformation.expiryDate" class="column-two-thirds">@c.decision.fold("")(decision => Dates.format(decision.effectiveEndDate))</div>
             </div>
         </div>
 
         @components.subheading(messages("rulingInformation.commoditySubheading"))
 
-        <p>@messages("rulingInformation.commodityIntro") <span id="rulingInformation.commodityCode">@c.decision.get.bindingCommodityCode</span>. </p>
+        <p>@messages("rulingInformation.commodityIntro") <span id="rulingInformation.commodityCode">@c.decision.fold("")(decision => decision.bindingCommodityCode)</span>. </p>
 
 
-        @if(c.decision.get.explanation.isDefined) {
+        @if(c.decision.isDefined && c.decision.get.explanation.isDefined) {
             <p id="rulingInformation.explanation" style="white-space: pre-wrap">@c.decision.get.explanation</p>
         }
 

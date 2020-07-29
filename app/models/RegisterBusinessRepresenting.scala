@@ -18,8 +18,8 @@ package models
 
 import play.api.libs.json._
 
-case class RegisterBusinessRepresenting(eoriNumber: String, businessName: String, addressLine1: String, town: String, postCode: String, country: String)
+case class RegisterBusinessRepresenting(eoriNumber: String, businessName: String, addressLine1: String, town: String, postCode: Option[String], country: String)
 
 object RegisterBusinessRepresenting {
-  implicit val format = Json.format[RegisterBusinessRepresenting]
+  implicit val format: OFormat[RegisterBusinessRepresenting] = Json.format[RegisterBusinessRepresenting]
 }

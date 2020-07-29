@@ -97,7 +97,7 @@ class CaseRequestMapper {
       details.addressLine1,
       details.town,
       "", // address line 3 empty
-      details.postCode,
+      details.postCode.getOrElse(""),
       details.country
     )
   }
@@ -109,7 +109,7 @@ class CaseRequestMapper {
       details.addressLine1,
       details.townOrCity,
       "", // address line 3 empty
-      details.postcode,
+      details.postcode.getOrElse(""),
       details.country
     )
   }

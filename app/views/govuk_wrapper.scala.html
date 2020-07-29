@@ -33,7 +33,7 @@
 
 
 @signOutMarkup = {
-<a href="@signOutLink"> @messages("global.link.signout") </a>
+<li> <a href="@signOutLink"> @messages("global.link.signout") </a> </li>
 }
 
 
@@ -65,6 +65,7 @@
       ssoUrl = None,
       scriptElem = scriptElem,
       gaCalls = None)
+      <script src="@routes.Assets.versioned("javascripts/location-autocomplete.min.js")"></script>
       <script src='@routes.Assets.versioned("javascripts/bindingtarifftraderfrontend-app.js")'> </script>
       <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NDJKHWK" height="0" width="0" style="display:none;visibility:hidden"></iframe>

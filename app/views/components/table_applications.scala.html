@@ -71,7 +71,7 @@
                                 index
                             }-status">
                             @c.status match {
-                                case CaseStatus.NEW | CaseStatus.OPEN | CaseStatus.SUSPENDED => {
+                                case CaseStatus.NEW | CaseStatus.OPEN => {
                                     @messages("case.application.status.inProgress")
                                 }
                                 case CaseStatus.SUPPRESSED | CaseStatus.REJECTED => {
@@ -86,6 +86,10 @@
                                 case CaseStatus.DRAFT => {
                                     @messages("case.application.status.draft")
                                 }
+                                case CaseStatus.SUSPENDED => {
+                                    @messages("case.application.status.suspended")
+                                }
+                                case _ => {}
                             }
                             </td>
                             <td id="application-list-row-@{
