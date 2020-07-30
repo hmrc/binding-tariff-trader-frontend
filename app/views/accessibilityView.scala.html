@@ -27,7 +27,7 @@ hasTimeOut = false) {
 
 <p class="govuk-body-l">@messages("accessibility.overview1")</p>
 <p>@messages("accessibility.overview2.start") <a id="govuk_accessibility_url" target="_self" href="@appConfig.govukAccessibilityUrl">@messages("accessibility.overview2.link")</a> @messages("accessibility.overview2.end")</p>
-<p>@messages("accessibility.overview3") <a id="govuk_taxservice_subdomain" target="_self" href="@appConfig.subdomainUrl">@messages("accessibility.overview3.subdomainUrl")</a>
+<p>@messages("accessibility.overview3") <a id="govuk_taxservice_subdomain" target="_self" href="@appConfig.subdomainUrl">@messages("accessibility.overview3.subdomainUrl")</a>@messages("accessibility.overview3.subdomainUrl.end")
 </p>
 
 @components.subheading(messages("accessibility.usingThisService.heading"))
@@ -49,7 +49,7 @@ messages("accessibility.usingThisService.bullet6")
 
 @components.subheading(messages("accessibility.howAccessibleIsThisService.heading"))
 
-<p>@messages("accessibility.howAccessible.p1") <a id="webstandard_url" target="_self" href="@appConfig.webStandards">@messages("accessibility.howAccessible.p1.link")</a></p>
+<p>@messages("accessibility.howAccessible.p1") <a id="webstandard_url" target="_self" href="@appConfig.webStandards">@messages("accessibility.howAccessible.p1.link")</a>@messages("accessibility.howAccessible.p1.end")</p>
 
 @components.subheading(messages("accessibility.whatToDoIfYouHaveDifficulty.heading"))
 <p>@messages("accessibility.whatToDoIfYouHaveDifficulty.p1")</p>
@@ -62,14 +62,12 @@ messages("accessibility.whatToDoIfYouHaveDifficulty.bullet4"),
 )
 
 @components.subheading(messages("accessibility.reportingProblems.heading"))
-<p>
-    @messages("accessibility.reportingProblems.p1")
+<p>@messages("accessibility.reportingProblems.p1")
     <a id="email_link" target="_blank" href="@appConfig.reportEmail">@messages("accessibility.reportingProblems.p1.link")</a>@messages("accessibility.reportingProblems.p1.text")
-
 </p>
 
 @components.subheading(messages("accessibility.notHappyWithCompliance.heading"))
-<p>@messages("accessibility.notHappyWithCompliance.p1")<p>
+<p>@messages("accessibility.notHappyWithCompliance.p1.text1") &lsquo;@messages("accessibility.notHappyWithCompliance.p1.text2")&rsquo;@messages("accessibility.notHappyWithCompliance.p1.text3")<p>
 
 <p>@messages("accessibility.notHappyWithCompliance.p2") <a id="equality_advisory" target="_self" href="@appConfig.equalityadvisoryservice">@messages("accessibility.notHappyWithCompliance.p2.link")</a>
     @messages("accessibility.notHappyWithCompliance.p2.text")
@@ -88,12 +86,11 @@ messages("accessibility.whatToDoIfYouHaveDifficulty.bullet4"),
 @components.subheading(messages("accessibility.technicalInformation.heading"))
 <p>@messages("accessibility.technicalInformation.p1")</p>
 <p>@messages("accessibility.technicalInformation.p2.text")
-    <a id="tech_help" target="_self" href="@appConfig.webStandards"> @messages("accessibility.technicalInformation.p2.link")</a></p>
+    <a id="tech_help" target="_self" href="@appConfig.webStandards"> @messages("accessibility.technicalInformation.p2.link")</a>@messages("accessibility.technicalInformation.p2.end")</p>
 
 @components.subheading(messages("accessibility.howWeTested.heading"))
 <p>@messages("accessibility.howWeTested.p1")</p>
 <p>@messages("accessibility.howWeTested.p2")
-    <a id="digital_centre" target="_self" href="@appConfig.digitalcentre"> @messages("accessibility.howWeTested.p2.link")</a>
-    @messages("accessibility.howWeTested.p2.text") </p>
+    <a id="digital_centre" target="_self" href="@appConfig.digitalcentre"> @messages("accessibility.howWeTested.p2.link")</a>@messages("accessibility.howWeTested.p2.text") </p>
 <p>@messages("accessibility.howWeTested.p3")</p>
 }
