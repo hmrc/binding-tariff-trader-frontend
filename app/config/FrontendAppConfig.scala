@@ -50,6 +50,22 @@ class FrontendAppConfig @Inject()(
   lazy val pdfGeneratorUrl: String = serviceConfig.baseUrl("pdf-generator-service")
   lazy val isCdsEnrolmentCheckEnabled: Boolean = serviceConfig.getBoolean("cdsEnrolmentCheckEnabled")
 
+  //accessibility Urls
+  lazy val accessibilityUrl = loadConfig("accessibility-urls.accessibility")
+  lazy val govukAccessibilityUrl = loadConfig("accessibility-urls.govukAccessibilityUrl")
+  lazy val subdomainUrl = loadConfig("accessibility-urls.subdomainUrl")
+  lazy val abilityNetUrl = loadConfig("accessibility-urls.abilityNetUrl")
+  lazy val webStandards = loadConfig("accessibility-urls.webStandards")
+  lazy val reportEmail = loadConfig("accessibility-urls.reportEmail")
+  lazy val eassUrl = loadConfig("accessibility-urls.eassUrl")
+  lazy val ecniUrl = loadConfig("accessibility-urls.ecniUrl")
+  lazy val dacUrl = loadConfig("accessibility-urls.dacUrl")
+  lazy val equalityadvisoryservice = loadConfig("accessibility-urls.equalityadvisoryservice")
+  lazy val equalityni = loadConfig("accessibility-urls.equalityni")
+  lazy val extrasupport = loadConfig("accessibility-urls.extrasupport")
+  lazy val digitalcentre = loadConfig("accessibility-urls.digitalcentre")
+  //accessibility Urls end
+
   lazy val fileUploadMaxSize: Int = loadConfig("fileupload.maxSize").toInt
   lazy val fileUploadMimeTypes: Set[String] = loadConfig("fileupload.mimeTypes").split(",").map(_.trim).toSet
 

@@ -1,0 +1,96 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+
+@(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+title = messages("accessibility.title"),
+appConfig = appConfig,
+bodyClasses = None,
+hasTimeOut = false) {
+@components.heading(messages("accessibility.heading"))
+
+<p class="govuk-body-l">@messages("accessibility.overview1")</p>
+<p>@messages("accessibility.overview2.start") <a id="govuk_accessibility_url" target="_self" href="@appConfig.govukAccessibilityUrl">@messages("accessibility.overview2.link")</a> @messages("accessibility.overview2.end")</p>
+<p>@messages("accessibility.overview3") <a id="govuk_taxservice_subdomain" target="_self" href="@appConfig.subdomainUrl">@messages("accessibility.overview3.subdomainUrl")</a>@messages("accessibility.overview3.subdomainUrl.end")
+</p>
+
+@components.subheading(messages("accessibility.usingThisService.heading"))
+<p>@messages("accessibility.usingThisService.p1")</p>
+<p>@messages("accessibility.usingThisService.p2")</p>
+
+@components.list_items(
+messages("accessibility.usingThisService.bullet1"),
+messages("accessibility.usingThisService.bullet2"),
+messages("accessibility.usingThisService.bullet3"),
+messages("accessibility.usingThisService.bullet4"),
+messages("accessibility.usingThisService.bullet5"),
+messages("accessibility.usingThisService.bullet6")
+)
+<p>@messages("accessibility.usingThisService.p3")</p>
+
+<p><a id="abilityNet_url" target="_self" href="@appConfig.abilityNetUrl">@messages("accessibility.usingThisService.p4.link")</a>
+    @messages("accessibility.usingThisService.p4.text")</p>
+
+@components.subheading(messages("accessibility.howAccessibleIsThisService.heading"))
+
+<p>@messages("accessibility.howAccessible.p1") <a id="webstandard_url" target="_self" href="@appConfig.webStandards">@messages("accessibility.howAccessible.p1.link")</a>@messages("accessibility.howAccessible.p1.end")</p>
+
+@components.subheading(messages("accessibility.whatToDoIfYouHaveDifficulty.heading"))
+<p>@messages("accessibility.whatToDoIfYouHaveDifficulty.p1")</p>
+
+@components.list_items(
+messages("accessibility.whatToDoIfYouHaveDifficulty.bullet1"),
+messages("accessibility.whatToDoIfYouHaveDifficulty.bullet2"),
+messages("accessibility.whatToDoIfYouHaveDifficulty.bullet3"),
+messages("accessibility.whatToDoIfYouHaveDifficulty.bullet4"),
+)
+
+@components.subheading(messages("accessibility.reportingProblems.heading"))
+<p>@messages("accessibility.reportingProblems.p1")
+    <a id="email_link" target="_blank" href="@appConfig.reportEmail">@messages("accessibility.reportingProblems.p1.link")</a>@messages("accessibility.reportingProblems.p1.text")
+</p>
+
+@components.subheading(messages("accessibility.notHappyWithCompliance.heading"))
+<p>@messages("accessibility.notHappyWithCompliance.p1.text1") &lsquo;@messages("accessibility.notHappyWithCompliance.p1.text2")&rsquo;@messages("accessibility.notHappyWithCompliance.p1.text3")<p>
+
+<p>@messages("accessibility.notHappyWithCompliance.p2") <a id="equality_advisory" target="_self" href="@appConfig.equalityadvisoryservice">@messages("accessibility.notHappyWithCompliance.p2.link")</a>
+    @messages("accessibility.notHappyWithCompliance.p2.text")
+    <a id="equality_commission" target="_self" href="@appConfig.equalityni">@messages("accessibility.notHappyWithCompliance.p2.link2")</a>
+    @messages("accessibility.notHappyWithCompliance.p2.text2")
+</p>
+
+@components.subheading(messages("accessibility.contactUs.heading"))
+<p>@messages("accessibility.contactUs.p1")</p>
+<p>@messages("accessibility.contactUs.p2")</p>
+<p>@messages("accessibility.contactUs.p3")
+    <a id="get_help" target="_self" href="@appConfig.extrasupport">@messages("accessibility.contactUs.p3.link")</a> @messages("accessibility.contactUs.p3.text")
+</p>
+
+
+@components.subheading(messages("accessibility.technicalInformation.heading"))
+<p>@messages("accessibility.technicalInformation.p1")</p>
+<p>@messages("accessibility.technicalInformation.p2.text")
+    <a id="tech_help" target="_self" href="@appConfig.webStandards"> @messages("accessibility.technicalInformation.p2.link")</a>@messages("accessibility.technicalInformation.p2.end")</p>
+
+@components.subheading(messages("accessibility.howWeTested.heading"))
+<p>@messages("accessibility.howWeTested.p1")</p>
+<p>@messages("accessibility.howWeTested.p2")
+    <a id="digital_centre" target="_self" href="@appConfig.digitalcentre"> @messages("accessibility.howWeTested.p2.link")</a>@messages("accessibility.howWeTested.p2.text") </p>
+<p>@messages("accessibility.howWeTested.p3")</p>
+}
