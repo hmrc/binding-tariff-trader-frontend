@@ -62,8 +62,9 @@ messages("accessibility.whatToDoIfYouHaveDifficulty.bullet4"),
 )
 
 @components.subheading(messages("accessibility.reportingProblems.heading"))
-<p>@messages("accessibility.reportingProblems.p1")
-    <a id="email_link" target="_blank" href="@appConfig.reportEmail">@messages("accessibility.reportingProblems.p1.link")</a>@messages("accessibility.reportingProblems.p1.text")
+<p>@messages("accessibility.reportingProblems.p1")</p>
+<p>@messages("accessibility.reportingProblems.p2")
+    <a id="email_link" target="_blank" href="@appConfig.reportEmail">@messages("accessibility.reportingProblems.p2.link")</a>@messages("accessibility.reportingProblems.p2.text")
 </p>
 
 @components.subheading(messages("accessibility.notHappyWithCompliance.heading"))
@@ -92,5 +93,6 @@ messages("accessibility.whatToDoIfYouHaveDifficulty.bullet4"),
 <p>@messages("accessibility.howWeTested.p1")</p>
 <p>@messages("accessibility.howWeTested.p2")
     <a id="digital_centre" target="_self" href="@appConfig.digitalcentre"> @messages("accessibility.howWeTested.p2.link")</a>@messages("accessibility.howWeTested.p2.text") </p>
-<p>@messages("accessibility.howWeTested.p3")</p>
+<p>@messages("accessibility.howWeTested.p3")<br />
+@messages("accessibility.howWeTested.p4")</p>
 }
