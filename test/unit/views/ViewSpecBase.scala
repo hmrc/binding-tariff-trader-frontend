@@ -110,6 +110,7 @@ trait ViewSpecBase extends SpecBase {
   }
 
   def assertLinkContainsHref(doc: Document, id: String, href: String): Assertion = {
+    assert(doc.getElementById(id) != null, s"\n\nElement $id is not present")
     assert(doc.getElementById(id).attr("href").contains(href))
   }
 }
