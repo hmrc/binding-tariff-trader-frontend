@@ -1,0 +1,107 @@
+.header__menu__proposition-name {
+  font-size: 24px;
+  text-decoration: none;
+  color: white;
+  font-family: "nta",Arial,sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  line-height: 1.25;
+}
+.centered-content {
+    display: block;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0em .78947em 0em .78947em;
+    line-height: 1.5;
+    font-family: "nta",Arial,sans-serif;
+    font-weight: 400;
+    text-transform: none;
+}
+.brand-border--top, .section--blue-top, .footer, .service-info {
+    border-top-color: #1d70b8;
+}
+a.header__menu__proposition-name {
+
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: underline;
+  }
+}
+
+.header__menu__proposition-links {
+  font-size: 24px;
+  text-decoration: none;
+  color: white;
+  font-family: "nta",Arial,sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  line-height: 1.25;
+  text-decoration: none;
+  float: right;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  li {
+    display: inline;
+    padding-right: em(15);
+  }
+
+  a {
+    font-size: 16px;
+    color: #fff;
+    text-decoration: none;
+  }
+}
+.service-info {
+    border-top: 10px solid #005ea5;
+    padding-bottom: 0.5em;
+    display: block;
+    position: relative;
+    z-index: 997;
+    overflow: hidden;
+}
+.beta-banner {
+    padding: 10px 0 8px;
+    border-bottom: 1px solid #bfc1c3;
+}
+@media (min-width: 641px) {
+    .beta-banner {
+        padding-bottom: 10px;
+    }
+}
+.brand-border--top, .section--blue-top, .footer, .service-info {
+    border-top-color: #1d70b8;
+}
+.beta-banner p {
+     display: table;
+     margin: 0;
+     color: #000;
+     font-family: "nta",Arial,sans-serif;
+     font-weight: 400;
+     text-transform: none;
+     font-size: 14px;
+     line-height: 1.14286;
+ }
+ @media (min-width: 641px) {
+     p, .body-text {
+         margin-top: .26316em;
+         margin-bottom: 1.05263em;
+     }
+ }
+
+@media (min-width: 641px) {
+.centered-content {
+    font-size: 19px;
+    line-height: 1.31579;
+}
+}
+//section
+.section, .section--branded {
+    margin-bottom: 1em;
+    padding: 1em 0;
+}
+//main
+#wrapper {
+background-color: #fff;
+}
