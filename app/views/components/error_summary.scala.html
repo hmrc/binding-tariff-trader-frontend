@@ -24,7 +24,7 @@
 
         <ul role="list" class="error-summary-list">
             @for(error <- errors) {
-                <li><a href="#@{error.key}"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args:_*)</a></li>
+                <li><a href="#@{error.key}">@messages(error.message, error.args:_*)</a></li>
             }
         </ul>
 
