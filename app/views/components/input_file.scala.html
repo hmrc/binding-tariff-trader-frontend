@@ -31,7 +31,7 @@
             <span class="form-hint">@hint</span>
         }
         @field.errors.map { error =>
-            <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
+            <span class="error-message" id="error-message-@{field.id}-input"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
         }
     </label>
     <div class="form-control-wrapper">
