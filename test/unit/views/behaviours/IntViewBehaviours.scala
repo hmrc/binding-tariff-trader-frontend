@@ -58,7 +58,7 @@ trait IntViewBehaviours extends QuestionViewBehaviours[Int] {
         "show an error in the value field's label" in {
           val doc = asDocument(createView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("error-message").first
-          errorSpan.text shouldBe messages(errorMessage)
+          errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
         }
 
         "show an error prefix in the browser title" in {
