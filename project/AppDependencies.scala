@@ -5,19 +5,18 @@ object AppDependencies {
   import play.core.PlayVersion
 
   val compile = Seq(
-    "commons-validator" % "commons-validator"                 % "1.6",
+    "commons-validator" % "commons-validator"                 % "1.7",
     play.sbt.PlayImport.ws,
-    "uk.gov.hmrc"       %% "auth-client"                      % "2.35.0-play-26",
-    "uk.gov.hmrc"       %% "bootstrap-play-26"                % "1.7.0",
-    "uk.gov.hmrc"       %% "govuk-template"                   % "5.54.0-play-26",
-    "uk.gov.hmrc"       %% "http-caching-client"              % "9.0.0-play-26",
-    "uk.gov.hmrc"       %% "play-conditional-form-mapping"    % "1.2.0-play-26",
-    "uk.gov.hmrc"       %% "play-health"                      % "3.15.0-play-26",
-    "uk.gov.hmrc"       %% "play-language"                    % "4.2.0-play-26",
-    "uk.gov.hmrc"       %% "play-ui"                          % "8.8.0-play-26",
-    "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.30.0-play-26",
-    "uk.gov.hmrc"       %% "play-whitelist-filter"            % "3.1.0-play-26",
-    "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.10.0-play-26"
+    "uk.gov.hmrc"       %% "auth-client"                      % "3.0.0-play-27",
+    "uk.gov.hmrc"       %% "bootstrap-frontend-play-27"       % "2.24.0",
+    "uk.gov.hmrc"       %% "govuk-template"                   % "5.55.0-play-27",
+    "uk.gov.hmrc"       %% "http-caching-client"              % "9.1.0-play-27",
+    "uk.gov.hmrc"       %% "play-health"                      % "3.15.0-play-27",
+    "uk.gov.hmrc"       %% "play-language"                    % "4.3.0-play-27",
+    "uk.gov.hmrc"       %% "play-ui"                          % "8.11.0-play-27",
+    "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.30.0-play-27",
+    "uk.gov.hmrc"       %% "play-whitelist-filter"            % "3.4.0-play-27",
+    "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.12.0-play-27"
   )
 
   private lazy val scope: String = "test"
@@ -31,7 +30,6 @@ object AppDependencies {
     "org.scalacheck"            %% "scalacheck"             % "1.14.3"            % scope,
     "org.scalatest"             %% "scalatest"              % "3.0.8"             % scope,
     "org.scalatestplus.play"    %% "scalatestplus-play"     % "3.1.3"             % scope,
-    "uk.gov.hmrc"               %% "hmrctest"               % "3.9.0-play-26"     % scope
   )
 
   def apply(): Seq[ModuleID] = (compile ++ test).map(_ withSources())

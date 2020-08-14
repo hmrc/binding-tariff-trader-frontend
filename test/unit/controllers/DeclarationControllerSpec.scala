@@ -53,7 +53,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
   private val btiApp = mock[Application]
   private val contact = mock[Contact]
 
-  private implicit val mat: Materializer = fakeApplication.materializer
+  private implicit val mat: Materializer = app.materializer
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()

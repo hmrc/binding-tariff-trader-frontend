@@ -27,7 +27,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Call
 import play.twirl.api.Html
-import uk.gov.hmrc.play.test.UnitSpec
+import unit.utils.UnitSpec
 import views.ViewMatchers._
 import views.html.components.pagination
 

@@ -44,7 +44,7 @@ trait ConnectorTest
   )(appConfig)
 
   protected lazy val standardHttpClient = new DefaultHttpClient(
-    fakeApplication.configuration,
+    app.configuration,
     auditing,
     wsClient,
     actorSystem
