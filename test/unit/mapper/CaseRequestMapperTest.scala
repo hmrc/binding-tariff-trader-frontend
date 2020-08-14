@@ -20,7 +20,7 @@ import models._
 import pages._
 import play.api.libs.json.{JsValue, Json, Writes}
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.test.UnitSpec
+import unit.utils.UnitSpec
 
 class CaseRequestMapperTest extends UnitSpec {
 

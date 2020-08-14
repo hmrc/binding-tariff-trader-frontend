@@ -17,7 +17,7 @@
 package views
 
 import org.scalatest.WordSpec
-import uk.gov.hmrc.play.test.UnitSpec
+import unit.utils.UnitSpec
 
 class ViewUtilsSpec extends WordSpec with UnitSpec {
 

@@ -30,7 +30,7 @@ import play.api.routing.Router
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderNames, HttpVerbs, SessionKeys}
-import uk.gov.hmrc.play.test.UnitSpec
+import unit.utils.UnitSpec
 
 import scala.concurrent.ExecutionContext
 
@@ -49,7 +49,7 @@ object SessionIdFilterSpec {
 
 class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
-  override lazy val fakeApplication: Application = GuiceApplicationBuilder()
+  override implicit lazy val app: Application = GuiceApplicationBuilder()
     .overrides(
       play.api.inject.bind[HttpFilters].to[SessionIdFilterSpec.Filters],
       play.api.inject.bind[SessionIdFilter].to[SessionIdFilterSpec.TestSessionIdFilter]
@@ -92,7 +92,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     "add a sessionId if one doesn't already exist" in {
 
-      val Some(result) = route(fakeApplication, FakeRequest(HttpVerbs.GET, "/test"))
+      val Some(result) = route(app, FakeRequest(HttpVerbs.GET, "/test"))
 
       val body = contentAsJson(result)
 
@@ -102,7 +102,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     "not override a sessionId if one doesn't already exist" in {
 
-      val Some(result) = route(fakeApplication, FakeRequest(HttpVerbs.GET, "/test").withSession(SessionKeys.sessionId -> "foo"))
+      val Some(result) = route(app, FakeRequest(HttpVerbs.GET, "/test").withSession(SessionKeys.sessionId -> "foo"))
 
       val body = contentAsJson(result)
 
@@ -112,13 +112,13 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     "not override other session values from the response" in {
 
-      val Some(result) = route(fakeApplication, FakeRequest(HttpVerbs.GET, "/test2"))
+      val Some(result) = route(app, FakeRequest(HttpVerbs.GET, "/test2"))
       session(result).data should contain("foo" -> "bar")
     }
 
     "not override other session values from the request" in {
 
-      val Some(result) = route(fakeApplication, FakeRequest(HttpVerbs.GET, "/test").withSession("foo" -> "bar"))
+      val Some(result) = route(app, FakeRequest(HttpVerbs.GET, "/test").withSession("foo" -> "bar"))
       session(result).data should contain("foo" -> "bar")
     }
   }

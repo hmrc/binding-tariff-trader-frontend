@@ -25,7 +25,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.Configuration
 import play.api.mvc.Call
-import uk.gov.hmrc.play.test.UnitSpec
+import unit.utils.UnitSpec
 
 class WhitelistFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks with MockitoSugar with Generators {
 

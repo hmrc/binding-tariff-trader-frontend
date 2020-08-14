@@ -29,18 +29,18 @@ import play.api.libs.Files.TemporaryFileCreator
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.test.UnitSpec
 import unit.base.WireMockObject
+import unit.utils.UnitSpec
 
 trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
 
-  override def fakeApplication: Application = GuiceApplicationBuilder()
+  override implicit lazy val app: Application = GuiceApplicationBuilder()
     .configure(
     "metrics.jvm" -> false,
     "metrics.enabled" -> false
   ).build()
 
-  protected lazy val injector: Injector = fakeApplication.injector
+  protected lazy val injector: Injector = app.injector
 
   def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
