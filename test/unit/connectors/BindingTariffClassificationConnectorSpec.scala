@@ -149,7 +149,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
   "Connector 'Find Cases By'" should {
 
     "Find empty paged case" in {
-      val url = "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50"
+      val url = "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50&migrated=false"
 
       stubFor(get(urlEqualTo(url))
         .willReturn(aResponse()
@@ -175,7 +175,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "Find valid paged case" in {
-      val url = "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50"
+      val url = "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50&migrated=false"
 
       stubFor(get(urlEqualTo(url))
         .willReturn(aResponse()
@@ -201,7 +201,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "propagate errors" in {
-      val url = "/cases?eori=eori1234567&status=NEW&sort_by=created-date&sort_direction=desc&page=1&page_size=2147483647"
+      val url = "/cases?eori=eori1234567&status=NEW&sort_by=created-date&sort_direction=desc&page=1&page_size=2147483647&migrated=false"
 
       stubFor(get(urlEqualTo(url))
         .willReturn(aResponse()
