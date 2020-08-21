@@ -21,8 +21,9 @@ import config.FrontendAppConfig
 import javax.inject.Singleton
 import models.CaseStatus.CaseStatus
 import models._
+import models.requests.NewEventRequest
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
+import utils.JsonFormatters._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -50,4 +51,10 @@ class BindingTariffClassificationConnector @Inject()(
       "&migrated=false"
     client.GET[Paged[Case]](url)(implicitly, addAuth, implicitly)
   }
+
+  def createEvent(c: Case, e: NewEventRequest)(implicit hc: HeaderCarrier): Future[Event] = {
+    val url = s"${configuration.bindingTariffClassificationUrl}/cases/${c.reference}/events"
+    client.POST[NewEventRequest, Event](url = url, body = e)
+  }
+
 }
