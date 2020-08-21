@@ -40,7 +40,9 @@
 
     @if(elements.args.contains('_additionalTitleText)){<p>@elements.args.get('_additionalTitleText)</p>}
     @if(elements.hasErrors){
-        @{ elements.errors.map { error => <div id="error-message-@{field.id}-input" class="error-message"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error)</div>} }
+        @elements.errors.map { error =>
+            <div id="error-message-@{field.id}-input" class="error-message"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@error</div>
+        }
     }
     <select @if(elements.hasErrors || elements.args.contains('_inputHint)){aria-describedby="@if(elements.args.contains('_inputHint) ){hint-@elements.field.name} @if(elements.hasErrors){error-message-@{field.id}-input}"} id="@elements.field.name" name="@elements.field.name" class="@elements.args.get('_selectClass) form-control">
         @if(displayEmptyValue) {
