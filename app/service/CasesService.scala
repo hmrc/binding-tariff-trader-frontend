@@ -41,7 +41,6 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector, em
           c.reference
         )
       )
-      _ <- addCaseCreatedEvent(c, Operator(""))
       _ <- emailConnector.send(email) recover loggingAnError(c.reference)
     } yield c
   }
@@ -71,13 +70,12 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector, em
     }
   }
 
-  private def addCaseCreatedEvent(atarCase: Case, operator: Operator)
+  def addCaseCreatedEvent(atar: Case, operator: Operator)
                                  (implicit hc: HeaderCarrier): Future[Unit] = {
     val event = NewEventRequest(CaseCreated("Application submitted"), operator)
-    connector.createEvent(atarCase, event) recover {
+    connector.createEvent(atar, event) recover {
       case t: Throwable =>
-        Logger.error(s"Could not create Event for case [${atarCase.reference}] with payload [$event]", t)
+        Logger.error(s"Could not create Event for case [${atar.reference}] with payload [$event]", t)
     } map (_ => ())
   }
-
 }

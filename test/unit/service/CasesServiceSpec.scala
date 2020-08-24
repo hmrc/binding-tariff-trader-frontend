@@ -53,10 +53,9 @@ class CasesServiceSpec extends SpecBase {
     given(contact.email) willReturn "email"
     given(contact.name) willReturn "name"
 
-    "delegate to connector and add a Case_Created event" in {
+    "delegate to connector" in {
       given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
       given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Any]], any[Reads[Email[_]]])).willReturn(Future.successful(()))
-      given(caseConnector.createEvent(refEq(existingCase), any[NewEventRequest])(any[HeaderCarrier])).willReturn(Future.successful(mock[Event]))
 
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
 
@@ -67,10 +66,6 @@ class CasesServiceSpec extends SpecBase {
           caseRef
         )
       )
-      val eventCreated = theEventCreatedFor(caseConnector, existingCase)
-
-      eventCreated.operator shouldBe Operator("")
-      eventCreated.details shouldBe CaseCreated(comment = "Application submitted")
     }
 
     "handle error with email silently" in {
@@ -80,29 +75,19 @@ class CasesServiceSpec extends SpecBase {
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
     }
 
-    "propagate any error on case creation and not add a Case_Created event" in {
+    "propagate any error on case create" in {
       val exception = new RuntimeException("Error")
       given(caseConnector.createCase(any[NewCaseRequest])(any[HeaderCarrier])).willThrow(exception)
 
       val caught = intercept[RuntimeException] {
         await(service.create(newCase)(HeaderCarrier()))
-
       }
       caught shouldBe exception
-
-      verify(caseConnector, never()).createEvent(refEq(existingCase), any[NewEventRequest])(any[HeaderCarrier])
-
     }
 
     def theEmailSent: ApplicationSubmittedEmail = {
       val captor: ArgumentCaptor[ApplicationSubmittedEmail] = ArgumentCaptor.forClass(classOf[ApplicationSubmittedEmail])
       verify(emailConnector).send(captor.capture())(any[HeaderCarrier], any[Writes[Any]], any[Reads[Email[_]]])
-      captor.getValue
-    }
-
-    def theEventCreatedFor(connector: BindingTariffClassificationConnector, c: Case): NewEventRequest = {
-      val captor: ArgumentCaptor[NewEventRequest] = ArgumentCaptor.forClass(classOf[NewEventRequest])
-      verify(connector).createEvent(refEq(c), captor.capture())(any[HeaderCarrier])
       captor.getValue
     }
   }
@@ -130,6 +115,42 @@ class CasesServiceSpec extends SpecBase {
     }
   }
 
+  "addCaseCreatedEvent" should {
+    val atar = oCase.btiCaseExample
+    val operator = Operator("", Some(""))
+
+    "create an event" in {
+
+      given(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier])).willReturn(Future.successful(mock[Event]))
+
+      await(service.addCaseCreatedEvent(atar, operator)(HeaderCarrier())) shouldBe ()
+
+      val eventCreated = theEventCreatedFor(caseConnector, atar)
+      eventCreated.operator shouldBe Operator("", Some(""))
+      eventCreated.details shouldBe CaseCreated(comment = "Application submitted")
+    }
+
+    "not create an event when connector throws an exception" in {
+
+      val exception = new RuntimeException("Error")
+
+      given(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier])).willThrow(exception)
+
+      val caught = intercept[RuntimeException] {
+        await(service.addCaseCreatedEvent(atar, operator)(HeaderCarrier()))
+
+      }
+
+      caught shouldBe exception
+      verify(caseConnector, never()).createEvent(refEq(existingCase), any[NewEventRequest])(any[HeaderCarrier])
+    }
+
+    def theEventCreatedFor(connector: BindingTariffClassificationConnector, c: Case): NewEventRequest = {
+      val captor: ArgumentCaptor[NewEventRequest] = ArgumentCaptor.forClass(classOf[NewEventRequest])
+      verify(connector).createEvent(refEq(c), captor.capture())(any[HeaderCarrier])
+      captor.getValue
+    }
+  }
 
   "Service 'Get Case For User'" should {
 

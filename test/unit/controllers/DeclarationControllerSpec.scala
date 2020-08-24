@@ -75,6 +75,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
   private def givenTheCaseCreatesSuccessfully(): Unit = {
     when(casesService.create(any[NewCaseRequest])(any[HeaderCarrier])).thenReturn(successful(createdCase))
+    when(casesService.addCaseCreatedEvent(any[Case], any[Operator])(any[HeaderCarrier])).thenReturn(successful(()))
   }
 
   private def givenTheCaseCreateFails(): Unit = {
@@ -125,6 +126,22 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       result.header.status shouldBe Status.SEE_OTHER
       result.header.headers(LOCATION) shouldBe "/foo"
     }
+
+/*    "create an event when the ATAR application has been submitted successfully" in {
+      givenTheCaseCreatesSuccessfully()
+
+      val c = controller(extractDataFromCache)
+      val req = fakeRequest
+
+      await(c.onSubmit(NormalMode)(req))
+
+      verify(casesService, never()).addCaseCreatedEvent(refEq(createdCase), Operator("", Some("")))(any[HeaderCarrier])
+    }*/
+
+
+/*    "not create an event when the ATAR application failed to be submitted " in {
+
+    }*/
 
     "send the expected explicit audit events when the BTI application has been submitted successfully" in {
       givenTheCaseCreatesSuccessfully()
