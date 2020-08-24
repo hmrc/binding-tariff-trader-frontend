@@ -50,7 +50,10 @@
                 labelHtml = Some(addAnotherFile)
             )
         } else {
-            <h1 class="heading-xlarge">@messages("supportingMaterialFileList.heading")</h1>
+            <h1 class="heading-xlarge">
+                <span class="heading-large caption-text">@messages("supportingMaterialFileList.caption")</span>
+                @messages("supportingMaterialFileList.heading")
+            </h1>
 
             @indicationsContent
 
@@ -62,7 +65,7 @@
         }
 
         <div class="section">
-            <button id="submit" class="button"> Continue </button>
+            <button id="submit" class="button">@messages("supportingMaterialFileList.continue")</button>
         </div>
 
     }
