@@ -75,6 +75,9 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
   private def givenTheCaseCreatesSuccessfully(): Unit = {
     when(casesService.create(any[NewCaseRequest])(any[HeaderCarrier])).thenReturn(successful(createdCase))
+  }
+
+  private def givenTheCaseCreatedEventIsSuccessful(): Unit = {
     when(casesService.addCaseCreatedEvent(any[Case], any[Operator])(any[HeaderCarrier])).thenReturn(successful(()))
   }
 
@@ -120,6 +123,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     "return OK and the correct view for a POST" in {
       givenTheCaseCreatesSuccessfully()
       givenTheAttachmentPublishSucceeds()
+      givenTheCaseCreatedEventIsSuccessful
 
       val result = await(controller(extractDataFromCache).onSubmit(NormalMode)(fakeRequest))
 
@@ -127,24 +131,38 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       result.header.headers(LOCATION) shouldBe "/foo"
     }
 
-/*    "create an event when the ATAR application has been submitted successfully" in {
+    "create an event when the ATAR application has been submitted successfully" in {
       givenTheCaseCreatesSuccessfully()
+      givenTheCaseCreatedEventIsSuccessful()
 
       val c = controller(extractDataFromCache)
       val req = fakeRequest
 
       await(c.onSubmit(NormalMode)(req))
 
-      verify(casesService, never()).addCaseCreatedEvent(refEq(createdCase), Operator("", Some("")))(any[HeaderCarrier])
-    }*/
+      verify(casesService, times(1)).addCaseCreatedEvent(
+        any[Case], any[Operator])(any[HeaderCarrier])
+    }
 
 
-/*    "not create an event when the ATAR application failed to be submitted " in {
+    "not create an event when the ATAR application failed to be submitted " in {
+      givenTheCaseCreateFails()
 
-    }*/
+      val c = controller(extractDataFromCache)
+      val req = fakeRequest
+
+      val caught = intercept[RuntimeException] {
+        await(c.onSubmit(NormalMode)(req))
+      }
+
+      caught shouldBe error
+
+      verify(casesService, never()).addCaseCreatedEvent(any[Case], any[Operator])(any[HeaderCarrier])
+    }
 
     "send the expected explicit audit events when the BTI application has been submitted successfully" in {
       givenTheCaseCreatesSuccessfully()
+      givenTheCaseCreatedEventIsSuccessful
 
       val c = controller(extractDataFromCache)
       val req = fakeRequest
