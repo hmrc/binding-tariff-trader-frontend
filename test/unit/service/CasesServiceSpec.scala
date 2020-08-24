@@ -20,6 +20,7 @@ import base.SpecBase
 import connectors.{BindingTariffClassificationConnector, EmailConnector}
 import models.CaseStatus.CaseStatus
 import models._
+import models.requests.NewEventRequest
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
@@ -52,9 +53,10 @@ class CasesServiceSpec extends SpecBase {
     given(contact.email) willReturn "email"
     given(contact.name) willReturn "name"
 
-    "delegate to connector" in {
+    "delegate to connector and add a Case_Created event" in {
       given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
       given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Any]], any[Reads[Email[_]]])).willReturn(Future.successful(()))
+      given(caseConnector.createEvent(refEq(existingCase), any[NewEventRequest])(any[HeaderCarrier])).willReturn(Future.successful(mock[Event]))
 
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
 
@@ -65,6 +67,10 @@ class CasesServiceSpec extends SpecBase {
           caseRef
         )
       )
+      val eventCreated = theEventCreatedFor(caseConnector, existingCase)
+
+      eventCreated.operator shouldBe Operator("")
+      eventCreated.details shouldBe CaseCreated(comment = "Application submitted")
     }
 
     "handle error with email silently" in {
@@ -74,19 +80,29 @@ class CasesServiceSpec extends SpecBase {
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
     }
 
-    "propagate any error on case create" in {
+    "propagate any error on case creation and not add a Case_Created event" in {
       val exception = new RuntimeException("Error")
       given(caseConnector.createCase(any[NewCaseRequest])(any[HeaderCarrier])).willThrow(exception)
 
       val caught = intercept[RuntimeException] {
         await(service.create(newCase)(HeaderCarrier()))
+
       }
       caught shouldBe exception
+
+      verify(caseConnector, never()).createEvent(refEq(existingCase), any[NewEventRequest])(any[HeaderCarrier])
+
     }
 
     def theEmailSent: ApplicationSubmittedEmail = {
       val captor: ArgumentCaptor[ApplicationSubmittedEmail] = ArgumentCaptor.forClass(classOf[ApplicationSubmittedEmail])
       verify(emailConnector).send(captor.capture())(any[HeaderCarrier], any[Writes[Any]], any[Reads[Email[_]]])
+      captor.getValue
+    }
+
+    def theEventCreatedFor(connector: BindingTariffClassificationConnector, c: Case): NewEventRequest = {
+      val captor: ArgumentCaptor[NewEventRequest] = ArgumentCaptor.forClass(classOf[NewEventRequest])
+      verify(connector).createEvent(refEq(c), captor.capture())(any[HeaderCarrier])
       captor.getValue
     }
   }

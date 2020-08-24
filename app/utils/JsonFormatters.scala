@@ -33,14 +33,16 @@ object JsonFormatters {
   implicit val caseFormat: OFormat[Case] = Json.format[Case]
   implicit val newCaseRequestFormat: OFormat[NewCaseRequest] = Json.format[NewCaseRequest]
   implicit val caseAuditPayloadFormat: OFormat[CaseAuditPayload] = Json.format[CaseAuditPayload]
-  implicit val eventFormat: OFormat[Event] = Json.format[Event]
   implicit val operator: Format[Operator] = Json.using[Json.WithDefaultValues].format[Operator]
 
-  implicit val newEventRequestFormat: OFormat[NewEventRequest] = Json.using[Json.WithDefaultValues].format[NewEventRequest]
   implicit val formatCaseCreated: OFormat[CaseCreated] = Json.using[Json.WithDefaultValues].format[CaseCreated]
   implicit val formatEventDetail: Format[Details] = Union.from[Details]("type")
     .and[CaseCreated](EventType.CASE_CREATED.toString)
     .format
+
+  implicit val eventFormat: OFormat[Event] = Json.format[Event]
+  implicit val newEventRequestFormat: OFormat[NewEventRequest] = Json.using[Json.WithDefaultValues].format[NewEventRequest]
+
 }
 
 object EnumJson {

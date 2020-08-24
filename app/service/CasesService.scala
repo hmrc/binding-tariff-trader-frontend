@@ -20,6 +20,7 @@ import connectors.{BindingTariffClassificationConnector, EmailConnector}
 import javax.inject.{Inject, Singleton}
 import models.CaseStatus.CaseStatus
 import models._
+import models.requests.NewEventRequest
 import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -40,7 +41,7 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector, em
           c.reference
         )
       )
-
+      _ <- addCaseCreatedEvent(c, Operator(""))
       _ <- emailConnector.send(email) recover loggingAnError(c.reference)
     } yield c
   }
@@ -68,6 +69,15 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector, em
       case Some(c) => Future.successful(c)
       case _ => Future.failed(new RuntimeException("Case not found"))
     }
+  }
+
+  private def addCaseCreatedEvent(atarCase: Case, operator: Operator)
+                                 (implicit hc: HeaderCarrier): Future[Unit] = {
+    val event = NewEventRequest(CaseCreated("Application submitted"), operator)
+    connector.createEvent(atarCase, event) recover {
+      case t: Throwable =>
+        Logger.error(s"Could not create Event for case [${atarCase.reference}] with payload [$event]", t)
+    } map (_ => ())
   }
 
 }
