@@ -64,6 +64,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     when(btiApp.holder).thenReturn(EORIDetails("eori", "", "", "", "", "", ""))
     when(btiApp.contact).thenReturn(contact)
     when(contact.email).thenReturn("luigi@example.test")
+    when(contact.name).thenReturn("luigi")
 
     when(mapper.map(any[UserAnswers])).thenReturn(newCaseReq)
   }
@@ -141,7 +142,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       await(c.onSubmit(NormalMode)(req))
 
       verify(casesService, times(1)).addCaseCreatedEvent(
-        any[Case], any[Operator])(any[HeaderCarrier])
+        refEq(createdCase), refEq(Operator("", Some("luigi"))))(any[HeaderCarrier])
     }
 
 
