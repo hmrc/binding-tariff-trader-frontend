@@ -45,7 +45,7 @@ class IndexViewSpec extends ViewBehaviours {
     "contain a start button that redirects to ImportExportOrAdvice Page" in {
       val doc = asDocument(applicationView())
 
-      assertLinkContainsHref(doc, "start-application", routes.ImportOrExportController.onPageLoad(NormalMode).url)
+      assertLinkContainsHref(doc, "start-application", routes.BeforeYouStartController.onPageLoad.url)
     }
   }
 }
