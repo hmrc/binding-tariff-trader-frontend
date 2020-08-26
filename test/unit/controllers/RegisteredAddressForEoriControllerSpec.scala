@@ -43,7 +43,6 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
-      new DataRequiredActionImpl,
       formProvider,
       countriesService,
       cc
@@ -53,7 +52,7 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
   private def onwardRoute = Call("GET", "/foo")
 
   private def viewAsString(form: Form[RegisteredAddressForEori] = form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get))): String = {
-    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithNotOptionalEoriAndCache, messages).toString
+    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithEori, messages).toString
   }
 
   "RegisteredAddressForEori Controller" must {
@@ -75,7 +74,9 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("eori", "GB123"), ("businessName", "value 1"), ("addressLine1", "value 3"), ("townOrCity", "value 4"), ("postcode", "value 5"), ("country", "value 6"))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(
+        ("eori", "GB123"), ("businessName", "value 1"), ("addressLine1", "value 3"),
+        ("townOrCity", "value 4"), ("postcode", "value 5"), ("country", "value 6"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -97,7 +98,9 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 
     gbCountryCombinations.foreach { country =>
       s"return a Bad Request and errors when invalid gb postcode with country passed like '$country' is submitted" in {
-        val postRequest = fakeRequest.withFormUrlEncodedBody(("eori", "GB123"), ("businessName", "value 1"), ("addressLine1", "value 3"), ("townOrCity", "value 4"), ("postcode", "value 5"), ("country", country))
+        val postRequest = fakeRequest.withFormUrlEncodedBody(
+          ("eori", "GB123"), ("businessName", "value 1"), ("addressLine1", "value 3"),
+          ("townOrCity", "value 4"), ("postcode", "value 5"), ("country", country))
         val boundForm = form.bindFromRequest()(postRequest)
 
         val result = controller().onSubmit(NormalMode)(postRequest)
