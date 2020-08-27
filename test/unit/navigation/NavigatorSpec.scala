@@ -18,9 +18,7 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
-import models.ImportOrExport.{Advice, Import}
-import models.{ImportOrExport, _}
-import org.mockito.Mockito._
+import models._
 import pages._
 
 class NavigatorSpec extends SpecBase {
@@ -35,22 +33,6 @@ class NavigatorSpec extends SpecBase {
 
         case object UnknownPage extends Page
         navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) shouldBe routes.IndexController.getApplications()
-      }
-
-      "go to contactCustomsDutyLiabilityTeam page when Advice option is selected" in {
-        val mockUserAnswers = mock[UserAnswers]
-
-        when(mockUserAnswers.get[ImportOrExport](ImportOrExportPage)).thenReturn(Some(Advice))
-
-        navigator.nextPage(ImportExportOrAdvicePage, NormalMode)(mockUserAnswers) shouldBe routes.ContactCustomsDutyLiabilityTeamController.onPageLoad()
-      }
-
-      "go to the next page (Information you need) when import or export option is selected" in {
-        val mockUserAnswers = mock[UserAnswers]
-
-        when(mockUserAnswers.get[ImportOrExport](ImportOrExportPage)).thenReturn(Some(Import))
-
-        navigator.nextPage(ImportExportOrAdvicePage, NormalMode)(mockUserAnswers) shouldBe routes.BeforeYouStartController.onPageLoad()
       }
     }
 

@@ -17,7 +17,6 @@
 package mapper
 
 import javax.inject.Singleton
-import models.ImportOrExport.{Advice, Export, Import}
 import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import pages._
@@ -35,7 +34,6 @@ class CaseRequestMapper {
     val legalChallengeDetails: Option[String] = answers.get(LegalChallengeDetailsPage)
     val commodityCodeDigits: Option[String] = answers.get(CommodityCodeDigitsPage)
     val supportingInformationDetails: Option[String] = answers.get(SupportingInformationDetailsPage)
-    val importOrExport: Option[String] = answers.get(ImportOrExportPage).map(toImportOrExport)
 
     val sampleProvided: Boolean = answers.get(WhenToSendSamplePage).getOrElse(throwError("when to send a sample"))
     val returnSample: Option[ReturnSamples] = answers.get(ReturnSamplesPage)
@@ -57,7 +55,6 @@ class CaseRequestMapper {
       goodName = goodName,
       goodDescription = goodDescription,
       confidentialInformation = confidentialInformation,
-      importOrExport = importOrExport,
       otherInformation = supportingInformationDetails,
       reissuedBTIReference = previousCommodityCode.map(_.previousCommodityCode),
       relatedBTIReference = commodityCodeRulingReference,
@@ -127,13 +124,6 @@ class CaseRequestMapper {
       case ReturnSamples.Yes => true
       case _ => false
     }
-  }
-
-  private def toImportOrExport: ImportOrExport => String = {
-    case Import => "IMPORT"
-    case Export => "EXPORT"
-    case Advice => "ADVICE"
-    case _ => throw new IllegalArgumentException
   }
 
 }

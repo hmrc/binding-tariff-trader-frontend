@@ -100,11 +100,6 @@ trait ModelGenerators {
       Gen.oneOf(WhichBestDescribesYou.values.toSeq)
     }
 
-  implicit lazy val arbitraryImportOrExport: Arbitrary[ImportOrExport] =
-    Arbitrary {
-      Gen.oneOf(ImportOrExport.values.toSeq)
-    }
-
   implicit lazy val arbitraryRegisteredAddressForEori: Arbitrary[RegisteredAddressForEori] =
     Arbitrary {
       for {

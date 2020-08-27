@@ -359,17 +359,10 @@ uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg a
 uploadWrittenAuthorisation.upload.timeLimit = from within the last 12 months
 uploadWrittenAuthorisation.upload.document = a digital document, a scanned letter or copy of an email from the business, organisation or individual
 
-importOrExport.title = What do you want to do? - Manage your Advance Tariff Rulings - GOV.UK
-importOrExport.heading = What do you want to do?
-importOrExport.import = Import an item to the UK
-importOrExport.export = Export an item from the UK
-importOrExport.advice = Get commodity code advice from the Customs Duty Liability Team
 contactCustomsDutyLiabilityTeam.title = Contact the Customs Duty Liability Team - Manage your Advance Tariff Rulings - GOV.UK
 contactCustomsDutyLiabilityTeam.heading = Contact the Customs Duty Liability Team
 contactCustomsDutyLiabilityTeam.forGeneralAdvice = For general advice on commodity codes, <a href="https://www.gov.uk/guidance/ask-hmrc-for-advice-on-classifying-your-goods">contact the Customs Duty Liability Team</a>
 contactCustomsDutyLiabilityTeam.onlyUseTheApply = Only use the Manage your Advance Tariff Rulings service if you are definitely importing or exporting goods.
-importOrExport.checkYourAnswersLabel = Is the item going to be imported or exported?
-importOrExport.error.required = Select if you want to import or export an item or contact the Customs Duty Liability Team
 
 checkYourAnswers.applicantRegisteredSection = Your details
 checkYourAnswers.applicantOtherBusiness = Details of the business, organisation or individual you represent
@@ -402,9 +395,6 @@ application.section.aboutItem.heading = Information about your item
 application.section.aboutItem.description = Item description and confidential information
 application.section.aboutItem.suggestedCommodityCode = Have you found a commodity code?
 application.section.aboutItem.envisagedCommodityCode = Commodity code
-application.section.aboutItem.importOrExport = Is the item going to be imported or exported?
-application.section.aboutItem.import = Imported
-application.section.aboutItem.export = Exported
 application.section.aboutItem.uploadeDocuments = Uploaded documents
 application.section.aboutItem.sampleProvided = Are you sending a sample?
 application.section.aboutItem.sampleReturned = Would you like the sample returned?
