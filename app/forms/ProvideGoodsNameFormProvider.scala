@@ -16,16 +16,15 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
 
 class ProvideGoodsNameFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("provideGoodsName.error.required")
+      "goodsName" -> text("provideGoodsName.error.required")
         .verifying(maxLength(100, "provideGoodsName.error.length"))
     )
 }

@@ -16,38 +16,37 @@
 
 package controllers
 
-import javax.inject.Inject
-
-import play.api.data.Form
-import play.api.i18n.I18nSupport
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import config.FrontendAppConfig
-import forms.provideGoodsNameFormProvider
+import forms.ProvideGoodsNameFormProvider
+import javax.inject.Inject
 import models.Mode
-import pages.ProvideGoodsNamePage
 import navigation.Navigator
-import views.html.provideGoodsName
-import play.api.mvc.MessagesControllerComponents
-import scala.concurrent.ExecutionContext.Implicits.global
+import pages.ProvideGoodsNamePage
+import play.api.data.Form
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ProvideGoodsNameController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: provideGoodsNameFormProvider,
-                                        cc: MessagesControllerComponents
-                                     )extends FrontendController(cc) with I18nSupport {
+                                            appConfig: FrontendAppConfig,
+                                            dataCacheConnector: DataCacheConnector,
+                                            navigator: Navigator,
+                                            identify: IdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            provideGoodsNameFormProvider: ProvideGoodsNameFormProvider,
+                                            val provide_goods_name_view: views.html.provideGoodsName,
+                                            cc: MessagesControllerComponents
+                                          )extends FrontendController(cc) with I18nSupport {
 
-  val form = formProvider()
+  val form = provideGoodsNameFormProvider()
 
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(ProvideGoodsNamePage) match {
@@ -55,15 +54,15 @@ class ProvideGoodsNameController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(provideGoodsName(appConfig, preparedForm, mode))
+      Ok(provide_goods_name_view(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(provideGoodsName(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(provide_goods_name_view(appConfig, formWithErrors, mode))),
         (value) => {
           val updatedAnswers = request.userAnswers.set(ProvideGoodsNamePage, value)
 
