@@ -22,7 +22,7 @@ import pages.behaviours.PageBehaviours
 
 class ProvideGoodsNamePageSpec extends PageBehaviours {
 
-  "provideGoodsNamePage" must {
+  "ProvideGoodsNamePage" must {
 
     beRetrievable[String](ProvideGoodsNamePage)
 

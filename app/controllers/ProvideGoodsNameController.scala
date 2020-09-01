@@ -63,7 +63,7 @@ class ProvideGoodsNameController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(provide_goods_name_view(appConfig, formWithErrors, mode))),
-        (value) => {
+        value => {
           val updatedAnswers = request.userAnswers.set(ProvideGoodsNamePage, value)
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map(

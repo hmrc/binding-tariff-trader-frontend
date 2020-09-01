@@ -143,6 +143,9 @@ class CaseRequestMapperTest extends UnitSpec {
               Some("12345")
             )
           ),
+          ProvideGoodsNamePage.toString -> js(
+            "Good Name"
+          ),
           DescribeYourItemPage.toString -> js(
             DescribeYourItem(
               "Good Name",
@@ -206,6 +209,9 @@ class CaseRequestMapperTest extends UnitSpec {
               "Email",
               None
             )
+          ),
+          ProvideGoodsNamePage.toString -> js(
+            "Good Name"
           ),
           DescribeYourItemPage.toString -> js(
             DescribeYourItem(

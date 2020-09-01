@@ -28,13 +28,13 @@ class Navigator @Inject()() {
 
   private val routeMap: Map[Page, UserAnswers => Call] = Map(
     RegisteredAddressForEoriPage -> (_ => routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)),
-    EnterContactDetailsPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
     WhichBestDescribesYouPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
     SelectApplicationTypePage -> (_ => routes.SelectApplicationTypeController.onPageLoad(NormalMode)),
     RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(NormalMode)),
     UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(NormalMode)),
     AcceptItemInformationPage -> (_ => routes.AcceptItemInformationListController.onPageLoad()),
     PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
+    ProvideGoodsNamePage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode)),
     DescribeYourItemPage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode)),
     SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
@@ -53,6 +53,7 @@ class Navigator @Inject()() {
     LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(NormalMode)),
     SupportingInformationPage -> (_ => routes.SupportingInformationController.onPageLoad(NormalMode)),
     SupportingInformationDetailsPage -> (_ => routes.SupportingInformationDetailsController.onPageLoad(NormalMode)),
+    EnterContactDetailsPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
     CheckYourAnswersPage -> (_ => routes.CheckYourAnswersController.onPageLoad()),
     DeclarationPage -> (_ => routes.DeclarationController.onPageLoad(NormalMode)),
     ConfirmationPage -> (_ => routes.ConfirmationController.onPageLoad())

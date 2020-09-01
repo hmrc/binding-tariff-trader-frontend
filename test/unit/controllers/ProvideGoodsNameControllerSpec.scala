@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package unit.controllers
+package controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import controllers.{ControllerSpecBase, ProvideGoodsNameController, routes}
 import forms.ProvideGoodsNameFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
@@ -55,7 +54,7 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
 
   val testAnswer = "answer"
 
-  "provideGoodsName Controller" must {
+  "ProvideGoodsName Controller" must {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeGETRequest)
@@ -78,6 +77,9 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
+      println("*" * 100)
+      println(result)
+      println("*" * 100)
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
