@@ -9,7 +9,7 @@ object AppDependencies {
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc"       %% "auth-client"                      % "3.0.0-play-27",
     "uk.gov.hmrc"       %% "bootstrap-frontend-play-27"       % "2.24.0",
-    "uk.gov.hmrc"       %% "govuk-template"                   % "5.55.0-play-27",
+    "uk.gov.hmrc"       %% "govuk-template"                   % "5.56.0-play-27",
     "uk.gov.hmrc"       %% "http-caching-client"              % "9.1.0-play-27",
     "uk.gov.hmrc"       %% "play-health"                      % "3.15.0-play-27",
     "uk.gov.hmrc"       %% "play-language"                    % "4.3.0-play-27",
