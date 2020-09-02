@@ -27,30 +27,26 @@ index.home = Home
 
 global.link.signout = Sign out
 
-beforeYouStart.title = Information you need to apply for a ruling - Manage your Advance Tariff Rulings - GOV.UK
-beforeYouStart.heading = Information you need to apply for a ruling
-beforeYouStart.subheading0 = About you
-beforeYouStart.subheading1 = About the item
-beforeYouStart.subheading2 = To apply for another business or organisation
+beforeYouStart.title = Information you need to complete an application - Manage your Advance Tariff Rulings - GOV.UK
+beforeYouStart.heading = Information you need to complete an application
 
-beforeYouStart.paragraph0 = Collect this information before you start. You will not be able to save this application and return to it later.
-beforeYouStart.paragraph1a = You need your registered EORI address.
-beforeYouStart.paragraph1b = You need your:
-beforeYouStart.paragraph1b.item1 = Economic Operator and Registration Identification (EORI) number
-beforeYouStart.paragraph1b.item2 = EORI address
-beforeYouStart.paragraph1b.item3 = If you do not have an EORI you need to get an EORI to continue this application
-beforeYouStart.paragraph2 = You need to know:
-beforeYouStart.paragraph2.item1 = how it is made including a list of ingredients or parts
-beforeYouStart.paragraph2.item2 = what it is used for and how it works
-beforeYouStart.paragraph2.item3 = how it is packaged
-beforeYouStart.paragraph3 = If relevant, you’ll also need to:
-beforeYouStart.paragraph3.item1 = upload documents, photographs, manuals, brochures or technical specifications
-beforeYouStart.paragraph3.item2 = send a sample
-beforeYouStart.paragraph4 = You need:
-beforeYouStart.paragraph4.item1 = written authorisation from within the last 12 months
-beforeYouStart.paragraph4.item2 = their EORI number
-beforeYouStart.paragraph4.item3 = their registered EORI address
+beforeYouStart.heading.paragraph1 = You will be able to tell us in your application if any of the information you provide about your goods is confidential. We will not publish confidential information on the Advance Tariff Rulings website.
+beforeYouStart.heading.inset1 = You will be able to save this application and return to it later.
 
+beforeYouStart.subheading1 = About the goods
+beforeYouStart.subheading1.paragraph1 = You need to know:
+beforeYouStart.subheading1.paragraph1.item1 = how it is made including a list of ingredients or parts
+beforeYouStart.subheading1.paragraph1.item2 = what it is used for and how it works
+beforeYouStart.subheading1.paragraph1.item3 = how it is packaged
+beforeYouStart.subheading1.paragraph2 = If relevant, you’ll also need to:
+beforeYouStart.subheading1.paragraph2.item1 = upload photographs, manuals, brochures or technical specifications
+beforeYouStart.subheading1.paragraph2.item2 = send a sample
+
+beforeYouStart.subheading2 = About other rulings
+beforeYouStart.subheading2.paragraph1 = If you are renewing a previous ruling or referring similar rulings you will need to know the reference numbers.
+
+beforeYouStart.subheading3 = About the applicant
+beforeYouStart.subheading3.paragraph1 = You need to know the contact email and phone number for this application.
 
 session_expired.title = For your security, we deleted your answers
 session_expired.heading = For your security, we deleted your answers

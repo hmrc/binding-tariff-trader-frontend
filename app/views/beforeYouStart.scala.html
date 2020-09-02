@@ -27,49 +27,34 @@
 
     @components.heading(messages("beforeYouStart.heading"))
 
+    <p>@messages("beforeYouStart.heading.paragraph1")</p>
 
-    <p>@messages("beforeYouStart.paragraph0")</p>
-
-    <h2>@messages("beforeYouStart.subheading0")</h2>
-
-    @if(request.eoriNumber.isDefined) {
-        <p>@messages("beforeYouStart.paragraph1a")</p>
-    } else {
-        <p>@messages("beforeYouStart.paragraph1b")</p>
-        <ul class="list list-bullet">
-            <li>@messages("beforeYouStart.paragraph1b.item1")</li>
-            <li>@messages("beforeYouStart.paragraph1b.item2")</li>
-        </ul>
-        <p>@messages("beforeYouStart.paragraph1b.item3")</p>
-    }
-
+    @components.inset_text(Html(messages("beforeYouStart.heading.inset1")))
 
     <h2>@messages("beforeYouStart.subheading1")</h2>
 
-    <p>@messages("beforeYouStart.paragraph2")</p>
+    <p>@messages("beforeYouStart.subheading1.paragraph1")</p>
 
     <ul class="list list-bullet">
-        <li>@messages("beforeYouStart.paragraph2.item1")</li>
-        <li>@messages("beforeYouStart.paragraph2.item2")</li>
-        <li>@messages("beforeYouStart.paragraph2.item3")</li>
+        <li>@messages("beforeYouStart.subheading1.paragraph1.item1")</li>
+        <li>@messages("beforeYouStart.subheading1.paragraph1.item2")</li>
+        <li>@messages("beforeYouStart.subheading1.paragraph1.item3")</li>
     </ul>
 
-    <p>@messages("beforeYouStart.paragraph3")</p>
+    <p>@messages("beforeYouStart.subheading1.paragraph2")</p>
 
     <ul class="list list-bullet">
-        <li>@messages("beforeYouStart.paragraph3.item1")</li>
-        <li>@messages("beforeYouStart.paragraph3.item2")</li>
+        <li>@messages("beforeYouStart.subheading1.paragraph2.item1")</li>
+        <li>@messages("beforeYouStart.subheading1.paragraph2.item2")</li>
     </ul>
 
     <h2>@messages("beforeYouStart.subheading2")</h2>
 
-    <p>@messages("beforeYouStart.paragraph4")</p>
+    <p>@messages("beforeYouStart.subheading2.paragraph1")</p>
 
-    <ul class="list list-bullet">
-        <li>@messages("beforeYouStart.paragraph4.item1")</li>
-        <li>@messages("beforeYouStart.paragraph4.item2")</li>
-        <li>@messages("beforeYouStart.paragraph4.item3")</li>
-    </ul>
+    <h2>@messages("beforeYouStart.subheading3")</h2>
+
+    <p>@messages("beforeYouStart.subheading3.paragraph1")</p>
 
     @components.button_link( messages("site.continue"), routes.RegisteredAddressForEoriController.onPageLoad(NormalMode).url)
 }
