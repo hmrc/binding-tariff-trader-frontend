@@ -30,7 +30,7 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 
 class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
+  private def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ProvideGoodsNameFormProvider()
   val form: Form[String] = formProvider()
@@ -38,7 +38,9 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
   val provideGoodsNameView = new views.html.provideGoodsName
 
   val fakeGETRequest = fakeGETRequestWithCSRF
-  def viewAsString(form: Form[_] = form) = provideGoodsNameView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages).toString
+
+  def viewAsString(form: Form[_] = form): String = provideGoodsNameView(
+    frontendAppConfig, form, NormalMode)(fakeGETRequest, messages).toString
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new ProvideGoodsNameController(
@@ -73,13 +75,10 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeGETRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("goodsName", testAnswer))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      println("*" * 100)
-      println(result)
-      println("*" * 100)
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
