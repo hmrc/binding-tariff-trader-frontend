@@ -75,7 +75,7 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("goodsName", testAnswer))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 

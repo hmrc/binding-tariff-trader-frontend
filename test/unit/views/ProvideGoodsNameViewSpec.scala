@@ -46,8 +46,6 @@ class ProvideGoodsNameViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    // TODO scaffold test cannot cope with text field with no label
-    // As per CommodityCodeDigitsViewSpec
-    //behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.ProvideGoodsNameController.onSubmit(NormalMode).url)
+    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.ProvideGoodsNameController.onSubmit(NormalMode).url)
   }
 }

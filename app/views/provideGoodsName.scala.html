@@ -37,13 +37,12 @@
 
         @components.error_summary(goodsNameForm.errors)
 
-        <p class="preheader">@messages("provideGoodsName.preheader.hint")</p>
-
-        @components.heading(messages("provideGoodsName.heading"))
+        <div class="preheader">@messages("provideGoodsName.preheader.hint")</div>
 
         @components.input_text(
-            field = goodsNameForm("goodsName"),
-            label = Some(messages("provideGoodsName.paragraph"))
+            field = goodsNameForm("value"),
+            label = Some(messages("provideGoodsName.paragraph")),
+            labelHtml = Some(components.heading(messages("provideGoodsName.heading")))
         )
 
         @components.submit_button(Some(messages("site.save_and_continue")))
