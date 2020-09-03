@@ -8,8 +8,8 @@ echo "" >> ../conf/app.routes
 echo "GET        /provideGoodsName                        controllers.ProvideGoodsNameController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
 echo "POST       /provideGoodsName                        controllers.ProvideGoodsNameController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeprovideGoodsName                  controllers.ProvideGoodsNameController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeprovideGoodsName                  controllers.ProvideGoodsNameController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeProvideGoodsName                  controllers.ProvideGoodsNameController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeProvideGoodsName                  controllers.ProvideGoodsNameController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

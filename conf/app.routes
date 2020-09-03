@@ -127,4 +127,4 @@ GET         /accessibility                                             controlle
 GET        /provide-goods-name                                         controllers.ProvideGoodsNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /provide-goods-name                                         controllers.ProvideGoodsNameController.onSubmit(mode: Mode = NormalMode)
 GET        /change-provide-goods-name                                  controllers.ProvideGoodsNameController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeprovide-goods-name                                   controllers.ProvideGoodsNameController.onSubmit(mode: Mode = CheckMode)
+POST       /change-provide-goods-name                                  controllers.ProvideGoodsNameController.onSubmit(mode: Mode = CheckMode)
