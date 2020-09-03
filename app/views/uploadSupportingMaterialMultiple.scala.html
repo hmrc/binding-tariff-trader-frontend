@@ -17,21 +17,19 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
+@import models.upscan.UpscanInitiateResponse
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, initiateResponse: UpscanInitiateResponse, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("uploadSupportingMaterialMultiple.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = UploadSupportingMaterialMultipleController.onSubmit(mode),
-         'enctype -> "multipart/form-data",
-         'id -> "upload-files-form") {
-
+    <form method="POST" action="@initiateResponse.uploadRequest.href" id="upload-files-form" enctype="multipart/form-data">
         @components.back_link()
 
         @components.error_summary(form.errors)
@@ -45,28 +43,18 @@
             <li>@messages("uploadSupportingMaterialMultiple.upload.typeOfFiles")</li>
         </ul>
 
-        <div class="js-visible mt-3">
-            @components.input_file(
-                field = form("file-input"),
-                label = messages("uploadSupportingMaterialMultiple.label"),
-                accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt")
-            )
+        @for((key, value) <- initiateResponse.uploadRequest.fields) {
+            <input type="hidden" name="@key" value="@value" />
+        }
 
-            <div id="list-of-files-table" class="draganddroptable"></div>
-        </div>
-
-        <div class="notice js-hidden my-3">
-            <i class="icon icon-important">
-                <span class="visually-hidden">@messages("uploadSupportingMaterialMultiple.jsDisabled.title")</span>
-            </i>
-            <strong class="bold-small">
-                @messages("uploadSupportingMaterialMultiple.jsDisabled.label")
-            </strong>
-        </div>
+        @components.input_file(
+            field = form("file"),
+            label = messages("uploadSupportingMaterialMultiple.label"),
+            accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt")
+        )
 
         <div class="section">
-            <button id="submit" class="button"> Upload </button>
+            <button id="submit" class="button">Upload</button>
         </div>
-
-    }
+    </form>
 }

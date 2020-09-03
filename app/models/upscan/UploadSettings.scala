@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package models.upscan
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import play.api.libs.json.{Format, Json}
 
-class UploadSupportingMaterialMultipleFormProvider @Inject() extends Mappings {
+case class UploadSettings
+(
+  callbackUrl: String,
+  minimumFileSize: Option[Int] = None,
+  maximumFileSize: Option[Int] = None,
+  successRedirect: Option[String] = None
+)
 
-  def apply(): Form[String] =
-    Form(
-      "file" -> text()
-    )
-
+object UploadSettings {
+  implicit val format: Format[UploadSettings] = Json.format
 }

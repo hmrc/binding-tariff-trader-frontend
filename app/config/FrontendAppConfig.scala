@@ -44,6 +44,7 @@ class FrontendAppConfig @Inject()(
   lazy val authUrl: String = serviceConfig.baseUrl("auth")
   lazy val loginUrl: String = loadConfig("urls.login")
   lazy val loginContinueUrl: String = loadConfig("urls.loginContinue")
+  lazy val upscanInitiateUrl: String = serviceConfig.baseUrl("upscan-initiate")
   lazy val bindingTariffClassificationUrl: String = serviceConfig.baseUrl("binding-tariff-classification")
   lazy val bindingTariffFileStoreUrl: String = serviceConfig.baseUrl("binding-tariff-filestore")
   lazy val emailUrl: String = serviceConfig.baseUrl("email")

@@ -17,13 +17,13 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
+import connectors.{ DataCacheConnector, UpscanConnector }
 import controllers.actions._
-import forms.UploadSupportingMaterialMultipleFormProvider
 import javax.inject.Inject
 import models.{FileAttachment, Mode}
 import pages._
-import play.api.data.FormError
+import play.api.data.{ Form, Forms, FormError }
+import play.api.data.format.Formats._
 import play.api.i18n.{I18nSupport, Lang}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc._
@@ -31,9 +31,10 @@ import service.FileService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.Future.successful
+import models.upscan.UploadSettings
+import scala.concurrent.ExecutionContext
+import forms.UploadSupportingMaterialMultipleFormProvider
 
 class UploadSupportingMaterialMultipleController @Inject()(
                                                             appConfig: FrontendAppConfig,
@@ -41,59 +42,24 @@ class UploadSupportingMaterialMultipleController @Inject()(
                                                             identify: IdentifierAction,
                                                             getData: DataRetrievalAction,
                                                             requireData: DataRequiredAction,
+                                                            upscanConnector: UpscanConnector,
                                                             formProvider: UploadSupportingMaterialMultipleFormProvider,
                                                             fileService: FileService,
                                                             cc: MessagesControllerComponents
-                                                          ) extends FrontendController(cc) with I18nSupport {
+                                                          )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
   private implicit val lang: Lang = appConfig.defaultLang
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
-    Ok(uploadSupportingMaterialMultiple(appConfig, form, mode))
-  }
-
-  def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
-    .async(parse.multipartFormData) { implicit request =>
-
-      def badRequest(errorKey: String, errorMessage: String): Future[Result] = {
-        successful(
-          BadRequest(
-            uploadSupportingMaterialMultiple(appConfig, form.copy(errors = Seq(FormError(errorKey, errorMessage))), mode)
-          )
-        )
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      upscanConnector.initiate(UploadSettings(s"${appConfig.bindingTariffFileStoreUrl}/file")).map { initiateResponse =>
+        Ok(uploadSupportingMaterialMultiple(appConfig, initiateResponse, form, mode))
       }
-
-      def saveAndRedirect(file: FileAttachment): Future[Result] = {
-        val updatedFiles = request.userAnswers.get(SupportingMaterialFileListPage)
-          .map(_ ++ Seq(file)) getOrElse Seq(file)
-        val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, updatedFiles)
-        dataCacheConnector.save(updatedAnswers.cacheMap)
-          .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
-      }
-
-      def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]): Future[Result] = {
-        fileService.upload(validFile) flatMap {
-          case file: FileAttachment => saveAndRedirect(file)
-          case _ => badRequest("upload-error", "File upload has failed. Try again")
-        }
-      }
-
-      def hasMaxFiles: Boolean = {
-        request.userAnswers.get(SupportingMaterialFileListPage).map(_.size).getOrElse(0) >= 10
-      }
-
-      request.body.file("file-input").filter(_.filename.nonEmpty) match {
-        case Some(_) if hasMaxFiles => badRequest("validation-error", messagesApi("uploadSupportingMaterialMultiple.error.numberFiles"))
-        case Some(file) => fileService.validate(file) match {
-          case Right(rightFile) => uploadFile(rightFile)
-          case Left(errorMessage) => badRequest("file-input", errorMessage)
-        }
-        case _ =>
-          badRequest("file-input", messagesApi("uploadSupportingMaterialMultiple.upload.selectFile"))
-      }
-
     }
 
+  def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = 
+    (identify andThen getData andThen requireData).async(parse.multipartFormData) { implicit request =>
+      Future.successful(Ok)
+    }
 }

@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package models.upscan
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import utils.EnumJson
 
-class UploadSupportingMaterialMultipleFormProvider @Inject() extends Mappings {
+object ScanStatus extends Enumeration {
+  type ScanStatus = Value
 
-  def apply(): Form[String] =
-    Form(
-      "file" -> text()
-    )
+  val READY, FAILED = Value
 
+  implicit val format = EnumJson.format(ScanStatus)
 }
