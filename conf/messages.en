@@ -191,6 +191,12 @@ provideGoodsName.error.required = Enter a short name to describe the goods
 provideGoodsName.error.length = Name for the goods must be 100 characters or less
 provideGoodsName.paragraph = This information may appear on the Advance Tariff Rulings website.
 
+provideGoodsDescription.title = Provide a detailed description of the {0} - Manage your Advance Tariff Rulings - GOV.UK
+provideGoodsDescription.heading = Provide a detailed description of the {0}
+provideGoodsDescription.checkYourAnswersLabel = Goods Description
+provideGoodsDescription.error.required = Enter a detailed description of your goods
+provideGoodsDescription.error.length = Description for the goods must be 100 characters or less
+
 describeYourItem.title = Detailed description of your item - Manage your Advance Tariff Rulings - GOV.UK
 describeYourItem.heading = Detailed description of your item
 describeYourItem.subheading = Description of your item that may be used as part of the published ruling
@@ -918,9 +924,3 @@ accessibility.howWeTested.p2.link=Digital Accessibility Centre
 accessibility.howWeTested.p2.text=. The full service was tested by HMRC and included disabled users.
 accessibility.howWeTested.p3=This page was prepared on 1 September 2020.
 accessibility.howWeTested.p4=It was last updated on 1 September 2020.
-
-provideGoodsDescription.title = provideGoodsDescription
-provideGoodsDescription.heading = provideGoodsDescription
-provideGoodsDescription.checkYourAnswersLabel = provideGoodsDescription
-provideGoodsDescription.error.required = Enter provideGoodsDescription
-provideGoodsDescription.error.length = ProvideGoodsDescription must be 100 characters or less

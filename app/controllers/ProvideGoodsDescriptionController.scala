@@ -23,12 +23,14 @@ import forms.ProvideGoodsDescriptionFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.ProvideGoodsDescriptionPage
+import pages.{ProvideGoodsDescriptionPage, ProvideGoodsNamePage}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import play.twirl.api.TemplateMagic.anyToDefault
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import scala.Option.option2Iterable
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -49,20 +51,23 @@ class ProvideGoodsDescriptionController @Inject()(
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("the goods")
       val preparedForm = request.userAnswers.get(ProvideGoodsDescriptionPage) match {
-        case None => form
         case Some(value) => form.fill(value)
+        case None => form
       }
 
-      Ok(provide_goods_description(appConfig, preparedForm, mode))
+      Ok(provide_goods_description(appConfig, preparedForm, goodsName, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
     implicit request =>
 
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("the goods")
+
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(provide_goods_description(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(provide_goods_description(appConfig, formWithErrors, goodsName, mode))),
         (value) => {
           val updatedAnswers = request.userAnswers.set(ProvideGoodsDescriptionPage, value)
 
