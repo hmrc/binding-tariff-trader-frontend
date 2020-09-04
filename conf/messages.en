@@ -918,3 +918,9 @@ accessibility.howWeTested.p2.link=Digital Accessibility Centre
 accessibility.howWeTested.p2.text=. The full service was tested by HMRC and included disabled users.
 accessibility.howWeTested.p3=This page was prepared on 1 September 2020.
 accessibility.howWeTested.p4=It was last updated on 1 September 2020.
+
+provideGoodsDescription.title = provideGoodsDescription
+provideGoodsDescription.heading = provideGoodsDescription
+provideGoodsDescription.checkYourAnswersLabel = provideGoodsDescription
+provideGoodsDescription.error.required = Enter provideGoodsDescription
+provideGoodsDescription.error.length = ProvideGoodsDescription must be 100 characters or less
