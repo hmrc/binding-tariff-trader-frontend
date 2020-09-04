@@ -27,8 +27,8 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "provideGoodsDescription"
 
+  val goodsName = "goods Name"
   val form = new ProvideGoodsDescriptionFormProvider()()
-
 
   val fakeGETRequest = fakeGETRequestWithCSRF
 
@@ -36,13 +36,13 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
 
 
   def createView = () =>
-    provideGoodsDescriptionView(frontendAppConfig, form, "", NormalMode)(fakeGETRequest, messages)
+    provideGoodsDescriptionView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   def createViewUsingForm = (form: Form[String]) =>
-    provideGoodsDescriptionView(frontendAppConfig, form, "", NormalMode)(fakeGETRequest, messages)
+    provideGoodsDescriptionView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   "ProvideGoodsDescription view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
+    behave like normalPage(createView, messageKeyPrefix, goodsName)()
 
     behave like pageWithBackLink(createView)
 

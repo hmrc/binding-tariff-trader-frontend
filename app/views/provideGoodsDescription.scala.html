@@ -37,11 +37,16 @@
 
         @components.error_summary(goodsDescriptionForm.errors)
 
-        @components.heading("provideGoodsDescription.heading", goodsName)
+        <div class="preheader">@messages("provideGoodsName.preheader.hint")</div>
+
+
+        @components.inset_text(Html(messages("provideGoodsName.paragraph")))
+
+        @components.inset_text(Html(messages("provideGoodsDescription.confidential_info")))
 
         @components.input_textarea(
             field = goodsDescriptionForm("value"),
-            label = Html(messages("provideGoodsDescription.heading", goodsName)),
+            label = components.heading(messages("provideGoodsDescription.heading", goodsName)),
             labelClass = Some("heading-medium"),
             hint = Some(descriptionBullets),
             inputFormControl = "form-control--full-width",
@@ -49,7 +54,7 @@
             maxlength = 50000
         )
 
-        @components.submit_button()
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }
 

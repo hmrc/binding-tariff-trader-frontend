@@ -196,6 +196,7 @@ provideGoodsDescription.heading = Provide a detailed description of the {0}
 provideGoodsDescription.checkYourAnswersLabel = Goods Description
 provideGoodsDescription.error.required = Enter a detailed description of your goods
 provideGoodsDescription.error.length = Description for the goods must be 100 characters or less
+provideGoodsDescription.confidential_info = You will be able to add confidential information and upload files later in the application.
 
 describeYourItem.title = Detailed description of your item - Manage your Advance Tariff Rulings - GOV.UK
 describeYourItem.heading = Detailed description of your item
