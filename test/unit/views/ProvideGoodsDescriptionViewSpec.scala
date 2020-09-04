@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package views
+package unit.views
 
-import play.api.data.Form
 import controllers.routes
 import forms.ProvideGoodsDescriptionFormProvider
 import models.NormalMode
+import play.api.data.Form
 import views.behaviours.StringViewBehaviours
 import views.html.provideGoodsDescription
 
@@ -29,12 +29,20 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
 
   val form = new ProvideGoodsDescriptionFormProvider()()
 
-  def createView = () => provideGoodsDescription(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) => provideGoodsDescription(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val fakeGETRequest = fakeGETRequestWithCSRF
+
+  def provideGoodsDescriptionView: provideGoodsDescription = injector.instanceOf[provideGoodsDescription]
+
+
+  def createView = () =>
+    provideGoodsDescriptionView(frontendAppConfig, form, "", NormalMode)(fakeGETRequest, messages)
+
+  def createViewUsingForm = (form: Form[String]) =>
+    provideGoodsDescriptionView(frontendAppConfig, form, "", NormalMode)(fakeGETRequest, messages)
 
   "ProvideGoodsDescription view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 

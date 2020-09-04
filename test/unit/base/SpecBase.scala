@@ -61,6 +61,10 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
     "GET", "/", FakeHeaders(Seq("csrfToken"->"csrfToken")), AnyContentAsEmpty)
     .withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
+  def fakePOSTRequestWithCSRF: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    "POST", "/", FakeHeaders(Seq("csrfToken"->"csrfToken")), AnyContentAsEmpty)
+    .withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
+
   def messages: Messages = messagesApi.preferred(fakeRequest)
 
   def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]

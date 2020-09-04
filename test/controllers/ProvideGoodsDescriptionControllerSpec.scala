@@ -16,18 +16,17 @@
 
 package controllers
 
-import play.api.data.Form
-import play.api.libs.json.JsString
-import uk.gov.hmrc.http.cache.client.CacheMap
-import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import play.api.test.Helpers._
 import forms.ProvideGoodsDescriptionFormProvider
 import models.NormalMode
-import pages.ProvideGoodsDescriptionPage
+import navigation.FakeNavigator
+import pages.{ProvideGoodsDescriptionPage, ProvideGoodsNamePage}
+import play.api.data.Form
+import play.api.libs.json.JsString
 import play.api.mvc.Call
-import views.html.provideGoodsDescription
+import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 class ProvideGoodsDescriptionControllerSpec extends ControllerSpecBase {
 
@@ -36,60 +35,88 @@ class ProvideGoodsDescriptionControllerSpec extends ControllerSpecBase {
   val formProvider = new ProvideGoodsDescriptionFormProvider()
   val form = formProvider()
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new ProvideGoodsDescriptionController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(onwardRoute), FakeIdentifierAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+  val provideGoodsDescriptionView = new views.html.provideGoodsDescription
 
-  def viewAsString(form: Form[_] = form) = provideGoodsDescription(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakePOSTRequest = fakePOSTRequestWithCSRF
 
   val testAnswer = "answer"
+
+  val testName = "Luigi"
+
+  def viewAsString(form: Form[_] = form): String = provideGoodsDescriptionView(
+    frontendAppConfig, form, testName, NormalMode)(fakeGETRequest, messages).toString
+
+  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+    new ProvideGoodsDescriptionController(
+      frontendAppConfig,
+      FakeDataCacheConnector,
+      new FakeNavigator(onwardRoute),
+      FakeIdentifierAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl,
+      formProvider,
+      provideGoodsDescriptionView,
+      cc
+    )
 
   "ProvideGoodsDescription Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
+
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(testName))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeGETRequest)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(ProvideGoodsDescriptionPage.toString -> JsString(testAnswer))
+      val validData = Map(
+        ProvideGoodsDescriptionPage.toString -> JsString(testAnswer),
+        ProvideGoodsNamePage.toString -> JsString(testName)
+      )
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeGETRequest)
 
       contentAsString(result) shouldBe viewAsString(form.fill(testAnswer))
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(testName))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val result = controller(getRelevantData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", ""))
+      val postRequest = fakeGETRequest.withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(testName))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val result = controller(getRelevantData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) shouldBe viewAsString(boundForm)
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
+      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeGETRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("value", testAnswer))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe SEE_OTHER
