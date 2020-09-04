@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package pages
+package unit.pages
 
+import pages.ProvideGoodsDescriptionPage
 import pages.behaviours.PageBehaviours
 
 

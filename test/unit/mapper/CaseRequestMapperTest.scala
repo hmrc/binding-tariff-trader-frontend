@@ -146,6 +146,9 @@ class CaseRequestMapperTest extends UnitSpec {
           ProvideGoodsNamePage.toString -> js(
             "Good Name"
           ),
+          ProvideGoodsDescriptionPage.toString -> js(
+            "Good Description"
+          ),
           DescribeYourItemPage.toString -> js(
             DescribeYourItem(
               "Good Name",
@@ -212,6 +215,9 @@ class CaseRequestMapperTest extends UnitSpec {
           ),
           ProvideGoodsNamePage.toString -> js(
             "Good Name"
+          ),
+          ProvideGoodsDescriptionPage.toString -> js(
+            "Good Description"
           ),
           DescribeYourItemPage.toString -> js(
             DescribeYourItem(
