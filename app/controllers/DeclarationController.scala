@@ -67,11 +67,12 @@ class DeclarationController @Inject()(
 
     for {
       att: Seq[PublishedFileAttachment] <- fileService.publish(attachments)
-      letter <- getPublishedLetter(answers)
-      c: Case <- createCase(newCaseRequest, att, letter, answers)
-      _ = auditService.auditBTIApplicationSubmissionSuccessful(c)
-      userAnswers = answers.set(ConfirmationPage, Confirmation(c))
-      _ <- dataCacheConnector.save(userAnswers.cacheMap)
+      letter      <- getPublishedLetter(answers)
+      atar        <- createCase(newCaseRequest, att, letter, answers)
+      _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
+      _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
+      userAnswers = answers.set(ConfirmationPage, Confirmation(atar))
+      _           <- dataCacheConnector.save(userAnswers.cacheMap)
       res: Result <- successful(Redirect(navigator.nextPage(ConfirmationPage, mode)(userAnswers)))
     } yield res
 

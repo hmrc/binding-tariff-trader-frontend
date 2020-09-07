@@ -213,17 +213,19 @@ describeYourItem.listItem5 = how it is packaged, including all materials
 
 supportingMaterialFileList.title = Do you want to upload any supporting documents? - Manage your Advance Tariff Rulings - GOV.UK
 supportingMaterialFileList.heading = Do you want to upload any supporting documents?
+supportingMaterialFileList.caption = About the goods
 supportingMaterialFileList.uploadFileCounter.singular = You have uploaded 1 supporting document
 supportingMaterialFileList.uploadFileCounter.plural = You have uploaded {0} supporting documents
 supportingMaterialFileList.checkYourAnswersLabel = Uploaded documents
 supportingMaterialFileList.label.anotherFile =  Do you want to upload another document?
-supportingMaterialFileList.indications = The things we need to give you an accurate commodity code are:
-supportingMaterialFileList.indications.bullet1 = ingredients lists for food and drink items
+supportingMaterialFileList.indications = To get accurate commodity code advice you can provide us with:
+supportingMaterialFileList.indications.bullet1 = ingredients lists for food and drink goods
 supportingMaterialFileList.indications.bullet2 = technical specifications
 supportingMaterialFileList.indications.bullet3 = lists of materials
-supportingMaterialFileList.indications.bullet4 = images of the item
+supportingMaterialFileList.indications.bullet4 = images of the goods
 supportingMaterialFileList.indications.bullet5 = images of packaging
 supportingMaterialFileList.error.required = Select yes if you want to upload a supporting document
+supportingMaterialFileList.continue = Save and continue
 supportingMaterialFile.remove.file.text = Remove
 supportingMaterialFile.remove.file.hidden.text = Remove file {0}
 

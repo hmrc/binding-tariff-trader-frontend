@@ -20,6 +20,7 @@ import base.SpecBase
 import connectors.{BindingTariffClassificationConnector, EmailConnector}
 import models.CaseStatus.CaseStatus
 import models._
+import models.requests.NewEventRequest
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
@@ -114,6 +115,42 @@ class CasesServiceSpec extends SpecBase {
     }
   }
 
+  "addCaseCreatedEvent" should {
+    val atar = oCase.btiCaseExample
+    val operator = Operator("", Some(""))
+
+    "create an event" in {
+
+      given(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier])).willReturn(Future.successful(mock[Event]))
+
+      await(service.addCaseCreatedEvent(atar, operator)(HeaderCarrier())) shouldBe ()
+
+      val eventCreated = theEventCreatedFor(caseConnector, atar)
+      eventCreated.operator shouldBe Operator("", Some(""))
+      eventCreated.details shouldBe CaseCreated(comment = "Application submitted")
+    }
+
+    "not create an event when connector throws an exception" in {
+
+      val exception = new RuntimeException("Error")
+
+      given(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier])).willThrow(exception)
+
+      val caught = intercept[RuntimeException] {
+        await(service.addCaseCreatedEvent(atar, operator)(HeaderCarrier()))
+
+      }
+
+      caught shouldBe exception
+      verify(caseConnector, never()).createEvent(refEq(existingCase), any[NewEventRequest])(any[HeaderCarrier])
+    }
+
+    def theEventCreatedFor(connector: BindingTariffClassificationConnector, c: Case): NewEventRequest = {
+      val captor: ArgumentCaptor[NewEventRequest] = ArgumentCaptor.forClass(classOf[NewEventRequest])
+      verify(connector).createEvent(refEq(c), captor.capture())(any[HeaderCarrier])
+      captor.getValue
+    }
+  }
 
   "Service 'Get Case For User'" should {
 
