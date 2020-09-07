@@ -20,7 +20,6 @@ import com.codahale.metrics.{ MetricRegistry, Timer }
 import com.kenshoo.play.metrics.Metrics
 import java.util.concurrent.atomic.AtomicBoolean
 import play.api.mvc.Result
-import play.api.http.Status
 import scala.concurrent.{ ExecutionContext, Future }
 
 trait HasMetrics {
@@ -73,7 +72,7 @@ trait HasMetrics {
 
       // Clean up timer according to server response
       result.foreach { result =>
-        if (Status.isServerError(result.header.status))
+        if (isFailureStatus(result.header.status))
           timer.completeWithFailure()
         else
           timer.completeWithSuccess()
@@ -125,4 +124,7 @@ trait HasMetrics {
 
   private def withMetricsTimer[T](metric: Metric)(block: MetricsTimer => T): T =
     block(new MetricsTimer(metric))
+
+  private def isFailureStatus(status: Int) =
+    status / 100 >= 4
 }
