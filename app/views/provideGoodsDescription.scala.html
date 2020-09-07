@@ -39,26 +39,29 @@
 
         <div class="preheader">@messages("provideGoodsName.preheader.hint")</div>
 
-
-        @components.inset_text(Html(messages("provideGoodsName.paragraph")))
-
-        @components.inset_text(Html(messages("provideGoodsDescription.confidential_info")))
+        @components.heading(messages("provideGoodsDescription.heading", goodsName))
 
         @components.input_textarea(
             field = goodsDescriptionForm("value"),
-            label = components.heading(messages("provideGoodsDescription.heading", goodsName)),
-            labelClass = Some("heading-medium"),
-            hint = Some(descriptionBullets),
+            label = descriptionBullets,
             inputFormControl = "form-control--full-width",
             numRows = 15,
             maxlength = 50000
         )
+
+        @components.inset_text(Html(messages("provideGoodsName.paragraph")))
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }
 
 @descriptionBullets = {
+    <p>@messages("provideGoodsName.paragraph")</p>
+
+    @components.inset_text(Html(messages("provideGoodsDescription.confidential_info")))
+
+    <p>@messages("provideGoodsDescription.p1")</p>
+
     <p>@messages("describeYourItem.paragraph.includes")</p>
     <ul class="list list-bullet">
         <li>@messages("describeYourItem.listItem1")</li>
