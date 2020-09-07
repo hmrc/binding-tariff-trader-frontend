@@ -57,7 +57,7 @@ class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues w
   def verifyCompletedWithSuccess(metricName: String, metrics: MockHasMetrics): Assertion = {
     val inOrder = Mockito.inOrder(metrics.localMetrics, metrics.timer)
     inOrder.verify(metrics.localMetrics, times(1)).startTimer(metricName)
-    inOrder.verify(metrics.timer, times(1)).stop()
+    inOrder.verify(metrics.localMetrics, times(1)).stopTimer(metrics.timer)
     inOrder.verify(metrics.localMetrics, times(1)).incrementSuccessCounter(metricName)
     verifyNoMoreInteractions(metrics.localMetrics)
     verifyNoMoreInteractions(metrics.timer)
@@ -67,7 +67,7 @@ class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues w
   def verifyCompletedWithFailure(metricName: String, metrics: MockHasMetrics): Assertion = {
     val inOrder = Mockito.inOrder(metrics.localMetrics, metrics.timer)
     inOrder.verify(metrics.localMetrics, times(1)).startTimer(metricName)
-    inOrder.verify(metrics.timer, times(1)).stop()
+    inOrder.verify(metrics.localMetrics, times(1)).stopTimer(metrics.timer)
     inOrder.verify(metrics.localMetrics, times(1)).incrementFailedCounter(metricName)
     verifyNoMoreInteractions(metrics.localMetrics)
     verifyNoMoreInteractions(metrics.timer)

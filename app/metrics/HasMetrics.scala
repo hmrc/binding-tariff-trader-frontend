@@ -61,14 +61,14 @@ trait HasMetrics {
 
     def completeWithSuccess(): Unit = {
       if (timerRunning.compareAndSet(true, false)) {
-        timer.stop()
+        localMetrics.stopTimer(timer)
         localMetrics.incrementSuccessCounter(metric)
       }
     }
 
     def completeWithFailure(): Unit = {
       if (timerRunning.compareAndSet(true, false)) {
-        timer.stop()
+        localMetrics.stopTimer(timer)
         localMetrics.incrementFailedCounter(metric)
       }
     }
