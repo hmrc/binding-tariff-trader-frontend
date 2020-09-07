@@ -19,8 +19,10 @@ package connectors
 import akka.stream.IOResult
 import akka.stream.scaladsl.{FileIO, Source}
 import akka.util.ByteString
+import com.kenshoo.play.metrics.Metrics
 import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
+import metrics.HasMetrics
 import models.response.FilestoreResponse
 import models.{Attachment, FileAttachment}
 import play.api.libs.Files.TemporaryFile
@@ -28,55 +30,56 @@ import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
+import scala.concurrent.{ ExecutionContext, Future }
 import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 @Singleton
 class BindingTariffFilestoreConnector @Inject()(
-                                                 ws: WSClient,
-                                                 client: AuthenticatedHttpClient
-                                               )(implicit appConfig: FrontendAppConfig) extends InjectAuthHeader {
+  ws: WSClient,
+  client: AuthenticatedHttpClient,
+  val metrics: Metrics
+)(implicit appConfig: FrontendAppConfig, ec: ExecutionContext) extends InjectAuthHeader with HasMetrics {
 
   def upload(file: MultipartFormData.FilePart[TemporaryFile])
-            (implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
+            (implicit hc: HeaderCarrier): Future[FilestoreResponse] = 
+    withMetricsTimerAsync("binding-tariff-filestore.upload") { _ =>
+      val filePart: MultipartFormData.Part[Source[ByteString, Future[IOResult]]] = FilePart(
+        "file",
+        file.filename,
+        file.contentType,
+        FileIO.fromPath(file.ref.path)
+      )
 
-    val filePart: MultipartFormData.Part[Source[ByteString, Future[IOResult]]] = FilePart(
-      "file",
-      file.filename,
-      file.contentType,
-      FileIO.fromPath(file.ref.path)
-    )
-
-    ws.url(s"${appConfig.bindingTariffFileStoreUrl}/file")
-      .addHttpHeaders(hc.headers: _*)
-      .addHttpHeaders(authHeaders(appConfig.apiToken))
-      .post(Source(List(filePart)))
-      .map(response => Json.fromJson[FilestoreResponse](Json.parse(response.body)).get)
-
-  }
-
-  def get(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
-    client.GET[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}")(implicitly, addAuth, implicitly)
-  }
-
-  def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] = {
-    client.POSTEmpty[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish")(implicitly, addAuth, implicitly)
-  }
-
-  def getFileMetadata(attachments: Seq[Attachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[FilestoreResponse]] = {
-    if (attachments.isEmpty) {
-      Future.successful(Seq.empty)
-    } else {
-      val query = s"?${attachments.map(att => s"id=${att.id}").mkString("&")}"
-      val url = s"${appConfig.bindingTariffFileStoreUrl}/file$query"
-      client.GET[Seq[FilestoreResponse]](url)(implicitly, addAuth, implicitly)
+      ws.url(s"${appConfig.bindingTariffFileStoreUrl}/file")
+        .addHttpHeaders(hc.headers: _*)
+        .addHttpHeaders(authHeaders(appConfig.apiToken))
+        .post(Source(List(filePart)))
+        .map(response => Json.fromJson[FilestoreResponse](Json.parse(response.body)).get)
     }
-  }
 
-  def get(attachment: Attachment)(implicit headerCarrier: HeaderCarrier): Future[Option[FilestoreResponse]] = {
-    client.GET[Option[FilestoreResponse]](s"${appConfig.bindingTariffFileStoreUrl}/file/${attachment.id}")(implicitly, addAuth, implicitly)
-  }
+  def get(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
+    withMetricsTimerAsync("binding-tariff-filestore.get") { _ =>
+      client.GET[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}")(implicitly, addAuth, implicitly)
+    }
 
+  def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
+    withMetricsTimerAsync("binding-tariff-filestore.publish") { _ =>
+      client.POSTEmpty[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish")(implicitly, addAuth, implicitly)
+    }
+
+  def getFileMetadata(attachments: Seq[Attachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[FilestoreResponse]] =
+    withMetricsTimerAsync("binding-tariff-filestore.getFileMetadata") { _ =>
+      if (attachments.isEmpty) {
+        Future.successful(Seq.empty)
+      } else {
+        val query = s"?${attachments.map(att => s"id=${att.id}").mkString("&")}"
+        val url = s"${appConfig.bindingTariffFileStoreUrl}/file$query"
+        client.GET[Seq[FilestoreResponse]](url)(implicitly, addAuth, implicitly)
+      }
+    }
+
+  def get(attachment: Attachment)(implicit headerCarrier: HeaderCarrier): Future[Option[FilestoreResponse]] =
+    withMetricsTimerAsync("binding-tariff-filestore.get") { _ =>
+      client.GET[Option[FilestoreResponse]](s"${appConfig.bindingTariffFileStoreUrl}/file/${attachment.id}")(implicitly, addAuth, implicitly)
+    }
 }
