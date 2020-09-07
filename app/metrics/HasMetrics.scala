@@ -21,6 +21,7 @@ import com.kenshoo.play.metrics.Metrics
 import java.util.concurrent.atomic.AtomicBoolean
 import play.api.mvc.Result
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.control.NonFatal
 
 trait HasMetrics {
   type Metric = String
@@ -68,22 +69,29 @@ trait HasMetrics {
     */
   def withMetricsTimerAction(metric: Metric)(block: => Future[Result])(implicit ec: ExecutionContext): Future[Result] = {
     withMetricsTimer(metric) { timer =>
-      val result = block
+      try {
+        val result = block
 
-      // Clean up timer according to server response
-      result.foreach { result =>
-        if (isFailureStatus(result.header.status))
+        // Clean up timer according to server response
+        result.foreach { result =>
+          if (isFailureStatus(result.header.status))
+            timer.completeWithFailure()
+          else
+            timer.completeWithSuccess()
+        }
+
+        // Clean up timer for unhandled exceptions
+        result.failed.foreach { _ =>
           timer.completeWithFailure()
-        else
-          timer.completeWithSuccess()
-      }
+        }
 
-      // Clean up timer for unhandled exceptions
-      result.failed.foreach { _ =>
-        timer.completeWithFailure()
-      }
+        result
 
-      result
+      } catch {
+        case NonFatal(e) =>
+          timer.completeWithFailure()
+          throw e
+      }
     }
   }
 
@@ -106,19 +114,26 @@ trait HasMetrics {
     */
   def withMetricsTimerAsync[T](metric: Metric)(block: MetricsTimer => Future[T])(implicit ec: ExecutionContext): Future[T] = {
     withMetricsTimer(metric) { timer =>
-      val result = block(timer)
+      try {
+        val result = block(timer)
 
-      // Clean up timer if the user doesn't
-      result.foreach { _ =>
-        timer.completeWithSuccess()
+        // Clean up timer if the user doesn't
+        result.foreach { _ =>
+          timer.completeWithSuccess()
+        }
+
+        // Clean up timer on unhandled exceptions
+        result.failed.foreach { _ =>
+          timer.completeWithFailure()
+        }
+
+        result
+
+      } catch {
+        case NonFatal(e) =>
+          timer.completeWithFailure()
+          throw e
       }
-
-      // Clean up timer on unhandled exceptions
-      result.failed.foreach { _ =>
-        timer.completeWithFailure()
-      }
-
-      result
     }
   }
 

@@ -22,8 +22,8 @@ import org.mockito.Mockito
 import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers._
 import org.scalatest.{ AsyncWordSpecLike, BeforeAndAfterAll, Matchers, OptionValues }
-import org.scalatest.mockito.MockitoSugar
 import org.scalatest.compatible.Assertion
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Results
 import scala.concurrent.Future
 
@@ -64,7 +64,7 @@ class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues w
   "HasMetrics" when {
     "withMetricsTimerAsync" should {
       "increment success counter for a successful future" in withTestMetrics { metrics =>
-        metrics.withMetricsTimerAsync(TestMetric){ _ =>
+        metrics.withMetricsTimerAsync(TestMetric) { _ =>
           Future.successful(())
         }.map { _ =>
           verifyCompletedWithSuccess(TestMetric, metrics)
@@ -81,7 +81,7 @@ class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues w
       }
 
       "increment failure counter for a failed future" in withTestMetrics { metrics =>
-        metrics.withMetricsTimerAsync(TestMetric){ _ =>
+        metrics.withMetricsTimerAsync(TestMetric) { _ =>
           Future.failed(new Exception)
         }.recover { case _ =>
           verifyCompletedWithFailure(TestMetric, metrics)
@@ -120,6 +120,16 @@ class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues w
         }.map { _ =>
           verifyCompletedWithFailure(TestMetric, metrics)
         }
+      }
+
+      "increment failure counter when the user throws an exception constructing their code block" in withTestMetrics { metrics =>
+        assertThrows[RuntimeException] {
+          metrics.withMetricsTimerAsync(TestMetric) { _ =>
+            Future.successful(throw new RuntimeException)
+          }
+        }
+
+        Future.successful(verifyCompletedWithFailure(TestMetric, metrics))
       }
     }
 
@@ -172,6 +182,15 @@ class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues w
         }
       }
 
+      "increment failure counter when the user throws an exception constructing their code block" in withTestMetrics { metrics =>
+        assertThrows[RuntimeException] {
+          metrics.withMetricsTimerAction(TestMetric) {
+            Future.successful(throw new RuntimeException)
+          }
+        }
+
+        Future.successful(verifyCompletedWithFailure(TestMetric, metrics))
+      }
     }
   }
 
