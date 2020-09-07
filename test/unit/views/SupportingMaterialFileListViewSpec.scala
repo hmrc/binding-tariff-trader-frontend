@@ -50,7 +50,7 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
       val headings = htmlView.getElementsByTag("h1")
       assert(headings.size() == 1)
-      assert(headings.first().text() == "Do you want to upload any supporting documents?")
+      assert(headings.first().ownText() == messagesApi(s"${messageKeyPrefix}.heading"))
     }
 
     "show the expected heading when 1 file has been uploaded" in {
@@ -69,11 +69,11 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
     val headings = htmlView.getElementsByTag("h1")
     assert(headings.size() == 1)
-    val heading = headings.first().text()
+    val heading = headings.first().ownText()
     if (n == 1) {
-      assert(heading == s"You have uploaded $n supporting document")
+      assert(heading == messagesApi(s"${messageKeyPrefix}.uploadFileCounter.singular"))
     } else {
-      assert(heading == s"You have uploaded $n supporting documents")
+      assert(heading == messagesApi(s"${messageKeyPrefix}.uploadFileCounter.plural", n))
     }
   }
 

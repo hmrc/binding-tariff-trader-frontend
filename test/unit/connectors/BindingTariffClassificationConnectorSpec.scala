@@ -16,12 +16,15 @@
 
 package connectors
 
+import java.time.Instant
+
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models._
+import models.requests.NewEventRequest
 import org.apache.http.HttpStatus
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
-import utils.JsonFormatters.{caseFormat, newCaseRequestFormat}
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream5xxResponse}
+import utils.JsonFormatters._
 
 class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
@@ -222,6 +225,63 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       verify(
         getRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+  }
+
+  "Connector 'Create Event'" should {
+
+    val event: Event =
+      Event("id", CaseCreated("Case created"), Operator("", Some("user name")), "case-ref", Instant.now())
+    val eventRequest: NewEventRequest =
+      NewEventRequest(CaseCreated("comment"), Operator("", Some("user name")), Instant.now())
+    val events: Seq[Event] = Seq(event)
+
+    "create event" in {
+      val ref = "case-reference"
+      val validCase = oCase.btiCaseExample.copy(reference = ref)
+      val validEventRequest = eventRequest
+      val validEvent = event.copy(caseReference = ref)
+      val requestJson = Json.toJson(validEventRequest).toString()
+      val responseJson = Json.toJson(validEvent).toString()
+
+      stubFor(post(urlEqualTo(s"/cases/$ref/events"))
+        .withRequestBody(equalToJson(requestJson))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_OK)
+          .withBody(responseJson)
+        )
+      )
+
+      await(connector.createEvent(validCase, validEventRequest)) shouldBe validEvent
+
+      verify(
+        postRequestedFor(urlEqualTo(s"/cases/$ref/events"))
+          .withHeader("X-Api-Token", equalTo(fakeAuthToken))
+      )
+    }
+
+    "create event with an unknown case reference" in {
+      val ref = "unknown-reference"
+      val validCase = oCase.btiCaseExample.copy(reference = ref)
+      val validEventRequest = eventRequest
+      val requestJson = Json.toJson(validEventRequest).toString()
+
+      stubFor(post(urlEqualTo(s"/cases/$ref/events"))
+        .withRequestBody(equalToJson(requestJson))
+        .willReturn(aResponse()
+          .withStatus(HttpStatus.SC_NOT_FOUND)
+        )
+      )
+
+      intercept[NotFoundException] {
+        await(connector.createEvent(validCase, validEventRequest))
+      }
+
+      verify(
+        postRequestedFor(urlEqualTo(s"/cases/$ref/events"))
+          .withHeader("X-Api-Token", equalTo(fakeAuthToken))
       )
     }
 
