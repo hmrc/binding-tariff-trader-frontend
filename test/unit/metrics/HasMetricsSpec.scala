@@ -24,11 +24,9 @@ import org.mockito.ArgumentMatchers._
 import org.scalatest.{ AsyncWordSpecLike, BeforeAndAfterAll, Matchers, OptionValues }
 import org.scalatest.compatible.Assertion
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc.Results
+import play.api.mvc.{ MessagesAbstractController, Results }
+import play.api.test.{ FakeRequest, Helpers }
 import scala.concurrent.Future
-import play.api.test.Helpers
-import play.api.test.FakeRequest
-import play.api.mvc.AbstractController
 
 class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues with MockitoSugar with BeforeAndAfterAll {
 
@@ -44,7 +42,7 @@ class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues w
     with MockHasMetrics
 
   class TestHasActionMetrics
-    extends AbstractController(Helpers.stubControllerComponents())
+    extends MessagesAbstractController(Helpers.stubMessagesControllerComponents())
     with HasActionMetrics
     with MockHasMetrics
 
