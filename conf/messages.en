@@ -238,11 +238,13 @@ supportingMaterialFileList.continue = Save and continue
 supportingMaterialFile.remove.file.text = Remove
 supportingMaterialFile.remove.file.hidden.text = Remove file {0}
 
-uploadSupportingMaterialMultiple.title = Upload documents, photographs, manuals, brochures or technical specifications - Manage your Advance Tariff Rulings - GOV.UK
-uploadSupportingMaterialMultiple.heading = Upload documents, photographs, manuals, brochures or technical specifications
+uploadSupportingMaterialMultiple.title = Upload supporting documents for the {0} - Manage your Advance Tariff Rulings - GOV.UK
+uploadSupportingMaterialMultiple.heading = Upload supporting documents for the {0}
+uploadSupportingMaterialMultiple.caption = About the goods
 uploadSupportingMaterialMultiple.label = Upload a file
 uploadSupportingMaterialMultiple.upload.title =  You can upload:
 uploadSupportingMaterialMultiple.upload.restrictionFiles = one file at a time, up to 10 files
+uploadSupportingMaterialMultiple.upload.exampleFiles = photographs, manuals, brochures or technical specifications
 uploadSupportingMaterialMultiple.upload.restrictionSize =  a maximum individual file size of 10MB
 uploadSupportingMaterialMultiple.upload.selectFile = You must select a file
 uploadSupportingMaterialMultiple.upload.typeOfFiles =   pdf, doc, docx, png, jpg, jpeg and txt files
@@ -251,6 +253,7 @@ uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.numberFiles = Reduce the number of files to a maximum of 10
+uploadSupportingMaterialMultiple.continue = Save and continue
 
 commodityCodeBestMatch.title = Have you found a commodity code for your item? - Manage your Advance Tariff Rulings - GOV.UK
 commodityCodeBestMatch.heading = Have you found a commodity code for your item?

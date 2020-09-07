@@ -50,17 +50,19 @@ class UploadSupportingMaterialMultipleController @Inject()(
   private implicit val lang: Lang = appConfig.defaultLang
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
 
-    Ok(uploadSupportingMaterialMultiple(appConfig, form, mode))
+    Ok(uploadSupportingMaterialMultiple(appConfig, form, goodsName, mode))
   }
 
   def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
     .async(parse.multipartFormData) { implicit request =>
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
 
       def badRequest(errorKey: String, errorMessage: String): Future[Result] = {
         successful(
           BadRequest(
-            uploadSupportingMaterialMultiple(appConfig, form.copy(errors = Seq(FormError(errorKey, errorMessage))), mode)
+            uploadSupportingMaterialMultiple(appConfig, form.copy(errors = Seq(FormError(errorKey, errorMessage))), goodsName, mode)
           )
         )
       }

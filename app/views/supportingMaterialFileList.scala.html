@@ -36,9 +36,9 @@
 
         @if(files.nonEmpty) {
             @if(files.size == 1) {
-                <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter.singular")</h1>
+                @components.heading(messages("supportingMaterialFileList.uploadFileCounter.singular"))
             } else {
-                <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter.plural", files.size)</h1>
+                @components.heading(messages("supportingMaterialFileList.uploadFileCounter.plural", files.size))
             }
 
             @components.show_file_table(files, mode)
@@ -50,10 +50,8 @@
                 labelHtml = Some(addAnotherFile)
             )
         } else {
-            <h1 class="heading-xlarge">
-                <span class="heading-secondary">@messages("supportingMaterialFileList.caption")</span>
-                @messages("supportingMaterialFileList.heading")
-            </h1>
+            @components.heading(messages("supportingMaterialFileList.heading"),
+                captionMsg = Some(messages("supportingMaterialFileList.caption")))
 
             @indicationsContent
 
