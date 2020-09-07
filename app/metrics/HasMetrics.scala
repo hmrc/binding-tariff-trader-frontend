@@ -19,12 +19,11 @@ package metrics
 import com.codahale.metrics.{ MetricRegistry, Timer }
 import com.kenshoo.play.metrics.Metrics
 import java.util.concurrent.atomic.AtomicBoolean
-import play.api.mvc.{ Action, Result }
+import play.api.mvc.{ Action, BaseController, Result }
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.control.NonFatal
-import play.api.mvc.AbstractController
 
-trait HasActionMetrics extends HasMetrics { self: AbstractController =>
+trait HasActionMetrics extends HasMetrics { self: BaseController =>
   /**
     * Execute a [[play.api.mvc.Action]] with a metrics timer.
     * Intended for use in controllers that return HTTP responses.
