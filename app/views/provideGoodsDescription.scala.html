@@ -39,8 +39,6 @@
 
         <div class="preheader">@messages("provideGoodsName.preheader.hint")</div>
 
-        @components.heading(messages("provideGoodsDescription.heading", goodsName))
-
         @components.input_textarea(
             field = goodsDescriptionForm("value"),
             label = descriptionBullets,
@@ -49,25 +47,27 @@
             maxlength = 50000
         )
 
-        @components.inset_text(Html(messages("provideGoodsName.paragraph")))
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }
 
 @descriptionBullets = {
-    <p>@messages("provideGoodsName.paragraph")</p>
+
+    @components.heading(messages("provideGoodsDescription.heading", goodsName))
+
+    <p>@messages("provideGoodsDescription.p2")</p>
 
     @components.inset_text(Html(messages("provideGoodsDescription.confidential_info")))
 
     <p>@messages("provideGoodsDescription.p1")</p>
 
-    <p>@messages("describeYourItem.paragraph.includes")</p>
+    <p>@messages("provideGoodsDescription.paragraph.includes")</p>
     <ul class="list list-bullet">
-        <li>@messages("describeYourItem.listItem1")</li>
-        <li>@messages("describeYourItem.listItem2")</li>
-        <li>@messages("describeYourItem.listItem3")</li>
-        <li>@messages("describeYourItem.listItem4")</li>
-        <li>@messages("describeYourItem.listItem5")</li>
+        <li>@messages("provideGoodsDescription.listItem1")</li>
+        <li>@messages("provideGoodsDescription.listItem2")</li>
+        <li>@messages("provideGoodsDescription.listItem3")</li>
+        <li>@messages("provideGoodsDescription.listItem4")</li>
+        <li>@messages("provideGoodsDescription.listItem5")</li>
     </ul>
 }

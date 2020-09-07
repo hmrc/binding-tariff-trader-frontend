@@ -35,7 +35,7 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
   val formProvider = new ProvideGoodsNameFormProvider()
   val form: Form[String] = formProvider()
 
-  val provideGoodsNameView = new views.html.provideGoodsName
+  val provideGoodsNameView = injector.instanceOf[views.html.provideGoodsName]
 
   val fakeGETRequest = fakeGETRequestWithCSRF
   val fakePOSTRequest = fakePOSTRequestWithCSRF

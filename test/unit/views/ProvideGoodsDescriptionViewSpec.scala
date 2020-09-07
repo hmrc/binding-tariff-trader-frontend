@@ -46,6 +46,10 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.ProvideGoodsDescriptionController.onSubmit(NormalMode).url)
+    behave like pageWithTextFields(
+      createViewUsingForm,
+      messageKeyPrefix,
+      routes.ProvideGoodsDescriptionController.onSubmit(NormalMode).url,
+      "value")
   }
 }

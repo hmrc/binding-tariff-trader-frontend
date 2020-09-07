@@ -53,7 +53,6 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
           val doc = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
 
-          println("hello world" + expectedHintText)
           assertContainsLabel(doc, "value",  expectedLabel(messageKeyPrefix), expectedHintText)
         }
 

@@ -27,10 +27,8 @@ import pages.{ProvideGoodsDescriptionPage, ProvideGoodsNamePage}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
-import play.twirl.api.TemplateMagic.anyToDefault
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import scala.Option.option2Iterable
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
