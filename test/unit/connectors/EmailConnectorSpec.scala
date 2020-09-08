@@ -22,9 +22,11 @@ import models.{ApplicationSubmittedEmail, ApplicationSubmittedParameters}
 import org.apache.http.HttpStatus
 import uk.gov.hmrc.http.Upstream5xxResponse
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class EmailConnectorSpec extends ConnectorTest {
 
-  private val connector = new EmailConnector(mockConfig, standardHttpClient)
+  private val connector = new EmailConnector(mockConfig, standardHttpClient, metrics)
 
   private val email = ApplicationSubmittedEmail(Seq("user@domain.com"), ApplicationSubmittedParameters("ref", "name"))
 
