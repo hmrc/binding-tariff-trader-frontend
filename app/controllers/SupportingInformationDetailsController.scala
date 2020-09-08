@@ -65,7 +65,7 @@ class SupportingInformationDetailsController @Inject()(
         val updatedAnswers = request.userAnswers.set(SupportingInformationDetailsPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(CheckYourAnswersPage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(SupportingInformationDetailsPage, mode)(updatedAnswers))
         )
       }
     )

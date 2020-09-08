@@ -29,6 +29,7 @@ class CaseRequestMapper {
 
   def map(answers: UserAnswers): NewCaseRequest = {
     val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
+    val goodsName = answers.get(ProvideGoodsNamePage)
     val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
     val previousCommodityCode: Option[PreviousCommodityCode] = answers.get(PreviousCommodityCodePage)
     val commodityCodeRulingReference: Option[String] = answers.get(CommodityCodeRulingReferencePage)
@@ -45,6 +46,7 @@ class CaseRequestMapper {
     val agentDetails: Option[AgentDetails] = agentDetailsFrom(answers)
     val holderDetails: EORIDetails = holderDetailsFrom(answers)
 
+    //TODO: Replace and delete as part of DIT-2271
     val goodName = describeYourItem.map(_.name).getOrElse(throwError("good name"))
     val goodDescription = describeYourItem.map(_.description).getOrElse(throwError("good description"))
     val confidentialInformation = describeYourItem.flatMap(_.confidentialInformation)
@@ -54,7 +56,7 @@ class CaseRequestMapper {
       contact = contact,
       agent = agentDetails,
       offline = false,
-      goodName = goodName,
+      goodName = goodsName.getOrElse(throwError("good name")),
       goodDescription = goodDescription,
       confidentialInformation = confidentialInformation,
       importOrExport = importOrExport,

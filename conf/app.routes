@@ -122,4 +122,9 @@ GET         /applications/:reference/ruling/pdf                        controlle
 
 GET         /rulings/:reference                                        controllers.RulingController.viewRuling(reference: String)
 
-GET        /accessibility                                              controllers.AccessibilityController.onPageLoad
+GET         /accessibility                                             controllers.AccessibilityController.onPageLoad
+
+GET        /provide-goods-name                                         controllers.ProvideGoodsNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /provide-goods-name                                         controllers.ProvideGoodsNameController.onSubmit(mode: Mode = NormalMode)
+GET        /change-provide-goods-name                                  controllers.ProvideGoodsNameController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-provide-goods-name                                  controllers.ProvideGoodsNameController.onSubmit(mode: Mode = CheckMode)

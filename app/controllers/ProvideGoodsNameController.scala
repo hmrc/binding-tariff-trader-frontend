@@ -19,55 +19,58 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import forms.DescribeYourItemFormProvider
+import forms.ProvideGoodsNameFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{DescribeYourItemPage, SupportingMaterialFileListPage}
+import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.describeYourItem
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DescribeYourItemController @Inject()(
+class ProvideGoodsNameController @Inject()(
                                             appConfig: FrontendAppConfig,
                                             dataCacheConnector: DataCacheConnector,
                                             navigator: Navigator,
                                             identify: IdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
-                                            formProvider: DescribeYourItemFormProvider,
+                                            provideGoodsNameFormProvider: ProvideGoodsNameFormProvider,
+                                            val provide_goods_name_view: views.html.provideGoodsName,
                                             cc: MessagesControllerComponents
-                                          ) extends FrontendController(cc) with I18nSupport {
+                                          )extends FrontendController(cc) with I18nSupport {
 
-  private lazy val form = formProvider()
+  val form = provideGoodsNameFormProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+    implicit request =>
 
-    val preparedForm = request.userAnswers.get(DescribeYourItemPage) match {
-      case Some(value) => form.fill(value)
-      case _ => form
-    }
+      val preparedForm = request.userAnswers.get(ProvideGoodsNamePage) match {
+        case None => form
+        case Some(value) => form.fill(value)
+      }
 
-    Ok(describeYourItem(appConfig, preparedForm, mode))
+      Ok(provide_goods_name_view(appConfig, preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+    implicit request =>
 
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(describeYourItem(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(DescribeYourItemPage, value)
+      form.bindFromRequest().fold(
+        (formWithErrors: Form[_]) =>
+          Future.successful(BadRequest(provide_goods_name_view(appConfig, formWithErrors, mode))),
+        value => {
+          val updatedAnswers = request.userAnswers.set(ProvideGoodsNamePage, value)
 
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(DescribeYourItemPage, mode)(updatedAnswers))
-        )
-      }
-    )
+          dataCacheConnector.save(updatedAnswers.cacheMap).map(
+            _ =>
+              Redirect(navigator.nextPage(ProvideGoodsNamePage, mode)(updatedAnswers))
+          )
+        }
+      )
   }
 }

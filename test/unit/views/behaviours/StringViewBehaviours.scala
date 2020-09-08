@@ -31,12 +31,14 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
   }
 
   private def expectedLabel(messageKeyPrefix: String): String = {
-    getMessage(s"$messageKeyPrefix.label") match {
-      case Some(l) => l
-      case _ => getMessage(s"$messageKeyPrefix.heading") match {
-        case Some(h) => h
-        case _ => ""
-      }
+    (getMessage(s"$messageKeyPrefix.caption"),
+      getMessage(s"$messageKeyPrefix.heading"),
+      getMessage(s"$messageKeyPrefix.label")
+    ) match {
+      case (_,             _, Some(l)) => l
+      case (Some(c), Some(h), _) => s"$c $h"
+      case (_,       Some(h), _) => h
+      case _ => ""
     }
   }
 

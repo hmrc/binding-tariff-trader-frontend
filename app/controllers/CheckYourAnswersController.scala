@@ -64,6 +64,7 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.importOrExport,
           checkYourAnswersHelper.selectApplicationType,
           checkYourAnswersHelper.previousCommodityCode,
+          checkYourAnswersHelper.provideGoodsName,
           checkYourAnswersHelper.describeYourItem,
           checkYourAnswersHelper.supportingMaterialFileList,
           checkYourAnswersHelper.commodityCodeBestMatch,

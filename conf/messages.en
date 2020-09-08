@@ -66,6 +66,7 @@ site.continue = Continue
 site.submit = Submit
 site.upload_continue = Upload and continue
 site.service_name = Manage your Advance Tariff Rulings
+site.save_and_continue = Save and continue
 
 unauthorised.title = Not registered for CDS
 unauthorised.heading = To apply for an Advance Tariff Ruling (ATaR) you need to get access to CDS
@@ -181,6 +182,14 @@ previousCommodityCode.error.previousCommodityCode.required = Enter a ruling refe
 previousCommodityCode.error.previousCommodityCode.length = Previous Tariff Information ruling must be 100 characters or less
 previousCommodityCode.details.summary = What is my Binding Tariff Information ruling reference number?
 previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling.
+
+provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
+provideGoodsName.heading = Provide a name for the goods
+provideGoodsName.caption = About the goods
+provideGoodsName.checkYourAnswersLabel = Goods Name
+provideGoodsName.error.required = Enter a short name to describe the goods
+provideGoodsName.error.length = Name for the goods must be 100 characters or less
+provideGoodsName.paragraph = This information may appear on the Advance Tariff Rulings website.
 
 describeYourItem.title = Detailed description of your item - Manage your Advance Tariff Rulings - GOV.UK
 describeYourItem.heading = Detailed description of your item
