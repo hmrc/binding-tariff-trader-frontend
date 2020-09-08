@@ -15,6 +15,7 @@ echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
 echo "provideGoodsName.title = provideGoodsName" >> ../conf/messages.en
 echo "provideGoodsName.heading = provideGoodsName" >> ../conf/messages.en
+echo "provideGoodsName.caption = provideGoodsName" >> ../conf/messages.en
 echo "provideGoodsName.checkYourAnswersLabel = provideGoodsName" >> ../conf/messages.en
 echo "provideGoodsName.error.required = Enter provideGoodsName" >> ../conf/messages.en
 echo "provideGoodsName.error.length = provideGoodsName must be 100 characters or less" >> ../conf/messages.en
