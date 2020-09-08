@@ -54,7 +54,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
     }
 
     "clear user cache when present" in {
-      controller.startFeedbackSurvey(fakeRequestWithEoriAndCache)
+      await(controller.startFeedbackSurvey(fakeRequestWithEoriAndCache))
       verify(dataCache).remove(any())
     }
   }
@@ -69,7 +69,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
     }
 
     "clear user cache when present" in {
-      controller.forceSignOut(fakeRequestWithEoriAndCache)
+      await(controller.forceSignOut(fakeRequestWithEoriAndCache))
       verify(dataCache).remove(any())
     }
   }
