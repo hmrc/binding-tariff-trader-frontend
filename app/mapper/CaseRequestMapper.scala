@@ -30,6 +30,7 @@ class CaseRequestMapper {
   def map(answers: UserAnswers): NewCaseRequest = {
     val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
     val goodsName = answers.get(ProvideGoodsNamePage)
+    val goodsDescription = answers.get(ProvideGoodsDescriptionPage)
     val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
     val previousCommodityCode: Option[PreviousCommodityCode] = answers.get(PreviousCommodityCodePage)
     val commodityCodeRulingReference: Option[String] = answers.get(CommodityCodeRulingReferencePage)
@@ -56,8 +57,8 @@ class CaseRequestMapper {
       contact = contact,
       agent = agentDetails,
       offline = false,
-      goodName = goodsName.getOrElse(throwError("good name")),
-      goodDescription = goodDescription,
+      goodName = goodsName.getOrElse(throwError("goods name")),
+      goodDescription = goodsDescription.getOrElse(throwError("goods description")),
       confidentialInformation = confidentialInformation,
       importOrExport = importOrExport,
       otherInformation = supportingInformationDetails,

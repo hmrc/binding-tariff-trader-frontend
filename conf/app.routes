@@ -128,3 +128,8 @@ GET        /provide-goods-name                                         controlle
 POST       /provide-goods-name                                         controllers.ProvideGoodsNameController.onSubmit(mode: Mode = NormalMode)
 GET        /change-provide-goods-name                                  controllers.ProvideGoodsNameController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-provide-goods-name                                  controllers.ProvideGoodsNameController.onSubmit(mode: Mode = CheckMode)
+
+GET        /provide-goods-description                                  controllers.ProvideGoodsDescriptionController.onPageLoad(mode: Mode = NormalMode)
+POST       /provide-goods-description                                  controllers.ProvideGoodsDescriptionController.onSubmit(mode: Mode = NormalMode)
+GET        /change-provide-goods-description                           controllers.ProvideGoodsDescriptionController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-provide-goods-description                           controllers.ProvideGoodsDescriptionController.onSubmit(mode: Mode = CheckMode)

@@ -38,6 +38,10 @@ class CheckYourAnswersHelper(
     x => AnswerRow("provideGoodsName.checkYourAnswersLabel", s"$x", false, routes.ProvideGoodsNameController.onPageLoad(CheckMode).url)
   }
 
+  def provideGoodsDescription: Option[AnswerRow] = userAnswers.get(ProvideGoodsDescriptionPage) map {
+    x => AnswerRow("provideGoodsDescription.checkYourAnswersLabel", s"$x", false, routes.ProvideGoodsDescriptionController.onPageLoad(CheckMode).url)
+  }
+
   def supportingInformationDetails: Option[AnswerRow] = userAnswers.get(SupportingInformationDetailsPage) map {
     x => AnswerRow("supportingInformationDetails.checkYourAnswersLabel", s"$x", false, routes.SupportingInformationDetailsController.onPageLoad(CheckMode).url)
   }
@@ -119,9 +123,10 @@ class CheckYourAnswersHelper(
   }
 
   def whichBestDescribesYou: Option[AnswerRow] = None
-//    userAnswers.get(WhichBestDescribesYouPage) map {
-//    x => AnswerRow("whichBestDescribesYou.checkYourAnswersLabel", s"whichBestDescribesYou.$x", true, routes.WhichBestDescribesYouController.onPageLoad(CheckMode).url)
-//  }
+
+  //    userAnswers.get(WhichBestDescribesYouPage) map {
+  //    x => AnswerRow("whichBestDescribesYou.checkYourAnswersLabel", s"whichBestDescribesYou.$x", true, routes.WhichBestDescribesYouController.onPageLoad(CheckMode).url)
+  //  }
 
   def registeredAddressForEori(implicit request: DataRequest[_]): Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map { x =>
 

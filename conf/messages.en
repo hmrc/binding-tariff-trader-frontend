@@ -191,6 +191,22 @@ provideGoodsName.error.required = Enter a short name to describe the goods
 provideGoodsName.error.length = Name for the goods must be 100 characters or less
 provideGoodsName.paragraph = This information may appear on the Advance Tariff Rulings website.
 
+provideGoodsDescription.title = Provide a detailed description of the {0} - Manage your Advance Tariff Rulings - GOV.UK
+provideGoodsDescription.heading = Provide a detailed description of the {0}
+provideGoodsDescription.caption = About the goods
+provideGoodsDescription.checkYourAnswersLabel = Goods Description
+provideGoodsDescription.p1 = The more detailed the description is, the faster we will be able to classify the goods.
+provideGoodsDescription.p2 = This information may appear on the Advance Tariff Rulings website.
+provideGoodsDescription.error.required = Enter a detailed description of your goods
+provideGoodsDescription.error.length = Description for the goods must be 100 characters or less
+provideGoodsDescription.confidential_info = You will be able to add confidential information and upload files later in the application.
+provideGoodsDescription.paragraph.includes = The description can include:
+provideGoodsDescription.listItem1 = what it is used for
+provideGoodsDescription.listItem2 = what it is made from, including all materials, parts or ingredients
+provideGoodsDescription.listItem3 = how it is made, including all manufacturing processes
+provideGoodsDescription.listItem4 = how it works
+provideGoodsDescription.listItem5 = how it is packaged, including all materials
+
 describeYourItem.title = Detailed description of your item - Manage your Advance Tariff Rulings - GOV.UK
 describeYourItem.heading = Detailed description of your item
 describeYourItem.subheading = Description of your item that may be used as part of the published ruling
