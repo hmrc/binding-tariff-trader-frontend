@@ -25,9 +25,11 @@ import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import uk.gov.hmrc.http.HeaderCarrier
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
-  private def connector = new BindingTariffFilestoreConnector(wsClient, authenticatedHttpClient)(mockConfig)
+  private def connector = new BindingTariffFilestoreConnector(wsClient, authenticatedHttpClient, metrics)(mockConfig, implicitly)
 
   private def withHeaderCarrier(key: String, value: String) = HeaderCarrier(extraHeaders = Seq(key -> value))
 

@@ -26,9 +26,11 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream5xxResponse}
 import utils.JsonFormatters._
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
-  private val connector = new BindingTariffClassificationConnector(authenticatedHttpClient)(mockConfig)
+  private val connector = new BindingTariffClassificationConnector(authenticatedHttpClient, metrics)(mockConfig, implicitly)
 
   private def withHeaderCarrier(key: String, value: String) = HeaderCarrier(extraHeaders = Seq(key -> value))
 

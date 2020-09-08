@@ -21,11 +21,13 @@ import models.PdfFile
 import play.api.http.Status
 import play.twirl.api.Html
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class PdfGeneratorServiceConnectorSpec extends ConnectorTest {
 
   private val pdfTemplate = Html("")
 
-  private val connector = new PdfGeneratorServiceConnector(mockConfig, wsClient)
+  private val connector = new PdfGeneratorServiceConnector(mockConfig, wsClient, metrics)
 
   "Connector" should {
 
