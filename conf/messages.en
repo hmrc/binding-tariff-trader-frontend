@@ -185,7 +185,7 @@ previousCommodityCode.details.contentParagraph = The reference number was suppli
 
 provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
 provideGoodsName.heading = Provide a name for the goods
-provideGoodsName.preheader.hint = About the goods
+provideGoodsName.caption = About the goods
 provideGoodsName.checkYourAnswersLabel = Goods Name
 provideGoodsName.error.required = Enter a short name to describe the goods
 provideGoodsName.error.length = Name for the goods must be 100 characters or less
@@ -193,6 +193,7 @@ provideGoodsName.paragraph = This information may appear on the Advance Tariff R
 
 provideGoodsDescription.title = Provide a detailed description of the {0} - Manage your Advance Tariff Rulings - GOV.UK
 provideGoodsDescription.heading = Provide a detailed description of the {0}
+provideGoodsDescription.caption = About the goods
 provideGoodsDescription.checkYourAnswersLabel = Goods Description
 provideGoodsDescription.p1 = The more detailed the description is, the faster we will be able to classify the goods.
 provideGoodsDescription.p2 = This information may appear on the Advance Tariff Rulings website.

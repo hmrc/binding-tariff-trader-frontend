@@ -38,7 +38,6 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
   val provideGoodsNameView = injector.instanceOf[views.html.provideGoodsName]
 
   val fakeGETRequest = fakeGETRequestWithCSRF
-  val fakePOSTRequest = fakePOSTRequestWithCSRF
 
   def viewAsString(form: Form[_] = form): String = provideGoodsNameView(
     frontendAppConfig, form, NormalMode)(fakeGETRequest, messages).toString
@@ -76,7 +75,7 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -102,7 +101,7 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val postRequest = fakeGETRequest.withFormUrlEncodedBody(("value", testAnswer))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe SEE_OTHER

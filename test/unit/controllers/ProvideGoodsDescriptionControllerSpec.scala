@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package unit.controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
+import controllers.{ControllerSpecBase, ProvideGoodsDescriptionController, routes}
 import forms.ProvideGoodsDescriptionFormProvider
 import models.NormalMode
 import navigation.FakeNavigator

@@ -37,8 +37,6 @@
 
         @components.error_summary(goodsDescriptionForm.errors)
 
-        <div class="preheader">@messages("provideGoodsName.preheader.hint")</div>
-
         @components.input_textarea(
             field = goodsDescriptionForm("value"),
             label = descriptionBullets,
@@ -54,7 +52,8 @@
 
 @descriptionBullets = {
 
-    @components.heading(messages("provideGoodsDescription.heading", goodsName))
+    @components.heading(messages("provideGoodsDescription.heading", goodsName),
+        captionMsg = Some(messages("provideGoodsDescription.caption")))
 
     <p>@messages("provideGoodsDescription.p2")</p>
 
