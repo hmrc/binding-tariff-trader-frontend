@@ -35,7 +35,7 @@ class EmailConnector @Inject()(
 )(implicit ec: ExecutionContext) extends HasMetrics {
 
   def send[E >: Email[_]](e: E)(implicit hc: HeaderCarrier, writes: Writes[E], rds: Reads[E]): Future[Unit] =
-    withMetricsTimerAsync("email.send") { _ =>
+    withMetricsTimerAsync("send-email") { _ =>
       val url = s"${configuration.emailUrl}/hmrc/email"
       client.POST(url = url, body = e).map(_ => ())
     }

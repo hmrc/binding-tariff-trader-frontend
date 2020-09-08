@@ -30,24 +30,24 @@ class MongoCacheConnector @Inject()(
 )(implicit ec: ExecutionContext) extends DataCacheConnector with HasMetrics {
 
   def save[A](cacheMap: CacheMap): Future[CacheMap] =
-    withMetricsTimerAsync("mongo-cache.save") { _ =>
+    withMetricsTimerAsync("mongo-cache-save") { _ =>
       sessionRepository().upsert(cacheMap).map { _ => cacheMap }
     }
 
   def fetch(cacheId: String): Future[Option[CacheMap]] =
-    withMetricsTimerAsync("mongo-cache.fetch") { _ =>
+    withMetricsTimerAsync("mongo-cache-fetch") { _ =>
       sessionRepository().get(cacheId)
     }
 
   def getEntry[A](cacheId: String, key: String)(implicit fmt: Format[A]): Future[Option[A]] =
-    withMetricsTimerAsync("mongo-cache.getEntry") { _ =>
+    withMetricsTimerAsync("mongo-cache-get-entry") { _ =>
       fetch(cacheId).map { optionalCacheMap =>
         optionalCacheMap.flatMap { cacheMap => cacheMap.getEntry(key)}
       }
     }
 
   def remove(cacheMap: CacheMap): Future[Boolean] =
-    withMetricsTimerAsync("mongo-cache.remove") { _ =>
+    withMetricsTimerAsync("mongo-cache-remove") { _ =>
       sessionRepository().remove(cacheMap)
     }
 }

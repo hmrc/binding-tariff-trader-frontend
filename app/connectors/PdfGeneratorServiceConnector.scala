@@ -36,7 +36,7 @@ class PdfGeneratorServiceConnector @Inject()(
   private lazy val url = s"${configuration.pdfGeneratorUrl}/pdf-generator-service/generate"
 
   def generatePdf(html: Html): Future[PdfFile] =
-    withMetricsTimerAsync("pdf-generator-service.generatePdf") { _ =>
+    withMetricsTimerAsync("generate-pdf") { _ =>
       ws.url(url).post(Map("html" -> Seq(html.toString))).flatMap { response =>
         response.status match {
           case Status.OK =>

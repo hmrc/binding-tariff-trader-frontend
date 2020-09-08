@@ -42,7 +42,7 @@ class BindingTariffFilestoreConnector @Inject()(
 
   def upload(file: MultipartFormData.FilePart[TemporaryFile])
             (implicit hc: HeaderCarrier): Future[FilestoreResponse] = 
-    withMetricsTimerAsync("binding-tariff-filestore.upload") { _ =>
+    withMetricsTimerAsync("upload-file") { _ =>
       val filePart: MultipartFormData.Part[Source[ByteString, Future[IOResult]]] = FilePart(
         "file",
         file.filename,
@@ -58,17 +58,17 @@ class BindingTariffFilestoreConnector @Inject()(
     }
 
   def get(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
-    withMetricsTimerAsync("binding-tariff-filestore.get") { _ =>
+    withMetricsTimerAsync("get-file-by-id") { _ =>
       client.GET[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}")(implicitly, addAuth, implicitly)
     }
 
   def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
-    withMetricsTimerAsync("binding-tariff-filestore.publish") { _ =>
+    withMetricsTimerAsync("publish-file") { _ =>
       client.POSTEmpty[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish")(implicitly, addAuth, implicitly)
     }
 
   def getFileMetadata(attachments: Seq[Attachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[FilestoreResponse]] =
-    withMetricsTimerAsync("binding-tariff-filestore.getFileMetadata") { _ =>
+    withMetricsTimerAsync("get-file-metadata") { _ =>
       if (attachments.isEmpty) {
         Future.successful(Seq.empty)
       } else {
@@ -79,7 +79,7 @@ class BindingTariffFilestoreConnector @Inject()(
     }
 
   def get(attachment: Attachment)(implicit headerCarrier: HeaderCarrier): Future[Option[FilestoreResponse]] =
-    withMetricsTimerAsync("binding-tariff-filestore.get") { _ =>
+    withMetricsTimerAsync("get-file-by-id") { _ =>
       client.GET[Option[FilestoreResponse]](s"${appConfig.bindingTariffFileStoreUrl}/file/${attachment.id}")(implicitly, addAuth, implicitly)
     }
 }
