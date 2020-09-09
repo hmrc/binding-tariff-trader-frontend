@@ -28,7 +28,6 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.addConfidentialInformation
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,6 +39,7 @@ class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfi
                                                      getData: DataRetrievalAction,
                                                      requireData: DataRequiredAction,
                                                      formProvider: AddConfidentialInformationFormProvider,
+                                                     val add_confidential_information: views.html.addConfidentialInformation,
                                                      cc: MessagesControllerComponents
                                                     ) extends FrontendController(cc) with I18nSupport {
 
@@ -53,7 +53,7 @@ class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfi
         case Some(value) => form.fill(value)
       }
 
-      Ok(addConfidentialInformation(appConfig, preparedForm, mode))
+      Ok(add_confidential_information(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
@@ -61,7 +61,7 @@ class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfi
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(addConfidentialInformation(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(add_confidential_information(appConfig, formWithErrors, mode))),
         (value) => {
           val updatedAnswers = request.userAnswers.set(AddConfidentialInformationPage, value)
 

@@ -15,28 +15,30 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
+@import helper._
 @import models.Mode
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@this()
+
+@(appConfig: FrontendAppConfig, addConfidentialInformationForm: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("addConfidentialInformation.title")}",
+    title = s"${errorPrefix(addConfidentialInformationForm)} ${messages("addConfidentialInformation.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = AddConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
+    @form(action = AddConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @components.error_summary(addConfidentialInformationForm.errors)
 
         @components.heading("addConfidentialInformation.heading")
 
         @components.input_yes_no(
-            field = form("value"),
+            field = addConfidentialInformationForm("value"),
             label = Some(messages("addConfidentialInformation.heading")),
             labelClass = Some("visually-hidden")
         )
