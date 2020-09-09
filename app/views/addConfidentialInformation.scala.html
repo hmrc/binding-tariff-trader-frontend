@@ -22,26 +22,27 @@
 
 @this()
 
-@(appConfig: FrontendAppConfig, addConfidentialInformationForm: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, addConfidentialInformationForm: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(addConfidentialInformationForm)} ${messages("addConfidentialInformation.title")}",
+    title = s"${errorPrefix(addConfidentialInformationForm)} ${messages("addConfidentialInformation.title", goodsName)}",
     appConfig = appConfig,
     bodyClasses = None) {
 
     @form(action = AddConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
 
+        @CSRF.formField
+
         @components.back_link()
 
         @components.error_summary(addConfidentialInformationForm.errors)
 
-        @components.heading("addConfidentialInformation.heading")
-
         @components.input_yes_no(
             field = addConfidentialInformationForm("value"),
-            label = Some(messages("addConfidentialInformation.heading")),
-            labelClass = Some("visually-hidden")
+            labelHtml = Some(components.heading(messages("addConfidentialInformation.heading", goodsName),
+                captionMsg = Some(messages("addConfidentialInformation.caption"))))
         )
+
 
         @components.submit_button()
     }

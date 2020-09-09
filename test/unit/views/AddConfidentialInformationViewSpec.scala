@@ -33,11 +33,13 @@ class AddConfidentialInformationViewSpec extends YesNoViewBehaviours {
 
   val fakeGETRequest = fakeGETRequestWithCSRF
 
+  val testItem = "Mushrooms"
+
   def createView = () =>
-    addConfidentialInformationView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+    addConfidentialInformationView(frontendAppConfig, form, testItem, NormalMode)(fakeGETRequest, messages)
 
   def createViewUsingForm = (form: Form[_]) =>
-    addConfidentialInformationView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+    addConfidentialInformationView(frontendAppConfig, form, testItem, NormalMode)(fakeGETRequest, messages)
 
   "AddConfidentialInformation view" must {
 

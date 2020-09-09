@@ -23,7 +23,7 @@ import forms.AddConfidentialInformationFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.AddConfidentialInformationPage
+import pages.{AddConfidentialInformationPage, ProvideGoodsNamePage}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
@@ -48,20 +48,22 @@ class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfi
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).get
       val preparedForm = request.userAnswers.get(AddConfidentialInformationPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(add_confidential_information(appConfig, preparedForm, mode))
+      Ok(add_confidential_information(appConfig, preparedForm, goodsName, mode))
   }
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
     implicit request =>
 
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).get
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(add_confidential_information(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(add_confidential_information(appConfig, formWithErrors, goodsName, mode))),
         (value) => {
           val updatedAnswers = request.userAnswers.set(AddConfidentialInformationPage, value)
 

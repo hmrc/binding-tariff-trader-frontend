@@ -41,6 +41,8 @@ class AddConfidentialInformationControllerSpec extends ControllerSpecBase {
   val fakeGETRequest = fakeGETRequestWithCSRF
   val fakePOSTRequest = fakePOSTRequestWithCSRF
 
+  val testItem = "Mushrooms"
+
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new AddConfidentialInformationController(
       frontendAppConfig,
@@ -54,7 +56,7 @@ class AddConfidentialInformationControllerSpec extends ControllerSpecBase {
       cc)
 
   def viewAsString(form: Form[_] = form) = addConfidentialInformationView(
-    frontendAppConfig, form, NormalMode)(fakeGETRequest, messages).toString
+    frontendAppConfig, form, testItem, NormalMode)(fakeGETRequest, messages).toString
 
   "AddConfidentialInformation Controller" must {
 

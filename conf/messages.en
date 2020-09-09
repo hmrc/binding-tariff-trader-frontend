@@ -207,8 +207,10 @@ provideGoodsDescription.listItem3 = how it is made, including all manufacturing 
 provideGoodsDescription.listItem4 = how it works
 provideGoodsDescription.listItem5 = how it is packaged, including all materials
 
-addConfidentialInformation.title = addConfidentialInformation
-addConfidentialInformation.heading = addConfidentialInformation
+addConfidentialInformation.title = Do you want to add any confidential information about the {0} - Manage your Advance Tariff Rulings - GOV.UK
+addConfidentialInformation.heading = Do you want to add any confidential information about the {0}
+addConfidentialInformation.caption = About the goods
+addConfidentialInformation.p1 = This information will not appear on the Advance Tariff Rulings website.
 addConfidentialInformation.checkYourAnswersLabel = addConfidentialInformation
 addConfidentialInformation.error.required = Select yes if addConfidentialInformation
 
