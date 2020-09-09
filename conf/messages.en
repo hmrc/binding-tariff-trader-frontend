@@ -207,6 +207,11 @@ provideGoodsDescription.listItem3 = how it is made, including all manufacturing 
 provideGoodsDescription.listItem4 = how it works
 provideGoodsDescription.listItem5 = how it is packaged, including all materials
 
+addConfidentialInformation.title = addConfidentialInformation
+addConfidentialInformation.heading = addConfidentialInformation
+addConfidentialInformation.checkYourAnswersLabel = addConfidentialInformation
+addConfidentialInformation.error.required = Select yes if addConfidentialInformation
+
 describeYourItem.title = Detailed description of your item - Manage your Advance Tariff Rulings - GOV.UK
 describeYourItem.heading = Detailed description of your item
 describeYourItem.subheading = Description of your item that may be used as part of the published ruling

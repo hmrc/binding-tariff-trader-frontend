@@ -133,3 +133,8 @@ GET        /provide-goods-description                                  controlle
 POST       /provide-goods-description                                  controllers.ProvideGoodsDescriptionController.onSubmit(mode: Mode = NormalMode)
 GET        /change-provide-goods-description                           controllers.ProvideGoodsDescriptionController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-provide-goods-description                           controllers.ProvideGoodsDescriptionController.onSubmit(mode: Mode = CheckMode)
+
+GET        /add-confidential-information                               controllers.AddConfidentialInformationController.onPageLoad(mode: Mode = NormalMode)
+POST       /add-confidential-information                               controllers.AddConfidentialInformationController.onSubmit(mode: Mode = NormalMode)
+GET        /change-add-confidential-information                        controllers.AddConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-add-confidential-information                        controllers.AddConfidentialInformationController.onSubmit(mode: Mode = CheckMode)
