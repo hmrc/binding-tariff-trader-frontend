@@ -33,20 +33,22 @@ class AddConfidentialInformationViewSpec extends YesNoViewBehaviours {
 
   val fakeGETRequest = fakeGETRequestWithCSRF
 
-  val testItem = "Mushrooms"
+  val goodsName = "goods name"
 
   def createView = () =>
-    addConfidentialInformationView(frontendAppConfig, form, testItem, NormalMode)(fakeGETRequest, messages)
+    addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   def createViewUsingForm = (form: Form[_]) =>
-    addConfidentialInformationView(frontendAppConfig, form, testItem, NormalMode)(fakeGETRequest, messages)
+    addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   "AddConfidentialInformation view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)()
+    behave like normalPage(createView, messageKeyPrefix, goodsName)()
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.AddConfidentialInformationController.onSubmit(NormalMode).url)
+    behave like yesNoPage(createViewUsingForm,
+      messageKeyPrefix,
+      routes.AddConfidentialInformationController.onSubmit(NormalMode).url)
   }
 }

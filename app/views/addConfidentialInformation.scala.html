@@ -40,10 +40,14 @@
         @components.input_yes_no(
             field = addConfidentialInformationForm("value"),
             labelHtml = Some(components.heading(messages("addConfidentialInformation.heading", goodsName),
-                captionMsg = Some(messages("addConfidentialInformation.caption"))))
+                captionMsg = Some(messages("addConfidentialInformation.caption")))),
+            contentHtml = Some(extraInformation)
         )
 
-
-        @components.submit_button()
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
+}
+
+@extraInformation = {
+    <p>@messages("addConfidentialInformation.p1")<p/>
 }
