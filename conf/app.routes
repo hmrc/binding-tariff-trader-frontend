@@ -138,3 +138,8 @@ GET        /add-confidential-information                               controlle
 POST       /add-confidential-information                               controllers.AddConfidentialInformationController.onSubmit(mode: Mode = NormalMode)
 GET        /change-add-confidential-information                        controllers.AddConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-add-confidential-information                        controllers.AddConfidentialInformationController.onSubmit(mode: Mode = CheckMode)
+
+GET        /provide-confidential-information                        controllers.ProvideConfidentialInformationController.onPageLoad(mode: Mode = NormalMode)
+POST       /provide-confidential-information                        controllers.ProvideConfidentialInformationController.onSubmit(mode: Mode = NormalMode)
+GET        /change-provide-confidential-information                  controllers.ProvideConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-provide-confidential-information                  controllers.ProvideConfidentialInformationController.onSubmit(mode: Mode = CheckMode)
