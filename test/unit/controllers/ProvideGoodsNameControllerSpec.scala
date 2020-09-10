@@ -28,6 +28,8 @@ import play.api.mvc.Call
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")

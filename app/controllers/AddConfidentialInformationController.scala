@@ -29,8 +29,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfig,
                                                      dataCacheConnector: DataCacheConnector,
@@ -41,7 +40,7 @@ class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfi
                                                      formProvider: AddConfidentialInformationFormProvider,
                                                      val add_confidential_information: views.html.addConfidentialInformation,
                                                      cc: MessagesControllerComponents
-                                                    ) extends FrontendController(cc) with I18nSupport {
+                                                    )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 

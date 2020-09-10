@@ -21,6 +21,18 @@ import play.twirl.api.HtmlFormat
 
 trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
 
+  protected def expectedLegend(messageKeyPrefix: String): String = {
+    def has(value: String): Boolean = {
+      val key = s"$messageKeyPrefix.$value"
+      messages(key) != key
+    }
+    if(has("legend")) {
+      messages(s"$messageKeyPrefix.legend")
+    } else {
+      messages(s"$messageKeyPrefix.heading")
+    }
+  }
+
   protected def yesNoPage(createView: Form[Boolean] => HtmlFormat.Appendable,
                           messageKeyPrefix: String,
                           expectedFormAction: String): Unit = {
@@ -31,7 +43,7 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
           val doc = asDocument(createView(form))
           val legends = doc.getElementsByTag("legend")
           legends.size shouldBe 1
-          legends.first.text should include (expectedLegend)
+          legends.first.text should include (expectedLegend(messageKeyPrefix))
         }
 
         "contain an input for the value" in {
@@ -76,18 +88,6 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
           val doc = asDocument(createView(form.withError(error)))
           assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title")}""")
         }
-      }
-    }
-
-    def expectedLegend: String = {
-      def has(value: String): Boolean = {
-        val key = s"$messageKeyPrefix.$value"
-        messages(key) != key
-      }
-      if(has("legend")) {
-        messages(s"$messageKeyPrefix.legend")
-      } else {
-        messages(s"$messageKeyPrefix.heading")
       }
     }
   }

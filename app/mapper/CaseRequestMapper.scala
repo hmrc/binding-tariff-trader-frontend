@@ -31,6 +31,8 @@ class CaseRequestMapper {
     val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
     val goodsName = answers.get(ProvideGoodsNamePage)
     val goodsDescription = answers.get(ProvideGoodsDescriptionPage)
+    val addConfidentialInformation = answers.get(AddConfidentialInformationPage)
+      .getOrElse(throwError("add confidential information?"))
     val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
     val previousCommodityCode: Option[PreviousCommodityCode] = answers.get(PreviousCommodityCodePage)
     val commodityCodeRulingReference: Option[String] = answers.get(CommodityCodeRulingReferencePage)
