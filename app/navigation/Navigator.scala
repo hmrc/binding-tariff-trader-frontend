@@ -20,7 +20,7 @@ import controllers.routes
 import javax.inject.{Inject, Singleton}
 import models.ImportOrExport.Advice
 import models._
-import pages.{CommodityCodeRulingReferencePage, UploadWrittenAuthorisationPage, _}
+import pages.{AddConfidentialInformationPage, CommodityCodeRulingReferencePage, UploadWrittenAuthorisationPage, _}
 import play.api.mvc.Call
 
 @Singleton
@@ -35,7 +35,12 @@ class Navigator @Inject()() {
     AcceptItemInformationPage -> (_ => routes.AcceptItemInformationListController.onPageLoad()),
     PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
     ProvideGoodsNamePage -> (_ => routes.ProvideGoodsDescriptionController.onPageLoad(NormalMode)),
-    ProvideGoodsDescriptionPage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode)),
+    ProvideGoodsDescriptionPage -> (_ => routes.AddConfidentialInformationController.onPageLoad(NormalMode)),
+    AddConfidentialInformationPage -> (answer => answer.get(AddConfidentialInformationPage) match {
+      case Some(true) => routes.DescribeYourItemController.onPageLoad(NormalMode)
+      case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
+    }),
+
     DescribeYourItemPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),

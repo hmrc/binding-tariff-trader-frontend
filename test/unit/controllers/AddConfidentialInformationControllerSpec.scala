@@ -14,38 +14,39 @@
  * limitations under the License.
  */
 
-package controllers
+package unit.controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import forms.ProvideGoodsNameFormProvider
+import controllers.{AddConfidentialInformationController, ControllerSpecBase, routes}
+import forms.AddConfidentialInformationFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
-import pages.ProvideGoodsNamePage
+import pages.{AddConfidentialInformationPage, ProvideGoodsNamePage}
 import play.api.data.Form
-import play.api.libs.json.JsString
+import play.api.libs.json.{JsBoolean, JsString}
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
+class AddConfidentialInformationControllerSpec extends ControllerSpecBase {
 
-  private def onwardRoute = Call("GET", "/foo")
+  def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ProvideGoodsNameFormProvider()
-  val form: Form[String] = formProvider()
+  val formProvider = new AddConfidentialInformationFormProvider()
+  val form = formProvider()
 
-  val provideGoodsNameView = injector.instanceOf[views.html.provideGoodsName]
+  val addConfidentialInformationView = injector.instanceOf[views.html.addConfidentialInformation]
 
   val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakePOSTRequest = fakePOSTRequestWithCSRF
 
-  def viewAsString(form: Form[_] = form): String = provideGoodsNameView(
-    frontendAppConfig, form, NormalMode)(fakeGETRequest, messages).toString
+  val goodsName = "Mushrooms"
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new ProvideGoodsNameController(
+    new AddConfidentialInformationController(
       frontendAppConfig,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
@@ -53,43 +54,55 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      provideGoodsNameView,
+      addConfidentialInformationView,
       cc)
 
-  val testAnswer = "answer"
+  def viewAsString(form: Form[_] = form) = addConfidentialInformationView(
+    frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages).toString
 
-  "ProvideGoodsName Controller" must {
+  "AddConfidentialInformation Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeGETRequest)
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val getRequiredData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val result = controller(getRequiredData).onPageLoad(NormalMode)(fakeGETRequest)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(ProvideGoodsNamePage.toString -> JsString(testAnswer))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      val validData = Map(AddConfidentialInformationPage.toString -> JsBoolean(true),
+        ProvideGoodsNamePage.toString -> JsString(goodsName))
 
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeGETRequest)
+      val getRequiredData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      contentAsString(result) shouldBe viewAsString(form.fill(testAnswer))
+      val result = controller(getRequiredData).onPageLoad(NormalMode)(fakeGETRequest)
+
+      contentAsString(result) shouldBe viewAsString(form.fill(true))
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("value", "true"))
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val getRequiredData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val result = controller(getRequiredData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val postRequest = fakeGETRequest.withFormUrlEncodedBody(("value", ""))
-      val boundForm = form.bind(Map("value" -> ""))
+      val postRequest = fakeGETRequest.withFormUrlEncodedBody(("value", "invalid value"))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val getRequiredData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val result = controller(getRequiredData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) shouldBe viewAsString(boundForm)
@@ -103,7 +116,7 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeGETRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("value", "true"))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe SEE_OTHER

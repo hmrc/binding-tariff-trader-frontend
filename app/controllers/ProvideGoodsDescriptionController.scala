@@ -29,8 +29,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ProvideGoodsDescriptionController @Inject()(
                                                    appConfig: FrontendAppConfig,
@@ -42,7 +41,7 @@ class ProvideGoodsDescriptionController @Inject()(
                                                    formProvider: ProvideGoodsDescriptionFormProvider,
                                                    val provide_goods_description: views.html.provideGoodsDescription,
                                                    cc: MessagesControllerComponents
-                                                 ) extends FrontendController(cc) with I18nSupport {
+                                                 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   val form = formProvider()
 

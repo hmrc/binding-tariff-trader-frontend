@@ -52,6 +52,25 @@ class NavigatorSpec extends SpecBase {
 
         navigator.nextPage(ImportExportOrAdvicePage, NormalMode)(mockUserAnswers) shouldBe routes.BeforeYouStartController.onPageLoad()
       }
+
+      "go to SupportingMaterialFileListController when no is selected in AddConfidentialInformation page" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(AddConfidentialInformationPage)).thenReturn(Some(false))
+
+        navigator.nextPage(AddConfidentialInformationPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
+      }
+
+      //TODO: Add the correct controller under DIT-2268
+      "go to ProvideConfidentialInformation when yes is selected in AddConfidentialInformation page" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(AddConfidentialInformationPage)).thenReturn(Some(true))
+
+        navigator.nextPage(AddConfidentialInformationPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.DescribeYourItemController.onPageLoad(NormalMode)
+      }
     }
 
     "in Check mode" must {

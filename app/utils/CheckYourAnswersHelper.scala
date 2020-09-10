@@ -42,6 +42,10 @@ class CheckYourAnswersHelper(
     x => AnswerRow("provideGoodsDescription.checkYourAnswersLabel", s"$x", false, routes.ProvideGoodsDescriptionController.onPageLoad(CheckMode).url)
   }
 
+  def addConfidentialInformation: Option[AnswerRow] = userAnswers.get(AddConfidentialInformationPage) map {
+    x => AnswerRow("addConfidentialInformation.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.AddConfidentialInformationController.onPageLoad(CheckMode).url)
+  }
+
   def supportingInformationDetails: Option[AnswerRow] = userAnswers.get(SupportingInformationDetailsPage) map {
     x => AnswerRow("supportingInformationDetails.checkYourAnswersLabel", s"$x", false, routes.SupportingInformationDetailsController.onPageLoad(CheckMode).url)
   }
