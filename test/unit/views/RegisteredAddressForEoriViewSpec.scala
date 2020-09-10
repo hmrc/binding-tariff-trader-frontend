@@ -35,11 +35,11 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
 
 
   private def createView = { () =>
-    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithNotOptionalEoriAndCache, messages)
+    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithEori, messages)
   }
 
   private def createViewUsingForm = { form: Form[_] =>
-    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithNotOptionalEoriAndCache, messages)
+    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithEori, messages)
   }
 
   "RegisteredAddressForEori view" must {

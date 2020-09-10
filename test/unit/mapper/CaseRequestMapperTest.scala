@@ -116,7 +116,6 @@ class CaseRequestMapperTest extends UnitSpec {
       application.relatedBTIReference shouldBe Some("Related BTI Reference")
       application.knownLegalProceedings shouldBe Some("Known Legal Proceedings")
       application.envisagedCommodityCode shouldBe Some("Envisaged Commodity Code")
-      application.importOrExport shouldBe Some("IMPORT")
     }
   }
 
@@ -152,9 +151,6 @@ class CaseRequestMapperTest extends UnitSpec {
           ),
           WhichBestDescribesYouPage.toString -> js(
             WhichBestDescribesYou.BusinessRepresentative
-          ),
-          ImportOrExportPage.toString -> js(
-            ImportOrExport.Import
           ),
           RegisterBusinessRepresentingPage.toString -> js(
             RegisterBusinessRepresenting(

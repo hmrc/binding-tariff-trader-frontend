@@ -61,7 +61,6 @@ class CheckYourAnswersController @Inject()(
       AnswerSection(
         Some("checkYourAnswers.informationAboutYourItemSection"),
         Seq(
-          checkYourAnswersHelper.importOrExport,
           checkYourAnswersHelper.selectApplicationType,
           checkYourAnswersHelper.previousCommodityCode,
           checkYourAnswersHelper.describeYourItem,

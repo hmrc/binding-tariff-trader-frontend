@@ -18,7 +18,6 @@ package navigation
 
 import controllers.routes
 import javax.inject.{Inject, Singleton}
-import models.ImportOrExport.Advice
 import models._
 import pages.{CommodityCodeRulingReferencePage, UploadWrittenAuthorisationPage, _}
 import play.api.mvc.Call
@@ -38,11 +37,6 @@ class Navigator @Inject()() {
     DescribeYourItemPage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode)),
     SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
-    ImportOrExportPage -> (_ => routes.ImportOrExportController.onPageLoad(NormalMode)),
-    ImportExportOrAdvicePage -> (answer => answer.get[ImportOrExport](ImportOrExportPage) match {
-      case Some(Advice) => routes.ContactCustomsDutyLiabilityTeamController.onPageLoad()
-      case _ => routes.BeforeYouStartController.onPageLoad()
-    }),
     CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)),
     CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(NormalMode)),
     WhenToSendSamplePage -> (_ => routes.WhenToSendSampleController.onPageLoad(NormalMode)),
