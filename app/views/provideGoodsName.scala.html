@@ -38,7 +38,7 @@
         @components.error_summary(goodsNameForm.errors)
 
         @components.input_text(
-            field = goodsNameForm("value"),
+            field = goodsNameForm("goodsName"),
             label = Some(messages("provideGoodsName.paragraph")),
             labelHtml = Some(components.heading(messages("provideGoodsName.heading"),
                 captionMsg = Some(messages("provideGoodsName.caption"))))

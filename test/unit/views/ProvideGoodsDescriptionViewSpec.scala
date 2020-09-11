@@ -50,6 +50,6 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
       createViewUsingForm,
       messageKeyPrefix,
       routes.ProvideGoodsDescriptionController.onSubmit(NormalMode).url,
-      "value")
+      "goodsDescription")
   }
 }

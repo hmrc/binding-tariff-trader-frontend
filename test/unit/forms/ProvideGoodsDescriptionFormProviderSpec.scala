@@ -28,7 +28,7 @@ class ProvideGoodsDescriptionFormProviderSpec extends StringFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName = "goodsDescription"
 
     behave like mandatoryField(
       form,

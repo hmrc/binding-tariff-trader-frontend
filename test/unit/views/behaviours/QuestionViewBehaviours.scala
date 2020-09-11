@@ -24,7 +24,8 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
   private val errorKey = "value"
   protected val errorMessage = "error.number"
   protected val errorPrefix = "error.browser.title.prefix"
-  protected val error = FormError(errorKey, errorMessage)
+  protected def error = FormError(errorKey, errorMessage)
+  protected def error(errKey: String) = FormError(errKey, errorMessage)
 
   protected val form: Form[A]
 

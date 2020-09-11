@@ -25,6 +25,6 @@ class ProvideGoodsDescriptionFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("provideGoodsDescription.error.required")
+      "goodsDescription" -> text("provideGoodsDescription.error.required")
     )
 }
