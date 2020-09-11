@@ -30,7 +30,7 @@ class ProvideGoodsNameFormProviderSpec extends StringFieldBehaviours {
 
   ".goodsName" must {
 
-    val fieldName = "value"
+    val fieldName = "goodsName"
 
     behave like fieldThatBindsValidData(
       form,

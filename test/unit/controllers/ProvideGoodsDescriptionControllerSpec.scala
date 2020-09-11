@@ -89,7 +89,7 @@ class ProvideGoodsDescriptionControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("goodsDescription", testAnswer))
       val validData = Map(ProvideGoodsNamePage.toString -> JsString(testName))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
@@ -100,8 +100,8 @@ class ProvideGoodsDescriptionControllerSpec extends ControllerSpecBase {
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val postRequest = fakeGETRequest.withFormUrlEncodedBody(("value", ""))
-      val boundForm = form.bind(Map("value" -> ""))
+      val postRequest = fakeGETRequest.withFormUrlEncodedBody(("goodsDescription", ""))
+      val boundForm = form.bind(Map("goodsDescription" -> ""))
       val validData = Map(ProvideGoodsNamePage.toString -> JsString(testName))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
@@ -119,7 +119,7 @@ class ProvideGoodsDescriptionControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("goodsDescription", testAnswer))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe SEE_OTHER
