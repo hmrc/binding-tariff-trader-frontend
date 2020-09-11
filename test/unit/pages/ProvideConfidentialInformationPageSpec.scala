@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package forms
+package unit.pages
 
-import javax.inject.Inject
+import pages.ProvideConfidentialInformationPage
+import pages.behaviours.PageBehaviours
 
-import forms.mappings.Mappings
-import play.api.data.Form
 
-class ProvideConfidentialInformationFormProvider @Inject() extends Mappings {
+class ProvideConfidentialInformationPageSpec extends PageBehaviours {
 
-  def apply(): Form[String] =
-    Form(
-      "confidentialInformation" -> text("provideConfidentialInformation.error.required")
-    )
+  "ProvideConfidentialInformationPage" must {
+
+    beRetrievable[String](ProvideConfidentialInformationPage)
+
+    beSettable[String](ProvideConfidentialInformationPage)
+
+    beRemovable[String](ProvideConfidentialInformationPage)
+  }
 }

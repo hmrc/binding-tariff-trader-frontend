@@ -15,7 +15,6 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
 @import models.Mode
 @import views.ViewUtils._
@@ -38,11 +37,21 @@
 
         @components.error_summary(provideConfidentialInformationForm.errors)
 
-        @components.heading(messages("provideConfidentialInformation.heading", goodsName), captionMsg=Some(messages("provideConfidentialInformation.caption")))
+        @components.heading(messages("provideConfidentialInformation.heading", goodsName),
+            captionMsg=Some(messages("provideConfidentialInformation.caption")))
+        <p>@messages("provideConfidentialInformation.description")</p>
 
+        @components.inset_text(Html(messages("provideConfidentialInformation.inset")))
+
+        <p>@messages("provideConfidentialInformation.thismayinclude")</p>
+
+        <ul class="list list-bullet">
+            <li>@messages("provideConfidentialInformation.modelnumbers")</li>
+            <li>@messages("provideConfidentialInformation.patentinfo")</li>
+        </ul>
         @components.input_textarea(
-          field = provideConfidentialInformationForm("value"),
-          label = bigLabel,
+          field = provideConfidentialInformationForm("confidentialInformation"),
+          label = Html(messages("")),
           inputFormControl = "form-control--full-width",
           numRows = 15,
           maxlength = 50000
@@ -50,21 +59,5 @@
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }
-
-
-}
-
-@bigLabel = {
-
-            <p>@messages("provideConfidentialInformation.description")</p>
-
-            @components.inset_text(Html(messages("provideConfidentialInformation.inset")))
-
-            <p>@messages("provideConfidentialInformation.thismayinclude")</p>
-
-            <ul class="list list-bullet">
-                <li>@messages("provideConfidentialInformation.modelnumbers")</li>
-                <li>@messages("provideConfidentialInformation.patentinfo")</li>
-            </ul>
 
 }

@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package forms
+import forms.ProvideConfidentialInformationFormProvider
+import forms.behaviours.StringFieldBehaviours
+import play.api.data.FormError
 
-import javax.inject.Inject
+class ProvideConfidentialInformationFormProviderSpec extends StringFieldBehaviours {
 
-import forms.mappings.Mappings
-import play.api.data.Form
+  val requiredKey = "provideConfidentialInformation.error.required"
 
-class ProvideConfidentialInformationFormProvider @Inject() extends Mappings {
+  val form = new ProvideConfidentialInformationFormProvider()()
 
-  def apply(): Form[String] =
-    Form(
-      "confidentialInformation" -> text("provideConfidentialInformation.error.required")
+  ".value" must {
+
+    val fieldName = "confidentialInformation"
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
     )
+  }
 }
