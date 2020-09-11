@@ -67,7 +67,11 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
       "rendered with a valid form" must {
         "include the form's value in the value input" in {
           val doc = asDocument(createView(form.fill(answer)))
-          doc.getElementById("value").attr("value") shouldBe answer
+          val input = doc.getElementById("value")
+          if(input.tagName() == "textarea")
+            input.html() shouldBe answer
+          else
+            input.attr("value") shouldBe answer
         }
       }
 
