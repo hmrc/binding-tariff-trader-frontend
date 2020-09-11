@@ -46,9 +46,10 @@ class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like stringPage(
+    behave like pageWithTextFields(
       createViewUsingForm,
       messageKeyPrefix,
-      routes.ProvideConfidentialInformationController.onSubmit(NormalMode).url)
+      routes.ProvideConfidentialInformationController.onSubmit(NormalMode).url,
+    "confidentialInformation")
   }
 }
