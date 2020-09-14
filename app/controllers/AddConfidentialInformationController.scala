@@ -23,7 +23,7 @@ import forms.AddConfidentialInformationFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{AddConfidentialInformationPage, ProvideGoodsNamePage}
+import pages._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
@@ -32,17 +32,21 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfig,
-                                                     dataCacheConnector: DataCacheConnector,
-                                                     navigator: Navigator,
                                                      identify: IdentifierAction,
                                                      getData: DataRetrievalAction,
                                                      requireData: DataRequiredAction,
                                                      formProvider: AddConfidentialInformationFormProvider,
                                                      val add_confidential_information: views.html.addConfidentialInformation,
+                                                     override val navigator: Navigator,
+                                                     override val dataCacheConnector: DataCacheConnector,
                                                      cc: MessagesControllerComponents
-                                                    )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+                                                    )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
   val form: Form[Boolean] = formProvider()
+
+  override protected val page: QuestionPage[Boolean] = AddConfidentialInformationPage
+  override protected val pageDetails: QuestionPage[String] = ProvideConfidentialInformationPage
+  override protected val nextPage: Page = SupportingMaterialFileListPage
 
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
@@ -60,9 +64,22 @@ class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfi
     implicit request =>
 
       val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+      def badRequest = { formWithErrors: Form[_] =>
+        Future.successful(BadRequest(add_confidential_information(appConfig, formWithErrors,goodsName, mode)))
+      }
+
+      form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
+  }
+}
+
+/*  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+    implicit request =>
+
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(add_confidential_information(appConfig, formWithErrors, goodsName, mode))),
+
         (value) => {
           val updatedAnswers = request.userAnswers.set(AddConfidentialInformationPage, value)
 
@@ -72,5 +89,4 @@ class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfi
           )
         }
       )
-  }
-}
+  }  */
