@@ -28,7 +28,6 @@ class CaseRequestMapper {
   private def throwError(field: String) = throw new IllegalStateException(s"Missing User Session Data: $field")
 
   def map(answers: UserAnswers): NewCaseRequest = {
-    val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
     val goodsName = answers.get(ProvideGoodsNamePage)
     val goodsDescription = answers.get(ProvideGoodsDescriptionPage)
     val addConfidentialInformation = answers.get(AddConfidentialInformationPage)
@@ -49,11 +48,6 @@ class CaseRequestMapper {
 
     val agentDetails: Option[AgentDetails] = agentDetailsFrom(answers)
     val holderDetails: EORIDetails = holderDetailsFrom(answers)
-
-    //TODO: Replace and delete as part of DIT-2271
-    val goodName = describeYourItem.map(_.name).getOrElse(throwError("good name"))
-    val goodDescription = describeYourItem.map(_.description).getOrElse(throwError("good description"))
-    val confidentialInformation = describeYourItem.flatMap(_.confidentialInformation)
 
     val app = Application(
       holder = holderDetails,
