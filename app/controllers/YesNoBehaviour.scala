@@ -41,11 +41,6 @@ trait YesNoBehaviour[A] {
     val updatedAnswers: UserAnswers = request.userAnswers.set(page, answer)
     val answers = if (answer) updatedAnswers else updatedAnswers.remove(pageDetails)
     val next = if (answer) pageDetails else nextPage
-    println()
-    println("sum gooooood shit ::::: " + answer)
-    println("sum gooooood shit mode ::::: " + mode)
-    println("summmm shit :::: " + next)
-    println()
     dataCacheConnector.save(answers.cacheMap).map(
       _ => Results.Redirect(navigator.nextPage(next, mode)(answers))
     )

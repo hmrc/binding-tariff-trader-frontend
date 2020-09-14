@@ -32,21 +32,17 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfig,
+                                                     dataCacheConnector: DataCacheConnector,
+                                                     navigator: Navigator,
                                                      identify: IdentifierAction,
                                                      getData: DataRetrievalAction,
                                                      requireData: DataRequiredAction,
                                                      formProvider: AddConfidentialInformationFormProvider,
                                                      val add_confidential_information: views.html.addConfidentialInformation,
-                                                     override val navigator: Navigator,
-                                                     override val dataCacheConnector: DataCacheConnector,
                                                      cc: MessagesControllerComponents
-                                                    )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
+                                                    )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
-
-  override protected val page: QuestionPage[Boolean] = AddConfidentialInformationPage
-  override protected val pageDetails: QuestionPage[String] = ProvideConfidentialInformationPage
-  override protected val nextPage: Page = SupportingMaterialFileListPage
 
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
@@ -64,29 +60,18 @@ class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfi
     implicit request =>
 
       val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-      def badRequest = { formWithErrors: Form[_] =>
-        Future.successful(BadRequest(add_confidential_information(appConfig, formWithErrors,goodsName, mode)))
-      }
-
-      form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
-  }
-}
-
-/*  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(add_confidential_information(appConfig, formWithErrors, goodsName, mode))),
 
         (value) => {
           val updatedAnswers = request.userAnswers.set(AddConfidentialInformationPage, value)
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          val answers = if (value) updatedAnswers else updatedAnswers.remove(ProvideConfidentialInformationPage)
+          dataCacheConnector.save(answers.cacheMap).map(
             _ =>
               Redirect(navigator.nextPage(AddConfidentialInformationPage, mode)(updatedAnswers))
           )
         }
       )
-  }  */
+  }
+}

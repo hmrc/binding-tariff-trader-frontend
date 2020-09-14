@@ -65,6 +65,10 @@ class Navigator @Inject()() {
   )
 
   private val checkRouteMap: Map[Page, UserAnswers => Call] = Map(
+    AddConfidentialInformationPage -> (answer => answer.get(AddConfidentialInformationPage) match {
+      case Some(true) => routes.ProvideConfidentialInformationController.onPageLoad(CheckMode)
+      case _ => routes.CheckYourAnswersController.onPageLoad()
+    }),
     LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(CheckMode)),
     CommodityCodeRulingReferencePage -> (_ => routes.CommodityCodeRulingReferenceController.onPageLoad(CheckMode)),
     CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(CheckMode)),
