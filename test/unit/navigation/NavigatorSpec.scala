@@ -53,6 +53,23 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(ImportExportOrAdvicePage, NormalMode)(mockUserAnswers) shouldBe routes.BeforeYouStartController.onPageLoad()
       }
 
+      "go to ProvideGoodsDescriptionPage after ProvideGoodsName page" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(ProvideGoodsNamePage)).thenReturn(Some("goods name"))
+
+        navigator.nextPage(ProvideGoodsNamePage, NormalMode)(mockUserAnswers) shouldBe routes.ProvideGoodsDescriptionController.onPageLoad(NormalMode)
+      }
+
+      "go to AddConfidentialInformationPage after ProvideGoodsDescriptionPage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(ProvideGoodsDescriptionPage)).thenReturn(Some("goods description"))
+
+        navigator.nextPage(ProvideGoodsDescriptionPage, NormalMode)(mockUserAnswers) shouldBe routes.AddConfidentialInformationController.onPageLoad(NormalMode)
+      }
+
+
       "go to SupportingMaterialFileListController when no is selected in AddConfidentialInformation page" in {
         val mockUserAnswers = mock[UserAnswers]
 
@@ -69,6 +86,15 @@ class NavigatorSpec extends SpecBase {
 
         navigator.nextPage(AddConfidentialInformationPage, NormalMode)(mockUserAnswers) shouldBe
           routes.ProvideConfidentialInformationController.onPageLoad(NormalMode)
+      }
+
+      "go to SupportingMaterialFileListPage after entering confidential info in ProvideConfidentialInformation page" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(ProvideConfidentialInformationPage)).thenReturn(Some("confidential information"))
+
+        navigator.nextPage(ProvideConfidentialInformationPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
       }
     }
 
