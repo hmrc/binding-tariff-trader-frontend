@@ -62,14 +62,13 @@ class NavigatorSpec extends SpecBase {
           routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
       }
 
-      //TODO: Add the correct controller under DIT-2268
       "go to ProvideConfidentialInformation when yes is selected in AddConfidentialInformation page" in {
         val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddConfidentialInformationPage)).thenReturn(Some(true))
 
         navigator.nextPage(AddConfidentialInformationPage, NormalMode)(mockUserAnswers) shouldBe
-          routes.DescribeYourItemController.onPageLoad(NormalMode)
+          routes.ProvideConfidentialInformationController.onPageLoad(NormalMode)
       }
     }
 
@@ -79,6 +78,24 @@ class NavigatorSpec extends SpecBase {
 
         case object UnknownPage extends Page
         navigator.nextPage(UnknownPage, CheckMode)(mock[UserAnswers]) shouldBe routes.CheckYourAnswersController.onPageLoad()
+      }
+
+      "go to next page (ProvideConfidentialInformation) when yes is selected in AddConfidentialInformation page" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(AddConfidentialInformationPage)).thenReturn(Some(true))
+
+        navigator.nextPage(AddConfidentialInformationPage, CheckMode)(mockUserAnswers) shouldBe
+          routes.ProvideConfidentialInformationController.onPageLoad(CheckMode)
+      }
+
+      "return to CheckYourAnswers when no is selected in AddConfidentialInformation page" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(AddConfidentialInformationPage)).thenReturn(Some(false))
+
+        navigator.nextPage(AddConfidentialInformationPage, CheckMode)(mockUserAnswers) shouldBe
+          routes.CheckYourAnswersController.onPageLoad()
       }
     }
   }

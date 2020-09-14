@@ -150,15 +150,18 @@ class CaseRequestMapperTest extends UnitSpec {
             "Good Description"
           ),
           AddConfidentialInformationPage.toString -> js(
-            false
+            true
           ),
-          DescribeYourItemPage.toString -> js(
-            DescribeYourItem(
-              "Good Name",
-              "Good Description",
-              Some("Confidential Info")
-            )
+          ProvideConfidentialInformationPage.toString -> js(
+            "Confidential information"
           ),
+//          DescribeYourItemPage.toString -> js(
+//            DescribeYourItem(
+//              "Good Name",
+//              "Good Description",
+//              Some("Confidential Info")
+//            )
+//          ),
           WhichBestDescribesYouPage.toString -> js(
             WhichBestDescribesYou.BusinessRepresentative
           ),

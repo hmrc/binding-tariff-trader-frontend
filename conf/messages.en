@@ -211,13 +211,13 @@ addConfidentialInformation.title = Do you want to add any confidential informati
 addConfidentialInformation.heading = Do you want to add any confidential information about the {0}?
 addConfidentialInformation.caption = About the goods
 addConfidentialInformation.p1 = This information will not appear on the Advance Tariff Rulings website.
-addConfidentialInformation.checkYourAnswersLabel = Add confidential information
+addConfidentialInformation.checkYourAnswersLabel = Add confidential information?
 addConfidentialInformation.error.required = Select yes if you want to add confidential information
 
 provideConfidentialInformation.title = Provide any confidential information about the goods - Manage your Advance Tariff Rulings - GOV.UK
 provideConfidentialInformation.heading = Provide any confidential information about the {0}
 provideConfidentialInformation.caption = About the goods
-provideConfidentialInformation.checkYourAnswersLabel = provideConfidentialInformation
+provideConfidentialInformation.checkYourAnswersLabel = Confidential information
 provideConfidentialInformation.error.required = Enter the confidential information for your goods
 provideConfidentialInformation.description = This information will not appear on the Advance Tariff Rulings website.
 provideConfidentialInformation.inset = You will be able to upload files later in the application.
