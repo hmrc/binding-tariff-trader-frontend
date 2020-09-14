@@ -19,6 +19,7 @@
 @import helper._
 @import models.Mode
 @import views.ViewUtils._
+@import views.html.components.heading
 
 @this()
 
@@ -37,10 +38,11 @@
 
         @components.error_summary(addConfidentialInformationForm.errors)
 
+        @components.heading(messages("addConfidentialInformation.heading", goodsName),
+            captionMsg = Some(messages("addConfidentialInformation.caption")))
+
         @components.input_yes_no(
             field = addConfidentialInformationForm("value"),
-            labelHtml = Some(components.heading(messages("addConfidentialInformation.heading", goodsName),
-                captionMsg = Some(messages("addConfidentialInformation.caption")))),
             contentHtml = Some(extraInformation)
         )
 

@@ -40,7 +40,7 @@ class Navigator @Inject()() {
       case Some(true) => routes.ProvideConfidentialInformationController.onPageLoad(NormalMode)
       case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
     }),
-    ProvideConfidentialInformationPage -> (_ => routes.SupportingInformationController.onPageLoad(NormalMode)),
+    ProvideConfidentialInformationPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
     ImportOrExportPage -> (_ => routes.ImportOrExportController.onPageLoad(NormalMode)),

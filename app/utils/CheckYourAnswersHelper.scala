@@ -30,10 +30,6 @@ class CheckYourAnswersHelper(
                               implicit val lang: Lang
                             ) {
 
-  def provideConfidentialInformation: Option[AnswerRow] = userAnswers.get(ProvideConfidentialInformationPage) map {
-    x => AnswerRow("provideConfidentialInformation.checkYourAnswersLabel", s"$x", false, routes.ProvideConfidentialInformationController.onPageLoad(CheckMode).url)
-  }
-
   def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
     x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name, false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
   }
@@ -47,7 +43,11 @@ class CheckYourAnswersHelper(
   }
 
   def addConfidentialInformation: Option[AnswerRow] = userAnswers.get(AddConfidentialInformationPage) map {
-    x => AnswerRow("addConfidentialInformation.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.AddConfidentialInformationController.onPageLoad(CheckMode).url)
+    x => AnswerRow("addConfidentialInformation.checkYourAnswersLabel", yesNoAnswer(x), true, routes.AddConfidentialInformationController.onPageLoad(CheckMode).url)
+  }
+
+  def provideConfidentialInformation: Option[AnswerRow] = userAnswers.get(ProvideConfidentialInformationPage) map {
+    x => AnswerRow("provideConfidentialInformation.checkYourAnswersLabel", s"$x", false, routes.ProvideConfidentialInformationController.onPageLoad(CheckMode).url)
   }
 
   def supportingInformationDetails: Option[AnswerRow] = userAnswers.get(SupportingInformationDetailsPage) map {

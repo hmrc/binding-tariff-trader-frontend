@@ -66,7 +66,10 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.previousCommodityCode,
           checkYourAnswersHelper.provideGoodsName,
           checkYourAnswersHelper.provideGoodsDescription,
-          checkYourAnswersHelper.describeYourItem,
+          checkYourAnswersHelper.addConfidentialInformation,
+          checkYourAnswersHelper.provideConfidentialInformation,
+          // TODO Remove as part of DIT-2271
+          // checkYourAnswersHelper.describeYourItem,
           checkYourAnswersHelper.supportingMaterialFileList,
           checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,
