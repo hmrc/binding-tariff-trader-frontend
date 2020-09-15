@@ -21,7 +21,7 @@
 @import views.ViewUtils._
 
 
-@(appConfig: FrontendAppConfig, form: Form[_], files: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, files: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("supportingMaterialFileList.title")}",
@@ -36,9 +36,15 @@
 
         @if(files.nonEmpty) {
             @if(files.size == 1) {
-                <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter.singular")</h1>
+                <h1 class="heading-xlarge">
+                    <span class="heading-secondary">@messages("supportingMaterialFileList.caption")</span>
+                    @messages("supportingMaterialFileList.uploadFileCounter.singular", goodsName)
+                </h1>
             } else {
-                <h1 class="heading-xlarge">@messages("supportingMaterialFileList.uploadFileCounter.plural", files.size)</h1>
+                <h1 class="heading-xlarge">
+                    <span class="heading-secondary">@messages("supportingMaterialFileList.caption")</span>
+                    @messages("supportingMaterialFileList.uploadFileCounter.plural", files.size, goodsName)
+                </h1>
             }
 
             @components.show_file_table(files, mode)

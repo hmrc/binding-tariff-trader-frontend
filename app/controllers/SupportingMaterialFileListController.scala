@@ -28,22 +28,21 @@ import pages._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.Future.successful
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.supportingMaterialFileList
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.concurrent.Future.successful
-
-class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfig,
-                                                     dataCacheConnector: DataCacheConnector,
-                                                     navigator: Navigator,
-                                                     identify: IdentifierAction,
-                                                     getData: DataRetrievalAction,
-                                                     requireData: DataRequiredAction,
-                                                     formProvider: SupportingMaterialFileListFormProvider,
-                                                     cc: MessagesControllerComponents
-                                                    ) extends FrontendController(cc) with I18nSupport {
+class SupportingMaterialFileListController @Inject()(
+  appConfig: FrontendAppConfig,
+  dataCacheConnector: DataCacheConnector,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: SupportingMaterialFileListFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
