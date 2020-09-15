@@ -44,7 +44,9 @@
         <p>@messages("provideGoodsName.paragraph")</p>
 
         @components.input_text(
-            field = goodsNameForm("goodsName")
+            field = goodsNameForm("goodsName"),
+            label = Some(messages("provideGoodsName.heading")),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button(Some(messages("site.save_and_continue")))

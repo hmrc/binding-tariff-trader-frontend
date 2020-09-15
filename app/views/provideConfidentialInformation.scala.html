@@ -51,7 +51,8 @@
         </ul>
         @components.input_textarea(
           field = provideConfidentialInformationForm("confidentialInformation"),
-          label = Html(messages("")),
+          label = Html(messages("provideConfidentialInformation.heading", goodsName)),
+          labelClass = Some("visually-hidden"),
           inputFormControl = "form-control--full-width",
           numRows = 15,
           maxlength = 50000
