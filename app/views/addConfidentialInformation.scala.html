@@ -40,15 +40,15 @@
         @components.heading(messages("addConfidentialInformation.heading", goodsName),
             captionMsg = Some(messages("addConfidentialInformation.caption")))
 
+        <p>@messages("addConfidentialInformation.p1")<p/>
+
         @components.input_yes_no(
             field = addConfidentialInformationForm("value"),
-            contentHtml = Some(extraInformation)
+            label = Some(messages("addConfidentialInformation.heading", goodsName)),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }
 
-@extraInformation = {
-    <p>@messages("addConfidentialInformation.p1")<p/>
-}
