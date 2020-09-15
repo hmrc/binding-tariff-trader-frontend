@@ -57,7 +57,8 @@
 
         @components.input_textarea(
             field = goodsDescriptionForm("goodsDescription"),
-            label = Html(messages("r")),
+            label = Html(messages("provideGoodsDescription.heading", goodsName)),
+            labelClass = Some("visually-hidden"),
             inputFormControl = "form-control--full-width",
             numRows = 15,
             maxlength = 50000
