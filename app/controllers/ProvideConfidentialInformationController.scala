@@ -48,7 +48,7 @@ class ProvideConfidentialInformationController @Inject()(
 
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
-      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("")
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
       val preparedForm = request.userAnswers.get(ProvideConfidentialInformationPage) match {
         case None => form
         case Some(value) => form.fill(value)
@@ -59,7 +59,7 @@ class ProvideConfidentialInformationController @Inject()(
 
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
     implicit request =>
-      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("")
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(provide_confidential_information(appConfig, formWithErrors, goodsName, mode))),
