@@ -136,7 +136,12 @@ POST       /add-confidential-information                               controlle
 GET        /change-add-confidential-information                        controllers.AddConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-add-confidential-information                        controllers.AddConfidentialInformationController.onSubmit(mode: Mode = CheckMode)
 
-GET        /provide-confidential-information                        controllers.ProvideConfidentialInformationController.onPageLoad(mode: Mode = NormalMode)
-POST       /provide-confidential-information                        controllers.ProvideConfidentialInformationController.onSubmit(mode: Mode = NormalMode)
-GET        /change-provide-confidential-information                  controllers.ProvideConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-provide-confidential-information                  controllers.ProvideConfidentialInformationController.onSubmit(mode: Mode = CheckMode)
+GET        /provide-confidential-information                           controllers.ProvideConfidentialInformationController.onPageLoad(mode: Mode = NormalMode)
+POST       /provide-confidential-information                           controllers.ProvideConfidentialInformationController.onSubmit(mode: Mode = NormalMode)
+GET        /change-provide-confidential-information                    controllers.ProvideConfidentialInformationController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-provide-confidential-information                    controllers.ProvideConfidentialInformationController.onSubmit(mode: Mode = CheckMode)
+
+GET        /is-sample-hazardous                                        controllers.IsSampleHazardousController.onPageLoad(mode: Mode = NormalMode)
+POST       /is-sample-hazardous                                        controllers.IsSampleHazardousController.onSubmit(mode: Mode = NormalMode)
+GET        /change-is-sample-hazardous                                 controllers.IsSampleHazardousController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-is-sample-hazardous                                 controllers.IsSampleHazardousController.onSubmit(mode: Mode = CheckMode)
