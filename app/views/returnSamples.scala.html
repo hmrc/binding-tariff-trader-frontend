@@ -34,9 +34,9 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("returnSamples.heading"))
+        @components.heading(headingMsg = messages("returnSamples.heading"), secondaryHeading=Some(messages("returnSamples.caption")))
 
-        <div role="note" class="application-notice info-notice mb-4">
+        <div role="note" class="mb-4">
             <p> @messages("returnSamples.first.paragraph")</p>
         </div>
 
@@ -47,6 +47,6 @@
             inputs = ReturnSamples.options.toSeq
         )
 
-        @components.submit_button()
+        @components.submit_button(Some(messages("button.saveandcontinue")))
     }
 }

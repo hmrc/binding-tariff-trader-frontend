@@ -263,13 +263,14 @@ whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
 whenToSendSample.legend = Are you sending a sample?
 
-returnSamples.title = Would you like the samples returned? - Manage your Advance Tariff Rulings - GOV.UK
-returnSamples.heading = Would you like the samples returned?
-returnSamples.first.paragraph = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
+returnSamples.title = Would you like the samples returned to you? - Manage your Advance Tariff Rulings - GOV.UK
+returnSamples.heading = Would you like the samples returned to you?
+returnSamples.first.paragraph = Samples will be returned where possible but may be damaged during testing. All samples will be destroyed after 60 working days.
 returnSamples.yesReturnSamples = Yes
 returnSamples.noDontReturnSamples = No
 returnSamples.checkYourAnswersLabel = Would you like the sample returned?
 returnSamples.error.required = Select yes if you would like the sample returned
+returnSamples.caption = About the goods
 
 similarItemCommodityCode.title = Do you know of a similar item that already has an Advance Tariff Ruling? - Manage your Advance Tariff Rulings - GOV.UK
 similarItemCommodityCode.heading = Do you know of a similar item that already has an Advance Tariff Ruling?
@@ -901,3 +902,5 @@ accessibility.howWeTested.p2.link=Digital Accessibility Centre
 accessibility.howWeTested.p2.text=. The full service was tested by HMRC and included disabled users.
 accessibility.howWeTested.p3=This page was prepared on 1 September 2020.
 accessibility.howWeTested.p4=It was last updated on 1 September 2020.
+
+button.saveandcontinue = Save and continue
