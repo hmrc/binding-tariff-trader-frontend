@@ -24,7 +24,7 @@ lazy val root = (project in file("."))
   .settings(
     commonSettings,
     name := appName,
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.12.12",
     targetJvm := "jvm-1.8",
     RoutesKeys.routesImport += "models._",
     PlayKeys.playDefaultPort := 9582,
@@ -38,6 +38,12 @@ lazy val root = (project in file("."))
     resolvers ++= Seq(
       Resolver.bintrayRepo("hmrc", "releases"),
       Resolver.jcenterRepo
+    ),
+    // Use the silencer plugin to suppress warnings from unused imports in compiled twirl templates
+    scalacOptions += "-P:silencer:pathFilters=views;routes",
+    libraryDependencies ++= Seq(
+      compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.1" cross CrossVersion.full),
+      "com.github.ghik" % "silencer-lib" % "1.7.1" % Provided cross CrossVersion.full
     ),
     // concatenate js
     Concat.groups := Seq(
