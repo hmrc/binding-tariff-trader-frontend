@@ -49,7 +49,7 @@ class WhenToSendSampleControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute: Call = Call("GET", "/foo")
 
-  private def viewAsString(form: Form[_] = form): String = whenToSendSample(frontendAppConfig, form, NormalMode, "some-goods-name")(fakeRequest, messages).toString
+  private def viewAsString(form: Form[_] = form): String = whenToSendSample(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages).toString
 
   "WhenToSendSample Controller" must {
 
