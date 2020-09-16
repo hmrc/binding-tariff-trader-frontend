@@ -31,18 +31,16 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
   }
 
   private def expectedLabel(messageKeyPrefix: String): String = {
-    (getMessage(s"$messageKeyPrefix.caption"),
-      getMessage(s"$messageKeyPrefix.heading"),
-      getMessage(s"$messageKeyPrefix.label")
-    ) match {
-      case (_,             _, Some(l)) => l
-      case (Some(c), Some(h), _) => s"$c $h"
-      case (_,       Some(h), _) => h
-      case _ => ""
+    getMessage(s"$messageKeyPrefix.label") match {
+      case Some(l) => l
+      case _ => getMessage(s"$messageKeyPrefix.heading") match {
+        case Some(h) => h
+        case _ => ""
+      }
     }
   }
 
-  protected def   stringPage(createView: Form[String] => HtmlFormat.Appendable,
+  protected def stringPage(createView: Form[String] => HtmlFormat.Appendable,
                            messageKeyPrefix: String,
                            expectedFormAction: String,
                            expectedHintKey: Option[String] = None,
@@ -68,7 +66,11 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
       "rendered with a valid form" must {
         "include the form's value in the value input" in {
           val doc = asDocument(createView(form.fill(answer)))
-          doc.getElementById(forElement).attr("value") shouldBe answer
+          val input = doc.getElementById(forElement)
+          if(input.tagName() == "textarea")
+            input.html() shouldBe answer
+          else
+            input.attr("value") shouldBe answer
         }
       }
 

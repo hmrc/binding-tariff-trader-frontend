@@ -22,7 +22,7 @@ import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierA
 import play.api.i18n.{I18nSupport, Lang}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CountriesService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.check_your_answers
@@ -66,7 +66,8 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.previousCommodityCode,
           checkYourAnswersHelper.provideGoodsName,
           checkYourAnswersHelper.provideGoodsDescription,
-          checkYourAnswersHelper.describeYourItem,
+          checkYourAnswersHelper.addConfidentialInformation,
+          checkYourAnswersHelper.provideConfidentialInformation,
           checkYourAnswersHelper.supportingMaterialFileList,
           checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,

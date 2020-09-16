@@ -37,9 +37,28 @@
 
         @components.error_summary(goodsDescriptionForm.errors)
 
+        @components.heading(messages("provideGoodsDescription.heading", goodsName),
+            captionMsg = Some(messages("provideGoodsDescription.caption")))
+
+        <p>@messages("provideGoodsDescription.p2")</p>
+
+        @components.inset_text(Html(messages("provideGoodsDescription.confidential_info")))
+
+        <p>@messages("provideGoodsDescription.p1")</p>
+
+        <p>@messages("provideGoodsDescription.paragraph.includes")</p>
+        <ul class="list list-bullet">
+            <li>@messages("provideGoodsDescription.listItem1")</li>
+            <li>@messages("provideGoodsDescription.listItem2")</li>
+            <li>@messages("provideGoodsDescription.listItem3")</li>
+            <li>@messages("provideGoodsDescription.listItem4")</li>
+            <li>@messages("provideGoodsDescription.listItem5")</li>
+        </ul>
+
         @components.input_textarea(
             field = goodsDescriptionForm("goodsDescription"),
-            label = descriptionBullets,
+            label = Html(messages("provideGoodsDescription.heading", goodsName)),
+            labelClass = Some("visually-hidden"),
             inputFormControl = "form-control--full-width",
             numRows = 15,
             maxlength = 50000
@@ -48,25 +67,4 @@
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }
-}
-
-@descriptionBullets = {
-
-    @components.heading(messages("provideGoodsDescription.heading", goodsName),
-        captionMsg = Some(messages("provideGoodsDescription.caption")))
-
-    <p>@messages("provideGoodsDescription.p2")</p>
-
-    @components.inset_text(Html(messages("provideGoodsDescription.confidential_info")))
-
-    <p>@messages("provideGoodsDescription.p1")</p>
-
-    <p>@messages("provideGoodsDescription.paragraph.includes")</p>
-    <ul class="list list-bullet">
-        <li>@messages("provideGoodsDescription.listItem1")</li>
-        <li>@messages("provideGoodsDescription.listItem2")</li>
-        <li>@messages("provideGoodsDescription.listItem3")</li>
-        <li>@messages("provideGoodsDescription.listItem4")</li>
-        <li>@messages("provideGoodsDescription.listItem5")</li>
-    </ul>
 }

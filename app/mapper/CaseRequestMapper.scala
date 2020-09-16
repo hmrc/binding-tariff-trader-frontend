@@ -28,11 +28,11 @@ class CaseRequestMapper {
   private def throwError(field: String) = throw new IllegalStateException(s"Missing User Session Data: $field")
 
   def map(answers: UserAnswers): NewCaseRequest = {
-    val describeYourItem: Option[DescribeYourItem] = answers.get(DescribeYourItemPage)
     val goodsName = answers.get(ProvideGoodsNamePage)
     val goodsDescription = answers.get(ProvideGoodsDescriptionPage)
     val addConfidentialInformation = answers.get(AddConfidentialInformationPage)
       .getOrElse(throwError("add confidential information?"))
+    val provideConfidentialInformation = confidentialInfo(answers)
     val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
     val previousCommodityCode: Option[PreviousCommodityCode] = answers.get(PreviousCommodityCodePage)
     val commodityCodeRulingReference: Option[String] = answers.get(CommodityCodeRulingReferencePage)
@@ -49,11 +49,6 @@ class CaseRequestMapper {
     val agentDetails: Option[AgentDetails] = agentDetailsFrom(answers)
     val holderDetails: EORIDetails = holderDetailsFrom(answers)
 
-    //TODO: Replace and delete as part of DIT-2271
-    val goodName = describeYourItem.map(_.name).getOrElse(throwError("good name"))
-    val goodDescription = describeYourItem.map(_.description).getOrElse(throwError("good description"))
-    val confidentialInformation = describeYourItem.flatMap(_.confidentialInformation)
-
     val app = Application(
       holder = holderDetails,
       contact = contact,
@@ -61,7 +56,7 @@ class CaseRequestMapper {
       offline = false,
       goodName = goodsName.getOrElse(throwError("goods name")),
       goodDescription = goodsDescription.getOrElse(throwError("goods description")),
-      confidentialInformation = confidentialInformation,
+      confidentialInformation = provideConfidentialInformation,
       importOrExport = importOrExport,
       otherInformation = supportingInformationDetails,
       reissuedBTIReference = previousCommodityCode.map(_.previousCommodityCode),
@@ -73,6 +68,13 @@ class CaseRequestMapper {
     )
 
     NewCaseRequest(app)
+  }
+
+  private def confidentialInfo(answers: UserAnswers): Option[String] = {
+    answers.get(AddConfidentialInformationPage) match {
+      case Some(true) => answers.get(ProvideConfidentialInformationPage)
+      case _ => None
+    }
   }
 
   private def holderDetailsFrom(answers: UserAnswers): EORIDetails = {

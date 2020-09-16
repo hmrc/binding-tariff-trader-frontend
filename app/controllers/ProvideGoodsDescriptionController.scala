@@ -48,7 +48,7 @@ class ProvideGoodsDescriptionController @Inject()(
   def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).get
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
       val preparedForm = request.userAnswers.get(ProvideGoodsDescriptionPage) match {
         case Some(value) => form.fill(value)
         case None => form
@@ -60,7 +60,7 @@ class ProvideGoodsDescriptionController @Inject()(
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).get
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

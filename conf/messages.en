@@ -211,8 +211,19 @@ addConfidentialInformation.title = Do you want to add any confidential informati
 addConfidentialInformation.heading = Do you want to add any confidential information about the {0}?
 addConfidentialInformation.caption = About the goods
 addConfidentialInformation.p1 = This information will not appear on the Advance Tariff Rulings website.
-addConfidentialInformation.checkYourAnswersLabel = Add confidential information
+addConfidentialInformation.checkYourAnswersLabel = Add confidential information?
 addConfidentialInformation.error.required = Select yes if you want to add confidential information
+
+provideConfidentialInformation.title = Provide any confidential information about the goods - Manage your Advance Tariff Rulings - GOV.UK
+provideConfidentialInformation.heading = Provide any confidential information about the {0}
+provideConfidentialInformation.caption = About the goods
+provideConfidentialInformation.checkYourAnswersLabel = Confidential information
+provideConfidentialInformation.error.required = Enter the confidential information for your goods
+provideConfidentialInformation.description = This information will not appear on the Advance Tariff Rulings website.
+provideConfidentialInformation.inset = You will be able to upload files later in the application.
+provideConfidentialInformation.thismayinclude = This may include:
+provideConfidentialInformation.modelnumbers = model numbers
+provideConfidentialInformation.patentinfo = patent information
 
 describeYourItem.title = Detailed description of your item - Manage your Advance Tariff Rulings - GOV.UK
 describeYourItem.heading = Detailed description of your item
@@ -943,3 +954,5 @@ accessibility.howWeTested.p2.link=Digital Accessibility Centre
 accessibility.howWeTested.p2.text=. The full service was tested by HMRC and included disabled users.
 accessibility.howWeTested.p3=This page was prepared on 1 September 2020.
 accessibility.howWeTested.p4=It was last updated on 1 September 2020.
+
+

@@ -37,11 +37,10 @@ class Navigator @Inject()() {
     ProvideGoodsNamePage -> (_ => routes.ProvideGoodsDescriptionController.onPageLoad(NormalMode)),
     ProvideGoodsDescriptionPage -> (_ => routes.AddConfidentialInformationController.onPageLoad(NormalMode)),
     AddConfidentialInformationPage -> (answer => answer.get(AddConfidentialInformationPage) match {
-      case Some(true) => routes.DescribeYourItemController.onPageLoad(NormalMode)
+      case Some(true) => routes.ProvideConfidentialInformationController.onPageLoad(NormalMode)
       case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
     }),
-
-    DescribeYourItemPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
+    ProvideConfidentialInformationPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
     ImportOrExportPage -> (_ => routes.ImportOrExportController.onPageLoad(NormalMode)),
@@ -66,6 +65,10 @@ class Navigator @Inject()() {
   )
 
   private val checkRouteMap: Map[Page, UserAnswers => Call] = Map(
+    AddConfidentialInformationPage -> (answer => answer.get(AddConfidentialInformationPage) match {
+      case Some(true) => routes.ProvideConfidentialInformationController.onPageLoad(CheckMode)
+      case _ => routes.CheckYourAnswersController.onPageLoad()
+    }),
     LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(CheckMode)),
     CommodityCodeRulingReferencePage -> (_ => routes.CommodityCodeRulingReferenceController.onPageLoad(CheckMode)),
     CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(CheckMode)),

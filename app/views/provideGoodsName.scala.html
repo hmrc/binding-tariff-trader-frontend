@@ -37,11 +37,15 @@
 
         @components.error_summary(goodsNameForm.errors)
 
+        @components.heading(messages("provideGoodsName.heading"),
+            captionMsg = Some(messages("provideGoodsName.caption")))
+
+        <p>@messages("provideGoodsName.paragraph")</p>
+
         @components.input_text(
             field = goodsNameForm("goodsName"),
-            label = Some(messages("provideGoodsName.paragraph")),
-            labelHtml = Some(components.heading(messages("provideGoodsName.heading"),
-                captionMsg = Some(messages("provideGoodsName.caption"))))
+            label = Some(messages("provideGoodsName.heading")),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button(Some(messages("site.save_and_continue")))

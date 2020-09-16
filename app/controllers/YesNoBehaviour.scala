@@ -36,10 +36,11 @@ trait YesNoBehaviour[A] {
   protected val nextPage: Page
 
   def submitAnswer(answer: Boolean, mode: Mode)(implicit request: DataRequest[_]): Future[Result] = {
+
+
     val updatedAnswers: UserAnswers = request.userAnswers.set(page, answer)
     val answers = if (answer) updatedAnswers else updatedAnswers.remove(pageDetails)
     val next = if (answer) pageDetails else nextPage
-
     dataCacheConnector.save(answers.cacheMap).map(
       _ => Results.Redirect(navigator.nextPage(next, mode)(answers))
     )

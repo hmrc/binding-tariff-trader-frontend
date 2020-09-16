@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package unit.views
 
 import controllers.routes
 import forms.ProvideGoodsNameFormProvider
