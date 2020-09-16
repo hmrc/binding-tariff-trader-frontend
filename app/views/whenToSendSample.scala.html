@@ -20,7 +20,7 @@
 @import models.Mode
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("whenToSendSample.title")}",
@@ -33,7 +33,8 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("whenToSendSample.heading"))
+        @components.heading(messages("whenToSendSample.heading", goodsName),
+            captionMsg=Some(messages("whenToSendSample.caption")))
 
         <div class="form-group">
             <p>@messages("whenToSendSample.second.paragraph")</p>
@@ -43,16 +44,14 @@
                 <li>@messages("whenToSendSample.listItem2")</li>
                 <li>@messages("whenToSendSample.listItem3")</li>
             </ul>
-            <p>@Html(messages("whenToSendSample.third.paragraph"))</p>
         </div>
 
         @components.input_yes_no(
             field = form("value"),
-            label =  Some(messages("whenToSendSample.legend")),
-            labelClass = Some("heading-medium"),
-            hint = Some(messages("whenToSendSample.fourth.paragraph"))
+            label = Some(messages("whenToSendSample.heading", goodsName)),
+            labelClass = Some("visually-hidden")
         )
 
-        @components.submit_button()
+        @components.submit_button(label = Some(messages("whenToSendSample.submitLabel")))
     }
 }

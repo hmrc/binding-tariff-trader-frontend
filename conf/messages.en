@@ -292,19 +292,18 @@ commodityCodeDigits.error.required = Enter a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
 
 whenToSendSample.title = Sending samples to HMRC - Manage your Advance Tariff Rulings - GOV.UK
-whenToSendSample.heading = Sending samples to HMRC
+whenToSendSample.caption = About the goods
+whenToSendSample.heading = Will you send a sample of the {0} to HMRC?
 whenToSendSample.yesProvideSample = Yes
 whenToSendSample.notSendingSample = No
 whenToSendSample.checkYourAnswersLabel = Are you sending a sample?
 whenToSendSample.error.required = Select yes if you will be sending a sample
-whenToSendSample.first.paragraph = We usually ask for samples of:
-whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for HMRC to contact you if one is needed.
-whenToSendSample.third.paragraph = <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#check-if-you-need-to-provide-a-sample" target="_blank">Get more information about samples (opens in a new window or tab)</a>
-whenToSendSample.fourth.paragraph = We will let you know where to send your sample at the end of the application.
+whenToSendSample.first.paragraph = Samples are usually required if the goods are:
+whenToSendSample.second.paragraph = If you are not sure whether you need to provide a sample, you can wait for the Tariff Classification Team to contact you if one is needed.
 whenToSendSample.listItem1 = textiles
 whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
-whenToSendSample.legend = Are you sending a sample?
+whenToSendSample.submitLabel=Save and continue
 
 returnSamples.title = Would you like the samples returned? - Manage your Advance Tariff Rulings - GOV.UK
 returnSamples.heading = Would you like the samples returned?

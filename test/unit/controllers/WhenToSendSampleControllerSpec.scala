@@ -21,9 +21,9 @@ import controllers.actions._
 import forms.WhenToSendSampleFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
-import pages.WhenToSendSamplePage
+import pages.{ProvideGoodsNamePage, WhenToSendSamplePage}
 import play.api.data.Form
-import play.api.libs.json.JsBoolean
+import play.api.libs.json.{JsBoolean, JsString}
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -33,6 +33,7 @@ class WhenToSendSampleControllerSpec extends ControllerSpecBase {
 
   private val formProvider = new WhenToSendSampleFormProvider()
   private val form: Form[Boolean] = formProvider()
+  private val goodsName = "some-goods-name"
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new WhenToSendSampleController(
@@ -48,19 +49,22 @@ class WhenToSendSampleControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute: Call = Call("GET", "/foo")
 
-  private def viewAsString(form: Form[_] = form): String = whenToSendSample(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  private def viewAsString(form: Form[_] = form): String = whenToSendSample(frontendAppConfig, form, NormalMode, "some-goods-name")(fakeRequest, messages).toString
 
   "WhenToSendSample Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val getRequiredData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val result = controller(getRequiredData).onPageLoad(NormalMode)(fakeRequest)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(WhenToSendSamplePage.toString -> JsBoolean(true))
+      val validData = Map(WhenToSendSamplePage.toString -> JsBoolean(true), ProvideGoodsNamePage.toString -> JsString(goodsName))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
@@ -89,7 +93,10 @@ class WhenToSendSampleControllerSpec extends ControllerSpecBase {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val getRequiredData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val result = controller(getRequiredData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) shouldBe viewAsString(boundForm)
