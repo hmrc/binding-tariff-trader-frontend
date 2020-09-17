@@ -53,6 +53,11 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.whenToSendSample.get.answer shouldBe "site.yes"
       }
 
+      "return a row with the correct answer for IsSampleHazardous" in {
+        given(userAnswers.get(IsSampleHazardousPage)).willReturn(Option(true))
+        checkHelper.isSampleHazardous.get.answer shouldBe "site.yes"
+      }
+
       "return a row with the correct answer for ReturnSamplesPage" in {
         given(userAnswers.get(ReturnSamplesPage)).willReturn(Option(true))
         checkHelper.returnSamples.get.answer shouldBe "site.yes"
