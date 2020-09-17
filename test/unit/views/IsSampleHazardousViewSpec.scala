@@ -39,12 +39,6 @@ class IsSampleHazardousViewSpec extends YesNoViewBehaviours {
   def createViewUsingForm = (form: Form[_]) =>
     isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
-/*
-  override def expectedLegend(messageKeyPrefix: String): String = {
-    messages(s"$messageKeyPrefix.heading")
-  }
-*/
-
   "IsSampleHazardous view" must {
 
     behave like normalPage(createView, messageKeyPrefix)()
