@@ -40,7 +40,7 @@ class IsSampleHazardousController @Inject()(appConfig: FrontendAppConfig,
                                             formProvider: IsSampleHazardousFormProvider,
                                             val is_sample_hazardous: views.html.isSampleHazardous,
                                             cc: MessagesControllerComponents
-                                                    )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+                                           )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 

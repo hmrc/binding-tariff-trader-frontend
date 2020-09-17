@@ -18,13 +18,13 @@ package unit.controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import controllers.{AddConfidentialInformationController, ControllerSpecBase, IsSampleHazardousController, routes}
-import forms.{AddConfidentialInformationFormProvider, IsSampleHazardousFormProvider}
+import controllers.{ControllerSpecBase, IsSampleHazardousController, routes}
+import forms.IsSampleHazardousFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
-import pages.{AddConfidentialInformationPage, IsSampleHazardousPage, ProvideGoodsNamePage}
+import pages.IsSampleHazardousPage
 import play.api.data.Form
-import play.api.libs.json.{JsBoolean, JsString}
+import play.api.libs.json.JsBoolean
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -38,12 +38,10 @@ class IsSampleHazardousControllerSpec extends ControllerSpecBase {
   val formProvider = new IsSampleHazardousFormProvider()
   val form = formProvider()
 
-  val addConfidentialInformationView = injector.instanceOf[views.html.isSampleHazardous]
+  val isSampleHazardousView = injector.instanceOf[views.html.isSampleHazardous]
 
   val fakeGETRequest = fakeGETRequestWithCSRF
   val fakePOSTRequest = fakePOSTRequestWithCSRF
-
-  val goodsName = "Mushrooms"
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new IsSampleHazardousController(
@@ -54,10 +52,10 @@ class IsSampleHazardousControllerSpec extends ControllerSpecBase {
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      addConfidentialInformationView,
+      isSampleHazardousView,
       cc)
 
-  def viewAsString(form: Form[_] = form) = addConfidentialInformationView(
+  def viewAsString(form: Form[_] = form) = isSampleHazardousView(
     frontendAppConfig, form, NormalMode)(fakeGETRequest, messages).toString
 
   "IsSampleHazardous Controller" must {
@@ -92,11 +90,6 @@ class IsSampleHazardousControllerSpec extends ControllerSpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
       val postRequest = fakeGETRequest.withFormUrlEncodedBody(("isSampleHazardous", "invalid value"))
       val boundForm = form.bind(Map("isSampleHazardous" -> "invalid value"))
-/*
-
-      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
-      val getRequiredData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-*/
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
