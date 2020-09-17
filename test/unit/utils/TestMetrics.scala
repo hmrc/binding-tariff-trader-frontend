@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package unit.utils
 
-import models.ImportOrExport
+import com.kenshoo.play.metrics.Metrics
+import com.codahale.metrics.MetricRegistry
 
-case object ImportOrExportPage extends QuestionPage[ImportOrExport] {
-
-  override def toString: String = "importOrExportPage"
+class TestMetrics extends Metrics {
+  override def defaultRegistry: MetricRegistry = new MetricRegistry
+  override def toJson: String = ""
 }

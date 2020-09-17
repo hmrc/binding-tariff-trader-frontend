@@ -18,7 +18,12 @@
 @import models.response.FilestoreResponse
 @import utils.Dates
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, getCountryName: String => Option[String], viewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig,
+        c: Case,
+        attachments: Seq[FilestoreResponse],
+        letterOfAuthority: Option[FilestoreResponse] = None,
+        getCountryName: String => Option[String],
+        viewMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @sectionHeading(headerId: String) = {
 <h2 id=@headerId>@messages(headerId)</h2>
@@ -224,16 +229,6 @@
                 @row.fileName <br/>
                 }
                 }
-            </td>
-        </tr>
-        <tr>
-            <td>@messages("application.section.aboutItem.importOrExport")</td>
-            <td id="application.importOrExport">
-                @{c.application.importOrExport match {
-                case Some("IMPORT") => messages("application.section.aboutItem.import")
-                case Some("EXPORT") => messages("application.section.aboutItem.export")
-                case _ => messages("site.unknown")
-                }}
             </td>
         </tr>
         <tr>

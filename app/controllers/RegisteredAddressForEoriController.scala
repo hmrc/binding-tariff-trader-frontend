@@ -21,7 +21,7 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisteredAddressForEoriFormProvider
 import javax.inject.Inject
-import models.{Mode, RegisteredAddressForEori}
+import models.{Mode, RegisteredAddressForEori, UserAnswers}
 import navigation.Navigator
 import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
 import play.api.data.Form
@@ -39,7 +39,6 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                                    navigator: Navigator,
                                                    identify: IdentifierAction,
                                                    getData: DataRetrievalAction,
-                                                   requireData: DataRequiredAction,
                                                    formProvider: RegisteredAddressForEoriFormProvider,
                                                    countriesService: CountriesService,
                                                    cc: MessagesControllerComponents
@@ -47,11 +46,12 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
 
   private lazy val form: Form[RegisteredAddressForEori] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(RegisteredAddressForEoriPage) match {
-      case Some(value) if request.eoriNumber.isDefined => form.fill(value.copy(eori = request.eoriNumber.get))
-      case None if request.eoriNumber.isDefined => form.fill(RegisteredAddressForEori(request.eoriNumber.get))
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
+
+    val preparedForm = request.userAnswers.flatMap(_.get(RegisteredAddressForEoriPage)) match {
+      case Some(value) if request.userEoriNumber.isDefined => form.fill(value.copy(eori = request.userEoriNumber.get))
+      case None if request.userEoriNumber.isDefined => form.fill(RegisteredAddressForEori(request.userEoriNumber.get))
       case Some(value) => form.fill(value)
       case _ => form
     }
@@ -59,14 +59,14 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
     Ok(registeredAddressForEori(appConfig, preparedForm, mode, countriesService.getAllCountries))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(
           BadRequest(registeredAddressForEori(appConfig, formWithErrors, mode, countriesService.getAllCountries))),
       value => {
-        val updatedAnswers = request.userAnswers.set(RegisteredAddressForEoriPage, value)
+        val updatedAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId)).set(RegisteredAddressForEoriPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
           _ => Redirect(navigator.nextPage(RegisteredAddressForEoriPage, mode)(updatedAnswers))

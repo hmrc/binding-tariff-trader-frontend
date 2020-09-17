@@ -126,10 +126,6 @@ class CheckYourAnswersHelper(
     x => AnswerRow("selectApplicationType.checkYourAnswersLabel", s"selectApplicationType.$x", true, routes.SelectApplicationTypeController.onPageLoad(CheckMode).url)
   }
 
-  def importOrExport: Option[AnswerRow] = userAnswers.get(ImportOrExportPage) map {
-    x => AnswerRow("importOrExport.checkYourAnswersLabel", s"importOrExport.$x", true, routes.ImportOrExportController.onPageLoad(CheckMode).url)
-  }
-
   def whichBestDescribesYou: Option[AnswerRow] = None
 
   //    userAnswers.get(WhichBestDescribesYouPage) map {

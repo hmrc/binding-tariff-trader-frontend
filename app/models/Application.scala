@@ -27,7 +27,6 @@ case class Application
   goodName: String,
   goodDescription: String,
   confidentialInformation: Option[String],
-  importOrExport: Option[String],
   otherInformation: Option[String],
   reissuedBTIReference: Option[String],
   relatedBTIReference: Option[String],

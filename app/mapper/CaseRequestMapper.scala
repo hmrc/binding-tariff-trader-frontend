@@ -17,7 +17,6 @@
 package mapper
 
 import javax.inject.Singleton
-import models.ImportOrExport.{Advice, Export, Import}
 import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import pages._
@@ -39,7 +38,6 @@ class CaseRequestMapper {
     val legalChallengeDetails: Option[String] = answers.get(LegalChallengeDetailsPage)
     val commodityCodeDigits: Option[String] = answers.get(CommodityCodeDigitsPage)
     val supportingInformationDetails: Option[String] = answers.get(SupportingInformationDetailsPage)
-    val importOrExport: Option[String] = answers.get(ImportOrExportPage).map(toImportOrExport)
 
     val sampleProvided: Boolean = answers.get(WhenToSendSamplePage).getOrElse(throwError("when to send a sample"))
     val returnSample: Option[ReturnSamples] = answers.get(ReturnSamplesPage)
@@ -49,6 +47,10 @@ class CaseRequestMapper {
     val agentDetails: Option[AgentDetails] = agentDetailsFrom(answers)
     val holderDetails: EORIDetails = holderDetailsFrom(answers)
 
+    val goodName = describeYourItem.map(_.name).getOrElse(throwError("good name"))
+    val goodDescription = describeYourItem.map(_.description).getOrElse(throwError("good description"))
+    val confidentialInformation = describeYourItem.flatMap(_.confidentialInformation)
+
     val app = Application(
       holder = holderDetails,
       contact = contact,
@@ -57,7 +59,6 @@ class CaseRequestMapper {
       goodName = goodsName.getOrElse(throwError("goods name")),
       goodDescription = goodsDescription.getOrElse(throwError("goods description")),
       confidentialInformation = provideConfidentialInformation,
-      importOrExport = importOrExport,
       otherInformation = supportingInformationDetails,
       reissuedBTIReference = previousCommodityCode.map(_.previousCommodityCode),
       relatedBTIReference = commodityCodeRulingReference,
@@ -134,13 +135,6 @@ class CaseRequestMapper {
       case ReturnSamples.Yes => true
       case _ => false
     }
-  }
-
-  private def toImportOrExport: ImportOrExport => String = {
-    case Import => "IMPORT"
-    case Export => "EXPORT"
-    case Advice => "ADVICE"
-    case _ => throw new IllegalArgumentException
   }
 
 }

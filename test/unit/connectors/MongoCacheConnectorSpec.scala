@@ -30,8 +30,13 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
-class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheckDrivenPropertyChecks
-  with Generators with MockitoSugar with ScalaFutures with OptionValues {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class MongoCacheConnectorSpec
+  extends ConnectorTest
+  with ScalaCheckDrivenPropertyChecks
+  with Generators
+  with ScalaFutures {
 
   ".save" must {
 
@@ -43,14 +48,14 @@ class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheck
       when(mockSessionRepository.apply()) thenReturn mockReactiveMongoRepository
       when(mockReactiveMongoRepository.upsert(any[CacheMap])) thenReturn Future.successful(true)
 
-      val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository)
+      val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository, metrics)
 
       forAll(arbitrary[CacheMap]) { cacheMap =>
 
         val result = mongoCacheConnector.save(cacheMap)
 
         whenReady(result) { savedCacheMap =>
-          savedCacheMap mustEqual cacheMap
+          savedCacheMap shouldEqual cacheMap
           verify(mockReactiveMongoRepository).upsert(cacheMap)
         }
 
@@ -70,14 +75,14 @@ class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheck
       when(mockSessionRepository.apply()) thenReturn mockReactiveMongoRepository
       when(mockReactiveMongoRepository.remove(any[CacheMap])) thenReturn Future.successful(true)
 
-      val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository)
+      val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository, metrics)
 
       forAll(arbitrary[CacheMap]) { cacheMap =>
 
         val result = mongoCacheConnector.remove(cacheMap)
 
         whenReady(result) { savedCacheMap =>
-          savedCacheMap mustEqual true
+          savedCacheMap shouldEqual true
           verify(mockReactiveMongoRepository).remove(cacheMap)
         }
       }
@@ -98,14 +103,14 @@ class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheck
         when(mockSessionRepository.apply()) thenReturn mockReactiveMongoRepository
         when(mockReactiveMongoRepository.get(any())) thenReturn Future.successful(None)
 
-        val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository)
+        val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository, metrics)
 
         forAll(nonEmptyString) { cacheId =>
 
           val result = mongoCacheConnector.fetch(cacheId)
 
           whenReady(result) { optionalCacheMap =>
-            optionalCacheMap must be(empty)
+            optionalCacheMap should be(empty)
           }
         }
 
@@ -122,7 +127,7 @@ class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheck
 
         when(mockSessionRepository.apply()) thenReturn mockReactiveMongoRepository
 
-        val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository)
+        val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository, metrics)
 
         forAll(arbitrary[CacheMap]) { cacheMap =>
 
@@ -131,7 +136,7 @@ class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheck
           val result = mongoCacheConnector.fetch(cacheMap.id)
 
           whenReady(result) { optionalCacheMap =>
-              optionalCacheMap.value mustEqual cacheMap
+            optionalCacheMap shouldBe Some(cacheMap)
           }
         }
 
@@ -153,14 +158,14 @@ class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheck
         when(mockSessionRepository.apply()) thenReturn mockReactiveMongoRepository
         when(mockReactiveMongoRepository.get(any())) thenReturn Future.successful(None)
 
-        val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository)
+        val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository, metrics)
 
         forAll(nonEmptyString, nonEmptyString) { (cacheId, key) =>
 
             val result = mongoCacheConnector.getEntry[String](cacheId, key)
 
             whenReady(result) { optionalValue =>
-              optionalValue must be(empty)
+              optionalValue should be(empty)
             }
         }
 
@@ -177,7 +182,7 @@ class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheck
 
         when(mockSessionRepository.apply()) thenReturn mockReactiveMongoRepository
 
-        val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository)
+        val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository, metrics)
 
         val gen = for {
           key      <- nonEmptyString
@@ -191,7 +196,7 @@ class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheck
           val result = mongoCacheConnector.getEntry[String](cacheMap.id, k)
 
           whenReady(result) { optionalValue =>
-            optionalValue must be(empty)
+            optionalValue should be(empty)
           }
         }
 
@@ -208,7 +213,7 @@ class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheck
 
         when(mockSessionRepository.apply()) thenReturn mockReactiveMongoRepository
 
-        val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository)
+        val mongoCacheConnector = new MongoCacheConnector(mockSessionRepository, metrics)
 
         val gen = for {
           key      <- nonEmptyString
@@ -222,7 +227,7 @@ class MongoCacheConnectorSpec extends WordSpec with MustMatchers with ScalaCheck
           val result = mongoCacheConnector.getEntry[String](cacheMap.id, k)
 
           whenReady(result) { optionalValue =>
-            optionalValue.value mustEqual v
+            optionalValue shouldBe Some(v)
           }
         }
 

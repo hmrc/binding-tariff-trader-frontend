@@ -18,6 +18,7 @@ package connectors
 
 import akka.actor.ActorSystem
 import base.SpecBase
+import com.kenshoo.play.metrics.Metrics
 import config.FrontendAppConfig
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterAll
@@ -26,6 +27,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import unit.base.WireMockObject
+import unit.utils.TestMetrics
 
 import scala.io.Source
 
@@ -37,6 +39,7 @@ trait ConnectorTest
 
   protected lazy val fakeAuthToken = "AUTH_TOKEN"
   protected lazy val wsClient: WSClient = injector.instanceOf[WSClient]
+  protected lazy val metrics: Metrics = new TestMetrics
   protected lazy val authenticatedHttpClient = new AuthenticatedHttpClient(
     auditing,
     wsClient,

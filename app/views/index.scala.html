@@ -27,7 +27,7 @@
 
     @components.heading(messages("index.heading"))
 
-    @components.button_link(messages("site.start"), routes.ImportOrExportController.onPageLoad(NormalMode).url, id = Some("start-application"))
+    @components.button_link(messages("site.start"), routes.BeforeYouStartController.onPageLoad.url, id = Some("start-application"))
 
     <div class="tabs mb-5">
         @components.case_tabs(activeTab)
