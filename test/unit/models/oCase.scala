@@ -40,6 +40,7 @@ object oCase {
     None,
     None,
     sampleToBeProvided = false,
+    sampleIsHazardous = None,
     sampleToBeReturned = false
   )
 
