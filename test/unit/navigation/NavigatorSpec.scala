@@ -19,6 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.routes
 import models._
+import org.mockito.Mockito._
 import pages._
 
 class NavigatorSpec extends SpecBase {
