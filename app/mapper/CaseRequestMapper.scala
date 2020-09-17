@@ -47,10 +47,6 @@ class CaseRequestMapper {
     val agentDetails: Option[AgentDetails] = agentDetailsFrom(answers)
     val holderDetails: EORIDetails = holderDetailsFrom(answers)
 
-    val goodName = describeYourItem.map(_.name).getOrElse(throwError("good name"))
-    val goodDescription = describeYourItem.map(_.description).getOrElse(throwError("good description"))
-    val confidentialInformation = describeYourItem.flatMap(_.confidentialInformation)
-
     val app = Application(
       holder = holderDetails,
       contact = contact,
