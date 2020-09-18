@@ -33,7 +33,7 @@ class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase {
 
   val formProvider = new CommodityCodeBestMatchFormProvider()
   val form: Form[Boolean] = formProvider()
-  val goodsName = "goods"
+  val goodsName = "some-goods-name"
 
   def viewAsString(form: Form[_] = form): String = commodityCodeBestMatch(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages).toString
 
