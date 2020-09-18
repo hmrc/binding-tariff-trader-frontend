@@ -291,7 +291,7 @@ commodityCodeDigits.checkYourAnswersLabel = Commodity code
 commodityCodeDigits.error.required = Enter a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
 
-whenToSendSample.title = Sending samples to HMRC - Manage your Advance Tariff Rulings - GOV.UK
+whenToSendSample.title = Will you send a sample of the goods to HMRC? - Manage your Advance Tariff Rulings - GOV.UK
 whenToSendSample.caption = About the goods
 whenToSendSample.heading = Will you send a sample of the {0} to HMRC?
 whenToSendSample.yesProvideSample = Yes
