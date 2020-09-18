@@ -29,7 +29,7 @@ class CommodityCodeBestMatchViewSpec extends YesNoViewBehaviours {
 
   val form = new CommodityCodeBestMatchFormProvider()()
 
-  val goodsName = "goods"
+  val goodsName = "some-goods-name"
 
   override protected def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)
