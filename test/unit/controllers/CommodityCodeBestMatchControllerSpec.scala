@@ -54,14 +54,17 @@ class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase {
   "CommodityCodeBestMatch Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      
+      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(CommodityCodeBestMatchPage.toString -> JsBoolean(true))
+      val validData = Map(CommodityCodeBestMatchPage.toString -> JsBoolean(true), ProvideGoodsNamePage.toString -> JsString(goodsName))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
@@ -90,8 +93,11 @@ class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
+ 
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val result = controller(getRelevantData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) shouldBe viewAsString(boundForm)
