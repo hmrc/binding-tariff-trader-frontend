@@ -303,7 +303,6 @@ whenToSendSample.second.paragraph = If you are not sure whether you need to prov
 whenToSendSample.listItem1 = textiles
 whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
-whenToSendSample.submitLabel=Save and continue
 
 returnSamples.title = Would you like the samples returned? - Manage your Advance Tariff Rulings - GOV.UK
 returnSamples.heading = Would you like the samples returned?
