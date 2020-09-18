@@ -23,7 +23,7 @@ import models.NormalMode
 import navigation.FakeNavigator
 import pages.{ CommodityCodeBestMatchPage, ProvideGoodsNamePage }
 import play.api.data.Form
-import play.api.libs.json.JsBoolean
+import play.api.libs.json.{ JsBoolean, JsString }
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
