@@ -21,7 +21,7 @@
 @import views.ViewUtils._
 
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("uploadSupportingMaterialMultiple.title")}",
@@ -36,11 +36,13 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("uploadSupportingMaterialMultiple.heading"))
+        @components.heading(messages("uploadSupportingMaterialMultiple.heading", goodsName),
+            captionMsg = Some(messages("uploadSupportingMaterialMultiple.caption")))
 
         <p>@messages("uploadSupportingMaterialMultiple.upload.title")</p>
         <ul class="bullets">
             <li>@messages("uploadSupportingMaterialMultiple.upload.restrictionFiles")</li>
+            <li>@messages("uploadSupportingMaterialMultiple.upload.exampleFiles")</li>
             <li>@messages("uploadSupportingMaterialMultiple.upload.restrictionSize")</li>
             <li>@messages("uploadSupportingMaterialMultiple.upload.typeOfFiles")</li>
         </ul>
@@ -65,7 +67,7 @@
         </div>
 
         <div class="section">
-            <button id="submit" class="button"> Upload </button>
+            <button id="submit" class="button">@messages("site.save_and_continue")</button>
         </div>
 
     }
