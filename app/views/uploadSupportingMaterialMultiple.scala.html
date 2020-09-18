@@ -66,9 +66,7 @@
             </strong>
         </div>
 
-        <div class="section">
-            <button id="submit" class="button">@messages("site.save_and_continue")</button>
-        </div>
+        @components.submit_button(Some(messages("site.save_and_continue")))
 
     }
 }
