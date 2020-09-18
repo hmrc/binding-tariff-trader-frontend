@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.CommodityCodeBestMatchFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
-import pages.CommodityCodeBestMatchPage
+import pages.{ CommodityCodeBestMatchPage, ProvideGoodsNamePage }
 import play.api.data.Form
 import play.api.libs.json.JsBoolean
 import play.api.mvc.Call
