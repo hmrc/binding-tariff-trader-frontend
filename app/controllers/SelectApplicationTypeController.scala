@@ -21,7 +21,6 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SelectApplicationTypeFormProvider
 import javax.inject.Inject
-import models.SelectApplicationType.{NewCommodity, PreviousCommodity}
 import models._
 import navigation.Navigator
 import pages._
@@ -48,34 +47,29 @@ class SelectApplicationTypeController @Inject()(
   private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     val preparedForm = request.userAnswers.get(SelectApplicationTypePage) match {
       case Some(value) => form.fill(value)
       case _ => form
     }
 
-    Ok(selectApplicationType(appConfig, preparedForm, mode))
+    Ok(selectApplicationType(appConfig, preparedForm, goodsName, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def update(o: SelectApplicationType): UserAnswers = {
-      o match {
-        case PreviousCommodity => request.userAnswers.set(SelectApplicationTypePage, o)
-        case NewCommodity => request.userAnswers.set(SelectApplicationTypePage, o).remove(PreviousCommodityCodePage)
-      }
+    def nextPage: Boolean => Page = {
+      case true => PreviousCommodityCodePage
+      case false => AcceptItemInformationPage
     }
 
-    def nextPage: SelectApplicationType => Page = {
-      case PreviousCommodity => PreviousCommodityCodePage
-      case NewCommodity => AcceptItemInformationPage
-    }
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(selectApplicationType(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(selectApplicationType(appConfig, formWithErrors, goodsName, mode))),
       selectedOption => {
-        val updatedAnswers = update(selectedOption)
+        val updatedAnswers = request.userAnswers.set(SelectApplicationTypePage, selectedOption)
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
           _ => Results.Redirect(navigator.nextPage(nextPage(selectedOption), mode)(updatedAnswers))
         )

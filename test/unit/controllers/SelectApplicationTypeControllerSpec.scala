@@ -19,8 +19,7 @@ package controllers
 import connectors.FakeDataCacheConnector
 import controllers.actions._
 import forms.SelectApplicationTypeFormProvider
-import models.{NormalMode, SelectApplicationType}
-import models.SelectApplicationType.{NewCommodity, PreviousCommodity}
+import models.NormalMode
 import navigation.FakeNavigator
 import pages.SelectApplicationTypePage
 import play.api.data.Form
@@ -29,11 +28,14 @@ import play.api.mvc.Call
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.selectApplicationType
+import play.api.libs.json.JsBoolean
+import pages.ProvideGoodsNamePage
 
 class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
 
   private val formProvider = new SelectApplicationTypeFormProvider()
   private val form = formProvider()
+  private val goodsName = "some-goods-name"
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): SelectApplicationTypeController = {
     new SelectApplicationTypeController(
@@ -50,30 +52,32 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private def viewAsString(form: Form[_] = form): String = {
-    selectApplicationType(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
-  }
+  private def viewAsString(form: Form[_] = form): String =
+    selectApplicationType(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages).toString
 
   "SelectApplicationType Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(SelectApplicationTypePage.toString -> JsString(SelectApplicationType.values.head.toString))
+      val validData = Map(SelectApplicationTypePage.toString -> JsBoolean(true), ProvideGoodsNamePage.toString -> JsString(goodsName))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) shouldBe viewAsString(form.fill(SelectApplicationType.values.head))
+      contentAsString(result) shouldBe viewAsString(form.fill(true))
     }
 
     "redirect to the next page when new commodity data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", NewCommodity))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "false"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -82,7 +86,7 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when previous commodity data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", PreviousCommodity))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -92,10 +96,12 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
 
 
     "return a Bad Request and errors when invalid data is submitted" in {
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val result = controller(getRelevantData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) shouldBe viewAsString(boundForm)
@@ -109,7 +115,7 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", SelectApplicationType.options.head.value))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe SEE_OTHER
