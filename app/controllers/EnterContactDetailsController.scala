@@ -65,7 +65,7 @@ class EnterContactDetailsController @Inject()(
         val updatedAnswers = request.userAnswers.set(EnterContactDetailsPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(SelectApplicationTypePage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(EnterContactDetailsPage, mode)(updatedAnswers))
         )
       }
     )

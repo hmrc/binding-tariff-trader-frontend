@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
- @(headingMsg: String, headingSize: String = "heading-xlarge", headingClass: Option[String] = None,
-         captionMsg: Option[String] = None)
+package unit.pages
 
- <h1 class="@headingSize @headingClass.map{classes => classes}">
-  @captionMsg.map{caption => <span class="heading-secondary">@caption</span>}
-  @headingMsg
- </h1>
+import pages.ProvideGoodsDescriptionPage
+import pages.behaviours.PageBehaviours
+
+
+class ProvideGoodsDescriptionPageSpec extends PageBehaviours {
+
+  "ProvideGoodsDescriptionPage" must {
+
+    beRetrievable[String](ProvideGoodsDescriptionPage)
+
+    beSettable[String](ProvideGoodsDescriptionPage)
+
+    beRemovable[String](ProvideGoodsDescriptionPage)
+  }
+}

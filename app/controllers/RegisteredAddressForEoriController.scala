@@ -69,7 +69,7 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
         val updatedAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId)).set(RegisteredAddressForEoriPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(EnterContactDetailsPage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(RegisteredAddressForEoriPage, mode)(updatedAnswers))
         )
       }
     )

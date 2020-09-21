@@ -47,7 +47,7 @@ class SupportingInformationController @Inject()(
 
   override val page: QuestionPage[Boolean] = SupportingInformationPage
   override val pageDetails: QuestionPage[String] = SupportingInformationDetailsPage
-  override val nextPage: Page = CheckYourAnswersPage
+  override val nextPage: Page = EnterContactDetailsPage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 

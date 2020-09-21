@@ -66,6 +66,7 @@ site.continue = Continue
 site.submit = Submit
 site.upload_continue = Upload and continue
 site.service_name = Manage your Advance Tariff Rulings
+site.save_and_continue = Save and continue
 
 unauthorised.title = Not registered for CDS
 unauthorised.heading = To apply for an Advance Tariff Ruling (ATaR) you need to get access to CDS
@@ -181,6 +182,48 @@ previousCommodityCode.error.previousCommodityCode.required = Enter a ruling refe
 previousCommodityCode.error.previousCommodityCode.length = Previous Tariff Information ruling must be 100 characters or less
 previousCommodityCode.details.summary = What is my Binding Tariff Information ruling reference number?
 previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling.
+
+provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
+provideGoodsName.heading = Provide a name for the goods
+provideGoodsName.caption = About the goods
+provideGoodsName.checkYourAnswersLabel = Goods Name
+provideGoodsName.error.required = Enter a short name to describe the goods
+provideGoodsName.error.length = Name for the goods must be 100 characters or less
+provideGoodsName.paragraph = This information may appear on the Advance Tariff Rulings website.
+
+provideGoodsDescription.title = Provide a detailed description of the goods - Manage your Advance Tariff Rulings - GOV.UK
+provideGoodsDescription.heading = Provide a detailed description of the {0}
+provideGoodsDescription.caption = About the goods
+provideGoodsDescription.checkYourAnswersLabel = Goods Description
+provideGoodsDescription.p1 = The more detailed the description is, the faster we will be able to classify the goods.
+provideGoodsDescription.p2 = This information may appear on the Advance Tariff Rulings website.
+provideGoodsDescription.error.required = Enter a detailed description of your goods
+provideGoodsDescription.error.length = Description for the goods must be 100 characters or less
+provideGoodsDescription.confidential_info = You will be able to add confidential information and upload files later in the application.
+provideGoodsDescription.paragraph.includes = The description can include:
+provideGoodsDescription.listItem1 = what it is used for
+provideGoodsDescription.listItem2 = what it is made from, including all materials, parts or ingredients
+provideGoodsDescription.listItem3 = how it is made, including all manufacturing processes
+provideGoodsDescription.listItem4 = how it works
+provideGoodsDescription.listItem5 = how it is packaged, including all materials
+
+addConfidentialInformation.title = Do you want to add any confidential information about the goods? - Manage your Advance Tariff Rulings - GOV.UK
+addConfidentialInformation.heading = Do you want to add any confidential information about the {0}?
+addConfidentialInformation.caption = About the goods
+addConfidentialInformation.p1 = This information will not appear on the Advance Tariff Rulings website.
+addConfidentialInformation.checkYourAnswersLabel = Add confidential information?
+addConfidentialInformation.error.required = Select yes if you want to add confidential information
+
+provideConfidentialInformation.title = Provide any confidential information about the goods - Manage your Advance Tariff Rulings - GOV.UK
+provideConfidentialInformation.heading = Provide any confidential information about the {0}
+provideConfidentialInformation.caption = About the goods
+provideConfidentialInformation.checkYourAnswersLabel = Confidential information
+provideConfidentialInformation.error.required = Enter the confidential information for your goods
+provideConfidentialInformation.description = This information will not appear on the Advance Tariff Rulings website.
+provideConfidentialInformation.inset = You will be able to upload files later in the application.
+provideConfidentialInformation.thismayinclude = This may include:
+provideConfidentialInformation.modelnumbers = model numbers
+provideConfidentialInformation.patentinfo = patent information
 
 describeYourItem.title = Detailed description of your item - Manage your Advance Tariff Rulings - GOV.UK
 describeYourItem.heading = Detailed description of your item
@@ -901,3 +944,5 @@ accessibility.howWeTested.p2.link=Digital Accessibility Centre
 accessibility.howWeTested.p2.text=. The full service was tested by HMRC and included disabled users.
 accessibility.howWeTested.p3=This page was prepared on 1 September 2020.
 accessibility.howWeTested.p4=It was last updated on 1 September 2020.
+
+

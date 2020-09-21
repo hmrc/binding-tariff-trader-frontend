@@ -110,7 +110,7 @@ class CaseRequestMapperTest extends UnitSpec {
       application.sampleToBeReturned shouldBe true
 
       // Then optional Fields should be blank
-      application.confidentialInformation shouldBe Some("Confidential Info")
+      application.confidentialInformation shouldBe Some("Confidential information")
       application.otherInformation shouldBe Some("Other Info")
       application.reissuedBTIReference shouldBe Some("Reissued BTI Reference")
       application.relatedBTIReference shouldBe Some("Related BTI Reference")
@@ -142,12 +142,17 @@ class CaseRequestMapperTest extends UnitSpec {
               Some("12345")
             )
           ),
-          DescribeYourItemPage.toString -> js(
-            DescribeYourItem(
-              "Good Name",
-              "Good Description",
-              Some("Confidential Info")
-            )
+          ProvideGoodsNamePage.toString -> js(
+            "Good Name"
+          ),
+          ProvideGoodsDescriptionPage.toString -> js(
+            "Good Description"
+          ),
+          AddConfidentialInformationPage.toString -> js(
+            true
+          ),
+          ProvideConfidentialInformationPage.toString -> js(
+            "Confidential information"
           ),
           WhichBestDescribesYouPage.toString -> js(
             WhichBestDescribesYou.BusinessRepresentative
@@ -202,6 +207,15 @@ class CaseRequestMapperTest extends UnitSpec {
               "Email",
               None
             )
+          ),
+          ProvideGoodsNamePage.toString -> js(
+            "Good Name"
+          ),
+          ProvideGoodsDescriptionPage.toString -> js(
+            "Good Description"
+          ),
+          AddConfidentialInformationPage.toString -> js(
+            false
           ),
           DescribeYourItemPage.toString -> js(
             DescribeYourItem(

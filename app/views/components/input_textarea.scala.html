@@ -25,7 +25,7 @@
         maxlength: Int = 90000
 )(implicit messages: Messages)
 
-@ariaDescribeElements={@hint.map{_ =>@{field.id}-hint}@field.error.map{_ => error-message-@{field.id}-input}}
+@ariaDescribeElements={@hint.map{_ =>@{field.id}-hint}@field.error.map{_ =>error-message-@{field.id}-input}}
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
 

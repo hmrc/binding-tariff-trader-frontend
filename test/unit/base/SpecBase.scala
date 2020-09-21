@@ -26,8 +26,9 @@ import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.Files.TemporaryFileCreator
-import play.api.mvc.MessagesControllerComponents
-import play.api.test.FakeRequest
+import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents}
+import play.api.test.CSRFTokenHelper.CSRFFRequestHeader
+import play.api.test.{FakeHeaders, FakeRequest}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import unit.base.WireMockObject
 import unit.utils.UnitSpec
@@ -36,9 +37,9 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
 
   override implicit lazy val app: Application = GuiceApplicationBuilder()
     .configure(
-    "metrics.jvm" -> false,
-    "metrics.enabled" -> false
-  ).build()
+      "metrics.jvm" -> false,
+      "metrics.enabled" -> false
+    ).build()
 
   protected lazy val injector: Injector = app.injector
 
@@ -55,6 +56,14 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
   def fakeRequest = FakeRequest()
 
   def fakeRequestWithEoriAndCache = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), Some(UserAnswers(CacheMap("id", Map.empty))))
+
+  def fakeGETRequestWithCSRF: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    "GET", "/", FakeHeaders(Seq("csrfToken"->"csrfToken")), AnyContentAsEmpty)
+    .withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
+
+  def fakePOSTRequestWithCSRF: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    "POST", "/", FakeHeaders(Seq("csrfToken"->"csrfToken")), AnyContentAsEmpty)
+    .withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
   def messages: Messages = messagesApi.preferred(fakeRequest)
 

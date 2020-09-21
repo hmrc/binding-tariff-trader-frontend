@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +12,28 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
- @(headingMsg: String, headingSize: String = "heading-xlarge", headingClass: Option[String] = None,
-         captionMsg: Option[String] = None)
+package unit.forms
 
- <h1 class="@headingSize @headingClass.map{classes => classes}">
-  @captionMsg.map{caption => <span class="heading-secondary">@caption</span>}
-  @headingMsg
- </h1>
+import forms.ProvideGoodsDescriptionFormProvider
+import forms.behaviours.StringFieldBehaviours
+import play.api.data.FormError
+
+class ProvideGoodsDescriptionFormProviderSpec extends StringFieldBehaviours {
+
+  val requiredKey = "provideGoodsDescription.error.required"
+
+  val form = new ProvideGoodsDescriptionFormProvider()()
+
+  ".value" must {
+
+    val fieldName = "goodsDescription"
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+}
