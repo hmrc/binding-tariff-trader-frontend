@@ -250,6 +250,7 @@ supportingMaterialFileList.heading = Do you want to upload any supporting docume
 supportingMaterialFileList.caption = About the goods
 supportingMaterialFileList.uploadFileCounter.singular = You have uploaded 1 supporting document for the {0}
 supportingMaterialFileList.uploadFileCounter.plural = You have uploaded {0} supporting documents for the {1}
+supportingMaterialFileList.choice.checkYourAnswersLabel = Upload supporting documents?
 supportingMaterialFileList.checkYourAnswersLabel = Uploaded documents
 supportingMaterialFileList.label.anotherFile =  Do you want to upload another supporting document?
 supportingMaterialFileList.indications = To get accurate commodity code advice you can provide us with:
@@ -258,8 +259,7 @@ supportingMaterialFileList.indications.bullet2 = technical specifications
 supportingMaterialFileList.indications.bullet3 = lists of materials
 supportingMaterialFileList.indications.bullet4 = images of the goods
 supportingMaterialFileList.indications.bullet5 = images of packaging
-supportingMaterialFileList.error.required = Select yes if you want to upload a supporting document
-supportingMaterialFileList.continue = Save and continue
+supportingMaterialFileList.error.required = Select yes if you have files to upload
 supportingMaterialFile.remove.file.text = Remove
 supportingMaterialFile.remove.file.hidden.text = Remove file {0}
 

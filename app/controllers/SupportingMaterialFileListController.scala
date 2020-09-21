@@ -47,11 +47,20 @@ class SupportingMaterialFileListController @Inject()(
   private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    Ok(supportingMaterialFileList(appConfig, form, existingFiles, mode))
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+    Ok(supportingMaterialFileList(appConfig, form, goodsName, existingFiles, mode))
   }
 
   private def existingFiles(implicit request: DataRequest[AnyContent]): Seq[FileAttachment] = {
     request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
+  }
+
+  def onClear(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val clearAnswers: UserAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
+
+    dataCacheConnector
+      .save(clearAnswers.cacheMap)
+      .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
   }
 
   def onRemove(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -78,9 +87,11 @@ class SupportingMaterialFileListController @Inject()(
       }
     }
 
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, existingFiles, mode))),
+        successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, goodsName, existingFiles, mode))),
       {
         case true => successful(Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
         case false => defaultCachePageAndRedirect

@@ -58,6 +58,7 @@ GET         /change-upload-documents                                   controlle
 POST        /change-upload-documents                                   controllers.SupportingMaterialFileListController.onSubmit(mode: Mode = CheckMode)
 GET         /remove-uploaded-supporting-documents                      controllers.SupportingMaterialFileListController.onRemove(id : String, mode: Mode = NormalMode)
 GET         /change-remove-uploaded-supporting-documents               controllers.SupportingMaterialFileListController.onRemove(id : String, mode: Mode = CheckMode)
+GET         /clear-uploaded-documents                                  controllers.SupportingMaterialFileListController.onClear(mode: Mode = CheckMode)
 GET         /provide-supporting-documents                              controllers.UploadSupportingMaterialMultipleController.onPageLoad(mode: Mode = NormalMode)
 POST        /provide-supporting-documents                              controllers.UploadSupportingMaterialMultipleController.onSubmit(mode: Mode = NormalMode)
 GET         /change-provide-supporting-documents                       controllers.UploadSupportingMaterialMultipleController.onPageLoad(mode: Mode = CheckMode)

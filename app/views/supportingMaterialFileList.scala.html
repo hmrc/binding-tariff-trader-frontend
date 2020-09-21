@@ -36,15 +36,13 @@
 
         @if(files.nonEmpty) {
             @if(files.size == 1) {
-                <h1 class="heading-xlarge">
-                    <span class="heading-secondary">@messages("supportingMaterialFileList.caption")</span>
-                    @messages("supportingMaterialFileList.uploadFileCounter.singular", goodsName)
-                </h1>
+                @components.heading(
+                    messages("supportingMaterialFileList.uploadFileCounter.singular", goodsName),
+                    captionMsg = Some(messages("supportingMaterialFileList.caption")))
             } else {
-                <h1 class="heading-xlarge">
-                    <span class="heading-secondary">@messages("supportingMaterialFileList.caption")</span>
-                    @messages("supportingMaterialFileList.uploadFileCounter.plural", files.size, goodsName)
-                </h1>
+                @components.heading(
+                    messages("supportingMaterialFileList.uploadFileCounter.plural", files.size, goodsName),
+                    captionMsg = Some(messages("supportingMaterialFileList.caption")))
             }
 
             @components.show_file_table(files, mode)
@@ -56,10 +54,9 @@
                 labelHtml = Some(addAnotherFile)
             )
         } else {
-            <h1 class="heading-xlarge">
-                <span class="heading-secondary">@messages("supportingMaterialFileList.caption")</span>
-                @messages("supportingMaterialFileList.heading")
-            </h1>
+            @components.heading(
+                messages("supportingMaterialFileList.heading", goodsName),
+                captionMsg = Some(messages("supportingMaterialFileList.caption")))
 
             @indicationsContent
 
@@ -70,10 +67,7 @@
             )
         }
 
-        <div class="section">
-            <button id="submit" class="button">@messages("supportingMaterialFileList.continue")</button>
-        </div>
-
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }
 
