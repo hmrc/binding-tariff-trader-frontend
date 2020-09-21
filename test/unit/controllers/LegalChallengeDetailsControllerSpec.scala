@@ -48,7 +48,7 @@ class LegalChallengeDetailsControllerSpec extends ControllerSpecBase {
       cc
     )
 
-  def viewAsString(form: Form[_] = form): String = legalChallengeDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form): String = legalChallengeDetails(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages).toString
 
   val testAnswer = "answer"
 

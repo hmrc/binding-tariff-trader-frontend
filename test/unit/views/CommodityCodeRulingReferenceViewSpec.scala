@@ -44,7 +44,7 @@ class CommodityCodeRulingReferenceViewSpec extends StringViewBehaviours {
       createViewUsingForm,
       messageKeyPrefix,
       routes.CommodityCodeRulingReferenceController.onSubmit(NormalMode).url,
-      Some(s"$messageKeyPrefix.hint")
+      expectedHintKey = Some(s"$messageKeyPrefix.hint")
     )
   }
 }

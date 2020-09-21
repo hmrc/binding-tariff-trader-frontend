@@ -98,6 +98,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
   protected def textareaPage(createView: Form[String] => HtmlFormat.Appendable,
                              messageKeyPrefix: String,
                              expectedFormAction: String,
+                             expectedFormElement: String = "value",
                              expectedHintKey: Option[String] = None): Unit = {
 
     "behave like a page with a string value field" when {
@@ -108,7 +109,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
           val doc = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
 
-          assertContainsLabel(doc, "value",  expectedLabel(messageKeyPrefix), expectedHintText)
+          assertContainsLabel(doc, expectedFormElement,  expectedLabel(messageKeyPrefix), expectedHintText)
         }
 
         "contain an input for the value" in {
