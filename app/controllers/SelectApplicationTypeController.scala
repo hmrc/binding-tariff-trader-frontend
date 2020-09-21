@@ -27,7 +27,7 @@ import pages._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.selectApplicationType
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -42,7 +42,7 @@ class SelectApplicationTypeController @Inject()(
                                                  requireData: DataRequiredAction,
                                                  formProvider: SelectApplicationTypeFormProvider,
                                                  cc: MessagesControllerComponents
-                                               ) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
+                                               ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

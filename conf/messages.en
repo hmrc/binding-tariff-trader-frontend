@@ -120,7 +120,7 @@ whichBestDescribesYou.error.required = Select if this application is for the bus
 
 selectApplicationType.title = Do you have a previous BTI ruling reference for the goods? - Manage your Advance Tariff Rulings - GOV.UK
 selectApplicationType.heading = Do you have a previous BTI ruling reference for the {0}?
-selectApplicationType.checkYourAnswersLabel = Do you have a previous BTI ruling reference for the goods?
+selectApplicationType.checkYourAnswersLabel = Renewing a BTI?
 selectApplicationType.error.required = Select yes if you are renewing a previous BTI ruling
 
 registerBusinessRepresenting.title =  What are the registered details of the business, organisation or individual you’re representing? - Manage your Advance Tariff Rulings - GOV.UK
