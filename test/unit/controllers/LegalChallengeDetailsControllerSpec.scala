@@ -55,20 +55,20 @@ class LegalChallengeDetailsControllerSpec extends ControllerSpecBase {
   "LegalChallengeDetails Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val validData = Map(ProvideGoodsNamePage.toString -> JsString("goodsName"))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      val data = Map(ProvideGoodsNamePage.toString -> JsString("goodsName"))
+      val fakeRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
 
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+      val result = controller(fakeRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(LegalChallengeDetailsPage.toString -> JsString(testAnswer), ProvideGoodsNamePage.toString -> JsString("goodsName"))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      val data = Map(LegalChallengeDetailsPage.toString -> JsString(testAnswer), ProvideGoodsNamePage.toString -> JsString("goodsName"))
+      val fakeRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
 
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+      val result = controller(fakeRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
 
       contentAsString(result) shouldBe viewAsString(form.fill(testAnswer))
     }
@@ -83,13 +83,13 @@ class LegalChallengeDetailsControllerSpec extends ControllerSpecBase {
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val validData = Map(ProvideGoodsNamePage.toString -> JsString("goodsName"))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      val data = Map(ProvideGoodsNamePage.toString -> JsString("goodsName"))
+      val fakeRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
 
       val postRequest = fakeRequest.withFormUrlEncodedBody(("legalChallengeDetails", ""))
       val boundForm = form.bind(Map("legalChallengeDetails" -> ""))
 
-      val result = controller(getRelevantData).onSubmit(NormalMode)(postRequest)
+      val result = controller(fakeRetrievalAction).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) shouldBe viewAsString(boundForm)
