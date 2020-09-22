@@ -20,6 +20,7 @@ import controllers.routes
 import forms.LegalChallengeDetailsFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.twirl.api.Html
 import views.behaviours.StringViewBehaviours
 import views.html.legalChallengeDetails
 
@@ -42,7 +43,7 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
       createView = createViewUsingForm,
       messageKeyPrefix = messageKeyPrefix,
       expectedFormAction = routes.LegalChallengeDetailsController.onSubmit(NormalMode).url,
-      expectedFormElement = "legalChallengeDetails",
+      expectedFormElementId = "legalChallengeDetails",
       messageArgs = Seq("goodsName")
     )
   }

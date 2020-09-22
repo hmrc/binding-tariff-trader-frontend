@@ -98,7 +98,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
   protected def textareaPage(createView: Form[String] => HtmlFormat.Appendable,
                              messageKeyPrefix: String,
                              expectedFormAction: String,
-                             expectedFormElement: String = "value",
+                             expectedFormElementId: String = "value",
                              messageArgs: Seq[String] = Nil,
                              expectedHintKey: Option[String] = None): Unit = {
 
@@ -111,19 +111,19 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
           val expectedHintText = expectedHintKey map (k => messages(k))
           val expectedLabel = getExpectedLabel(messageKeyPrefix, messageArgs:_*)
 
-          assertContainsLabel(doc, expectedFormElement,  expectedLabel, expectedHintText)
+          assertContainsLabel(doc, expectedFormElementId,  expectedLabel, expectedHintText)
         }
 
         "contain an input for the value" in {
           val doc = asDocument(createView(form))
-          assertRenderedById(doc, messageKeyPrefix)
+          assertRenderedById(doc, expectedFormElementId)
         }
       }
 
       "rendered with a valid form" must {
         "include the form's value in the value input" in {
           val doc = asDocument(createView(form.fill(answer)))
-          doc.getElementById(messageKeyPrefix).text() shouldBe answer
+          doc.getElementById(expectedFormElementId).text() shouldBe answer
         }
       }
 
@@ -136,7 +136,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         }
 
         "show an error in the value field's label" in {
-          val doc = asDocument(createView(form.withError(error(expectedFormElement))))
+          val doc = asDocument(createView(form.withError(error(expectedFormElementId))))
           val errorSpan = doc.getElementsByClass("error-message").first
           errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
         }
