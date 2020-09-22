@@ -27,14 +27,16 @@ class WhenToSendSampleViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "whenToSendSample"
 
+  val goodsName = "some-goods-name"
+
   val form = new WhenToSendSampleFormProvider()()
 
-  def createView = () => whenToSendSample(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => whenToSendSample(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => whenToSendSample(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => whenToSendSample(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "WhenToSendSample view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
+    behave like normalPage(createView, messageKeyPrefix, goodsName)()
 
     behave like pageWithBackLink(createView)
 
@@ -42,4 +44,6 @@ class WhenToSendSampleViewSpec extends YesNoViewBehaviours {
 
   }
 
+  override protected def expectedLegend(messageKeyPrefix: String): String =
+    messages(s"$messageKeyPrefix.heading", goodsName)
 }
