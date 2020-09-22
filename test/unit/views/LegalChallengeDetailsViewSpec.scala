@@ -38,6 +38,12 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like textareaPage(createViewUsingForm, messageKeyPrefix, routes.LegalChallengeDetailsController.onSubmit(NormalMode).url, expectedFormElement = "legalChallengeDetails")
+    behave like textareaPage(
+      createView = createViewUsingForm,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.LegalChallengeDetailsController.onSubmit(NormalMode).url,
+      expectedFormElement = "legalChallengeDetails",
+      messageArgs = Seq("goodsName")
+    )
   }
 }
