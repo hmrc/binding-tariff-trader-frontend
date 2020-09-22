@@ -229,4 +229,17 @@ class IndexControllerSpec extends ControllerSpecBase {
 
   }
 
+  "Index Controller - Get Applications and Rulings" should {
+
+      "return the correct view for a load applications and rulings" in {
+
+        given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+          .willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
+
+        val result = controller().getApplicationsAndRulings(page = 1)(fakeRequest)
+
+        status(result) shouldBe OK
+        contentAsString(result) should include("applications-list-table")
+      }
+  }
 }

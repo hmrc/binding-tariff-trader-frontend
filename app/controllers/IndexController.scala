@@ -72,7 +72,7 @@ class IndexController @Inject()(
     }
   }
 
-  def getApplicationsAndRullings(page: Int): Action[AnyContent] = identify.async { implicit request =>
+  def getApplicationsAndRulings(page: Int): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
         service.getCases(eori, applicationStatuses, SearchPagination(page), Sort()) flatMap { pagedResult =>

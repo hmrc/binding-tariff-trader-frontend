@@ -17,6 +17,8 @@
 @import utils.Dates
 
 @import config.FrontendAppConfig
+@import java.time.Instant
+@import java.time.temporal.ChronoUnit
 
 
 @(appConfig: FrontendAppConfig,  cases: Paged[Case])(implicit request: Request[_], messages: Messages)
@@ -62,28 +64,45 @@ bodyClasses = None) {
                                 index
                             }-status">
     @c.status match {
-    case CaseStatus.NEW | CaseStatus.OPEN => {
-    @messages("case.application.status.inProgress")
-    }
     case CaseStatus.NEW => {
     @messages("case.application.status.submitted")
     }
     case CaseStatus.OPEN => {
     @messages("case.application.status.inProgress")
     }
-
+    case CaseStatus.REFERRED => {
+    @messages("case.application.status.infoRequested")
+    }
+    case CaseStatus.SUPPRESSED | CaseStatus.REJECTED => {
+    @messages("case.application.status.rejected")
+    }
+    case CaseStatus.COMPLETED if c.hasActiveDecision => {
+    @if(c.daysDifference.get > 120){
+    @messages("case.application.status.approvedRuling")
+    } else {
+    @messages("case.application.status.approvedRulingExpiring", c.daysDifference.get)
+    }
+    }
+    case CaseStatus.COMPLETED if c.hasExpiredDecision => {
+    @messages("case.ruling.status.expired")
+    }
+    case CaseStatus.CANCELLED => {
+    @messages("case.application.status.cancelled")
+    }
     case _ => {}
     }
    </td>
-   <td id="application-list-row-@{
-                                index
-                            }-download">
-    <a id="application-list-row-@{
-                                    index
-                                }-view-application-link" href="@routes.ApplicationController.viewApplication(c.reference)">
+   <td id="application-list-row-@{index}-download">
+
+    <a id="application-list-row-@{index}-view-application-link" href="@routes.ApplicationController.viewApplication(c.reference)">
      <span aria-hidden="true">@messages("case.application.viewApplication")</span>
      <span class="visually-hidden">@messages("case.application.viewApplication.hidden", c.reference)</span>
     </a>
+
+    @if(Set(CaseStatus.COMPLETED).contains(c.status)) {
+    <a id="rulings-list-row-@{index}-view-link" href="@routes.RulingController.viewRuling(c.reference)">@messages("case.ruling.viewRuling")</a>
+    }
+
    </td>
   </tr>
   }

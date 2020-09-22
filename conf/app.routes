@@ -11,6 +11,7 @@ GET         /countries-json                                            controlle
 GET         /                                                          controllers.Default.redirect(to = controllers.routes.IndexController.getApplications().url)
 GET         /applications                                              controllers.IndexController.getApplications(page: Int ?= 1)
 GET         /rulings                                                   controllers.IndexController.getRulings(page: Int ?= 1)
+GET         /applications-and-rulings                                  controllers.IndexController.getApplicationsAndRulings(page: Int ?= 1)
 
 GET         /sign-out                                                  controllers.SignOutController.startFeedbackSurvey
 GET         /force-sign-out                                            controllers.SignOutController.forceSignOut
@@ -119,6 +120,3 @@ GET         /applications/:reference/ruling/pdf                        controlle
 GET         /rulings/:reference                                        controllers.RulingController.viewRuling(reference: String)
 
 GET        /accessibility                                              controllers.AccessibilityController.onPageLoad
-
-GET        /account_dashboard_statuses                                 controllers.AccountDashboardStatusesController.onPageLoad
-
