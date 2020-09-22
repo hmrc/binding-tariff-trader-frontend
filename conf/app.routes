@@ -119,3 +119,6 @@ GET         /applications/:reference/ruling/pdf                        controlle
 GET         /rulings/:reference                                        controllers.RulingController.viewRuling(reference: String)
 
 GET        /accessibility                                              controllers.AccessibilityController.onPageLoad
+
+GET        /account_dashboard_statuses                                 controllers.AccountDashboardStatusesController.onPageLoad
+

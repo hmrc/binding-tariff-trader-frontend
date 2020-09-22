@@ -43,3 +43,29 @@ p.font-xsmall{
 .pre-wrap {
   white-space: pre-wrap;
 }
+.govuk-tag--yellow {
+    color: #594d00;
+    background: #fff7bf;
+    display: inline-block;
+        outline: 2px solid transparent;
+        outline-offset: -2px;
+        letter-spacing: 1px;
+        text-decoration: none;
+        text-transform: uppercase;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-weight: 700;
+        font-size: 14px;
+        padding-top: 5px;
+        padding-right: 8px;
+        padding-bottom: 4px;
+        padding-left: 8px;
+}
+.data-filter {
+    width: 80% !important;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    line-height: 22px;
+    padding: 5px;
+    margin-top: 16px;
+}

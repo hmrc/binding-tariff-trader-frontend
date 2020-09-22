@@ -26,7 +26,7 @@ import service.CasesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.CaseDetailTab
 import views.html.components.{table_applications, table_rulings}
-import views.html.index
+import views.html.{account_dashboard_statuses, index}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.successful
@@ -70,6 +70,18 @@ class IndexController @Inject()(
 
       case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
     }
+  }
+
+  def getApplicationsAndRullings(page: Int): Action[AnyContent] = identify.async { implicit request =>
+    request.eoriNumber match {
+      case Some(eori: String) =>
+        service.getCases(eori, applicationStatuses, SearchPagination(page), Sort()) flatMap { pagedResult =>
+          successful(Ok(account_dashboard_statuses(appConfig, pagedResult)))
+        }
+
+      case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
+    }
+
   }
 
 

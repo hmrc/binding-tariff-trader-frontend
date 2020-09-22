@@ -66,6 +66,8 @@ class FrontendAppConfig @Inject()(
   lazy val digitalcentre = loadConfig("accessibility-urls.digitalcentre")
   //accessibility Urls end
 
+  lazy val accountDashboardUrl = loadConfig("account_dashboard_statuses-urls.account_dashboard_statuses")
+
   lazy val fileUploadMaxSize: Int = loadConfig("fileupload.maxSize").toInt
   lazy val fileUploadMimeTypes: Set[String] = loadConfig("fileupload.mimeTypes").split(",").map(_.trim).toSet
 
