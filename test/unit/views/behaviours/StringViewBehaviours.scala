@@ -23,17 +23,17 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
 
   val answer = "answer"
 
-  private def getMessage(key: String): Option[String] = {
-    messages(key) match {
+  private def getMessage(key: String, args: String*): Option[String] = {
+    messages(key, args:_*) match {
       case m if m == key => None
       case s => Some(s)
     }
   }
 
-  private def expectedLabel(messageKeyPrefix: String): String = {
+  private def getExpectedLabel(messageKeyPrefix: String, args: String*): String = {
     getMessage(s"$messageKeyPrefix.label") match {
       case Some(l) => l
-      case _ => getMessage(s"$messageKeyPrefix.heading") match {
+      case _ => getMessage(s"$messageKeyPrefix.heading", args:_*) match {
         case Some(h) => h
         case _ => ""
       }
@@ -54,7 +54,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
           val doc = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
 
-          assertContainsLabel(doc, forElement,  expectedLabel(messageKeyPrefix), expectedHintText)
+          assertContainsLabel(doc, forElement,  getExpectedLabel(messageKeyPrefix), expectedHintText)
         }
 
         "contain an input for the value" in {
@@ -98,6 +98,8 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
   protected def textareaPage(createView: Form[String] => HtmlFormat.Appendable,
                              messageKeyPrefix: String,
                              expectedFormAction: String,
+                             expectedFormElementId: String = "value",
+                             messageArgs: Seq[String] = Nil,
                              expectedHintKey: Option[String] = None): Unit = {
 
     "behave like a page with a string value field" when {
@@ -107,32 +109,34 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         "contain a label for the value" in {
           val doc = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
+          val expectedLabel = getExpectedLabel(messageKeyPrefix, messageArgs:_*)
 
-          assertContainsLabel(doc, "value",  expectedLabel(messageKeyPrefix), expectedHintText)
+          assertContainsLabel(doc, expectedFormElementId,  expectedLabel, expectedHintText)
         }
 
         "contain an input for the value" in {
           val doc = asDocument(createView(form))
-          assertRenderedById(doc, "value")
+          assertRenderedById(doc, expectedFormElementId)
         }
       }
 
       "rendered with a valid form" must {
         "include the form's value in the value input" in {
           val doc = asDocument(createView(form.fill(answer)))
-          doc.getElementById("value").text() shouldBe answer
+          doc.getElementById(expectedFormElementId).text() shouldBe answer
         }
       }
 
       "rendered with an error" must {
 
         "show an error summary" in {
-          val doc = asDocument(createView(form.withError(error)))
+          val view = createView(form.withError(error))
+          val doc = asDocument(view)
           assertRenderedById(doc, "error-summary-heading")
         }
 
         "show an error in the value field's label" in {
-          val doc = asDocument(createView(form.withError(error)))
+          val doc = asDocument(createView(form.withError(error(expectedFormElementId))))
           val errorSpan = doc.getElementsByClass("error-message").first
           errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
         }
