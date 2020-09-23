@@ -28,7 +28,7 @@ class CommodityCodeDigitsViewSpec extends StringViewBehaviours {
 
   val form = new CommodityCodeDigitsFormProvider()()
 
-  val goodsName = "goods"
+  val goodsName = "some goods"
 
   def createView = () => commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 

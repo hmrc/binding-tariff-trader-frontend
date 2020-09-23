@@ -35,7 +35,7 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase {
 
   val formProvider = new CommodityCodeDigitsFormProvider()
   val form: Form[String] = formProvider()
-  val goodsName = "goods"
+  val goodsName = "some goods"
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CommodityCodeDigitsController(
