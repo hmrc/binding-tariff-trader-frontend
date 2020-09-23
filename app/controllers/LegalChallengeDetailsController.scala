@@ -23,7 +23,7 @@ import forms.LegalChallengeDetailsFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{LegalChallengeDetailsPage, SupportingInformationPage}
+import pages.{LegalChallengeDetailsPage, ProvideGoodsNamePage, SupportingInformationPage}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -47,20 +47,21 @@ class LegalChallengeDetailsController @Inject()(
   private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     val preparedForm = request.userAnswers.get(LegalChallengeDetailsPage) match {
       case Some(value) => form.fill(value)
       case _ => form
     }
 
-    Ok(legalChallengeDetails(appConfig, preparedForm, mode))
+    Ok(legalChallengeDetails(appConfig, preparedForm, mode, goodsName))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(legalChallengeDetails(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(legalChallengeDetails(appConfig, formWithErrors, mode, goodsName))),
       value => {
         val updatedAnswers = request.userAnswers.set(LegalChallengeDetailsPage, value)
 

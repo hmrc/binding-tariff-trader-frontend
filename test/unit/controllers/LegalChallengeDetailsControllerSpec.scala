@@ -25,7 +25,7 @@ import controllers.actions._
 import play.api.test.Helpers._
 import forms.LegalChallengeDetailsFormProvider
 import models.NormalMode
-import pages.LegalChallengeDetailsPage
+import pages.{LegalChallengeDetailsPage, ProvideGoodsNamePage}
 import play.api.mvc.Call
 import views.html.legalChallengeDetails
 
@@ -48,30 +48,33 @@ class LegalChallengeDetailsControllerSpec extends ControllerSpecBase {
       cc
     )
 
-  def viewAsString(form: Form[_] = form): String = legalChallengeDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form): String = legalChallengeDetails(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages).toString
 
   val testAnswer = "answer"
 
   "LegalChallengeDetails Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
+      val data = Map(ProvideGoodsNamePage.toString -> JsString("goodsName"))
+      val fakeRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
+
+      val result = controller(fakeRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(LegalChallengeDetailsPage.toString -> JsString(testAnswer))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      val data = Map(LegalChallengeDetailsPage.toString -> JsString(testAnswer), ProvideGoodsNamePage.toString -> JsString("goodsName"))
+      val fakeRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
 
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+      val result = controller(fakeRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
 
       contentAsString(result) shouldBe viewAsString(form.fill(testAnswer))
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("legalChallengeDetails", testAnswer))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -80,10 +83,13 @@ class LegalChallengeDetailsControllerSpec extends ControllerSpecBase {
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", ""))
-      val boundForm = form.bind(Map("value" -> ""))
+      val data = Map(ProvideGoodsNamePage.toString -> JsString("goodsName"))
+      val fakeRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("legalChallengeDetails", ""))
+      val boundForm = form.bind(Map("legalChallengeDetails" -> ""))
+
+      val result = controller(fakeRetrievalAction).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) shouldBe viewAsString(boundForm)
@@ -97,7 +103,7 @@ class LegalChallengeDetailsControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("legalChallengeDetails", testAnswer))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe SEE_OTHER
