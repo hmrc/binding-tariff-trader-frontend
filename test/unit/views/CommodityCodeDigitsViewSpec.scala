@@ -35,7 +35,7 @@ class CommodityCodeDigitsViewSpec extends StringViewBehaviours {
   def createViewUsingForm = (form: Form[String]) => commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "CommodityCodeDigits view" must {
-    behave like normalPage(createView, messageKeyPrefix, "goods")()
+    behave like normalPage(createView, messageKeyPrefix, "some goods")()
 
     behave like pageWithBackLink(createView)
 
