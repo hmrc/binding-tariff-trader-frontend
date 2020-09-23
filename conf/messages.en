@@ -287,7 +287,7 @@ commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code?
 commodityCodeBestMatch.error.required = Select yes if you have found a commodity code
 
 commodityCodeDigits.title = What is the commodity code you found for your item? - Manage your Advance Tariff Rulings - GOV.UK
-commodityCodeDigits.heading = Provide a commodity code for the {0}?
+commodityCodeDigits.heading = Provide a commodity code for the {0}
 commodityCodeDigits.bodyText = Entering a commodity code, even just the first 2 numbers, may speed up the processing of your application.
 commodityCodeDigits.caption = About the goods
 commodityCodeDigits.checkYourAnswersLabel = Commodity code

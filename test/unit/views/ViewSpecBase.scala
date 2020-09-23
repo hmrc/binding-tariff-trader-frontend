@@ -42,10 +42,7 @@ trait ViewSpecBase extends SpecBase {
     val headers = doc.getElementsByTag("h1")
     headers.size() match {
       case 0 => ()
-      case 1 =>
-        val actual = headers.first.ownText.replaceAll("\u00a0", " ")
-        val expected = messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
-        actual shouldBe expected
+      case 1 => headers.first.ownText.replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
       case _ => throw new RuntimeException(s"Pages should only have (at most) one h1 element. Found ${headers.size}")
     }
   }
