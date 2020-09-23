@@ -26,9 +26,9 @@ class LegalChallengeDetailsFormProviderSpec extends StringFieldBehaviours {
 
   val form = new LegalChallengeDetailsFormProvider()()
 
-  ".value" must {
+  ".legalChallengeDetails" must {
 
-    val fieldName = "value"
+    val fieldName = "legalChallengeDetails"
 
     behave like fieldThatBindsValidData(
       form,

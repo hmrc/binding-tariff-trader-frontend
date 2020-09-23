@@ -26,9 +26,10 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import pages.SupportingMaterialFileListPage
+import pages.{ProvideGoodsNamePage, SupportingMaterialFileListPage}
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
+import play.api.libs.json.JsString
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
 import play.api.test.Helpers._
@@ -45,6 +46,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
   private val cacheConnector = mock[DataCacheConnector]
   private val formProvider = new UploadSupportingMaterialMultipleFormProvider()
   private val form = formProvider()
+  private val goodsName = "goose"
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new UploadSupportingMaterialMultipleController(
@@ -66,13 +68,17 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
   private def viewAsString(form: Form[_] = form): String = uploadSupportingMaterialMultiple(
     frontendAppConfig,
     form,
+    goodsName,
     NormalMode
   )(fakeRequest, messages).toString
 
   "UploadSupportingMaterialMultiple Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
