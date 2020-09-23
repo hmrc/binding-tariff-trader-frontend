@@ -336,15 +336,15 @@ legalChallenge.checkYourAnswersLabel = Do you know of any problems with the clas
 legalChallenge.error.required = Select yes if you know if there have been any problems classifying the item
 legalChallenge.paragraph = This includes court rulings and when a commodity code is being reviewed. This helps us to match the goods with other rulings.
 
-legalChallengeDetails.title = Provide details of the legal problems classifying the item - Manage your Advance Tariff Rulings - GOV.UK
+legalChallengeDetails.title = Provide details of the legal problems classifying the goods - Manage your Advance Tariff Rulings - GOV.UK
 legalChallengeDetails.heading = Provide details of the legal problems classifying the {0}
 legalChallengeDetails.caption = About the goods
-legalChallengeDetails.checkYourAnswersLabel = Problems with the classification of the item
+legalChallengeDetails.checkYourAnswersLabel = Problems with the classification of the goods
 legalChallengeDetails.first.paragraph = Providing this legal or administrative information can help to identify goods with similar rulings.
 legalChallengeDetails.second.paragraph = This may include details of:
 legalChallengeDetails.item1 = court rulings
 legalChallengeDetails.item2 = commodity codes under review
-legalChallengeDetails.error.required = Enter any problems with the classification of your item
+legalChallengeDetails.error.required = Enter any problems with the classification of your goods
 
 supportingInformation.title = Do you need to enter any other information to support this application? - Manage your Advance Tariff Rulings - GOV.UK
 supportingInformation.heading = Do you need to enter any other information to support this application?
