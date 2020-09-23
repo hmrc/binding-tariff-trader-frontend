@@ -35,6 +35,7 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase {
 
   val formProvider = new CommodityCodeDigitsFormProvider()
   val form: Form[String] = formProvider()
+  val goodsName = "goods"
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CommodityCodeDigitsController(
@@ -48,7 +49,7 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase {
       cc
     )
 
-  def viewAsString(form: Form[_] = form): String = commodityCodeDigits(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form): String = commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages).toString
 
   val testAnswer = "answer"
 

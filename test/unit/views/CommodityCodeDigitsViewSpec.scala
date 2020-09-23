@@ -28,12 +28,14 @@ class CommodityCodeDigitsViewSpec extends StringViewBehaviours {
 
   val form = new CommodityCodeDigitsFormProvider()()
 
-  def createView = () => commodityCodeDigits(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val goodsName = "goods"
 
-  def createViewUsingForm = (form: Form[String]) => commodityCodeDigits(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+
+  def createViewUsingForm = (form: Form[String]) => commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "CommodityCodeDigits view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
+    behave like normalPage(createView, messageKeyPrefix, "goods")()
 
     behave like pageWithBackLink(createView)
 
