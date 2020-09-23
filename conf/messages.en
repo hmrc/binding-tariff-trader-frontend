@@ -478,6 +478,8 @@ case.application.status.submitted = Submitted
 case.application.status.approvedRuling = Approved ruling
 case.application.status.approvedRulingExpiring = Ruling expires in {0} days
 case.application.status.cancelled = Cancelled ruling
+case.application.ruling.viewRuling = View ruling
+case.application.ruling.renewRuling = Renew ruling
 
 
 case.application.viewApplication = View application

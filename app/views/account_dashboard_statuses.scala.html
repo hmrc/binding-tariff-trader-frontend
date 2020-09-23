@@ -19,9 +19,21 @@
 @import config.FrontendAppConfig
 @import java.time.Instant
 @import java.time.temporal.ChronoUnit
+@import components.pagination
 
 
 @(appConfig: FrontendAppConfig,  cases: Paged[Case])(implicit request: Request[_], messages: Messages)
+
+@paginate(containerClass: String, idPrefix: String) = {
+@pagination(
+id = s"$idPrefix-applications-pagination",
+singularName = messages("case.applications.pagination.singular"),
+pluralName = messages("case.applications.pagination.plural"),
+pager = cases,
+containerClass = Some(containerClass),
+onChange = page => controllers.routes.IndexController.getApplicationsAndRulings(page)
+)
+}
 
 @main_template(
 title = messages("index.title"),
@@ -35,7 +47,7 @@ bodyClasses = None) {
 @components.button_link(messages("site.start"), routes.BeforeYouStartController.onPageLoad.url, id = Some("start-application"))
 
 <div>
-
+ @paginate("mb-2", "top")
  <table >
   <thead>
   <tr>
@@ -65,29 +77,29 @@ bodyClasses = None) {
                             }-status">
     @c.status match {
     case CaseStatus.NEW => {
-    @messages("case.application.status.submitted")
+    <span class="govuk-tag govuk-tag--blue">@messages("case.application.status.submitted")</span>
     }
-    case CaseStatus.OPEN => {
-    @messages("case.application.status.inProgress")
+    case CaseStatus.OPEN | CaseStatus.SUSPENDED => {
+    <span class="govuk-tag govuk-tag--blue">@messages("case.application.status.inProgress")</span>
     }
     case CaseStatus.REFERRED => {
-    @messages("case.application.status.infoRequested")
+    <span class="govuk-tag govuk-tag--yellow">@messages("case.application.status.infoRequested")</span>
     }
     case CaseStatus.SUPPRESSED | CaseStatus.REJECTED => {
-    @messages("case.application.status.rejected")
+    <span class="govuk-tag govuk-tag--red"> @messages("case.application.status.rejected")</span>
     }
     case CaseStatus.COMPLETED if c.hasActiveDecision => {
     @if(c.daysDifference.get > 120){
-    @messages("case.application.status.approvedRuling")
+    <span class="govuk-tag govuk-tag--green"> @messages("case.application.status.approvedRuling")</span>
     } else {
-    @messages("case.application.status.approvedRulingExpiring", c.daysDifference.get)
+    <span class="govuk-tag govuk-tag--red">@messages("case.application.status.approvedRulingExpiring", c.daysDifference.get)</span>
     }
     }
     case CaseStatus.COMPLETED if c.hasExpiredDecision => {
-    @messages("case.ruling.status.expired")
+    <span class="govuk-tag govuk-tag--grey">@messages("case.ruling.status.expired")</span>
     }
     case CaseStatus.CANCELLED => {
-    @messages("case.application.status.cancelled")
+    <span class="govuk-tag govuk-tag--grey">@messages("case.application.status.cancelled")</span>
     }
     case _ => {}
     }
@@ -98,17 +110,23 @@ bodyClasses = None) {
      <span aria-hidden="true">@messages("case.application.viewApplication")</span>
      <span class="visually-hidden">@messages("case.application.viewApplication.hidden", c.reference)</span>
     </a>
-
+    <p>
     @if(Set(CaseStatus.COMPLETED).contains(c.status)) {
-    <a id="rulings-list-row-@{index}-view-link" href="@routes.RulingController.viewRuling(c.reference)">@messages("case.ruling.viewRuling")</a>
+    <a id="rulings-list-row-@{index}-view-link" href="@routes.RulingController.viewRuling(c.reference)">@messages("case.application.ruling.viewRuling")</a>
     }
+    </p>
+    <p>
+     @if((c.hasActiveDecision && c.daysDifference.get <= 120) | (Set(CaseStatus.COMPLETED).contains(c.status) && c.hasExpiredDecision)) {
+     <a id="rulings-list-row-@{index}-view-link" href="#">@messages("case.application.ruling.renewRuling")</a>
+     }
+    </p>
 
    </td>
   </tr>
   }
   </tbody>
  </table>
-
+ @paginate("mt-2", "bottom")
 </div>
 
 }
