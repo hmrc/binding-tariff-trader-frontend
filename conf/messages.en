@@ -324,7 +324,7 @@ similarItemCommodityCode.yesAwareSimilarCode = Yes
 similarItemCommodityCode.noNotAware = No
 similarItemCommodityCode.checkYourAnswersLabel = Do you know of a similar item that already has a ruling?
 similarItemCommodityCode.error.required = Select yes if you know of a similar item that has an Advance Tariff Ruling
-similarItemCommodityCode.bodyText = It can help us to classify your goods and match with other rulings if:
+similarItemCommodityCode.bodyText = It can help to provide a ruling if there is already a ruling for goods that are similar, even if the ruling was made in another country.
 similarItemCommodityCode.listItem1 = your business or organisation operates in other countries and you have a ruling for that country
 similarItemCommodityCode.listItem2 = you know of a similar item with a ruling
 
