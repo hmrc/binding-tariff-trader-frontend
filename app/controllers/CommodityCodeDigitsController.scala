@@ -23,7 +23,7 @@ import forms.CommodityCodeDigitsFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{CommodityCodeDigitsPage, WhenToSendSamplePage}
+import pages.{CommodityCodeDigitsPage, ProvideGoodsNamePage, WhenToSendSamplePage}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,19 +48,21 @@ class CommodityCodeDigitsController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     val preparedForm = request.userAnswers.get(CommodityCodeDigitsPage) match {
       case Some(value) => form.fill(value)
       case _ => form
     }
 
-    Ok(commodityCodeDigits(appConfig, preparedForm, mode))
+    Ok(commodityCodeDigits(appConfig, preparedForm, mode, goodsName))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(commodityCodeDigits(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(commodityCodeDigits(appConfig, formWithErrors, mode, goodsName))),
       value => {
         val updatedAnswers = request.userAnswers.set(CommodityCodeDigitsPage, value)
 

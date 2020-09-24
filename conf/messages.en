@@ -286,10 +286,12 @@ commodityCodeBestMatch.noHaventFoundCommodityCode = No
 commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code?
 commodityCodeBestMatch.error.required = Select yes if you have found a commodity code
 
-commodityCodeDigits.title = What is the commodity code you found for your item? - Manage your Advance Tariff Rulings - GOV.UK
-commodityCodeDigits.heading = What is the commodity code you found for your item?
+commodityCodeDigits.title = Provide a commodity code for the goods - Manage your Advance Tariff Rulings - GOV.UK
+commodityCodeDigits.heading = Provide a commodity code for the {0}
+commodityCodeDigits.bodyText = Entering a commodity code, even just the first 2 numbers, may speed up the processing of your application.
+commodityCodeDigits.caption = About the goods
 commodityCodeDigits.checkYourAnswersLabel = Commodity code
-commodityCodeDigits.error.required = Enter a commodity code
+commodityCodeDigits.error.required = Enter at least 2 digits of a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
 
 whenToSendSample.title = Will you send a sample of the goods to HMRC? - Manage your Advance Tariff Rulings - GOV.UK
@@ -349,7 +351,7 @@ legalChallengeDetails.first.paragraph = Providing this legal or administrative i
 legalChallengeDetails.second.paragraph = This may include details of:
 legalChallengeDetails.item1 = court rulings
 legalChallengeDetails.item2 = commodity codes under review
-legalChallengeDetails.error.required = Enter any problems with the classification of your goods
+legalChallengeDetails.error.required = Enter details of the legal problems classifying the goods
 
 supportingInformation.title = Do you need to enter any other information to support this application? - Manage your Advance Tariff Rulings - GOV.UK
 supportingInformation.heading = Do you need to enter any other information to support this application?
