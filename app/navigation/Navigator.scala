@@ -34,7 +34,11 @@ class Navigator @Inject()() {
       case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
     }),
     ProvideConfidentialInformationPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
-    SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
+    SupportingMaterialFileListPage -> (answers => {
+      answers.get(SupportingMaterialFileListPage).flatMap(_.addAnotherDecision) match {
+        case Some(false) => routes.WhenToSendSampleController.onPageLoad(NormalMode)
+        case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
+      }}),
     RegisteredAddressForEoriPage -> (_ => routes.ProvideGoodsNameController.onPageLoad(NormalMode)),
     WhichBestDescribesYouPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
     SelectApplicationTypePage -> (_ => routes.SelectApplicationTypeController.onPageLoad(NormalMode)),

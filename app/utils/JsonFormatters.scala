@@ -43,7 +43,6 @@ object JsonFormatters {
 
   implicit val eventFormat: OFormat[Event] = Json.format[Event]
   implicit val newEventRequestFormat: OFormat[NewEventRequest] = Json.using[Json.WithDefaultValues].format[NewEventRequest]
-  implicit val fileListAnswersFormat: OFormat[FileListAnswers] = Json.format[FileListAnswers]
 
 }
 

@@ -38,6 +38,7 @@ import views.html.declaration
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
+import utils.JsonFormatters._
 
 class DeclarationController @Inject()(
                                        appConfig: FrontendAppConfig,
@@ -62,7 +63,7 @@ class DeclarationController @Inject()(
   val newCaseRequest = mapper.map(answers)
 
     val attachments: Seq[FileAttachment] = answers
-      .get(SupportingMaterialFileListPage)
+      .get(SupportingMaterialFileListPage).map(_.fileAttachments)
       .getOrElse(Seq.empty)
 
     for {

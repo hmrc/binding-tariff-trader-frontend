@@ -17,12 +17,20 @@
 package pages
 
 import models.FileAttachment
+import play.api.libs.json.{Json, OFormat}
 
 case object SupportingMaterialFileListPage extends QuestionPage[FileListAnswers] {
 
   override def toString: String = "supportingMaterialFileListPage"
 }
 
-case class FileListAnswers(addAnotherDecision: Boolean,fileAttachments: Seq[FileAttachment])
+case class FileListAnswers(addAnotherDecision: Option[Boolean],fileAttachments: Seq[FileAttachment])
+
+object FileListAnswers {
+  val empty = FileListAnswers(None, Nil)
+
+  implicit val fileListAnswersFormat: OFormat[FileListAnswers] = Json.format[FileListAnswers]
+
+}
 
 

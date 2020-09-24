@@ -97,7 +97,7 @@ class CheckYourAnswersHelper(
     }
 
     userAnswers.get(SupportingMaterialFileListPage) map {
-      case filenames if filenames.nonEmpty => constructRow(filenames.map(_.name))
+      case filenames if filenames.fileAttachments.nonEmpty => constructRow(filenames.fileAttachments.map(_.name))
       case _ => constructRow(Seq("No files attached"))
     }
   }

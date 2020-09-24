@@ -21,6 +21,7 @@ import controllers.routes
 import models._
 import org.mockito.Mockito._
 import pages._
+import utils.JsonFormatters._
 
 class NavigatorSpec extends SpecBase {
 
@@ -88,7 +89,30 @@ class NavigatorSpec extends SpecBase {
       }
 
       "return to SupportingMaterialFileList page when file is removed" in {
+        val mockUserAnswers = mock[UserAnswers]
 
+        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(None, Nil)))
+
+        navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
+      }
+
+      "return to SupportingMaterialFileList page when add another file is selected" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(Some(true), Nil)))
+
+        navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
+      }
+
+      "redirect to WhenToSendSample page when no further files are uploaded" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(Some(false), Nil)))
+
+        navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.WhenToSendSampleController.onPageLoad(NormalMode)
       }
     }
 

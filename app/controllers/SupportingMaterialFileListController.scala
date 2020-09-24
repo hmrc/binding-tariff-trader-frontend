@@ -53,12 +53,12 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
   }
 
   private def existingFiles(implicit request: DataRequest[AnyContent]): FileListAnswers = {
-    request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(FileListAnswers(false,Seq.empty))
+    request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(FileListAnswers.empty)
   }
 
   def onRemove(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    val removedFile = FileListAnswers(false, existingFiles.fileAttachments.filter(_.id != fileId).seq)
+    val removedFile = FileListAnswers(existingFiles.addAnotherDecision, existingFiles.fileAttachments.filter(_.id != fileId).seq)
     val answers: UserAnswers = request.userAnswers.set(SupportingMaterialFileListPage, removedFile)
     dataCacheConnector.save(answers.cacheMap)
       .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
@@ -66,28 +66,15 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def defaultCachePageAndRedirect: Future[Result] = {
-
-      val updatedAnswers: Future[UserAnswers] = request.userAnswers.get(SupportingMaterialFileListPage) match {
-        case None =>
-          val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(_ => updatedAnswers)
-        case _ => successful(request.userAnswers)
-      }
-
-      updatedAnswers.map { userAnswers =>
-        Redirect(navigator.nextPage(CommodityCodeBestMatchPage, mode)(userAnswers))
-      }
-    }
-
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, existingFiles.fileAttachments, mode))),
       { selection =>
 
         val currentAnswers = request.userAnswers.get(SupportingMaterialFileListPage).map{
-          answers => answers.copy(addAnotherDecision = selection, fileAttachments = answers.fileAttachments)
-        }.getOrElse(FileListAnswers(selection, Seq.empty))
+          answers => answers.copy(addAnotherDecision = Some(selection), fileAttachments = answers.fileAttachments)
+        }.getOrElse(FileListAnswers(Some(selection), Seq.empty))
+
         val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, currentAnswers)
         dataCacheConnector.save(updatedAnswers.cacheMap).map(_ => updatedAnswers).map {
           savedAnswers => Redirect(navigator.nextPage(SupportingMaterialFileListPage,mode)(savedAnswers))

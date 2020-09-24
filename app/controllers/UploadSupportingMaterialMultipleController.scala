@@ -34,6 +34,8 @@ import views.html.uploadSupportingMaterialMultiple
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
+import utils.JsonFormatters._
+
 
 class UploadSupportingMaterialMultipleController @Inject()(
                                                             appConfig: FrontendAppConfig,
@@ -66,7 +68,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
       def saveAndRedirect(file: FileAttachment): Future[Result] = {
         val updatedFiles = request.userAnswers.get(SupportingMaterialFileListPage)
-          .map(_ ++ Seq(file)) getOrElse Seq(file)
+          .map(curAnswers => curAnswers.copy(curAnswers.addAnotherDecision, curAnswers.fileAttachments ++ Seq(file)) ) getOrElse FileListAnswers(None, Seq(file))
         val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, updatedFiles)
         dataCacheConnector.save(updatedAnswers.cacheMap)
           .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
@@ -80,7 +82,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
       }
 
       def hasMaxFiles: Boolean = {
-        request.userAnswers.get(SupportingMaterialFileListPage).map(_.size).getOrElse(0) >= 10
+        request.userAnswers.get(SupportingMaterialFileListPage).map(_.fileAttachments.size).getOrElse(0) >= 10
       }
 
       request.body.file("file-input").filter(_.filename.nonEmpty) match {

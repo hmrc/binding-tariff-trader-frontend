@@ -19,6 +19,7 @@ package generators
 import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+import pages.FileListAnswers
 
 trait ModelGenerators {
 
@@ -93,6 +94,14 @@ trait ModelGenerators {
   implicit lazy val arbitrarySelectApplicationType: Arbitrary[SelectApplicationType] =
     Arbitrary {
       Gen.oneOf(SelectApplicationType.values.toSeq)
+    }
+
+  implicit lazy val arbitraryFileListAnswers: Arbitrary[FileListAnswers] =
+    Arbitrary {
+      for {
+        addAnotherDecision <- arbitrary[Option[Boolean]]
+        fileList <- arbitrary[Seq[FileAttachment]]
+      } yield FileListAnswers(addAnotherDecision, fileList)
     }
 
   implicit lazy val arbitraryWhichBestDescribesYou: Arbitrary[WhichBestDescribesYou] =
