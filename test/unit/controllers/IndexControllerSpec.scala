@@ -231,15 +231,93 @@ class IndexControllerSpec extends ControllerSpecBase {
 
   "Index Controller - Get Applications and Rulings" should {
 
-      "return the correct view for a load applications and rulings" in {
+    "return the correct view for a load applications and rulings" in {
 
+      given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
+
+      val result = controller().getApplicationsAndRulings(page = 1)(fakeRequest)
+
+      status(result) shouldBe OK
+      contentAsString(result) should include("applications-rulings-list-table")
+    }
+
+
+    "redirect to BeforeYouStart when EORI unavailable" in {
+      val result = controller(givenUserDoesntHaveAnEORI).getApplicationsAndRulings(page = 1)(fakeRequest)
+
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
+    }
+
+
+    for(caseStatus <- CaseStatus.values.toSeq) {
+      s"return the correct view with correct applications and rulings status in table for case status '$caseStatus'" in {
+        val testCase = btiCaseWithDecision.copy(status = caseStatus)
         given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
-          .willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
+          .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
 
         val result = controller().getApplicationsAndRulings(page = 1)(fakeRequest)
 
         status(result) shouldBe OK
-        contentAsString(result) should include("applications-list-table")
+
+        val doc = Jsoup.parse(contentAsString(result))
+        val actualStatus = doc.getElementById("applications-rulings-list-row-0-status").text().trim
+
+        val expectedStatus = testCase.status match {
+          case CaseStatus.NEW => {
+            messages("case.application.status.submitted")
+          }
+          case CaseStatus.OPEN | CaseStatus.SUSPENDED => {
+            messages("case.application.status.inProgress")
+          }
+          case CaseStatus.REFERRED => {
+            messages("case.application.status.infoRequested")
+          }
+          case CaseStatus.SUPPRESSED | CaseStatus.REJECTED => {
+            messages("case.application.status.rejected")
+          }
+          case CaseStatus.COMPLETED if testCase.hasActiveDecision => {
+            if(testCase.daysDifference.get > 120){
+              messages("case.application.status.approvedRuling")
+            }else {
+              messages("case.application.status.approvedRulingExpiring", testCase.daysDifference.get)
+            }
+          }
+          case CaseStatus.COMPLETED if testCase.hasExpiredDecision => {
+            messages("case.application.ruling.status.expired")
+          }
+          case CaseStatus.CANCELLED =>  {
+            messages("case.application.status.cancelled")
+          }
+        }
+        actualStatus shouldBe expectedStatus
       }
+
+      s"return the correct view with case bti ruling link in table for case status '$caseStatus'" in {
+        val testCase = btiCaseWithDecision.copy(status = caseStatus)
+        given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+          .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+
+        val result = controller().getApplicationsAndRulings(page = 1)(fakeRequest)
+
+        status(result) shouldBe OK
+
+        val doc = Jsoup.parse(contentAsString(result))
+        val actualLinkText = doc.getElementById("applications-rulings-list-row-0-download").text().trim
+        //val expectedLinkText = messages("case.application.viewApplication")
+        val viewRulingStatus = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
+        val expectedLinkTextView = if(viewRulingStatus.contains(testCase.status)) { messages("case.application.ruling.viewRuling") }
+        if((testCase.hasActiveDecision && testCase.daysDifference.get <= 120) | (Set(CaseStatus.COMPLETED).contains(testCase.status) && testCase.hasExpiredDecision) | (Set(CaseStatus.CANCELLED).contains(testCase.status))) {
+          messages("case.application.ruling.renewRuling")
+        }
+        else { messages("case.application.ruling.viewRuling") }
+        //val expectedLinkTextRenew = messages("case.application.ruling.renewRuling")
+
+        actualLinkText shouldBe expectedLinkTextView
+        //actualLinkText should startWith(expectedLinkTextView)
+        //actualLinkText should startWith(expectedLinkTextRenew)
+      }
+    }
   }
 }

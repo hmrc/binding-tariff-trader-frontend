@@ -475,11 +475,13 @@ case.application.status.completed = Completed
 case.application.status.draft = Draft
 case.application.status.suspended = Suspended
 case.application.status.submitted = Submitted
+case.application.ruling.status.expired = Expired ruling
 case.application.status.approvedRuling = Approved ruling
 case.application.status.approvedRulingExpiring = Ruling expires in {0} days
 case.application.status.cancelled = Cancelled ruling
 case.application.ruling.viewRuling = View ruling
 case.application.ruling.renewRuling = Renew ruling
+case.application.ruling.table.download = Download
 
 
 case.application.viewApplication = View application
@@ -504,7 +506,7 @@ case.ruling.status.cancelled = Cancelled
 case.ruling.status.rejected = Closed
 case.ruling.status.suspended = Closed
 case.ruling.status.active = Active
-case.ruling.status.expired = Expired ruling
+case.ruling.status.expired = Expired
 case.ruling.status.in.progress = In progress
 
 case.ruling.viewRuling = View BTI ruling
