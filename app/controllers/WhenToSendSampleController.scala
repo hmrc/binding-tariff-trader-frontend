@@ -21,13 +21,13 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.WhenToSendSampleFormProvider
 import javax.inject.Inject
-import models.{Mode, ReturnSamples}
+import models.Mode
 import navigation.Navigator
 import pages._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.whenToSendSample
 
 import scala.concurrent.Future
@@ -41,12 +41,12 @@ class WhenToSendSampleController @Inject()(
                                             requireData: DataRequiredAction,
                                             formProvider: WhenToSendSampleFormProvider,
                                             cc: MessagesControllerComponents
-                                          ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[ReturnSamples] {
+                                          ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[Boolean] {
 
   private lazy val form = formProvider()
 
   override val page: QuestionPage[Boolean] = WhenToSendSamplePage
-  override val pageDetails: QuestionPage[ReturnSamples] = ReturnSamplesPage
+  override val pageDetails: QuestionPage[Boolean] = ReturnSamplesPage
   override val nextPage: Page = SimilarItemCommodityCodePage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>

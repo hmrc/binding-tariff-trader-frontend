@@ -16,11 +16,10 @@
 
 package forms
 
-import forms.behaviours.OptionFieldBehaviours
-import models.ReturnSamples
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class ReturnSamplesFormProviderSpec extends OptionFieldBehaviours {
+class ReturnSamplesFormProviderSpec extends BooleanFieldBehaviours {
 
   val form = new ReturnSamplesFormProvider()()
 
@@ -29,11 +28,10 @@ class ReturnSamplesFormProviderSpec extends OptionFieldBehaviours {
     val fieldName = "value"
     val requiredKey = "returnSamples.error.required"
 
-    behave like optionsField[ReturnSamples](
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = ReturnSamples.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, "error.boolean")
     )
 
     behave like mandatoryField(
