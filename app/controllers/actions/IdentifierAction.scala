@@ -32,7 +32,8 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 import scala.concurrent.{ExecutionContext, Future}
 
 trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest] {
-  protected lazy val cdsEnrolment = "HMRC-CUS-ORG"
+  protected lazy val atarEnrolment = "HMRC-ATAR-ORG"
+  protected lazy val EORINumber = "EORINumber"
 }
 
 class AuthenticatedIdentifierAction @Inject()(
@@ -42,7 +43,6 @@ class AuthenticatedIdentifierAction @Inject()(
                                              )(implicit ec: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions {
 
-
   override val parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
   override protected val executionContext: ExecutionContext = cc.executionContext
 
@@ -51,33 +51,42 @@ class AuthenticatedIdentifierAction @Inject()(
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
     authorise().retrieve(Retrievals.internalId and Retrievals.allEnrolments) {
-      case ~(Some(internalId: String), allEnrolments: Enrolments) => eori(allEnrolments) match {
-        case Some(eori: String) => block(IdentifierRequest(request, internalId, Some(eori)))
-        case None if !config.isCdsEnrolmentCheckEnabled => block(IdentifierRequest(request, internalId, None))
-        case _ => throw InsufficientEnrolments()
-      }
+      case ~(Some(internalId: String), allEnrolments: Enrolments) =>
+        eori(allEnrolments).map { eori =>
+          block(IdentifierRequest(request, internalId, Some(eori)))
+        }.getOrElse(throw InsufficientEnrolments())
 
       case _ =>
         throw new UnauthorizedException("Unable to retrieve internal Id")
 
-    } recover {
-      case _: NoActiveSession => Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
-      case _: InsufficientEnrolments |
-           _: InsufficientConfidenceLevel |
+    }.recover {
+      case _: NoActiveSession =>
+        redirectToLogin
+      case _: InsufficientEnrolments =>
+        redirectToEoriComponent
+      case _: InsufficientConfidenceLevel |
            _: UnsupportedAuthProvider |
            _: UnsupportedAffinityGroup |
-           _: UnsupportedCredentialRole => redirectToUnauthorised
+           _: UnsupportedCredentialRole =>
+        redirectToUnauthorised
     }
   }
 
-  def redirectToUnauthorised: Result = Redirect(routes.UnauthorisedController.onPageLoad())
+  def redirectToLogin: Result =
+    Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
 
-  def eori(enrolments: Enrolments): Option[String] = enrolments.getEnrolment(cdsEnrolment).flatMap(_.getIdentifier("EORINumber")).map(_.value)
+  def redirectToUnauthorised: Result =
+    Redirect(routes.UnauthorisedController.onPageLoad())
 
-  private def authorise(): AuthorisedFunction = if (config.isCdsEnrolmentCheckEnabled) {
-    authorised(Enrolment(cdsEnrolment) and AuthProviders(GovernmentGateway))
-  } else {
-    authorised(AuthProviders(GovernmentGateway))
-  }
+  def redirectToEoriComponent: Result =
+    Redirect(config.atarSubscribeUrl)
 
+  def eori(enrolments: Enrolments): Option[String] =
+    for {
+      enrolment <- enrolments.getEnrolment(atarEnrolment)
+      identifier <- enrolment.getIdentifier(EORINumber)
+    } yield identifier.value
+
+  private def authorise(): AuthorisedFunction =
+    authorised(Enrolment(atarEnrolment) and AuthProviders(GovernmentGateway))
 }

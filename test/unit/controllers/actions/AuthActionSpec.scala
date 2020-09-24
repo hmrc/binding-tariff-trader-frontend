@@ -79,7 +79,7 @@ class AuthActionSpec extends SpecBase {
         val result: Future[Result] = handleAuthError(InsufficientEnrolments())
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe unauthorisedLocation
+        redirectLocation(result) shouldBe atarSubscribeLocation
       }
     }
 
@@ -123,6 +123,10 @@ class AuthActionSpec extends SpecBase {
 
   private def unauthorisedLocation = {
     Some(routes.UnauthorisedController.onPageLoad().url)
+  }
+
+  private def atarSubscribeLocation = {
+    Some(frontendAppConfig.atarSubscribeUrl)
   }
 
   private def beTheLoginPage = {
