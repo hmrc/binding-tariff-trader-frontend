@@ -278,9 +278,9 @@ class IndexControllerSpec extends ControllerSpecBase {
             messages("case.application.status.rejected")
           }
           case CaseStatus.COMPLETED if testCase.hasActiveDecision => {
-            if(testCase.daysDifference.get > 120){
+            if (testCase.daysDifference.get > 120) {
               messages("case.application.status.approvedRuling")
-            }else {
+            } else {
               messages("case.application.status.approvedRulingExpiring", testCase.daysDifference.get)
             }
           }
@@ -290,34 +290,47 @@ class IndexControllerSpec extends ControllerSpecBase {
           case CaseStatus.CANCELLED =>  {
             messages("case.application.status.cancelled")
           }
+          case _ => ""
         }
         actualStatus shouldBe expectedStatus
       }
+    }
 
-      s"return the correct view with case bti ruling link in table for case status '$caseStatus'" in {
-        val testCase = btiCaseWithDecision.copy(status = caseStatus)
-        given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
-          .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+    "return the correct view with View ruling link for COMPLETED cases" in {
+      val testCase = btiCaseWithDecision.copy(status = CaseStatus.COMPLETED)
 
-        val result = controller().getApplicationsAndRulings(page = 1)(fakeRequest)
+      given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
 
-        status(result) shouldBe OK
+      val result = controller().getApplicationsAndRulings(page = 1)(fakeRequest)
 
-        val doc = Jsoup.parse(contentAsString(result))
-        val actualLinkText = doc.getElementById("applications-rulings-list-row-0-download").text().trim
-        //val expectedLinkText = messages("case.application.viewApplication")
-        val viewRulingStatus = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
-        val expectedLinkTextView = if(viewRulingStatus.contains(testCase.status)) { messages("case.application.ruling.viewRuling") }
-        if((testCase.hasActiveDecision && testCase.daysDifference.get <= 120) | (Set(CaseStatus.COMPLETED).contains(testCase.status) && testCase.hasExpiredDecision) | (Set(CaseStatus.CANCELLED).contains(testCase.status))) {
-          messages("case.application.ruling.renewRuling")
-        }
-        else { messages("case.application.ruling.viewRuling") }
-        //val expectedLinkTextRenew = messages("case.application.ruling.renewRuling")
+      status(result) shouldBe OK
 
-        actualLinkText shouldBe expectedLinkTextView
-        //actualLinkText should startWith(expectedLinkTextView)
-        //actualLinkText should startWith(expectedLinkTextRenew)
-      }
+      val doc = Jsoup.parse(contentAsString(result))
+      val actualLinkText = doc.getElementById("applications-rulings-list-row-0-view-rulings-link").text().trim
+
+      val expectedLinkTextView = messages("case.application.ruling.viewRuling")
+
+      actualLinkText shouldBe expectedLinkTextView
+    }
+
+
+    "return the correct view with Renew ruling link for CANCELLED cases" in {
+      val testCase = btiCaseWithDecision.copy(status = CaseStatus.CANCELLED)
+
+      given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+        .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+
+      val result = controller().getApplicationsAndRulings(page = 1)(fakeRequest)
+
+      status(result) shouldBe OK
+
+      val doc = Jsoup.parse(contentAsString(result))
+      val actualLinkText = doc.getElementById("applications-rulings-list-row-0-renew-link").text().trim
+
+      val expectedLinkTextView = messages("case.application.ruling.renewRuling")
+
+      actualLinkText shouldBe expectedLinkTextView
     }
   }
 }
