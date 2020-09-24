@@ -317,8 +317,9 @@ returnSamples.checkYourAnswersLabel = Return the samples?
 returnSamples.error.required = Select yes if you would like the sample returned
 returnSamples.caption = About the goods
 
-similarItemCommodityCode.title = Do you know of a similar item that already has an Advance Tariff Ruling? - Manage your Advance Tariff Rulings - GOV.UK
-similarItemCommodityCode.heading = Do you know of a similar item that already has an Advance Tariff Ruling?
+similarItemCommodityCode.title = Are there similar goods that already have a ruling? - Manage your Advance Tariff Rulings - GOV.UK
+similarItemCommodityCode.heading = Are there similar goods that already have a ruling?
+similarItemCommodityCode.caption = About other rulings
 similarItemCommodityCode.yesAwareSimilarCode = Yes
 similarItemCommodityCode.noNotAware = No
 similarItemCommodityCode.checkYourAnswersLabel = Do you know of a similar item that already has a ruling?

@@ -33,7 +33,8 @@
 
         @components.error_summary(form.errors)
 
-        <h1 class="heading-xlarge">@messages("similarItemCommodityCode.heading")</h1>
+        @components.heading(messages("similarItemCommodityCode.heading"),
+                            captionMsg=Some(messages("similarItemCommodityCode.caption")))
 
         <p>@messages("similarItemCommodityCode.bodyText")</p>
         <ul class="list list-bullet">
