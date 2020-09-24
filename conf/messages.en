@@ -277,13 +277,15 @@ uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functiona
 uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.numberFiles = Reduce the number of files to a maximum of 10
 
-commodityCodeBestMatch.title = Have you found a commodity code for your item? - Manage your Advance Tariff Rulings - GOV.UK
-commodityCodeBestMatch.heading = Have you found a commodity code for your item?
-commodityCodeBestMatch.bodyText = Entering a commodity code, even just the first 2 numbers, means we will be able to classify your item faster.
+commodityCodeBestMatch.title = Have you found a commodity code for the goods? - Manage your Advance Tariff Rulings - GOV.UK
+commodityCodeBestMatch.heading = Have you found a commodity code for the {0}?
+commodityCodeBestMatch.bodyText = Entering a commodity code, even just the first 2 numbers, may speed up the processing of your application.
 commodityCodeBestMatch.yesFoundCommodityCode = Yes
 commodityCodeBestMatch.noHaventFoundCommodityCode = No
 commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code?
 commodityCodeBestMatch.error.required = Select yes if you have found a commodity code
+commodityCodeBestMatch.caption = About the goods
+commodityCodeBestMatch.submitLabel = Save and continue
 
 commodityCodeDigits.title = What is the commodity code you found for your item? - Manage your Advance Tariff Rulings - GOV.UK
 commodityCodeDigits.heading = What is the commodity code you found for your item?

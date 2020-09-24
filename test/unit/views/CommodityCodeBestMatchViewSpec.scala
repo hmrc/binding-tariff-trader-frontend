@@ -29,12 +29,17 @@ class CommodityCodeBestMatchViewSpec extends YesNoViewBehaviours {
 
   val form = new CommodityCodeBestMatchFormProvider()()
 
-  def createView = () => commodityCodeBestMatch(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val goodsName = "goods"
 
-  def createViewUsingForm = (form: Form[_]) => commodityCodeBestMatch(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  override protected def expectedLegend(messageKeyPrefix: String): String =
+    messages(s"$messageKeyPrefix.heading", goodsName)
+
+  def createView = () => commodityCodeBestMatch(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+
+  def createViewUsingForm = (form: Form[_]) => commodityCodeBestMatch(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "CommodityCodeBestMatch view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
+    behave like normalPage(createView, messageKeyPrefix, goodsName)()
 
     behave like pageWithBackLink(createView)
 
