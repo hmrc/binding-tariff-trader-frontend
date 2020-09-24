@@ -345,7 +345,7 @@ legalChallengeDetails.first.paragraph = Providing this legal or administrative i
 legalChallengeDetails.second.paragraph = This may include details of:
 legalChallengeDetails.item1 = court rulings
 legalChallengeDetails.item2 = commodity codes under review
-legalChallengeDetails.error.required = Enter any problems with the classification of your goods
+legalChallengeDetails.error.required = Enter details of the legal problems classifying the goods
 
 supportingInformation.title = Do you need to enter any other information to support this application? - Manage your Advance Tariff Rulings - GOV.UK
 supportingInformation.heading = Do you need to enter any other information to support this application?
