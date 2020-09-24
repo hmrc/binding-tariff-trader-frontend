@@ -20,9 +20,11 @@ import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import models.CaseStatus.CaseStatus
 import models._
 import models.oCase._
+import navigation.FakeNavigator
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
+import play.api.mvc.Call
 import play.api.test.Helpers._
 import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -33,11 +35,14 @@ class IndexControllerSpec extends ControllerSpecBase {
 
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
   private val casesService = mock[CasesService]
+  def nextPageRoute = Call("GET", "/advance-tariff-application/information-you-need")
+
 
   private def controller(identifier: IdentifierAction = FakeIdentifierAction): IndexController =
     new IndexController(
       frontendAppConfig,
       identifier,
+      new FakeNavigator(nextPageRoute),
       casesService,
       cc
     )

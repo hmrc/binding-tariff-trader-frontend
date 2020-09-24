@@ -20,9 +20,12 @@ import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
 import javax.inject.Inject
 import models._
+import navigation.Navigator
+import pages.IndexPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CasesService
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.CaseDetailTab
 import views.html.components.{table_applications, table_rulings}
@@ -34,6 +37,7 @@ import scala.concurrent.Future.successful
 class IndexController @Inject()(
                                  val appConfig: FrontendAppConfig,
                                  identify: IdentifierAction,
+                                 navigator: Navigator,
                                  service: CasesService,
                                  cc: MessagesControllerComponents
                                ) extends FrontendController(cc) with I18nSupport {
@@ -56,7 +60,7 @@ class IndexController @Inject()(
           successful(Ok(index(appConfig, CaseDetailTab.APPLICATION, table_applications(pagedResult))))
         }
 
-      case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
+      case None => successful(Redirect(navigator.nextPage(IndexPage,NormalMode)(UserAnswers(""))))
     }
 
   }
@@ -68,7 +72,7 @@ class IndexController @Inject()(
           successful(Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult))))
         }
 
-      case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
+      case None => successful(Redirect(navigator.nextPage(IndexPage,NormalMode)(UserAnswers(""))))
     }
   }
 

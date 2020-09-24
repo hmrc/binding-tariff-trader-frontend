@@ -26,13 +26,7 @@ import play.api.mvc.Call
 class Navigator @Inject()() {
 
   private val routeMap: Map[Page, UserAnswers => Call] = Map(
-    RegisteredAddressForEoriPage -> (_ => routes.ProvideGoodsNameController.onPageLoad(NormalMode)),
-    WhichBestDescribesYouPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
-    SelectApplicationTypePage -> (_ => routes.SelectApplicationTypeController.onPageLoad(NormalMode)),
-    RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(NormalMode)),
-    UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(NormalMode)),
-    AcceptItemInformationPage -> (_ => routes.AcceptItemInformationListController.onPageLoad()),
-    PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
+    IndexPage -> (_ => routes.BeforeYouStartController.onPageLoad()),
     ProvideGoodsNamePage -> (_ => routes.ProvideGoodsDescriptionController.onPageLoad(NormalMode)),
     ProvideGoodsDescriptionPage -> (_ => routes.AddConfidentialInformationController.onPageLoad(NormalMode)),
     AddConfidentialInformationPage -> (answer => answer.get(AddConfidentialInformationPage) match {
@@ -41,6 +35,13 @@ class Navigator @Inject()() {
     }),
     ProvideConfidentialInformationPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
+    RegisteredAddressForEoriPage -> (_ => routes.ProvideGoodsNameController.onPageLoad(NormalMode)),
+    WhichBestDescribesYouPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
+    SelectApplicationTypePage -> (_ => routes.SelectApplicationTypeController.onPageLoad(NormalMode)),
+    RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(NormalMode)),
+    UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(NormalMode)),
+    AcceptItemInformationPage -> (_ => routes.AcceptItemInformationListController.onPageLoad()),
+    PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
     CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)),
     CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(NormalMode)),

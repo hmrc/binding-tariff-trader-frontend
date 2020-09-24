@@ -19,6 +19,7 @@ package utils
 import audit.CaseAuditPayload
 import models._
 import models.requests.NewEventRequest
+import pages.FileListAnswers
 import play.api.libs.json._
 import uk.gov.hmrc.play.json.Union
 
@@ -42,6 +43,7 @@ object JsonFormatters {
 
   implicit val eventFormat: OFormat[Event] = Json.format[Event]
   implicit val newEventRequestFormat: OFormat[NewEventRequest] = Json.using[Json.WithDefaultValues].format[NewEventRequest]
+  implicit val fileListAnswersFormat: OFormat[FileListAnswers] = Json.format[FileListAnswers]
 
 }
 

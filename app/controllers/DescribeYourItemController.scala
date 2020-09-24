@@ -23,7 +23,7 @@ import forms.DescribeYourItemFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{DescribeYourItemPage, SupportingMaterialFileListPage}
+import pages.DescribeYourItemPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

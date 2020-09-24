@@ -36,6 +36,12 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) shouldBe routes.IndexController.getApplications()
       }
 
+      "Go to Before you start from index when required" in {
+
+        navigator.nextPage(IndexPage, NormalMode)(mock[UserAnswers]) shouldBe routes.BeforeYouStartController.onPageLoad()
+
+      }
+
 
       "go to ProvideGoodsDescriptionPage after ProvideGoodsName page" in {
         val mockUserAnswers = mock[UserAnswers]
@@ -79,6 +85,10 @@ class NavigatorSpec extends SpecBase {
 
         navigator.nextPage(ProvideConfidentialInformationPage, NormalMode)(mockUserAnswers) shouldBe
           routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
+      }
+
+      "return to SupportingMaterialFileList page when file is removed" in {
+
       }
     }
 

@@ -16,13 +16,6 @@
 
 package pages
 
-import models.FileAttachment
-
-case object SupportingMaterialFileListPage extends QuestionPage[FileListAnswers] {
-
-  override def toString: String = "supportingMaterialFileListPage"
+case object IndexPage extends Page {
+  override def toString: String = "index"
 }
-
-case class FileListAnswers(addAnotherDecision: Boolean,fileAttachments: Seq[FileAttachment])
-
-
