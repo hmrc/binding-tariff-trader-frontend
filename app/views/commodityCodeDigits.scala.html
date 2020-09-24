@@ -20,10 +20,10 @@
 @import models.Mode
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("commodityCodeDigits.title")}",
+    title = s"${errorPrefix(form)} ${messages("commodityCodeDigits.title", goodsName)}",
     appConfig = appConfig,
     bodyClasses = None) {
 
@@ -33,11 +33,17 @@
 
         @components.error_summary(form.errors)
 
+        @components.heading(messages("commodityCodeDigits.heading", goodsName),
+            captionMsg = Some(messages("commodityCodeDigits.caption")))
+
+        <p>@messages("commodityCodeDigits.bodyText")</p>
+
         @components.input_text(
             field = form("value"),
-            labelHtml = Some(components.heading(messages("commodityCodeDigits.heading")))
+            labelClass = Some("visually-hidden"),
+            label = Some(messages("commodityCodeDigits.heading", goodsName))
         )
 
-        @components.submit_button()
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }

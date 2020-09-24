@@ -25,7 +25,7 @@ import controllers.actions._
 import play.api.test.Helpers._
 import forms.CommodityCodeDigitsFormProvider
 import models.NormalMode
-import pages.CommodityCodeDigitsPage
+import pages.{CommodityCodeDigitsPage, ProvideGoodsNamePage}
 import play.api.mvc.Call
 import views.html.commodityCodeDigits
 
@@ -35,6 +35,7 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase {
 
   val formProvider = new CommodityCodeDigitsFormProvider()
   val form: Form[String] = formProvider()
+  val goodsName = "some goods"
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CommodityCodeDigitsController(
@@ -48,24 +49,27 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase {
       cc
     )
 
-  def viewAsString(form: Form[_] = form): String = commodityCodeDigits(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_] = form): String = commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages).toString
 
   val testAnswer = "answer"
 
   "CommodityCodeDigits Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
+      val data = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val fakeDataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
+
+      val result = controller(fakeDataRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(CommodityCodeDigitsPage.toString -> JsString(testAnswer))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      val data = Map(CommodityCodeDigitsPage.toString -> JsString(testAnswer), ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val fakeDataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
 
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+      val result = controller(fakeDataRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
 
       contentAsString(result) shouldBe viewAsString(form.fill(testAnswer))
     }
@@ -80,10 +84,12 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase {
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
+      val data = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val fakeDataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", ""))
       val boundForm = form.bind(Map("value" -> ""))
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val result = controller(fakeDataRetrievalAction).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) shouldBe viewAsString(boundForm)
