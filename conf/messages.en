@@ -331,13 +331,17 @@ commodityCodeRulingReference.hint = The reference number, for example GB12345678
 commodityCodeRulingReference.checkYourAnswersLabel = Ruling reference number
 commodityCodeRulingReference.error.required = Enter the ruling reference numbers and details of similar rulings
 
-legalChallenge.title = Do you know if there have been any problems classifying the item? - Manage your Advance Tariff Rulings - GOV.UK
-legalChallenge.heading = Do you know if there have been any problems classifying the item?
+legalChallenge.title = Have there been any legal problems classifying the goods? - Manage your Advance Tariff Rulings - GOV.UK
+legalChallenge.heading = Have there been any legal problems classifying the {0}?
+legalChallenge.caption = About the goods
 legalChallenge.yesLegalChallenge = Yes
 legalChallenge.noLegalChallenge = No
-legalChallenge.checkYourAnswersLabel = Do you know of any problems with the classification of the item?
-legalChallenge.error.required = Select yes if you know if there have been any problems classifying the item
-legalChallenge.paragraph = This includes court rulings and when a commodity code is being reviewed. This helps us to match the goods with other rulings.
+legalChallenge.checkYourAnswersLabel = Problems classifying?
+legalChallenge.error.required = Select yes if you are aware of any problems with classifying the goods
+legalChallenge.paragraph0 = Providing this legal or administrative information can help to identify goods with similar rulings to the {0}.
+legalChallenge.paragraph1 = This may include details of:
+legalChallenge.listItem1 = court rulings
+legalChallenge.listItem2 = commodity codes under review
 
 legalChallengeDetails.title = Provide details of the legal problems classifying the goods - Manage your Advance Tariff Rulings - GOV.UK
 legalChallengeDetails.heading = Provide details of the legal problems classifying the {0}
