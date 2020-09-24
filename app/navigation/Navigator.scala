@@ -19,22 +19,27 @@ package navigation
 import controllers.routes
 import javax.inject.{Inject, Singleton}
 import models._
-import pages.{CommodityCodeRulingReferencePage, UploadWrittenAuthorisationPage, _}
+import pages.{AddConfidentialInformationPage, CommodityCodeRulingReferencePage, UploadWrittenAuthorisationPage, _}
 import play.api.mvc.Call
 
 @Singleton
 class Navigator @Inject()() {
 
   private val routeMap: Map[Page, UserAnswers => Call] = Map(
-    RegisteredAddressForEoriPage -> (_ => routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)),
-    EnterContactDetailsPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
+    RegisteredAddressForEoriPage -> (_ => routes.ProvideGoodsNameController.onPageLoad(NormalMode)),
     WhichBestDescribesYouPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
     SelectApplicationTypePage -> (_ => routes.SelectApplicationTypeController.onPageLoad(NormalMode)),
     RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(NormalMode)),
     UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(NormalMode)),
     AcceptItemInformationPage -> (_ => routes.AcceptItemInformationListController.onPageLoad()),
     PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
-    DescribeYourItemPage -> (_ => routes.DescribeYourItemController.onPageLoad(NormalMode)),
+    ProvideGoodsNamePage -> (_ => routes.ProvideGoodsDescriptionController.onPageLoad(NormalMode)),
+    ProvideGoodsDescriptionPage -> (_ => routes.AddConfidentialInformationController.onPageLoad(NormalMode)),
+    AddConfidentialInformationPage -> (answer => answer.get(AddConfidentialInformationPage) match {
+      case Some(true) => routes.ProvideConfidentialInformationController.onPageLoad(NormalMode)
+      case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
+    }),
+    ProvideConfidentialInformationPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
     UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
     CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)),
@@ -45,14 +50,19 @@ class Navigator @Inject()() {
     CommodityCodeRulingReferencePage -> (_ => routes.CommodityCodeRulingReferenceController.onPageLoad(NormalMode)),
     LegalChallengePage -> (_ => routes.LegalChallengeController.onPageLoad(NormalMode)),
     LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(NormalMode)),
-    SupportingInformationPage -> (_ => routes.SupportingInformationController.onPageLoad(NormalMode)),
-    SupportingInformationDetailsPage -> (_ => routes.SupportingInformationDetailsController.onPageLoad(NormalMode)),
+    SupportingInformationPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
+    SupportingInformationDetailsPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
+    EnterContactDetailsPage -> (_ => routes.CheckYourAnswersController.onPageLoad()),
     CheckYourAnswersPage -> (_ => routes.CheckYourAnswersController.onPageLoad()),
     DeclarationPage -> (_ => routes.DeclarationController.onPageLoad(NormalMode)),
     ConfirmationPage -> (_ => routes.ConfirmationController.onPageLoad())
   )
 
   private val checkRouteMap: Map[Page, UserAnswers => Call] = Map(
+    AddConfidentialInformationPage -> (answer => answer.get(AddConfidentialInformationPage) match {
+      case Some(true) => routes.ProvideConfidentialInformationController.onPageLoad(CheckMode)
+      case _ => routes.CheckYourAnswersController.onPageLoad()
+    }),
     LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(CheckMode)),
     CommodityCodeRulingReferencePage -> (_ => routes.CommodityCodeRulingReferenceController.onPageLoad(CheckMode)),
     CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(CheckMode)),

@@ -51,18 +51,20 @@ class LegalChallengeController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     val preparedForm = request.userAnswers.get(LegalChallengePage) match {
       case Some(value) => form.fill(value)
       case _ => form
     }
 
-    Ok(legalChallenge(appConfig, preparedForm, mode))
+    Ok(legalChallenge(appConfig, preparedForm, goodsName, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, mode)))
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+      Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, goodsName, mode)))
     }
 
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))

@@ -20,7 +20,7 @@
 @import models.Mode
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("legalChallenge.title")}",
@@ -33,12 +33,24 @@
 
         @components.error_summary(form.errors)
 
+        @components.heading(messages("legalChallenge.heading", goodsName),
+            captionMsg=Some(messages("legalChallenge.caption")))
+
+        <div class="form-group">
+            <p>@messages("legalChallenge.paragraph0", goodsName)</p>
+            <p>@messages("legalChallenge.paragraph1")</p>
+            <ul class="list list-bullet">
+                <li>@messages("legalChallenge.listItem1")</li>
+                <li>@messages("legalChallenge.listItem2")</li>
+            </ul>
+        </div>
+
         @components.input_yes_no(
             field = form("value"),
-            labelHtml = Some(components.heading(messages("legalChallenge.heading"))),
-            hint = Some(messages("legalChallenge.paragraph"))
+            label = Some(messages("legalChallenge.heading", goodsName)),
+            labelClass = Some("visually-hidden")
         )
 
-        @components.submit_button()
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }
