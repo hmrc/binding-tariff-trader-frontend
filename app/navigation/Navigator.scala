@@ -37,6 +37,7 @@ class Navigator @Inject()() {
     SupportingMaterialFileListPage -> (answers => {
       answers.get(SupportingMaterialFileListPage).flatMap(_.addAnotherDecision) match {
         case Some(false) => routes.WhenToSendSampleController.onPageLoad(NormalMode)
+        case Some(true) => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)
         case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
       }}),
     RegisteredAddressForEoriPage -> (_ => routes.ProvideGoodsNameController.onPageLoad(NormalMode)),
