@@ -110,12 +110,11 @@ bodyClasses = None) {
     }
     </p>
     <p>
-     @if((c.hasActiveDecision && c.daysDifference.get <= 120) | (Set(CaseStatus.COMPLETED).contains(c.status) && c.hasExpiredDecision) | (Set(CaseStatus.CANCELLED).contains(c.status)))
-     {
-      <a id="applications-rulings-list-row-@{index}-renew-link" href="#">
-       @messages("case.application.ruling.renewRuling")
-      </a>
-      }
+     @if((c.hasActiveDecision && c.daysDifference.get <= 120) | (Set(CaseStatus.COMPLETED).contains(c.status) && c.hasExpiredDecision) | (Set(CaseStatus.CANCELLED).contains(c.status))) {
+     <a id="applications-rulings-list-row-@{index}-renew-link" href="#">
+      @messages("case.application.ruling.renewRuling")
+     </a>
+     }
     </p>
    </td>
   </tr>
