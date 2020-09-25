@@ -28,31 +28,39 @@ import pages._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.Future.successful
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.supportingMaterialFileList
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.concurrent.Future.successful
-
-class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfig,
-                                                     dataCacheConnector: DataCacheConnector,
-                                                     navigator: Navigator,
-                                                     identify: IdentifierAction,
-                                                     getData: DataRetrievalAction,
-                                                     requireData: DataRequiredAction,
-                                                     formProvider: SupportingMaterialFileListFormProvider,
-                                                     cc: MessagesControllerComponents
-                                                    ) extends FrontendController(cc) with I18nSupport {
+class SupportingMaterialFileListController @Inject()(
+  appConfig: FrontendAppConfig,
+  dataCacheConnector: DataCacheConnector,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: SupportingMaterialFileListFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    Ok(supportingMaterialFileList(appConfig, form, existingFiles, mode))
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+    Ok(supportingMaterialFileList(appConfig, form, goodsName, existingFiles, mode))
   }
 
   private def existingFiles(implicit request: DataRequest[AnyContent]): Seq[FileAttachment] = {
     request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
+  }
+
+  def onClear(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val clearAnswers: UserAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
+
+    dataCacheConnector
+      .save(clearAnswers.cacheMap)
+      .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
   }
 
   def onRemove(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -79,9 +87,11 @@ class SupportingMaterialFileListController @Inject()(appConfig: FrontendAppConfi
       }
     }
 
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, existingFiles, mode))),
+        successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, goodsName, existingFiles, mode))),
       {
         case true => successful(Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
         case false => defaultCachePageAndRedirect
