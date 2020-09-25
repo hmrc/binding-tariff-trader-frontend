@@ -59,8 +59,15 @@ class MakeFileConfidentialController @Inject()(appConfig: FrontendAppConfig,
           Future.successful(BadRequest(makeFileConfidential(appConfig, formWithErrors, mode))),
 
         (value) => {
-          val existingAnswers = request.userAnswers.get(MakeFileConfidentialPage).getOrElse(Seq.empty)
-          val updatedAnswers = request.userAnswers.set(MakeFileConfidentialPage, existingAnswers :+ value)
+          val updatedAnswers = request.userAnswers.get(MakeFileConfidentialPage) match {
+            case Some(first :+ last) if last.fileId == value.fileId =>
+              request.userAnswers.set(MakeFileConfidentialPage, first :+ last.copy(confidential = value.confidential))
+            case Some(list) =>
+              request.userAnswers.set(MakeFileConfidentialPage, list :+ value)
+            case None =>
+              request.userAnswers.set(MakeFileConfidentialPage, Seq(value))
+          }
+
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
               Redirect(navigator.nextPage(MakeFileConfidentialPage, mode)(updatedAnswers))
