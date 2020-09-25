@@ -66,6 +66,7 @@ site.continue = Continue
 site.submit = Submit
 site.upload_continue = Upload and continue
 site.service_name = Manage your Advance Tariff Rulings
+site.save_and_continue = Save and continue
 
 unauthorised.title = Not registered for CDS
 unauthorised.heading = To apply for an Advance Tariff Ruling (ATaR) you need to get access to CDS
@@ -182,6 +183,48 @@ previousCommodityCode.error.previousCommodityCode.length = Previous Tariff Infor
 previousCommodityCode.details.summary = What is my Binding Tariff Information ruling reference number?
 previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling.
 
+provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
+provideGoodsName.heading = Provide a name for the goods
+provideGoodsName.caption = About the goods
+provideGoodsName.checkYourAnswersLabel = Goods Name
+provideGoodsName.error.required = Enter a short name to describe the goods
+provideGoodsName.error.length = Name for the goods must be 100 characters or less
+provideGoodsName.paragraph = This information may appear on the Advance Tariff Rulings website.
+
+provideGoodsDescription.title = Provide a detailed description of the goods - Manage your Advance Tariff Rulings - GOV.UK
+provideGoodsDescription.heading = Provide a detailed description of the {0}
+provideGoodsDescription.caption = About the goods
+provideGoodsDescription.checkYourAnswersLabel = Goods Description
+provideGoodsDescription.p1 = The more detailed the description is, the faster we will be able to classify the goods.
+provideGoodsDescription.p2 = This information may appear on the Advance Tariff Rulings website.
+provideGoodsDescription.error.required = Enter a detailed description of your goods
+provideGoodsDescription.error.length = Description for the goods must be 100 characters or less
+provideGoodsDescription.confidential_info = You will be able to add confidential information and upload files later in the application.
+provideGoodsDescription.paragraph.includes = The description can include:
+provideGoodsDescription.listItem1 = what it is used for
+provideGoodsDescription.listItem2 = what it is made from, including all materials, parts or ingredients
+provideGoodsDescription.listItem3 = how it is made, including all manufacturing processes
+provideGoodsDescription.listItem4 = how it works
+provideGoodsDescription.listItem5 = how it is packaged, including all materials
+
+addConfidentialInformation.title = Do you want to add any confidential information about the goods? - Manage your Advance Tariff Rulings - GOV.UK
+addConfidentialInformation.heading = Do you want to add any confidential information about the {0}?
+addConfidentialInformation.caption = About the goods
+addConfidentialInformation.p1 = This information will not appear on the Advance Tariff Rulings website.
+addConfidentialInformation.checkYourAnswersLabel = Add confidential information?
+addConfidentialInformation.error.required = Select yes if you want to add confidential information
+
+provideConfidentialInformation.title = Provide any confidential information about the goods - Manage your Advance Tariff Rulings - GOV.UK
+provideConfidentialInformation.heading = Provide any confidential information about the {0}
+provideConfidentialInformation.caption = About the goods
+provideConfidentialInformation.checkYourAnswersLabel = Confidential information
+provideConfidentialInformation.error.required = Enter the confidential information for your goods
+provideConfidentialInformation.description = This information will not appear on the Advance Tariff Rulings website.
+provideConfidentialInformation.inset = You will be able to upload files later in the application.
+provideConfidentialInformation.thismayinclude = This may include:
+provideConfidentialInformation.modelnumbers = model numbers
+provideConfidentialInformation.patentinfo = patent information
+
 describeYourItem.title = Detailed description of your item - Manage your Advance Tariff Rulings - GOV.UK
 describeYourItem.heading = Detailed description of your item
 describeYourItem.subheading = Description of your item that may be used as part of the published ruling
@@ -220,18 +263,19 @@ supportingMaterialFileList.continue = Save and continue
 supportingMaterialFile.remove.file.text = Remove
 supportingMaterialFile.remove.file.hidden.text = Remove file {0}
 
-uploadSupportingMaterialMultiple.title = Upload documents, photographs, manuals, brochures or technical specifications - Manage your Advance Tariff Rulings - GOV.UK
-uploadSupportingMaterialMultiple.heading = Upload documents, photographs, manuals, brochures or technical specifications
+uploadSupportingMaterialMultiple.title = Upload supporting documents for the goods - Manage your Advance Tariff Rulings - GOV.UK
+uploadSupportingMaterialMultiple.heading = Upload supporting documents for the {0}
+uploadSupportingMaterialMultiple.caption = About the goods
 uploadSupportingMaterialMultiple.label = Upload a file
-uploadSupportingMaterialMultiple.upload.title =  You can upload:
+uploadSupportingMaterialMultiple.upload.title = You can upload:
 uploadSupportingMaterialMultiple.upload.restrictionFiles = one file at a time, up to 10 files
-uploadSupportingMaterialMultiple.upload.restrictionSize =  a maximum individual file size of 10MB
+uploadSupportingMaterialMultiple.upload.exampleFiles = photographs, manuals, brochures or technical specifications
+uploadSupportingMaterialMultiple.upload.restrictionSize = a maximum individual file size of 10MB
 uploadSupportingMaterialMultiple.upload.selectFile = You must select a file
-uploadSupportingMaterialMultiple.upload.typeOfFiles =   pdf, doc, docx, png, jpg, jpeg and txt files
+uploadSupportingMaterialMultiple.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg and txt files
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file types can I upload?
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
-uploadSupportingMaterialMultiple.error.required = Enter uploadSupportingMaterialMultiple
 uploadSupportingMaterialMultiple.error.numberFiles = Reduce the number of files to a maximum of 10
 
 commodityCodeBestMatch.title = Have you found a commodity code for your item? - Manage your Advance Tariff Rulings - GOV.UK
@@ -242,26 +286,26 @@ commodityCodeBestMatch.noHaventFoundCommodityCode = No
 commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code?
 commodityCodeBestMatch.error.required = Select yes if you have found a commodity code
 
-commodityCodeDigits.title = What is the commodity code you found for your item? - Manage your Advance Tariff Rulings - GOV.UK
-commodityCodeDigits.heading = What is the commodity code you found for your item?
+commodityCodeDigits.title = Provide a commodity code for the goods - Manage your Advance Tariff Rulings - GOV.UK
+commodityCodeDigits.heading = Provide a commodity code for the {0}
+commodityCodeDigits.bodyText = Entering a commodity code, even just the first 2 numbers, may speed up the processing of your application.
+commodityCodeDigits.caption = About the goods
 commodityCodeDigits.checkYourAnswersLabel = Commodity code
-commodityCodeDigits.error.required = Enter a commodity code
+commodityCodeDigits.error.required = Enter at least 2 digits of a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
 
-whenToSendSample.title = Sending samples to HMRC - Manage your Advance Tariff Rulings - GOV.UK
-whenToSendSample.heading = Sending samples to HMRC
+whenToSendSample.title = Will you send a sample of the goods to HMRC? - Manage your Advance Tariff Rulings - GOV.UK
+whenToSendSample.caption = About the goods
+whenToSendSample.heading = Will you send a sample of the {0} to HMRC?
 whenToSendSample.yesProvideSample = Yes
 whenToSendSample.notSendingSample = No
 whenToSendSample.checkYourAnswersLabel = Are you sending a sample?
-whenToSendSample.error.required = Select yes if you will be sending a sample
-whenToSendSample.first.paragraph = We usually ask for samples of:
-whenToSendSample.second.paragraph = If you are not sure if you need to provide a sample, you can wait for HMRC to contact you if one is needed.
-whenToSendSample.third.paragraph = <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600#check-if-you-need-to-provide-a-sample" target="_blank">Get more information about samples (opens in a new window or tab)</a>
-whenToSendSample.fourth.paragraph = We will let you know where to send your sample at the end of the application.
+whenToSendSample.error.required = Select yes if you are sending a sample
+whenToSendSample.first.paragraph = Samples are usually required if the goods are:
+whenToSendSample.second.paragraph = If you are not sure whether you need to provide a sample, you can wait for the Tariff Classification Team to contact you if one is needed.
 whenToSendSample.listItem1 = textiles
 whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
-whenToSendSample.legend = Are you sending a sample?
 
 returnSamples.title = Would you like the samples returned? - Manage your Advance Tariff Rulings - GOV.UK
 returnSamples.heading = Would you like the samples returned?
@@ -287,18 +331,27 @@ commodityCodeRulingReference.hint = The reference number, for example GB12345678
 commodityCodeRulingReference.checkYourAnswersLabel = Ruling reference number
 commodityCodeRulingReference.error.required = Enter the ruling reference numbers and details of similar rulings
 
-legalChallenge.title = Do you know if there have been any problems classifying the item? - Manage your Advance Tariff Rulings - GOV.UK
-legalChallenge.heading = Do you know if there have been any problems classifying the item?
+legalChallenge.title = Have there been any legal problems classifying the goods? - Manage your Advance Tariff Rulings - GOV.UK
+legalChallenge.heading = Have there been any legal problems classifying the {0}?
+legalChallenge.caption = About the goods
 legalChallenge.yesLegalChallenge = Yes
 legalChallenge.noLegalChallenge = No
-legalChallenge.checkYourAnswersLabel = Do you know of any problems with the classification of the item?
-legalChallenge.error.required = Select yes if you know if there have been any problems classifying the item
-legalChallenge.paragraph = This includes court rulings and when a commodity code is being reviewed. This helps us to match the goods with other rulings.
+legalChallenge.checkYourAnswersLabel = Problems classifying?
+legalChallenge.error.required = Select yes if you are aware of any problems with classifying the goods
+legalChallenge.paragraph0 = Providing this legal or administrative information can help to identify goods with similar rulings to the {0}.
+legalChallenge.paragraph1 = This may include details of:
+legalChallenge.listItem1 = court rulings
+legalChallenge.listItem2 = commodity codes under review
 
-legalChallengeDetails.title = What are the problems with classifying your item? - Manage your Advance Tariff Rulings - GOV.UK
-legalChallengeDetails.heading = What are the problems with classifying your item?
-legalChallengeDetails.checkYourAnswersLabel = Problems with the classification of the item
-legalChallengeDetails.error.required = Enter any problems with the classification of your item
+legalChallengeDetails.title = Provide details of the legal problems classifying the goods - Manage your Advance Tariff Rulings - GOV.UK
+legalChallengeDetails.heading = Provide details of the legal problems classifying the {0}
+legalChallengeDetails.caption = About the goods
+legalChallengeDetails.checkYourAnswersLabel = Problems with the classification of the goods
+legalChallengeDetails.first.paragraph = Providing this legal or administrative information can help to identify goods with similar rulings.
+legalChallengeDetails.second.paragraph = This may include details of:
+legalChallengeDetails.item1 = court rulings
+legalChallengeDetails.item2 = commodity codes under review
+legalChallengeDetails.error.required = Enter details of the legal problems classifying the goods
 
 supportingInformation.title = Do you need to enter any other information to support this application? - Manage your Advance Tariff Rulings - GOV.UK
 supportingInformation.heading = Do you need to enter any other information to support this application?
@@ -474,18 +527,8 @@ case.application.status.infoRequested = Info requested
 case.application.status.completed = Completed
 case.application.status.draft = Draft
 case.application.status.suspended = Suspended
-case.application.status.submitted = Submitted
-case.application.ruling.status.expired = Expired ruling
-case.application.status.approvedRuling = Approved ruling
-case.application.status.approvedRulingExpiring = Ruling expires in {0} days
-case.application.status.cancelled = Cancelled ruling
-case.application.ruling.viewRuling = View ruling
-case.application.ruling.renewRuling = Renew ruling
-case.application.ruling.table.download = Download
-
 
 case.application.viewApplication = View application
-case.application.deleteApplication = Delete application
 case.application.viewApplication.hidden = View application for reference {0}
 
 case.tabs.rulings = Rulings
@@ -912,4 +955,4 @@ accessibility.howWeTested.p2.text=. The full service was tested by HMRC and incl
 accessibility.howWeTested.p3=This page was prepared on 1 September 2020.
 accessibility.howWeTested.p4=It was last updated on 1 September 2020.
 
-application.dashboard.status.title = Advance Tariff Rulings
+

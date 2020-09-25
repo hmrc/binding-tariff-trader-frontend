@@ -29,13 +29,18 @@ class LegalChallengeViewSpec extends YesNoViewBehaviours {
 
   val form = new LegalChallengeFormProvider()()
 
-  def createView = () => legalChallenge(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val goodsName = "wine"
 
-  def createViewUsingForm = (form: Form[_]) => legalChallenge(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  override protected def expectedLegend(messageKeyPrefix: String): String =
+    messages(s"$messageKeyPrefix.heading", goodsName)
+
+  def createView = () => legalChallenge(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+
+  def createViewUsingForm = (form: Form[_]) => legalChallenge(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   "LegalChallenge view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)()
+    behave like normalPage(createView, messageKeyPrefix, goodsName)()
 
     behave like pageWithBackLink(createView)
 

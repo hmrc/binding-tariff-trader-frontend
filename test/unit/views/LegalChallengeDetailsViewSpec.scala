@@ -20,6 +20,7 @@ import controllers.routes
 import forms.LegalChallengeDetailsFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.twirl.api.Html
 import views.behaviours.StringViewBehaviours
 import views.html.legalChallengeDetails
 
@@ -29,15 +30,21 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
 
   val form = new LegalChallengeDetailsFormProvider()()
 
-  def createView = () => legalChallengeDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => legalChallengeDetails(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) => legalChallengeDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[String]) => legalChallengeDetails(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
 
   "LegalChallengeDetails view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
+    behave like normalPage(createView, messageKeyPrefix, messageHeadingArgs = "goodsName")()
 
     behave like pageWithBackLink(createView)
 
-    behave like textareaPage(createViewUsingForm, messageKeyPrefix, routes.LegalChallengeDetailsController.onSubmit(NormalMode).url)
+    behave like textareaPage(
+      createView = createViewUsingForm,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.LegalChallengeDetailsController.onSubmit(NormalMode).url,
+      expectedFormElementId = "legalChallengeDetails",
+      messageArgs = Seq("goodsName")
+    )
   }
 }

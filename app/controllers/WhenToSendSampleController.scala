@@ -50,19 +50,20 @@ class WhenToSendSampleController @Inject()(
   override val nextPage: Page = SimilarItemCommodityCodePage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     val preparedForm = request.userAnswers.get(WhenToSendSamplePage) match {
       case Some(value) => form.fill(value)
       case _ => form
     }
 
-    Ok(whenToSendSample(appConfig, preparedForm, mode))
+    Ok(whenToSendSample(appConfig, preparedForm, mode, goodsName))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(whenToSendSample(appConfig, formWithErrors, mode)))
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+      Future.successful(BadRequest(whenToSendSample(appConfig, formWithErrors, mode, goodsName)))
     }
 
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))

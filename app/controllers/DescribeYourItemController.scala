@@ -65,7 +65,7 @@ class DescribeYourItemController @Inject()(
         val updatedAnswers = request.userAnswers.set(DescribeYourItemPage, value)
 
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(SupportingMaterialFileListPage, mode)(updatedAnswers))
+          _ => Redirect(navigator.nextPage(DescribeYourItemPage, mode)(updatedAnswers))
         )
       }
     )
