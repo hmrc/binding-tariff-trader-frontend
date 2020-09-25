@@ -21,7 +21,7 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.MakeFileConfidentialFormProvider
 import javax.inject.Inject
-import models.Mode
+import models.{FileConfidentialityMapping, Mode}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
@@ -42,15 +42,12 @@ class MakeFileConfidentialController @Inject()(appConfig: FrontendAppConfig,
                                                cc: MessagesControllerComponents
                                                     )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
-  val form: Form[Boolean] = formProvider()
+  val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-
-      val preparedForm = request.userAnswers.get(MakeFileConfidentialPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+      val files = request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(throw new IllegalStateException("No files found on user answers"))          //TODO: BT: factor out message
+      val preparedForm = form.fill(FileConfidentialityMapping(fileId = files.last.id, confidential = false))
 
       Ok(makeFileConfidential(appConfig, preparedForm, mode))
   }
@@ -62,7 +59,8 @@ class MakeFileConfidentialController @Inject()(appConfig: FrontendAppConfig,
           Future.successful(BadRequest(makeFileConfidential(appConfig, formWithErrors, mode))),
 
         (value) => {
-          val updatedAnswers = request.userAnswers.set(MakeFileConfidentialPage, value)
+          val existingAnswers = request.userAnswers.get(MakeFileConfidentialPage).getOrElse(Seq.empty)
+          val updatedAnswers = request.userAnswers.set(MakeFileConfidentialPage, existingAnswers :+ value)
           dataCacheConnector.save(updatedAnswers.cacheMap).map(
             _ =>
               Redirect(navigator.nextPage(MakeFileConfidentialPage, mode)(updatedAnswers))

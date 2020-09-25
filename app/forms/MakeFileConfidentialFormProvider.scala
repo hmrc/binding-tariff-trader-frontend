@@ -18,12 +18,15 @@ package forms
 
 import forms.mappings.Mappings
 import javax.inject.Inject
+import models.{FileConfidentialityMapping, RegisterBusinessRepresenting}
 import play.api.data.Form
+import play.api.data.Forms.{mapping, optional}
 
 class MakeFileConfidentialFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("makeFileConfidential.error.required")           //TODO: BT: change field name
-    )
+  def apply(): Form[FileConfidentialityMapping] =
+    Form(mapping(
+      "fileId" -> text(),                                                   //TODO: BT: add key for hidden field
+      "value" -> boolean("makeFileConfidential.error.required") //TODO: BT: change field name
+    )(FileConfidentialityMapping.apply)(FileConfidentialityMapping.unapply))
 }

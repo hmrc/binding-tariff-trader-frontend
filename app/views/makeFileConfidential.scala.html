@@ -48,6 +48,8 @@
             labelClass = Some("visually-hidden")
         )
 
+        @components.input_hidden(field = makeFileConfidentialForm("fileId"))
+
         @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }

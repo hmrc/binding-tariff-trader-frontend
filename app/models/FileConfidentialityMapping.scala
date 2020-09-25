@@ -14,11 +14,22 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import models.FileConfidentialityMapping
+import play.api.libs.json.{Json, OFormat}
 
-case object MakeFileConfidentialPage extends QuestionPage[Seq[FileConfidentialityMapping]] {
+//TODO: BT: rename or get rid
+case class FileConfidentialityMapping(fileId: String, confidential: Boolean)
 
-  override def toString: String = "makeFileConfidential"
+object FileConfidentialityMapping {
+
+  implicit val confidentialityMappingFormat = Json.format[FileConfidentialityMapping]
 }
+
+
+
+
+
+
+
+
