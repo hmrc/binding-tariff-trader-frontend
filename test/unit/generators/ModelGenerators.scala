@@ -22,12 +22,6 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
-
-  implicit lazy val arbitraryReturnSamples: Arbitrary[ReturnSamples] =
-    Arbitrary {
-      Gen.oneOf(ReturnSamples.values.toSeq)
-    }
-
   implicit lazy val arbitraryUploadSupportingMaterialMultiple: Arbitrary[Seq[FileAttachment]] =
     Arbitrary {
       for {

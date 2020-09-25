@@ -177,9 +177,7 @@ class CaseRequestMapperTest extends UnitSpec {
           LegalChallengeDetailsPage.toString -> js("Known Legal Proceedings"),
           CommodityCodeDigitsPage.toString -> js("Envisaged Commodity Code"),
           WhenToSendSamplePage.toString -> js(true),
-          ReturnSamplesPage.toString -> js(
-            ReturnSamples.Yes
-          )
+          ReturnSamplesPage.toString -> js(true)
         )
       )
     )
