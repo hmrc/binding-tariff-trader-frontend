@@ -527,8 +527,18 @@ case.application.status.infoRequested = Info requested
 case.application.status.completed = Completed
 case.application.status.draft = Draft
 case.application.status.suspended = Suspended
+case.application.status.submitted = Submitted
+case.application.ruling.status.expired = Expired ruling
+case.application.status.approvedRuling = Approved ruling
+case.application.status.approvedRulingExpiring = Ruling expires in {0} days
+case.application.status.cancelled = Cancelled ruling
+case.application.ruling.viewRuling = View ruling
+case.application.ruling.renewRuling = Renew ruling
+case.application.ruling.table.download = Download
+
 
 case.application.viewApplication = View application
+case.application.deleteApplication = Delete application
 case.application.viewApplication.hidden = View application for reference {0}
 
 case.tabs.rulings = Rulings
@@ -955,4 +965,4 @@ accessibility.howWeTested.p2.text=. The full service was tested by HMRC and incl
 accessibility.howWeTested.p3=This page was prepared on 1 September 2020.
 accessibility.howWeTested.p4=It was last updated on 1 September 2020.
 
-
+application.dashboard.status.title = Advance Tariff Rulings
