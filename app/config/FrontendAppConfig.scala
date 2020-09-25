@@ -48,7 +48,6 @@ class FrontendAppConfig @Inject()(
   lazy val bindingTariffFileStoreUrl: String = serviceConfig.baseUrl("binding-tariff-filestore")
   lazy val emailUrl: String = serviceConfig.baseUrl("email")
   lazy val pdfGeneratorUrl: String = serviceConfig.baseUrl("pdf-generator-service")
-  lazy val isCdsEnrolmentCheckEnabled: Boolean = serviceConfig.getBoolean("cdsEnrolmentCheckEnabled")
 
   //accessibility Urls
   lazy val accessibilityUrl = loadConfig("accessibility-urls.accessibility")
@@ -74,6 +73,9 @@ class FrontendAppConfig @Inject()(
   private lazy val cdsUrl: String = loadConfig("customs-frontend.host")
   lazy val cdsSubscribeUrl: String = s"$cdsUrl/customs/subscribe-for-cds"
   lazy val cdsRegisterUrl: String = s"$cdsUrl/customs/register-for-cds"
+
+  private lazy val eoriCommonComponentUrl = loadConfig("eori-common-component-frontend.host")
+  lazy val atarSubscribeUrl: String = s"$eoriCommonComponentUrl/customs-enrolment-services/atar/subscribe"
 
   private lazy val feedbackUrl: String = loadConfig("feedback-frontend.host")
   private lazy val feedbackServiceName: String = "ABTIR"
