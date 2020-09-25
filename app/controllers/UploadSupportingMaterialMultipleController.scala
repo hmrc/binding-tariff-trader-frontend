@@ -22,6 +22,7 @@ import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import javax.inject.Inject
 import models.{FileAttachment, Mode}
+import navigation.Navigator
 import pages._
 import play.api.data.FormError
 import play.api.i18n.{I18nSupport, Lang}
@@ -42,6 +43,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
                                                             dataCacheConnector: DataCacheConnector,
                                                             identify: IdentifierAction,
                                                             getData: DataRetrievalAction,
+                                                            navigator: Navigator,
                                                             requireData: DataRequiredAction,
                                                             formProvider: UploadSupportingMaterialMultipleFormProvider,
                                                             fileService: FileService,
@@ -71,7 +73,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
           .map(curAnswers => curAnswers.copy(curAnswers.addAnotherDecision, curAnswers.fileAttachments ++ Seq(file)) ) getOrElse FileListAnswers(None, Seq(file))
         val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, updatedFiles)
         dataCacheConnector.save(updatedAnswers.cacheMap)
-          .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
+          .map(_ => Redirect(navigator.nextPage(UploadSupportingMaterialMultiplePage, mode)(updatedAnswers)))
       }
 
       def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]): Future[Result] = {

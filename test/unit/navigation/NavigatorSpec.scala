@@ -102,7 +102,7 @@ class NavigatorSpec extends SpecBase {
 
         when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(Some(true), Nil)))
 
-        navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
+        navigator.nextPage(UploadSupportingMaterialMultiplePage, NormalMode)(mockUserAnswers) shouldBe
           routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
       }
 
@@ -113,6 +113,75 @@ class NavigatorSpec extends SpecBase {
 
         navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
           routes.WhenToSendSampleController.onPageLoad(NormalMode)
+      }
+
+      //TODO should go to Hazardous page when user selects true
+/*      "redirect to IsSampleHazardous page when user selects YES from WhenToSendSample page" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(Some(false), Nil)))
+
+        navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.WhenToSendSampleController.onPageLoad(NormalMode)
+      }*/
+
+      "redirect to CommodityCodeBestMatchPage page when user selects NO from WhenToSendSample page" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(WhenToSendSamplePage)).thenReturn(Some(false))
+
+        navigator.nextPage(WhenToSendSamplePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)
+      }
+
+      "redirect to CommodityCodeDigitsPage page when user selects YES from CommodityCodeBestMatchPage page" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(CommodityCodeBestMatchPage)).thenReturn(Some(true))
+
+        navigator.nextPage(CommodityCodeBestMatchPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.CommodityCodeDigitsController.onPageLoad(NormalMode)
+      }
+
+      "redirect to LegalChallengePage page when user selects NO from CommodityCodeBestMatchPage page" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(CommodityCodeBestMatchPage)).thenReturn(Some(false))
+
+        navigator.nextPage(CommodityCodeBestMatchPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.LegalChallengeController.onPageLoad(NormalMode)
+      }
+
+      "redirect to LegalChallengePage page from CommodityCodeDigitsPage page" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        navigator.nextPage(CommodityCodeDigitsPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.LegalChallengeController.onPageLoad(NormalMode)
+      }
+
+      "redirect to LegalChallengeDetailsPage page when user selects YES from LegalChallengePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(LegalChallengePage)).thenReturn(Some(true))
+
+        navigator.nextPage(LegalChallengePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.LegalChallengeDetailsController.onPageLoad(NormalMode)
+      }
+
+      "redirect to SelectApplicationTypePage when user selects NO from LegalChallengePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(LegalChallengePage)).thenReturn(Some(false))
+
+        navigator.nextPage(LegalChallengePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.SelectApplicationTypeController.onPageLoad(NormalMode)
+      }
+
+      "redirect to SelectApplicationTypePage page from LegalChallengeDetailsPage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        navigator.nextPage(LegalChallengeDetailsPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.SelectApplicationTypeController.onPageLoad(NormalMode)
       }
     }
 

@@ -47,15 +47,26 @@ class Navigator @Inject()() {
     UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(NormalMode)),
     AcceptItemInformationPage -> (_ => routes.AcceptItemInformationListController.onPageLoad()),
     PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
-    UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
-    CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)),
-    CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(NormalMode)),
-    WhenToSendSamplePage -> (_ => routes.WhenToSendSampleController.onPageLoad(NormalMode)),
+    UploadSupportingMaterialMultiplePage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
+    CommodityCodeBestMatchPage -> (answer => answer.get(CommodityCodeBestMatchPage) match {
+      case Some(true) => routes.CommodityCodeDigitsController.onPageLoad(NormalMode)
+      case Some(false) => routes.LegalChallengeController.onPageLoad(NormalMode)
+    }),
+    CommodityCodeDigitsPage -> (_ => routes.LegalChallengeController.onPageLoad(NormalMode)),
+    WhenToSendSamplePage -> (answers => {answers.get(WhenToSendSamplePage) match {
+        //TODO should go to Hazardous page when user selects TRUE: update logic when that PR is merged
+        case Some(true) => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)
+        case Some(false) => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)
+        case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
+      }}),
     ReturnSamplesPage -> (_ => routes.ReturnSamplesController.onPageLoad(NormalMode)),
     SimilarItemCommodityCodePage -> (_ => routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode)),
     CommodityCodeRulingReferencePage -> (_ => routes.CommodityCodeRulingReferenceController.onPageLoad(NormalMode)),
-    LegalChallengePage -> (_ => routes.LegalChallengeController.onPageLoad(NormalMode)),
-    LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(NormalMode)),
+    LegalChallengePage -> (answer => answer.get(LegalChallengePage) match {
+      case Some(true) => routes.LegalChallengeDetailsController.onPageLoad(NormalMode)
+      case Some(false) => routes.SelectApplicationTypeController.onPageLoad(NormalMode)
+    }),
+    LegalChallengeDetailsPage -> (_ => routes.SelectApplicationTypeController.onPageLoad(NormalMode)),
     SupportingInformationPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
     SupportingInformationDetailsPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
     EnterContactDetailsPage -> (_ => routes.CheckYourAnswersController.onPageLoad()),

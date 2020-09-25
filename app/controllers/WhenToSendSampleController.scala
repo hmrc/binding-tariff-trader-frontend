@@ -47,7 +47,7 @@ class WhenToSendSampleController @Inject()(
 
   override val page: QuestionPage[Boolean] = WhenToSendSamplePage
   override val pageDetails: QuestionPage[ReturnSamples] = ReturnSamplesPage
-  override val nextPage: Page = SimilarItemCommodityCodePage
+  //override val nextPage: Page = SimilarItemCommodityCodePage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")

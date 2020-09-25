@@ -21,6 +21,7 @@ import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models.FileAttachment.format
 import models.{FileAttachment, NormalMode}
+import navigation.Navigator
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
@@ -54,6 +55,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       cacheConnector,
       FakeIdentifierAction,
       dataRetrievalAction,
+      new Navigator,
       new DataRequiredActionImpl,
       formProvider,
       fileService,

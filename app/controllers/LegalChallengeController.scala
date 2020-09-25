@@ -47,7 +47,7 @@ class LegalChallengeController @Inject()(
 
   override protected val page: QuestionPage[Boolean] = LegalChallengePage
   override protected val pageDetails: QuestionPage[String] = LegalChallengeDetailsPage
-  override protected val nextPage: Page = SupportingInformationPage
+  //override protected val nextPage: Page = SupportingInformationPage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 

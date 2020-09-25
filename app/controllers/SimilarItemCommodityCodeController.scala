@@ -46,7 +46,7 @@ class SimilarItemCommodityCodeController @Inject()(
 
   override val page = SimilarItemCommodityCodePage
   override val pageDetails = CommodityCodeRulingReferencePage
-  override val nextPage = LegalChallengePage
+  //override val nextPage = LegalChallengePage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 

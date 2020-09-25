@@ -47,7 +47,7 @@ class CommodityCodeBestMatchController @Inject()(
 
   override val page: QuestionPage[Boolean] = CommodityCodeBestMatchPage
   override val pageDetails: QuestionPage[String] = CommodityCodeDigitsPage
-  override val nextPage: Page = WhenToSendSamplePage
+  //override val nextPage: Page = WhenToSendSamplePage
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
