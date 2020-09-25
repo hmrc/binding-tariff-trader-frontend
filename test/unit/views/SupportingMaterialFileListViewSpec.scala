@@ -26,31 +26,23 @@ import views.html.supportingMaterialFileList
 class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
   private lazy val messageKeyPrefix = "supportingMaterialFileList"
+  private val goodsName = "some-goods-name"
 
   override protected val form = new SupportingMaterialFileListFormProvider()()
 
-  private def createView: () => HtmlFormat.Appendable = { () =>
-    createViewWithForm(form)
-  }
+  private def createView: () => HtmlFormat.Appendable = { () => createViewWithForm(form) }
 
-  private def createViewWithForm(f: Form[Boolean], files: Seq[FileAttachment] = Seq.empty): HtmlFormat.Appendable = {
-    supportingMaterialFileList(frontendAppConfig, f, files, NormalMode)(fakeRequest, messages)
-  }
+  private def createViewWithForm(f: Form[Boolean], files: Seq[FileAttachment] = Seq.empty): HtmlFormat.Appendable =
+    supportingMaterialFileList(frontendAppConfig, f, goodsName, files, NormalMode)(fakeRequest, messages)
 
   "SupportingMaterialFileList view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)()
+    behave like normalPage(createView, messageKeyPrefix, goodsName)()
 
     behave like pageWithBackLink(createView)
 
-//    behave like yesNoPage() // TODO: not working at the moment as it has not been created as the other Yes/No pages
-
     "show the expected heading when no files have been uploaded" in {
-      val htmlView = asDocument(createView())
-
-      val headings = htmlView.getElementsByTag("h1")
-      assert(headings.size() == 1)
-      assert(headings.first().ownText() == messagesApi(s"${messageKeyPrefix}.heading"))
+      assertHeading(0)
     }
 
     "show the expected heading when 1 file has been uploaded" in {
@@ -70,20 +62,19 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
     val headings = htmlView.getElementsByTag("h1")
     assert(headings.size() == 1)
     val heading = headings.first().ownText()
+
     if (n == 1) {
-      assert(heading == messagesApi(s"${messageKeyPrefix}.uploadFileCounter.singular"))
+      assert(heading == messagesApi(s"${messageKeyPrefix}.uploadFileCounter.singular", goodsName))
+    } else if (n > 1) {
+      assert(heading == messagesApi(s"${messageKeyPrefix}.uploadFileCounter.plural", n, goodsName))
     } else {
-      assert(heading == messagesApi(s"${messageKeyPrefix}.uploadFileCounter.plural", n))
+      assert(heading == messagesApi(s"${messageKeyPrefix}.heading", goodsName))
     }
   }
 
-  private def generateFiles: Int => Seq[FileAttachment] = { n =>
-
-    def generateFile: Int => FileAttachment = { n =>
-      FileAttachment(s"id$n", s"name$n", s"mime$n", 1L)
+  private def generateFiles(number: Int): Seq[FileAttachment] = {
+    (1 to number).map { idx =>
+      FileAttachment(s"id$idx", s"name$idx", s"mime$idx", 1L)
     }
-
-    (1 to n) map generateFile
   }
-
 }

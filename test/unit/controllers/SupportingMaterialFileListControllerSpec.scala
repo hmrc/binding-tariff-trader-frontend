@@ -25,10 +25,13 @@ import play.api.data.Form
 import play.api.test.Helpers._
 import views.html.supportingMaterialFileList
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
 
   private val formProvider = new SupportingMaterialFileListFormProvider()
   private val form: Form[Boolean] = formProvider()
+  private val goodsName = "some-goods-name"
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new SupportingMaterialFileListController(
@@ -42,8 +45,8 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
       cc
     )
 
-  private def viewAsString(form: Form[_] = form): String = supportingMaterialFileList(frontendAppConfig, form, Seq.empty, NormalMode)(fakeRequest, messages).toString
-
+  private def viewAsString(form: Form[_] = form): String =
+    supportingMaterialFileList(frontendAppConfig, form, goodsName, Seq.empty, NormalMode)(fakeRequest, messages).toString
 
   "SupportingMaterialFileList Controller" must {
 
