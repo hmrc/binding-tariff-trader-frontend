@@ -44,19 +44,18 @@ class MakeFileConfidentialController @Inject()(appConfig: FrontendAppConfig,
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request => Ok(makeFileConfidential(appConfig, form, mode))
+  def onPageLoad(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+    implicit request => Ok(makeFileConfidential(appConfig, form, mode, fileId))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
       form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(makeFileConfidential(appConfig, formWithErrors, mode))),
-        (value) => {
-          val files = request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(throw new IllegalStateException("No uploaded files found in user answers"))
+        formWithErrors =>
+          Future.successful(BadRequest(makeFileConfidential(appConfig, formWithErrors, mode, formWithErrors.value.get.fileId))),            //TODO: BT: safe to call get() on Option
+        (fileConfidentiality) => {
           val existingAnswers = request.userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty)
-          val updatedAnswers = request.userAnswers.set(MakeFileConfidentialPage, existingAnswers + (files.last.id -> value))
+          val updatedAnswers = request.userAnswers.set(MakeFileConfidentialPage, existingAnswers + (fileConfidentiality.fileId -> fileConfidentiality.confidential))
 
           dataCacheConnector.save(updatedAnswers.cacheMap).map {
             _ => Redirect(navigator.nextPage(MakeFileConfidentialPage, mode)(updatedAnswers))

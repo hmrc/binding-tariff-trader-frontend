@@ -22,7 +22,7 @@
 
 @this()
 
-@(appConfig: FrontendAppConfig, makeFileConfidentialForm: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, makeFileConfidentialForm: Form[_], mode: Mode, fileId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(makeFileConfidentialForm)} ${messages("makeFileConfidential.title")}",
@@ -48,7 +48,7 @@
             labelClass = Some("visually-hidden")
         )
 
-        @components.input_hidden(field = makeFileConfidentialForm("fileId"))
+        <input type="hidden" id="@{makeFileConfidentialForm("fileId").id}" name="@{makeFileConfidentialForm("fileId").name}" value="@fileId"/>
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }

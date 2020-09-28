@@ -69,7 +69,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
           .map(_ ++ Seq(file)) getOrElse Seq(file)
         val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, updatedFiles)
         dataCacheConnector.save(updatedAnswers.cacheMap)
-          .map(_ => Redirect(routes.MakeFileConfidentialController.onPageLoad(mode)))
+          .map(_ => Redirect(routes.MakeFileConfidentialController.onPageLoad(file.id, mode)))
       }
 
       def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]): Future[Result] = {
