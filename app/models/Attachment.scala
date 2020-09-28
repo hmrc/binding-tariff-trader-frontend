@@ -23,7 +23,7 @@ import play.api.libs.json.{Json, OFormat}
 case class Attachment
 (
   id: String,
-  public: Boolean = false,
+  public: Boolean,
   timestamp: ZonedDateTime = ZonedDateTime.now()
 )
 

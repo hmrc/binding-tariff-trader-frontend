@@ -16,9 +16,7 @@
 
 package pages
 
-import models.FileConfidentiality
-
-case object MakeFileConfidentialPage extends QuestionPage[Seq[FileConfidentiality]] {
+case object MakeFileConfidentialPage extends QuestionPage[Map[String, Boolean]] {
 
   override def toString: String = "makeFileConfidential"
 }

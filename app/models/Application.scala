@@ -33,8 +33,7 @@ case class Application
   knownLegalProceedings: Option[String],
   envisagedCommodityCode: Option[String],
   sampleToBeProvided: Boolean,
-  sampleToBeReturned: Boolean,
-  fileConfidentialityStatuses: Seq[FileConfidentiality]
+  sampleToBeReturned: Boolean
 )
 
 case class EORIDetails

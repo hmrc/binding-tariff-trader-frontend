@@ -27,7 +27,7 @@ import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import models.requests.OptionalDataRequest
 import navigation.Navigator
-import pages.{ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
+import pages.{ConfirmationPage, MakeFileConfidentialPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, FileService}
@@ -65,10 +65,12 @@ class DeclarationController @Inject()(
       .get(SupportingMaterialFileListPage)
       .getOrElse(Seq.empty)
 
+    val fileConfidentialityStatuses = answers.get(MakeFileConfidentialPage).getOrElse(Map.empty)
+
     for {
       att: Seq[PublishedFileAttachment] <- fileService.publish(attachments)
       letter      <- getPublishedLetter(answers)
-      atar        <- createCase(newCaseRequest, att, letter, answers)
+      atar        <- createCase(newCaseRequest, att, fileConfidentialityStatuses, letter, answers)
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
       _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
       userAnswers = answers.set(ConfirmationPage, Confirmation(atar))
@@ -91,14 +93,16 @@ class DeclarationController @Inject()(
   }
 
   private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[PublishedFileAttachment],
+                         fileConfidentialityStatuses: Map[String, Boolean],
                          letter: Option[PublishedFileAttachment], answers: UserAnswers)
                         (implicit headerCarrier: HeaderCarrier): Future[Case] = {
-    caseService.create(appendAttachments(newCaseRequest, attachments, letter, answers))
+    caseService.create(appendAttachments(newCaseRequest, attachments, fileConfidentialityStatuses, letter, answers))
   }
 
   private def appendAttachments(caseRequest: NewCaseRequest, attachments: Seq[PublishedFileAttachment],
+                                fileConfidentialityStatuses: Map[String, Boolean],
                                 letter: Option[PublishedFileAttachment], answers: UserAnswers): NewCaseRequest = {
-    def toAttachment: PublishedFileAttachment => Attachment = file => Attachment(file.id)
+    def toAttachment: PublishedFileAttachment => Attachment = file => Attachment(file.id, fileConfidentialityStatuses(file.id))
 
     if (theUserIsAnAgent(answers)) {
       val letterOfAuth: Option[Attachment] = letter.map(toAttachment)
