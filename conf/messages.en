@@ -150,8 +150,10 @@ registerBusinessRepresenting.error.postCode.length = Postcode must be {0} charac
 registerBusinessRepresenting.error.country.length = Country must be 60 characters or less
 registerBusinessRepresenting.error.postCode.gb = Enter a real postcode
 
-enterContactDetails.title = Contact details for this application - Manage your Advance Tariff Rulings - GOV.UK
-enterContactDetails.heading = Contact details for this application
+enterContactDetails.title = Provide the contact details for this application - Manage your Advance Tariff Rulings - GOV.UK
+enterContactDetails.heading = Provide the contact details for this application
+enterContactDetails.bodyText = These details may be used to contact you with questions relating to this application.
+enterContactDetails.caption = About the applicant
 enterContactDetails.name = Full name
 enterContactDetails.email = Email address
 enterContactDetails.phoneNumber = Telephone number (optional)
