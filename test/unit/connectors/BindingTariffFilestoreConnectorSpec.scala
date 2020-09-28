@@ -170,7 +170,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.getFileMetadata(Seq(Attachment("id1"), Attachment("id2")))(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        connector.getFileMetadata(Seq(Attachment("id1", false), Attachment("id2", false)))(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
       ) shouldBe Seq(
         FilestoreResponse(
           id = "id1",
