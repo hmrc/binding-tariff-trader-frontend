@@ -21,7 +21,7 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.MakeFileConfidentialFormProvider
 import javax.inject.Inject
-import models.{FileConfidentialityMapping, Mode}
+import models.{FileConfidentiality, Mode}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
@@ -47,7 +47,7 @@ class MakeFileConfidentialController @Inject()(appConfig: FrontendAppConfig,
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
       val files = request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(throw new IllegalStateException("No files found on user answers"))          //TODO: BT: factor out message
-      val preparedForm = form.fill(FileConfidentialityMapping(fileId = files.last.id, confidential = false))
+      val preparedForm = form.fill(FileConfidentiality(fileId = files.last.id, confidential = false))
 
       Ok(makeFileConfidential(appConfig, preparedForm, mode))
   }

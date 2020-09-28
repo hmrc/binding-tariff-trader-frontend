@@ -16,14 +16,13 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Json
 
-//TODO: BT: rename or get rid
-case class FileConfidentialityMapping(fileId: String, confidential: Boolean)
+case class FileConfidentiality(fileId: String, confidential: Boolean)
 
-object FileConfidentialityMapping {
+object FileConfidentiality {
 
-  implicit val confidentialityMappingFormat = Json.format[FileConfidentialityMapping]
+  implicit val confidentialityFormat = Json.format[FileConfidentiality]
 }
 
 
