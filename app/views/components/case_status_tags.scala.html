@@ -1,0 +1,52 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import utils.Dates
+
+@import config.FrontendAppConfig
+@import java.time.Instant
+@import java.time.temporal.ChronoUnit
+@import components.pagination
+
+@(c :Case)(implicit messages: Messages)
+
+@c.status match {
+case CaseStatus.NEW => {
+ <span class="govuk-tag govuk-tag--blue">@messages("case.application.status.submitted")</span>
+}
+case CaseStatus.OPEN | CaseStatus.SUSPENDED => {
+ <span class="govuk-tag govuk-tag--blue">@messages("case.application.status.inProgress")</span>
+}
+case CaseStatus.REFERRED => {
+ <span class="govuk-tag govuk-tag--yellow">@messages("case.application.status.infoRequested")</span>
+}
+case CaseStatus.SUPPRESSED | CaseStatus.REJECTED => {
+ <span class="govuk-tag govuk-tag--red"> @messages("case.application.status.rejected")</span>
+}
+case CaseStatus.COMPLETED if c.hasExpiringRuling => {
+ <span class="govuk-tag govuk-tag--red">@messages("case.application.status.approvedRulingExpiring", c.daysUntilExpiry.get)</span>
+}
+case CaseStatus.COMPLETED if c.hasActiveDecision => {
+ <span class="govuk-tag govuk-tag--green"> @messages("case.application.status.approvedRuling")</span>
+}
+case CaseStatus.COMPLETED if c.hasExpiredDecision => {
+ <span class="govuk-tag govuk-tag--grey">@messages("case.application.ruling.status.expired")</span>
+}
+case CaseStatus.CANCELLED => {
+ <span class="govuk-tag govuk-tag--grey">@messages("case.application.status.cancelled")</span>
+}
+case _ => {}
+}

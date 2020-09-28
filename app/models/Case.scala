@@ -48,6 +48,9 @@ case class Case
 
   private val rulingStates = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
 
-  val daysDifference: Option[Long] = this.decision.flatMap(_.effectiveEndDate).map(date => ChronoUnit.DAYS.between(Instant.now, date))
+
+
+  def daysUntilExpiry: Option[Long] = this.decision.flatMap(_.effectiveEndDate).map(date => ChronoUnit.DAYS.between(Instant.now, date))
+  def hasExpiringRuling: Boolean = daysUntilExpiry.map(days => days>0 && days<=120).getOrElse(false)
 
 }

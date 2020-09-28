@@ -278,10 +278,10 @@ class IndexControllerSpec extends ControllerSpecBase {
             messages("case.application.status.rejected")
           }
           case CaseStatus.COMPLETED if testCase.hasActiveDecision => {
-            if (testCase.daysDifference.get > 120) {
+            if (testCase.daysUntilExpiry.get > 120) {
               messages("case.application.status.approvedRuling")
             } else {
-              messages("case.application.status.approvedRulingExpiring", testCase.daysDifference.get)
+              messages("case.application.status.approvedRulingExpiring", testCase.daysUntilExpiry.get)
             }
           }
           case CaseStatus.COMPLETED if testCase.hasExpiredDecision => {
