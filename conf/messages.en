@@ -326,11 +326,12 @@ similarItemCommodityCode.bodyText = It can help us to classify your goods and ma
 similarItemCommodityCode.listItem1 = your business or organisation operates in other countries and you have a ruling for that country
 similarItemCommodityCode.listItem2 = you know of a similar item with a ruling
 
-commodityCodeRulingReference.title = What are the details and reference numbers of the similar rulings? - Manage your Advance Tariff Rulings - GOV.UK
-commodityCodeRulingReference.heading = What are the details and reference numbers of the similar rulings?
-commodityCodeRulingReference.hint = The reference number, for example GB12345678 and FR12345678, is on the ruling certificate. You can include more than one reference number.
-commodityCodeRulingReference.checkYourAnswersLabel = Ruling reference number
-commodityCodeRulingReference.error.required = Enter the ruling reference numbers and details of similar rulings
+commodityCodeRulingReference.title = Provide the reference number of a similar ruling - Manage your Advance Tariff Rulings - GOV.UK
+commodityCodeRulingReference.heading = Provide the reference number of a similar ruling
+commodityCodeRulingReference.caption = About other rulings
+commodityCodeRulingReference.hint = The reference number, for example FR12345678, is on the ruling certificate.
+commodityCodeRulingReference.checkYourAnswersLabel = Similar renewal references
+commodityCodeRulingReference.error.required = Enter a ruling reference number
 
 legalChallenge.title = Have there been any legal problems classifying the goods? - Manage your Advance Tariff Rulings - GOV.UK
 legalChallenge.heading = Have there been any legal problems classifying the {0}?
