@@ -1,0 +1,79 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+@import controllers.routes._
+@import models.Mode
+@import uk.gov.hmrc.play.views.html._
+@import views.ViewUtils._
+
+
+@(appConfig: FrontendAppConfig, form: Form[_], rulings: Seq[String], mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    title = s"${errorPrefix(form)} ${messages("addAnotherRuling.title")}",
+    appConfig = appConfig,
+    bodyClasses = None) {
+
+    @helpers.form(action = AddAnotherRulingController.onSubmit(mode)) {
+
+        @components.back_link()
+
+        @components.error_summary(form.errors)
+
+
+        @if(rulings.nonEmpty) {
+            @if(rulings.size == 1) {
+                @components.heading(
+                    messages("addAnotherRuling.addRulingCounter.singular", rulings),
+                    captionMsg = Some(messages("addAnotherRuling.caption"))
+                )
+            } else {
+                @components.heading(
+                    messages("addAnotherRuling.addRulingCounter.plural", rulings.size, rulings),
+                    captionMsg = Some(messages("addAnotherRuling.caption"))
+                )
+            }
+
+            @components.show_add_rulings_table(rulings, mode)
+
+            @components.input_yes_no(
+                field = form("add-another-ruling-choice"),
+                labelHtml = Some(addAdditionalRuling)
+            )
+        } else {
+            @components.heading(
+                messages("addAnotherRuling.heading"),
+                captionMsg = Some(messages("addAnotherRuling.caption"))
+            )
+
+            @components.input_yes_no(
+                field = form("add-another-ruling-choice"),
+                label = Some(messages("addAnotherRuling.heading")),
+                labelClass = Some("visually-hidden")
+            )
+        }
+
+        @components.submit_button(Some(messages("site.save_and_continue")))
+    }
+
+}
+
+@addAdditionalRuling = {
+    <div class="heading-large mb-2">
+        @messages("addAnotherRuling.label.anotherRuling")
+    </div>
+    }
