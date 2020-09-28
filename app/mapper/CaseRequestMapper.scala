@@ -39,11 +39,13 @@ class CaseRequestMapper {
 
     val sampleProvided: Boolean = answers.get(WhenToSendSamplePage).getOrElse(throwError("when to send a sample"))
     val returnSample: Boolean = answers.get(ReturnSamplesPage).getOrElse(false)
+    val fileConfidentialityStatuses = answers.get(MakeFileConfidentialPage).getOrElse(Nil)                //TODO: BT: ok with Nil as default here?
 
     val contact = contactDetails.map(toContact).getOrElse(throwError("contact details"))
 
     val agentDetails: Option[AgentDetails] = agentDetailsFrom(answers)
     val holderDetails: EORIDetails = holderDetailsFrom(answers)
+
 
     val app = Application(
       holder = holderDetails,
@@ -59,7 +61,8 @@ class CaseRequestMapper {
       knownLegalProceedings = legalChallengeDetails,
       envisagedCommodityCode = commodityCodeDigits,
       sampleToBeProvided = sampleProvided,
-      sampleToBeReturned = returnSample
+      sampleToBeReturned = returnSample,
+      fileConfidentialityStatuses = fileConfidentialityStatuses
     )
 
     NewCaseRequest(app)
