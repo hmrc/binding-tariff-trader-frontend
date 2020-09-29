@@ -21,14 +21,13 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SelectApplicationTypeFormProvider
 import javax.inject.Inject
-import models.SelectApplicationType.{NewCommodity, PreviousCommodity}
 import models._
 import navigation.Navigator
 import pages._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.selectApplicationType
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,39 +42,34 @@ class SelectApplicationTypeController @Inject()(
                                                  requireData: DataRequiredAction,
                                                  formProvider: SelectApplicationTypeFormProvider,
                                                  cc: MessagesControllerComponents
-                                               ) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
+                                               ) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     val preparedForm = request.userAnswers.get(SelectApplicationTypePage) match {
       case Some(value) => form.fill(value)
       case _ => form
     }
 
-    Ok(selectApplicationType(appConfig, preparedForm, mode))
+    Ok(selectApplicationType(appConfig, preparedForm, goodsName, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def update(o: SelectApplicationType): UserAnswers = {
-      o match {
-        case PreviousCommodity => request.userAnswers.set(SelectApplicationTypePage, o)
-        case NewCommodity => request.userAnswers.set(SelectApplicationTypePage, o).remove(PreviousCommodityCodePage)
-      }
+    def nextPage: Boolean => Page = {
+      case true => PreviousCommodityCodePage
+      case false => AcceptItemInformationPage
     }
 
-    def nextPage: SelectApplicationType => Page = {
-      case PreviousCommodity => PreviousCommodityCodePage
-      case NewCommodity => AcceptItemInformationPage
-    }
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(selectApplicationType(appConfig, formWithErrors, mode))),
+        Future.successful(BadRequest(selectApplicationType(appConfig, formWithErrors, goodsName, mode))),
       selectedOption => {
-        val updatedAnswers = update(selectedOption)
+        val updatedAnswers = request.userAnswers.set(SelectApplicationTypePage, selectedOption)
         dataCacheConnector.save(updatedAnswers.cacheMap).map(
           _ => Results.Redirect(navigator.nextPage(nextPage(selectedOption), mode)(updatedAnswers))
         )

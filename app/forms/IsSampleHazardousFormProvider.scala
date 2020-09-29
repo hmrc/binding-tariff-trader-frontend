@@ -16,16 +16,14 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
 
-class SelectApplicationTypeFormProvider @Inject() extends Mappings {
+class IsSampleHazardousFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("selectApplicationType.error.required")
+      "isSampleHazardous" -> boolean("isSampleHazardous.error.required")
     )
-
 }

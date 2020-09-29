@@ -16,17 +16,16 @@
 
 package pages
 
-import models.SelectApplicationType
 import pages.behaviours.PageBehaviours
 
 class SelectApplicationTypePageSpec extends PageBehaviours {
 
   "YourLocation" must {
 
-    beRetrievable[SelectApplicationType](SelectApplicationTypePage)
+    beRetrievable[Boolean](SelectApplicationTypePage)
 
-    beSettable[SelectApplicationType](SelectApplicationTypePage)
+    beSettable[Boolean](SelectApplicationTypePage)
 
-    beRemovable[SelectApplicationType](SelectApplicationTypePage)
+    beRemovable[Boolean](SelectApplicationTypePage)
   }
 }

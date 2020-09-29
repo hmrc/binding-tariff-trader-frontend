@@ -14,32 +14,37 @@
  * limitations under the License.
  */
 
-package controllers
+package unit.controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import forms.PreviousCommodityCodeFormProvider
-import models.{NormalMode, PreviousCommodityCode}
+import controllers.{ControllerSpecBase, IsSampleHazardousController, routes}
+import forms.IsSampleHazardousFormProvider
+import models.NormalMode
 import navigation.FakeNavigator
-import pages.PreviousCommodityCodePage
+import pages.IsSampleHazardousPage
 import play.api.data.Form
-import play.api.libs.json.Json
+import play.api.libs.json.JsBoolean
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
-import views.html.previousCommodityCode
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class PreviousCommodityCodeControllerSpec extends ControllerSpecBase {
+class IsSampleHazardousControllerSpec extends ControllerSpecBase {
 
-  private val formProvider = new PreviousCommodityCodeFormProvider()
-  private val form = formProvider()
+  def onwardRoute = Call("GET", "/foo")
 
-  def viewAsString(form: Form[_] = form): String = previousCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  val formProvider = new IsSampleHazardousFormProvider()
+  val form = formProvider()
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new PreviousCommodityCodeController(
+  val isSampleHazardousView = injector.instanceOf[views.html.isSampleHazardous]
+
+  val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakePOSTRequest = fakePOSTRequestWithCSRF
+
+  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+    new IsSampleHazardousController(
       frontendAppConfig,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
@@ -47,31 +52,34 @@ class PreviousCommodityCodeControllerSpec extends ControllerSpecBase {
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
-    )
+      isSampleHazardousView,
+      cc)
 
-  private def onwardRoute = Call("GET", "/foo")
+  def viewAsString(form: Form[_] = form) = isSampleHazardousView(
+    frontendAppConfig, form, NormalMode)(fakeGETRequest, messages).toString
 
-  "PreviousCommodityCode Controller" must {
+  "IsSampleHazardous Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
+
+      val result = controller().onPageLoad(NormalMode)(fakeGETRequest)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(PreviousCommodityCodePage.toString -> Json.toJson(PreviousCommodityCode("value 1")))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      val validData = Map(IsSampleHazardousPage.toString -> JsBoolean(true))
 
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+      val getRequiredData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      contentAsString(result) shouldBe viewAsString(form.fill(PreviousCommodityCode("value 1")))
+      val result = controller(getRequiredData).onPageLoad(NormalMode)(fakeGETRequest)
+
+      contentAsString(result) shouldBe viewAsString(form.fill(true))
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("previousCommodityCode", "value 1"))
+      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("isSampleHazardous", "true"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -80,8 +88,8 @@ class PreviousCommodityCodeControllerSpec extends ControllerSpecBase {
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val postRequest = fakeGETRequest.withFormUrlEncodedBody(("isSampleHazardous", "invalid value"))
+      val boundForm = form.bind(Map("isSampleHazardous" -> "invalid value"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -90,14 +98,14 @@ class PreviousCommodityCodeControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
+      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeGETRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("previousCommodityCode", "value 1"))
+      val postRequest = fakePOSTRequest.withFormUrlEncodedBody(("isSampleHazardous", "true"))
       val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe SEE_OTHER

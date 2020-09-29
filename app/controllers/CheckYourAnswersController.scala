@@ -72,6 +72,7 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,
           checkYourAnswersHelper.whenToSendSample,
+          checkYourAnswersHelper.isSampleHazardous,
           checkYourAnswersHelper.returnSamples,
           checkYourAnswersHelper.similarItemCommodityCode,
           checkYourAnswersHelper.commodityCodeRulingReference,

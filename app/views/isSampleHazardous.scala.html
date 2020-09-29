@@ -16,36 +16,37 @@
 
 @import config.FrontendAppConfig
 @import controllers.routes._
+@import helper._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@this()
+
+@(appConfig: FrontendAppConfig, isSampleHazardousForm: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("previousCommodityCode.title")}",
+    title = s"${errorPrefix(isSampleHazardousForm)} ${messages("isSampleHazardous.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = PreviousCommodityCodeController.onSubmit(mode)) {
+    @form(action = IsSampleHazardousController.onSubmit(mode), 'autoComplete -> "off") {
+
+        @CSRF.formField
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @components.error_summary(isSampleHazardousForm.errors)
 
-        @components.input_text(
-            field = form("previousCommodityCode"),
-            labelHtml = Some(heading),
-            hint = Some(messages("previousCommodityCode.previousCommodityCode.hint"))
+        @components.heading(messages("isSampleHazardous.heading"),
+            captionMsg = Some(messages("isSampleHazardous.caption")))
+
+        @components.input_yes_no(
+            field = isSampleHazardousForm("isSampleHazardous"),
+            label = Some(messages("isSampleHazardous.heading")),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }
 
-@heading = {
-    @components.heading(
-        messages("previousCommodityCode.heading"),
-        captionMsg = Some(messages("previousCommodityCode.caption"))
-    )
-}

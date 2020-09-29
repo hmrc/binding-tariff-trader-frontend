@@ -85,11 +85,6 @@ trait ModelGenerators {
       } yield RegisterBusinessRepresenting(eoriNumber, businessName, addressLine1, town, Some(postCode), country)
     }
 
-  implicit lazy val arbitrarySelectApplicationType: Arbitrary[SelectApplicationType] =
-    Arbitrary {
-      Gen.oneOf(SelectApplicationType.values.toSeq)
-    }
-
   implicit lazy val arbitraryFileListAnswers: Arbitrary[FileListAnswers] =
     Arbitrary {
       for {
