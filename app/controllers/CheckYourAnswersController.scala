@@ -67,6 +67,7 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.provideGoodsDescription,
           checkYourAnswersHelper.addConfidentialInformation,
           checkYourAnswersHelper.provideConfidentialInformation,
+          checkYourAnswersHelper.supportingMaterialFileListChoice,
           checkYourAnswersHelper.supportingMaterialFileList,
           checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,

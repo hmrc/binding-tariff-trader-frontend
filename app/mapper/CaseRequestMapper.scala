@@ -29,8 +29,6 @@ class CaseRequestMapper {
   def map(answers: UserAnswers): NewCaseRequest = {
     val goodsName = answers.get(ProvideGoodsNamePage)
     val goodsDescription = answers.get(ProvideGoodsDescriptionPage)
-    val addConfidentialInformation = answers.get(AddConfidentialInformationPage)
-      .getOrElse(throwError("add confidential information?"))
     val provideConfidentialInformation = confidentialInfo(answers)
     val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
     val previousCommodityCode: Option[PreviousCommodityCode] = answers.get(PreviousCommodityCodePage)
@@ -40,7 +38,7 @@ class CaseRequestMapper {
     val supportingInformationDetails: Option[String] = answers.get(SupportingInformationDetailsPage)
 
     val sampleProvided: Boolean = answers.get(WhenToSendSamplePage).getOrElse(throwError("when to send a sample"))
-    val returnSample: Option[ReturnSamples] = answers.get(ReturnSamplesPage)
+    val returnSample: Boolean = answers.get(ReturnSamplesPage).getOrElse(false)
 
     val contact = contactDetails.map(toContact).getOrElse(throwError("contact details"))
 
@@ -61,7 +59,7 @@ class CaseRequestMapper {
       knownLegalProceedings = legalChallengeDetails,
       envisagedCommodityCode = commodityCodeDigits,
       sampleToBeProvided = sampleProvided,
-      sampleToBeReturned = toReturnSample(returnSample)
+      sampleToBeReturned = returnSample
     )
 
     NewCaseRequest(app)
@@ -124,13 +122,6 @@ class CaseRequestMapper {
       email = details.email,
       phone = details.phoneNumber
     )
-  }
-
-  private def toReturnSample: Option[ReturnSamples] => Boolean = { op: Option[ReturnSamples] =>
-    op.getOrElse(ReturnSamples.No) match {
-      case ReturnSamples.Yes => true
-      case _ => false
-    }
   }
 
 }

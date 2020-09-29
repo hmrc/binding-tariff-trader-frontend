@@ -75,7 +75,7 @@ class CheckYourAnswersHelper(
   }
 
   def returnSamples: Option[AnswerRow] = userAnswers.get(ReturnSamplesPage) map {
-    x => AnswerRow("returnSamples.checkYourAnswersLabel", s"returnSamples.$x", true, routes.ReturnSamplesController.onPageLoad(CheckMode).url)
+    x => AnswerRow("returnSamples.checkYourAnswersLabel", yesNoAnswer(x), true, routes.ReturnSamplesController.onPageLoad(CheckMode).url)
   }
 
   def whenToSendSample: Option[AnswerRow] = userAnswers.get(WhenToSendSamplePage) map {
@@ -90,15 +90,33 @@ class CheckYourAnswersHelper(
     x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", yesNoAnswer(x), true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
   }
 
-  def supportingMaterialFileList: Option[AnswerRow] = {
+  def supportingMaterialFileListChoice: Option[AnswerRow] = {
+    def choiceRow(hasFiles: Boolean): AnswerRow = AnswerRow(
+      "supportingMaterialFileList.choice.checkYourAnswersLabel",
+      yesNoAnswer(hasFiles), false,
+      routes.SupportingMaterialFileListController.onClear().url
+    )
 
-    def constructRow: Seq[String] => AnswerRow = { content =>
-      AnswerRow("supportingMaterialFileList.checkYourAnswersLabel", content, false, routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url)
+    userAnswers.get(SupportingMaterialFileListPage).map {
+      case filenames if filenames.fileAttachments.nonEmpty =>
+        choiceRow(true)
+      case _ =>
+        choiceRow(false)
     }
+  }
 
-    userAnswers.get(SupportingMaterialFileListPage) map {
-      case filenames if filenames.fileAttachments.nonEmpty => constructRow(filenames.fileAttachments.map(_.name))
-      case _ => constructRow(Seq("No files attached"))
+  def supportingMaterialFileList: Option[AnswerRow] = {
+    def filesRow(files: Seq[String]): AnswerRow = AnswerRow(
+      "supportingMaterialFileList.checkYourAnswersLabel",
+      files, false,
+      routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
+    )
+
+    userAnswers.get(SupportingMaterialFileListPage).map {
+      case filenames if filenames.fileAttachments.nonEmpty =>
+        filesRow(filenames.fileAttachments.map(_.name))
+      case _ =>
+        filesRow(Seq("No files attached"))
     }
   }
 

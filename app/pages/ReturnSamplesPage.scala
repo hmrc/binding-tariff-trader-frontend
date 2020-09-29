@@ -16,9 +16,7 @@
 
 package pages
 
-import models.ReturnSamples
-
-case object ReturnSamplesPage extends QuestionPage[ReturnSamples] {
+case object ReturnSamplesPage extends QuestionPage[Boolean] {
 
   override def toString: String = "returnSamples"
 }

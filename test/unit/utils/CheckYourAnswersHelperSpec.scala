@@ -53,6 +53,11 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.whenToSendSample.get.answer shouldBe "site.yes"
       }
 
+      "return a row with the correct answer for ReturnSamplesPage" in {
+        given(userAnswers.get(ReturnSamplesPage)).willReturn(Option(true))
+        checkHelper.returnSamples.get.answer shouldBe "site.yes"
+      }
+
       "return a row with the correct answer for SupportingInformationDetailsPage" in {
         given(userAnswers.get(SupportingInformationPage)).willReturn(Option(false))
         checkHelper.supportingInformation.get.answer shouldBe "site.no"
@@ -75,11 +80,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       "return a row with the correct answer for CommodityCodeDigitsPage" in {
         given(userAnswers.get(CommodityCodeDigitsPage)).willReturn(Option("12131233241324"))
         checkHelper.commodityCodeDigits.get.answer shouldBe "12131233241324"
-      }
-
-      "return a row with the correct answer for ReturnSamplesPage" in {
-        given(userAnswers.get(ReturnSamplesPage)).willReturn(Option(ReturnSamples.Yes))
-        checkHelper.returnSamples.get.answer shouldBe "returnSamples.yesReturnSamples"
       }
 
       "return a row with the correct answer for UploadWrittenAuthorisationPage" in {
