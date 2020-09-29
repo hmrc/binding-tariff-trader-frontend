@@ -31,15 +31,16 @@ import views.html.makeFileConfidential
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class MakeFileConfidentialController @Inject()(appConfig: FrontendAppConfig,
-                                               dataCacheConnector: DataCacheConnector,
-                                               navigator: Navigator,
-                                               identify: IdentifierAction,
-                                               getData: DataRetrievalAction,
-                                               requireData: DataRequiredAction,
-                                               formProvider: MakeFileConfidentialFormProvider,
-                                               cc: MessagesControllerComponents
-                                                    )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+class MakeFileConfidentialController @Inject()(
+                                                appConfig: FrontendAppConfig,
+                                                dataCacheConnector: DataCacheConnector,
+                                                navigator: Navigator,
+                                                identify: IdentifierAction,
+                                                getData: DataRetrievalAction,
+                                                requireData: DataRequiredAction,
+                                                formProvider: MakeFileConfidentialFormProvider,
+                                                cc: MessagesControllerComponents
+                                              )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   val form = formProvider()
 
@@ -51,7 +52,7 @@ class MakeFileConfidentialController @Inject()(appConfig: FrontendAppConfig,
     implicit request =>
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(makeFileConfidential(appConfig, formWithErrors, mode, formWithErrors.value.get.fileId))),            //TODO: BT: safe to call get() on Option
+          Future.successful(BadRequest(makeFileConfidential(appConfig, formWithErrors, mode, formWithErrors.data("fileId")))),
         (fileConfidentiality) => {
           val existingAnswers = request.userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty)
           val updatedAnswers = request.userAnswers.set(MakeFileConfidentialPage, existingAnswers + (fileConfidentiality.fileId -> fileConfidentiality.confidential))
