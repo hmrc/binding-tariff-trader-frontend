@@ -310,6 +310,12 @@ whenToSendSample.listItem1 = textiles
 whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
 
+isSampleHazardous.title = Could the sample be potentially hazardous? - Manage your Advance Tariff Rulings - GOV.UK
+isSampleHazardous.heading = Could the sample be potentially hazardous?
+isSampleHazardous.caption = About the goods
+isSampleHazardous.checkYourAnswersLabel = Hazardous samples?
+isSampleHazardous.error.required = Select yes if the sample could be hazardous
+
 returnSamples.title = Would you like the samples returned to you? - Manage your Advance Tariff Rulings - GOV.UK
 returnSamples.heading = Would you like the samples returned to you?
 returnSamples.first.paragraph = Samples will be returned where possible but may be damaged during testing. All samples will be destroyed after 60 working days.
