@@ -48,7 +48,7 @@ class SupportingMaterialFileListController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    Ok(supportingMaterialFileList(appConfig, form, goodsName, existingFiles, mode))
+    Ok(supportingMaterialFileList(appConfig, form, goodsName, existingFiles.fileAttachments, mode))
   }
 
   private def existingFiles(implicit request: DataRequest[AnyContent]): FileListAnswers = {
@@ -56,7 +56,7 @@ class SupportingMaterialFileListController @Inject()(
   }
 
   def onClear(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val clearAnswers: UserAnswers = request.userAnswers.set(SupportingMaterialFileListPage, Seq.empty)
+    val clearAnswers: UserAnswers = request.userAnswers.set(SupportingMaterialFileListPage, FileListAnswers.empty)
 
     dataCacheConnector
       .save(clearAnswers.cacheMap)
