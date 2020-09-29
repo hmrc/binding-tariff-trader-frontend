@@ -26,7 +26,7 @@ import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers.{any, refEq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import pages.{DeclarationPage, UploadSupportingMaterialMultiplePage}
+import pages.{DeclarationPage, MakeFileConfidentialPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
 import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
@@ -41,6 +41,7 @@ import scala.concurrent.Future.{failed, successful}
 class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
   private lazy val error = new IllegalStateException("expected error")
   private val testAnswer = "answer"
+  private val expectedFileId = "some-file-id"
 
   private val mapper = mock[CaseRequestMapper]
   private val newCaseReq = mock[NewCaseRequest]
@@ -88,6 +89,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
   private def givenTheAttachmentPublishSucceeds(): Unit = {
     when(fileService.publish(any[Seq[FileAttachment]])(any[HeaderCarrier])).thenReturn(successful(Seq(publishedAttachment)))
+    when(publishedAttachment.id).thenReturn(expectedFileId)
   }
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): DeclarationController = {
@@ -124,7 +126,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     "return OK and the correct view for a POST" in {
       givenTheCaseCreatesSuccessfully()
       givenTheAttachmentPublishSucceeds()
-      givenTheCaseCreatedEventIsSuccessful
+      givenTheCaseCreatedEventIsSuccessful()
 
       val result = await(controller(extractDataFromCache).onSubmit(NormalMode)(fakeRequest))
 
@@ -196,7 +198,8 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
   private def extractDataFromCache: DataRetrievalAction = {
     val validData = Map(
       DeclarationPage.toString -> JsString(testAnswer),
-      UploadSupportingMaterialMultiplePage.toString -> Json.toJson(Seq(attachment))
+      UploadSupportingMaterialMultiplePage.toString -> Json.toJson(Seq(attachment)),
+      MakeFileConfidentialPage.toString -> Json.toJson(Map(expectedFileId -> true))
     )
     new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
   }
