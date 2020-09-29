@@ -43,7 +43,6 @@ trait CacheMapGenerator {
     arbitrary[(InformationAboutYourItemPage.type, JsValue)] ::
     arbitrary[(EnterContactDetailsPage.type, JsValue)] ::
     arbitrary[(RegisterBusinessRepresentingPage.type, JsValue)] ::
-    arbitrary[(SelectApplicationTypePage.type, JsValue)] ::
     arbitrary[(WhichBestDescribesYouPage.type, JsValue)] ::
     arbitrary[(RegisteredAddressForEoriPage.type, JsValue)] ::
     Nil

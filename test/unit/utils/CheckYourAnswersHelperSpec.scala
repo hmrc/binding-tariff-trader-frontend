@@ -17,7 +17,6 @@
 package utils
 
 import base.SpecBase
-import models.SelectApplicationType.NewCommodity
 import models.WhichBestDescribesYou.BusinessOwner
 import models._
 import models.requests.DataRequest
@@ -78,6 +77,10 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.similarItemCommodityCode.get.answer shouldBe "site.yes"
       }
 
+      "return a row with the correct answer for SelectApplicationTypePage" in {
+        given(userAnswers.get(SelectApplicationTypePage)).willReturn(Option(true))
+        checkHelper.selectApplicationType.get.answer shouldBe "site.yes"
+      }
     }
 
     "rendering information pages" must {
@@ -126,11 +129,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         given(userAnswers.get(RegisterBusinessRepresentingPage)).willReturn(
           Option(RegisterBusinessRepresenting("eoriNumber", "businessName", "addressLine1", "town", Some("postCode"), "IE")))
         checkHelper.registerBusinessRepresenting.get.answer shouldBe "eoriNumber\nbusinessName\naddressLine1\ntown\npostCode\nIrish Republic"
-      }
-
-      "return a row with the correct answer for SelectApplicationTypePage" in {
-        given(userAnswers.get(SelectApplicationTypePage)).willReturn(Option(NewCommodity))
-        checkHelper.selectApplicationType.get.answer shouldBe "selectApplicationType.newCommodity"
       }
 
       "return a row with the correct answer for WhichBestDescribesYouPage" in {
