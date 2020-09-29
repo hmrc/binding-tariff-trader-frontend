@@ -44,40 +44,37 @@ class CheckYourAnswersController @Inject()(
 
     val sections = Seq(
       AnswerSection(
-        Some("checkYourAnswers.applicantRegisteredSection"),
+        Some("checkYourAnswers.aboutTheGoodsSection"),
         Seq(
-          checkYourAnswersHelper.registeredAddressForEori,
-          checkYourAnswersHelper.enterContactDetails
-//          checkYourAnswersHelper.whichBestDescribesYou
-        ).flatten
-      ),
-      AnswerSection(
-        Some("checkYourAnswers.applicantOtherBusiness"),
-        Seq(
-          checkYourAnswersHelper.registerBusinessRepresenting,
-          checkYourAnswersHelper.uploadWrittenAuthorisation
-        ).flatten
-      ),
-      AnswerSection(
-        Some("checkYourAnswers.informationAboutYourItemSection"),
-        Seq(
-          checkYourAnswersHelper.selectApplicationType,
-          checkYourAnswersHelper.previousCommodityCode,
           checkYourAnswersHelper.provideGoodsName,
           checkYourAnswersHelper.provideGoodsDescription,
           checkYourAnswersHelper.addConfidentialInformation,
           checkYourAnswersHelper.provideConfidentialInformation,
           checkYourAnswersHelper.supportingMaterialFileListChoice,
           checkYourAnswersHelper.supportingMaterialFileList,
+          checkYourAnswersHelper.whenToSendSample,
+          checkYourAnswersHelper.returnSamples,
           checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,
-          checkYourAnswersHelper.whenToSendSample,
-          checkYourAnswersHelper.isSampleHazardous,
-          checkYourAnswersHelper.returnSamples,
-          checkYourAnswersHelper.similarItemCommodityCode,
-          checkYourAnswersHelper.commodityCodeRulingReference,
           checkYourAnswersHelper.legalChallenge,
-          checkYourAnswersHelper.legalChallengeDetails
+          checkYourAnswersHelper.legalChallengeDetails,
+          checkYourAnswersHelper.supportingInformation,
+          checkYourAnswersHelper.supportingInformationDetails
+        ).flatten
+      ),
+      AnswerSection(
+        Some("checkYourAnswers.aboutOtherRulingsSection"),
+        Seq(
+          checkYourAnswersHelper.selectApplicationType,
+          checkYourAnswersHelper.previousCommodityCode,
+          checkYourAnswersHelper.similarItemCommodityCode,
+          checkYourAnswersHelper.commodityCodeRulingReference
+        ).flatten
+      ),
+      AnswerSection(
+        Some("checkYourAnswers.aboutTheApplicantSection"),
+        Seq(
+          checkYourAnswersHelper.enterContactDetails
         ).flatten
       )
     )

@@ -1,6 +1,16 @@
 checkYourAnswers.title = Check your answers before sending your application - Manage your Advance Tariff Rulings - GOV.UK
 checkYourAnswers.heading = Check your answers before sending your application
-checkYourAnswers.guidance = Guidance for check your answers
+
+checkYourAnswers.aboutTheGoodsSection = About the goods
+checkYourAnswers.aboutOtherRulingsSection = About other rulings
+checkYourAnswers.aboutTheApplicantSection = About the applicant
+
+checkYourAnswers.declaration.subheading = Your declaration
+checkYourAnswers.declaration.paragraph0 = By applying for an Advance Tariff Ruling you confirm that the information you have provided is correct and complete to the best of your knowledge.
+checkYourAnswers.declaration.paragraph1 = You agree that HMRC can:
+checkYourAnswers.declaration.listItem1 = store the information you provided or may provide after you send your application
+checkYourAnswers.declaration.listItem2 = publish information that is not confidential on the Advance Tariff Ruling website
+checkYourAnswers.declaration.submit = Accept and apply for a ruling
 
 date.day = Day
 date.month = Month
@@ -184,7 +194,7 @@ previousCommodityCode.error.previousCommodityCode.length = Previous ruling refer
 provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
 provideGoodsName.heading = Provide a name for the goods
 provideGoodsName.caption = About the goods
-provideGoodsName.checkYourAnswersLabel = Goods Name
+provideGoodsName.checkYourAnswersLabel = Goods name
 provideGoodsName.error.required = Enter a short name to describe the goods
 provideGoodsName.error.length = Name for the goods must be 100 characters or less
 provideGoodsName.paragraph = This information may appear on the Advance Tariff Rulings website.
@@ -192,7 +202,7 @@ provideGoodsName.paragraph = This information may appear on the Advance Tariff R
 provideGoodsDescription.title = Provide a detailed description of the goods - Manage your Advance Tariff Rulings - GOV.UK
 provideGoodsDescription.heading = Provide a detailed description of the {0}
 provideGoodsDescription.caption = About the goods
-provideGoodsDescription.checkYourAnswersLabel = Goods Description
+provideGoodsDescription.checkYourAnswersLabel = Goods description
 provideGoodsDescription.p1 = The more detailed the description is, the faster we will be able to classify the goods.
 provideGoodsDescription.p2 = This information may appear on the Advance Tariff Rulings website.
 provideGoodsDescription.error.required = Enter a detailed description of your goods
@@ -298,7 +308,7 @@ whenToSendSample.caption = About the goods
 whenToSendSample.heading = Will you send a sample of the {0} to HMRC?
 whenToSendSample.yesProvideSample = Yes
 whenToSendSample.notSendingSample = No
-whenToSendSample.checkYourAnswersLabel = Are you sending a sample?
+whenToSendSample.checkYourAnswersLabel = Sending samples?
 whenToSendSample.error.required = Select yes if you are sending a sample
 whenToSendSample.first.paragraph = Samples are usually required if the goods are:
 whenToSendSample.second.paragraph = If you are not sure whether you need to provide a sample, you can wait for the Tariff Classification Team to contact you if one is needed.
@@ -323,7 +333,7 @@ similarItemCommodityCode.title = Do you know of a similar item that already has 
 similarItemCommodityCode.heading = Do you know of a similar item that already has an Advance Tariff Ruling?
 similarItemCommodityCode.yesAwareSimilarCode = Yes
 similarItemCommodityCode.noNotAware = No
-similarItemCommodityCode.checkYourAnswersLabel = Do you know of a similar item that already has a ruling?
+similarItemCommodityCode.checkYourAnswersLabel = Similar goods?
 similarItemCommodityCode.error.required = Select yes if you know of a similar item that has an Advance Tariff Ruling
 similarItemCommodityCode.bodyText = It can help us to classify your goods and match with other rulings if:
 similarItemCommodityCode.listItem1 = your business or organisation operates in other countries and you have a ruling for that country
@@ -369,16 +379,6 @@ supportingInformationDetails.heading = What is the information you want to provi
 supportingInformationDetails.checkYourAnswersLabel = Supporting information
 supportingInformationDetails.error.required = Enter supporting information
 
-declaration.title = Apply for a ruling - Manage your Advance Tariff Rulings - GOV.UK
-declaration.heading = Apply for a ruling
-declaration.checkYourAnswersLabel = Declaration
-declaration.paragraph0 = By applying for an Advance Tariff Ruling, you confirm that the information you provided is correct and complete to the best of your knowledge.
-declaration.paragraph1 = You agree that HMRC can:
-declaration.listItem1 = store the information you provided or may provide after you send your application
-declaration.listItem2 = publish information that is not confidential on the Advance Tariff Ruling website
-declaration.paragraph2 = You understand that your samples may be damaged during testing.
-declaration.submit = Accept and apply for a ruling
-
 confirmation.title = Application complete - Manage your Advance Tariff Rulings - GOV.UK
 confirmation.heading = Application complete
 confirmation.heading2.sendingSamples = The next steps
@@ -418,11 +418,6 @@ contactCustomsDutyLiabilityTeam.title = Contact the Customs Duty Liability Team 
 contactCustomsDutyLiabilityTeam.heading = Contact the Customs Duty Liability Team
 contactCustomsDutyLiabilityTeam.forGeneralAdvice = For general advice on commodity codes, <a href="https://www.gov.uk/guidance/ask-hmrc-for-advice-on-classifying-your-goods">contact the Customs Duty Liability Team</a>
 contactCustomsDutyLiabilityTeam.onlyUseTheApply = Only use the Manage your Advance Tariff Rulings service if you are definitely importing or exporting goods.
-
-checkYourAnswers.applicantRegisteredSection = Your details
-checkYourAnswers.applicantOtherBusiness = Details of the business, organisation or individual you represent
-checkYourAnswers.informationAboutYourItemSection = Information about your item
-checkYourAnswers.otherInformation = Other information about your item
 
 application.title = Your application for an Advance Tariff Ruling
 application.title.pdf = Your application for an Advance Tariff Ruling (PDF) - Manage your Advance Tariff Rulings - GOV.UK

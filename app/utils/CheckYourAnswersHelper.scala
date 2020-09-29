@@ -108,11 +108,9 @@ class CheckYourAnswersHelper(
       routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
     )
 
-    userAnswers.get(SupportingMaterialFileListPage).map {
+    userAnswers.get(SupportingMaterialFileListPage).collect {
       case filenames if filenames.fileAttachments.nonEmpty =>
         filesRow(filenames.fileAttachments.map(_.name))
-      case _ =>
-        filesRow(Seq("No files attached"))
     }
   }
 

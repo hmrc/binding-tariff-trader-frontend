@@ -30,5 +30,16 @@
             @components.answer_section(section)
         }
 
-        @components.button_link(messages("site.continue"), routes.DeclarationController.onPageLoad(NormalMode).url)
+        <h2 class="heading-large">@messages("checkYourAnswers.declaration.subheading")</h2>
+
+        <p>@messages("checkYourAnswers.declaration.paragraph0")</p>
+        <p>@messages("checkYourAnswers.declaration.paragraph1")</p>
+
+        <ul class="list list-bullet">
+          <li>@messages("checkYourAnswers.declaration.listItem1")</li>
+          <li>@messages("checkYourAnswers.declaration.listItem2")</li>
+        </ul>
+
+        @components.button_link(messages("checkYourAnswers.declaration.submit"), routes.DeclarationController.onPageLoad(NormalMode).url)
+
     }
