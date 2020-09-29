@@ -43,7 +43,7 @@
         <p>@messages("makeFileConfidential.infoText")<p/>
 
         @components.input_yes_no(
-            field = makeFileConfidentialForm("value"),                          //TODO: BT: change when we alter the form mapping
+            field = makeFileConfidentialForm("confidential"),
             label = Some(messages("makeFileConfidential.heading")),
             labelClass = Some("visually-hidden")
         )
