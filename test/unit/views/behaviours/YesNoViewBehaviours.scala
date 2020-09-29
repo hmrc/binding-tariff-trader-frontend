@@ -19,7 +19,7 @@ package views.behaviours
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 
-trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
+trait QuestionViewWithBooleanBehaviours[T] extends QuestionViewBehaviours[T] {
 
   protected def expectedLegend(messageKeyPrefix: String): String = {
     def has(value: String): Boolean = {
@@ -33,9 +33,10 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
     }
   }
 
-  protected def yesNoPage(createView: Form[Boolean] => HtmlFormat.Appendable,
+  protected def yesNoPage(createView: Form[T] => HtmlFormat.Appendable,
                           messageKeyPrefix: String,
-                          expectedFormAction: String): Unit = {
+                          expectedFormAction: String,
+                          elementIdPrefix: String = "value"): Unit = {
 
     "behave like a page with a Yes/No question" when {
       "rendered" must {
@@ -48,28 +49,20 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
 
         "contain an input for the value" in {
           val doc = asDocument(createView(form))
-          assertRenderedById(doc, "value-yes")
-          assertRenderedById(doc, "value-no")
+          assertRenderedById(doc, s"${elementIdPrefix}-yes")
+          assertRenderedById(doc, s"${elementIdPrefix}-no")
         }
 
         "have no values checked when rendered with no form" in {
           val doc = asDocument(createView(form))
-          assert(!doc.getElementById("value-yes").hasAttr("checked"))
-          assert(!doc.getElementById("value-no").hasAttr("checked"))
+          assert(!doc.getElementById(s"${elementIdPrefix}-yes").hasAttr("checked"))
+          assert(!doc.getElementById(s"${elementIdPrefix}-no").hasAttr("checked"))
         }
 
         "not render an error summary" in {
           val doc = asDocument(createView(form))
           assertNotRenderedById(doc, "error-summary_header")
         }
-      }
-
-      "rendered with a value of true" must {
-        behave like answeredYesNoPage(createView, answer = true)
-      }
-
-      "rendered with a value of false" must {
-        behave like answeredYesNoPage(createView, answer = false)
       }
 
       "rendered with an error" must {
@@ -79,7 +72,7 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
         }
 
         "show an error in the value field's label" in {
-          val doc = asDocument(createView(form.withError(error)))
+          val doc = asDocument(createView(form.withError(error(elementIdPrefix))))
           val errorSpan = doc.getElementsByClass("error-message").first
           errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
         }
@@ -89,10 +82,16 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
           assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title")}""")
         }
       }
+
+      subtypeSpecificTests(createView, messageKeyPrefix, expectedFormAction)
     }
   }
 
-  protected def answeredYesNoPage(createView: Form[Boolean] => HtmlFormat.Appendable, answer: Boolean): Unit = {
+  protected def answeredYesNoPage(
+                                   createView: Form[T] => HtmlFormat.Appendable,
+                                   answer: T,
+                                   elementIdPrefix: String = "value"
+                                 ): Unit = {
 
     "have only the correct value checked" in {
       val doc = asDocument(createView(form.fill(answer)))
@@ -106,4 +105,24 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
     }
   }
 
+  protected def subtypeSpecificTests(createView: Form[T] => HtmlFormat.Appendable,
+                                     messageKeyPrefix: String,
+                                     expectedFormAction: String): Unit = { }
+
+}
+
+trait YesNoViewBehaviours extends QuestionViewWithBooleanBehaviours[Boolean] {
+
+  protected def subtypeSpecificTests(createView: Form[Boolean] => HtmlFormat.Appendable,
+                                     messageKeyPrefix: String,
+                                     expectedFormAction: String,
+                                     elementIdPrefix: String = "value"): Unit = {
+    "rendered with a value of true" must {
+      behave like answeredYesNoPage(createView, answer = true, elementIdPrefix)
+    }
+
+    "rendered with a value of false" must {
+      behave like answeredYesNoPage(createView, answer = false, elementIdPrefix)
+    }
+  }
 }

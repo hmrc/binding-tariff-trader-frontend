@@ -24,10 +24,10 @@ import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages._
-import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import views.html.makeFileConfidential
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,7 +38,6 @@ class MakeFileConfidentialController @Inject()(appConfig: FrontendAppConfig,
                                                getData: DataRetrievalAction,
                                                requireData: DataRequiredAction,
                                                formProvider: MakeFileConfidentialFormProvider,
-                                               val makeFileConfidential: views.html.makeFileConfidential,
                                                cc: MessagesControllerComponents
                                                     )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 

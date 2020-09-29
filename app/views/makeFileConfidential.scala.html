@@ -20,8 +20,6 @@
 @import models.Mode
 @import views.ViewUtils._
 
-@this()
-
 @(appConfig: FrontendAppConfig, makeFileConfidentialForm: Form[_], mode: Mode, fileId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
