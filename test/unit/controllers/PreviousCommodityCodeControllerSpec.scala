@@ -29,6 +29,8 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.previousCommodityCode
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class PreviousCommodityCodeControllerSpec extends ControllerSpecBase {
 
   private val formProvider = new PreviousCommodityCodeFormProvider()

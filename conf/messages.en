@@ -175,15 +175,13 @@ acceptItemInformationList.askfor.paragraph2 = You can let us know if you:
 acceptItemInformationList.askfor.item1 = think you have found the correct commodity code
 acceptItemInformationList.askfor.item2 = need to send samples
 
-previousCommodityCode.title = What is the reference number for the ruling you want to renew? - Manage your Advance Tariff Rulings - GOV.UK
-previousCommodityCode.heading = What is the reference number for the ruling you want to renew?
-previousCommodityCode.previousCommodityCode = Ruling reference number
+previousCommodityCode.title = Provide the reference number for the previous BTI ruling - Manage your Advance Tariff Rulings - GOV.UK
+previousCommodityCode.heading = Provide the reference number for the previous BTI ruling
+previousCommodityCode.caption = About other rulings
 previousCommodityCode.previousCommodityCode.hint = The reference number, for example GB12345678, is on the ruling certificate.
-previousCommodityCode.checkYourAnswersLabel = Renewal reference number
-previousCommodityCode.error.previousCommodityCode.required = Enter a ruling reference number
-previousCommodityCode.error.previousCommodityCode.length = Previous Tariff Information ruling must be 100 characters or less
-previousCommodityCode.details.summary = What is my Binding Tariff Information ruling reference number?
-previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling.
+previousCommodityCode.checkYourAnswersLabel = Renewal reference
+previousCommodityCode.error.previousCommodityCode.required = Enter a ruling reference
+previousCommodityCode.error.previousCommodityCode.length = Previous ruling reference must be 100 characters or less
 
 provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
 provideGoodsName.heading = Provide a name for the goods
