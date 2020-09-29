@@ -22,53 +22,29 @@ import controllers.actions._
 import forms.CommodityCodeRulingReferenceFormProvider
 import javax.inject.Inject
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
-import pages.{CommodityCodeRulingReferencePage, LegalChallengePage}
+import pages.CommodityCodeRulingReferencePage
 import play.api.data.Form
-import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import play.api.mvc.MessagesControllerComponents
+import play.twirl.api.HtmlFormat
 import views.html.commodityCodeRulingReference
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 class CommodityCodeRulingReferenceController @Inject()(
-                                                        appConfig: FrontendAppConfig,
-                                                        dataCacheConnector: DataCacheConnector,
-                                                        navigator: Navigator,
-                                                        identify: IdentifierAction,
-                                                        getData: DataRetrievalAction,
-                                                        requireData: DataRequiredAction,
-                                                        formProvider: CommodityCodeRulingReferenceFormProvider,
-                                                        cc: MessagesControllerComponents
-                                                      ) extends FrontendController(cc) with I18nSupport {
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: CommodityCodeRulingReferenceFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends QuestionCachingController[String](cc) {
+  lazy val form = formProvider()
+  val questionPage = CommodityCodeRulingReferencePage
 
-  private lazy val form = formProvider()
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.get(CommodityCodeRulingReferencePage) match {
-      case Some(value) => form.fill(value)
-      case _ => form
-    }
-
-    Ok(commodityCodeRulingReference(appConfig, preparedForm, mode))
-  }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(commodityCodeRulingReference(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(CommodityCodeRulingReferencePage, value)
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(LegalChallengePage, mode)(updatedAnswers))
-        )
-      }
-    )
-  }
-
+  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
+    commodityCodeRulingReference(appConfig, preparedForm, mode)
 }

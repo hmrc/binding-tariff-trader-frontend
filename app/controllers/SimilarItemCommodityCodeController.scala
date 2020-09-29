@@ -22,49 +22,30 @@ import controllers.actions._
 import forms.SimilarItemCommodityCodeFormProvider
 import javax.inject.Inject
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
-import pages.{CommodityCodeRulingReferencePage, LegalChallengePage, SimilarItemCommodityCodePage}
+import pages.{CommodityCodeRulingReferencePage, SimilarItemCommodityCodePage}
 import play.api.data.Form
-import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import play.api.mvc.MessagesControllerComponents
+import play.twirl.api.HtmlFormat
 import views.html.similarItemCommodityCode
 
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 class SimilarItemCommodityCodeController @Inject()(
-                                                    appConfig: FrontendAppConfig,
-                                                    override val dataCacheConnector: DataCacheConnector,
-                                                    override val navigator: Navigator,
-                                                    identify: IdentifierAction,
-                                                    getData: DataRetrievalAction,
-                                                    requireData: DataRequiredAction,
-                                                    formProvider: SimilarItemCommodityCodeFormProvider,
-                                                    cc: MessagesControllerComponents
-                                                  ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
-  private lazy val form = formProvider()
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: SimilarItemCommodityCodeFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+  lazy val form = formProvider()
+  val questionPage = SimilarItemCommodityCodePage
+  val detailPages = List(CommodityCodeRulingReferencePage)
 
-  override val page = SimilarItemCommodityCodePage
-  override val pageDetails = CommodityCodeRulingReferencePage
-  //override val nextPage = LegalChallengePage
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.get(SimilarItemCommodityCodePage) match {
-      case Some(value) => form.fill(value)
-      case _ => form
-    }
-
-    Ok(similarItemCommodityCode(appConfig, preparedForm, mode))
-  }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(similarItemCommodityCode(appConfig, formWithErrors, mode)))
-    }
-
-    form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
-  }
-
+  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
+    similarItemCommodityCode(appConfig, preparedForm, mode)
 }

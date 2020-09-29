@@ -29,6 +29,8 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.legalChallenge
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class LegalChallengeControllerSpec extends ControllerSpecBase {
 
   private val formProvider = new LegalChallengeFormProvider()

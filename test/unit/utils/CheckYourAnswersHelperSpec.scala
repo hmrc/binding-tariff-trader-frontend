@@ -62,11 +62,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.returnSamples.get.answer shouldBe "site.yes"
       }
 
-      "return a row with the correct answer for SupportingInformationDetailsPage" in {
-        given(userAnswers.get(SupportingInformationPage)).willReturn(Option(false))
-        checkHelper.supportingInformation.get.answer shouldBe "site.no"
-      }
-
       "return a row with the correct answer for LegalChallengePage" in {
         given(userAnswers.get(LegalChallengePage)).willReturn(Option(false))
         checkHelper.legalChallenge.get.answer shouldBe "site.no"
@@ -95,11 +90,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.uploadWrittenAuthorisation.get.answer shouldBe "fileName"
       }
 
-      "return a row with the correct answer for SupportingInformationDetailsPage" in {
-        given(userAnswers.get(SupportingInformationDetailsPage)).willReturn(Option("Supporting information"))
-        checkHelper.supportingInformationDetails.get.answer shouldBe "Supporting information"
-      }
-
       "return a row with the correct answer for LegalChallengeDetailsPage" in {
         given(userAnswers.get(LegalChallengeDetailsPage)).willReturn(Option("Legal challenge"))
         checkHelper.legalChallengeDetails.get.answer shouldBe "Legal challenge"
@@ -108,11 +98,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       "return a row with the correct answer for CommodityCodeRulingReferencePage" in {
         given(userAnswers.get(CommodityCodeRulingReferencePage)).willReturn(Option("code ruling"))
         checkHelper.commodityCodeRulingReference.get.answer shouldBe "code ruling"
-      }
-
-      "return a row with the correct answer for DescribeYourItemPage" in {
-        given(userAnswers.get(DescribeYourItemPage)).willReturn(Option(DescribeYourItem("name", "description", None)))
-        checkHelper.describeYourItem.get.answer shouldBe "name\ndescription"
       }
 
       "return a row with the correct answer for PreviousCommodityCodePage" in {

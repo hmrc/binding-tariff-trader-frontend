@@ -43,15 +43,6 @@ trait ModelGenerators {
       } yield FileAttachment(id, name, mimeType, size)
     }
 
-  implicit lazy val arbitraryDescribeYourItem: Arbitrary[DescribeYourItem] =
-    Arbitrary {
-      for {
-        field1 <- arbitrary[String]
-        field2 <- arbitrary[String]
-        field3 <- arbitrary[Option[String]]
-      } yield DescribeYourItem(field1, field2, field3)
-    }
-
   implicit lazy val arbitraryPreviousCommodityCode: Arbitrary[PreviousCommodityCode] =
     Arbitrary {
       for {

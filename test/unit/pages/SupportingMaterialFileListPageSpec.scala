@@ -17,8 +17,6 @@
 package pages
 
 import pages.behaviours.PageBehaviours
-import utils.JsonFormatters._
-
 
 class SupportingMaterialFileListPageSpec extends PageBehaviours {
 

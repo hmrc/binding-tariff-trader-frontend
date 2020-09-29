@@ -64,7 +64,6 @@ class SupportingMaterialFileListController @Inject()(
   }
 
   def onRemove(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
     val removedFile = FileListAnswers(existingFiles.addAnotherDecision, existingFiles.fileAttachments.filter(_.id != fileId).seq)
     val answers: UserAnswers = request.userAnswers.set(SupportingMaterialFileListPage, removedFile)
     dataCacheConnector.save(answers.cacheMap)

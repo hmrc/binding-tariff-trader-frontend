@@ -22,57 +22,31 @@ import controllers.actions._
 import forms.ProvideGoodsDescriptionFormProvider
 import javax.inject.Inject
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.{ProvideGoodsDescriptionPage, ProvideGoodsNamePage}
 import play.api.data.Form
-import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import play.twirl.api.HtmlFormat
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class ProvideGoodsDescriptionController @Inject()(
-                                                   appConfig: FrontendAppConfig,
-                                                   dataCacheConnector: DataCacheConnector,
-                                                   navigator: Navigator,
-                                                   identify: IdentifierAction,
-                                                   getData: DataRetrievalAction,
-                                                   requireData: DataRequiredAction,
-                                                   formProvider: ProvideGoodsDescriptionFormProvider,
-                                                   val provide_goods_description: views.html.provideGoodsDescription,
-                                                   cc: MessagesControllerComponents
-                                                 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: ProvideGoodsDescriptionFormProvider,
+  val provide_goods_description: views.html.provideGoodsDescription,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends QuestionCachingController[String](cc) {
+  lazy val form = formProvider()
+  val questionPage = ProvideGoodsDescriptionPage
 
-  val form = formProvider()
-
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
-    implicit request =>
-
-      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-      val preparedForm = request.userAnswers.get(ProvideGoodsDescriptionPage) match {
-        case Some(value) => form.fill(value)
-        case None => form
-      }
-
-      Ok(provide_goods_description(appConfig, preparedForm, goodsName, mode))
-  }
-
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(provide_goods_description(appConfig, formWithErrors, goodsName, mode))),
-        (value) => {
-          val updatedAnswers = request.userAnswers.set(ProvideGoodsDescriptionPage, value)
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(ProvideGoodsDescriptionPage, mode)(updatedAnswers))
-          )
-        }
-      )
+  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+    provide_goods_description(appConfig, preparedForm, goodsName, mode)
   }
 }

@@ -16,61 +16,37 @@
 
 package controllers
 
-import javax.inject.Inject
-import play.api.data.Form
-import play.api.i18n.I18nSupport
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import connectors.DataCacheConnector
 import controllers.actions._
 import config.FrontendAppConfig
 import forms.ProvideConfidentialInformationFormProvider
+import javax.inject.Inject
 import models.Mode
-import pages.{ProvideConfidentialInformationPage, ProvideGoodsNamePage}
+import models.requests.DataRequest
 import navigation.Navigator
+import pages.{ProvideConfidentialInformationPage, ProvideGoodsNamePage}
+import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
-import views.html.provideConfidentialInformation
+import play.twirl.api.HtmlFormat
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class ProvideConfidentialInformationController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: ProvideConfidentialInformationFormProvider,
-                                        val provide_confidential_information: views.html.provideConfidentialInformation,
-                                        cc: MessagesControllerComponents
-                                     )(implicit ec:ExecutionContext) extends FrontendController(cc) with I18nSupport {
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: ProvideConfidentialInformationFormProvider,
+  val provide_confidential_information: views.html.provideConfidentialInformation,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends QuestionCachingController[String](cc) {
+  lazy val form = formProvider()
+  val questionPage = ProvideConfidentialInformationPage
 
-  val form = formProvider()
-
-  def onPageLoad(mode: Mode) = (identify andThen getData andThen requireData) {
-    implicit request =>
-      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-      val preparedForm = request.userAnswers.get(ProvideConfidentialInformationPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(provide_confidential_information(appConfig, preparedForm, goodsName, mode))
-  }
-
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
-    implicit request =>
-      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(provide_confidential_information(appConfig, formWithErrors, goodsName, mode))),
-        (value) => {
-          val updatedAnswers = request.userAnswers.set(ProvideConfidentialInformationPage, value)
-
-          dataCacheConnector.save(updatedAnswers.cacheMap).map(
-            _ =>
-              Redirect(navigator.nextPage(ProvideConfidentialInformationPage, mode)(updatedAnswers))
-          )
-        }
-      )
+  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+    provide_confidential_information(appConfig, preparedForm, goodsName, mode)
   }
 }

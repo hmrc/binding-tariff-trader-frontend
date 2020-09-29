@@ -31,6 +31,8 @@ import views.html.selectApplicationType
 import play.api.libs.json.JsBoolean
 import pages.ProvideGoodsNamePage
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class SelectApplicationTypeControllerSpec extends ControllerSpecBase {
 
   private val formProvider = new SelectApplicationTypeFormProvider()

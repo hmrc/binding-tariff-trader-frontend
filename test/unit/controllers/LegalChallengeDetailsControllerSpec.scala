@@ -29,6 +29,8 @@ import pages.{LegalChallengeDetailsPage, ProvideGoodsNamePage}
 import play.api.mvc.Call
 import views.html.legalChallengeDetails
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class LegalChallengeDetailsControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")

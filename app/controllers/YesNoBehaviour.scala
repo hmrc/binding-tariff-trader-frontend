@@ -18,31 +18,39 @@ package controllers
 
 import connectors.DataCacheConnector
 import models.requests.DataRequest
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.{Page, QuestionPage}
+import pages.QuestionPage
+import play.api.libs.json.Writes
 import play.api.mvc.{Result, Results}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Success, Failure }
+import scala.util.control.NonFatal
 
-trait YesNoBehaviour[A] {
+trait YesNoBehaviour extends CachingBehaviour[Boolean] {
+  def dataCacheConnector: DataCacheConnector
+  def navigator: Navigator
+  def detailPages: List[QuestionPage[_]]
 
-  protected val dataCacheConnector: DataCacheConnector
-  protected val navigator: Navigator
+  override def submitAnswer(answer: Boolean, mode: Mode)(implicit request: DataRequest[_], writes: Writes[Boolean], ec: ExecutionContext): Future[Result] = {
+    // Set the yes/no question into the user answers
+    val questionPageAnswers = request.userAnswers.set(questionPage, answer)
 
-  protected val page: QuestionPage[Boolean]
-  protected val pageDetails: QuestionPage[A]
+    // If they have selected 'no' clear the subsequent details pages
+    val updatedAnswers = if (answer)
+      questionPageAnswers
+    else
+      detailPages.foldLeft(questionPageAnswers) {
+        case (userAnswers, detailPage) => userAnswers.remove(detailPage)
+      }
 
-  def submitAnswer(answer: Boolean, mode: Mode)(implicit request: DataRequest[_]): Future[Result] = {
-
-
-    val updatedAnswers: UserAnswers = request.userAnswers.set(page, answer)
-    val answers = if (answer) updatedAnswers else updatedAnswers.remove(pageDetails)
-
-    dataCacheConnector.save(answers.cacheMap).map(
-      _ => Results.Redirect(navigator.nextPage(page, mode)(answers))
-    )
+    dataCacheConnector.save(updatedAnswers.cacheMap).transformWith {
+      case Failure(NonFatal(_)) =>
+        Future.successful(Results.BadGateway)
+      case Success(_) =>
+        Future.successful(Results.Redirect(navigator.nextPage(questionPage, mode)(updatedAnswers)))
+    }
   }
 
 }

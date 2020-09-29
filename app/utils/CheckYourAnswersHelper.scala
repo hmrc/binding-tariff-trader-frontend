@@ -50,14 +50,6 @@ class CheckYourAnswersHelper(
     x => AnswerRow("provideConfidentialInformation.checkYourAnswersLabel", s"$x", false, routes.ProvideConfidentialInformationController.onPageLoad(CheckMode).url)
   }
 
-  def supportingInformationDetails: Option[AnswerRow] = userAnswers.get(SupportingInformationDetailsPage) map {
-    x => AnswerRow("supportingInformationDetails.checkYourAnswersLabel", s"$x", false, routes.SupportingInformationDetailsController.onPageLoad(CheckMode).url)
-  }
-
-  def supportingInformation: Option[AnswerRow] = userAnswers.get(SupportingInformationPage) map {
-    x => AnswerRow("supportingInformation.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SupportingInformationController.onPageLoad(CheckMode).url)
-  }
-
   def legalChallengeDetails: Option[AnswerRow] = userAnswers.get(LegalChallengeDetailsPage) map {
     x => AnswerRow("legalChallengeDetails.checkYourAnswersLabel", s"$x", false, routes.LegalChallengeDetailsController.onPageLoad(CheckMode).url)
   }
@@ -97,7 +89,7 @@ class CheckYourAnswersHelper(
   def supportingMaterialFileListChoice: Option[AnswerRow] = {
     def choiceRow(hasFiles: Boolean): AnswerRow = AnswerRow(
       "supportingMaterialFileList.choice.checkYourAnswersLabel",
-      yesNoAnswer(hasFiles), false,
+      yesNoAnswer(hasFiles), true,
       routes.SupportingMaterialFileListController.onClear().url
     )
 
@@ -122,10 +114,6 @@ class CheckYourAnswersHelper(
       case _ =>
         filesRow(Seq("No files attached"))
     }
-  }
-
-  def describeYourItem: Option[AnswerRow] = userAnswers.get(DescribeYourItemPage) map {
-    x => AnswerRow("describeYourItem.checkYourAnswersLabel", Seq(x.name, x.description, x.confidentialInformation.orNull), false, routes.DescribeYourItemController.onPageLoad(CheckMode).url)
   }
 
   def previousCommodityCode: Option[AnswerRow] = userAnswers.get(PreviousCommodityCodePage) map {

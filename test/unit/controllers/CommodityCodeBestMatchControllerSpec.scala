@@ -29,6 +29,8 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.commodityCodeBestMatch
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase {
 
   val formProvider = new CommodityCodeBestMatchFormProvider()

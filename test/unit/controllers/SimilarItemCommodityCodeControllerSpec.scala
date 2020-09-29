@@ -29,6 +29,8 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.similarItemCommodityCode
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class SimilarItemCommodityCodeControllerSpec extends ControllerSpecBase {
 
   private val formProvider = new SimilarItemCommodityCodeFormProvider()

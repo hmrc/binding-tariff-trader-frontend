@@ -29,6 +29,8 @@ import pages.ReturnSamplesPage
 import play.api.mvc.Call
 import views.html.returnSamples
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class ReturnSamplesControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
