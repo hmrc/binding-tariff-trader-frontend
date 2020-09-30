@@ -18,19 +18,17 @@ package controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
+import controllers.behaviours.AnswerCachingControllerBehaviours
 import forms.ProvideGoodsNameFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
-import pages.ProvideGoodsNamePage
 import play.api.data.Form
-import play.api.libs.json.JsString
-import play.api.mvc.Call
-import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
+import play.api.mvc.{ Call, Request }
+import play.api.libs.json.JsValue
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
+class ProvideGoodsNameControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
 
   private def onwardRoute = Call("GET", "/foo")
 
@@ -41,8 +39,8 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
 
   val fakeGETRequest = fakeGETRequestWithCSRF
 
-  def viewAsString(form: Form[_] = form): String = provideGoodsNameView(
-    frontendAppConfig, form, NormalMode)(fakeGETRequest, messages).toString
+  def viewAsString(form: Form[_], request: Request[_]): String =
+    provideGoodsNameView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new ProvideGoodsNameController(
@@ -57,57 +55,19 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase {
       cc)
 
   val testAnswer = "answer"
+  val validFormData = Map("goodsName" -> testAnswer)
+  val invalidFormData = Map("goodsName" -> "")
+  val backgroundData = Map.empty[String, JsValue]
 
-  "ProvideGoodsName Controller" must {
-
-    "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeGETRequest)
-
-      status(result) shouldBe OK
-      contentAsString(result) shouldBe viewAsString()
-    }
-
-    "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(ProvideGoodsNamePage.toString -> JsString(testAnswer))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeGETRequest)
-
-      contentAsString(result) shouldBe viewAsString(form.fill(testAnswer))
-    }
-
-    "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("goodsName", testAnswer))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(onwardRoute.url)
-    }
-
-    "return a Bad Request and errors when invalid data is submitted" in {
-      val postRequest = fakeGETRequest.withFormUrlEncodedBody(("goodsName", ""))
-      val boundForm = form.bind(Map("value" -> ""))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe BAD_REQUEST
-      contentAsString(result) shouldBe viewAsString(boundForm)
-    }
-
-    "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeGETRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeGETRequest.withFormUrlEncodedBody(("goodsName", testAnswer))
-      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
+  "ProvideGoodsNameController" must {
+    behave like answerCachingController(
+      controller,
+      onwardRoute,
+      viewAsString,
+      validFormData,
+      invalidFormData,
+      backgroundData,
+      testAnswer
+    )
   }
 }

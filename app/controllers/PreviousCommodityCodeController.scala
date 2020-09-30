@@ -41,7 +41,7 @@ class PreviousCommodityCodeController @Inject()(
   val requireData: DataRequiredAction,
   formProvider: PreviousCommodityCodeFormProvider,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends QuestionCachingController[PreviousCommodityCode](cc) {
+)(implicit ec: ExecutionContext) extends AnswerCachingController[PreviousCommodityCode](cc) {
   lazy val form = formProvider()
   val questionPage = PreviousCommodityCodePage
 

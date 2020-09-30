@@ -28,7 +28,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Success, Failure }
 import scala.util.control.NonFatal
 
-trait YesNoBehaviour extends CachingBehaviour[Boolean] {
+trait YesNoCaching extends AnswerCaching[Boolean] {
   def dataCacheConnector: DataCacheConnector
   def navigator: Navigator
   def detailPages: List[QuestionPage[_]]

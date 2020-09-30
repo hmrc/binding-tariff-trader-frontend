@@ -41,7 +41,7 @@ class IsSampleHazardousController @Inject()(
   formProvider: IsSampleHazardousFormProvider,
   val is_sample_hazardous: views.html.isSampleHazardous,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends QuestionCachingController[Boolean](cc) {
+)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
   lazy val form = formProvider()
   val questionPage = IsSampleHazardousPage
 

@@ -41,7 +41,7 @@ class LegalChallengeDetailsController @Inject()(
   val requireData: DataRequiredAction,
   formProvider: LegalChallengeDetailsFormProvider,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends QuestionCachingController[String](cc) {
+)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
   lazy val form = formProvider()
   val questionPage = LegalChallengeDetailsPage
 

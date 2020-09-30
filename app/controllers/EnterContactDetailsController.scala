@@ -40,7 +40,7 @@ class EnterContactDetailsController @Inject()(
   val requireData: DataRequiredAction,
   formProvider: EnterContactDetailsFormProvider,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends QuestionCachingController[EnterContactDetails](cc) {
+)(implicit ec: ExecutionContext) extends AnswerCachingController[EnterContactDetails](cc) {
   lazy val form = formProvider()
   val questionPage = EnterContactDetailsPage
 

@@ -41,7 +41,7 @@ class ReturnSamplesController @Inject()(
   val requireData: DataRequiredAction,
   formProvider: ReturnSamplesFormProvider,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends QuestionCachingController[Boolean](cc) {
+)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
   lazy val form = formProvider()
   val questionPage = ReturnSamplesPage
 

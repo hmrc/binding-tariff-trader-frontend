@@ -20,18 +20,17 @@ import controllers.actions._
 import models.Mode
 import models.requests.DataRequest
 import play.api.data.Form
-import play.api.mvc.{ Action, AnyContent, Results }
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Results }
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ ExecutionContext, Future }
-import play.api.mvc.MessagesControllerComponents
 
-abstract class YesNoCachingController(cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends QuestionCachingController[Boolean](cc) with YesNoBehaviour
+abstract class YesNoCachingController(cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) with YesNoCaching
 
-abstract class QuestionCachingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A]) extends FrontendController(cc) with I18nSupport with CachingBehaviour[A] {
+abstract class AnswerCachingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A]) extends FrontendController(cc) with I18nSupport with AnswerCaching[A] {
   def identify: IdentifierAction
   def getData: DataRetrievalAction
   def requireData: DataRequiredAction

@@ -41,7 +41,7 @@ class ProvideConfidentialInformationController @Inject()(
   formProvider: ProvideConfidentialInformationFormProvider,
   val provide_confidential_information: views.html.provideConfidentialInformation,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends QuestionCachingController[String](cc) {
+)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
   lazy val form = formProvider()
   val questionPage = ProvideConfidentialInformationPage
 

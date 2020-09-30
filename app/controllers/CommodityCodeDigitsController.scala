@@ -41,7 +41,7 @@ class CommodityCodeDigitsController @Inject()(
   val requireData: DataRequiredAction,
   formProvider: CommodityCodeDigitsFormProvider,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends QuestionCachingController[String](cc) {
+)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
   lazy val form = formProvider()
   val questionPage = CommodityCodeDigitsPage
 

@@ -41,7 +41,7 @@ class ProvideGoodsNameController @Inject()(
   provideGoodsNameFormProvider: ProvideGoodsNameFormProvider,
   val provide_goods_name_view: views.html.provideGoodsName,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends QuestionCachingController[String](cc) {
+)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
   lazy val form = provideGoodsNameFormProvider()
   val questionPage = ProvideGoodsNamePage
 
