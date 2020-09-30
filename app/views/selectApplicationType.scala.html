@@ -17,11 +17,10 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
-@import models.SelectApplicationType
 @import models.Mode
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("selectApplicationType.title")}",
@@ -34,12 +33,18 @@
 
         @components.error_summary(form.errors)
 
-        @components.input_radio(
+        @components.input_yes_no(
             field = form("value"),
-            labelHtml = Some(components.heading(messages("selectApplicationType.heading"))),
-            inputs = SelectApplicationType.options.toSeq
+            labelHtml = Some(heading)
         )
 
-        @components.submit_button()
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
+}
+
+@heading = {
+    @components.heading(
+        messages("selectApplicationType.heading", goodsName),
+        captionMsg = Some(messages("selectApplicationType.caption"))
+    )
 }

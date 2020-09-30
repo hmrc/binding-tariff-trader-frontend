@@ -16,11 +16,10 @@
 
 package forms
 
-import forms.behaviours.OptionFieldBehaviours
-import models.SelectApplicationType
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class SelectApplicationTypeFormProviderSpec extends OptionFieldBehaviours {
+class SelectApplicationTypeFormProviderSpec extends BooleanFieldBehaviours {
 
   val form = new SelectApplicationTypeFormProvider()()
 
@@ -28,12 +27,12 @@ class SelectApplicationTypeFormProviderSpec extends OptionFieldBehaviours {
 
     val fieldName = "value"
     val requiredKey = "selectApplicationType.error.required"
+    val invalidKey = "error.boolean"
 
-    behave like optionsField[SelectApplicationType](
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = SelectApplicationType.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(
