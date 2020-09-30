@@ -63,15 +63,6 @@ class MakeFileConfidentialControllerSpec extends ControllerSpecBase {
       contentAsString(result) shouldBe viewAsString()
     }
 
-    "populate the view correctly on a GET when the question has previously been answered" in {
-      val data = Map(MakeFileConfidentialPage.toString -> Json.toJson(Map(fileId -> true)))
-      val fakeRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
-
-      val result = controller(fakeRetrievalAction).onPageLoad(fileId, NormalMode)(fakeRequest)
-
-      contentAsString(result) shouldBe viewAsString(form.fill(FileConfidentiality(fileId, true)))
-    }
-
     "redirect to the next page when valid data is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody("fileId" -> fileId, "confidential" -> "true")
 

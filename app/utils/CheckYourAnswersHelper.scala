@@ -18,9 +18,10 @@ package utils
 
 import controllers.routes
 import models.requests.DataRequest
-import models.{CheckMode, Country, UserAnswers}
+import models.{CheckMode, Country, FileAttachment, UserAnswers}
 import pages._
 import play.api.i18n.{Lang, MessagesApi}
+import utils.CollectionUtils.RichSeq
 import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(
@@ -112,12 +113,24 @@ class CheckYourAnswersHelper(
       routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
     )
 
-    userAnswers.get(SupportingMaterialFileListPage).map {
-      case filenames if filenames.nonEmpty =>
-        filesRow(filenames.map(_.name))
-      case _ =>
-        filesRow(Seq("No files attached"))
+    def mapToAnswers(fileAttachments: Seq[FileAttachment], fileConfidentialities: Map[String, Boolean]): AnswerRow = {
+      def answer(filename: String, confidential: Boolean): String = {
+        val confidentialSuffix = if (confidential) " - Keep confidential" else ""
+
+        s"$filename$confidentialSuffix"
+      }
+
+      val answers = fileAttachments.map {
+        fileAttachment => answer(fileAttachment.name, fileConfidentialities(fileAttachment.id))
+      }
+
+      filesRow(answers.orIfEmpty("No files attached"))
     }
+
+    for {
+      fileAttachments       <- userAnswers.get(SupportingMaterialFileListPage)
+      fileConfidentialities <- userAnswers.get(MakeFileConfidentialPage)
+    } yield mapToAnswers(fileAttachments, fileConfidentialities)
   }
 
   def describeYourItem: Option[AnswerRow] = userAnswers.get(DescribeYourItemPage) map {
