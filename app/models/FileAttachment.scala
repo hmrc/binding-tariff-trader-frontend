@@ -22,6 +22,8 @@ import play.api.libs.json.{Json, OFormat}
   All sizes are stored as KiloBytes
  */
 
+case class FileView(id: String, name: String, confidential: Boolean)
+
 case class FileAttachment(id: String, name: String, mimeType: String, size: Long)
 
 object FileAttachment {

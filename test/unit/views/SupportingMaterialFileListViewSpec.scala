@@ -17,7 +17,7 @@
 package views
 
 import forms.SupportingMaterialFileListFormProvider
-import models.{FileAttachment, NormalMode}
+import models.{FileAttachment, FileView, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -32,7 +32,7 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
   private def createView: () => HtmlFormat.Appendable = { () => createViewWithForm(form) }
 
-  private def createViewWithForm(f: Form[Boolean], files: Seq[FileAttachment] = Seq.empty): HtmlFormat.Appendable =
+  private def createViewWithForm(f: Form[Boolean], files: Seq[FileView] = Seq.empty): HtmlFormat.Appendable =
     supportingMaterialFileList(frontendAppConfig, f, goodsName, files, NormalMode)(fakeRequest, messages)
 
   "SupportingMaterialFileList view" must {
@@ -72,9 +72,9 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
     }
   }
 
-  private def generateFiles(number: Int): Seq[FileAttachment] = {
+  private def generateFiles(number: Int): Seq[FileView] = {
     (1 to number).map { idx =>
-      FileAttachment(s"id$idx", s"name$idx", s"mime$idx", 1L)
+      FileView(s"id$idx", s"name$idx", false)
     }
   }
 }

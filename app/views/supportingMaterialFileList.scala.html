@@ -21,7 +21,7 @@
 @import views.ViewUtils._
 
 
-@(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, files: Seq[FileAttachment], confidentialityStatuses: Map[String, Boolean], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, files: Seq[FileView], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("supportingMaterialFileList.title")}",
@@ -45,7 +45,7 @@
                     captionMsg = Some(messages("supportingMaterialFileList.caption")))
             }
 
-            @components.show_file_table(files, confidentialityStatuses, mode)
+            @components.show_file_table(files, mode)
 
             @indicationsContent
 

@@ -22,16 +22,17 @@ import controllers.actions._
 import forms.SupportingMaterialFileListFormProvider
 import javax.inject.Inject
 import models.requests.DataRequest
-import models.{FileAttachment, Mode, UserAnswers}
+import models.{FileAttachment, FileView, Mode, UserAnswers}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.concurrent.Future.successful
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.supportingMaterialFileList
+
+import scala.concurrent.Future.successful
+import scala.concurrent.{ExecutionContext, Future}
 
 class SupportingMaterialFileListController @Inject()(
   appConfig: FrontendAppConfig,
@@ -48,7 +49,7 @@ class SupportingMaterialFileListController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    Ok(supportingMaterialFileList(appConfig, form, goodsName, existingFiles, confidentialityStatuses, mode))
+    Ok(supportingMaterialFileList(appConfig, form, goodsName, existingFileViews, mode))
   }
 
   def onClear(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -87,7 +88,7 @@ class SupportingMaterialFileListController @Inject()(
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, goodsName, existingFiles, confidentialityStatuses, mode))),
+        successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, goodsName, existingFileViews, mode))),
       {
         case true => successful(Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
         case false => defaultCachePageAndRedirect
@@ -95,10 +96,14 @@ class SupportingMaterialFileListController @Inject()(
     )
   }
 
+  private def existingFileViews(implicit request: DataRequest[AnyContent]): Seq[FileView] = {
+    val confidentialityStatuses = request.userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty)
+    existingFiles map {
+      file => FileView(file.id, file.name, confidentialityStatuses(file.id))
+    }
+  }
+
   private def existingFiles(implicit request: DataRequest[AnyContent]): Seq[FileAttachment] =
     request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
-
-  private def confidentialityStatuses(implicit request: DataRequest[AnyContent]): Map[String, Boolean] =
-    request.userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty)
 
 }
