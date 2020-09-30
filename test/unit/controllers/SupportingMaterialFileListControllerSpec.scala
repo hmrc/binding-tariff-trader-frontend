@@ -19,10 +19,13 @@ package controllers
 import connectors.FakeDataCacheConnector
 import controllers.actions._
 import forms.SupportingMaterialFileListFormProvider
-import models.NormalMode
+import models.{FileAttachment, FileView, NormalMode}
 import navigation.Navigator
+import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, SupportingMaterialFileListPage}
 import play.api.data.Form
+import play.api.libs.json.{JsString, Json}
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.supportingMaterialFileList
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -45,16 +48,25 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
       cc
     )
 
-  private def viewAsString(form: Form[_] = form): String =
-    supportingMaterialFileList(frontendAppConfig, form, goodsName, Seq.empty, NormalMode)(fakeRequest, messages).toString
+  private def viewAsString(form: Form[_] = form, fileViews: Seq[FileView] = Seq.empty): String =
+    supportingMaterialFileList(frontendAppConfig, form, goodsName, fileViews, NormalMode)(fakeRequest, messages).toString
 
   "SupportingMaterialFileList Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
+      val fileId = "some-file-id"
+      val filename = "some-filename"
+      val data = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        SupportingMaterialFileListPage.toString -> Json.toJson(Seq(FileAttachment(fileId, filename, "some-mime-type", 2L))),
+        MakeFileConfidentialPage.toString -> Json.toJson(Map(fileId -> true))
+      )
+      val fakeRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
+
+      val result = controller(fakeRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
 
       status(result) shouldBe OK
-      contentAsString(result) shouldBe viewAsString()
+      contentAsString(result) shouldBe viewAsString(fileViews = Seq(FileView(fileId, filename, true)))
     }
 
     "redirect to the next page (Have you found commodity code) when no is submitted" in {
