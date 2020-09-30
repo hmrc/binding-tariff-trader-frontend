@@ -95,8 +95,8 @@ trait QuestionViewWithBooleanBehaviours[T] extends QuestionViewBehaviours[T] {
 
     "have only the correct value checked" in {
       val doc = asDocument(createView(form.fill(answer)))
-      assert(doc.getElementById("value-yes").hasAttr("checked") == answer)
-      assert(doc.getElementById("value-no").hasAttr("checked") != answer)
+      assert(doc.getElementById(s"${elementIdPrefix}-yes").hasAttr("checked") == answer)
+      assert(doc.getElementById(s"${elementIdPrefix}-no").hasAttr("checked") != answer)
     }
 
     "not render an error summary" in {

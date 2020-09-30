@@ -27,22 +27,21 @@ import pages.{AcceptItemInformationPage, PreviousCommodityCodePage}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.previousCommodityCode
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 class PreviousCommodityCodeController @Inject()(
-                                                 appConfig: FrontendAppConfig,
-                                                 dataCacheConnector: DataCacheConnector,
-                                                 navigator: Navigator,
-                                                 identify: IdentifierAction,
-                                                 getData: DataRetrievalAction,
-                                                 requireData: DataRequiredAction,
-                                                 formProvider: PreviousCommodityCodeFormProvider,
-                                                 cc: MessagesControllerComponents
-                                               ) extends FrontendController(cc) with I18nSupport {
+  appConfig: FrontendAppConfig,
+  dataCacheConnector: DataCacheConnector,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: PreviousCommodityCodeFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 

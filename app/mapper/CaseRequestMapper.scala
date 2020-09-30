@@ -38,6 +38,7 @@ class CaseRequestMapper {
     val supportingInformationDetails: Option[String] = answers.get(SupportingInformationDetailsPage)
 
     val sampleProvided: Boolean = answers.get(WhenToSendSamplePage).getOrElse(throwError("when to send a sample"))
+    val sampleHazardous: Option[Boolean] = answers.get(IsSampleHazardousPage)
     val returnSample: Boolean = answers.get(ReturnSamplesPage).getOrElse(false)
 
     val contact = contactDetails.map(toContact).getOrElse(throwError("contact details"))
@@ -60,6 +61,7 @@ class CaseRequestMapper {
       knownLegalProceedings = legalChallengeDetails,
       envisagedCommodityCode = commodityCodeDigits,
       sampleToBeProvided = sampleProvided,
+      sampleIsHazardous = sampleHazardous,
       sampleToBeReturned = returnSample
     )
 

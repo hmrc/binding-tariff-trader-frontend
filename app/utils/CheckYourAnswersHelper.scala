@@ -79,6 +79,10 @@ class CheckYourAnswersHelper(
     x => AnswerRow("returnSamples.checkYourAnswersLabel", yesNoAnswer(x), true, routes.ReturnSamplesController.onPageLoad(CheckMode).url)
   }
 
+  def isSampleHazardous: Option[AnswerRow] = userAnswers.get(IsSampleHazardousPage) map {
+    x => AnswerRow("isSampleHazardous.checkYourAnswersLabel", yesNoAnswer(x), true, routes.IsSampleHazardousController.onPageLoad(CheckMode).url)
+  }
+
   def whenToSendSample: Option[AnswerRow] = userAnswers.get(WhenToSendSamplePage) map {
     x => AnswerRow("whenToSendSample.checkYourAnswersLabel", yesNoAnswer(x), true, routes.WhenToSendSampleController.onPageLoad(CheckMode).url)
   }
@@ -154,7 +158,7 @@ class CheckYourAnswersHelper(
   }
 
   def selectApplicationType: Option[AnswerRow] = userAnswers.get(SelectApplicationTypePage) map {
-    x => AnswerRow("selectApplicationType.checkYourAnswersLabel", s"selectApplicationType.$x", true, routes.SelectApplicationTypeController.onPageLoad(CheckMode).url)
+    x => AnswerRow("selectApplicationType.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SelectApplicationTypeController.onPageLoad(CheckMode).url)
   }
 
   def whichBestDescribesYou: Option[AnswerRow] = None

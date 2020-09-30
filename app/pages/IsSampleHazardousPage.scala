@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+case object IsSampleHazardousPage extends QuestionPage[Boolean] {
 
-import forms.mappings.Mappings
-import play.api.data.Form
-
-class SelectApplicationTypeFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("selectApplicationType.error.required")
-    )
-
+  override def toString: String = "isSampleHazardous"
 }
