@@ -107,7 +107,7 @@ class Navigator @Inject()() {
     CheckYourAnswersPage -> (_ => routes.DeclarationController.onPageLoad(NormalMode)),
 
     // Your declaration
-    DeclarationPage -> (_ => routes.ConfirmationController.onPageLoad()),
+    DeclarationPage -> (_ => routes.ConfirmationController.onPageLoad())
   )
 
   private val checkRouteMap: Map[Page, UserAnswers => Call] = Map(
