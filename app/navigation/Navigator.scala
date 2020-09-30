@@ -19,7 +19,7 @@ package navigation
 import controllers.routes
 import javax.inject.{Inject, Singleton}
 import models._
-import pages.{AddConfidentialInformationPage, CommodityCodeRulingReferencePage, UploadWrittenAuthorisationPage, _}
+import pages._
 import play.api.mvc.Call
 
 @Singleton
@@ -92,7 +92,7 @@ class Navigator @Inject()() {
     // Do you know of a similar item that already has an Advance Tariff Ruling?
     SimilarItemCommodityCodePage -> (answer => answer.get(SimilarItemCommodityCodePage) match {
       case Some(true) => routes.CommodityCodeRulingReferenceController.onPageLoad(NormalMode)
-      case Some(false) => routes.EnterContactDetailsController.onPageLoad(NormalMode)
+      case Some(false) => routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)
       case _ => routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode)
     }),
     CommodityCodeRulingReferencePage -> (_ => routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)),

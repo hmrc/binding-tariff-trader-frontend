@@ -19,9 +19,9 @@ package navigation
 import base.SpecBase
 import controllers.routes
 import models._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import pages._
-import utils.JsonFormatters._
 
 class NavigatorSpec extends SpecBase {
 
@@ -88,21 +88,21 @@ class NavigatorSpec extends SpecBase {
           routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
       }
 
+      "redirect to UploadSupportingMaterialMultiplePage when user selects YES to add a file on SupportingMaterialFileListPage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(Some(true), Nil)))
+
+        navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)
+      }
+
       "return to SupportingMaterialFileList page when file is removed" in {
         val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(None, Nil)))
 
         navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
-          routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
-      }
-
-      "return to SupportingMaterialFileList page when add another file is selected" in {
-        val mockUserAnswers = mock[UserAnswers]
-
-        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(Some(true), Nil)))
-
-        navigator.nextPage(UploadSupportingMaterialMultiplePage, NormalMode)(mockUserAnswers) shouldBe
           routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
       }
 
@@ -115,15 +115,24 @@ class NavigatorSpec extends SpecBase {
           routes.WhenToSendSampleController.onPageLoad(NormalMode)
       }
 
-      //TODO should go to Hazardous page when user selects true
-/*      "redirect to IsSampleHazardous page when user selects YES from WhenToSendSample page" in {
+      "redirect to IsSampleHazardous page when user selects YES from WhenToSendSample page" in {
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(Some(false), Nil)))
+        when(mockUserAnswers.get(WhenToSendSamplePage)).thenReturn(Some(true))
 
-        navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
-          routes.WhenToSendSampleController.onPageLoad(NormalMode)
-      }*/
+        navigator.nextPage(WhenToSendSamplePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.IsSampleHazardousController.onPageLoad(NormalMode)
+      }
+
+      "redirect to ReturnSamplesPage from IsSampleHazardousPage" in {
+        navigator.nextPage(IsSampleHazardousPage, NormalMode)(mock[UserAnswers]) shouldBe
+          routes.ReturnSamplesController.onPageLoad(NormalMode)
+      }
+
+      "redirect to CommodityCodeBestMatchPage from ReturnSamplesPage" in {
+        navigator.nextPage(ReturnSamplesPage, NormalMode)(mock[UserAnswers]) shouldBe
+          routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)
+      }
 
       "redirect to CommodityCodeBestMatchPage page when user selects NO from WhenToSendSample page" in {
         val mockUserAnswers = mock[UserAnswers]
@@ -183,12 +192,101 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(LegalChallengeDetailsPage, NormalMode)(mockUserAnswers) shouldBe
           routes.SelectApplicationTypeController.onPageLoad(NormalMode)
       }
+
+      "redirect to PreviousCommodityCodePage when user selects YES from SelectApplicationTypePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SelectApplicationTypePage)).thenReturn(Some(true))
+
+        navigator.nextPage(SelectApplicationTypePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.PreviousCommodityCodeController.onPageLoad(NormalMode)
+      }
+
+      "redirect to SimilarItemCommodityCodePage from PreviousCommodityCodePage" in {
+        navigator.nextPage(PreviousCommodityCodePage, NormalMode)(mock[UserAnswers]) shouldBe
+          routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode)
+      }
+
+      "redirect to SimilarItemCommodityCodePage when user selects NO from SelectApplicationTypePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SelectApplicationTypePage)).thenReturn(Some(false))
+
+        navigator.nextPage(SelectApplicationTypePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode)
+      }
+
+      "redirect to CommodityCodeRulingReferencePage when user selects YES from SimilarItemCommodityCodePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SimilarItemCommodityCodePage)).thenReturn(Some(true))
+
+        navigator.nextPage(SimilarItemCommodityCodePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.CommodityCodeRulingReferenceController.onPageLoad(NormalMode)
+      }
+
+      "redirect to RegisteredAddressForEoriPage from CommodityCodeRulingReferencePage" in {
+        navigator.nextPage(CommodityCodeRulingReferencePage, NormalMode)(mock[UserAnswers]) shouldBe
+          routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)
+      }
+
+      "redirect to RegisteredAddressForEoriPage when user selects NO from SimilarItemCommodityCodePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SimilarItemCommodityCodePage)).thenReturn(Some(false))
+
+        navigator.nextPage(SimilarItemCommodityCodePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)
+      }
+
+      "redirect to EnterContactDetailsPage from RegisteredAddressForEoriPage" in {
+        navigator.nextPage(RegisteredAddressForEoriPage, NormalMode)(mock[UserAnswers]) shouldBe
+          routes.EnterContactDetailsController.onPageLoad(NormalMode)
+      }
+
+      "redirect to CheckYourAnswersPage from EnterContactDetailsPage" in {
+        navigator.nextPage(EnterContactDetailsPage, NormalMode)(mock[UserAnswers]) shouldBe
+          routes.CheckYourAnswersController.onPageLoad()
+      }
+
+      "redirect to DeclarationPage from CheckYourAnswersPage" in {
+        navigator.nextPage(CheckYourAnswersPage, NormalMode)(mock[UserAnswers]) shouldBe
+          routes.DeclarationController.onPageLoad(NormalMode)
+      }
+
+      "redirect to ConfirmationPage from DeclarationPage" in {
+        navigator.nextPage(DeclarationPage, NormalMode)(mock[UserAnswers]) shouldBe
+          routes.ConfirmationController.onPageLoad()
+      }
+
+      "redirect to self if no answers were entered" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(any())(any())).thenReturn(None)
+
+        navigator.nextPage(AddConfidentialInformationPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.AddConfidentialInformationController.onPageLoad(NormalMode)
+
+        navigator.nextPage(WhenToSendSamplePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.WhenToSendSampleController.onPageLoad(NormalMode)
+
+        navigator.nextPage(CommodityCodeBestMatchPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)
+
+        navigator.nextPage(LegalChallengePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.LegalChallengeController.onPageLoad(NormalMode)
+
+        navigator.nextPage(SelectApplicationTypePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.SelectApplicationTypeController.onPageLoad(NormalMode)
+
+        navigator.nextPage(SimilarItemCommodityCodePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode)
+      }
     }
 
     "in Check mode" must {
 
       "go to CheckYourAnswers from a page that doesn't exist in the edit route map" in {
-
         case object UnknownPage extends Page
         navigator.nextPage(UnknownPage, CheckMode)(mock[UserAnswers]) shouldBe routes.CheckYourAnswersController.onPageLoad()
       }
