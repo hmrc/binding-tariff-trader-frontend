@@ -26,7 +26,7 @@ class MakeFileConfidentialFormProvider @Inject() extends Mappings {
 
   def apply(): Form[FileConfidentiality] =
     Form(mapping(
-      "fileId" -> text(),                                                   //TODO: BT: add key for hidden field
-      "confidential" -> boolean("makeFileConfidential.error.required") //TODO: BT: change field name
+      "fileId" -> text(),
+      "confidential" -> boolean("makeFileConfidential.error.required")
     )(FileConfidentiality.apply)(FileConfidentiality.unapply))
 }
