@@ -30,7 +30,6 @@ class Navigator @Inject()() {
     IndexPage -> (_ => routes.BeforeYouStartController.onPageLoad()),
 
     // Removed from the journey for the time being
-    // RegisteredAddressForEoriPage -> (_ => routes.ProvideGoodsNameController.onPageLoad(NormalMode)),
     // WhichBestDescribesYouPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
     // RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(NormalMode)),
     // UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(NormalMode)),
@@ -96,7 +95,10 @@ class Navigator @Inject()() {
       case Some(false) => routes.EnterContactDetailsController.onPageLoad(NormalMode)
       case _ => routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode)
     }),
-    CommodityCodeRulingReferencePage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
+    CommodityCodeRulingReferencePage -> (_ => routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)),
+
+    // About the applicant
+    RegisteredAddressForEoriPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
 
     // Provide the contact details for this application
     EnterContactDetailsPage -> (_ => routes.CheckYourAnswersController.onPageLoad()),
