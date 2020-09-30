@@ -16,13 +16,13 @@
 
 @import views.ViewUtils._
 
-@(files: Seq[FileAttachment], mode: Mode)(implicit messages: Messages)
+@(files: Seq[FileAttachment], fileConfidentialities: Map[String, Boolean], mode: Mode)(implicit messages: Messages)
 
 <dl class="file-list mb-5">
     @for((file: FileAttachment, index: Int) <- files.zipWithIndex) {
         <div id="files-row-@{index}" class="file-list-row">
             <dt class="file-list-name" id="files-row-@{index}-title">@file.name</dt>
-            <dd class="file-list-size" id="files-row-@{index}-size" >@humanReadableSize(file.size)</dd>
+            <dd class="file-list-size" id="files-row-@{index}-size" >@confidentialityStatusLabel(fileConfidentialities(file.id))</dd>
             <dd class="file-list-link" id="files-row-@{index}-remove">
                 <a id="files-row-@{index}-remove-file" class="remove" href="@routes.SupportingMaterialFileListController.onRemove(file.id, mode)">
                     <span aria-hidden="true">@messages("supportingMaterialFile.remove.file.text")</span>

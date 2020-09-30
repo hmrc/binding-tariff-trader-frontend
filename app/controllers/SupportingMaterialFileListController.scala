@@ -48,11 +48,7 @@ class SupportingMaterialFileListController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    Ok(supportingMaterialFileList(appConfig, form, goodsName, existingFiles, mode))
-  }
-
-  private def existingFiles(implicit request: DataRequest[AnyContent]): Seq[FileAttachment] = {
-    request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
+    Ok(supportingMaterialFileList(appConfig, form, goodsName, existingFiles, confidentialityStatuses, mode))
   }
 
   def onClear(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -91,12 +87,18 @@ class SupportingMaterialFileListController @Inject()(
 
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
-        successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, goodsName, existingFiles, mode))),
+        successful(BadRequest(supportingMaterialFileList(appConfig, formWithErrors, goodsName, existingFiles, confidentialityStatuses, mode))),
       {
         case true => successful(Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
         case false => defaultCachePageAndRedirect
       }
     )
   }
+
+  private def existingFiles(implicit request: DataRequest[AnyContent]): Seq[FileAttachment] =
+    request.userAnswers.get(SupportingMaterialFileListPage).getOrElse(Seq.empty)
+
+  private def confidentialityStatuses(implicit request: DataRequest[AnyContent]): Map[String, Boolean] =
+    request.userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty)
 
 }
