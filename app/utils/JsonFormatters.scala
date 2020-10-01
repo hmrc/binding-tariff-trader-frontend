@@ -25,7 +25,6 @@ import viewmodels.PdfViewModel
 
 object JsonFormatters {
 
-  implicit val pdfFormat: OFormat[PdfViewModel] = Json.format[PdfViewModel]
   implicit val caseStatusFormat: Format[CaseStatus.Value] = EnumJson.format(CaseStatus)
   implicit val contactFormat: OFormat[Contact] = Json.format[Contact]
   implicit val eoriDetailsFormat: OFormat[EORIDetails] = Json.format[EORIDetails]
@@ -36,6 +35,7 @@ object JsonFormatters {
   implicit val newCaseRequestFormat: OFormat[NewCaseRequest] = Json.format[NewCaseRequest]
   implicit val caseAuditPayloadFormat: OFormat[CaseAuditPayload] = Json.format[CaseAuditPayload]
   implicit val operator: Format[Operator] = Json.using[Json.WithDefaultValues].format[Operator]
+  implicit val pdfFormat: OFormat[PdfViewModel] = Json.format[PdfViewModel]
 
   implicit val formatCaseCreated: OFormat[CaseCreated] = Json.using[Json.WithDefaultValues].format[CaseCreated]
   implicit val formatEventDetail: Format[Details] = Union.from[Details]("type")

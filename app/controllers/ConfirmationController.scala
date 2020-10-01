@@ -53,7 +53,10 @@ class ConfirmationController @Inject()(
 
       token: String = pdfService.encodeToken(c.eori)
     } yield Ok(confirmation(appConfig, c, token, pdf))
-
+    println("hello hello ::::::::::::")
+    println("hello hello ::::::::::::")
+    println("hello hello ::::::::::::")
+    println("hello hello ::::::::::::")
     (request.userAnswers.get(ConfirmationPage), request.userAnswers.get(PdfViewPage)) match {
       case (Some(c: Confirmation), Some(pdf: PdfViewModel)) => show(c, pdf)
       case _ => successful(Redirect(routes.SessionExpiredController.onPageLoad()))
