@@ -28,28 +28,6 @@ class NavigatorSpec extends SpecBase {
 
   val navigator = new Navigator
 
-  def behavesLikeNormalPage[A](
-    questionPage: QuestionPage[A],
-    mode: Mode,
-    answer: A,
-    expectedRoute: Call
-  ) = {
-    val mockUserAnswers = mock[UserAnswers]
-    when(mockUserAnswers.get(questionPage)(any())).thenReturn(Some(answer))
-    navigator.nextPage(questionPage, mode)(mockUserAnswers) shouldBe expectedRoute
-  }
-
-  def behavesLikeYesNoJourney(
-    questionPage: QuestionPage[Boolean],
-    mode: Mode,
-    answer: Boolean,
-    expectedRoute: Call
-  ) = {
-    val mockUserAnswers = mock[UserAnswers]
-    when(mockUserAnswers.get(questionPage)).thenReturn(Some(answer))
-    navigator.nextPage(questionPage, mode)(mockUserAnswers) shouldBe expectedRoute
-  }
-
   "Navigator" when {
 
     "in Normal mode" must {
