@@ -122,6 +122,7 @@ selectApplicationType.title = Do you have a previous BTI ruling reference for th
 selectApplicationType.heading = Do you have a previous BTI ruling reference for the {0}?
 selectApplicationType.checkYourAnswersLabel = Renewing a BTI?
 selectApplicationType.error.required = Select yes if you are renewing a previous BTI ruling
+selectApplicationType.caption = About other rulings
 
 registerBusinessRepresenting.title =  What are the registered details of the business, organisation or individual you’re representing? - Manage your Advance Tariff Rulings - GOV.UK
 registerBusinessRepresenting.heading = What are the registered details of the business, organisation or individual you’re representing?
