@@ -35,9 +35,17 @@
 
         @components.input_text(
             field = form("previousCommodityCode"),
-            labelHtml = Some(components.heading(messages("previousCommodityCode.heading"))),
+            labelHtml = Some(heading),
             hint = Some(messages("previousCommodityCode.previousCommodityCode.hint"))
         )
-        @components.submit_button()
+
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
+}
+
+@heading = {
+    @components.heading(
+        messages("previousCommodityCode.heading"),
+        captionMsg = Some(messages("previousCommodityCode.caption"))
+    )
 }

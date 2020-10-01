@@ -16,9 +16,7 @@
 
 package pages
 
-import models.SelectApplicationType
-
-case object SelectApplicationTypePage extends QuestionPage[SelectApplicationType] {
+case object SelectApplicationTypePage extends QuestionPage[Boolean] {
 
   override def toString: String = "selectApplicationType"
 }

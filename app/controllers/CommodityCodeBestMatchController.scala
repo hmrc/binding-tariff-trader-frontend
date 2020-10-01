@@ -51,18 +51,19 @@ class CommodityCodeBestMatchController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     val preparedForm = request.userAnswers.get(CommodityCodeBestMatchPage) match {
       case Some(value) => form.fill(value)
       case _ => form
     }
 
-    Ok(commodityCodeBestMatch(appConfig, preparedForm, mode))
+    Ok(commodityCodeBestMatch(appConfig, preparedForm, mode, goodsName))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
     def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode)))
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+      Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode, goodsName)))
     }
 
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
