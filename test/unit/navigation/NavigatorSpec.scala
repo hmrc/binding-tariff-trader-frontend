@@ -304,6 +304,15 @@ class NavigatorSpec extends SpecBase {
           routes.ProvideConfidentialInformationController.onPageLoad(CheckMode)
       }
 
+      "return to CheckYourAnswers once information is provided in ProvideConfidentialInformationPage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(ProvideConfidentialInformationPage)).thenReturn(Some("confidential"))
+
+        navigator.nextPage(ProvideConfidentialInformationPage, CheckMode)(mockUserAnswers) shouldBe
+          routes.CheckYourAnswersController.onPageLoad()
+      }
+
       "return to CheckYourAnswers when no is selected in AddConfidentialInformation page" in {
         val mockUserAnswers = mock[UserAnswers]
 
