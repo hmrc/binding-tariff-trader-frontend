@@ -53,13 +53,12 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.supportingMaterialFileListChoice,
           checkYourAnswersHelper.supportingMaterialFileList,
           checkYourAnswersHelper.whenToSendSample,
+          checkYourAnswersHelper.isSampleHazardous,
           checkYourAnswersHelper.returnSamples,
           checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,
           checkYourAnswersHelper.legalChallenge,
-          checkYourAnswersHelper.legalChallengeDetails,
-          checkYourAnswersHelper.supportingInformation,
-          checkYourAnswersHelper.supportingInformationDetails
+          checkYourAnswersHelper.legalChallengeDetails
         ).flatten
       ),
       AnswerSection(
