@@ -27,13 +27,15 @@ import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import models.requests.OptionalDataRequest
 import navigation.Navigator
-import pages.{ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
+import pages.{ConfirmationPage, PdfViewPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import viewmodels.PdfViewModel
 import views.html.declaration
+import utils.JsonFormatters._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -71,7 +73,7 @@ class DeclarationController @Inject()(
       atar        <- createCase(newCaseRequest, att, letter, answers)
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
       _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
-      userAnswers = answers.set(ConfirmationPage, Confirmation(atar))
+      userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar))
       _           <- dataCacheConnector.save(userAnswers.cacheMap)
       res: Result <- successful(Redirect(navigator.nextPage(ConfirmationPage, mode)(userAnswers)))
     } yield res

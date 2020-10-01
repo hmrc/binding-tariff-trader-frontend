@@ -17,8 +17,9 @@
 @import config.FrontendAppConfig
 @import components.view_application
 @import viewmodels.AnswerSection
+@import viewmodels.PdfViewModel
 
-@(appConfig: FrontendAppConfig, confirmation: Confirmation, pdfToken: String, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, confirmation: Confirmation, pdfToken: String, pdf: PdfViewModel, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
 val protocol = if(req.secure) "https" else "http"
@@ -77,5 +78,6 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
         @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplications().url)
     </div>
 </div>
-@components.view_application(appConfig, compositeMode)
+
+    @components.view_application(appConfig, pdf, compositeMode)
 }

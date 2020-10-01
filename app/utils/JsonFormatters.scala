@@ -21,9 +21,11 @@ import models._
 import models.requests.NewEventRequest
 import play.api.libs.json._
 import uk.gov.hmrc.play.json.Union
+import viewmodels.PdfViewModel
 
 object JsonFormatters {
 
+  implicit val pdfFormat: OFormat[PdfViewModel] = Json.format[PdfViewModel]
   implicit val caseStatusFormat: Format[CaseStatus.Value] = EnumJson.format(CaseStatus)
   implicit val contactFormat: OFormat[Contact] = Json.format[Contact]
   implicit val eoriDetailsFormat: OFormat[EORIDetails] = Json.format[EORIDetails]

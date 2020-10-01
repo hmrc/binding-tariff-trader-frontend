@@ -15,8 +15,9 @@
  *@
 
 @import config.FrontendAppConfig
+@import viewmodels.PdfViewModel
 
-@(appConfig: FrontendAppConfig, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, pdf: PdfViewModel, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
 val protocol = if(req.secure) "https" else "http"
@@ -79,7 +80,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
             <div class="column-half">
                 <dl class="body-text">
                     <dt class="bold">Contact name</dt>
-                    <dt></dt>
+                    <dt>@pdf.contact.name</dt>
                 </dl>
                 <dl class="body-text">
                     <dt class="bold">Contact email</dt>
