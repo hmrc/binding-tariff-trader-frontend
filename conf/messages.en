@@ -319,13 +319,14 @@ returnSamples.checkYourAnswersLabel = Return the samples?
 returnSamples.error.required = Select yes if you would like the sample returned
 returnSamples.caption = About the goods
 
-similarItemCommodityCode.title = Do you know of a similar item that already has an Advance Tariff Ruling? - Manage your Advance Tariff Rulings - GOV.UK
-similarItemCommodityCode.heading = Do you know of a similar item that already has an Advance Tariff Ruling?
+similarItemCommodityCode.title = Are there similar goods that already have a ruling? - Manage your Advance Tariff Rulings - GOV.UK
+similarItemCommodityCode.heading = Are there similar goods that already have a ruling?
+similarItemCommodityCode.caption = About other rulings
 similarItemCommodityCode.yesAwareSimilarCode = Yes
 similarItemCommodityCode.noNotAware = No
 similarItemCommodityCode.checkYourAnswersLabel = Do you know of a similar item that already has a ruling?
-similarItemCommodityCode.error.required = Select yes if you know of a similar item that has an Advance Tariff Ruling
-similarItemCommodityCode.bodyText = It can help us to classify your goods and match with other rulings if:
+similarItemCommodityCode.error.required = Select yes if you know of similar goods that have a ruling
+similarItemCommodityCode.bodyText = It can help to provide a ruling if there is already a ruling for goods that are similar, even if the ruling was made in another country.
 similarItemCommodityCode.listItem1 = your business or organisation operates in other countries and you have a ruling for that country
 similarItemCommodityCode.listItem2 = you know of a similar item with a ruling
 
