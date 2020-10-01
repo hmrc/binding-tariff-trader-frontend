@@ -31,6 +31,7 @@ import play.twirl.api.HtmlFormat
 import views.html.commodityCodeBestMatch
 
 import scala.concurrent.ExecutionContext
+import navigation.Journey
 
 class CommodityCodeBestMatchController @Inject()(
   appConfig: FrontendAppConfig,
@@ -43,8 +44,7 @@ class CommodityCodeBestMatchController @Inject()(
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
   lazy val form = formProvider()
-  val questionPage = CommodityCodeBestMatchPage
-  val detailPages = List(CommodityCodeDigitsPage)
+  val journey = Journey.commodityCode
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")

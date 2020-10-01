@@ -51,28 +51,19 @@ class Navigator @Inject()() {
   }
 
   def yesNoJourney(
-    questionPage: QuestionPage[Boolean],
-    detailPage: QuestionPage[_],
+    journey: YesNoJourney,
     continuingTo: Page,
     mode: Mode
-  ): Map[Page, UserAnswers => Call] =
-    yesNoJourney(questionPage, List(detailPage), continuingTo, mode)
-
-  def yesNoJourney(
-    questionPage: QuestionPage[Boolean],
-    detailPages: List[QuestionPage[_]],
-    continuingTo: Page,
-    mode: Mode
-  ): Map[Page, UserAnswers => Call] = detailPages match {
+  ): Map[Page, UserAnswers => Call] = journey.detailPages match {
     case Nil =>
-      normalPage(questionPage, continuingTo, mode)
+      normalPage(journey.questionPage, continuingTo, mode)
 
     case detailPages =>
-      val questionPageRoute = questionPage -> { (answer: UserAnswers) =>
-        answer.get(questionPage) match {
+      val questionPageRoute = journey.questionPage -> { (answer: UserAnswers) =>
+        answer.get(journey.questionPage) match {
           case Some(true) => detailPages.head.route(mode)
           case Some(false) => continuingTo.route(mode)
-          case _ => questionPage.route(mode)
+          case _ => journey.questionPage.route(mode)
         }
       }
 
@@ -91,8 +82,7 @@ class Navigator @Inject()() {
 
     // Do you want to add any confidential information about the goods?
     yesNoJourney(
-      questionPage = AddConfidentialInformationPage,
-      detailPage = ProvideConfidentialInformationPage,
+      journey = Journey.confidentialInformation,
       continuingTo = SupportingMaterialFileListPage,
       mode = NormalMode
     ),
@@ -111,40 +101,35 @@ class Navigator @Inject()() {
 
     // Will you send a sample of the goods to HMRC?
     yesNoJourney(
-      questionPage = WhenToSendSamplePage,
-      detailPages = List(IsSampleHazardousPage, ReturnSamplesPage),
+      journey = Journey.samples,
       continuingTo = CommodityCodeBestMatchPage,
       mode = NormalMode
     ),
 
     // Have you found a commodity code for the goods?
     yesNoJourney(
-      questionPage = CommodityCodeBestMatchPage,
-      detailPage = CommodityCodeDigitsPage,
+      journey = Journey.commodityCode,
       continuingTo = LegalChallengePage,
       mode = NormalMode
     ),
 
     // Have there been any legal problems classifying the goods?
     yesNoJourney(
-      questionPage = LegalChallengePage,
-      detailPage = LegalChallengeDetailsPage,
+      journey = Journey.legalProblems,
       continuingTo = SelectApplicationTypePage,
       mode = NormalMode
     ),
 
     // Do you have a previous BTI ruling reference for the goods?
     yesNoJourney(
-      questionPage = SelectApplicationTypePage,
-      detailPage = PreviousCommodityCodePage,
+      journey = Journey.previousBTI,
       continuingTo = SimilarItemCommodityCodePage,
       mode = NormalMode
     ),
 
     // Do you know of a similar item that already has an Advance Tariff Ruling?
     yesNoJourney(
-      questionPage = SimilarItemCommodityCodePage,
-      detailPage = CommodityCodeRulingReferencePage,
+      journey = Journey.similarItem,
       continuingTo = RegisteredAddressForEoriPage,
       mode = NormalMode
     ),
@@ -166,8 +151,7 @@ class Navigator @Inject()() {
   private val checkRouteMap: Map[Page, UserAnswers => Call] = List(
     // Do you want to add any confidential information about the goods?
     yesNoJourney(
-      questionPage = AddConfidentialInformationPage,
-      detailPage = ProvideConfidentialInformationPage,
+      journey = Journey.confidentialInformation,
       continuingTo = CheckYourAnswersPage,
       mode = CheckMode
     ),
@@ -186,40 +170,35 @@ class Navigator @Inject()() {
 
     // Will you send a sample of the goods to HMRC?
     yesNoJourney(
-      questionPage = WhenToSendSamplePage,
-      detailPages = List(IsSampleHazardousPage, ReturnSamplesPage),
+      journey = Journey.samples,
       continuingTo = CheckYourAnswersPage,
       mode = CheckMode
     ),
 
     // Have you found a commodity code for the goods?
     yesNoJourney(
-      questionPage = CommodityCodeBestMatchPage,
-      detailPage = CommodityCodeDigitsPage,
+      journey = Journey.commodityCode,
       continuingTo = CheckYourAnswersPage,
       mode = CheckMode
     ),
 
     // Have there been any legal problems classifying the goods?
     yesNoJourney(
-      questionPage = LegalChallengePage,
-      detailPage = LegalChallengeDetailsPage,
+      journey = Journey.legalProblems,
       continuingTo = CheckYourAnswersPage,
       mode = CheckMode
     ),
 
     // Do you have a previous BTI ruling reference for the goods?
     yesNoJourney(
-      questionPage = SelectApplicationTypePage,
-      detailPage = PreviousCommodityCodePage,
+      journey = Journey.previousBTI,
       continuingTo = CheckYourAnswersPage,
       mode = CheckMode
     ),
 
     // Do you know of a similar item that already has an Advance Tariff Ruling?
     yesNoJourney(
-      questionPage = SimilarItemCommodityCodePage,
-      detailPage = CommodityCodeRulingReferencePage,
+      journey = Journey.similarItem,
       continuingTo = CheckYourAnswersPage,
       mode = CheckMode
     ),

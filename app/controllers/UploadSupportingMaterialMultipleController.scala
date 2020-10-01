@@ -29,26 +29,23 @@ import play.api.i18n.{I18nSupport, Lang}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc._
 import service.FileService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.Future.successful
-import utils.JsonFormatters._
-
 
 class UploadSupportingMaterialMultipleController @Inject()(
-                                                            appConfig: FrontendAppConfig,
-                                                            dataCacheConnector: DataCacheConnector,
-                                                            identify: IdentifierAction,
-                                                            getData: DataRetrievalAction,
-                                                            navigator: Navigator,
-                                                            requireData: DataRequiredAction,
-                                                            formProvider: UploadSupportingMaterialMultipleFormProvider,
-                                                            fileService: FileService,
-                                                            cc: MessagesControllerComponents
-                                                          ) extends FrontendController(cc) with I18nSupport {
+  appConfig: FrontendAppConfig,
+  dataCacheConnector: DataCacheConnector,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  navigator: Navigator,
+  requireData: DataRequiredAction,
+  formProvider: UploadSupportingMaterialMultipleFormProvider,
+  fileService: FileService,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
   private implicit val lang: Lang = appConfig.defaultLang

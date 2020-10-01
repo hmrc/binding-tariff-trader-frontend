@@ -24,13 +24,14 @@ import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.{ ProvideGoodsNamePage, SelectApplicationTypePage, PreviousCommodityCodePage }
+import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import views.html.selectApplicationType
 
 import scala.concurrent.ExecutionContext
 import play.twirl.api.HtmlFormat
+import navigation.Journey
 
 class SelectApplicationTypeController @Inject()(
   appConfig: FrontendAppConfig,
@@ -43,8 +44,7 @@ class SelectApplicationTypeController @Inject()(
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
   lazy val form = formProvider()
-  val questionPage = SelectApplicationTypePage
-  val detailPages = List(PreviousCommodityCodePage)
+  val journey = Journey.previousBTI
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")

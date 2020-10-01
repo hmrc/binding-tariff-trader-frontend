@@ -27,7 +27,7 @@ import navigation.Navigator
 import pages.RegisteredAddressForEoriPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Request }
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import play.twirl.api.HtmlFormat
 import service.CountriesService
 import views.html.registeredAddressForEori

@@ -27,8 +27,14 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ ExecutionContext, Future }
+import navigation.YesNoJourney
+import pages.QuestionPage
 
-abstract class YesNoCachingController(cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) with YesNoCaching
+abstract class YesNoCachingController(cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) with YesNoCaching {
+  def journey: YesNoJourney
+  override def questionPage: QuestionPage[Boolean] = journey.questionPage
+  override def detailPages: List[QuestionPage[_]] = journey.detailPages
+}
 
 abstract class AnswerCachingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A]) extends FrontendController(cc) with I18nSupport with AnswerCaching[A] {
   def identify: IdentifierAction

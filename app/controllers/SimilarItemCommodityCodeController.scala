@@ -24,13 +24,13 @@ import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.{CommodityCodeRulingReferencePage, SimilarItemCommodityCodePage}
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import play.twirl.api.HtmlFormat
 import views.html.similarItemCommodityCode
 
 import scala.concurrent.ExecutionContext
+import navigation.Journey
 
 class SimilarItemCommodityCodeController @Inject()(
   appConfig: FrontendAppConfig,
@@ -43,8 +43,7 @@ class SimilarItemCommodityCodeController @Inject()(
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
   lazy val form = formProvider()
-  val questionPage = SimilarItemCommodityCodePage
-  val detailPages = List(CommodityCodeRulingReferencePage)
+  val journey = Journey.similarItem
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
     similarItemCommodityCode(appConfig, preparedForm, mode)

@@ -31,6 +31,7 @@ import play.twirl.api.HtmlFormat
 import views.html.whenToSendSample
 
 import scala.concurrent.ExecutionContext
+import navigation.Journey
 
 class WhenToSendSampleController @Inject()(
   appConfig: FrontendAppConfig,
@@ -43,8 +44,7 @@ class WhenToSendSampleController @Inject()(
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
   lazy val form = formProvider()
-  val questionPage = WhenToSendSamplePage
-  val detailPages = List(IsSampleHazardousPage, ReturnSamplesPage)
+  val journey = Journey.samples
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")

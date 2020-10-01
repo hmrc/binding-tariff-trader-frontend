@@ -24,6 +24,7 @@ import play.api.test.Helpers.{redirectLocation, _}
 import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RulingControllerSpec extends ControllerSpecBase {
