@@ -15,13 +15,23 @@
  *@
 
 @import config.FrontendAppConfig
-@(appConfig: FrontendAppConfig, confirmation: Confirmation, pdfToken: String)(implicit request: Request[_], messages: Messages)
+@import components.view_application
+@import viewmodels.AnswerSection
+
+@(appConfig: FrontendAppConfig, confirmation: Confirmation, pdfToken: String, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+
+@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
+val protocol = if(req.secure) "https" else "http"
+s"$protocol://${req.host}${routes.Assets.versioned(path)}"
+}
 
 @main_template(
     title = messages("confirmation.title"),
     appConfig = appConfig,
+    contentClass = Some("column-full"),
     bodyClasses = None) {
 
+<div class="column-two-thirds">
     <div class="govuk-box-highlight">
         @components.heading(messages("confirmation.heading"))
         <span class="font-large">
@@ -29,9 +39,6 @@
             <span id="confirmation-reference" class="font-large bold">@messages("caseReference.format", confirmation.reference)</span>
         </span>
     </div>
-
-    <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
-       <a id="confirmation-pdf-link" target="_blank" href="@routes.ApplicationController.applicationPdf(confirmation.reference, Some(pdfToken))">@messages("confirmation.download.link.PDF")</a>
 
     @if(confirmation.sendingSamples) {
         <h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
@@ -48,7 +55,10 @@
         </address>
     }
 
-    <h2 class="heading-medium">@messages("confirmation.heading2.whatNext")</h2>
+    <h2 class="heading-large">@messages("confirmation.heading2.whatNext")</h2>
+
+    <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
+
     <p class="break-word">
         @if(confirmation.sendingSamples){
             @Html(messages("confirmation.paragraph.whatNext0.sample"))
@@ -57,7 +67,15 @@
         }
         @Html(messages("confirmation.paragraph.whatNext1"))
     </p>
-    <p>
-        <a href="@routes.IndexController.getApplications()">@messages("confirmation.homeLink")</a>
-    </p>
+    <div>
+        <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+            @messages("confirmation.get.moreInformation")
+        </a>
+    </div>
+
+    <div class="mt-2">
+        @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplications().url)
+    </div>
+</div>
+@components.view_application(appConfig, compositeMode)
 }
