@@ -25,14 +25,14 @@ import play.api.mvc.Call
 @Singleton
 class Navigator @Inject()() {
 
-  def normalPage(
+  private def normalPage(
     page: Page,
     continuingTo: Page,
     mode: Mode
   ): Map[Page, UserAnswers => Call] =
     Map(page -> ((_: UserAnswers) => continuingTo.route(mode)))
 
-  def sequentialJourney(
+  private def sequentialJourney(
     pages: List[Page],
     continuingTo: Page,
     mode: Mode
@@ -50,7 +50,7 @@ class Navigator @Inject()() {
       journey ++ normalPage(pages.last, continuingTo, mode)
   }
 
-  def yesNoJourney(
+  private def yesNoJourney(
     journey: YesNoJourney,
     continuingTo: Page,
     mode: Mode

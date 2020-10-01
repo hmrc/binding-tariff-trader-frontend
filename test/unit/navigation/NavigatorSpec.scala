@@ -28,6 +28,28 @@ class NavigatorSpec extends SpecBase {
 
   val navigator = new Navigator
 
+  def behavesLikeNormalPage[A](
+    questionPage: QuestionPage[A],
+    mode: Mode,
+    answer: A,
+    expectedRoute: Call
+  ) = {
+    val mockUserAnswers = mock[UserAnswers]
+    when(mockUserAnswers.get(questionPage)(any())).thenReturn(Some(answer))
+    navigator.nextPage(questionPage, mode)(mockUserAnswers) shouldBe expectedRoute
+  }
+
+  def behavesLikeYesNoJourney(
+    questionPage: QuestionPage[Boolean],
+    mode: Mode,
+    answer: Boolean,
+    expectedRoute: Call
+  ) = {
+    val mockUserAnswers = mock[UserAnswers]
+    when(mockUserAnswers.get(questionPage)).thenReturn(Some(answer))
+    navigator.nextPage(questionPage, mode)(mockUserAnswers) shouldBe expectedRoute
+  }
+
   "Navigator" when {
 
     "in Normal mode" must {
@@ -295,7 +317,7 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(UnknownPage, CheckMode)(mock[UserAnswers]) shouldBe routes.CheckYourAnswersController.onPageLoad()
       }
 
-      "go to next page (ProvideConfidentialInformation) when yes is selected in AddConfidentialInformation page" in {
+      "go to ProvideConfidentialInformationPage when yes is selected in AddConfidentialInformationPage" in {
         val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddConfidentialInformationPage)).thenReturn(Some(true))
@@ -304,21 +326,118 @@ class NavigatorSpec extends SpecBase {
           routes.ProvideConfidentialInformationController.onPageLoad(CheckMode)
       }
 
-      "return to CheckYourAnswers once information is provided in ProvideConfidentialInformationPage" in {
-        val mockUserAnswers = mock[UserAnswers]
-
-        when(mockUserAnswers.get(ProvideConfidentialInformationPage)).thenReturn(Some("confidential"))
-
-        navigator.nextPage(ProvideConfidentialInformationPage, CheckMode)(mockUserAnswers) shouldBe
-          routes.CheckYourAnswersController.onPageLoad()
-      }
-
-      "return to CheckYourAnswers when no is selected in AddConfidentialInformation page" in {
+      "return to CheckYourAnswersPage when no is selected in AddConfidentialInformationPage" in {
         val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddConfidentialInformationPage)).thenReturn(Some(false))
 
         navigator.nextPage(AddConfidentialInformationPage, CheckMode)(mockUserAnswers) shouldBe
+          routes.CheckYourAnswersController.onPageLoad()
+      }
+
+      "go to IsSampleHazardousPage when yes is selected in WhenToSendSamplePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(WhenToSendSamplePage)).thenReturn(Some(true))
+
+        navigator.nextPage(WhenToSendSamplePage, CheckMode)(mockUserAnswers) shouldBe
+          routes.IsSampleHazardousController.onPageLoad(CheckMode)
+      }
+
+      "go to ReturnSamplesPage when information is provided on IsSampleHazardousPage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(IsSampleHazardousPage)).thenReturn(Some(true))
+
+        navigator.nextPage(IsSampleHazardousPage, CheckMode)(mockUserAnswers) shouldBe
+          routes.ReturnSamplesController.onPageLoad(CheckMode)
+
+        reset(mockUserAnswers)
+
+        when(mockUserAnswers.get(IsSampleHazardousPage)).thenReturn(Some(false))
+
+        navigator.nextPage(IsSampleHazardousPage, CheckMode)(mockUserAnswers) shouldBe
+          routes.ReturnSamplesController.onPageLoad(CheckMode)
+      }
+
+      "go back to CheckYourAnswersPage when no is selected in WhenToSendSamplePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(WhenToSendSamplePage)).thenReturn(Some(false))
+
+        navigator.nextPage(WhenToSendSamplePage, CheckMode)(mockUserAnswers) shouldBe
+          routes.CheckYourAnswersController.onPageLoad()
+      }
+      
+      "go to CommodityCodeDigitsPage when yes is selected in CommodityCodeBestMatchPage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(CommodityCodeBestMatchPage)).thenReturn(Some(true))
+
+        navigator.nextPage(CommodityCodeBestMatchPage, CheckMode)(mockUserAnswers) shouldBe
+          routes.CommodityCodeDigitsController.onPageLoad(CheckMode)
+      }
+
+      "go back to CheckYourAnswersPage when no is selected in CommodityCodeBestMatchPage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(CommodityCodeBestMatchPage)).thenReturn(Some(false))
+
+        navigator.nextPage(CommodityCodeBestMatchPage, CheckMode)(mockUserAnswers) shouldBe
+          routes.CheckYourAnswersController.onPageLoad()
+      }
+
+      "go to LegalChallengeDetailsPage when yes is selected in LegalChallengePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(LegalChallengePage)).thenReturn(Some(true))
+
+        navigator.nextPage(LegalChallengePage, CheckMode)(mockUserAnswers) shouldBe
+          routes.LegalChallengeDetailsController.onPageLoad(CheckMode)
+      }
+
+      "go back to CheckYourAnswersPage when no is selected in LegalChallengePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(LegalChallengePage)).thenReturn(Some(false))
+
+        navigator.nextPage(LegalChallengePage, CheckMode)(mockUserAnswers) shouldBe
+          routes.CheckYourAnswersController.onPageLoad()
+      }
+
+      "go to PreviousCommodityCodePage when yes is selected in SelectApplicationTypePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SelectApplicationTypePage)).thenReturn(Some(true))
+
+        navigator.nextPage(SelectApplicationTypePage, CheckMode)(mockUserAnswers) shouldBe
+          routes.PreviousCommodityCodeController.onPageLoad(CheckMode)
+      }
+
+      "go back to CheckYourAnswersPage when no is selected in SelectApplicationTypePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SelectApplicationTypePage)).thenReturn(Some(false))
+
+        navigator.nextPage(SelectApplicationTypePage, CheckMode)(mockUserAnswers) shouldBe
+          routes.CheckYourAnswersController.onPageLoad()
+      }
+
+      "go to CommodityCodeRulingReferencePage when yes is selected in SimilarItemCommodityCodePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SimilarItemCommodityCodePage)).thenReturn(Some(true))
+
+        navigator.nextPage(SimilarItemCommodityCodePage, CheckMode)(mockUserAnswers) shouldBe
+          routes.CommodityCodeRulingReferenceController.onPageLoad(CheckMode)
+      }
+
+      "go back to CheckYourAnswersPage when no is selected in SimilarItemCommodityCodePage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(SimilarItemCommodityCodePage)).thenReturn(Some(false))
+
+        navigator.nextPage(SimilarItemCommodityCodePage, CheckMode)(mockUserAnswers) shouldBe
           routes.CheckYourAnswersController.onPageLoad()
       }
     }
