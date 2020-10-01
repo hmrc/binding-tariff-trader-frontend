@@ -16,7 +16,13 @@
 
 package pages
 
-case object AddConfidentialInformationPage extends QuestionPage[Boolean] {
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-  override def toString: String = "addConfidentialInformation"
+case object AddConfidentialInformationPage extends QuestionPage[Boolean] {
+  def route(mode: Mode): Call =
+    routes.AddConfidentialInformationController.onPageLoad(mode)
+  override def toString: String =
+    "addConfidentialInformation"
 }

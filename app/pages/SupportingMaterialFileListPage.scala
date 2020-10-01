@@ -16,12 +16,16 @@
 
 package pages
 
-import models.FileAttachment
+import controllers.routes
+import models.{ FileAttachment, Mode }
 import play.api.libs.json.{Json, OFormat}
+import play.api.mvc.Call
 
 case object SupportingMaterialFileListPage extends QuestionPage[FileListAnswers] {
-
-  override def toString: String = "supportingMaterialFileListPage"
+  def route(mode: Mode): Call =
+    routes.SupportingMaterialFileListController.onPageLoad(mode)
+  override def toString: String =
+    "supportingMaterialFileListPage"
 }
 
 case class FileListAnswers(addAnotherDecision: Option[Boolean],fileAttachments: Seq[FileAttachment])

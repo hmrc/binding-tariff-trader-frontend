@@ -19,7 +19,6 @@ package controllers
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
-import models.FileAttachment.format
 import models.{FileAttachment, NormalMode}
 import navigation.Navigator
 import org.mockito.ArgumentCaptor
@@ -109,7 +108,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       verify(cacheConnector).save(captor.capture())
       val cache: CacheMap = captor.getValue
 
-      cache.getEntry[FileListAnswers](SupportingMaterialFileListPage) shouldBe Some(FileListAnswers(None,Seq(FileAttachment("id", "file-name", "type", file.toPath.toFile.length()))))
+      cache.getEntry[FileListAnswers](SupportingMaterialFileListPage.toString) shouldBe Some(FileListAnswers(None,Seq(FileAttachment("id", "file-name", "type", file.toPath.toFile.length()))))
     }
 
     "respond with bad request if a file has wrong extension" in {

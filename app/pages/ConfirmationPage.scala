@@ -16,8 +16,13 @@
 
 package pages
 
-import models.Confirmation
+import controllers.routes
+import models.{ Confirmation, Mode }
+import play.api.mvc.Call
 
 case object ConfirmationPage extends DataPage[Confirmation] {
-  override def toString: String = "confirmationPage"
+  def route(mode: Mode): Call =
+    routes.ConfirmationController.onPageLoad()
+  override def toString: String =
+    "confirmationPage"
 }

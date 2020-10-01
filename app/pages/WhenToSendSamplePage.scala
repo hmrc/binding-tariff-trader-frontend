@@ -16,7 +16,13 @@
 
 package pages
 
-case object WhenToSendSamplePage extends QuestionPage[Boolean] {
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-  override def toString: String = "whenToSendSample"
+case object WhenToSendSamplePage extends QuestionPage[Boolean] {
+  def route(mode: Mode): Call =
+    routes.WhenToSendSampleController.onPageLoad(mode)
+  override def toString: String =
+    "whenToSendSample"
 }

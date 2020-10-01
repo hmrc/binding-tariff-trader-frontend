@@ -22,6 +22,7 @@ import models._
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import pages._
+import play.api.mvc.Call
 
 class NavigatorSpec extends SpecBase {
 
@@ -32,8 +33,9 @@ class NavigatorSpec extends SpecBase {
     "in Normal mode" must {
 
       "go to Index from a page that doesn't exist in the route map" in {
-
-        case object UnknownPage extends Page
+        case object UnknownPage extends Page {
+          def route(mode: Mode) = Call("GET", "/unknown")
+        }
         navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) shouldBe routes.IndexController.getApplications()
       }
 
@@ -287,7 +289,9 @@ class NavigatorSpec extends SpecBase {
     "in Check mode" must {
 
       "go to CheckYourAnswers from a page that doesn't exist in the edit route map" in {
-        case object UnknownPage extends Page
+        case object UnknownPage extends Page {
+          def route(mode: Mode) = Call("GET", "/unknown")
+        }
         navigator.nextPage(UnknownPage, CheckMode)(mock[UserAnswers]) shouldBe routes.CheckYourAnswersController.onPageLoad()
       }
 

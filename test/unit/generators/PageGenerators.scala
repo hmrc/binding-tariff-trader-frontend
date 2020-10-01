@@ -54,9 +54,6 @@ trait PageGenerators {
   implicit lazy val arbitraryPreviousCommodityCodePage: Arbitrary[PreviousCommodityCodePage.type] =
     Arbitrary(PreviousCommodityCodePage)
 
-  implicit lazy val arbitraryInformationAboutYourItemPage: Arbitrary[InformationAboutYourItemPage.type] =
-    Arbitrary(InformationAboutYourItemPage)
-
   implicit lazy val arbitraryEnterContactDetailsPage: Arbitrary[EnterContactDetailsPage.type] =
     Arbitrary(EnterContactDetailsPage)
 

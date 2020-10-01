@@ -16,6 +16,13 @@
 
 package pages
 
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
+
 case object IndexPage extends Page {
-  override def toString: String = "index"
+  def route(mode: Mode): Call =
+    routes.IndexController.getApplications()
+  override def toString: String =
+    "index"
 }

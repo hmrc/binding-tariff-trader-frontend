@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-class InformationAboutYourItemFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("informationAboutYourItem.error.required")
-    )
-
+case object BeforeYouStartPage extends Page {
+  def route(mode: Mode): Call =
+    routes.BeforeYouStartController.onPageLoad()
+  override def toString: String =
+    "beforeYouStart"
 }
