@@ -201,7 +201,7 @@ class Navigator @Inject()() {
       journey = Journey.similarItem,
       continuingTo = CheckYourAnswersPage,
       mode = CheckMode
-    ),
+    )
 
   ).foldLeft(Map.empty[Page, UserAnswers => Call])(_ ++ _)
 
