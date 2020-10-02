@@ -95,7 +95,7 @@ class Navigator @Inject()() {
         answer.get(journey.continuePage) match {
           case Some(true) => detailPages.head.route(mode)
           case Some(false) => continuingTo.route(mode)
-          case _ => journey.questionPage.route(mode)
+          case _ => journey.continuePage.route(mode)
         }
       }
 

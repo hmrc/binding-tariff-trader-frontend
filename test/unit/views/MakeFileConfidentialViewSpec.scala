@@ -17,8 +17,8 @@
 package unit.views
 
 import controllers.routes
-import forms.{MakeFileConfidentialFormProvider, WhenToSendSampleFormProvider}
-import models.{FileConfidentiality, NormalMode}
+import forms.MakeFileConfidentialFormProvider
+import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.BooleanViewBehaviours
