@@ -40,7 +40,7 @@ class CommodityCodeRulingReferenceViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like textareaPage(
+    behave like stringPage(
       createViewUsingForm,
       messageKeyPrefix,
       routes.CommodityCodeRulingReferenceController.onSubmit(NormalMode).url,

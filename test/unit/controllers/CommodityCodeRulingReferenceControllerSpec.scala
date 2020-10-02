@@ -29,6 +29,8 @@ import pages.CommodityCodeRulingReferencePage
 import play.api.mvc.Call
 import views.html.commodityCodeRulingReference
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")

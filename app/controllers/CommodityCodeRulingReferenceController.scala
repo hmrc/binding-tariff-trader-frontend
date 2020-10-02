@@ -27,22 +27,21 @@ import pages.{CommodityCodeRulingReferencePage, LegalChallengePage}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.commodityCodeRulingReference
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 class CommodityCodeRulingReferenceController @Inject()(
-                                                        appConfig: FrontendAppConfig,
-                                                        dataCacheConnector: DataCacheConnector,
-                                                        navigator: Navigator,
-                                                        identify: IdentifierAction,
-                                                        getData: DataRetrievalAction,
-                                                        requireData: DataRequiredAction,
-                                                        formProvider: CommodityCodeRulingReferenceFormProvider,
-                                                        cc: MessagesControllerComponents
-                                                      ) extends FrontendController(cc) with I18nSupport {
+  appConfig: FrontendAppConfig,
+  dataCacheConnector: DataCacheConnector,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: CommodityCodeRulingReferenceFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
 
@@ -61,13 +60,13 @@ class CommodityCodeRulingReferenceController @Inject()(
     form.bindFromRequest().fold(
       (formWithErrors: Form[_]) =>
         Future.successful(BadRequest(commodityCodeRulingReference(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(CommodityCodeRulingReferencePage, value)
+        value => {
+          val updatedAnswers = request.userAnswers.set(CommodityCodeRulingReferencePage, value)
 
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(LegalChallengePage, mode)(updatedAnswers))
-        )
-      }
+          dataCacheConnector.save(updatedAnswers.cacheMap).map(
+            _ => Redirect(navigator.nextPage(LegalChallengePage, mode)(updatedAnswers))
+          )
+        }
     )
   }
 
