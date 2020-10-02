@@ -40,6 +40,6 @@
           <li>@messages("checkYourAnswers.declaration.listItem2")</li>
         </ul>
 
-        @components.button_link(messages("checkYourAnswers.declaration.submit"), routes.DeclarationController.onPageLoad(NormalMode).url)
+        @components.button_link(messages("checkYourAnswers.declaration.submit"), routes.ConfirmationController.onPageLoad().url)
 
     }

@@ -141,10 +141,10 @@ class Navigator @Inject()() {
     normalPage(EnterContactDetailsPage, CheckYourAnswersPage, NormalMode),
 
     // Check your answers
-    normalPage(CheckYourAnswersPage, DeclarationPage, NormalMode),
+    normalPage(CheckYourAnswersPage, ConfirmationPage, NormalMode)
 
     // Your declaration
-    normalPage(DeclarationPage, ConfirmationPage, NormalMode)
+    //normalPage(DeclarationPage, ConfirmationPage, NormalMode)
 
   ).foldLeft(Map.empty[Page, UserAnswers => Call])(_ ++ _)
 

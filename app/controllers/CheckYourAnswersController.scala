@@ -16,29 +16,49 @@
 
 package controllers
 
+import audit.AuditService
 import com.google.inject.Inject
 import config.FrontendAppConfig
+import connectors.DataCacheConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import mapper.CaseRequestMapper
+import models._
+import models.requests.OptionalDataRequest
+import models.WhichBestDescribesYou.theUserIsAnAgent
+import navigation.Navigator
+import pages.{CheckYourAnswersPage, ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
 import play.api.i18n.{I18nSupport, Lang}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import service.CountriesService
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import service.{CasesService, CountriesService, FileService}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.check_your_answers
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.concurrent.Future.successful
+
 class CheckYourAnswersController @Inject()(
                                             appConfig: FrontendAppConfig,
+                                            dataCacheConnector: DataCacheConnector,
+                                            auditService: AuditService,
+                                            navigator: Navigator,
+                                            identify: IdentifierAction,
                                             authenticate: IdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
                                             countriesService: CountriesService,
+                                            caseService: CasesService,
+                                            fileService: FileService,
+                                            mapper: CaseRequestMapper,
                                             cc: MessagesControllerComponents
                                           ) extends FrontendController(cc) with I18nSupport {
 
   private implicit val lang: Lang = appConfig.defaultLang
 
-  def onPageLoad(): Action[AnyContent] = (authenticate andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authenticate andThen getData andThen requireData) { implicit request =>
 
     val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountries, messagesApi, lang)
 
@@ -79,6 +99,59 @@ class CheckYourAnswersController @Inject()(
     )
 
     Ok(check_your_answers(appConfig, sections))
+  }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
+    val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
+    val newCaseRequest = mapper.map(answers)
+
+    val attachments: Seq[FileAttachment] = answers
+      .get(SupportingMaterialFileListPage).map(_.fileAttachments)
+      .getOrElse(Seq.empty)
+
+    for {
+      att: Seq[PublishedFileAttachment] <- fileService.publish(attachments)
+      letter      <- getPublishedLetter(answers)
+      atar        <- createCase(newCaseRequest, att, letter, answers)
+      _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
+      _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
+      userAnswers = answers.set(ConfirmationPage, Confirmation(atar))
+      _           <- dataCacheConnector.save(userAnswers.cacheMap)
+      res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, mode)(userAnswers)))
+    } yield res
+
+  }
+
+  private def getPublishedLetter(answers: UserAnswers)
+                                (implicit headerCarrier: HeaderCarrier): Future[Option[PublishedFileAttachment]] = {
+
+    if (theUserIsAnAgent(answers)) {
+      answers.get(UploadWrittenAuthorisationPage)
+        .map(fileService.publish(_).map(Some(_)))
+        .getOrElse(successful(None))
+    } else {
+      successful(None)
+    }
+  }
+
+  private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[PublishedFileAttachment],
+                         letter: Option[PublishedFileAttachment], answers: UserAnswers)
+                        (implicit headerCarrier: HeaderCarrier): Future[Case] = {
+    caseService.create(appendAttachments(newCaseRequest, attachments, letter, answers))
+  }
+
+  private def appendAttachments(caseRequest: NewCaseRequest, attachments: Seq[PublishedFileAttachment],
+                                letter: Option[PublishedFileAttachment], answers: UserAnswers): NewCaseRequest = {
+    def toAttachment: PublishedFileAttachment => Attachment = file => Attachment(file.id)
+
+    if (theUserIsAnAgent(answers)) {
+      val letterOfAuth: Option[Attachment] = letter.map(toAttachment)
+      val agentDetails = caseRequest.application.agent.map(_.copy(letterOfAuthorisation = letterOfAuth))
+      val application = caseRequest.application.copy(agent = agentDetails)
+      caseRequest.copy(application = application, attachments = attachments.map(toAttachment))
+    } else {
+      caseRequest.copy(attachments = attachments.map(toAttachment))
+    }
   }
 
 }
