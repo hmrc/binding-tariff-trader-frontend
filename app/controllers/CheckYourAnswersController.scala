@@ -101,6 +101,7 @@ class CheckYourAnswersController @Inject()(
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
+
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
     val newCaseRequest = mapper.map(answers)
 
