@@ -92,11 +92,8 @@ GET         /what-are-the-problems                                     controlle
 POST        /what-are-the-problems                                     controllers.LegalChallengeDetailsController.onSubmit(mode: Mode = NormalMode)
 GET         /change-what-are-the-problems                              controllers.LegalChallengeDetailsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-what-are-the-problems                              controllers.LegalChallengeDetailsController.onSubmit(mode: Mode = CheckMode)
-GET         /apply-for-a-ruling                                        controllers.DeclarationController.onPageLoad(mode: Mode = NormalMode)
-POST        /apply-for-a-ruling                                        controllers.DeclarationController.onSubmit(mode: Mode = NormalMode)
-GET         /change-apply-for-a-ruling                                 controllers.DeclarationController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-apply-for-a-ruling                                 controllers.DeclarationController.onSubmit(mode: Mode = CheckMode)
-GET         /check-your-answers                                        controllers.CheckYourAnswersController.onPageLoad
+GET         /check-your-answers                                        controllers.CheckYourAnswersController.onPageLoad()
+POST        /check-your-answers                                        controllers.CheckYourAnswersController.onSubmit()
 
 GET         /application-complete                                      controllers.ConfirmationController.onPageLoad()
 

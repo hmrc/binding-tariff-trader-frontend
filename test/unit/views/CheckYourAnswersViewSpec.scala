@@ -27,7 +27,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
   private val traderAnswer = "Answer by the trader"
 
   private val traderAnswers = Seq(
-    AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", traderAnswer, answerIsMessageKey = false, "url"))),
+    AnswerSection(Some("checkYourAnswers.aboutTheApplicantSection"), Seq(AnswerRow("label", traderAnswer, answerIsMessageKey = false, "url"))),
     AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq.empty)
   )
 
@@ -39,6 +39,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
     "contain the answers for a trader" in {
       val text = asDocument(createTraderView()).text()
+      println(asDocument(createTraderView()).html())
 
       text should include("About the applicant")
       text should include(traderAnswer)
