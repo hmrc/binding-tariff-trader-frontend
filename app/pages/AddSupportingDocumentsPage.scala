@@ -21,7 +21,8 @@ import models.Mode
 import play.api.mvc.Call
 
 case object AddSupportingDocumentsPage extends QuestionPage[Boolean] {
-  def route(mode: Mode): Call = Call("GET", "/foo")
+  def route(mode: Mode): Call =
+    routes.AddSupportingDocumentsController.onPageLoad(mode)
 
   override def toString: String =
     "addSupportingDocuments"

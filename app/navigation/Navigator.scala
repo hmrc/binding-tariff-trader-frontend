@@ -113,7 +113,7 @@ class Navigator @Inject()() {
     // Do you want to add any confidential information about the goods?
     yesNoJourney(
       journey = Journey.confidentialInformation,
-      continuingTo = SupportingMaterialFileListPage,
+      continuingTo = AddSupportingDocumentsPage,
       mode = NormalMode
     ),
 
