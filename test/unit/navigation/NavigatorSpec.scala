@@ -93,25 +93,16 @@ class NavigatorSpec extends SpecBase {
       "redirect to UploadSupportingMaterialMultiplePage when user selects YES to add a file on SupportingMaterialFileListPage" in {
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(Some(true), Nil)))
+        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(true))
 
         navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
           routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)
       }
 
-      "return to SupportingMaterialFileList page when file is removed" in {
-        val mockUserAnswers = mock[UserAnswers]
-
-        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(None, Nil)))
-
-        navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
-          routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
-      }
-
       "redirect to WhenToSendSample page when no further files are uploaded" in {
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(Some(false), Nil)))
+        when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(false))
 
         navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
           routes.WhenToSendSampleController.onPageLoad(NormalMode)

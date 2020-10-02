@@ -17,10 +17,10 @@
 package pages
 
 import controllers.routes
-import models.Mode
+import models.{ FileAttachment, Mode }
 import play.api.mvc.Call
 
-case object UploadSupportingMaterialMultiplePage extends Page {
+case object UploadSupportingMaterialMultiplePage extends QuestionPage[Seq[FileAttachment]] {
   def route(mode: Mode): Call =
     routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)
   override def toString: String =

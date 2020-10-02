@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import pages.behaviours.PageBehaviours
-import models.FileAttachment
+import play.api.libs.json.Json
 
-class SupportingMaterialFileListPageSpec extends PageBehaviours {
+case class FileConfidentiality(fileId: String, confidential: Boolean)
 
-  "UploadSupportingMaterialMultiplePage" must {
-
-    beRetrievable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beSettable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beRemovable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-  }
+object FileConfidentiality {
+  implicit val confidentialityFormat = Json.format[FileConfidentiality]
 }
+
+
+
+
+
+
+
+

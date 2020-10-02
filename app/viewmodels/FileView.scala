@@ -14,19 +14,6 @@
  * limitations under the License.
  */
 
-package pages
+package viewmodels
 
-import pages.behaviours.PageBehaviours
-import models.FileAttachment
-
-class SupportingMaterialFileListPageSpec extends PageBehaviours {
-
-  "UploadSupportingMaterialMultiplePage" must {
-
-    beRetrievable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beSettable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beRemovable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-  }
-}
+case class FileView(id: String, name: String, confidential: Boolean)

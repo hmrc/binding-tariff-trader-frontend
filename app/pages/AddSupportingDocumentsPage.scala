@@ -16,17 +16,13 @@
 
 package pages
 
-import pages.behaviours.PageBehaviours
-import models.FileAttachment
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-class SupportingMaterialFileListPageSpec extends PageBehaviours {
+case object AddSupportingDocumentsPage extends QuestionPage[Boolean] {
+  def route(mode: Mode): Call = Call("GET", "/foo")
 
-  "UploadSupportingMaterialMultiplePage" must {
-
-    beRetrievable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beSettable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beRemovable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-  }
+  override def toString: String =
+    "addSupportingDocuments"
 }

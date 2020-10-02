@@ -37,6 +37,9 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.declaration
 
 import scala.concurrent.Future.{failed, successful}
+import pages.MakeFileConfidentialPage
+import play.api.libs.json.JsObject
+import play.api.libs.json.JsBoolean
 
 class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
   private lazy val error = new IllegalStateException("expected error")
@@ -44,8 +47,8 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
   private val mapper = mock[CaseRequestMapper]
   private val newCaseReq = mock[NewCaseRequest]
-  private val attachment = mock[FileAttachment]
-  private val publishedAttachment = mock[PublishedFileAttachment]
+  private val attachment = FileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
+  private val publishedAttachment = PublishedFileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
   private val createdCase = mock[Case]
   private val auditService = mock[AuditService]
   private val casesService = mock[CasesService]
@@ -196,7 +199,8 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
   private def extractDataFromCache: DataRetrievalAction = {
     val validData = Map(
       DeclarationPage.toString -> JsString(testAnswer),
-      UploadSupportingMaterialMultiplePage.toString -> Json.toJson(Seq(attachment))
+      UploadSupportingMaterialMultiplePage.toString -> Json.toJson(Seq(attachment)),
+      MakeFileConfidentialPage.toString -> JsObject(Map("file-id" -> JsBoolean(false)))
     )
     new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
   }

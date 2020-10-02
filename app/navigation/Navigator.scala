@@ -72,6 +72,36 @@ class Navigator @Inject()() {
       detailPageRoutes + questionPageRoute
   }
 
+  def loopingJourney(
+    journey: LoopingJourney,
+    continuingTo: Page,
+    mode: Mode
+  ): Map[Page, UserAnswers => Call] = journey.detailPages match {
+    case Nil =>
+      normalPage(journey.questionPage, continuingTo, mode)
+
+    case detailPages =>
+      val questionPageRoute = journey.questionPage -> { (answer: UserAnswers) =>
+        answer.get(journey.questionPage) match {
+          case Some(true) => detailPages.head.route(mode)
+          case Some(false) => continuingTo.route(mode)
+          case _ => journey.questionPage.route(mode)
+        }
+      }
+
+      val detailPageRoutes = sequentialJourney(detailPages, journey.continuePage, mode)
+
+      val continuePageRoute = journey.continuePage -> { (answer: UserAnswers) =>
+        answer.get(journey.continuePage) match {
+          case Some(true) => detailPages.head.route(mode)
+          case Some(false) => continuingTo.route(mode)
+          case _ => journey.questionPage.route(mode)
+        }
+      }
+
+      detailPageRoutes + questionPageRoute + continuePageRoute
+  }
+
   private val routeMap: Map[Page, UserAnswers => Call] = List(
     // Information you need to complete an application
     normalPage(IndexPage, BeforeYouStartPage, NormalMode),
@@ -88,15 +118,10 @@ class Navigator @Inject()() {
     ),
 
     // Do you want to upload any supporting documents?
-    Map(
-      SupportingMaterialFileListPage -> { (answers: UserAnswers) =>
-        answers.get(SupportingMaterialFileListPage).flatMap(_.addAnotherDecision) match {
-          case Some(true) => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)
-          case Some(false) => routes.WhenToSendSampleController.onPageLoad(NormalMode)
-          case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
-        }
-      },
-      UploadSupportingMaterialMultiplePage -> ((_: UserAnswers) => routes.SupportingMaterialFileListController.onPageLoad(NormalMode))
+    loopingJourney(
+      journey = Journey.supportingDocuments,
+      continuingTo = WhenToSendSamplePage,
+      mode = NormalMode
     ),
 
     // Will you send a sample of the goods to HMRC?
@@ -157,15 +182,10 @@ class Navigator @Inject()() {
     ),
 
     // Do you want to upload any supporting documents?
-    Map(
-      SupportingMaterialFileListPage -> { (answers: UserAnswers) =>
-        answers.get(SupportingMaterialFileListPage).flatMap(_.addAnotherDecision) match {
-          case Some(true) => routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode)
-          case Some(false) => routes.CheckYourAnswersController.onPageLoad()
-          case _ => routes.SupportingMaterialFileListController.onPageLoad(CheckMode)
-        }
-      },
-      UploadSupportingMaterialMultiplePage -> ((_: UserAnswers) => routes.SupportingMaterialFileListController.onPageLoad(CheckMode))
+    loopingJourney(
+      journey = Journey.supportingDocuments,
+      continuingTo = CheckYourAnswersPage,
+      mode = CheckMode
     ),
 
     // Will you send a sample of the goods to HMRC?

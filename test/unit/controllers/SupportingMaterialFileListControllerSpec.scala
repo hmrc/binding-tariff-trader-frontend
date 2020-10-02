@@ -26,18 +26,23 @@ import play.api.test.Helpers._
 import views.html.supportingMaterialFileList
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import controllers.behaviours.YesNoCachingControllerBehaviours
+import play.api.mvc.Call
+import play.api.mvc.Request
+import pages.ProvideGoodsNamePage
+import play.api.libs.json.JsString
+import navigation.FakeNavigator
 
-class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
-
+class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
+  private def onwardRoute = Call("GET", "/foo")
   private val formProvider = new SupportingMaterialFileListFormProvider()
-  private val form: Form[Boolean] = formProvider()
   private val goodsName = "some-goods-name"
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new SupportingMaterialFileListController(
       frontendAppConfig,
       FakeDataCacheConnector,
-      new Navigator,
+      new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
@@ -45,26 +50,17 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
       cc
     )
 
-  private def viewAsString(form: Form[_] = form): String =
-    supportingMaterialFileList(frontendAppConfig, form, goodsName, Seq.empty, NormalMode)(fakeRequest, messages).toString
+  private def viewAsString(form: Form[_], request: Request[_]): String =
+    supportingMaterialFileList(frontendAppConfig, form, goodsName, Seq.empty, NormalMode)(request, messages).toString
 
-  "SupportingMaterialFileList Controller" must {
-
-    "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) shouldBe OK
-      contentAsString(result) shouldBe viewAsString()
-    }
-
-    "redirect to the next page (Will you send a sample of the goods to HMRC) when no is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("add-file-choice", "false"))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.WhenToSendSampleController.onPageLoad(NormalMode).url)
-    }
+  "SupportingMaterialFileListController" must {
+    behave like yesNoCachingController(
+      controller,
+      onwardRoute,
+      viewAsString,
+      formField = "add-file-choice",
+      backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+    )
 
     "redirect to the same page when delete element" in {
       val deleteRequest = fakeRequest.withFormUrlEncodedBody(("id", "file-id"))
@@ -72,31 +68,7 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
       val result = controller().onRemove("file-id", NormalMode)(deleteRequest)
 
       status(result) shouldBe SEE_OTHER
-    }
-
-    "return a Bad Request and errors when invalid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm = form.bind(Map("value" -> "invalid value"))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe BAD_REQUEST
-      contentAsString(result) shouldBe viewAsString(boundForm)
-    }
-
-    "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("add-file-choice", "true"))
-      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.SupportingMaterialFileListController.onPageLoad(NormalMode).url)
     }
   }
 }

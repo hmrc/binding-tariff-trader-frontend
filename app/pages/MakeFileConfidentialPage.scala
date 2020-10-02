@@ -16,17 +16,13 @@
 
 package pages
 
-import pages.behaviours.PageBehaviours
-import models.FileAttachment
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-class SupportingMaterialFileListPageSpec extends PageBehaviours {
-
-  "UploadSupportingMaterialMultiplePage" must {
-
-    beRetrievable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beSettable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beRemovable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-  }
+case object MakeFileConfidentialPage extends QuestionPage[Map[String, Boolean]] {
+  def route(mode: Mode): Call =
+    routes.MakeFileConfidentialController.onPageLoad(mode)
+  override def toString: String =
+    "makeFileConfidential"
 }

@@ -27,7 +27,7 @@ import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import models.requests.OptionalDataRequest
 import navigation.Navigator
-import pages.{ConfirmationPage, DeclarationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
+import pages._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, FileService}
@@ -61,13 +61,17 @@ class DeclarationController @Inject()(
     val newCaseRequest = mapper.map(answers)
 
     val attachments: Seq[FileAttachment] = answers
-      .get(SupportingMaterialFileListPage).map(_.fileAttachments)
+      .get(UploadSupportingMaterialMultiplePage)
       .getOrElse(Seq.empty)
+
+    val confidentialityStatuses = answers
+      .get(MakeFileConfidentialPage)
+      .getOrElse(Map.empty[String, Boolean])
 
     for {
       att: Seq[PublishedFileAttachment] <- fileService.publish(attachments)
       letter      <- getPublishedLetter(answers)
-      atar        <- createCase(newCaseRequest, att, letter, answers)
+      atar        <- createCase(newCaseRequest, att, confidentialityStatuses, letter, answers)
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
       _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
       userAnswers = answers.set(ConfirmationPage, Confirmation(atar))
@@ -89,15 +93,20 @@ class DeclarationController @Inject()(
     }
   }
 
-  private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[PublishedFileAttachment],
-                         letter: Option[PublishedFileAttachment], answers: UserAnswers)
-                        (implicit headerCarrier: HeaderCarrier): Future[Case] = {
-    caseService.create(appendAttachments(newCaseRequest, attachments, letter, answers))
+  private def createCase(
+    newCaseRequest: NewCaseRequest,
+    attachments: Seq[PublishedFileAttachment],
+    confidentialityStatuses: Map[String, Boolean],
+    letter: Option[PublishedFileAttachment], answers: UserAnswers
+  )(implicit headerCarrier: HeaderCarrier): Future[Case] = {
+    caseService.create(appendAttachments(newCaseRequest, attachments, confidentialityStatuses, letter, answers))
   }
 
-  private def appendAttachments(caseRequest: NewCaseRequest, attachments: Seq[PublishedFileAttachment],
+  private def appendAttachments(caseRequest: NewCaseRequest,
+                                attachments: Seq[PublishedFileAttachment],
+                                confidentialityStatuses: Map[String, Boolean],
                                 letter: Option[PublishedFileAttachment], answers: UserAnswers): NewCaseRequest = {
-    def toAttachment: PublishedFileAttachment => Attachment = file => Attachment(file.id)
+    def toAttachment: PublishedFileAttachment => Attachment = file => Attachment(file.id, confidentialityStatuses(file.id))
 
     if (theUserIsAnAgent(answers)) {
       val letterOfAuth: Option[Attachment] = letter.map(toAttachment)

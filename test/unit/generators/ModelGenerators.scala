@@ -19,7 +19,6 @@ package generators
 import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
-import pages.FileListAnswers
 
 trait ModelGenerators {
 
@@ -74,14 +73,6 @@ trait ModelGenerators {
         postCode <- arbitrary[String]
         country <- arbitrary[String]
       } yield RegisterBusinessRepresenting(eoriNumber, businessName, addressLine1, town, Some(postCode), country)
-    }
-
-  implicit lazy val arbitraryFileListAnswers: Arbitrary[FileListAnswers] =
-    Arbitrary {
-      for {
-        addAnotherDecision <- arbitrary[Option[Boolean]]
-        fileList <- arbitrary[Seq[FileAttachment]]
-      } yield FileListAnswers(addAnotherDecision, fileList)
     }
 
   implicit lazy val arbitraryWhichBestDescribesYou: Arbitrary[WhichBestDescribesYou] =

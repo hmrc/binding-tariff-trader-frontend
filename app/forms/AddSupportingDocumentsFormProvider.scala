@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import pages.behaviours.PageBehaviours
-import models.FileAttachment
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class SupportingMaterialFileListPageSpec extends PageBehaviours {
-
-  "UploadSupportingMaterialMultiplePage" must {
-
-    beRetrievable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beSettable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beRemovable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-  }
+class AddSupportingDocumentsFormProvider @Inject() extends Mappings {
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("supportingMaterialFileList.error.required")
+    )
 }

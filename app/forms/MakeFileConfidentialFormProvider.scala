@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import pages.behaviours.PageBehaviours
-import models.FileAttachment
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.FileConfidentiality
+import play.api.data.Form
+import play.api.data.Forms.tuple
 
-class SupportingMaterialFileListPageSpec extends PageBehaviours {
+class MakeFileConfidentialFormProvider @Inject() extends Mappings {
 
-  "UploadSupportingMaterialMultiplePage" must {
-
-    beRetrievable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beSettable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-
-    beRemovable[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage)
-  }
+  def apply(): Form[(String, Boolean)] =
+    Form(tuple(
+      "fileId" -> text(),
+      "confidential" -> boolean("makeFileConfidential.error.required")
+    ))
 }

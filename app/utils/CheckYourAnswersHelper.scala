@@ -90,11 +90,11 @@ class CheckYourAnswersHelper(
     def choiceRow(hasFiles: Boolean): AnswerRow = AnswerRow(
       "supportingMaterialFileList.choice.checkYourAnswersLabel",
       yesNoAnswer(hasFiles), true,
-      routes.SupportingMaterialFileListController.onClear().url
+      routes.AddSupportingDocumentsController.onPageLoad(CheckMode).url
     )
 
-    userAnswers.get(SupportingMaterialFileListPage).map {
-      case filenames if filenames.fileAttachments.nonEmpty =>
+    userAnswers.get(UploadSupportingMaterialMultiplePage).map {
+      case filenames if filenames.nonEmpty =>
         choiceRow(true)
       case _ =>
         choiceRow(false)
@@ -108,11 +108,9 @@ class CheckYourAnswersHelper(
       routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
     )
 
-    userAnswers.get(SupportingMaterialFileListPage).map {
-      case filenames if filenames.fileAttachments.nonEmpty =>
-        filesRow(filenames.fileAttachments.map(_.name))
-      case _ =>
-        filesRow(Seq("No files attached"))
+    userAnswers.get(UploadSupportingMaterialMultiplePage).collect {
+      case attachments if attachments.nonEmpty =>
+        filesRow(attachments.map(_.name))
     }
   }
 
