@@ -25,20 +25,13 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "checkYourAnswers"
   private val traderAnswer = "Answer by the trader"
-  private val agentAnswer = "Answer by the agent"
-  private val agentAnswerForTrader = "Answer by the agent on behalf of trader"
 
   private val traderAnswers = Seq(
     AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", traderAnswer, answerIsMessageKey = false, "url"))),
     AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq.empty)
   )
-  private val agentAnswers = Seq(
-    AnswerSection(Some("checkYourAnswers.applicantRegisteredSection"), Seq(AnswerRow("label", agentAnswer, answerIsMessageKey = false, "url"))),
-    AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq(AnswerRow("label", agentAnswerForTrader, answerIsMessageKey = false, "url")))
-  )
 
   private def createTraderView: () => Html = () => check_your_answers(frontendAppConfig, traderAnswers)(fakeRequest, messages)
-  private def createAgentView: () => Html = () => check_your_answers(frontendAppConfig, agentAnswers)(fakeRequest, messages)
 
   "Check Your Answers view" must {
     behave like normalPage(createTraderView, messageKeyPrefix)()
@@ -47,18 +40,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     "contain the answers for a trader" in {
       val text = asDocument(createTraderView()).text()
 
-      text should include("Your details")
+      text should include("About the applicant")
       text should include(traderAnswer)
-      text should not include "Details of the business, organisation or individual you represent"
-    }
-
-    "contain the answers for an agent" in {
-      val text = asDocument(createAgentView()).text()
-
-      text should include("Your details")
-      text should include(agentAnswer)
-      text should include("Details of the business, organisation or individual you represent")
-      text should include(agentAnswerForTrader)
     }
   }
 }

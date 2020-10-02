@@ -26,10 +26,8 @@
     } else {
         <p class="pre-wrap">@row.answer</p>
     @if(!row.answerMap.isEmpty){
-        @for(answer <- row.answerMap) {
-        @Html({s"<span class='govuk-body govuk-!-font-weight-bold'>${answer._1}: </span>${answer._2}\n"})
-            }
-        }
+        <p>@for(answer <- row.answerMap) {
+        @Html({s"<span class= 'bold-small'>${messages(answer._1)}: </span>${answer._2}\n"})}}</p>
     }
     </dd>
     <dd class="cya-change">

@@ -107,7 +107,9 @@ class CheckYourAnswersHelperSpec extends SpecBase {
 
       "return a row with the correct answer for EnterContactDetailsPage" in {
         given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
-        checkHelper.enterContactDetails.get.answer shouldBe "name\nemail\nphoneNumber"
+        checkHelper.enterContactDetails.get.answer shouldBe ""
+        checkHelper.enterContactDetails.get.answerMap shouldBe Map("enterContactDetails.checkYourAnswersLabel.name" -> "name",
+          "enterContactDetails.checkYourAnswersLabel.email" -> "email", "enterContactDetails.checkYourAnswersLabel.phone" -> "phoneNumber")
       }
 
       "return a row with the correct answer for RegisterBusinessRepresentingPage" in {
