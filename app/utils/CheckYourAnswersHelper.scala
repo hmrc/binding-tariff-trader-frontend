@@ -87,17 +87,12 @@ class CheckYourAnswersHelper(
   }
 
   def supportingMaterialFileListChoice: Option[AnswerRow] = {
-    def choiceRow(hasFiles: Boolean): AnswerRow = AnswerRow(
-      "supportingMaterialFileList.choice.checkYourAnswersLabel",
-      yesNoAnswer(hasFiles), true,
-      routes.AddSupportingDocumentsController.onPageLoad(CheckMode).url
-    )
-
-    userAnswers.get(UploadSupportingMaterialMultiplePage).map {
-      case filenames if filenames.nonEmpty =>
-        choiceRow(true)
-      case _ =>
-        choiceRow(false)
+    userAnswers.get(AddSupportingDocumentsPage).map { addDocuments =>
+      AnswerRow(
+        "supportingMaterialFileList.choice.checkYourAnswersLabel",
+        yesNoAnswer(addDocuments), true,
+        routes.AddSupportingDocumentsController.onPageLoad(CheckMode).url
+      )
     }
   }
 
