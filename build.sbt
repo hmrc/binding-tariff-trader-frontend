@@ -28,7 +28,7 @@ lazy val root = (project in file("."))
     targetJvm := "jvm-1.8",
     RoutesKeys.routesImport += "models._",
     PlayKeys.playDefaultPort := 9582,
-    scalacOptions ++= Seq("-Ywarn-unused-import", "-deprecation"),
+    scalacOptions ~= { opts => opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard")) },
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),

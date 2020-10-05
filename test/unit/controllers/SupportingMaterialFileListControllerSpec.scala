@@ -18,20 +18,18 @@ package controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
+import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.SupportingMaterialFileListFormProvider
 import models.NormalMode
-import navigation.Navigator
+import navigation.FakeNavigator
+import pages.ProvideGoodsNamePage
 import play.api.data.Form
+import play.api.libs.json.JsString
+import play.api.mvc.{ Call, Request }
 import play.api.test.Helpers._
 import views.html.supportingMaterialFileList
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import controllers.behaviours.YesNoCachingControllerBehaviours
-import play.api.mvc.Call
-import play.api.mvc.Request
-import pages.ProvideGoodsNamePage
-import play.api.libs.json.JsString
-import navigation.FakeNavigator
 
 class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
   private def onwardRoute = Call("GET", "/foo")
@@ -50,8 +48,9 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       cc
     )
 
+  // We ignore the provided form here - the controller does not prepopulate the view
   private def viewAsString(form: Form[_], request: Request[_]): String =
-    supportingMaterialFileList(frontendAppConfig, form, goodsName, Seq.empty, NormalMode)(request, messages).toString
+    supportingMaterialFileList(frontendAppConfig, formProvider(), goodsName, Seq.empty, NormalMode)(request, messages).toString
 
   "SupportingMaterialFileListController" must {
     behave like yesNoCachingController(

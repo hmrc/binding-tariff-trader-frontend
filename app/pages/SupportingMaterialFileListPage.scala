@@ -17,8 +17,7 @@
 package pages
 
 import controllers.routes
-import models.{ FileAttachment, Mode }
-import play.api.libs.json.{Json, OFormat}
+import models.Mode
 import play.api.mvc.Call
 
 case object SupportingMaterialFileListPage extends QuestionPage[Boolean] {

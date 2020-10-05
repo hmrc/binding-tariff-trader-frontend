@@ -42,11 +42,11 @@ class MakeFileConfidentialController @Inject()(
   formProvider: MakeFileConfidentialFormProvider,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends MapCachingController[Boolean](cc) {
-  val form = formProvider()
+  lazy val form = formProvider()
   val questionPage = MakeFileConfidentialPage
 
   def renderView(preparedForm: Form[(String, Boolean)], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
-    val fileId = request.userAnswers.get(UploadSupportingMaterialMultiplePage).flatMap(_.lastOption).map(_.id).get
-    makeFileConfidential(appConfig, form, mode, fileId)
+    val fileId = request.userAnswers.get(UploadSupportingMaterialMultiplePage).map(_.last.id).get
+    makeFileConfidential(appConfig, preparedForm, mode, fileId)
   }
 }

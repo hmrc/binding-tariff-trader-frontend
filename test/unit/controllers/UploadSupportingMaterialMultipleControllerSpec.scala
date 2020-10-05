@@ -26,7 +26,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import pages.{ProvideGoodsNamePage, SupportingMaterialFileListPage}
+import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.JsString

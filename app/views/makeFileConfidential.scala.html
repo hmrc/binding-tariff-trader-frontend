@@ -30,22 +30,29 @@
 
     @helpers.form(action = MakeFileConfidentialController.onSubmit(mode)) {
 
+        @CSRF.formField
+
         @components.back_link()
 
         @components.error_summary(makeFileConfidentialForm.errors)
 
-        @components.heading(messages("makeFileConfidential.heading"),
-            captionMsg = Some(messages("makeFileConfidential.caption")))
+        @components.heading(
+            messages("makeFileConfidential.heading"),
+            captionMsg = Some(messages("makeFileConfidential.caption"))
+        )
 
         <p>@messages("makeFileConfidential.infoText")<p/>
+
+        <input type="hidden"
+               id="@{makeFileConfidentialForm("fileId").id}"
+               name="@{makeFileConfidentialForm("fileId").name}"
+               value="@{fileId}"/>
 
         @components.input_yes_no(
             field = makeFileConfidentialForm("confidential"),
             label = Some(messages("makeFileConfidential.heading")),
             labelClass = Some("visually-hidden")
         )
-
-        <input type="hidden" id="@{makeFileConfidentialForm("fileId").id}" name="@{makeFileConfidentialForm("fileId").name}" value="@fileId"/>
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }

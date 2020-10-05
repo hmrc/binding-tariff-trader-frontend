@@ -26,10 +26,8 @@ import models.{FileAttachment, Mode, UserAnswers}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import scala.concurrent.{ ExecutionContext, Future }
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import scala.concurrent.ExecutionContext
 import viewmodels.FileView
 import views.html.supportingMaterialFileList
 import play.twirl.api.HtmlFormat
@@ -69,6 +67,7 @@ class SupportingMaterialFileListController @Inject()(
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    supportingMaterialFileList(appConfig, preparedForm, goodsName, getFileViews(request.userAnswers), mode)
+    // We will not use the prepared form here because we don't want to prepopulate the choice
+    supportingMaterialFileList(appConfig, form, goodsName, getFileViews(request.userAnswers), mode)
   }
 }
