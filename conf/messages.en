@@ -223,6 +223,18 @@ provideConfidentialInformation.thismayinclude = This may include:
 provideConfidentialInformation.modelnumbers = model numbers
 provideConfidentialInformation.patentinfo = patent information
 
+addSupportingDocuments.title = Do you want to upload any supporting documents? - Manage your Advance Tariff Rulings - GOV.UK
+addSupportingDocuments.heading = Do you want to upload any supporting documents?
+addSupportingDocuments.caption = About the goods
+addSupportingDocuments.checkYourAnswersLabel = Upload supporting documents?
+addSupportingDocuments.indications = To get accurate commodity code advice you can provide us with:
+addSupportingDocuments.indications.bullet1 = ingredients lists for food and drink goods
+addSupportingDocuments.indications.bullet2 = technical specifications
+addSupportingDocuments.indications.bullet3 = lists of materials
+addSupportingDocuments.indications.bullet4 = images of the goods
+addSupportingDocuments.indications.bullet5 = images of packaging
+addSupportingDocuments.error.required = Select yes if you have files to upload
+
 makeFileConfidential.title = Do you want this file to be marked as confidential?
 makeFileConfidential.heading = Do you want this file to be marked as confidential?
 makeFileConfidential.caption = About the goods

@@ -18,15 +18,15 @@ package pages
 
 import pages.behaviours.PageBehaviours
 
-class SupportingMaterialFileListPageSpec extends PageBehaviours {
+class MakeFileConfidentialPageSpec extends PageBehaviours {
 
-  "SupportingMaterialFileListPage" must {
+  "MakeFileConfidentialPage" must {
 
-    beRetrievable[Boolean](SupportingMaterialFileListPage)
+    beRetrievable[Map[String, Boolean]](MakeFileConfidentialPage)
 
-    beSettable[Boolean](SupportingMaterialFileListPage)
+    beSettable[Map[String, Boolean]](MakeFileConfidentialPage)
 
-    beRemovable[Boolean](SupportingMaterialFileListPage)
+    beRemovable[Map[String, Boolean]](MakeFileConfidentialPage)
   }
 
 }

@@ -23,7 +23,7 @@
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("supportingMaterialFileList.title")}",
+    title = s"${errorPrefix(form)} ${messages("addSupportingDocuments.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
@@ -34,24 +34,24 @@
         @components.error_summary(form.errors)
 
         @components.heading(
-            messages("supportingMaterialFileList.heading", goodsName),
-            captionMsg = Some(messages("supportingMaterialFileList.caption"))
+            messages("addSupportingDocuments.heading", goodsName),
+            captionMsg = Some(messages("addSupportingDocuments.caption"))
         )
 
         <div class="form-group">
-            <p>@messages("supportingMaterialFileList.indications")</p>
+            <p>@messages("addSupportingDocuments.indications")</p>
             <ul class="list list-bullet">
-                <li>@messages("supportingMaterialFileList.indications.bullet1")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet2")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet3")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet4")</li>
-                <li>@messages("supportingMaterialFileList.indications.bullet5")</li>
+                <li>@messages("addSupportingDocuments.indications.bullet1")</li>
+                <li>@messages("addSupportingDocuments.indications.bullet2")</li>
+                <li>@messages("addSupportingDocuments.indications.bullet3")</li>
+                <li>@messages("addSupportingDocuments.indications.bullet4")</li>
+                <li>@messages("addSupportingDocuments.indications.bullet5")</li>
             </ul>
         </div>
 
         @components.input_yes_no(
             field = form("value"),
-            label = Some(messages("supportingMaterialFileList.heading")),
+            label = Some(messages("addSupportingDocuments.heading")),
             labelClass = Some("visually-hidden")
         )
 

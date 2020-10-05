@@ -69,4 +69,6 @@ trait PageGenerators {
   implicit lazy val arbitraryRegisteredAddressForEoriPage: Arbitrary[RegisteredAddressForEoriPage.type] =
     Arbitrary(RegisteredAddressForEoriPage)
 
+  implicit lazy val arbitraryMakeFileConfidentialPage: Arbitrary[MakeFileConfidentialPage.type] =
+    Arbitrary(MakeFileConfidentialPage)
 }

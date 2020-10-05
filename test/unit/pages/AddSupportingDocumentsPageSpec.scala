@@ -18,15 +18,15 @@ package pages
 
 import pages.behaviours.PageBehaviours
 
-class SupportingMaterialFileListPageSpec extends PageBehaviours {
+class AddSupportingDocumentsPageSpec extends PageBehaviours {
 
-  "SupportingMaterialFileListPage" must {
+  "AddSupportingDocumentsPage" must {
 
-    beRetrievable[Boolean](SupportingMaterialFileListPage)
+    beRetrievable[Boolean](AddSupportingDocumentsPage)
 
-    beSettable[Boolean](SupportingMaterialFileListPage)
+    beSettable[Boolean](AddSupportingDocumentsPage)
 
-    beRemovable[Boolean](SupportingMaterialFileListPage)
+    beRemovable[Boolean](AddSupportingDocumentsPage)
   }
 
 }
