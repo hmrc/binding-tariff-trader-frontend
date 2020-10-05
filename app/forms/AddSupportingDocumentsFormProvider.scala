@@ -23,6 +23,6 @@ import play.api.data.Form
 class AddSupportingDocumentsFormProvider @Inject() extends Mappings {
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("supportingMaterialFileList.error.required")
+      "value" -> boolean("addSupportingDocuments.error.required")
     )
 }
