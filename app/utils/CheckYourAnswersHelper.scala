@@ -118,11 +118,19 @@ class CheckYourAnswersHelper(
     x => AnswerRow("previousCommodityCode.checkYourAnswersLabel", s"${x.previousCommodityCode}", false, routes.PreviousCommodityCodeController.onPageLoad(CheckMode).url)
   }
 
-  def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-    x => AnswerRow("enterContactDetails.checkYourAnswersLabel","", false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url,
-      Map("enterContactDetails.checkYourAnswersLabel.name" -> x.name,
-        "enterContactDetails.checkYourAnswersLabel.email" -> x.email,
-        "enterContactDetails.checkYourAnswersLabel.phone" -> x.phoneNumber.orNull))
+  def enterContactDetailsName: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+      x => AnswerRow("enterContactDetails.checkYourAnswersLabel.name", s"${x.name}", false,
+        routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  }
+
+  def enterContactDetailsEmail: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.email", s"${x.email}", false,
+      routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  }
+
+  def enterContactDetailsPhone: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.phone", s"${x.phoneNumber.getOrElse("")}", false,
+      routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
   }
 
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {

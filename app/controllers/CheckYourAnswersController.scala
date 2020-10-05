@@ -92,7 +92,9 @@ class CheckYourAnswersController @Inject()(
       AnswerSection(
         Some("checkYourAnswers.aboutTheApplicantSection"),
         Seq(
-          checkYourAnswersHelper.enterContactDetails
+          checkYourAnswersHelper.enterContactDetailsName,
+          checkYourAnswersHelper.enterContactDetailsEmail,
+          checkYourAnswersHelper.enterContactDetailsPhone,
         ).flatten
       )
     )

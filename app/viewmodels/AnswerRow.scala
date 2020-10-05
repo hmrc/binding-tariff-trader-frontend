@@ -18,15 +18,12 @@ package viewmodels
 
 import org.apache.commons.lang3.StringUtils
 
-case class AnswerRow(label: String, answer: String, answerIsMessageKey: Boolean, changeUrl: String, answerMap: Map[String, String] = Map.empty[String, String]) {
-  def this(label: String, answer: Seq[String], answerIsMessageKey: Boolean, changeUrl: String, answerMap: Map[String, String])
-  = this(label, answer.filter(StringUtils.isNoneBlank(_)).reduce((a, b) => s"$a\n$b"), answerIsMessageKey, changeUrl, answerMap)
+case class AnswerRow(label: String, answer: String, answerIsMessageKey: Boolean, changeUrl: String) {
+  def this(label: String, answer: Seq[String], answerIsMessageKey: Boolean, changeUrl: String)
+  = this(label, answer.filter(StringUtils.isNoneBlank(_)).reduce((a, b) => s"$a\n$b"), answerIsMessageKey, changeUrl)
 }
 
 object AnswerRow {
   def apply(label: String, answer: Seq[String], answerIsMessageKey: Boolean, changeUrl: String): AnswerRow
-   = new AnswerRow(label: String, answer: Seq[String], answerIsMessageKey: Boolean, changeUrl: String, Map.empty[String, String])
-
-  def apply(label: String, answerMap: Map[String, String], answerIsMessageKey: Boolean, changeUrl: String): AnswerRow
-  = new AnswerRow(label: String, Nil, answerIsMessageKey: Boolean, changeUrl: String, answerMap: Map[String, String])
+   = new AnswerRow(label: String, answer: Seq[String], answerIsMessageKey: Boolean, changeUrl: String)
 }
