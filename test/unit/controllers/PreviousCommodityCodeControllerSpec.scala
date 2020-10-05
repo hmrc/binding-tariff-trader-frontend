@@ -50,7 +50,7 @@ class PreviousCommodityCodeControllerSpec extends ControllerSpecBase with Answer
 
   private def onwardRoute = Call("GET", "/foo")
 
-  val validFormData = Map("previousCommodityCode" -> "value 1")
+  val validFormData = Map("btiReference" -> "value 1")
   val invalidFormData = Map("value" -> "invalid value")
   val backgroundData = Map.empty[String, JsValue]
 

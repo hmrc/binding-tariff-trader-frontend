@@ -23,9 +23,9 @@ class PreviousCommodityCodeFormProviderSpec extends StringFieldBehaviours {
 
   val form = new PreviousCommodityCodeFormProvider()()
 
-  ".previousCommodityCode" must {
+  ".btiReference" must {
 
-    val fieldName = "previousCommodityCode"
+    val fieldName = "btiReference"
     val requiredKey = "previousCommodityCode.error.previousCommodityCode.required"
     val lengthKey = "previousCommodityCode.error.previousCommodityCode.length"
     val maxLength = 100
