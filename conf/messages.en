@@ -122,6 +122,7 @@ selectApplicationType.title = Do you have a previous BTI ruling reference for th
 selectApplicationType.heading = Do you have a previous BTI ruling reference for the {0}?
 selectApplicationType.checkYourAnswersLabel = Renewing a BTI?
 selectApplicationType.error.required = Select yes if you are renewing a previous BTI ruling
+selectApplicationType.caption = About other rulings
 
 registerBusinessRepresenting.title =  What are the registered details of the business, organisation or individual you’re representing? - Manage your Advance Tariff Rulings - GOV.UK
 registerBusinessRepresenting.heading = What are the registered details of the business, organisation or individual you’re representing?
@@ -337,21 +338,23 @@ returnSamples.checkYourAnswersLabel = Return the samples?
 returnSamples.error.required = Select yes if you would like the sample returned
 returnSamples.caption = About the goods
 
-similarItemCommodityCode.title = Do you know of a similar item that already has an Advance Tariff Ruling? - Manage your Advance Tariff Rulings - GOV.UK
-similarItemCommodityCode.heading = Do you know of a similar item that already has an Advance Tariff Ruling?
+similarItemCommodityCode.title = Are there similar goods that already have a ruling? - Manage your Advance Tariff Rulings - GOV.UK
+similarItemCommodityCode.heading = Are there similar goods that already have a ruling?
+similarItemCommodityCode.caption = About other rulings
 similarItemCommodityCode.yesAwareSimilarCode = Yes
 similarItemCommodityCode.noNotAware = No
 similarItemCommodityCode.checkYourAnswersLabel = Do you know of a similar item that already has a ruling?
-similarItemCommodityCode.error.required = Select yes if you know of a similar item that has an Advance Tariff Ruling
-similarItemCommodityCode.bodyText = It can help us to classify your goods and match with other rulings if:
+similarItemCommodityCode.error.required = Select yes if you know of similar goods that have a ruling
+similarItemCommodityCode.bodyText = It can help to provide a ruling if there is already a ruling for goods that are similar, even if the ruling was made in another country.
 similarItemCommodityCode.listItem1 = your business or organisation operates in other countries and you have a ruling for that country
 similarItemCommodityCode.listItem2 = you know of a similar item with a ruling
 
-commodityCodeRulingReference.title = What are the details and reference numbers of the similar rulings? - Manage your Advance Tariff Rulings - GOV.UK
-commodityCodeRulingReference.heading = What are the details and reference numbers of the similar rulings?
-commodityCodeRulingReference.hint = The reference number, for example GB12345678 and FR12345678, is on the ruling certificate. You can include more than one reference number.
-commodityCodeRulingReference.checkYourAnswersLabel = Ruling reference number
-commodityCodeRulingReference.error.required = Enter the ruling reference numbers and details of similar rulings
+commodityCodeRulingReference.title = Provide the reference number of a similar ruling - Manage your Advance Tariff Rulings - GOV.UK
+commodityCodeRulingReference.heading = Provide the reference number of a similar ruling
+commodityCodeRulingReference.caption = About other rulings
+commodityCodeRulingReference.hint = The reference number, for example FR12345678, is on the ruling certificate.
+commodityCodeRulingReference.checkYourAnswersLabel = Similar renewal references
+commodityCodeRulingReference.error.required = Enter a ruling reference number
 
 legalChallenge.title = Have there been any legal problems classifying the goods? - Manage your Advance Tariff Rulings - GOV.UK
 legalChallenge.heading = Have there been any legal problems classifying the {0}?
