@@ -15,6 +15,7 @@
  *@
 
 @import config.FrontendAppConfig
+@import views.html.components.languageSelection
 
 @(title: String,
   appConfig: FrontendAppConfig,
@@ -37,6 +38,15 @@
     @if(sidebarLinks.isDefined) {
         @layouts.sidebar(sidebarLinks.get, Some("sidebar"))
     }
+}
+
+@contentHeaderWithLanguageSelection = {
+    <div class="govuk-options-end">
+        @if(appConfig.languageTranslationEnabled) {
+            @languageSelection()
+        }
+    </div>
+    @contentHeader.getOrElse("")
 }
 
 @content = {
@@ -70,7 +80,7 @@
                mainClass = mainClass,
                bodyClasses = bodyClasses,
                sidebar = sidebar,
-               contentHeader = contentHeader,
+               contentHeader = Some(contentHeaderWithLanguageSelection),
                mainContent = content,
                serviceInfoContent = serviceInfoContent,
                scriptElem = Some(scriptElement),

@@ -17,6 +17,7 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
+import models.Languages.English
 import play.api.Configuration
 import play.api.i18n.Lang
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -89,10 +90,5 @@ class FrontendAppConfig @Inject()(
   lazy val refreshInterval: Int = timeOutSeconds + 10
   lazy val enableRefresh: Boolean = runModeConfiguration.getOptional[Boolean]("timeoutDialog.enableRefresh").getOrElse(true)
 
-  def languageMap: Map[String, Lang] = Map(
-    "english" -> Lang("en"),
-    "cymraeg" -> Lang("cy")
-  )
-
-  def defaultLang: Lang = languageMap.getOrElse("english", Lang("en"))
+  def defaultLang: Lang = English.lang
 }
