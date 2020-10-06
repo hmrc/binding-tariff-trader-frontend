@@ -31,8 +31,6 @@
 
     @form(action = AddConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @CSRF.formField
-
         @components.back_link()
 
         @components.error_summary(addConfidentialInformationForm.errors)

@@ -31,8 +31,6 @@
 
     @form(action = IsSampleHazardousController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @CSRF.formField
-
         @components.back_link()
 
         @components.error_summary(isSampleHazardousForm.errors)

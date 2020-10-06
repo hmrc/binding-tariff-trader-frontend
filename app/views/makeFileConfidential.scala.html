@@ -30,8 +30,6 @@
 
     @helpers.form(action = MakeFileConfidentialController.onSubmit(mode)) {
 
-        @CSRF.formField
-
         @components.back_link()
 
         @components.error_summary(makeFileConfidentialForm.errors)

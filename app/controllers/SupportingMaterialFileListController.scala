@@ -47,16 +47,31 @@ class SupportingMaterialFileListController @Inject()(
 
   def removeFile(id: String, userAnswers: UserAnswers): UserAnswers = {
     val files = userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty[FileAttachment])
+    val remainingFiles = files.filterNot(_.id == id)
     val confidentialityStatuses = userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty[String, Boolean])
-    userAnswers
-      .set(UploadSupportingMaterialMultiplePage, files.filterNot(_.id == id))
-      .set(MakeFileConfidentialPage, confidentialityStatuses.filterKeys(_ != id))
+    val remainingStatuses = confidentialityStatuses.filterKeys(_ != id)
+
+    val updatedAnswers = userAnswers
+      .set(UploadSupportingMaterialMultiplePage, remainingFiles)
+      .set(MakeFileConfidentialPage, remainingStatuses)
+
+    if (remainingFiles.isEmpty)
+      updatedAnswers.remove(AddSupportingDocumentsPage)
+    else
+      updatedAnswers
   }
 
   def onRemove(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val updatedAnswers = removeFile(fileId, request.userAnswers)
-    dataCacheConnector.save(updatedAnswers.cacheMap)
-      .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
+
+    val onwardRoute = if (updatedAnswers.get(AddSupportingDocumentsPage).isEmpty)
+      routes.AddSupportingDocumentsController.onPageLoad(mode)
+    else
+      routes.SupportingMaterialFileListController.onPageLoad(mode)
+
+    dataCacheConnector
+      .save(updatedAnswers.cacheMap)
+      .map { _ => Redirect(onwardRoute) }
   }
 
   def getFileViews(userAnswers: UserAnswers): Seq[FileView] = {

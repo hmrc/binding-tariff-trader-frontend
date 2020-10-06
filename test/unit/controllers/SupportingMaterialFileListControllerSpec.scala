@@ -30,13 +30,20 @@ import play.api.test.Helpers._
 import views.html.supportingMaterialFileList
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import uk.gov.hmrc.http.cache.client.CacheMap
+import models.FileAttachment
+import pages.UploadSupportingMaterialMultiplePage
+import play.api.libs.json.JsArray
+import play.api.libs.json.Json
+import pages.AddSupportingDocumentsPage
+import play.api.libs.json.JsBoolean
 
 class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
   private def onwardRoute = Call("GET", "/foo")
   private val formProvider = new SupportingMaterialFileListFormProvider()
   private val goodsName = "some-goods-name"
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  private def controller(dataRetrievalAction: DataRetrievalAction) =
     new SupportingMaterialFileListController(
       frontendAppConfig,
       FakeDataCacheConnector,
@@ -61,13 +68,42 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
     )
 
-    "redirect to the same page when delete element" in {
+    "redirect to the same page when deleting a file" in {
       val deleteRequest = fakeRequest.withFormUrlEncodedBody(("id", "file-id"))
 
-      val result = controller().onRemove("file-id", NormalMode)(deleteRequest)
+      val backgroundData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        AddSupportingDocumentsPage.toString -> JsBoolean(true),
+        UploadSupportingMaterialMultiplePage.toString -> JsArray(Seq(
+          Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
+          Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
+          Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
+        ))
+      )
+
+      val getData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
+      val result = controller(getData).onRemove("file-id-2", NormalMode)(deleteRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SupportingMaterialFileListController.onPageLoad(NormalMode).url)
+    }
+
+    "redirect to the add documents choice when deleting the last remaining file" in {
+      val deleteRequest = fakeRequest.withFormUrlEncodedBody(("id", "file-id"))
+
+      val backgroundData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        AddSupportingDocumentsPage.toString -> JsBoolean(true),
+        UploadSupportingMaterialMultiplePage.toString -> JsArray(Seq(
+          Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L))
+        ))
+      )
+
+      val getData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
+      val result = controller(getData).onRemove("file-id-1", NormalMode)(deleteRequest)
+
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.AddSupportingDocumentsController.onPageLoad(NormalMode).url)
     }
   }
 }

@@ -31,8 +31,6 @@
 
     @form(action = ProvideGoodsNameController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @CSRF.formField
-
         @components.back_link()
 
         @components.error_summary(goodsNameForm.errors)
