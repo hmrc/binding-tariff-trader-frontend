@@ -19,10 +19,10 @@ GET         /keep-alive                                                controlle
 GET         /unauthorised                                              controllers.UnauthorisedController.onPageLoad
 
 GET         /information-you-need                                      controllers.BeforeYouStartController.onPageLoad()
-GET         /registered-address-for-eori                               controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = NormalMode)
-POST        /registered-address-for-eori                               controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = NormalMode)
-GET         /change-registered-address-for-eori                        controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-registered-address-for-eori                        controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = CheckMode)
+GET         /provide-registered-eori-details                           controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = NormalMode)
+POST        /provide-registered-eori-details                           controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = NormalMode)
+GET         /change-provide-registered-eori-details                    controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-provide-registered-eori-details                    controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = CheckMode)
 GET         /who-is-this-application-for                               controllers.WhichBestDescribesYouController.onPageLoad(mode: Mode = NormalMode)
 POST        /who-is-this-application-for                               controllers.WhichBestDescribesYouController.onSubmit(mode: Mode = NormalMode)
 GET         /change-who-is-the-application-for                         controllers.WhichBestDescribesYouController.onPageLoad(mode: Mode = CheckMode)
