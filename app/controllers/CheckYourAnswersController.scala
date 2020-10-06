@@ -79,12 +79,6 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.legalChallenge,
           checkYourAnswersHelper.legalChallengeDetails
         ).flatten
-      ), AnswerSection(
-        Some("checkYourAnswers.otherInformation"),
-        Seq(
-          checkYourAnswersHelper.supportingInformation,
-          checkYourAnswersHelper.supportingInformationDetails
-        ).flatten
       )
     )
 

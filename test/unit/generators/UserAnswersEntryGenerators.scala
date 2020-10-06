@@ -32,22 +32,6 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitrarySupportingInformationDetailsUserAnswersEntry: Arbitrary[(SupportingInformationDetailsPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[SupportingInformationDetailsPage.type]
-        value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitrarySupportingInformationUserAnswersEntry: Arbitrary[(SupportingInformationPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[SupportingInformationPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
   implicit lazy val arbitraryLegalChallengeDetailsUserAnswersEntry: Arbitrary[(LegalChallengeDetailsPage.type, JsValue)] =
     Arbitrary {
       for {
@@ -123,27 +107,11 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryDescribeYourItemUserAnswersEntry: Arbitrary[(DescribeYourItemPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[DescribeYourItemPage.type]
-        value <- arbitrary[DescribeYourItem].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
   implicit lazy val arbitraryPreviousCommodityCodeUserAnswersEntry: Arbitrary[(PreviousCommodityCodePage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[PreviousCommodityCodePage.type]
         value <- arbitrary[PreviousCommodityCode].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitraryInformationAboutYourItemUserAnswersEntry: Arbitrary[(InformationAboutYourItemPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[InformationAboutYourItemPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }
 

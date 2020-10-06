@@ -16,7 +16,13 @@
 
 package pages
 
-case object IsSampleHazardousPage extends QuestionPage[Boolean] {
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-  override def toString: String = "isSampleHazardous"
+case object IsSampleHazardousPage extends QuestionPage[Boolean] {
+  def route(mode: Mode): Call =
+    routes.IsSampleHazardousController.onPageLoad(mode)
+  override def toString: String =
+    "isSampleHazardous"
 }

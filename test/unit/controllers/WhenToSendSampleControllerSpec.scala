@@ -18,24 +18,25 @@ package controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
+import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.WhenToSendSampleFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
-import pages.{ProvideGoodsNamePage, WhenToSendSamplePage}
+import pages.ProvideGoodsNamePage
 import play.api.data.Form
-import play.api.libs.json.{JsBoolean, JsString}
-import play.api.mvc.Call
-import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
+import play.api.libs.json.JsString
+import play.api.mvc.{ Call, Request }
 import views.html.whenToSendSample
 
-class WhenToSendSampleControllerSpec extends ControllerSpecBase {
+import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.mvc.Request
+
+class WhenToSendSampleControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
   private val formProvider = new WhenToSendSampleFormProvider()
-  private val form: Form[Boolean] = formProvider()
   private val goodsName = "some-goods-name"
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  private def controller(dataRetrievalAction: DataRetrievalAction) =
     new WhenToSendSampleController(
       frontendAppConfig,
       FakeDataCacheConnector,
@@ -49,72 +50,15 @@ class WhenToSendSampleControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute: Call = Call("GET", "/foo")
 
-  private def viewAsString(form: Form[_] = form): String = whenToSendSample(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages).toString
+  private def viewAsString(form: Form[Boolean], request: Request[_]): String =
+    whenToSendSample(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
-  "WhenToSendSample Controller" must {
-
-    "return OK and the correct view for a GET" in {
-      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
-      val getRequiredData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-
-      val result = controller(getRequiredData).onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) shouldBe OK
-      contentAsString(result) shouldBe viewAsString()
-    }
-
-    "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(WhenToSendSamplePage.toString -> JsBoolean(true), ProvideGoodsNamePage.toString -> JsString(goodsName))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
-
-      contentAsString(result) shouldBe viewAsString(form.fill(true))
-    }
-
-    "redirect to the next page when Yes is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(onwardRoute.url)
-    }
-
-    "redirect to the next page when No  is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "false"))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(onwardRoute.url)
-    }
-    "return a Bad Request and errors when invalid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm = form.bind(Map("value" -> "invalid value"))
-
-      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
-      val getRequiredData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-
-      val result = controller(getRequiredData).onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe BAD_REQUEST
-      contentAsString(result) shouldBe viewAsString(boundForm)
-    }
-
-    "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
-      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
+  "WhenToSendSampleController" must {
+    behave like yesNoCachingController(
+      controller,
+      onwardRoute,
+      viewAsString,
+      backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+    )
   }
 }

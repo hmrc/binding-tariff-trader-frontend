@@ -16,9 +16,13 @@
 
 package pages
 
-import models.DescribeYourItem
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-case object DescribeYourItemPage extends QuestionPage[DescribeYourItem] {
-
-  override def toString: String = "describeYourItem"
+case object IndexPage extends Page {
+  def route(mode: Mode): Call =
+    routes.IndexController.getApplications()
+  override def toString: String =
+    "index"
 }

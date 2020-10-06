@@ -16,9 +16,13 @@
 
 package pages
 
-import models.WhichBestDescribesYou
+import controllers.routes
+import models.{ Mode, WhichBestDescribesYou }
+import play.api.mvc.Call
 
 case object WhichBestDescribesYouPage extends QuestionPage[WhichBestDescribesYou] {
-
-  override def toString: String = "whichBestDescribesYou"
+  def route(mode: Mode): Call =
+    routes.WhichBestDescribesYouController.onPageLoad(mode)
+  override def toString: String =
+    "whichBestDescribesYou"
 }
