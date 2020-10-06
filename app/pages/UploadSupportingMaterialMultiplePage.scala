@@ -16,7 +16,13 @@
 
 package pages
 
-case object UploadSupportingMaterialMultiplePage extends Page {
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-  override def toString: String = "uploadSupportingMaterialMultiple"
+case object UploadSupportingMaterialMultiplePage extends Page {
+  def route(mode: Mode): Call =
+    routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)
+  override def toString: String =
+    "uploadSupportingMaterialMultiple"
 }

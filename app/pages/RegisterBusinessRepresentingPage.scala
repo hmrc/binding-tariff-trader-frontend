@@ -16,9 +16,13 @@
 
 package pages
 
-import models.RegisterBusinessRepresenting
+import controllers.routes
+import models.{ Mode, RegisterBusinessRepresenting }
+import play.api.mvc.Call
 
 case object RegisterBusinessRepresentingPage extends QuestionPage[RegisterBusinessRepresenting] {
-
-  override def toString: String = "registerBusinessRepresenting"
+  def route(mode: Mode): Call =
+    routes.RegisterBusinessRepresentingController.onPageLoad(mode)
+  override def toString: String =
+    "registerBusinessRepresenting"
 }

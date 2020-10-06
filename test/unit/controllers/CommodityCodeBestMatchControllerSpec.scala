@@ -18,26 +18,27 @@ package controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
+import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.CommodityCodeBestMatchFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
-import pages.{ CommodityCodeBestMatchPage, ProvideGoodsNamePage }
+import pages.ProvideGoodsNamePage
 import play.api.data.Form
-import play.api.libs.json.{ JsBoolean, JsString }
-import play.api.mvc.Call
-import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
+import play.api.libs.json.JsString
+import play.api.mvc.{ Call, Request }
 import views.html.commodityCodeBestMatch
 
-class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
   val formProvider = new CommodityCodeBestMatchFormProvider()
-  val form: Form[Boolean] = formProvider()
   val goodsName = "some-goods-name"
 
-  def viewAsString(form: Form[_] = form): String = commodityCodeBestMatch(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_], request: Request[_]): String =
+    commodityCodeBestMatch(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  private def controller(dataRetrievalAction: DataRetrievalAction) =
     new CommodityCodeBestMatchController(
       frontendAppConfig,
       FakeDataCacheConnector,
@@ -51,71 +52,12 @@ class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
 
-  "CommodityCodeBestMatch Controller" must {
-
-    "return OK and the correct view for a GET" in {
-      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-      
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) shouldBe OK
-      contentAsString(result) shouldBe viewAsString()
-    }
-
-    "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(CommodityCodeBestMatchPage.toString -> JsBoolean(true), ProvideGoodsNamePage.toString -> JsString(goodsName))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
-
-      contentAsString(result) shouldBe viewAsString(form.fill(true))
-    }
-
-    "redirect to the next page when Yes is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(onwardRoute.url)
-    }
-
-    "redirect to the next page when No  is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "false"))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(onwardRoute.url)
-    }
-
-    "return a Bad Request and errors when invalid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm = form.bind(Map("value" -> "invalid value"))
- 
-      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-
-      val result = controller(getRelevantData).onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe BAD_REQUEST
-      contentAsString(result) shouldBe viewAsString(boundForm)
-    }
-
-    "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
-      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
+  "CommodityCodeBestMatchController" must {
+    behave like yesNoCachingController(
+      controller,
+      onwardRoute,
+      viewAsString,
+      backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+    )
   }
 }

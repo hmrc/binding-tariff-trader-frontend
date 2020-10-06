@@ -57,13 +57,13 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
       contentAsString(result) shouldBe viewAsString()
     }
 
-    "redirect to the next page (Have you found commodity code) when no is submitted" in {
+    "redirect to the next page (Will you send a sample of the goods to HMRC) when no is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("add-file-choice", "false"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.CommodityCodeBestMatchController.onPageLoad(NormalMode).url)
+      redirectLocation(result) shouldBe Some(routes.WhenToSendSampleController.onPageLoad(NormalMode).url)
     }
 
     "redirect to the same page when delete element" in {
