@@ -33,12 +33,18 @@
 
         @components.error_summary(form.errors)
 
-        @components.input_textarea(
-            field = form("value"),
-            label = components.heading(messages("commodityCodeRulingReference.heading")),
-            hint = Some(Html(messages("commodityCodeRulingReference.hint")))
+        @components.heading(
+            messages("commodityCodeRulingReference.heading"),
+            captionMsg = Some(messages("commodityCodeRulingReference.caption"))
         )
 
-        @components.submit_button()
+        @components.input_text(
+            field = form("value"),
+            labelClass = Some("visually-hidden"),
+            label = Some(messages("commodityCodeRulingReference.heading")),
+            hint = Some(messages("commodityCodeRulingReference.hint"))
+        )
+
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }
