@@ -26,7 +26,7 @@ lazy val root = (project in file("."))
     name := appName,
     scalaVersion := "2.12.12",
     targetJvm := "jvm-1.8",
-    RoutesKeys.routesImport += "models._",
+    RoutesKeys.routesImport ++= Seq("models._", "models.Languages._"),
     PlayKeys.playDefaultPort := 9582,
     scalacOptions ~= { opts => opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard")) },
     libraryDependencies ++= AppDependencies(),
