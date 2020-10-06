@@ -16,13 +16,7 @@
 
 package pages
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
-
 case object SimilarItemCommodityCodePage extends QuestionPage[Boolean] {
-  def route(mode: Mode): Call =
-    routes.SimilarItemCommodityCodeController.onPageLoad(mode)
-  override def toString: String =
-    "similarItemCommodityCode"
+
+  override def toString: String = "similarItemCommodityCode"
 }

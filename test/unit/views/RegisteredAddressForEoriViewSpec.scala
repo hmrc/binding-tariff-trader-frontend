@@ -32,10 +32,10 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
 
   override protected val form = new RegisteredAddressForEoriFormProvider()()
 
+
+
   private def createView = { () =>
-    val request = fakeRequestWithEori
-    val preparedForm = form.fill(RegisteredAddressForEori(request.userEoriNumber.get))
-    registeredAddressForEori(frontendAppConfig, preparedForm, NormalMode, countriesService.getAllCountries)(request, messages)
+    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithEori, messages)
   }
 
   private def createViewUsingForm = { form: Form[_] =>
@@ -46,7 +46,7 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
 
     behave like normalPage(createView, messageKeyPrefix, "eori-789012")()
 
-    behave like pageWithBackLink(createView)
+    behave like pageWithoutBackLink(createView)
 
     behave like pageWithTextFields(
       createViewUsingForm,
@@ -56,9 +56,7 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
     )
 
     "show the expected text" in {
-      val request = fakeRequestWithEori
-      val preparedForm = form.fill(RegisteredAddressForEori(request.userEoriNumber.get))
-      val text = asDocument(createViewUsingForm(preparedForm)).text()
+      val text = asDocument(createViewUsingForm(form)).text()
       text should include(messages("registeredAddressForEori.title"))
       text should include(messages("registeredAddressForEori.heading", "eori-789012"))
       text should include(messages("registeredAddressForEori.note"))

@@ -27,12 +27,12 @@ import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import models.requests.OptionalDataRequest
 import navigation.Navigator
-import pages.{ConfirmationPage, DeclarationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
+import pages.{ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.declaration
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -57,11 +57,12 @@ class DeclarationController @Inject()(
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
+
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
-    val newCaseRequest = mapper.map(answers)
+  val newCaseRequest = mapper.map(answers)
 
     val attachments: Seq[FileAttachment] = answers
-      .get(SupportingMaterialFileListPage).map(_.fileAttachments)
+      .get(SupportingMaterialFileListPage)
       .getOrElse(Seq.empty)
 
     for {
@@ -72,7 +73,7 @@ class DeclarationController @Inject()(
       _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
       userAnswers = answers.set(ConfirmationPage, Confirmation(atar))
       _           <- dataCacheConnector.save(userAnswers.cacheMap)
-      res: Result <- successful(Redirect(navigator.nextPage(DeclarationPage, mode)(userAnswers)))
+      res: Result <- successful(Redirect(navigator.nextPage(ConfirmationPage, mode)(userAnswers)))
     } yield res
 
   }

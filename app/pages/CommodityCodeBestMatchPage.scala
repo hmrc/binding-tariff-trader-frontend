@@ -16,13 +16,7 @@
 
 package pages
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
-
 case object CommodityCodeBestMatchPage extends QuestionPage[Boolean] {
-  def route(mode: Mode): Call =
-    routes.CommodityCodeBestMatchController.onPageLoad(mode)
-  override def toString: String =
-    "commodityCodeBestMatch"
+
+  override def toString: String = "commodityCodeBestMatch"
 }

@@ -16,11 +16,4 @@
 
 package pages
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
-
-case object CheckYourAnswersPage extends Page {
-  def route(mode: Mode): Call =
-    routes.CheckYourAnswersController.onPageLoad()
-}
+case object CheckYourAnswersPage extends Page

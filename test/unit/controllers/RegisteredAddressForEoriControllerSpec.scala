@@ -30,8 +30,6 @@ import service.CountriesService
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.registeredAddressForEori
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
 class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 
   private lazy val formProvider: RegisteredAddressForEoriFormProvider = new RegisteredAddressForEoriFormProvider()
@@ -45,7 +43,6 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
-      new DataRequiredActionImpl,
       formProvider,
       countriesService,
       cc

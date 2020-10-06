@@ -16,13 +16,16 @@
 
 package pages
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
+import pages.behaviours.PageBehaviours
 
-case object BeforeYouStartPage extends Page {
-  def route(mode: Mode): Call =
-    routes.BeforeYouStartController.onPageLoad()
-  override def toString: String =
-    "beforeYouStart"
+class SupportingInformationPageSpec extends PageBehaviours {
+
+  "SupportingInformationPage" must {
+
+    beRetrievable[Boolean](SupportingInformationPage)
+
+    beSettable[Boolean](SupportingInformationPage)
+
+    beRemovable[Boolean](SupportingInformationPage)
+  }
 }

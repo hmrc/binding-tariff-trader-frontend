@@ -22,31 +22,54 @@ import controllers.actions._
 import forms.LegalChallengeDetailsFormProvider
 import javax.inject.Inject
 import models.Mode
-import models.requests.DataRequest
 import navigation.Navigator
-import pages.{ LegalChallengeDetailsPage, ProvideGoodsNamePage }
+import pages.{LegalChallengeDetailsPage, ProvideGoodsNamePage, SupportingInformationPage}
 import play.api.data.Form
-import play.api.mvc.MessagesControllerComponents
-import play.twirl.api.HtmlFormat
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.legalChallengeDetails
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class LegalChallengeDetailsController @Inject()(
-  appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
-  formProvider: LegalChallengeDetailsFormProvider,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
-  lazy val form = formProvider()
-  val questionPage = LegalChallengeDetailsPage
+                                                 appConfig: FrontendAppConfig,
+                                                 dataCacheConnector: DataCacheConnector,
+                                                 navigator: Navigator,
+                                                 identify: IdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 formProvider: LegalChallengeDetailsFormProvider,
+                                                 cc: MessagesControllerComponents
+                                               ) extends FrontendController(cc) with I18nSupport {
 
-  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+  private lazy val form = formProvider()
+
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    legalChallengeDetails(appConfig, preparedForm, mode, goodsName)
+    val preparedForm = request.userAnswers.get(LegalChallengeDetailsPage) match {
+      case Some(value) => form.fill(value)
+      case _ => form
+    }
+
+    Ok(legalChallengeDetails(appConfig, preparedForm, mode, goodsName))
   }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        Future.successful(BadRequest(legalChallengeDetails(appConfig, formWithErrors, mode, goodsName))),
+      value => {
+        val updatedAnswers = request.userAnswers.set(LegalChallengeDetailsPage, value)
+
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ => Redirect(navigator.nextPage(SupportingInformationPage, mode)(updatedAnswers))
+        )
+      }
+    )
+  }
+
 }
