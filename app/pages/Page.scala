@@ -16,9 +16,12 @@
 
 package pages
 
-import play.api.mvc.Call
-import models.Mode
+import scala.language.implicitConversions
 
-trait Page {
-  def route(mode: Mode): Call
+trait Page
+
+object Page {
+
+  implicit def toString(page: Page): String = page.toString
+
 }

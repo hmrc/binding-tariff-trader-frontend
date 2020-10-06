@@ -28,7 +28,6 @@ import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.{failed, successful}
 
 class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {

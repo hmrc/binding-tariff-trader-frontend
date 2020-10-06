@@ -16,13 +16,7 @@
 
 package pages
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
-
 case object CommodityCodeDigitsPage extends QuestionPage[String] {
-  def route(mode: Mode): Call =
-    routes.CommodityCodeDigitsController.onPageLoad(mode)
-  override def toString: String =
-    "commodityCodeDigits"
+
+  override def toString: String = "commodityCodeDigits"
 }

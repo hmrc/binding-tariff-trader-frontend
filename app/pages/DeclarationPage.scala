@@ -16,13 +16,7 @@
 
 package pages
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
-
 case object DeclarationPage extends QuestionPage[String] {
-  def route(mode: Mode): Call =
-    routes.DeclarationController.onPageLoad(mode)
-  override def toString: String =
-    "declaration"
+
+  override def toString: String = "declaration"
 }

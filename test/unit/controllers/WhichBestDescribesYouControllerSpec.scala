@@ -70,7 +70,7 @@ class WhichBestDescribesYouControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when BusinessOwner is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", BusinessOwner.toString))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", BusinessOwner))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
@@ -79,7 +79,7 @@ class WhichBestDescribesYouControllerSpec extends ControllerSpecBase {
     }
 
     "redirect to the next page when BusinessRepresentative is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", BusinessRepresentative.toString))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", BusinessRepresentative))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 

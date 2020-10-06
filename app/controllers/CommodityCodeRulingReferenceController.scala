@@ -22,29 +22,52 @@ import controllers.actions._
 import forms.CommodityCodeRulingReferenceFormProvider
 import javax.inject.Inject
 import models.Mode
-import models.requests.DataRequest
 import navigation.Navigator
-import pages.CommodityCodeRulingReferencePage
+import pages.{CommodityCodeRulingReferencePage, LegalChallengePage}
 import play.api.data.Form
-import play.api.mvc.MessagesControllerComponents
-import play.twirl.api.HtmlFormat
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.commodityCodeRulingReference
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ ExecutionContext, Future }
 
 class CommodityCodeRulingReferenceController @Inject()(
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
+  dataCacheConnector: DataCacheConnector,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
   formProvider: CommodityCodeRulingReferenceFormProvider,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
-  lazy val form = formProvider()
-  val questionPage = CommodityCodeRulingReferencePage
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
-  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
-    commodityCodeRulingReference(appConfig, preparedForm, mode)
+  private lazy val form = formProvider()
+
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+
+    val preparedForm = request.userAnswers.get(CommodityCodeRulingReferencePage) match {
+      case Some(value) => form.fill(value)
+      case _ => form
+    }
+
+    Ok(commodityCodeRulingReference(appConfig, preparedForm, mode))
+  }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        Future.successful(BadRequest(commodityCodeRulingReference(appConfig, formWithErrors, mode))),
+        value => {
+          val updatedAnswers = request.userAnswers.set(CommodityCodeRulingReferencePage, value)
+
+          dataCacheConnector.save(updatedAnswers.cacheMap).map(
+            _ => Redirect(navigator.nextPage(LegalChallengePage, mode)(updatedAnswers))
+          )
+        }
+    )
+  }
+
 }

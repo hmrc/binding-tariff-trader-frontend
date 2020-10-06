@@ -16,13 +16,7 @@
 
 package pages
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
-
 case object CommodityCodeRulingReferencePage extends QuestionPage[String] {
-  def route(mode: Mode): Call =
-    routes.CommodityCodeRulingReferenceController.onPageLoad(mode)
-  override def toString: String =
-    "commodityCodeRulingReference"
+
+  override def toString: String = "commodityCodeRulingReference"
 }

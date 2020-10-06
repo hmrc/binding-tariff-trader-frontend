@@ -27,7 +27,6 @@ import service.PdfService
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.confirmation
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ConfirmationControllerSpec extends ControllerSpecBase {

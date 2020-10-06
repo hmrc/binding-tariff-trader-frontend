@@ -20,8 +20,9 @@
 @import play.api.libs.json.Json
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
+@import models.requests.OptionalDataRequest
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, countries: List[Country])(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, countries: List[Country])(implicit request: OptionalDataRequest[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("registeredAddressForEori.title")}",
@@ -30,12 +31,10 @@
 
     @helpers.form(action = RegisteredAddressForEoriController.onSubmit(mode)) {
 
-        @components.back_link()
-
         @components.error_summary(form.errors)
 
-        @if(form("eori").value.isDefined) {
-            @components.heading(messages("registeredAddressForEori.heading", form("eori").value.get))
+        @if(request.userEoriNumber.isDefined) {
+            @components.heading(messages("registeredAddressForEori.heading", request.userEoriNumber.get))
 
             <div role="note" class="application-notice info-notice">
                 <p> @messages("registeredAddressForEori.note") </p>

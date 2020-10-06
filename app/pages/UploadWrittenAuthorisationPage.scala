@@ -16,13 +16,9 @@
 
 package pages
 
-import controllers.routes
-import models.{ FileAttachment, Mode }
-import play.api.mvc.Call
+import models.FileAttachment
 
 case object UploadWrittenAuthorisationPage extends QuestionPage[FileAttachment] {
-  def route(mode: Mode): Call =
-    routes.UploadWrittenAuthorisationController.onPageLoad(mode)
-  override def toString: String =
-    "uploadWrittenAuthorisation"
+
+  override def toString: String = "uploadWrittenAuthorisation"
 }

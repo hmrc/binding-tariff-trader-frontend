@@ -22,32 +22,53 @@ import controllers.actions._
 import forms.LegalChallengeFormProvider
 import javax.inject.Inject
 import models.Mode
-import models.requests.DataRequest
 import navigation.Navigator
-import pages.ProvideGoodsNamePage
+import pages._
 import play.api.data.Form
-import play.api.mvc.MessagesControllerComponents
-import play.twirl.api.HtmlFormat
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.legalChallenge
 
-import scala.concurrent.ExecutionContext
-import navigation.Journey
+import scala.concurrent.Future
 
 class LegalChallengeController @Inject()(
-  appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
-  formProvider: LegalChallengeFormProvider,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
-  lazy val form = formProvider()
-  val journey = Journey.legalProblems
+                                          appConfig: FrontendAppConfig,
+                                          override val dataCacheConnector: DataCacheConnector,
+                                          override val navigator: Navigator,
+                                          identify: IdentifierAction,
+                                          getData: DataRetrievalAction,
+                                          requireData: DataRequiredAction,
+                                          formProvider: LegalChallengeFormProvider,
+                                          cc: MessagesControllerComponents
+                                        ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
 
-  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+  private lazy val form = formProvider()
+
+  override protected val page: QuestionPage[Boolean] = LegalChallengePage
+  override protected val pageDetails: QuestionPage[String] = LegalChallengeDetailsPage
+  override protected val nextPage: Page = SupportingInformationPage
+
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    legalChallenge(appConfig, preparedForm, goodsName, mode)
+    val preparedForm = request.userAnswers.get(LegalChallengePage) match {
+      case Some(value) => form.fill(value)
+      case _ => form
+    }
+
+    Ok(legalChallenge(appConfig, preparedForm, goodsName, mode))
   }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+
+    def badRequest = { formWithErrors: Form[_] =>
+      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+      Future.successful(BadRequest(legalChallenge(appConfig, formWithErrors, goodsName, mode)))
+    }
+
+    form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
+
+  }
+
 }

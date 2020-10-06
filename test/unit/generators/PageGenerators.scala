@@ -24,6 +24,12 @@ trait PageGenerators {
   implicit lazy val arbitraryUploadWrittenAuthorisationPage: Arbitrary[UploadWrittenAuthorisationPage.type] =
     Arbitrary(UploadWrittenAuthorisationPage)
 
+  implicit lazy val arbitrarySupportingInformationDetailsPage: Arbitrary[SupportingInformationDetailsPage.type] =
+    Arbitrary(SupportingInformationDetailsPage)
+
+  implicit lazy val arbitrarySupportingInformationPage: Arbitrary[SupportingInformationPage.type] =
+    Arbitrary(SupportingInformationPage)
+
   implicit lazy val arbitraryLegalChallengeDetailsPage: Arbitrary[LegalChallengeDetailsPage.type] =
     Arbitrary(LegalChallengeDetailsPage)
 
@@ -51,8 +57,14 @@ trait PageGenerators {
   implicit lazy val arbitraryUploadSupportingMaterialMultiplePage: Arbitrary[UploadSupportingMaterialMultiplePage.type] =
     Arbitrary(UploadSupportingMaterialMultiplePage)
 
+  implicit lazy val arbitraryDescribeYourItemPage: Arbitrary[DescribeYourItemPage.type] =
+    Arbitrary(DescribeYourItemPage)
+
   implicit lazy val arbitraryPreviousCommodityCodePage: Arbitrary[PreviousCommodityCodePage.type] =
     Arbitrary(PreviousCommodityCodePage)
+
+  implicit lazy val arbitraryInformationAboutYourItemPage: Arbitrary[InformationAboutYourItemPage.type] =
+    Arbitrary(InformationAboutYourItemPage)
 
   implicit lazy val arbitraryEnterContactDetailsPage: Arbitrary[EnterContactDetailsPage.type] =
     Arbitrary(EnterContactDetailsPage)

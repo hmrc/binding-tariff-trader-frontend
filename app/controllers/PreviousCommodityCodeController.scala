@@ -21,30 +21,52 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.PreviousCommodityCodeFormProvider
 import javax.inject.Inject
-import models.{ Mode, PreviousCommodityCode }
-import models.requests.DataRequest
+import models.Mode
 import navigation.Navigator
-import pages.PreviousCommodityCodePage
+import pages.{AcceptItemInformationPage, PreviousCommodityCodePage}
 import play.api.data.Form
-import play.api.mvc.MessagesControllerComponents
-import play.twirl.api.HtmlFormat
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.previousCommodityCode
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ ExecutionContext, Future }
 
 class PreviousCommodityCodeController @Inject()(
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
+  dataCacheConnector: DataCacheConnector,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
   formProvider: PreviousCommodityCodeFormProvider,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[PreviousCommodityCode](cc) {
-  lazy val form = formProvider()
-  val questionPage = PreviousCommodityCodePage
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
-  def renderView(preparedForm: Form[PreviousCommodityCode], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
-    previousCommodityCode(appConfig, preparedForm, mode)
+  private lazy val form = formProvider()
+
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+
+    val preparedForm = request.userAnswers.get(PreviousCommodityCodePage) match {
+      case Some(value) => form.fill(value)
+      case _ => form
+    }
+    Ok(previousCommodityCode(appConfig, preparedForm, mode))
+  }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+
+    form.bindFromRequest().fold(
+      (formWithErrors: Form[_]) =>
+        Future.successful(BadRequest(previousCommodityCode(appConfig, formWithErrors, mode))),
+      value => {
+        val updatedAnswers = request.userAnswers.set(PreviousCommodityCodePage, value)
+
+        dataCacheConnector.save(updatedAnswers.cacheMap).map(
+          _ => Redirect(navigator.nextPage(AcceptItemInformationPage, mode)(updatedAnswers))
+        )
+      }
+    )
+  }
+
 }

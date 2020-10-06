@@ -16,14 +16,9 @@
 
 package pages
 
-import controllers.routes
 import models.RegisteredAddressForEori
-import models.Mode
-import play.api.mvc.Call
 
 case object RegisteredAddressForEoriPage extends QuestionPage[RegisteredAddressForEori] {
-  def route(mode: Mode): Call =
-    routes.RegisteredAddressForEoriController.onPageLoad(mode)
-  override def toString: String =
-    "registeredAddressForEori"
+
+  override def toString: String = "registeredAddressForEori"
 }

@@ -16,13 +16,7 @@
 
 package pages
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
-
 case object SelectApplicationTypePage extends QuestionPage[Boolean] {
-  def route(mode: Mode): Call =
-    routes.SelectApplicationTypeController.onPageLoad(mode)
-  override def toString: String =
-    "selectApplicationType"
+
+  override def toString: String = "selectApplicationType"
 }

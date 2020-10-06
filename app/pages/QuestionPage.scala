@@ -16,4 +16,9 @@
 
 package pages
 
-trait QuestionPage[A] extends DataPage[A]
+import models.UserAnswers
+
+trait QuestionPage[A] extends DataPage[A] {
+
+  def cleanup(value: Option[A], userAnswers: UserAnswers): UserAnswers = userAnswers
+}
