@@ -30,6 +30,8 @@
 
     @helpers.form(action = RegisteredAddressForEoriController.onSubmit(mode)) {
 
+        @components.back_link()
+
         @components.error_summary(form.errors)
 
         @if(form("eori").value.isDefined) {

@@ -27,7 +27,7 @@ class PreviousCommodityCodeFormProvider @Inject() extends Mappings {
 
    def apply(): Form[PreviousCommodityCode] = Form(
      mapping(
-      "previousCommodityCode" -> text("previousCommodityCode.error.previousCommodityCode.required")
+      "btiReference" -> text("previousCommodityCode.error.previousCommodityCode.required")
         .verifying(maxLength(100, "previousCommodityCode.error.previousCommodityCode.length"))
      )(PreviousCommodityCode.apply)(PreviousCommodityCode.unapply)
    )
