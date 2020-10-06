@@ -23,12 +23,10 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 case class UserAnswers(cacheMap: CacheMap) extends Enumerable.Implicits {
 
   def get[A](page: DataPage[A])(implicit rds: Reads[A]): Option[A] =
-    cacheMap.getEntry[A](page)
+    cacheMap.getEntry[A](page.toString)
 
   def set[A](page: QuestionPage[A], value: A)(implicit writes: Writes[A]): UserAnswers = {
-    val updatedAnswers = UserAnswers(cacheMap copy (data = cacheMap.data + (page.toString -> Json.toJson(value))))
-
-    page.cleanup(Some(value), updatedAnswers)
+    UserAnswers(cacheMap copy (data = cacheMap.data + (page.toString -> Json.toJson(value))))
   }
 
   def set[A](page: DataPage[A], value: A)(implicit writes: Writes[A]): UserAnswers = {
@@ -36,9 +34,7 @@ case class UserAnswers(cacheMap: CacheMap) extends Enumerable.Implicits {
   }
 
   def remove[A](page: QuestionPage[A]): UserAnswers = {
-    val updatedAnswers = UserAnswers(cacheMap copy (data = cacheMap.data - page))
-
-    page.cleanup(None, updatedAnswers)
+    UserAnswers(cacheMap copy (data = cacheMap.data - page.toString))
   }
 }
 

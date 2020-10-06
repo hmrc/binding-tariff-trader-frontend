@@ -20,13 +20,12 @@ import javax.inject.Inject
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import models.SelectApplicationType
 
 class SelectApplicationTypeFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[SelectApplicationType] =
+  def apply(): Form[Boolean] =
     Form(
-      "value" -> enumerable[SelectApplicationType]("selectApplicationType.error.required")
+      "value" -> boolean("selectApplicationType.error.required")
     )
 
 }

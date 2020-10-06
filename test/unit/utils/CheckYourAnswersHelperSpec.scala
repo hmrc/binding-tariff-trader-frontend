@@ -17,7 +17,6 @@
 package utils
 
 import base.SpecBase
-import models.SelectApplicationType.NewCommodity
 import models.WhichBestDescribesYou.BusinessOwner
 import models._
 import models.requests.DataRequest
@@ -53,9 +52,14 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.whenToSendSample.get.answer shouldBe "site.yes"
       }
 
-      "return a row with the correct answer for SupportingInformationDetailsPage" in {
-        given(userAnswers.get(SupportingInformationPage)).willReturn(Option(false))
-        checkHelper.supportingInformation.get.answer shouldBe "site.no"
+      "return a row with the correct answer for IsSampleHazardous" in {
+        given(userAnswers.get(IsSampleHazardousPage)).willReturn(Option(true))
+        checkHelper.isSampleHazardous.get.answer shouldBe "site.yes"
+      }
+
+      "return a row with the correct answer for ReturnSamplesPage" in {
+        given(userAnswers.get(ReturnSamplesPage)).willReturn(Option(true))
+        checkHelper.returnSamples.get.answer shouldBe "site.yes"
       }
 
       "return a row with the correct answer for LegalChallengePage" in {
@@ -68,6 +72,10 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.similarItemCommodityCode.get.answer shouldBe "site.yes"
       }
 
+      "return a row with the correct answer for SelectApplicationTypePage" in {
+        given(userAnswers.get(SelectApplicationTypePage)).willReturn(Option(true))
+        checkHelper.selectApplicationType.get.answer shouldBe "site.yes"
+      }
     }
 
     "rendering information pages" must {
@@ -77,19 +85,9 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.commodityCodeDigits.get.answer shouldBe "12131233241324"
       }
 
-      "return a row with the correct answer for ReturnSamplesPage" in {
-        given(userAnswers.get(ReturnSamplesPage)).willReturn(Option(ReturnSamples.Yes))
-        checkHelper.returnSamples.get.answer shouldBe "returnSamples.yesReturnSamples"
-      }
-
       "return a row with the correct answer for UploadWrittenAuthorisationPage" in {
         given(userAnswers.get(UploadWrittenAuthorisationPage)).willReturn(Option(fileAttachment))
         checkHelper.uploadWrittenAuthorisation.get.answer shouldBe "fileName"
-      }
-
-      "return a row with the correct answer for SupportingInformationDetailsPage" in {
-        given(userAnswers.get(SupportingInformationDetailsPage)).willReturn(Option("Supporting information"))
-        checkHelper.supportingInformationDetails.get.answer shouldBe "Supporting information"
       }
 
       "return a row with the correct answer for LegalChallengeDetailsPage" in {
@@ -100,11 +98,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       "return a row with the correct answer for CommodityCodeRulingReferencePage" in {
         given(userAnswers.get(CommodityCodeRulingReferencePage)).willReturn(Option("code ruling"))
         checkHelper.commodityCodeRulingReference.get.answer shouldBe "code ruling"
-      }
-
-      "return a row with the correct answer for DescribeYourItemPage" in {
-        given(userAnswers.get(DescribeYourItemPage)).willReturn(Option(DescribeYourItem("name", "description", None)))
-        checkHelper.describeYourItem.get.answer shouldBe "name\ndescription"
       }
 
       "return a row with the correct answer for PreviousCommodityCodePage" in {
@@ -121,11 +114,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         given(userAnswers.get(RegisterBusinessRepresentingPage)).willReturn(
           Option(RegisterBusinessRepresenting("eoriNumber", "businessName", "addressLine1", "town", Some("postCode"), "IE")))
         checkHelper.registerBusinessRepresenting.get.answer shouldBe "eoriNumber\nbusinessName\naddressLine1\ntown\npostCode\nIrish Republic"
-      }
-
-      "return a row with the correct answer for SelectApplicationTypePage" in {
-        given(userAnswers.get(SelectApplicationTypePage)).willReturn(Option(NewCommodity))
-        checkHelper.selectApplicationType.get.answer shouldBe "selectApplicationType.newCommodity"
       }
 
       "return a row with the correct answer for WhichBestDescribesYouPage" in {

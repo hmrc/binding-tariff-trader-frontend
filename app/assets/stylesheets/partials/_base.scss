@@ -50,3 +50,29 @@ Common styles
    font-size: 27px;
    margin-bottom: 5px;
  }
+
+/*
+====================================
+Language switch
+====================================
+*/
+
+.govuk-lang-switch {
+  list-style: none;
+  text-align: right;
+  margin: 15px 0;
+  padding-left: 0;
+}
+
+.govuk-lang-switch-item {
+  display: inline;
+}
+
+.govuk-lang-switch > *:first-child {
+  padding-right: 5px;
+}
+
+.govuk-lang-switch > *:last-child {
+  border-left: 2px solid;
+  padding-left: 5px;
+}

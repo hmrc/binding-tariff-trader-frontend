@@ -15,29 +15,38 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
+@import helper._
 @import models.Mode
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@this()
+
+@(appConfig: FrontendAppConfig, isSampleHazardousForm: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("supportingInformation.title")}",
+    title = s"${errorPrefix(isSampleHazardousForm)} ${messages("isSampleHazardous.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = SupportingInformationController.onSubmit(mode)) {
+    @form(action = IsSampleHazardousController.onSubmit(mode), 'autoComplete -> "off") {
+
+        @CSRF.formField
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @components.error_summary(isSampleHazardousForm.errors)
+
+        @components.heading(messages("isSampleHazardous.heading"),
+            captionMsg = Some(messages("isSampleHazardous.caption")))
 
         @components.input_yes_no(
-            field = form("value"),
-            labelHtml = Some(components.heading(messages("supportingInformation.heading")))
+            field = isSampleHazardousForm("isSampleHazardous"),
+            label = Some(messages("isSampleHazardous.heading")),
+            labelClass = Some("visually-hidden")
         )
 
-        @components.submit_button()
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }
+

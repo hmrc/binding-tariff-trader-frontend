@@ -22,55 +22,31 @@ import controllers.actions._
 import forms.CommodityCodeDigitsFormProvider
 import javax.inject.Inject
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
-import pages.{CommodityCodeDigitsPage, ProvideGoodsNamePage, WhenToSendSamplePage}
+import pages.{ CommodityCodeDigitsPage, ProvideGoodsNamePage }
 import play.api.data.Form
-import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import play.api.mvc.MessagesControllerComponents
+import play.twirl.api.HtmlFormat
 import views.html.commodityCodeDigits
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 class CommodityCodeDigitsController @Inject()(
-                                               appConfig: FrontendAppConfig,
-                                               dataCacheConnector: DataCacheConnector,
-                                               navigator: Navigator,
-                                               identify: IdentifierAction,
-                                               getData: DataRetrievalAction,
-                                               requireData: DataRequiredAction,
-                                               formProvider: CommodityCodeDigitsFormProvider,
-                                               cc: MessagesControllerComponents
-                                             ) extends FrontendController(cc) with I18nSupport {
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: CommodityCodeDigitsFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
+  lazy val form = formProvider()
+  val questionPage = CommodityCodeDigitsPage
 
-  private lazy val form = formProvider()
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
+  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    val preparedForm = request.userAnswers.get(CommodityCodeDigitsPage) match {
-      case Some(value) => form.fill(value)
-      case _ => form
-    }
-
-    Ok(commodityCodeDigits(appConfig, preparedForm, mode, goodsName))
+    commodityCodeDigits(appConfig, preparedForm, mode, goodsName)
   }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(commodityCodeDigits(appConfig, formWithErrors, mode, goodsName))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(CommodityCodeDigitsPage, value)
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(WhenToSendSamplePage, mode)(updatedAnswers))
-        )
-      }
-    )
-  }
-
 }

@@ -67,21 +67,17 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.provideGoodsDescription,
           checkYourAnswersHelper.addConfidentialInformation,
           checkYourAnswersHelper.provideConfidentialInformation,
+          checkYourAnswersHelper.supportingMaterialFileListChoice,
           checkYourAnswersHelper.supportingMaterialFileList,
           checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,
           checkYourAnswersHelper.whenToSendSample,
+          checkYourAnswersHelper.isSampleHazardous,
           checkYourAnswersHelper.returnSamples,
           checkYourAnswersHelper.similarItemCommodityCode,
           checkYourAnswersHelper.commodityCodeRulingReference,
           checkYourAnswersHelper.legalChallenge,
           checkYourAnswersHelper.legalChallengeDetails
-        ).flatten
-      ), AnswerSection(
-        Some("checkYourAnswers.otherInformation"),
-        Seq(
-          checkYourAnswersHelper.supportingInformation,
-          checkYourAnswersHelper.supportingInformationDetails
         ).flatten
       )
     )

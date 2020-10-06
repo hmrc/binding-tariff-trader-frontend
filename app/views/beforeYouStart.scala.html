@@ -15,8 +15,8 @@
  *@
 
 @import config.FrontendAppConfig
-@import models.requests.IdentifierRequest
-@(appConfig: FrontendAppConfig)(implicit request: IdentifierRequest[_], messages: Messages)
+@import models.requests.OptionalDataRequest
+@(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("beforeYouStart.title"),
@@ -56,5 +56,5 @@
 
     <p>@messages("beforeYouStart.subheading3.paragraph1")</p>
 
-    @components.button_link( messages("site.continue"), routes.RegisteredAddressForEoriController.onPageLoad(NormalMode).url)
+    @components.button_link(messages("site.continue"), routes.ProvideGoodsNameController.onPageLoad(NormalMode).url)
 }

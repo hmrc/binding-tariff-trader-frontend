@@ -35,8 +35,11 @@
 
         <fieldset>
             <legend>
-                @components.heading(messages("enterContactDetails.heading"))
+                @components.heading(messages("enterContactDetails.heading"),
+                captionMsg = Some(messages("enterContactDetails.caption")))
             </legend>
+
+            <p>@messages("enterContactDetails.bodyText")</p>
 
             @components.input_text(
                 field = form("name"),
@@ -56,7 +59,7 @@
                 inputPurpose=Some("phoneNumber")
             )
 
-            @components.submit_button()
+            @components.submit_button(Some(messages("site.save_and_continue")))
 
         </fieldset>
     }

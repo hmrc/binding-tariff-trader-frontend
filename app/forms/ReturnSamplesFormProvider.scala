@@ -20,13 +20,12 @@ import javax.inject.Inject
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import models.ReturnSamples
 
 class ReturnSamplesFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[ReturnSamples] =
+  def apply(): Form[Boolean] =
     Form(
-      "value" -> enumerable[ReturnSamples]("returnSamples.error.required")
+      "value" -> boolean("returnSamples.error.required")
     )
 
 }

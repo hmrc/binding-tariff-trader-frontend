@@ -16,16 +16,13 @@
 
 package pages
 
-import pages.behaviours.PageBehaviours
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-class SupportingInformationPageSpec extends PageBehaviours {
-
-  "SupportingInformationPage" must {
-
-    beRetrievable[Boolean](SupportingInformationPage)
-
-    beSettable[Boolean](SupportingInformationPage)
-
-    beRemovable[Boolean](SupportingInformationPage)
-  }
+case object IndexPage extends Page {
+  def route(mode: Mode): Call =
+    routes.IndexController.getApplications()
+  override def toString: String =
+    "index"
 }

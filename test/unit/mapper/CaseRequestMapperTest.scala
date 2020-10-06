@@ -111,7 +111,6 @@ class CaseRequestMapperTest extends UnitSpec {
 
       // Then optional Fields should be blank
       application.confidentialInformation shouldBe Some("Confidential information")
-      application.otherInformation shouldBe Some("Other Info")
       application.reissuedBTIReference shouldBe Some("Reissued BTI Reference")
       application.relatedBTIReference shouldBe Some("Related BTI Reference")
       application.knownLegalProceedings shouldBe Some("Known Legal Proceedings")
@@ -167,7 +166,6 @@ class CaseRequestMapperTest extends UnitSpec {
               "Trader Country"
             )
           ),
-          SupportingInformationDetailsPage.toString -> js("Other Info"),
           PreviousCommodityCodePage.toString -> js(
             PreviousCommodityCode(
               "Reissued BTI Reference"
@@ -177,9 +175,7 @@ class CaseRequestMapperTest extends UnitSpec {
           LegalChallengeDetailsPage.toString -> js("Known Legal Proceedings"),
           CommodityCodeDigitsPage.toString -> js("Envisaged Commodity Code"),
           WhenToSendSamplePage.toString -> js(true),
-          ReturnSamplesPage.toString -> js(
-            ReturnSamples.Yes
-          )
+          ReturnSamplesPage.toString -> js(true)
         )
       )
     )
@@ -216,13 +212,6 @@ class CaseRequestMapperTest extends UnitSpec {
           ),
           AddConfidentialInformationPage.toString -> js(
             false
-          ),
-          DescribeYourItemPage.toString -> js(
-            DescribeYourItem(
-              "Good Name",
-              "Good Description",
-              None
-            )
           ),
           WhenToSendSamplePage.toString -> js(true)
         )

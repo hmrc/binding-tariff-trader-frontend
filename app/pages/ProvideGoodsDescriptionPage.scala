@@ -16,7 +16,13 @@
 
 package pages
 
-case object ProvideGoodsDescriptionPage extends QuestionPage[String] {
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-  override def toString: String = "provideGoodsDescription"
+case object ProvideGoodsDescriptionPage extends QuestionPage[String] {
+  def route(mode: Mode): Call  =
+    routes.ProvideGoodsDescriptionController.onPageLoad(mode)
+  override def toString: String =
+    "provideGoodsDescription"
 }
