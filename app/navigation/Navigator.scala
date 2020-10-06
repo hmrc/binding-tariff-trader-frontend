@@ -96,7 +96,7 @@ class Navigator @Inject()() {
           case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
         }
       },
-      UploadSupportingMaterialMultiplePage -> ((_: UserAnswers) => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
+      UploadSupportingMaterialMultiplePage -> ((_: UserAnswers) => routes.SupportingMaterialFileListController.onPageLoad(NormalMode))
     ),
 
     // Will you send a sample of the goods to HMRC?
@@ -162,7 +162,7 @@ class Navigator @Inject()() {
           case _ => routes.SupportingMaterialFileListController.onPageLoad(CheckMode)
         }
       },
-      UploadSupportingMaterialMultiplePage -> ((_: UserAnswers) => routes.SupportingMaterialFileListController.onPageLoad(CheckMode)),
+      UploadSupportingMaterialMultiplePage -> ((_: UserAnswers) => routes.SupportingMaterialFileListController.onPageLoad(CheckMode))
     ),
 
     // Will you send a sample of the goods to HMRC?

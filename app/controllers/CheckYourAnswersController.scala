@@ -94,7 +94,7 @@ class CheckYourAnswersController @Inject()(
         Seq(
           checkYourAnswersHelper.enterContactDetailsName,
           checkYourAnswersHelper.enterContactDetailsEmail,
-          checkYourAnswersHelper.enterContactDetailsPhone,
+          checkYourAnswersHelper.enterContactDetailsPhone
         ).flatten
       )
     )
