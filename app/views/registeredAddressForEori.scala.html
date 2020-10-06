@@ -36,14 +36,8 @@
             @components.heading(messages("registeredAddressForEori.heading", form("eori").value.get),
                 captionMsg=Some(messages("registeredAddressForEori.caption")))
 
-            <p class="notice">
-                <i class="icon icon-important">
-                    <span class="visually-hidden">Warning</span>
-                </i>
-                <strong class="bold-small">
-                    @messages("registeredAddressForEori.note")
-                </strong>
-            </p>
+            @components.warning_text(messages("registeredAddressForEori.note"))
+
             @components.input_hidden(field = form("eori"))
         } else {
             @components.heading(messages("registeredAddressForEori.headingNoEORI"))
