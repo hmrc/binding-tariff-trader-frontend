@@ -187,10 +187,13 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     <dt class="cya-question">@messages("whenToSendSample.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@pdf.sendingSample</dd>
                 </div>
+
+                @if(pdf.hazardousSample.isDefined){
                 <div>
                     <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@pdf.hazardousSample.get</dd>
                 </div>
+                }
                 <div>
                     <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@pdf.returnSample</dd>

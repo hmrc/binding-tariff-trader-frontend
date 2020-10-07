@@ -48,6 +48,5 @@ object PdfViewModel{
     sendingSample = c.application.sampleToBeProvided,
     hazardousSample = c.application.sampleIsHazardous,
     returnSample = c.application.sampleToBeReturned
-
   )
 }
