@@ -38,6 +38,8 @@ import views.html.check_your_answers
 
 import scala.concurrent.Future.{failed, successful}
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
   private lazy val error = new IllegalStateException("expected error")

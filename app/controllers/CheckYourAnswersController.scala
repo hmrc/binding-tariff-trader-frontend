@@ -23,7 +23,7 @@ import connectors.DataCacheConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import mapper.CaseRequestMapper
 import models._
-import models.requests.OptionalDataRequest
+import models.requests.DataRequest
 import models.WhichBestDescribesYou.theUserIsAnAgent
 import navigation.Navigator
 import pages.{CheckYourAnswersPage, ConfirmationPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
@@ -36,8 +36,7 @@ import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.check_your_answers
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.successful
 
 class CheckYourAnswersController @Inject()(
@@ -53,7 +52,7 @@ class CheckYourAnswersController @Inject()(
                                             fileService: FileService,
                                             mapper: CaseRequestMapper,
                                             cc: MessagesControllerComponents
-                                          ) extends FrontendController(cc) with I18nSupport {
+                                          ) (implicit ec: ExecutionContext)extends FrontendController(cc) with I18nSupport {
 
   private implicit val lang: Lang = appConfig.defaultLang
 
@@ -102,9 +101,9 @@ class CheckYourAnswersController @Inject()(
     Ok(check_your_answers(appConfig, sections))
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>
 
-    val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
+    val answers = request.userAnswers
     val newCaseRequest = mapper.map(answers)
 
     val attachments: Seq[FileAttachment] = answers
