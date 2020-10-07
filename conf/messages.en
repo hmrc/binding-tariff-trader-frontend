@@ -424,6 +424,7 @@ view.application.goods.details = Goods details
 view.application.sending.sample.paragraph1 = You must label your sample with the application reference number
 view.application.sending.sample.paragraph2 = if you consider a sample to be hazardous, it is important your email tariff.classification@hmrc.gov.uk before you send them. We may not accept the sample for heal and safety reason.
 view.application.paragraph.whatNext0 = We will give you your ruling within 120 days. You can sign in to Advance Tariff Rulings check the status of your application.
+view.application.paragraph.do.not.send.sample = Do not send a sample unless one has been requested by the Tariff Classification Team.
 
 confirmation.yourRefNumber = Your application reference
 confirmation.paragraph.confirmationEmail = We have sent your confirmation email to {0}

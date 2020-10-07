@@ -59,7 +59,6 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
     <h2 class="heading-large">@messages("confirmation.heading2.whatNext")</h2>
 
     <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
-    <a id="confirmation-pdf-link" target="_blank" href="@routes.ApplicationController.applicationPdf(confirmation.reference, Some(pdfToken))">@messages("confirmation.download.link.PDF")</a>
 
     <p class="break-word">
         @if(confirmation.sendingSamples){

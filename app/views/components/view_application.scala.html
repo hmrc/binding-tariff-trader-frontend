@@ -129,7 +129,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                                     <div class="bold mb-2">@pdf.reference</div>
                                 </div>
                                 <div class="decision-service-version">
-                                    <div class="mb-2">@messages("view.application.sending.sample.paragraph2")</div>
+                                    <div class="mb-2">@messages("confirmation.paragraph0.sendingSamples")</div>
                                 </div>
                                 <div>
                                     <dl>
@@ -149,8 +149,9 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                             </div>
                         </div>
                     </div>
+                    }
                 </div>
-                }
+
                 <div class="footer-info footer-page-break">
                    <span class="footer-page-no"></span>
                    <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
