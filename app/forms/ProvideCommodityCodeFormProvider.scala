@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
+import javax.inject.Inject
 
-case object CommodityCodeDigitsPage extends QuestionPage[String] {
-  def route(mode: Mode): Call =
-    routes.CommodityCodeDigitsController.onPageLoad(mode)
-  override def toString: String =
-    "commodityCodeDigits"
+import forms.mappings.Mappings
+import play.api.data.Form
+
+class ProvideCommodityCodeFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[String] =
+    Form(
+      "value" -> text("provideCommodityCode.error.required")
+        .verifying(maxLength(100, "provideCommodityCode.error.length"))
+    )
+
 }

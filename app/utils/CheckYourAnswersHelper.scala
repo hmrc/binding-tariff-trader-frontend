@@ -78,8 +78,8 @@ class CheckYourAnswersHelper(
     x => AnswerRow("areYouSendingSamples.checkYourAnswersLabel", yesNoAnswer(x), true, routes.AreYouSendingSamplesController.onPageLoad(CheckMode).url)
   }
 
-  def commodityCodeDigits: Option[AnswerRow] = userAnswers.get(CommodityCodeDigitsPage) map {
-    x => AnswerRow("commodityCodeDigits.checkYourAnswersLabel", s"$x", false, routes.CommodityCodeDigitsController.onPageLoad(CheckMode).url)
+  def provideCommodityCode: Option[AnswerRow] = userAnswers.get(ProvideCommodityCodePage) map {
+    x => AnswerRow("provideCommodityCode.checkYourAnswersLabel", s"$x", false, routes.ProvideCommodityCodeController.onPageLoad(CheckMode).url)
   }
 
   def commodityCodeBestMatch: Option[AnswerRow] = userAnswers.get(CommodityCodeBestMatchPage) map {

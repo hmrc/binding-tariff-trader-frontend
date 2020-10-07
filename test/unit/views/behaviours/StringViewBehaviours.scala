@@ -44,7 +44,8 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
                            messageKeyPrefix: String,
                            expectedFormAction: String,
                            expectedHintKey: Option[String] = None,
-                           forElement: String = "value"): Unit = {
+                           expectedFormElementId: String = "value",
+                           messageArgs: Seq[String] = Seq.empty): Unit = {
 
     "behave like a page with a string value field" when {
 
@@ -54,19 +55,19 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
           val doc = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
 
-          assertContainsLabel(doc, forElement,  getExpectedLabel(messageKeyPrefix), expectedHintText)
+          assertContainsLabel(doc, expectedFormElementId,  getExpectedLabel(messageKeyPrefix, messageArgs: _*), expectedHintText)
         }
 
         "contain an input for the value" in {
           val doc = asDocument(createView(form))
-          assertRenderedById(doc, forElement)
+          assertRenderedById(doc, expectedFormElementId)
         }
       }
 
       "rendered with a valid form" must {
         "include the form's value in the value input" in {
           val doc = asDocument(createView(form.fill(answer)))
-          val input = doc.getElementById(forElement)
+          val input = doc.getElementById(expectedFormElementId)
           if(input.tagName() == "textarea")
             input.html() shouldBe answer
           else
@@ -77,18 +78,18 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
       "rendered with an error" must {
 
         "show an error summary" in {
-          val doc = asDocument(createView(form.withError(error(forElement))))
+          val doc = asDocument(createView(form.withError(error(expectedFormElementId))))
           assertRenderedById(doc, "error-summary-heading")
         }
 
         "show an error in the value field's label" in {
-          val doc = asDocument(createView(form.withError(error(forElement))))
+          val doc = asDocument(createView(form.withError(error(expectedFormElementId))))
           val errorSpan = doc.getElementsByClass("error-message").first
           errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
         }
 
         "show an error prefix in the browser title" in {
-          val doc = asDocument(createView(form.withError(error(forElement))))
+          val doc = asDocument(createView(form.withError(error(expectedFormElementId))))
           assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title")}""")
         }
       }
@@ -99,8 +100,8 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
                              messageKeyPrefix: String,
                              expectedFormAction: String,
                              expectedFormElementId: String = "value",
-                             messageArgs: Seq[String] = Nil,
-                             expectedHintKey: Option[String] = None): Unit = {
+                             expectedHintKey: Option[String] = None,
+                             messageArgs: Seq[String] = Nil): Unit = {
 
     "behave like a page with a string value field" when {
 

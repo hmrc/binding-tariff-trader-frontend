@@ -70,7 +70,7 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.supportingMaterialFileListChoice,
           checkYourAnswersHelper.supportingMaterialFileList,
           checkYourAnswersHelper.commodityCodeBestMatch,
-          checkYourAnswersHelper.commodityCodeDigits,
+          checkYourAnswersHelper.provideCommodityCode,
           checkYourAnswersHelper.areYouSendingSamples,
           checkYourAnswersHelper.isSampleHazardous,
           checkYourAnswersHelper.returnSamples,

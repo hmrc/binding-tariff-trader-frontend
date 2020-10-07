@@ -34,7 +34,7 @@ class CaseRequestMapper {
     val provideBTIReference: Option[BTIReference] = answers.get(ProvideBTIReferencePage)
     val commodityCodeRulingReference: Option[String] = answers.get(CommodityCodeRulingReferencePage)
     val legalChallengeDetails: Option[String] = answers.get(LegalChallengeDetailsPage)
-    val commodityCodeDigits: Option[String] = answers.get(CommodityCodeDigitsPage)
+    val provideCommodityCode: Option[String] = answers.get(ProvideCommodityCodePage)
 
     val sampleProvided: Boolean = answers.get(AreYouSendingSamplesPage).getOrElse(throwError("when to send a sample"))
     val sampleHazardous: Option[Boolean] = answers.get(IsSampleHazardousPage)
@@ -57,7 +57,7 @@ class CaseRequestMapper {
       reissuedBTIReference = provideBTIReference.map(_.reference),
       relatedBTIReference = commodityCodeRulingReference,
       knownLegalProceedings = legalChallengeDetails,
-      envisagedCommodityCode = commodityCodeDigits,
+      envisagedCommodityCode = provideCommodityCode,
       sampleToBeProvided = sampleProvided,
       sampleIsHazardous = sampleHazardous,
       sampleToBeReturned = returnSample

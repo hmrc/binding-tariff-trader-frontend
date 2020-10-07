@@ -145,13 +145,13 @@ class NavigatorSpec extends SpecBase {
           routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)
       }
 
-      "redirect to CommodityCodeDigitsPage page when user selects YES from CommodityCodeBestMatchPage page" in {
+      "redirect to ProvideCommodityCodePage page when user selects YES from CommodityCodeBestMatchPage page" in {
         val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(CommodityCodeBestMatchPage)).thenReturn(Some(true))
 
         navigator.nextPage(CommodityCodeBestMatchPage, NormalMode)(mockUserAnswers) shouldBe
-          routes.CommodityCodeDigitsController.onPageLoad(NormalMode)
+          routes.ProvideCommodityCodeController.onPageLoad(NormalMode)
       }
 
       "redirect to LegalChallengePage page when user selects NO from CommodityCodeBestMatchPage page" in {
@@ -163,10 +163,10 @@ class NavigatorSpec extends SpecBase {
           routes.LegalChallengeController.onPageLoad(NormalMode)
       }
 
-      "redirect to LegalChallengePage page from CommodityCodeDigitsPage page" in {
+      "redirect to LegalChallengePage page from ProvideCommodityCodePage page" in {
         val mockUserAnswers = mock[UserAnswers]
 
-        navigator.nextPage(CommodityCodeDigitsPage, NormalMode)(mockUserAnswers) shouldBe
+        navigator.nextPage(ProvideCommodityCodePage, NormalMode)(mockUserAnswers) shouldBe
           routes.LegalChallengeController.onPageLoad(NormalMode)
       }
 
@@ -347,13 +347,13 @@ class NavigatorSpec extends SpecBase {
           routes.CheckYourAnswersController.onPageLoad()
       }
       
-      "go to CommodityCodeDigitsPage when yes is selected in CommodityCodeBestMatchPage" in {
+      "go to ProvideCommodityCodePage when yes is selected in CommodityCodeBestMatchPage" in {
         val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(CommodityCodeBestMatchPage)).thenReturn(Some(true))
 
         navigator.nextPage(CommodityCodeBestMatchPage, CheckMode)(mockUserAnswers) shouldBe
-          routes.CommodityCodeDigitsController.onPageLoad(CheckMode)
+          routes.ProvideCommodityCodeController.onPageLoad(CheckMode)
       }
 
       "go back to CheckYourAnswersPage when no is selected in CommodityCodeBestMatchPage" in {

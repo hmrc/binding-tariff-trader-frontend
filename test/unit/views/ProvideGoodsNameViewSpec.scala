@@ -46,6 +46,11 @@ class ProvideGoodsNameViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.ProvideGoodsNameController.onSubmit(NormalMode).url, forElement = "goodsName")
+    behave like stringPage(
+      createView = createViewUsingForm,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.ProvideGoodsNameController.onSubmit(NormalMode).url,
+      expectedFormElementId = "goodsName"
+    )
   }
 }

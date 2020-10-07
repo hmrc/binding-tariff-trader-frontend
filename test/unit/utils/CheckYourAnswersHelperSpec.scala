@@ -80,9 +80,9 @@ class CheckYourAnswersHelperSpec extends SpecBase {
 
     "rendering information pages" must {
 
-      "return a row with the correct answer for CommodityCodeDigitsPage" in {
-        given(userAnswers.get(CommodityCodeDigitsPage)).willReturn(Option("12131233241324"))
-        checkHelper.commodityCodeDigits.get.answer shouldBe "12131233241324"
+      "return a row with the correct answer for ProvideCommodityCodePage" in {
+        given(userAnswers.get(ProvideCommodityCodePage)).willReturn(Option("12131233241324"))
+        checkHelper.provideCommodityCode.get.answer shouldBe "12131233241324"
       }
 
       "return a row with the correct answer for UploadWrittenAuthorisationPage" in {

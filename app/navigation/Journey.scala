@@ -28,7 +28,7 @@ object Journey {
     YesNoJourney(AreYouSendingSamplesPage, List(IsSampleHazardousPage, ReturnSamplesPage))
 
   val commodityCode =
-    YesNoJourney(CommodityCodeBestMatchPage, List(CommodityCodeDigitsPage))
+    YesNoJourney(CommodityCodeBestMatchPage, List(ProvideCommodityCodePage))
 
   val legalProblems =
     YesNoJourney(LegalChallengePage, List(LegalChallengeDetailsPage))

@@ -23,25 +23,25 @@
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("commodityCodeDigits.title", goodsName)}",
+    title = s"${errorPrefix(form)} ${messages("provideCommodityCode.title", goodsName)}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = CommodityCodeDigitsController.onSubmit(mode)) {
+    @helpers.form(action = ProvideCommodityCodeController.onSubmit(mode)) {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("commodityCodeDigits.heading", goodsName),
-            captionMsg = Some(messages("commodityCodeDigits.caption")))
+        @components.heading(messages("provideCommodityCode.heading", goodsName),
+            captionMsg = Some(messages("provideCommodityCode.caption")))
 
-        <p>@messages("commodityCodeDigits.bodyText")</p>
+        <p>@messages("provideCommodityCode.bodyText")</p>
 
         @components.input_text(
             field = form("value"),
             labelClass = Some("visually-hidden"),
-            label = Some(messages("commodityCodeDigits.heading", goodsName))
+            label = Some(messages("provideCommodityCode.heading", goodsName))
         )
 
         @components.submit_button(Some(messages("site.save_and_continue")))

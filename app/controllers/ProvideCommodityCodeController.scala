@@ -19,34 +19,34 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import forms.CommodityCodeDigitsFormProvider
+import forms.ProvideCommodityCodeFormProvider
 import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.{ CommodityCodeDigitsPage, ProvideGoodsNamePage }
+import pages.{ ProvideCommodityCodePage, ProvideGoodsNamePage }
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import play.twirl.api.HtmlFormat
-import views.html.commodityCodeDigits
+import views.html.provideCommodityCode
 
 import scala.concurrent.ExecutionContext
 
-class CommodityCodeDigitsController @Inject()(
+class ProvideCommodityCodeController @Inject()(
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
   val requireData: DataRequiredAction,
-  formProvider: CommodityCodeDigitsFormProvider,
+  formProvider: ProvideCommodityCodeFormProvider,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
   lazy val form = formProvider()
-  val questionPage = CommodityCodeDigitsPage
+  val questionPage = ProvideCommodityCodePage
 
   def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    commodityCodeDigits(appConfig, preparedForm, mode, goodsName)
+    provideCommodityCode(appConfig, preparedForm, mode, goodsName)
   }
 }

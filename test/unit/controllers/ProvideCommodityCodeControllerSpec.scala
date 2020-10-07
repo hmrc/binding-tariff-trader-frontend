@@ -20,25 +20,25 @@ import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.AnswerCachingControllerBehaviours
 import navigation.FakeNavigator
-import forms.CommodityCodeDigitsFormProvider
+import forms.ProvideCommodityCodeFormProvider
 import models.NormalMode
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
 import play.api.mvc.{ Call, Request }
-import views.html.commodityCodeDigits
+import views.html.provideCommodityCode
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class CommodityCodeDigitsControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
+class ProvideCommodityCodeControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
 
   private def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new CommodityCodeDigitsFormProvider()
+  val formProvider = new ProvideCommodityCodeFormProvider()
   val goodsName = "some goods"
 
   def controller(dataRetrievalAction: DataRetrievalAction) =
-    new CommodityCodeDigitsController(
+    new ProvideCommodityCodeController(
       frontendAppConfig,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
@@ -50,14 +50,14 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase with AnswerCa
     )
 
   def viewAsString(form: Form[_], request: Request[_]): String =
-    commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
+    provideCommodityCode(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
   val testAnswer = "answer"
   val validFormData = Map("value" -> testAnswer)
   val invalidFormData = Map("value" -> "")
   val backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
 
-  "CommodityCodeDigitsController" must {
+  "ProvideCommodityCodeController" must {
     behave like answerCachingController(
       controller,
       onwardRoute,

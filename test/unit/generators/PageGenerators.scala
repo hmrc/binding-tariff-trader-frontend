@@ -42,8 +42,8 @@ trait PageGenerators {
   implicit lazy val arbitraryAreYouSendingSamplesPage: Arbitrary[AreYouSendingSamplesPage.type] =
     Arbitrary(AreYouSendingSamplesPage)
 
-  implicit lazy val arbitraryCommodityCodeDigitsPage: Arbitrary[CommodityCodeDigitsPage.type] =
-    Arbitrary(CommodityCodeDigitsPage)
+  implicit lazy val arbitraryProvideCommodityCodePage: Arbitrary[ProvideCommodityCodePage.type] =
+    Arbitrary(ProvideCommodityCodePage)
 
   implicit lazy val arbitraryCommodityCodeBestMatchPage: Arbitrary[CommodityCodeBestMatchPage.type] =
     Arbitrary(CommodityCodeBestMatchPage)

@@ -19,14 +19,14 @@ package pages
 import pages.behaviours.PageBehaviours
 
 
-class CommodityCodeDigitsPageSpec extends PageBehaviours {
+class ProvideCommodityCodePageSpec extends PageBehaviours {
 
-  "CommodityCodeDigitsPage" must {
+  "ProvideCommodityCodePage" must {
 
-    beRetrievable[String](CommodityCodeDigitsPage)
+    beRetrievable[String](ProvideCommodityCodePage)
 
-    beSettable[String](CommodityCodeDigitsPage)
+    beSettable[String](ProvideCommodityCodePage)
 
-    beRemovable[String](CommodityCodeDigitsPage)
+    beRemovable[String](ProvideCommodityCodePage)
   }
 }

@@ -33,7 +33,7 @@ trait CacheMapGenerator {
     arbitrary[(SimilarItemCommodityCodePage.type, JsValue)] ::
     arbitrary[(ReturnSamplesPage.type, JsValue)] ::
     arbitrary[(AreYouSendingSamplesPage.type, JsValue)] ::
-    arbitrary[(CommodityCodeDigitsPage.type, JsValue)] ::
+    arbitrary[(ProvideCommodityCodePage.type, JsValue)] ::
     arbitrary[(CommodityCodeBestMatchPage.type, JsValue)] ::
     arbitrary[(UploadSupportingMaterialMultiplePage.type, JsValue)] ::
     arbitrary[(ProvideBTIReferencePage.type, JsValue)] ::
