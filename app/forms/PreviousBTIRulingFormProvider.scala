@@ -21,11 +21,11 @@ import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class SelectApplicationTypeFormProvider @Inject() extends Mappings {
+class PreviousBTIRulingFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("selectApplicationType.error.required")
+      "value" -> boolean("previousBTIRuling.error.required")
     )
 
 }

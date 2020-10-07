@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import forms.SelectApplicationTypeFormProvider
+import forms.PreviousBTIRulingFormProvider
 import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
@@ -27,20 +27,20 @@ import navigation.Navigator
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
-import views.html.selectApplicationType
+import views.html.previousBTIRuling
 
 import scala.concurrent.ExecutionContext
 import play.twirl.api.HtmlFormat
 import navigation.Journey
 
-class SelectApplicationTypeController @Inject()(
+class PreviousBTIRulingController @Inject()(
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
   val requireData: DataRequiredAction,
-  formProvider: SelectApplicationTypeFormProvider,
+  formProvider: PreviousBTIRulingFormProvider,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
   lazy val form = formProvider()
@@ -48,6 +48,6 @@ class SelectApplicationTypeController @Inject()(
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    selectApplicationType(appConfig, preparedForm, goodsName, mode)
+    previousBTIRuling(appConfig, preparedForm, goodsName, mode)
   }
 }

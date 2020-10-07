@@ -19,14 +19,14 @@ package forms
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class SelectApplicationTypeFormProviderSpec extends BooleanFieldBehaviours {
+class PreviousBTIRulingFormProviderSpec extends BooleanFieldBehaviours {
 
-  val form = new SelectApplicationTypeFormProvider()()
+  val form = new PreviousBTIRulingFormProvider()()
 
   ".value" must {
 
     val fieldName = "value"
-    val requiredKey = "selectApplicationType.error.required"
+    val requiredKey = "previousBTIRuling.error.required"
     val invalidKey = "error.boolean"
 
     behave like booleanField(

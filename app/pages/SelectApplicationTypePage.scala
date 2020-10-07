@@ -20,9 +20,9 @@ import controllers.routes
 import models.Mode
 import play.api.mvc.Call
 
-case object SelectApplicationTypePage extends QuestionPage[Boolean] {
+case object PreviousBTIRulingPage extends QuestionPage[Boolean] {
   def route(mode: Mode): Call =
-    routes.SelectApplicationTypeController.onPageLoad(mode)
+    routes.PreviousBTIRulingController.onPageLoad(mode)
   override def toString: String =
-    "selectApplicationType"
+    "previousBTIRuling"
 }

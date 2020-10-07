@@ -19,24 +19,24 @@ package controllers
 import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.YesNoCachingControllerBehaviours
-import forms.SelectApplicationTypeFormProvider
+import forms.PreviousBTIRulingFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
 import play.api.data.Form
 import play.api.libs.json.JsString
 import play.api.mvc.{ Call, Request }
-import views.html.selectApplicationType
+import views.html.previousBTIRuling
 import pages.ProvideGoodsNamePage
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SelectApplicationTypeControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
+class PreviousBTIRulingControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
-  private val formProvider = new SelectApplicationTypeFormProvider()
+  private val formProvider = new PreviousBTIRulingFormProvider()
   private val goodsName = "some-goods-name"
 
-  private def controller(dataRetrievalAction: DataRetrievalAction): SelectApplicationTypeController = {
-    new SelectApplicationTypeController(
+  private def controller(dataRetrievalAction: DataRetrievalAction): PreviousBTIRulingController = {
+    new PreviousBTIRulingController(
       frontendAppConfig,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
@@ -51,11 +51,11 @@ class SelectApplicationTypeControllerSpec extends ControllerSpecBase with YesNoC
   private def onwardRoute = Call("GET", "/foo")
 
   private def viewAsString(form: Form[_], request: Request[_]): String =
-    selectApplicationType(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
+    previousBTIRuling(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
   val backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
 
-  "SelectApplicationTypeController" must {
+  "PreviousBTIRulingController" must {
     behave like yesNoCachingController(
       controller,
       onwardRoute,

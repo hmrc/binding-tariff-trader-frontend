@@ -132,8 +132,8 @@ class CheckYourAnswersHelper(
         routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
   }
 
-  def selectApplicationType: Option[AnswerRow] = userAnswers.get(SelectApplicationTypePage) map {
-    x => AnswerRow("selectApplicationType.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SelectApplicationTypeController.onPageLoad(CheckMode).url)
+  def previousBTIRuling: Option[AnswerRow] = userAnswers.get(PreviousBTIRulingPage) map { x =>
+    AnswerRow("previousBTIRuling.checkYourAnswersLabel", yesNoAnswer(x), true, routes.PreviousBTIRulingController.onPageLoad(CheckMode).url)
   }
 
   def whichBestDescribesYou: Option[AnswerRow] = None
