@@ -57,7 +57,7 @@ session_expired.title = For your security, we deleted your answers
 session_expired.heading = For your security, we deleted your answers
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
 
-site.start = Start application
+site.start = Start new application
 site.back = Back
 site.delete = Remove
 site.edit = Change
@@ -525,7 +525,7 @@ case.tabs.applications = Applications
 case.tabs.applications.notSubmitted = Submitted applications will appear here
 
 case.tabs.applications.table.reference = Reference
-case.tabs.applications.table.itemName = Item name
+case.tabs.applications.table.itemName = Name of goods
 case.tabs.applications.table.dateSubmitted = Date submitted
 case.tabs.applications.table.status = Status
 case.tabs.applications.table.download =

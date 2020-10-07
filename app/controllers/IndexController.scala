@@ -29,10 +29,9 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.CaseDetailTab
 import views.html.components.{table_applications, table_rulings}
 import views.html.{account_dashboard_statuses, index}
-import views.html.components.{ table_applications, table_rulings }
-import views.html.index
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.Future.successful
+import scala.concurrent.{ExecutionContext, Future}
 
 class IndexController @Inject()(
   val appConfig: FrontendAppConfig,
