@@ -21,58 +21,44 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisteredAddressForEoriFormProvider
 import javax.inject.Inject
-import models.{Mode, RegisteredAddressForEori, UserAnswers}
+import models.{ Mode, RegisteredAddressForEori }
+import models.requests.DataRequest
 import navigation.Navigator
-import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
+import pages.RegisteredAddressForEoriPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.twirl.api.HtmlFormat
 import service.CountriesService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.registeredAddressForEori
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
-                                                   dataCacheConnector: DataCacheConnector,
-                                                   navigator: Navigator,
-                                                   identify: IdentifierAction,
-                                                   getData: DataRetrievalAction,
-                                                   formProvider: RegisteredAddressForEoriFormProvider,
-                                                   countriesService: CountriesService,
-                                                   cc: MessagesControllerComponents
-                                                  ) extends FrontendController(cc) with I18nSupport {
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: RegisteredAddressForEoriFormProvider,
+  countriesService: CountriesService,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends AnswerCachingController[RegisteredAddressForEori](cc) with I18nSupport {
 
-  private lazy val form: Form[RegisteredAddressForEori] = formProvider()
+  lazy val form: Form[RegisteredAddressForEori] = formProvider()
+  val questionPage = RegisteredAddressForEoriPage
 
+  def renderView(preparedForm: Form[RegisteredAddressForEori], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
+    registeredAddressForEori(appConfig, preparedForm, mode, countriesService.getAllCountries)
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
-
-    val preparedForm = request.userAnswers.flatMap(_.get(RegisteredAddressForEoriPage)) match {
-      case Some(value) if request.userEoriNumber.isDefined => form.fill(value.copy(eori = request.userEoriNumber.get))
-      case None if request.userEoriNumber.isDefined => form.fill(RegisteredAddressForEori(request.userEoriNumber.get))
-      case Some(value) => form.fill(value)
+  override def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = (request.userAnswers.get(RegisteredAddressForEoriPage), request.eoriNumber) match {
+      case (Some(value), Some(eoriNumber)) => form.fill(value.copy(eori = eoriNumber))
+      case (None,        Some(eoriNumber)) => form.fill(RegisteredAddressForEori(eoriNumber))
+      case (Some(value), _               ) => form.fill(value)
       case _ => form
     }
 
-    Ok(registeredAddressForEori(appConfig, preparedForm, mode, countriesService.getAllCountries))
+    Ok(renderView(preparedForm, mode))
   }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
-
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(
-          BadRequest(registeredAddressForEori(appConfig, formWithErrors, mode, countriesService.getAllCountries))),
-      value => {
-        val updatedAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId)).set(RegisteredAddressForEoriPage, value)
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(RegisteredAddressForEoriPage, mode)(updatedAnswers))
-        )
-      }
-    )
-  }
-
 }

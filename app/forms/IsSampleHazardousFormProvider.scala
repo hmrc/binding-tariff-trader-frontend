@@ -16,30 +16,14 @@
 
 package forms
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class SupportingInformationFormProviderSpec extends BooleanFieldBehaviours {
+class IsSampleHazardousFormProvider @Inject() extends Mappings {
 
-  val form = new SupportingInformationFormProvider()()
-
-  val requiredKey = "supportingInformation.error.required"
-  val invalidKey = "error.boolean"
-
-  ".value" must {
-
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+  def apply(): Form[Boolean] =
+    Form(
+      "isSampleHazardous" -> boolean("isSampleHazardous.error.required")
     )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
 }

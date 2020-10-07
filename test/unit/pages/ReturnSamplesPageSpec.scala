@@ -16,17 +16,16 @@
 
 package pages
 
-import models.ReturnSamples
 import pages.behaviours.PageBehaviours
 
 class ReturnSamplesPageSpec extends PageBehaviours {
 
-  "YourLocation" must {
+  "ReturnSamplesPage" must {
 
-    beRetrievable[ReturnSamples](ReturnSamplesPage)
+    beRetrievable[Boolean](ReturnSamplesPage)
 
-    beSettable[ReturnSamples](ReturnSamplesPage)
+    beSettable[Boolean](ReturnSamplesPage)
 
-    beRemovable[ReturnSamples](ReturnSamplesPage)
+    beRemovable[Boolean](ReturnSamplesPage)
   }
 }

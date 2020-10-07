@@ -22,50 +22,32 @@ import controllers.actions._
 import forms.CommodityCodeBestMatchFormProvider
 import javax.inject.Inject
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import play.api.mvc.MessagesControllerComponents
+import play.twirl.api.HtmlFormat
 import views.html.commodityCodeBestMatch
 
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
+import navigation.Journey
 
 class CommodityCodeBestMatchController @Inject()(
-                                                  appConfig: FrontendAppConfig,
-                                                  override val dataCacheConnector: DataCacheConnector,
-                                                  override val navigator: Navigator,
-                                                  identify: IdentifierAction,
-                                                  getData: DataRetrievalAction,
-                                                  requireData: DataRequiredAction,
-                                                  formProvider: CommodityCodeBestMatchFormProvider,
-                                                  cc: MessagesControllerComponents
-                                                ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[String] {
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: CommodityCodeBestMatchFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+  lazy val form = formProvider()
+  val journey = Journey.commodityCode
 
-  private lazy val form = formProvider()
-
-  override val page: QuestionPage[Boolean] = CommodityCodeBestMatchPage
-  override val pageDetails: QuestionPage[String] = CommodityCodeDigitsPage
-  override val nextPage: Page = WhenToSendSamplePage
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.get(CommodityCodeBestMatchPage) match {
-      case Some(value) => form.fill(value)
-      case _ => form
-    }
-
-    Ok(commodityCodeBestMatch(appConfig, preparedForm, mode))
+  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+    commodityCodeBestMatch(appConfig, preparedForm, mode, goodsName)
   }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    def badRequest = { formWithErrors: Form[_] =>
-      Future.successful(BadRequest(commodityCodeBestMatch(appConfig, formWithErrors, mode)))
-    }
-
-    form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
-  }
-
 }

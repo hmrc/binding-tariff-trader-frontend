@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json._
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-case class DescribeYourItem (name: String, description: String, confidentialInformation: Option[String])
-
-object DescribeYourItem {
-  implicit val format: OFormat[DescribeYourItem] = Json.format[DescribeYourItem]
+case object BeforeYouStartPage extends Page {
+  def route(mode: Mode): Call =
+    routes.BeforeYouStartController.onPageLoad()
+  override def toString: String =
+    "beforeYouStart"
 }

@@ -19,63 +19,194 @@ package navigation
 import controllers.routes
 import javax.inject.{Inject, Singleton}
 import models._
-import pages.{AddConfidentialInformationPage, CommodityCodeRulingReferencePage, UploadWrittenAuthorisationPage, _}
+import pages._
 import play.api.mvc.Call
 
 @Singleton
 class Navigator @Inject()() {
 
-  private val routeMap: Map[Page, UserAnswers => Call] = Map(
-    RegisteredAddressForEoriPage -> (_ => routes.ProvideGoodsNameController.onPageLoad(NormalMode)),
-    WhichBestDescribesYouPage -> (_ => routes.WhichBestDescribesYouController.onPageLoad(NormalMode)),
-    SelectApplicationTypePage -> (_ => routes.SelectApplicationTypeController.onPageLoad(NormalMode)),
-    RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(NormalMode)),
-    UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(NormalMode)),
-    AcceptItemInformationPage -> (_ => routes.AcceptItemInformationListController.onPageLoad()),
-    PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(NormalMode)),
-    ProvideGoodsNamePage -> (_ => routes.ProvideGoodsDescriptionController.onPageLoad(NormalMode)),
-    ProvideGoodsDescriptionPage -> (_ => routes.AddConfidentialInformationController.onPageLoad(NormalMode)),
-    AddConfidentialInformationPage -> (answer => answer.get(AddConfidentialInformationPage) match {
-      case Some(true) => routes.ProvideConfidentialInformationController.onPageLoad(NormalMode)
-      case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
-    }),
-    ProvideConfidentialInformationPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
-    SupportingMaterialFileListPage -> (_ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)),
-    UploadSupportingMaterialMultiplePage -> (_ => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)),
-    CommodityCodeBestMatchPage -> (_ => routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)),
-    CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(NormalMode)),
-    WhenToSendSamplePage -> (_ => routes.WhenToSendSampleController.onPageLoad(NormalMode)),
-    ReturnSamplesPage -> (_ => routes.ReturnSamplesController.onPageLoad(NormalMode)),
-    SimilarItemCommodityCodePage -> (_ => routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode)),
-    CommodityCodeRulingReferencePage -> (_ => routes.CommodityCodeRulingReferenceController.onPageLoad(NormalMode)),
-    LegalChallengePage -> (_ => routes.LegalChallengeController.onPageLoad(NormalMode)),
-    LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(NormalMode)),
-    SupportingInformationPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
-    SupportingInformationDetailsPage -> (_ => routes.EnterContactDetailsController.onPageLoad(NormalMode)),
-    EnterContactDetailsPage -> (_ => routes.CheckYourAnswersController.onPageLoad()),
-    CheckYourAnswersPage -> (_ => routes.CheckYourAnswersController.onPageLoad()),
-    DeclarationPage -> (_ => routes.DeclarationController.onPageLoad(NormalMode)),
-    ConfirmationPage -> (_ => routes.ConfirmationController.onPageLoad())
-  )
+  private def normalPage(
+    page: Page,
+    continuingTo: Page,
+    mode: Mode
+  ): Map[Page, UserAnswers => Call] =
+    Map(page -> ((_: UserAnswers) => continuingTo.route(mode)))
 
-  private val checkRouteMap: Map[Page, UserAnswers => Call] = Map(
-    AddConfidentialInformationPage -> (answer => answer.get(AddConfidentialInformationPage) match {
-      case Some(true) => routes.ProvideConfidentialInformationController.onPageLoad(CheckMode)
-      case _ => routes.CheckYourAnswersController.onPageLoad()
-    }),
-    LegalChallengeDetailsPage -> (_ => routes.LegalChallengeDetailsController.onPageLoad(CheckMode)),
-    CommodityCodeRulingReferencePage -> (_ => routes.CommodityCodeRulingReferenceController.onPageLoad(CheckMode)),
-    CommodityCodeDigitsPage -> (_ => routes.CommodityCodeDigitsController.onPageLoad(CheckMode)),
-    ReturnSamplesPage -> (_ => routes.ReturnSamplesController.onPageLoad(CheckMode)),
-    SupportingInformationDetailsPage -> (_ => routes.SupportingInformationDetailsController.onPageLoad(CheckMode)),
-    PreviousCommodityCodePage -> (_ => routes.PreviousCommodityCodeController.onPageLoad(CheckMode)),
-    RegisterBusinessRepresentingPage -> (_ => routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode)),
-    UploadWrittenAuthorisationPage -> (_ => routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode))
-  )
+  private def sequentialJourney(
+    pages: List[Page],
+    continuingTo: Page,
+    mode: Mode
+  ): Map[Page, UserAnswers => Call] = pages match {
+    case Nil =>
+      Map.empty[Page, UserAnswers => Call]
+    case _ =>
+      val journey = pages.sliding(2).flatMap {
+        case from :: to :: Nil =>
+          normalPage(from, to, mode)
+        case _ =>
+          Map.empty[Page, UserAnswers => Call]
+      }.toMap
+
+      journey ++ normalPage(pages.last, continuingTo, mode)
+  }
+
+  private def yesNoJourney(
+    journey: YesNoJourney,
+    continuingTo: Page,
+    mode: Mode
+  ): Map[Page, UserAnswers => Call] = journey.detailPages match {
+    case Nil =>
+      normalPage(journey.questionPage, continuingTo, mode)
+
+    case detailPages =>
+      val questionPageRoute = journey.questionPage -> { (answer: UserAnswers) =>
+        answer.get(journey.questionPage) match {
+          case Some(true) => detailPages.head.route(mode)
+          case Some(false) => continuingTo.route(mode)
+          case _ => journey.questionPage.route(mode)
+        }
+      }
+
+      val detailPageRoutes = sequentialJourney(detailPages, continuingTo, mode)
+
+      detailPageRoutes + questionPageRoute
+  }
+
+  private val routeMap: Map[Page, UserAnswers => Call] = List(
+    // Information you need to complete an application
+    normalPage(IndexPage, BeforeYouStartPage, NormalMode),
+
+    // About the goods
+    normalPage(ProvideGoodsNamePage, ProvideGoodsDescriptionPage, NormalMode),
+    normalPage(ProvideGoodsDescriptionPage, AddConfidentialInformationPage, NormalMode),
+
+    // Do you want to add any confidential information about the goods?
+    yesNoJourney(
+      journey = Journey.confidentialInformation,
+      continuingTo = SupportingMaterialFileListPage,
+      mode = NormalMode
+    ),
+
+    // Do you want to upload any supporting documents?
+    Map(
+      SupportingMaterialFileListPage -> { (answers: UserAnswers) =>
+        answers.get(SupportingMaterialFileListPage).flatMap(_.addAnotherDecision) match {
+          case Some(true) => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)
+          case Some(false) => routes.WhenToSendSampleController.onPageLoad(NormalMode)
+          case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
+        }
+      },
+      UploadSupportingMaterialMultiplePage -> ((_: UserAnswers) => routes.SupportingMaterialFileListController.onPageLoad(NormalMode))
+    ),
+
+    // Will you send a sample of the goods to HMRC?
+    yesNoJourney(
+      journey = Journey.samples,
+      continuingTo = CommodityCodeBestMatchPage,
+      mode = NormalMode
+    ),
+
+    // Have you found a commodity code for the goods?
+    yesNoJourney(
+      journey = Journey.commodityCode,
+      continuingTo = LegalChallengePage,
+      mode = NormalMode
+    ),
+
+    // Have there been any legal problems classifying the goods?
+    yesNoJourney(
+      journey = Journey.legalProblems,
+      continuingTo = SelectApplicationTypePage,
+      mode = NormalMode
+    ),
+
+    // Do you have a previous BTI ruling reference for the goods?
+    yesNoJourney(
+      journey = Journey.previousBTI,
+      continuingTo = SimilarItemCommodityCodePage,
+      mode = NormalMode
+    ),
+
+    // Do you know of a similar item that already has an Advance Tariff Ruling?
+    yesNoJourney(
+      journey = Journey.similarItem,
+      continuingTo = RegisteredAddressForEoriPage,
+      mode = NormalMode
+    ),
+
+    // About the applicant
+    normalPage(RegisteredAddressForEoriPage, EnterContactDetailsPage, NormalMode),
+
+    // Provide the contact details for this application
+    normalPage(EnterContactDetailsPage, CheckYourAnswersPage, NormalMode),
+
+    // Check your answers
+    normalPage(CheckYourAnswersPage, DeclarationPage, NormalMode),
+
+    // Your declaration
+    normalPage(DeclarationPage, ConfirmationPage, NormalMode)
+
+  ).foldLeft(Map.empty[Page, UserAnswers => Call])(_ ++ _)
+
+  private val checkRouteMap: Map[Page, UserAnswers => Call] = List(
+    // Do you want to add any confidential information about the goods?
+    yesNoJourney(
+      journey = Journey.confidentialInformation,
+      continuingTo = CheckYourAnswersPage,
+      mode = CheckMode
+    ),
+
+    // Do you want to upload any supporting documents?
+    Map(
+      SupportingMaterialFileListPage -> { (answers: UserAnswers) =>
+        answers.get(SupportingMaterialFileListPage).flatMap(_.addAnotherDecision) match {
+          case Some(true) => routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode)
+          case Some(false) => routes.CheckYourAnswersController.onPageLoad()
+          case _ => routes.SupportingMaterialFileListController.onPageLoad(CheckMode)
+        }
+      },
+      UploadSupportingMaterialMultiplePage -> ((_: UserAnswers) => routes.SupportingMaterialFileListController.onPageLoad(CheckMode))
+    ),
+
+    // Will you send a sample of the goods to HMRC?
+    yesNoJourney(
+      journey = Journey.samples,
+      continuingTo = CheckYourAnswersPage,
+      mode = CheckMode
+    ),
+
+    // Have you found a commodity code for the goods?
+    yesNoJourney(
+      journey = Journey.commodityCode,
+      continuingTo = CheckYourAnswersPage,
+      mode = CheckMode
+    ),
+
+    // Have there been any legal problems classifying the goods?
+    yesNoJourney(
+      journey = Journey.legalProblems,
+      continuingTo = CheckYourAnswersPage,
+      mode = CheckMode
+    ),
+
+    // Do you have a previous BTI ruling reference for the goods?
+    yesNoJourney(
+      journey = Journey.previousBTI,
+      continuingTo = CheckYourAnswersPage,
+      mode = CheckMode
+    ),
+
+    // Do you know of a similar item that already has an Advance Tariff Ruling?
+    yesNoJourney(
+      journey = Journey.similarItem,
+      continuingTo = CheckYourAnswersPage,
+      mode = CheckMode
+    )
+
+  ).foldLeft(Map.empty[Page, UserAnswers => Call])(_ ++ _)
 
   def nextPage(page: Page, mode: Mode): UserAnswers => Call = mode match {
     case NormalMode => routeMap.getOrElse(page, _ => routes.IndexController.getApplications())
     case CheckMode => checkRouteMap.getOrElse(page, _ => routes.CheckYourAnswersController.onPageLoad())
   }
-
 }

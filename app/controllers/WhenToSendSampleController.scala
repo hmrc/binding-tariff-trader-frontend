@@ -21,52 +21,33 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.WhenToSendSampleFormProvider
 import javax.inject.Inject
-import models.{Mode, ReturnSamples}
+import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import play.api.mvc.MessagesControllerComponents
+import play.twirl.api.HtmlFormat
 import views.html.whenToSendSample
 
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
+import navigation.Journey
 
 class WhenToSendSampleController @Inject()(
-                                            appConfig: FrontendAppConfig,
-                                            override val dataCacheConnector: DataCacheConnector,
-                                            override val navigator: Navigator,
-                                            identify: IdentifierAction,
-                                            getData: DataRetrievalAction,
-                                            requireData: DataRequiredAction,
-                                            formProvider: WhenToSendSampleFormProvider,
-                                            cc: MessagesControllerComponents
-                                          ) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[ReturnSamples] {
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: WhenToSendSampleFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+  lazy val form = formProvider()
+  val journey = Journey.samples
 
-  private lazy val form = formProvider()
-
-  override val page: QuestionPage[Boolean] = WhenToSendSamplePage
-  override val pageDetails: QuestionPage[ReturnSamples] = ReturnSamplesPage
-  override val nextPage: Page = SimilarItemCommodityCodePage
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    val preparedForm = request.userAnswers.get(WhenToSendSamplePage) match {
-      case Some(value) => form.fill(value)
-      case _ => form
-    }
-
-    Ok(whenToSendSample(appConfig, preparedForm, mode, goodsName))
+    whenToSendSample(appConfig, preparedForm, mode, goodsName)
   }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    def badRequest = { formWithErrors: Form[_] =>
-      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-      Future.successful(BadRequest(whenToSendSample(appConfig, formWithErrors, mode, goodsName)))
-    }
-
-    form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
-  }
-
 }

@@ -19,14 +19,9 @@ package generators
 import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+import pages.FileListAnswers
 
 trait ModelGenerators {
-
-
-  implicit lazy val arbitraryReturnSamples: Arbitrary[ReturnSamples] =
-    Arbitrary {
-      Gen.oneOf(ReturnSamples.values.toSeq)
-    }
 
   implicit lazy val arbitraryUploadSupportingMaterialMultiple: Arbitrary[Seq[FileAttachment]] =
     Arbitrary {
@@ -46,15 +41,6 @@ trait ModelGenerators {
         mimeType <- arbitrary[String]
         size <- arbitrary[Long]
       } yield FileAttachment(id, name, mimeType, size)
-    }
-
-  implicit lazy val arbitraryDescribeYourItem: Arbitrary[DescribeYourItem] =
-    Arbitrary {
-      for {
-        field1 <- arbitrary[String]
-        field2 <- arbitrary[String]
-        field3 <- arbitrary[Option[String]]
-      } yield DescribeYourItem(field1, field2, field3)
     }
 
   implicit lazy val arbitraryPreviousCommodityCode: Arbitrary[PreviousCommodityCode] =
@@ -90,9 +76,12 @@ trait ModelGenerators {
       } yield RegisterBusinessRepresenting(eoriNumber, businessName, addressLine1, town, Some(postCode), country)
     }
 
-  implicit lazy val arbitrarySelectApplicationType: Arbitrary[SelectApplicationType] =
+  implicit lazy val arbitraryFileListAnswers: Arbitrary[FileListAnswers] =
     Arbitrary {
-      Gen.oneOf(SelectApplicationType.values.toSeq)
+      for {
+        addAnotherDecision <- arbitrary[Option[Boolean]]
+        fileList <- arbitrary[Seq[FileAttachment]]
+      } yield FileListAnswers(addAnotherDecision, fileList)
     }
 
   implicit lazy val arbitraryWhichBestDescribesYou: Arbitrary[WhichBestDescribesYou] =

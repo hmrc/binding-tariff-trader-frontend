@@ -14,31 +14,40 @@
  * limitations under the License.
  */
 
-package views
+package unit.views
 
 import controllers.routes
-import forms.SupportingInformationFormProvider
+import forms.IsSampleHazardousFormProvider
 import models.NormalMode
 import play.api.data.Form
 import views.behaviours.YesNoViewBehaviours
-import views.html.supportingInformation
+import views.html.isSampleHazardous
 
-class SupportingInformationViewSpec extends YesNoViewBehaviours {
+class IsSampleHazardousViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "supportingInformation"
+  val messageKeyPrefix = "isSampleHazardous"
 
-  val form = new SupportingInformationFormProvider()()
+  val form = new IsSampleHazardousFormProvider()()
 
-  private def createView = () => supportingInformation(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def isSampleHazardousView: isSampleHazardous = injector.instanceOf[isSampleHazardous]
 
-  private def createViewUsingForm = (form: Form[_]) => supportingInformation(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val fakeGETRequest = fakeGETRequestWithCSRF
 
-  "SupportingInformation view" must {
+  def createView = () =>
+    isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+
+  def createViewUsingForm = (form: Form[_]) =>
+    isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+
+  "IsSampleHazardous view" must {
+
     behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.SupportingInformationController.onSubmit(NormalMode).url)
+    behave like yesNoPage(createViewUsingForm,
+      messageKeyPrefix,
+      routes.IsSampleHazardousController.onSubmit(NormalMode).url,
+      "isSampleHazardous")
   }
-
 }

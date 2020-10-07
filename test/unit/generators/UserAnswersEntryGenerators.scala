@@ -32,22 +32,6 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitrarySupportingInformationDetailsUserAnswersEntry: Arbitrary[(SupportingInformationDetailsPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[SupportingInformationDetailsPage.type]
-        value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitrarySupportingInformationUserAnswersEntry: Arbitrary[(SupportingInformationPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[SupportingInformationPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
   implicit lazy val arbitraryLegalChallengeDetailsUserAnswersEntry: Arbitrary[(LegalChallengeDetailsPage.type, JsValue)] =
     Arbitrary {
       for {
@@ -93,7 +77,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[ReturnSamplesPage.type]
-        value <- arbitrary[ReturnSamples].map(Json.toJson(_))
+        value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -123,27 +107,11 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryDescribeYourItemUserAnswersEntry: Arbitrary[(DescribeYourItemPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[DescribeYourItemPage.type]
-        value <- arbitrary[DescribeYourItem].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
   implicit lazy val arbitraryPreviousCommodityCodeUserAnswersEntry: Arbitrary[(PreviousCommodityCodePage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[PreviousCommodityCodePage.type]
         value <- arbitrary[PreviousCommodityCode].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitraryInformationAboutYourItemUserAnswersEntry: Arbitrary[(InformationAboutYourItemPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[InformationAboutYourItemPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -160,14 +128,6 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       for {
         page  <- arbitrary[RegisterBusinessRepresentingPage.type]
         value <- arbitrary[RegisterBusinessRepresenting].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitrarySelectApplicationTypeUserAnswersEntry: Arbitrary[(SelectApplicationTypePage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[SelectApplicationTypePage.type]
-        value <- arbitrary[SelectApplicationType].map(Json.toJson(_))
       } yield (page, value)
     }
 

@@ -18,25 +18,25 @@ package controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
+import controllers.behaviours.AnswerCachingControllerBehaviours
 import forms.PreviousCommodityCodeFormProvider
 import models.{NormalMode, PreviousCommodityCode}
 import navigation.FakeNavigator
-import pages.PreviousCommodityCodePage
 import play.api.data.Form
-import play.api.libs.json.Json
-import play.api.mvc.Call
-import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
+import play.api.mvc.{ Call, Request }
+import play.api.libs.json.JsValue
 import views.html.previousCommodityCode
 
-class PreviousCommodityCodeControllerSpec extends ControllerSpecBase {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class PreviousCommodityCodeControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
 
   private val formProvider = new PreviousCommodityCodeFormProvider()
-  private val form = formProvider()
 
-  def viewAsString(form: Form[_] = form): String = previousCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_], request: Request[_]): String =
+    previousCommodityCode(frontendAppConfig, form, NormalMode)(request, messages).toString
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  private def controller(dataRetrievalAction: DataRetrievalAction) =
     new PreviousCommodityCodeController(
       frontendAppConfig,
       FakeDataCacheConnector,
@@ -50,56 +50,19 @@ class PreviousCommodityCodeControllerSpec extends ControllerSpecBase {
 
   private def onwardRoute = Call("GET", "/foo")
 
-  "PreviousCommodityCode Controller" must {
+  val validFormData = Map("btiReference" -> "value 1")
+  val invalidFormData = Map("value" -> "invalid value")
+  val backgroundData = Map.empty[String, JsValue]
 
-    "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) shouldBe OK
-      contentAsString(result) shouldBe viewAsString()
-    }
-
-    "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(PreviousCommodityCodePage.toString -> Json.toJson(PreviousCommodityCode("value 1")))
-      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
-
-      contentAsString(result) shouldBe viewAsString(form.fill(PreviousCommodityCode("value 1")))
-    }
-
-    "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("previousCommodityCode", "value 1"))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(onwardRoute.url)
-    }
-
-    "return a Bad Request and errors when invalid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm = form.bind(Map("value" -> "invalid value"))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe BAD_REQUEST
-      contentAsString(result) shouldBe viewAsString(boundForm)
-    }
-
-    "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("previousCommodityCode", "value 1"))
-      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
+  "PreviousCommodityCodeController" must {
+    behave like answerCachingController(
+      controller,
+      onwardRoute,
+      viewAsString,
+      validFormData,
+      invalidFormData,
+      backgroundData,
+      PreviousCommodityCode("value 1")
+    )
   }
 }

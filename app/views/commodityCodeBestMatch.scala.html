@@ -20,7 +20,7 @@
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("commodityCodeBestMatch.title")}",
@@ -35,10 +35,12 @@
 
         @components.input_yes_no(
             field = form("value"),
-            labelHtml = Some(components.heading(messages("commodityCodeBestMatch.heading"))),
+            labelHtml = Some(components.heading(
+                messages("commodityCodeBestMatch.heading", goodsName),
+                captionMsg = Some(messages("commodityCodeBestMatch.caption")))),
             hint = Some(messages("commodityCodeBestMatch.bodyText"))
         )
 
-        @components.submit_button()
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }

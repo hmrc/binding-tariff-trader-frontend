@@ -50,14 +50,6 @@ class CheckYourAnswersHelper(
     x => AnswerRow("provideConfidentialInformation.checkYourAnswersLabel", s"$x", false, routes.ProvideConfidentialInformationController.onPageLoad(CheckMode).url)
   }
 
-  def supportingInformationDetails: Option[AnswerRow] = userAnswers.get(SupportingInformationDetailsPage) map {
-    x => AnswerRow("supportingInformationDetails.checkYourAnswersLabel", s"$x", false, routes.SupportingInformationDetailsController.onPageLoad(CheckMode).url)
-  }
-
-  def supportingInformation: Option[AnswerRow] = userAnswers.get(SupportingInformationPage) map {
-    x => AnswerRow("supportingInformation.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SupportingInformationController.onPageLoad(CheckMode).url)
-  }
-
   def legalChallengeDetails: Option[AnswerRow] = userAnswers.get(LegalChallengeDetailsPage) map {
     x => AnswerRow("legalChallengeDetails.checkYourAnswersLabel", s"$x", false, routes.LegalChallengeDetailsController.onPageLoad(CheckMode).url)
   }
@@ -75,7 +67,11 @@ class CheckYourAnswersHelper(
   }
 
   def returnSamples: Option[AnswerRow] = userAnswers.get(ReturnSamplesPage) map {
-    x => AnswerRow("returnSamples.checkYourAnswersLabel", s"returnSamples.$x", true, routes.ReturnSamplesController.onPageLoad(CheckMode).url)
+    x => AnswerRow("returnSamples.checkYourAnswersLabel", yesNoAnswer(x), true, routes.ReturnSamplesController.onPageLoad(CheckMode).url)
+  }
+
+  def isSampleHazardous: Option[AnswerRow] = userAnswers.get(IsSampleHazardousPage) map {
+    x => AnswerRow("isSampleHazardous.checkYourAnswersLabel", yesNoAnswer(x), true, routes.IsSampleHazardousController.onPageLoad(CheckMode).url)
   }
 
   def whenToSendSample: Option[AnswerRow] = userAnswers.get(WhenToSendSamplePage) map {
@@ -90,20 +86,34 @@ class CheckYourAnswersHelper(
     x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", yesNoAnswer(x), true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
   }
 
-  def supportingMaterialFileList: Option[AnswerRow] = {
+  def supportingMaterialFileListChoice: Option[AnswerRow] = {
+    def choiceRow(hasFiles: Boolean): AnswerRow = AnswerRow(
+      "supportingMaterialFileList.choice.checkYourAnswersLabel",
+      yesNoAnswer(hasFiles), true,
+      routes.SupportingMaterialFileListController.onClear().url
+    )
 
-    def constructRow: Seq[String] => AnswerRow = { content =>
-      AnswerRow("supportingMaterialFileList.checkYourAnswersLabel", content, false, routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url)
-    }
-
-    userAnswers.get(SupportingMaterialFileListPage) map {
-      case filenames if filenames.nonEmpty => constructRow(filenames.map(_.name))
-      case _ => constructRow(Seq("No files attached"))
+    userAnswers.get(SupportingMaterialFileListPage).map {
+      case filenames if filenames.fileAttachments.nonEmpty =>
+        choiceRow(true)
+      case _ =>
+        choiceRow(false)
     }
   }
 
-  def describeYourItem: Option[AnswerRow] = userAnswers.get(DescribeYourItemPage) map {
-    x => AnswerRow("describeYourItem.checkYourAnswersLabel", Seq(x.name, x.description, x.confidentialInformation.orNull), false, routes.DescribeYourItemController.onPageLoad(CheckMode).url)
+  def supportingMaterialFileList: Option[AnswerRow] = {
+    def filesRow(files: Seq[String]): AnswerRow = AnswerRow(
+      "supportingMaterialFileList.checkYourAnswersLabel",
+      files, false,
+      routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
+    )
+
+    userAnswers.get(SupportingMaterialFileListPage).map {
+      case filenames if filenames.fileAttachments.nonEmpty =>
+        filesRow(filenames.fileAttachments.map(_.name))
+      case _ =>
+        filesRow(Seq("No files attached"))
+    }
   }
 
   def previousCommodityCode: Option[AnswerRow] = userAnswers.get(PreviousCommodityCodePage) map {
@@ -123,7 +133,7 @@ class CheckYourAnswersHelper(
   }
 
   def selectApplicationType: Option[AnswerRow] = userAnswers.get(SelectApplicationTypePage) map {
-    x => AnswerRow("selectApplicationType.checkYourAnswersLabel", s"selectApplicationType.$x", true, routes.SelectApplicationTypeController.onPageLoad(CheckMode).url)
+    x => AnswerRow("selectApplicationType.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SelectApplicationTypeController.onPageLoad(CheckMode).url)
   }
 
   def whichBestDescribesYou: Option[AnswerRow] = None

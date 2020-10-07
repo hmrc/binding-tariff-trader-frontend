@@ -19,14 +19,14 @@ package controllers
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
-import models.FileAttachment.format
 import models.{FileAttachment, NormalMode}
+import navigation.Navigator
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import pages.{ProvideGoodsNamePage, SupportingMaterialFileListPage}
+import pages.{FileListAnswers, ProvideGoodsNamePage, SupportingMaterialFileListPage}
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.JsString
@@ -54,6 +54,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       cacheConnector,
       FakeIdentifierAction,
       dataRetrievalAction,
+      new Navigator,
       new DataRequiredActionImpl,
       formProvider,
       fileService,
@@ -103,8 +104,11 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       // Then
       status(result) shouldBe SEE_OTHER
 
-      val cache = theCacheSaved
-      cache.getEntry[Seq[FileAttachment]](SupportingMaterialFileListPage) shouldBe Some(Seq(FileAttachment("id", "file-name", "type", file.toPath.toFile.length())))
+      val captor = ArgumentCaptor.forClass(classOf[CacheMap])
+      verify(cacheConnector).save(captor.capture())
+      val cache: CacheMap = captor.getValue
+
+      cache.getEntry[FileListAnswers](SupportingMaterialFileListPage.toString) shouldBe Some(FileListAnswers(None,Seq(FileAttachment("id", "file-name", "type", file.toPath.toFile.length()))))
     }
 
     "respond with bad request if a file has wrong extension" in {
@@ -161,9 +165,4 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
   }
 
-  private def theCacheSaved: CacheMap = {
-    val captor = ArgumentCaptor.forClass(classOf[CacheMap])
-    verify(cacheConnector).save(captor.capture())
-    captor.getValue
-  }
 }

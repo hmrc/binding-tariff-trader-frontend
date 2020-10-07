@@ -21,66 +21,33 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SelectApplicationTypeFormProvider
 import javax.inject.Inject
-import models.SelectApplicationType.{NewCommodity, PreviousCommodity}
-import models._
+import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
-import pages._
+import pages.ProvideGoodsNamePage
 import play.api.data.Form
-import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import play.api.mvc.MessagesControllerComponents
 import views.html.selectApplicationType
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
+import play.twirl.api.HtmlFormat
+import navigation.Journey
 
 class SelectApplicationTypeController @Inject()(
-                                                 appConfig: FrontendAppConfig,
-                                                 dataCacheConnector: DataCacheConnector,
-                                                 navigator: Navigator,
-                                                 identify: IdentifierAction,
-                                                 getData: DataRetrievalAction,
-                                                 requireData: DataRequiredAction,
-                                                 formProvider: SelectApplicationTypeFormProvider,
-                                                 cc: MessagesControllerComponents
-                                               ) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: SelectApplicationTypeFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+  lazy val form = formProvider()
+  val journey = Journey.previousBTI
 
-  private lazy val form = formProvider()
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.get(SelectApplicationTypePage) match {
-      case Some(value) => form.fill(value)
-      case _ => form
-    }
-
-    Ok(selectApplicationType(appConfig, preparedForm, mode))
+  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+    selectApplicationType(appConfig, preparedForm, goodsName, mode)
   }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    def update(o: SelectApplicationType): UserAnswers = {
-      o match {
-        case PreviousCommodity => request.userAnswers.set(SelectApplicationTypePage, o)
-        case NewCommodity => request.userAnswers.set(SelectApplicationTypePage, o).remove(PreviousCommodityCodePage)
-      }
-    }
-
-    def nextPage: SelectApplicationType => Page = {
-      case PreviousCommodity => PreviousCommodityCodePage
-      case NewCommodity => AcceptItemInformationPage
-    }
-
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(selectApplicationType(appConfig, formWithErrors, mode))),
-      selectedOption => {
-        val updatedAnswers = update(selectedOption)
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Results.Redirect(navigator.nextPage(nextPage(selectedOption), mode)(updatedAnswers))
-        )
-      }
-    )
-  }
-
 }

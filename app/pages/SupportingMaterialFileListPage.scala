@@ -16,9 +16,25 @@
 
 package pages
 
-import models.FileAttachment
+import controllers.routes
+import models.{ FileAttachment, Mode }
+import play.api.libs.json.{Json, OFormat}
+import play.api.mvc.Call
 
-case object SupportingMaterialFileListPage extends QuestionPage[Seq[FileAttachment]] {
-
-  override def toString: String = "supportingMaterialFileListPage"
+case object SupportingMaterialFileListPage extends QuestionPage[FileListAnswers] {
+  def route(mode: Mode): Call =
+    routes.SupportingMaterialFileListController.onPageLoad(mode)
+  override def toString: String =
+    "supportingMaterialFileListPage"
 }
+
+case class FileListAnswers(addAnotherDecision: Option[Boolean],fileAttachments: Seq[FileAttachment])
+
+object FileListAnswers {
+  val empty = FileListAnswers(None, Nil)
+
+  implicit val fileListAnswersFormat: OFormat[FileListAnswers] = Json.format[FileListAnswers]
+
+}
+
+

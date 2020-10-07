@@ -33,6 +33,7 @@ case class Application
   knownLegalProceedings: Option[String],
   envisagedCommodityCode: Option[String],
   sampleToBeProvided: Boolean,
+  sampleIsHazardous: Option[Boolean],
   sampleToBeReturned: Boolean
 )
 

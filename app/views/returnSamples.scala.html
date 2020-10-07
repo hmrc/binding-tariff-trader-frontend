@@ -17,7 +17,6 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
-@import models.ReturnSamples
 @import models.Mode
 @import views.ViewUtils._
 
@@ -34,19 +33,21 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("returnSamples.heading"))
+        @components.heading(
+            headingMsg = messages("returnSamples.heading"),
+            captionMsg = Some(messages("returnSamples.caption"))
+        )
 
-        <div role="note" class="application-notice info-notice mb-4">
+        <div role="note" class="mb-4">
             <p> @messages("returnSamples.first.paragraph")</p>
         </div>
 
-        @components.input_radio(
+        @components.input_yes_no(
             field = form("value"),
-            labelHtml = Some(Html(messages("returnSamples.heading"))),
-            labelClass = Some("visually-hidden"),
-            inputs = ReturnSamples.options.toSeq
+            label = Some(messages("returnSamples.heading")),
+            labelClass = Some("visually-hidden")
         )
 
-        @components.submit_button()
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }

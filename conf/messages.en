@@ -1,3 +1,8 @@
+language.english=English
+language.cymraeg=Cymraeg
+language.change.english=Change the language to English
+language.change.cymraeg=Newid yr iaith i'r Gymraeg
+
 checkYourAnswers.title = Check your answers before sending your application - Manage your Advance Tariff Rulings - GOV.UK
 checkYourAnswers.heading = Check your answers before sending your application
 checkYourAnswers.guidance = Guidance for check your answers
@@ -118,12 +123,11 @@ whichBestDescribesYou.businessRepresentative = A different business or organisat
 whichBestDescribesYou.checkYourAnswersLabel = This application is for
 whichBestDescribesYou.error.required = Select if this application is for the business or organisation you work for or own, or a business, organisation or individual that you are representing
 
-selectApplicationType.title = Is this a new application or a renewal of a previous ruling? - Manage your Advance Tariff Rulings - GOV.UK
-selectApplicationType.heading = Is this a new application or a renewal of a previous ruling?
-selectApplicationType.newCommodity = This is a new application
-selectApplicationType.previousCommodity = This is a renewal of a previous ruling
-selectApplicationType.checkYourAnswersLabel = Is this a new application or a renewal?
-selectApplicationType.error.required = Select if this is a new application or a renewal of a previous ruling
+selectApplicationType.title = Do you have a previous BTI ruling reference for the goods? - Manage your Advance Tariff Rulings - GOV.UK
+selectApplicationType.heading = Do you have a previous BTI ruling reference for the {0}?
+selectApplicationType.checkYourAnswersLabel = Renewing a BTI?
+selectApplicationType.error.required = Select yes if you are renewing a previous BTI ruling
+selectApplicationType.caption = About other rulings
 
 registerBusinessRepresenting.title =  What are the registered details of the business, organisation or individual you’re representing? - Manage your Advance Tariff Rulings - GOV.UK
 registerBusinessRepresenting.heading = What are the registered details of the business, organisation or individual you’re representing?
@@ -150,8 +154,10 @@ registerBusinessRepresenting.error.postCode.length = Postcode must be {0} charac
 registerBusinessRepresenting.error.country.length = Country must be 60 characters or less
 registerBusinessRepresenting.error.postCode.gb = Enter a real postcode
 
-enterContactDetails.title = Contact details for this application - Manage your Advance Tariff Rulings - GOV.UK
-enterContactDetails.heading = Contact details for this application
+enterContactDetails.title = Provide the contact details for this application - Manage your Advance Tariff Rulings - GOV.UK
+enterContactDetails.heading = Provide the contact details for this application
+enterContactDetails.bodyText = These details may be used to contact you with questions relating to this application.
+enterContactDetails.caption = About the applicant
 enterContactDetails.name = Full name
 enterContactDetails.email = Email address
 enterContactDetails.phoneNumber = Telephone number (optional)
@@ -173,15 +179,13 @@ acceptItemInformationList.askfor.paragraph2 = You can let us know if you:
 acceptItemInformationList.askfor.item1 = think you have found the correct commodity code
 acceptItemInformationList.askfor.item2 = need to send samples
 
-previousCommodityCode.title = What is the reference number for the ruling you want to renew? - Manage your Advance Tariff Rulings - GOV.UK
-previousCommodityCode.heading = What is the reference number for the ruling you want to renew?
-previousCommodityCode.previousCommodityCode = Ruling reference number
+previousCommodityCode.title = Provide the reference number for the previous BTI ruling - Manage your Advance Tariff Rulings - GOV.UK
+previousCommodityCode.heading = Provide the reference number for the previous BTI ruling
+previousCommodityCode.caption = About other rulings
 previousCommodityCode.previousCommodityCode.hint = The reference number, for example GB12345678, is on the ruling certificate.
-previousCommodityCode.checkYourAnswersLabel = Renewal reference number
-previousCommodityCode.error.previousCommodityCode.required = Enter a ruling reference number
-previousCommodityCode.error.previousCommodityCode.length = Previous Tariff Information ruling must be 100 characters or less
-previousCommodityCode.details.summary = What is my Binding Tariff Information ruling reference number?
-previousCommodityCode.details.contentParagraph = The reference number was supplied on the certificate when you were given your original ruling.
+previousCommodityCode.checkYourAnswersLabel = Renewal reference
+previousCommodityCode.error.previousCommodityCode.required = Enter a ruling reference
+previousCommodityCode.error.previousCommodityCode.length = Previous ruling reference must be 100 characters or less
 
 provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
 provideGoodsName.heading = Provide a name for the goods
@@ -248,18 +252,18 @@ describeYourItem.listItem5 = how it is packaged, including all materials
 supportingMaterialFileList.title = Do you want to upload any supporting documents? - Manage your Advance Tariff Rulings - GOV.UK
 supportingMaterialFileList.heading = Do you want to upload any supporting documents?
 supportingMaterialFileList.caption = About the goods
-supportingMaterialFileList.uploadFileCounter.singular = You have uploaded 1 supporting document
-supportingMaterialFileList.uploadFileCounter.plural = You have uploaded {0} supporting documents
+supportingMaterialFileList.uploadFileCounter.singular = You have uploaded 1 supporting document for the {0}
+supportingMaterialFileList.uploadFileCounter.plural = You have uploaded {0} supporting documents for the {1}
+supportingMaterialFileList.choice.checkYourAnswersLabel = Upload supporting documents?
 supportingMaterialFileList.checkYourAnswersLabel = Uploaded documents
-supportingMaterialFileList.label.anotherFile =  Do you want to upload another document?
+supportingMaterialFileList.label.anotherFile =  Do you want to upload another supporting document?
 supportingMaterialFileList.indications = To get accurate commodity code advice you can provide us with:
 supportingMaterialFileList.indications.bullet1 = ingredients lists for food and drink goods
 supportingMaterialFileList.indications.bullet2 = technical specifications
 supportingMaterialFileList.indications.bullet3 = lists of materials
 supportingMaterialFileList.indications.bullet4 = images of the goods
 supportingMaterialFileList.indications.bullet5 = images of packaging
-supportingMaterialFileList.error.required = Select yes if you want to upload a supporting document
-supportingMaterialFileList.continue = Save and continue
+supportingMaterialFileList.error.required = Select yes if you have files to upload
 supportingMaterialFile.remove.file.text = Remove
 supportingMaterialFile.remove.file.hidden.text = Remove file {0}
 
@@ -278,13 +282,14 @@ uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
 uploadSupportingMaterialMultiple.error.numberFiles = Reduce the number of files to a maximum of 10
 
-commodityCodeBestMatch.title = Have you found a commodity code for your item? - Manage your Advance Tariff Rulings - GOV.UK
-commodityCodeBestMatch.heading = Have you found a commodity code for your item?
-commodityCodeBestMatch.bodyText = Entering a commodity code, even just the first 2 numbers, means we will be able to classify your item faster.
+commodityCodeBestMatch.title = Have you found a commodity code for the goods? - Manage your Advance Tariff Rulings - GOV.UK
+commodityCodeBestMatch.heading = Have you found a commodity code for the {0}?
+commodityCodeBestMatch.bodyText = Entering a commodity code, even just the first 2 numbers, may speed up the processing of your application.
 commodityCodeBestMatch.yesFoundCommodityCode = Yes
 commodityCodeBestMatch.noHaventFoundCommodityCode = No
 commodityCodeBestMatch.checkYourAnswersLabel = Have you found a commodity code?
 commodityCodeBestMatch.error.required = Select yes if you have found a commodity code
+commodityCodeBestMatch.caption = About the goods
 
 commodityCodeDigits.title = Provide a commodity code for the goods - Manage your Advance Tariff Rulings - GOV.UK
 commodityCodeDigits.heading = Provide a commodity code for the {0}
@@ -307,29 +312,36 @@ whenToSendSample.listItem1 = textiles
 whenToSendSample.listItem2 = shoes
 whenToSendSample.listItem3 = ceramics
 
-returnSamples.title = Would you like the samples returned? - Manage your Advance Tariff Rulings - GOV.UK
-returnSamples.heading = Would you like the samples returned?
-returnSamples.first.paragraph = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
-returnSamples.yesReturnSamples = Yes
-returnSamples.noDontReturnSamples = No
-returnSamples.checkYourAnswersLabel = Would you like the sample returned?
-returnSamples.error.required = Select yes if you would like the sample returned
+isSampleHazardous.title = Could the sample be potentially hazardous? - Manage your Advance Tariff Rulings - GOV.UK
+isSampleHazardous.heading = Could the sample be potentially hazardous?
+isSampleHazardous.caption = About the goods
+isSampleHazardous.checkYourAnswersLabel = Hazardous samples?
+isSampleHazardous.error.required = Select yes if the sample could be hazardous
 
-similarItemCommodityCode.title = Do you know of a similar item that already has an Advance Tariff Ruling? - Manage your Advance Tariff Rulings - GOV.UK
-similarItemCommodityCode.heading = Do you know of a similar item that already has an Advance Tariff Ruling?
+returnSamples.title = Would you like the samples returned to you? - Manage your Advance Tariff Rulings - GOV.UK
+returnSamples.heading = Would you like the samples returned to you?
+returnSamples.first.paragraph = Samples will be returned where possible but may be damaged during testing. All samples will be destroyed after 60 working days.
+returnSamples.checkYourAnswersLabel = Return the samples?
+returnSamples.error.required = Select yes if you would like the sample returned
+returnSamples.caption = About the goods
+
+similarItemCommodityCode.title = Are there similar goods that already have a ruling? - Manage your Advance Tariff Rulings - GOV.UK
+similarItemCommodityCode.heading = Are there similar goods that already have a ruling?
+similarItemCommodityCode.caption = About other rulings
 similarItemCommodityCode.yesAwareSimilarCode = Yes
 similarItemCommodityCode.noNotAware = No
 similarItemCommodityCode.checkYourAnswersLabel = Do you know of a similar item that already has a ruling?
-similarItemCommodityCode.error.required = Select yes if you know of a similar item that has an Advance Tariff Ruling
-similarItemCommodityCode.bodyText = It can help us to classify your goods and match with other rulings if:
+similarItemCommodityCode.error.required = Select yes if you know of similar goods that have a ruling
+similarItemCommodityCode.bodyText = It can help to provide a ruling if there is already a ruling for goods that are similar, even if the ruling was made in another country.
 similarItemCommodityCode.listItem1 = your business or organisation operates in other countries and you have a ruling for that country
 similarItemCommodityCode.listItem2 = you know of a similar item with a ruling
 
-commodityCodeRulingReference.title = What are the details and reference numbers of the similar rulings? - Manage your Advance Tariff Rulings - GOV.UK
-commodityCodeRulingReference.heading = What are the details and reference numbers of the similar rulings?
-commodityCodeRulingReference.hint = The reference number, for example GB12345678 and FR12345678, is on the ruling certificate. You can include more than one reference number.
-commodityCodeRulingReference.checkYourAnswersLabel = Ruling reference number
-commodityCodeRulingReference.error.required = Enter the ruling reference numbers and details of similar rulings
+commodityCodeRulingReference.title = Provide the reference number of a similar ruling - Manage your Advance Tariff Rulings - GOV.UK
+commodityCodeRulingReference.heading = Provide the reference number of a similar ruling
+commodityCodeRulingReference.caption = About other rulings
+commodityCodeRulingReference.hint = The reference number, for example FR12345678, is on the ruling certificate.
+commodityCodeRulingReference.checkYourAnswersLabel = Similar renewal references
+commodityCodeRulingReference.error.required = Enter a ruling reference number
 
 legalChallenge.title = Have there been any legal problems classifying the goods? - Manage your Advance Tariff Rulings - GOV.UK
 legalChallenge.heading = Have there been any legal problems classifying the {0}?
