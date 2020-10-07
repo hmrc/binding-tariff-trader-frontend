@@ -27,9 +27,9 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.PdfService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import utils.JsonFormatters._
 import viewmodels.PdfViewModel
 import views.html.confirmation
-import utils.JsonFormatters._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -53,10 +53,7 @@ class ConfirmationController @Inject()(
 
       token: String = pdfService.encodeToken(c.eori)
     } yield Ok(confirmation(appConfig, c, token, pdf))
-    println("hello hello ::::::::::::")
-    println("hello hello ::::::::::::")
-    println("hello hello ::::::::::::")
-    println("hello hello ::::::::::::")
+
     (request.userAnswers.get(ConfirmationPage), request.userAnswers.get(PdfViewPage)) match {
       case (Some(c: Confirmation), Some(pdf: PdfViewModel)) => show(c, pdf)
       case _ => successful(Redirect(routes.SessionExpiredController.onPageLoad()))

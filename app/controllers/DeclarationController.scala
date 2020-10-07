@@ -33,9 +33,9 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import utils.JsonFormatters._
 import viewmodels.PdfViewModel
 import views.html.declaration
-import utils.JsonFormatters._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
