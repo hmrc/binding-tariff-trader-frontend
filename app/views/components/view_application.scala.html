@@ -116,6 +116,8 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                         <h3>@messages("confirmation.heading2.whatNext")</h3>
                         <p class="govuk-body">@messages("view.application.paragraph.whatNext0")</p>
                     </div>
+
+                    @if(pdf.sendingSample){
                     <div class="column-one-third">
                         <div class="about-this-result-box">
                             <div id="aboutThisResult" class="about-this-result">
@@ -131,7 +133,8 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                                 </div>
                                 <div>
                                     <dl>
-                                        <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span></p></dt>
+                                        <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span>
+                                        </p></dt>
                                         <dt>@messages("application.footer.sendingSamples.address.line1")</dt>
                                         <dt>@messages("application.footer.sendingSamples.address.line2")</dt>
                                         <dt>@messages("application.footer.sendingSamples.address.line3")</dt>
@@ -139,16 +142,18 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                                         <dt>@messages("application.footer.sendingSamples.address.line5")</dt>
                                         <dt>@messages("application.footer.sendingSamples.address.line5")</dt>
                                         <dt>@messages("application.footer.sendingSamples.address.line7")</dt>
-                                        <dt class="mb-2">@messages("application.footer.sendingSamples.address.line8")</dt>
+                                        <dt class="mb-2">@messages("application.footer.sendingSamples.address.line8")
+                                        </dt>
                                     </dl>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                }
                 <div class="footer-info footer-page-break">
                    <span class="footer-page-no"></span>
-                   <span class="footer-page-date">HMRC @pdf.dateSubmitted</span>
+                   <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
                 </div>
             </div>
         </div>
@@ -185,18 +190,18 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 </div>
                 <div>
                     <dt class="cya-question">@messages("whenToSendSample.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@pdf.sendingSample</dd>
+                    <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
                 </div>
 
                 @if(pdf.hazardousSample.isDefined){
                 <div>
                     <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@pdf.hazardousSample.get</dd>
+                    <dd class="cya-answer">@{if(pdf.hazardousSample.get) {messages("site.yes")} else {messages("site.no")}}</dd>
                 </div>
                 }
                 <div>
                     <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@pdf.returnSample</dd>
+                    <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
                 </div>
 
             </dl>
@@ -205,7 +210,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
             </dl>
             <div class="footer-info footer-page-break">
                 <span class="footer-page-no"></span>
-                <span class="footer-page-date">HMRC @pdf.dateSubmitted</span>
+                <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
            </div>
         </div>
     </div>

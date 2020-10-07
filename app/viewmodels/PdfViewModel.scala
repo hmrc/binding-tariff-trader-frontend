@@ -49,4 +49,8 @@ object PdfViewModel{
     hazardousSample = c.application.sampleIsHazardous,
     returnSample = c.application.sampleToBeReturned
   )
+
+  private def yesNoAnswer(x: Boolean) = if (x) "site.yes" else "site.no"
+
+
 }
