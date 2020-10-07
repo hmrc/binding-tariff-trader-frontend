@@ -76,7 +76,6 @@ class IndexController @Inject()(
         Future.successful(Redirect(navigator.nextPage(IndexPage, NormalMode)(initialAnswers)))
     }
   }
-
   def getApplicationsAndRulings(page: Int): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
@@ -88,6 +87,4 @@ class IndexController @Inject()(
     }
 
   }
-
-
 }
