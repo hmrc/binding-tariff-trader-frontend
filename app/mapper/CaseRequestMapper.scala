@@ -36,7 +36,7 @@ class CaseRequestMapper {
     val legalChallengeDetails: Option[String] = answers.get(LegalChallengeDetailsPage)
     val commodityCodeDigits: Option[String] = answers.get(CommodityCodeDigitsPage)
 
-    val sampleProvided: Boolean = answers.get(WhenToSendSamplePage).getOrElse(throwError("when to send a sample"))
+    val sampleProvided: Boolean = answers.get(AreYouSendingSamplesPage).getOrElse(throwError("when to send a sample"))
     val sampleHazardous: Option[Boolean] = answers.get(IsSampleHazardousPage)
     val returnSample: Boolean = answers.get(ReturnSamplesPage).getOrElse(false)
 

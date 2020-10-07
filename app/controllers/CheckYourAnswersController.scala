@@ -71,7 +71,7 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.supportingMaterialFileList,
           checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,
-          checkYourAnswersHelper.whenToSendSample,
+          checkYourAnswersHelper.areYouSendingSamples,
           checkYourAnswersHelper.isSampleHazardous,
           checkYourAnswersHelper.returnSamples,
           checkYourAnswersHelper.similarItemCommodityCode,

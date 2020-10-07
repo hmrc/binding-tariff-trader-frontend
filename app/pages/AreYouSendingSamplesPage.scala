@@ -20,10 +20,10 @@ import controllers.routes
 import models.Mode
 import play.api.mvc.Call
 
-case object WhenToSendSamplePage extends QuestionPage[Boolean] {
+case object AreYouSendingSamplesPage extends QuestionPage[Boolean] {
   def route(mode: Mode): Call =
-    routes.WhenToSendSampleController.onPageLoad(mode)
+    routes.AreYouSendingSamplesController.onPageLoad(mode)
 
   override def toString: String =
-    "whenToSendSample"
+    "areYouSendingSamples"
 }

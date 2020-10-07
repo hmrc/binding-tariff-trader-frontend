@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import forms.WhenToSendSampleFormProvider
+import forms.AreYouSendingSamplesFormProvider
 import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
@@ -28,19 +28,19 @@ import pages._
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import play.twirl.api.HtmlFormat
-import views.html.whenToSendSample
+import views.html.areYouSendingSamples
 
 import scala.concurrent.ExecutionContext
 import navigation.Journey
 
-class WhenToSendSampleController @Inject()(
+class AreYouSendingSamplesController @Inject()(
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
   val requireData: DataRequiredAction,
-  formProvider: WhenToSendSampleFormProvider,
+  formProvider: AreYouSendingSamplesFormProvider,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
   lazy val form = formProvider()
@@ -48,6 +48,6 @@ class WhenToSendSampleController @Inject()(
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    whenToSendSample(appConfig, preparedForm, mode, goodsName)
+    areYouSendingSamples(appConfig, preparedForm, mode, goodsName)
   }
 }

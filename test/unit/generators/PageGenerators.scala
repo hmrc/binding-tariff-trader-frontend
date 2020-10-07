@@ -39,8 +39,8 @@ trait PageGenerators {
   implicit lazy val arbitraryReturnSamplesPage: Arbitrary[ReturnSamplesPage.type] =
     Arbitrary(ReturnSamplesPage)
 
-  implicit lazy val arbitraryWhenToSendSamplePage: Arbitrary[WhenToSendSamplePage.type] =
-    Arbitrary(WhenToSendSamplePage)
+  implicit lazy val arbitraryAreYouSendingSamplesPage: Arbitrary[AreYouSendingSamplesPage.type] =
+    Arbitrary(AreYouSendingSamplesPage)
 
   implicit lazy val arbitraryCommodityCodeDigitsPage: Arbitrary[CommodityCodeDigitsPage.type] =
     Arbitrary(CommodityCodeDigitsPage)

@@ -74,8 +74,8 @@ class CheckYourAnswersHelper(
     x => AnswerRow("isSampleHazardous.checkYourAnswersLabel", yesNoAnswer(x), true, routes.IsSampleHazardousController.onPageLoad(CheckMode).url)
   }
 
-  def whenToSendSample: Option[AnswerRow] = userAnswers.get(WhenToSendSamplePage) map {
-    x => AnswerRow("whenToSendSample.checkYourAnswersLabel", yesNoAnswer(x), true, routes.WhenToSendSampleController.onPageLoad(CheckMode).url)
+  def areYouSendingSamples: Option[AnswerRow] = userAnswers.get(AreYouSendingSamplesPage) map {
+    x => AnswerRow("areYouSendingSamples.checkYourAnswersLabel", yesNoAnswer(x), true, routes.AreYouSendingSamplesController.onPageLoad(CheckMode).url)
   }
 
   def commodityCodeDigits: Option[AnswerRow] = userAnswers.get(CommodityCodeDigitsPage) map {
