@@ -27,12 +27,12 @@ import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import models.requests.OptionalDataRequest
 import navigation.Navigator
-import pages.{ConfirmationPage, PdfViewPage, SupportingMaterialFileListPage, UploadWrittenAuthorisationPage}
+import pages._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.JsonFormatters._
 import viewmodels.PdfViewModel
 import views.html.declaration
@@ -59,12 +59,11 @@ class DeclarationController @Inject()(
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[_] =>
-
     val answers = request.userAnswers.get // TODO: we should not call `get` on an Option
-  val newCaseRequest = mapper.map(answers)
+    val newCaseRequest = mapper.map(answers)
 
     val attachments: Seq[FileAttachment] = answers
-      .get(SupportingMaterialFileListPage)
+      .get(SupportingMaterialFileListPage).map(_.fileAttachments)
       .getOrElse(Seq.empty)
 
     for {
@@ -75,7 +74,7 @@ class DeclarationController @Inject()(
       _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
       userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar))
       _           <- dataCacheConnector.save(userAnswers.cacheMap)
-      res: Result <- successful(Redirect(navigator.nextPage(ConfirmationPage, mode)(userAnswers)))
+      res: Result <- successful(Redirect(navigator.nextPage(DeclarationPage, mode)(userAnswers)))
     } yield res
 
   }

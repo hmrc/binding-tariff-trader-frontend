@@ -16,28 +16,28 @@
 
 package controllers
 
-import play.api.data.Form
-import play.api.libs.json.JsString
-import uk.gov.hmrc.http.cache.client.CacheMap
-import navigation.FakeNavigator
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import play.api.test.Helpers._
+import controllers.behaviours.AnswerCachingControllerBehaviours
+import navigation.FakeNavigator
 import forms.CommodityCodeDigitsFormProvider
 import models.NormalMode
-import pages.{CommodityCodeDigitsPage, ProvideGoodsNamePage}
-import play.api.mvc.Call
+import pages.ProvideGoodsNamePage
+import play.api.data.Form
+import play.api.libs.json.JsString
+import play.api.mvc.{ Call, Request }
 import views.html.commodityCodeDigits
 
-class CommodityCodeDigitsControllerSpec extends ControllerSpecBase {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class CommodityCodeDigitsControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
 
   private def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CommodityCodeDigitsFormProvider()
-  val form: Form[String] = formProvider()
   val goodsName = "some goods"
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  def controller(dataRetrievalAction: DataRetrievalAction) =
     new CommodityCodeDigitsController(
       frontendAppConfig,
       FakeDataCacheConnector,
@@ -49,65 +49,23 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase {
       cc
     )
 
-  def viewAsString(form: Form[_] = form): String = commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages).toString
+  def viewAsString(form: Form[_], request: Request[_]): String =
+    commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
   val testAnswer = "answer"
+  val validFormData = Map("value" -> testAnswer)
+  val invalidFormData = Map("value" -> "")
+  val backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
 
-  "CommodityCodeDigits Controller" must {
-
-    "return OK and the correct view for a GET" in {
-      val data = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
-      val fakeDataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
-
-      val result = controller(fakeDataRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) shouldBe OK
-      contentAsString(result) shouldBe viewAsString()
-    }
-
-    "populate the view correctly on a GET when the question has previously been answered" in {
-      val data = Map(CommodityCodeDigitsPage.toString -> JsString(testAnswer), ProvideGoodsNamePage.toString -> JsString(goodsName))
-      val fakeDataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
-
-      val result = controller(fakeDataRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
-
-      contentAsString(result) shouldBe viewAsString(form.fill(testAnswer))
-    }
-
-    "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
-
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(onwardRoute.url)
-    }
-
-    "return a Bad Request and errors when invalid data is submitted" in {
-      val data = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
-      val fakeDataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, data)))
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", ""))
-      val boundForm = form.bind(Map("value" -> ""))
-
-      val result = controller(fakeDataRetrievalAction).onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe BAD_REQUEST
-      contentAsString(result) shouldBe viewAsString(boundForm)
-    }
-
-    "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", testAnswer))
-      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
+  "CommodityCodeDigitsController" must {
+    behave like answerCachingController(
+      controller,
+      onwardRoute,
+      viewAsString,
+      validFormData,
+      invalidFormData,
+      backgroundData,
+      testAnswer
+    )
   }
 }

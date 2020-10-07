@@ -21,54 +21,30 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.ReturnSamplesFormProvider
 import javax.inject.Inject
-import models.{Enumerable, Mode}
+import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
-import pages.{ReturnSamplesPage, SimilarItemCommodityCodePage}
+import pages.ReturnSamplesPage
 import play.api.data.Form
-import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import play.api.mvc.MessagesControllerComponents
+import play.twirl.api.HtmlFormat
 import views.html.returnSamples
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 class ReturnSamplesController @Inject()(
-                                         appConfig: FrontendAppConfig,
-                                         dataCacheConnector: DataCacheConnector,
-                                         navigator: Navigator,
-                                         identify: IdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: ReturnSamplesFormProvider,
-                                         cc: MessagesControllerComponents
-                                       ) extends FrontendController(cc) with I18nSupport with Enumerable.Implicits {
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: ReturnSamplesFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
+  lazy val form = formProvider()
+  val questionPage = ReturnSamplesPage
 
-  private lazy val form = formProvider()
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.get(ReturnSamplesPage) match {
-      case Some(value) => form.fill(value)
-      case _ => form
-    }
-
-    Ok(returnSamples(appConfig, preparedForm, mode))
-  }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(returnSamples(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(ReturnSamplesPage, value)
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(SimilarItemCommodityCodePage, mode)(updatedAnswers))
-        )
-      }
-    )
-  }
-
+  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
+    returnSamples(appConfig, preparedForm, mode)
 }

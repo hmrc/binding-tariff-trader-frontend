@@ -24,21 +24,19 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.templates.{applicationTemplate, applicationView, rulingCertificateTemplate, rulingCertificateView}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import views.html.templates._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.concurrent.Future.successful
+import scala.concurrent.{ ExecutionContext, Future }
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
-                                      identify: IdentifierAction,
-                                      pdfService: PdfService,
-                                      caseService: CasesService,
-                                      fileService: FileService,
-                                      countriesService: CountriesService,
-                                      cc: MessagesControllerComponents
-                                     ) extends FrontendController(cc) with I18nSupport {
+  identify: IdentifierAction,
+  pdfService: PdfService,
+  caseService: CasesService,
+  fileService: FileService,
+  countriesService: CountriesService,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private type Eori = String
   private type CaseReference = String
@@ -66,10 +64,13 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
     (maybeEoriNumber, token) match {
       case (Some(eori), _) => toView(eori, reference)
       case (_, Some(tkn)) => pdfService.decodeToken(tkn) match {
-        case Some(eori) => toView(eori, reference)
-        case None => successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+        case Some(eori) =>
+          toView(eori, reference)
+        case None =>
+          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
-      case _ => successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
+      case _ =>
+        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
     }
   }
 
@@ -92,8 +93,10 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
       attachments <- fileService.getAttachmentMetadata(c)
       letter <- fileService.getLetterOfAuthority(c)
       out <- pdf match {
-        case true => generatePdf(applicationTemplate(appConfig, c, attachments, letter, getCountryName), s"BTIConfirmation$reference.pdf")
-        case false => successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
+        case true =>
+          generatePdf(applicationTemplate(appConfig, c, attachments, letter, getCountryName), s"BTIConfirmation$reference.pdf")
+        case false =>
+          Future.successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
       }
     } yield out
   }
@@ -116,11 +119,14 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
 
   def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)
                            (implicit request: Request[AnyContent]): Future[Result] = {
-    caseService.getCaseWithRulingForUser(eori, reference) flatMap {
-      c: Case => successful(Ok(rulingCertificateView(appConfig, c, getCountryName)))
+    caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
+      Future.successful(Ok(rulingCertificateView(appConfig, c, getCountryName)))
     }
   }
 
-  def getCountryName(code: String) = countriesService.getAllCountries.find(_.code == code).map(_.countryName)
-
+  def getCountryName(code: String) =
+    countriesService
+      .getAllCountries
+      .find(_.code == code)
+      .map(_.countryName)
 }

@@ -18,15 +18,18 @@ package controllers
 
 import connectors.DataCacheConnector
 import controllers.actions._
-import models.Confirmation
+import models.{Confirmation, EORIDetails, oCase}
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
-import pages.ConfirmationPage
+import pages.{ConfirmationPage, PdfViewPage}
 import play.api.test.Helpers._
 import service.PdfService
 import uk.gov.hmrc.http.cache.client.CacheMap
+import viewmodels.PdfViewModel
 import views.html.confirmation
+import utils.JsonFormatters._
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ConfirmationControllerSpec extends ControllerSpecBase {
@@ -34,6 +37,8 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
   private val cache = mock[DataCacheConnector]
   private val cacheMap = mock[CacheMap]
   private val pdfService = mock[PdfService]
+  private val agentCase = oCase.btiCaseExample
+  private val pdf = PdfViewModel(agentCase)
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
     new ConfirmationController(
@@ -48,7 +53,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
   }
 
   private def viewAsString: String = {
-    confirmation(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true), "token")(fakeRequest, messages).toString
+    confirmation(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true), "token", pdf)(fakeRequest, messages).toString
   }
 
   "Confirmation Controller" must {
@@ -56,6 +61,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
     "return OK and the correct view for a GET" in {
       given(cache.remove(cacheMap)).willReturn(Future.successful(true))
       given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true)))
+      given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdf))
       given(pdfService.encodeToken("eori")).willReturn("token")
 
       val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)

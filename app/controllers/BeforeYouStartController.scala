@@ -17,20 +17,34 @@
 package controllers
 
 import config.FrontendAppConfig
+import connectors.DataCacheConnector
 import controllers.actions._
 import javax.inject.Inject
+import models.UserAnswers
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.beforeYouStart
 
-class BeforeYouStartController @Inject()(
-                                          appConfig: FrontendAppConfig,
-                                          identify: IdentifierAction,
-                                          cc: MessagesControllerComponents
-                                        ) extends FrontendController(cc) with I18nSupport {
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Success, Failure }
+import scala.util.control.NonFatal
 
-  def onPageLoad: Action[AnyContent] = identify { implicit request =>
-    Ok(beforeYouStart(appConfig))
+class BeforeYouStartController @Inject()(
+  appConfig: FrontendAppConfig,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  dataCacheConnector: DataCacheConnector,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+
+  def onPageLoad: Action[AnyContent] = (identify andThen getData).async { implicit request =>
+    val initialAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId))
+    dataCacheConnector.save(initialAnswers.cacheMap).transformWith {
+      case Success(_) =>
+        Future.successful(Ok(beforeYouStart(appConfig)))
+      case Failure(NonFatal(_)) =>
+        Future.successful(Results.BadGateway)
+    }
   }
 }

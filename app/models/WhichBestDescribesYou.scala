@@ -16,11 +16,11 @@
 
 package models
 
-import pages.{Page, WhichBestDescribesYouPage}
 import play.api.libs.json._
+import pages.WhichBestDescribesYouPage
 import viewmodels.RadioOption
 
-sealed trait WhichBestDescribesYou extends Page
+sealed trait WhichBestDescribesYou
 
 object WhichBestDescribesYou {
 

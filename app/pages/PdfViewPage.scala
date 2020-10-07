@@ -16,10 +16,16 @@
 
 package pages
 
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 import viewmodels.PdfViewModel
 
 
 case object PdfViewPage extends DataPage[PdfViewModel] {
   override def toString: String = "pdfViewPage"
+
+  override def route(mode: Mode): Call =
+    routes.ConfirmationController.onPageLoad()
 
 }

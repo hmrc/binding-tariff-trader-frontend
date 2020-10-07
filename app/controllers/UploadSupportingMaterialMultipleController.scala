@@ -22,29 +22,30 @@ import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import javax.inject.Inject
 import models.{FileAttachment, Mode}
+import navigation.Navigator
 import pages._
 import play.api.data.FormError
 import play.api.i18n.{I18nSupport, Lang}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc._
 import service.FileService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.Future.successful
 
 class UploadSupportingMaterialMultipleController @Inject()(
-                                                            appConfig: FrontendAppConfig,
-                                                            dataCacheConnector: DataCacheConnector,
-                                                            identify: IdentifierAction,
-                                                            getData: DataRetrievalAction,
-                                                            requireData: DataRequiredAction,
-                                                            formProvider: UploadSupportingMaterialMultipleFormProvider,
-                                                            fileService: FileService,
-                                                            cc: MessagesControllerComponents
-                                                          ) extends FrontendController(cc) with I18nSupport {
+  appConfig: FrontendAppConfig,
+  dataCacheConnector: DataCacheConnector,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  navigator: Navigator,
+  requireData: DataRequiredAction,
+  formProvider: UploadSupportingMaterialMultipleFormProvider,
+  fileService: FileService,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private lazy val form = formProvider()
   private implicit val lang: Lang = appConfig.defaultLang
@@ -66,10 +67,10 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
       def saveAndRedirect(file: FileAttachment): Future[Result] = {
         val updatedFiles = request.userAnswers.get(SupportingMaterialFileListPage)
-          .map(_ ++ Seq(file)) getOrElse Seq(file)
+          .map(curAnswers => curAnswers.copy(curAnswers.addAnotherDecision, curAnswers.fileAttachments ++ Seq(file)) ) getOrElse FileListAnswers(None, Seq(file))
         val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, updatedFiles)
         dataCacheConnector.save(updatedAnswers.cacheMap)
-          .map(_ => Redirect(routes.SupportingMaterialFileListController.onPageLoad(mode)))
+          .map(_ => Redirect(navigator.nextPage(UploadSupportingMaterialMultiplePage, mode)(updatedAnswers)))
       }
 
       def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]): Future[Result] = {
@@ -80,7 +81,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
       }
 
       def hasMaxFiles: Boolean = {
-        request.userAnswers.get(SupportingMaterialFileListPage).map(_.size).getOrElse(0) >= 10
+        request.userAnswers.get(SupportingMaterialFileListPage).map(_.fileAttachments.size).getOrElse(0) >= 10
       }
 
       request.body.file("file-input").filter(_.filename.nonEmpty) match {

@@ -16,7 +16,13 @@
 
 package pages
 
-case object ReturnSamplesPage extends QuestionPage[Boolean] {
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-  override def toString: String = "returnSamples"
+case object ReturnSamplesPage extends QuestionPage[Boolean] {
+  def route(mode: Mode): Call =
+    routes.ReturnSamplesController.onPageLoad(mode)
+  override def toString: String =
+    "returnSamples"
 }

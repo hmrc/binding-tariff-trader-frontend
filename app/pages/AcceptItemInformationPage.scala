@@ -16,7 +16,13 @@
 
 package pages
 
-case object AcceptItemInformationPage extends Page {
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-  override def toString: String = "acceptItemInformation"
+case object AcceptItemInformationPage extends Page {
+  def route(mode: Mode): Call =
+    routes.AcceptItemInformationListController.onPageLoad()
+  override def toString: String =
+    "acceptItemInformation"
 }

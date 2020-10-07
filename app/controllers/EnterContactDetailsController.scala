@@ -21,53 +21,29 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.EnterContactDetailsFormProvider
 import javax.inject.Inject
-import models.Mode
+import models.{ EnterContactDetails,  Mode }
+import models.requests.DataRequest
 import navigation.Navigator
-import pages.{EnterContactDetailsPage, SelectApplicationTypePage}
+import pages.EnterContactDetailsPage
 import play.api.data.Form
-import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import play.api.mvc.MessagesControllerComponents
 import views.html.enterContactDetails
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 class EnterContactDetailsController @Inject()(
-                                               appConfig: FrontendAppConfig,
-                                               dataCacheConnector: DataCacheConnector,
-                                               navigator: Navigator,
-                                               identify: IdentifierAction,
-                                               getData: DataRetrievalAction,
-                                               requireData: DataRequiredAction,
-                                               formProvider: EnterContactDetailsFormProvider,
-                                               cc: MessagesControllerComponents
-                                             ) extends FrontendController(cc) with I18nSupport {
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: EnterContactDetailsFormProvider,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends AnswerCachingController[EnterContactDetails](cc) {
+  lazy val form = formProvider()
+  val questionPage = EnterContactDetailsPage
 
-  private lazy val form = formProvider()
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.get(EnterContactDetailsPage) match {
-      case Some(value) => form.fill(value)
-      case _ => form
-    }
-
-    Ok(enterContactDetails(appConfig, preparedForm, mode))
-  }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(enterContactDetails(appConfig, formWithErrors, mode))),
-      value => {
-        val updatedAnswers = request.userAnswers.set(EnterContactDetailsPage, value)
-
-        dataCacheConnector.save(updatedAnswers.cacheMap).map(
-          _ => Redirect(navigator.nextPage(EnterContactDetailsPage, mode)(updatedAnswers))
-        )
-      }
-    )
-  }
+  def renderView(preparedForm: Form[EnterContactDetails], mode: Mode)(implicit request: DataRequest[_]) =
+    enterContactDetails(appConfig, preparedForm, mode)
 }

@@ -16,9 +16,14 @@
 
 package pages
 
+import controllers.routes
 import models.EnterContactDetails
+import models.Mode
+import play.api.mvc.Call
 
 case object EnterContactDetailsPage extends QuestionPage[EnterContactDetails] {
-
-  override def toString: String = "enterContactDetails"
+  def route(mode: Mode): Call =
+    routes.EnterContactDetailsController.onPageLoad(mode)
+  override def toString: String =
+    "enterContactDetails"
 }
