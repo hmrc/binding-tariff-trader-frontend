@@ -1,3 +1,15 @@
+body {
+    counter-reset: sec-counter;
+}
+.govuk-panel--confirmation {
+	color: #fff;
+	background: #00703C;
+	margin-top: 30px;
+}
+span.footer-page-no::before {
+    counter-increment: sec-counter;
+    content: "Page " counter(sec-counter) " of 2 ";
+}
 .print-save-application {
     position: relative;
     display: inline-block;
@@ -12,7 +24,7 @@
 .print-document {
     border: 1px solid #6f777b;
     box-shadow: 6px 6px 0 0 #dee0e2;
-    padding: 25px 50px;
+    padding: 50px 50px;
     height: auto;
     position: relative;
     margin-bottom: 2em;
@@ -34,7 +46,7 @@ ul li {
 
 .print-document .print-header {
     position: relative;
-    top: 10mm;
+    //top: 10mm;
 }
 
 .print-document .print-header .column-one-third {
@@ -95,7 +107,7 @@ ul li {
 }
 .print-header, .header-space,
 .print-footer, .footer-space {
-  height: 45mm;
+  //height: 45mm;
 }
 .print-document .footer-info {
     font-size: 14px;
@@ -147,7 +159,6 @@ ul li {
     width: 66%;
     float: left;
 }
-
 .print-pages {
     -webkit-transform-origin:  top left;
     -moz-transform-origin:  top left;
@@ -226,11 +237,6 @@ ul li {
     }
 }
 
-.heading-medium {
-    font-size: 30px
-}
-
-
 @media print {
 
     @page {
@@ -244,14 +250,29 @@ ul li {
         height: auto;
         margin: 0;
    }
+
+   .hidden-print {
+       display: none !important;
+    }
+    .service-info {
+        display: none !important;
+    }
    .print-document {
-           margin: 0;
+           margin: 10mm;
            border: none;
            width: 210mm;
            height: 297mm;
            padding: 10mm;
            box-shadow: none;
            zoom: 100%;
+      }
+      .information-box {
+        background: #e1f3f1;
+        -webkit-print-color-adjust: exact
+      }
+      .column-half {
+          width: 50%;
+          float: left;
       }
 
     #print-and-save-result {
@@ -260,8 +281,8 @@ ul li {
 
     .print-header {
         position: fixed;
-        top: 0;
-        margin-top: 10mm;
+        top: 0px;
+        margin-top: 20mm;
         width: 210mm;
     }
 

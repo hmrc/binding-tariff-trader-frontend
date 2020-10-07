@@ -28,6 +28,10 @@ case class PdfViewModel(
                          dateSubmitted: Instant,
                          goodsName: String,
                          goodsDetails: String,
+                         confidentialInformation: Option[String],
+                         sendingSample: Boolean,
+                         hazardousSample: Option[Boolean],
+                         returnSample: Boolean
                        )
 
 object PdfViewModel{
@@ -38,7 +42,12 @@ object PdfViewModel{
     accountDetails = c.application.holder,
     contact = c.application.contact,
     dateSubmitted = c.createdDate,
-    c.application.goodName,
-    c.application.goodDescription
+    goodsName = c.application.goodName,
+    goodsDetails = c.application.goodDescription,
+    confidentialInformation = c.application.confidentialInformation,
+    sendingSample = c.application.sampleToBeProvided,
+    hazardousSample = c.application.sampleIsHazardous,
+    returnSample = c.application.sampleToBeReturned
+
   )
 }

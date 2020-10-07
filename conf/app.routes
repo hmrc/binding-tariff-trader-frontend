@@ -145,5 +145,3 @@ GET        /is-sample-hazardous                                        controlle
 POST       /is-sample-hazardous                                        controllers.IsSampleHazardousController.onSubmit(mode: Mode = NormalMode)
 GET        /change-is-sample-hazardous                                 controllers.IsSampleHazardousController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-is-sample-hazardous                                 controllers.IsSampleHazardousController.onSubmit(mode: Mode = CheckMode)
-
-GET         /view-application                                          controllers.ViewApplicationController.onPageLoad

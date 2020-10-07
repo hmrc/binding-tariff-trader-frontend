@@ -29,11 +29,11 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 @main_template(
     title = messages("confirmation.title"),
     appConfig = appConfig,
-    contentClass = Some("column-full"),
+    contentClass = Some("column-full pl-0"),
     bodyClasses = None) {
 
-<div class="column-two-thirds">
-    <div class="govuk-box-highlight">
+<div class="column-two-thirds p-0 hidden-print">
+    <div class="govuk-box-highlight govuk-panel--confirmation">
         @components.heading(messages("confirmation.heading"))
         <span class="font-large">
             @messages("confirmation.yourRefNumber") <br>
@@ -59,14 +59,15 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
     <h2 class="heading-large">@messages("confirmation.heading2.whatNext")</h2>
 
     <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
+    <a id="confirmation-pdf-link" target="_blank" href="@routes.ApplicationController.applicationPdf(confirmation.reference, Some(pdfToken))">@messages("confirmation.download.link.PDF")</a>
 
     <p class="break-word">
         @if(confirmation.sendingSamples){
             @Html(messages("confirmation.paragraph.whatNext0.sample"))
         } else {
-            @Html(messages("confirmation.paragraph.whatNext0.nosample"))
+            @Html(messages("view.application.paragraph.whatNext0.nosample"))
         }
-        @Html(messages("confirmation.paragraph.whatNext1"))
+        <span>@messages("confirmation.paragraph.whatNext1") <a href="#">@messages("view.application.whatNext0.check.status.linkText")</a></span>
     </p>
     <div>
         <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
@@ -74,7 +75,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
         </a>
     </div>
 
-    <div class="mt-2">
+    <div class="mt-2 footer-page-break">
         @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplications().url)
     </div>
 </div>

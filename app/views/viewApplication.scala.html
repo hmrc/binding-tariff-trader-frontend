@@ -29,19 +29,19 @@ appConfig = appConfig,
 contentClass = Some("column-full"),
 bodyClasses = None) {
 
-<div class="grid-row">
+<div class="grid-row print-hide">
     <div class="column-two-thirds">
         @components.heading(messages("view.application.header"))
     </div>
 </div>
-<div>
-    <div class="print-save-application " style="display: inline-block;">
+<div class="print-pages">
+    <div class="print-save-application print-hide " style="display: inline-block;">
         @if(!compositeMode) {
         <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")">
          <a class="print-this__link" href="javascript:window.print()" data-journey-click="print - click:Your application:Print your application">@messages("view.application.print.application")</a>
         }
     </div>
-    <div class="print-save-application ">
+    <div class="print-save-application print-hide ">
         <a class="save-this__link" href="/personal-account/national-insurance-summary/save-letter-as-pdf" data-journey-click="save - click:Your application:Save your application">@messages("view.application.save.application")</a>
     </div>
     <div class="print-document">
@@ -67,39 +67,39 @@ bodyClasses = None) {
             </div>
             <div class="column-half">
 
-                <dl class="body-text">
-                    <dt class="bold">EORI</dt>
-                    <dt>1234567890</dt>
-                </dl>
-                <dl class="body-text">
-                    <dt class="bold">Account name</dt>
-                    <dt>Joeseph Bloggs</dt>
-                </dl>
-                <dl class="body-text">
-                    <dt class="bold">Account address</dt>
-                    <dt>Address line 1</dt>
-                    <dt>Address line 2</dt>
-                    <dt>Address line 3</dt>
-                    <dt>Address postcode</dt>
-                </dl>
+                <div class="body-text">
+                    <div class="bold">EORI</div>
+                    <div>1234567890</div>
+                </div>
+                <div class="body-text">
+                    <div class="bold">Account name</div>
+                    <div>Joeseph Bloggs</div>
+                </div>
+                <div class="body-text">
+                    <div class="bold">Account address</div>
+                    <div>Address line 1</div>
+                    <div>Address line 2</div>
+                    <div>Address line 3</div>
+                    <div>Address postcode</div>
+                </div>
             </div>
             <div class="column-half">
-                <dl class="body-text">
-                    <dt class="bold">Contact name</dt>
-                    <dt></dt>
-                </dl>
-                <dl class="body-text">
-                    <dt class="bold">Contact email</dt>
-                    <dt></dt>
-                </dl>
-                <dl class="body-text">
-                    <dt class="bold">Contact Phone</dt>
-                    <dt></dt>
-                </dl>
-                <dl class="body-text">
-                    <dt class="bold">Date submitted</dt>
-                    <dt>26 July 2020</dt>
-                </dl>
+                <div class="body-text">
+                    <div class="bold">Contact name</div>
+                    <div></div>
+                </div>
+                <div class="body-text">
+                    <div class="bold">Contact email</div>
+                    <div></div>
+                </div>
+                <div class="body-text">
+                    <div class="bold">Contact Phone</div>
+                    <div></div>
+                </div>
+                <div class="body-text">
+                    <div class="bold">Date submitted</div>
+                    <div>26 July 2020</div>
+                </div>
             </div>
         </div>
 
@@ -125,7 +125,7 @@ bodyClasses = None) {
             </div>
         </div>
     </div>
-</div>
+
 
 <div class="print-document">
     <div class="grid-row print-header">
@@ -167,6 +167,6 @@ bodyClasses = None) {
         </div>
     </div>
 </div>
-
+</div>
 
 }
