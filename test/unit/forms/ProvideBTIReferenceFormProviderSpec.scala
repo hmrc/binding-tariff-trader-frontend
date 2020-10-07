@@ -19,15 +19,15 @@ package forms
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 
-class PreviousCommodityCodeFormProviderSpec extends StringFieldBehaviours {
+class ProvideBTIReferenceFormProviderSpec extends StringFieldBehaviours {
 
-  val form = new PreviousCommodityCodeFormProvider()()
+  val form = new ProvideBTIReferenceFormProvider()()
 
   ".btiReference" must {
 
     val fieldName = "btiReference"
-    val requiredKey = "previousCommodityCode.error.previousCommodityCode.required"
-    val lengthKey = "previousCommodityCode.error.previousCommodityCode.length"
+    val requiredKey = "provideBTIReference.error.required"
+    val lengthKey = "provideBTIReference.error.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(

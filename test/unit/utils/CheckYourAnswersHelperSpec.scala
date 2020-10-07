@@ -100,9 +100,9 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.commodityCodeRulingReference.get.answer shouldBe "code ruling"
       }
 
-      "return a row with the correct answer for PreviousCommodityCodePage" in {
-        given(userAnswers.get(PreviousCommodityCodePage)).willReturn(Option(PreviousCommodityCode("122523847624")))
-        checkHelper.previousCommodityCode.get.answer shouldBe "122523847624"
+      "return a row with the correct answer for ProvideBTIReferencePage" in {
+        given(userAnswers.get(ProvideBTIReferencePage)).willReturn(Option(BTIReference("122523847624")))
+        checkHelper.provideBTIReference.get.answer shouldBe "122523847624"
       }
 
       "return a row with the correct answer for EnterContactDetailsPage" in {

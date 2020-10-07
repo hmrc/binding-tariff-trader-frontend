@@ -19,32 +19,32 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import forms.PreviousCommodityCodeFormProvider
+import forms.ProvideBTIReferenceFormProvider
 import javax.inject.Inject
-import models.{ Mode, PreviousCommodityCode }
+import models.{ Mode, BTIReference }
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.PreviousCommodityCodePage
+import pages.ProvideBTIReferencePage
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import play.twirl.api.HtmlFormat
-import views.html.previousCommodityCode
+import views.html.provideBTIReference
 
 import scala.concurrent.ExecutionContext
 
-class PreviousCommodityCodeController @Inject()(
+class ProvideBTIReferenceController @Inject()(
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
   val requireData: DataRequiredAction,
-  formProvider: PreviousCommodityCodeFormProvider,
+  formProvider: ProvideBTIReferenceFormProvider,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[PreviousCommodityCode](cc) {
+)(implicit ec: ExecutionContext) extends AnswerCachingController[BTIReference](cc) {
   lazy val form = formProvider()
-  val questionPage = PreviousCommodityCodePage
+  val questionPage = ProvideBTIReferencePage
 
-  def renderView(preparedForm: Form[PreviousCommodityCode], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
-    previousCommodityCode(appConfig, preparedForm, mode)
+  def renderView(preparedForm: Form[BTIReference], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
+    provideBTIReference(appConfig, preparedForm, mode)
 }

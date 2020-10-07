@@ -18,23 +18,23 @@ package views
 
 import play.api.data.Form
 import controllers.routes
-import forms.PreviousCommodityCodeFormProvider
-import models.{NormalMode, PreviousCommodityCode}
+import forms.ProvideBTIReferenceFormProvider
+import models.{NormalMode, BTIReference}
 import views.behaviours.QuestionViewBehaviours
-import views.html.previousCommodityCode
+import views.html.provideBTIReference
 
-class PreviousCommodityCodeViewSpec extends QuestionViewBehaviours[PreviousCommodityCode] {
+class ProvideBTIReferenceViewSpec extends QuestionViewBehaviours[BTIReference] {
 
-  val messageKeyPrefix = "previousCommodityCode"
+  val messageKeyPrefix = "provideBTIReference"
 
-  override protected val form = new PreviousCommodityCodeFormProvider()()
+  override protected val form = new ProvideBTIReferenceFormProvider()()
 
-  def createView = () => previousCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => provideBTIReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => previousCommodityCode(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => provideBTIReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
 
-  "PreviousCommodityCode view" must {
+  "ProvideBTIReference view" must {
 
     behave like normalPage(createView, messageKeyPrefix)()
 
@@ -43,7 +43,7 @@ class PreviousCommodityCodeViewSpec extends QuestionViewBehaviours[PreviousCommo
     behave like pageWithTextFields(
       createViewUsingForm,
       messageKeyPrefix,
-      routes.PreviousCommodityCodeController.onSubmit(NormalMode).url,
+      routes.ProvideBTIReferenceController.onSubmit(NormalMode).url,
       "btiReference"
     )
   }

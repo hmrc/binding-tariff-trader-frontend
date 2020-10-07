@@ -116,8 +116,8 @@ class CheckYourAnswersHelper(
     }
   }
 
-  def previousCommodityCode: Option[AnswerRow] = userAnswers.get(PreviousCommodityCodePage) map {
-    x => AnswerRow("previousCommodityCode.checkYourAnswersLabel", s"${x.previousCommodityCode}", false, routes.PreviousCommodityCodeController.onPageLoad(CheckMode).url)
+  def provideBTIReference: Option[AnswerRow] = userAnswers.get(ProvideBTIReferencePage) map {
+    x => AnswerRow("provideBTIReference.checkYourAnswersLabel", s"${x.reference}", false, routes.ProvideBTIReferenceController.onPageLoad(CheckMode).url)
   }
 
   def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
