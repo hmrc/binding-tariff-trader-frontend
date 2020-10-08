@@ -19,25 +19,25 @@ package controllers
 import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.AnswerCachingControllerBehaviours
-import forms.PreviousCommodityCodeFormProvider
-import models.{NormalMode, PreviousCommodityCode}
+import forms.ProvideBTIReferenceFormProvider
+import models.{NormalMode, BTIReference}
 import navigation.FakeNavigator
 import play.api.data.Form
 import play.api.mvc.{ Call, Request }
 import play.api.libs.json.JsValue
-import views.html.previousCommodityCode
+import views.html.provideBTIReference
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class PreviousCommodityCodeControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
+class ProvideBTIReferenceControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
 
-  private val formProvider = new PreviousCommodityCodeFormProvider()
+  private val formProvider = new ProvideBTIReferenceFormProvider()
 
   def viewAsString(form: Form[_], request: Request[_]): String =
-    previousCommodityCode(frontendAppConfig, form, NormalMode)(request, messages).toString
+    provideBTIReference(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
-    new PreviousCommodityCodeController(
+    new ProvideBTIReferenceController(
       frontendAppConfig,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
@@ -54,7 +54,7 @@ class PreviousCommodityCodeControllerSpec extends ControllerSpecBase with Answer
   val invalidFormData = Map("value" -> "invalid value")
   val backgroundData = Map.empty[String, JsValue]
 
-  "PreviousCommodityCodeController" must {
+  "ProvideBTIReferenceController" must {
     behave like answerCachingController(
       controller,
       onwardRoute,
@@ -62,7 +62,7 @@ class PreviousCommodityCodeControllerSpec extends ControllerSpecBase with Answer
       validFormData,
       invalidFormData,
       backgroundData,
-      PreviousCommodityCode("value 1")
+      BTIReference("value 1")
     )
   }
 }

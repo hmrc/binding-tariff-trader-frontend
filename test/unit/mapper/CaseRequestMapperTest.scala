@@ -166,8 +166,8 @@ class CaseRequestMapperTest extends UnitSpec {
               "Trader Country"
             )
           ),
-          PreviousCommodityCodePage.toString -> js(
-            PreviousCommodityCode(
+          ProvideBTIReferencePage.toString -> js(
+            BTIReference(
               "Reissued BTI Reference"
             )
           ),

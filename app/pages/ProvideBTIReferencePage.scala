@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+import controllers.routes
+import models.{ Mode, BTIReference }
+import play.api.mvc.Call
 
-import forms.mappings.Mappings
-import play.api.data.Form
-import play.api.data.Forms._
-import models.PreviousCommodityCode
-
-class PreviousCommodityCodeFormProvider @Inject() extends Mappings {
-
-   def apply(): Form[PreviousCommodityCode] = Form(
-     mapping(
-      "btiReference" -> text("previousCommodityCode.error.previousCommodityCode.required")
-        .verifying(maxLength(100, "previousCommodityCode.error.previousCommodityCode.length"))
-     )(PreviousCommodityCode.apply)(PreviousCommodityCode.unapply)
-   )
-
+case object ProvideBTIReferencePage extends QuestionPage[BTIReference] {
+  def route(mode: Mode): Call =
+    routes.ProvideBTIReferenceController.onPageLoad(mode)
+  override def toString: String =
+    "provideBTIReference"
 }

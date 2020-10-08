@@ -195,17 +195,17 @@ class NavigatorSpec extends SpecBase {
           routes.SelectApplicationTypeController.onPageLoad(NormalMode)
       }
 
-      "redirect to PreviousCommodityCodePage when user selects YES from SelectApplicationTypePage" in {
+      "redirect to ProvideBTIReferencePage when user selects YES from SelectApplicationTypePage" in {
         val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SelectApplicationTypePage)).thenReturn(Some(true))
 
         navigator.nextPage(SelectApplicationTypePage, NormalMode)(mockUserAnswers) shouldBe
-          routes.PreviousCommodityCodeController.onPageLoad(NormalMode)
+          routes.ProvideBTIReferenceController.onPageLoad(NormalMode)
       }
 
-      "redirect to SimilarItemCommodityCodePage from PreviousCommodityCodePage" in {
-        navigator.nextPage(PreviousCommodityCodePage, NormalMode)(mock[UserAnswers]) shouldBe
+      "redirect to SimilarItemCommodityCodePage from ProvideBTIReferencePage" in {
+        navigator.nextPage(ProvideBTIReferencePage, NormalMode)(mock[UserAnswers]) shouldBe
           routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode)
       }
 
@@ -383,13 +383,13 @@ class NavigatorSpec extends SpecBase {
           routes.CheckYourAnswersController.onPageLoad()
       }
 
-      "go to PreviousCommodityCodePage when yes is selected in SelectApplicationTypePage" in {
+      "go to ProvideBTIReferencePage when yes is selected in SelectApplicationTypePage" in {
         val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SelectApplicationTypePage)).thenReturn(Some(true))
 
         navigator.nextPage(SelectApplicationTypePage, CheckMode)(mockUserAnswers) shouldBe
-          routes.PreviousCommodityCodeController.onPageLoad(CheckMode)
+          routes.ProvideBTIReferenceController.onPageLoad(CheckMode)
       }
 
       "go back to CheckYourAnswersPage when no is selected in SelectApplicationTypePage" in {

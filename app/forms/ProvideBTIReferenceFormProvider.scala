@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json._
+import javax.inject.Inject
 
-case class PreviousCommodityCode (previousCommodityCode: String)
+import forms.mappings.Mappings
+import play.api.data.Form
+import play.api.data.Forms._
+import models.BTIReference
 
-object PreviousCommodityCode {
-  implicit val format = Json.format[PreviousCommodityCode]
+class ProvideBTIReferenceFormProvider @Inject() extends Mappings {
+
+   def apply(): Form[BTIReference] = Form(
+     mapping(
+      "btiReference" -> text("provideBTIReference.error.required")
+        .verifying(maxLength(100, "provideBTIReference.error.length"))
+     )(BTIReference.apply)(BTIReference.unapply)
+   )
+
 }

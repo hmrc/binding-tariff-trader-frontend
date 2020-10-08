@@ -34,7 +34,7 @@ object Journey {
     YesNoJourney(LegalChallengePage, List(LegalChallengeDetailsPage))
   
   val previousBTI =
-    YesNoJourney(SelectApplicationTypePage, List(PreviousCommodityCodePage))
+    YesNoJourney(SelectApplicationTypePage, List(ProvideBTIReferencePage))
   
   val similarItem =
     YesNoJourney(SimilarItemCommodityCodePage, List(CommodityCodeRulingReferencePage))
