@@ -23,7 +23,8 @@ class CommodityCodeDigitsFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "commodityCodeDigits.error.required"
   val lengthKey = "commodityCodeDigits.error.length"
-  val maxLength = 100
+  val numericType = "commodityCodeDigits.error.type"
+  val maxLength = 25
 
   val form = new CommodityCodeDigitsFormProvider()()
 
@@ -48,6 +49,14 @@ class CommodityCodeDigitsFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like commodityCodeField(
+      form,
+      fieldName,
+      requiredErrorKey = FormError(fieldName, requiredKey),
+      notNumericTypeErrorKey = FormError(fieldName, numericType),
+      maxLengthErrorKey = FormError(fieldName, lengthKey, Seq(maxLength))
     )
   }
 }

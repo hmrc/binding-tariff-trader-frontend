@@ -26,7 +26,8 @@ class CommodityCodeDigitsFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "value" -> text("commodityCodeDigits.error.required")
-        .verifying(maxLength(100, "commodityCodeDigits.error.length"))
+        .verifying(maxLength(25, "commodityCodeDigits.error.length"))
+        .verifying(regexp("^[0-9]*$", "commodityCodeDigits.error.length"))
     )
 
 }

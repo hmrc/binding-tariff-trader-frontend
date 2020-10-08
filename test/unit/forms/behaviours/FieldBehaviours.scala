@@ -97,4 +97,37 @@ trait FieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks with 
     }
   }
 
+  def commodityCodeField (
+                        form: Form[_],
+                        fieldName: String,
+                        requiredErrorKey: FormError,
+                        notNumericTypeErrorKey: FormError,
+                        maxLengthErrorKey: FormError
+                        ): Unit = {
+    "not bind when commodity code field not present" in {
+      val result = form.bind(emptyForm).apply(fieldName)
+      result.errors shouldEqual Seq(requiredErrorKey)
+    }
+
+    "not bind commodity code blank values" in {
+      val result = form.bind(Map(fieldName -> "")).apply(fieldName)
+      result.errors shouldEqual Seq(requiredErrorKey)
+    }
+
+    "not bind min length not met" in {
+      val result = form.bind(Map(fieldName -> "1")).apply(fieldName)
+      result.errors shouldEqual(requiredErrorKey)
+    }
+
+    "not bind non-numeric values" in {
+      val result = form.bind(Map(fieldName -> "122jh12")).apply(fieldName)
+      result.errors shouldEqual(Seq(notNumericTypeErrorKey))
+    }
+
+    "not bind max length exceeded" in {
+      val result = form.bind(Map(fieldName -> "1" * 26)).apply(fieldName)
+      result.errors shouldEqual(Seq(maxLengthErrorKey))
+    }
+  }
+
 }

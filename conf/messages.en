@@ -297,7 +297,8 @@ commodityCodeDigits.bodyText = Entering a commodity code, even just the first 2 
 commodityCodeDigits.caption = About the goods
 commodityCodeDigits.checkYourAnswersLabel = Commodity code
 commodityCodeDigits.error.required = Enter at least 2 digits of a commodity code
-commodityCodeDigits.error.length = Commodity code must be 100 characters or less
+commodityCodeDigits.error.length = Commodity code must be 25 digits or less
+commodityCodeDigits.error.type = Commodity code must numerical
 
 whenToSendSample.title = Will you send a sample of the goods to HMRC? - Manage your Advance Tariff Rulings - GOV.UK
 whenToSendSample.caption = About the goods
