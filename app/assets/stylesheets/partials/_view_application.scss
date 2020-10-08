@@ -244,13 +244,11 @@ ul li {
         width: 210mm;
         margin: 0;
     }
-
     body {
         width: auto;
         height: auto;
         margin: 0;
    }
-
    .hidden-print {
        display: none !important;
     }
@@ -258,95 +256,95 @@ ul li {
         display: none !important;
     }
    .print-document {
-           margin: 10mm;
-           border: none;
-           width: 210mm;
-           height: 297mm;
-           padding: 10mm;
-           box-shadow: none;
-           zoom: 100%;
-      }
-      .information-box {
-        background: #e1f3f1;
-        -webkit-print-color-adjust: exact
-      }
-      .column-half {
-          width: 50%;
-          float: left;
-      }
+      margin: 10mm;
+      border: none;
+      width: 210mm;
+      height: 297mm;
+      padding: 10mm;
+      box-shadow: none;
+      zoom: 100%;
+   }
+   .information-box {
+      background: #e1f3f1;
+      -webkit-print-color-adjust: exact
+   }
+   .column-half {
+       width: 50%;
+       float: left;
+   }
 
-    #print-and-save-result {
-        display: none;
-    }
-
-    .print-header {
-        position: fixed;
-        top: 0px;
-        margin-top: 20mm;
-        width: 210mm;
-    }
-
-    .centered-content {
-        display: none;
-    }
-
-    #global-cookie-message {
-        display: none;
-    }
-
-    .translate {
-        display: none;
-    }
-
-    header {
-        display: none;
-    }
-
-    .report-error {
-        display: none;
-    }
+   #print-and-save-result {
+      display: none;
+   }
+   .print-header {
+       position: fixed;
+       top: 0px;
+       margin-top: 20mm;
+       width: 210mm;
+   }
+   .notice .icon {
+       position: absolute;
+       left: 0;
+       top: 50%;
+       margin-top: -17px;
+   }
+   .icon-important {
+       width: 35px;
+       height: 35px;
+       background-image: url(../images/icon-important.png);
+   }
+   .icon {
+       display: inline-block;
+       background-position: 0 0;
+       background-repeat: no-repeat;
+   }
+   .centered-content {
+       display: none;
+   }
+   #global-cookie-message {
+       display: none;
+   }
+   .translate {
+       display: none;
+   }
+   header {
+       display: none;
+   }
+   .report-error {
+       display: none;
+   }
 }
-
 tfoot {
     position: absolute;
     bottom: 10mm;
 }
-
 .page {
     margin-bottom: 10mm;
 }
-
 .section-heading {
     color: #005EA5;
     margin-top: 1em;
 }
-
 .answer--container {
     display: table;
     margin-top: 1em;
     page-break-inside: avoid !important;
     width: 100%;
 }
-
 .answer--question {
     float: left;
     width: 50%;
 }
-
-
 .answer--question p {
     margin-top: 0.5em;
 }
-
 .answer--question p strong {
     font-weight: 700;
 }
-
 .answer--answer {
     float: left;
     width: 50%;
 }
-
 .answer--answer p {
     margin-top: 0.5em;
     margin-left: 1em;

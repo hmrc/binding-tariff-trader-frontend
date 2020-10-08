@@ -404,6 +404,7 @@ view.application.paragraph.whatNext0.nosample = We will give you your ruling wit
 confirmation.paragraph.whatNext1 = You can sign in to
 view.application.whatNext0.check.status.linkText = check the status of your application.
 confirmation.get.moreInformation = Get more information about samples (opens in a new window or tab)
+confirmation.returned.sample.note = Sample will be returned where possible. In some cases they may be damaged during testing. If you want to send the samples back, you must include return postage. Or you can collect your samples from our Southend Office.
 
 view.application.home.Link = Go to your applications and rulings
 view.application.header = Your application

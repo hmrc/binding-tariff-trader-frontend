@@ -115,6 +115,15 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     <div class="column-two-thirds">
                         <h3>@messages("confirmation.heading2.whatNext")</h3>
                         <p class="govuk-body">@messages("view.application.paragraph.whatNext0")</p>
+
+                        @if(pdf.sendingSample) {
+
+                        @components.icon_important("confirmation.sendingSamples.important")
+
+                        <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
+
+                        }
+
                     </div>
 
                     @if(pdf.sendingSample){
@@ -133,15 +142,11 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                                 </div>
                                 <div>
                                     <dl>
-                                        <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span>
-                                        </p></dt>
-                                        <dt>@messages("application.footer.sendingSamples.address.line1")</dt>
-                                        <dt>@messages("application.footer.sendingSamples.address.line2")</dt>
-                                        <dt>@messages("application.footer.sendingSamples.address.line3")</dt>
-                                        <dt>@messages("application.footer.sendingSamples.address.line4")</dt>
-                                        <dt>@messages("application.footer.sendingSamples.address.line5")</dt>
-                                        <dt>@messages("application.footer.sendingSamples.address.line5")</dt>
-                                        <dt>@messages("application.footer.sendingSamples.address.line7")</dt>
+                                        <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span></p>
+                                        </dt>
+                                        <address>
+                                            @Html(messages("confirmation.sendingSamples.address"))
+                                        </address>
                                         <dt class="mb-2">@messages("application.footer.sendingSamples.address.line8")
                                         </dt>
                                     </dl>

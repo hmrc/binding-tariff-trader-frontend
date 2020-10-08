@@ -41,38 +41,35 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
         </span>
     </div>
 
+    <h2 class="heading-large">@messages("confirmation.heading2.whatNext")</h2>
+
+    <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
+
     @if(confirmation.sendingSamples) {
-        <h2 class="heading-medium">@messages("confirmation.heading2.sendingSamples")</h2>
+
+        <p class="break-word">@messages("confirmation.paragraph.whatNext0.sample") <span>@messages("confirmation.paragraph.whatNext1") <a href="#">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
 
         @components.icon_important("confirmation.sendingSamples.important")
 
         <p>@messages("confirmation.paragraph0.sendingSamples")</p>
 
-        <p>@messages("confirmation.paragraph1.sendingSamples") @messages("caseReference.format", confirmation.reference).
+        <div class="panel panel-border-wide">@messages("confirmation.returned.sample.note")</div>
+
+        <p>@messages("confirmation.paragraph1.sendingSamples") <span class="bold"> @messages("caseReference.format", confirmation.reference).</span>
             @messages("confirmation.paragraph2.sendingSamples")</p>
 
         <address>
         @Html(messages("confirmation.sendingSamples.address"))
         </address>
+    } else {
+        <p lass="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="#">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
     }
 
-    <h2 class="heading-large">@messages("confirmation.heading2.whatNext")</h2>
 
-    <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
 
-    <p class="break-word">
-        @if(confirmation.sendingSamples){
-            @Html(messages("confirmation.paragraph.whatNext0.sample"))
-        } else {
-            @Html(messages("view.application.paragraph.whatNext0.nosample"))
-        }
-        <span>@messages("confirmation.paragraph.whatNext1") <a href="#">@messages("view.application.whatNext0.check.status.linkText")</a></span>
-    </p>
-    <div>
-        <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
-            @messages("confirmation.get.moreInformation")
-        </a>
-    </div>
+    <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+        @messages("confirmation.get.moreInformation")
+    </a></p>
 
     <div class="mt-2 footer-page-break">
         @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplications().url)
