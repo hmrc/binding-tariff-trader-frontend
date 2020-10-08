@@ -33,7 +33,8 @@ case class PdfViewModel(
                          hazardousSample: Option[Boolean],
                          returnSample: Boolean,
                          attachment: Seq[Attachment] = Seq.empty,
-
+                         foundCommodityCode: Option[String],
+                         legalProblems: Option[String]
                        )
 
 object PdfViewModel{
@@ -50,7 +51,9 @@ object PdfViewModel{
     sendingSample = c.application.sampleToBeProvided,
     hazardousSample = c.application.sampleIsHazardous,
     returnSample = c.application.sampleToBeReturned,
-    attachment = c.attachments.seq
+    attachment = c.attachments.seq,
+    foundCommodityCode = c.application.envisagedCommodityCode,
+    legalProblems = c.application.knownLegalProceedings
   )
 
   private def yesNoAnswer(x: Boolean) = if (x) "site.yes" else "site.no"

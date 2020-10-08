@@ -427,6 +427,11 @@ view.application.sending.sample.paragraph2 = if you consider a sample to be haza
 view.application.paragraph.whatNext0 = We will give you your ruling within 120 days. You can sign in to Advance Tariff Rulings check the status of your application.
 view.application.paragraph.do.not.send.sample = Do not send a sample unless one has been requested by the Tariff Classification Team.
 
+view.applicationPdf.provideConfidentialInformation = Provide confidential information for the item?
+view.applicationPdf.foundComodityCode = Have you found a commodity code for the item?
+view.applicationPdf.legalProblemQuestion = Have there been any legal problems classifying the item?
+view.applicationPdf.legalProblem = Problem classifying
+
 confirmation.yourRefNumber = Your application reference
 confirmation.paragraph.confirmationEmail = We have sent your confirmation email to {0}
 confirmation.download.link.PDF = Download a PDF of the application (opens in a new window or tab)

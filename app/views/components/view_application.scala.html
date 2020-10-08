@@ -26,7 +26,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 }
 
 
-<div class="grid-row hidden-print">
+<div id= "my-heading" class="grid-row hidden-print">
    <div class="column-two-thirds">
        <div class="heading-xlarge">@messages("view.application.header")</div>
    </div>
@@ -199,22 +199,53 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@pdf.confidentialInformation</dd>
                 </div>
-                }
+                } else {
                 <div>
-                    <dt class="cya-question">@messages("whenToSendSample.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                    <dt class="cya-question">@messages("provideConfidentialInformation.provideConfidentialInformation")</dt>
+                    <dd class="cya-answer">@messages("site.no")</dd>
                 </div>
+                }
 
-                @if(pdf.hazardousSample.isDefined){
+                @if(pdf.sendingSample){
                 <div>
                     <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@{if(pdf.hazardousSample.get) {messages("site.yes")} else {messages("site.no")}}</dd>
                 </div>
-                }
+
                 <div>
                     <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
                 </div>
+                } else {
+                <div>
+                    <dt class="cya-question">@messages("whenToSendSample.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer">@messages("site.no")</dd>
+                </div>
+                }
+
+                @if(pdf.foundCommodityCode.isDefined) {
+                <div>
+                    <dt class="cya-question">@messages("application.section.aboutItem.envisagedCommodityCode")</dt>
+                    <dd class="cya-answer">@pdf.foundCommodityCode</dd>
+                </div>
+                } else {
+                <div>
+                    <dt class="cya-question">@messages("view.applicationPdf.foundComodityCode")</dt>
+                    <dd class="cya-answer">@messages("site.no")</dd>
+                </div>
+                }
+
+                @if(pdf.legalProblems.isDefined) {
+                <div>
+                    <dt class="cya-question">@messages("view.applicationPdf.legalProblem")</dt>
+                    <dd class="cya-answer">@pdf.legalProblems</dd>
+                </div>
+                } else {
+                <div>
+                    <dt class="cya-question">@messages("view.applicationPdf.legalProblemQuestion")</dt>
+                    <dd class="cya-answer">@messages("site.no")</dd>
+                </div>
+                }
 
             </dl>
             <h3 class="heading-medium">@messages("beforeYouStart.subheading2")</h3>

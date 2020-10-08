@@ -72,7 +72,12 @@ class DeclarationController @Inject()(
       atar        <- createCase(newCaseRequest, att, letter, answers)
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
       _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
-      userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar))
+      userAnswers = {
+        println("atar ::::")
+        println("atar :::: " + atar)
+        println("atar :::: " + PdfViewModel(atar))
+        answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar))
+      }
       _           <- dataCacheConnector.save(userAnswers.cacheMap)
       res: Result <- successful(Redirect(navigator.nextPage(DeclarationPage, mode)(userAnswers)))
     } yield res
