@@ -47,9 +47,9 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.commodityCodeBestMatch.get.answer shouldBe "site.yes"
       }
 
-      "return a row with the correct answer for WhenToSendSamplePage" in {
-        given(userAnswers.get(WhenToSendSamplePage)).willReturn(Option(true))
-        checkHelper.whenToSendSample.get.answer shouldBe "site.yes"
+      "return a row with the correct answer for AreYouSendingSamplesPage" in {
+        given(userAnswers.get(AreYouSendingSamplesPage)).willReturn(Option(true))
+        checkHelper.areYouSendingSamples.get.answer shouldBe "site.yes"
       }
 
       "return a row with the correct answer for IsSampleHazardous" in {

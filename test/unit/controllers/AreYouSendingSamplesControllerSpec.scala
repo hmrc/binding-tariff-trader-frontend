@@ -19,25 +19,25 @@ package controllers
 import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.YesNoCachingControllerBehaviours
-import forms.WhenToSendSampleFormProvider
+import forms.AreYouSendingSamplesFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
 import play.api.mvc.{ Call, Request }
-import views.html.whenToSendSample
+import views.html.areYouSendingSamples
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.mvc.Request
 
-class WhenToSendSampleControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
+class AreYouSendingSamplesControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
-  private val formProvider = new WhenToSendSampleFormProvider()
+  private val formProvider = new AreYouSendingSamplesFormProvider()
   private val goodsName = "some-goods-name"
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
-    new WhenToSendSampleController(
+    new AreYouSendingSamplesController(
       frontendAppConfig,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
@@ -51,9 +51,9 @@ class WhenToSendSampleControllerSpec extends ControllerSpecBase with YesNoCachin
   private def onwardRoute: Call = Call("GET", "/foo")
 
   private def viewAsString(form: Form[Boolean], request: Request[_]): String =
-    whenToSendSample(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
+    areYouSendingSamples(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
-  "WhenToSendSampleController" must {
+  "AreYouSendingSamplesController" must {
     behave like yesNoCachingController(
       controller,
       onwardRoute,

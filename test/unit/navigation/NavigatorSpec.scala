@@ -108,21 +108,21 @@ class NavigatorSpec extends SpecBase {
           routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
       }
 
-      "redirect to WhenToSendSample page when no further files are uploaded" in {
+      "redirect to AreYouSendingSamples page when no further files are uploaded" in {
         val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(FileListAnswers(Some(false), Nil)))
 
         navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
-          routes.WhenToSendSampleController.onPageLoad(NormalMode)
+          routes.AreYouSendingSamplesController.onPageLoad(NormalMode)
       }
 
-      "redirect to IsSampleHazardous page when user selects YES from WhenToSendSample page" in {
+      "redirect to IsSampleHazardous page when user selects YES from AreYouSendingSamples page" in {
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.get(WhenToSendSamplePage)).thenReturn(Some(true))
+        when(mockUserAnswers.get(AreYouSendingSamplesPage)).thenReturn(Some(true))
 
-        navigator.nextPage(WhenToSendSamplePage, NormalMode)(mockUserAnswers) shouldBe
+        navigator.nextPage(AreYouSendingSamplesPage, NormalMode)(mockUserAnswers) shouldBe
           routes.IsSampleHazardousController.onPageLoad(NormalMode)
       }
 
@@ -136,12 +136,12 @@ class NavigatorSpec extends SpecBase {
           routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)
       }
 
-      "redirect to CommodityCodeBestMatchPage page when user selects NO from WhenToSendSample page" in {
+      "redirect to CommodityCodeBestMatchPage page when user selects NO from AreYouSendingSamples page" in {
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.get(WhenToSendSamplePage)).thenReturn(Some(false))
+        when(mockUserAnswers.get(AreYouSendingSamplesPage)).thenReturn(Some(false))
 
-        navigator.nextPage(WhenToSendSamplePage, NormalMode)(mockUserAnswers) shouldBe
+        navigator.nextPage(AreYouSendingSamplesPage, NormalMode)(mockUserAnswers) shouldBe
           routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)
       }
 
@@ -269,8 +269,8 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(AddConfidentialInformationPage, NormalMode)(mockUserAnswers) shouldBe
           routes.AddConfidentialInformationController.onPageLoad(NormalMode)
 
-        navigator.nextPage(WhenToSendSamplePage, NormalMode)(mockUserAnswers) shouldBe
-          routes.WhenToSendSampleController.onPageLoad(NormalMode)
+        navigator.nextPage(AreYouSendingSamplesPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.AreYouSendingSamplesController.onPageLoad(NormalMode)
 
         navigator.nextPage(CommodityCodeBestMatchPage, NormalMode)(mockUserAnswers) shouldBe
           routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)
@@ -313,12 +313,12 @@ class NavigatorSpec extends SpecBase {
           routes.CheckYourAnswersController.onPageLoad()
       }
 
-      "go to IsSampleHazardousPage when yes is selected in WhenToSendSamplePage" in {
+      "go to IsSampleHazardousPage when yes is selected in AreYouSendingSamplesPage" in {
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.get(WhenToSendSamplePage)).thenReturn(Some(true))
+        when(mockUserAnswers.get(AreYouSendingSamplesPage)).thenReturn(Some(true))
 
-        navigator.nextPage(WhenToSendSamplePage, CheckMode)(mockUserAnswers) shouldBe
+        navigator.nextPage(AreYouSendingSamplesPage, CheckMode)(mockUserAnswers) shouldBe
           routes.IsSampleHazardousController.onPageLoad(CheckMode)
       }
 
@@ -338,12 +338,12 @@ class NavigatorSpec extends SpecBase {
           routes.ReturnSamplesController.onPageLoad(CheckMode)
       }
 
-      "go back to CheckYourAnswersPage when no is selected in WhenToSendSamplePage" in {
+      "go back to CheckYourAnswersPage when no is selected in AreYouSendingSamplesPage" in {
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.get(WhenToSendSamplePage)).thenReturn(Some(false))
+        when(mockUserAnswers.get(AreYouSendingSamplesPage)).thenReturn(Some(false))
 
-        navigator.nextPage(WhenToSendSamplePage, CheckMode)(mockUserAnswers) shouldBe
+        navigator.nextPage(AreYouSendingSamplesPage, CheckMode)(mockUserAnswers) shouldBe
           routes.CheckYourAnswersController.onPageLoad()
       }
       

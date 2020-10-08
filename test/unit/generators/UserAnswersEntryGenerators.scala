@@ -81,10 +81,10 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryWhenToSendSampleUserAnswersEntry: Arbitrary[(WhenToSendSamplePage.type, JsValue)] =
+  implicit lazy val arbitraryAreYouSendingSamplesUserAnswersEntry: Arbitrary[(AreYouSendingSamplesPage.type, JsValue)] =
     Arbitrary {
       for {
-        page  <- arbitrary[WhenToSendSamplePage.type]
+        page  <- arbitrary[AreYouSendingSamplesPage.type]
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }

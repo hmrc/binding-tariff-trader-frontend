@@ -18,14 +18,14 @@ package pages
 
 import pages.behaviours.PageBehaviours
 
-class WhenToSendSamplePageSpec extends PageBehaviours {
+class AreYouSendingSamplesPageSpec extends PageBehaviours {
 
-  "WhenToSendSamplePage" must {
+  "AreYouSendingSamplesPage" must {
 
-    beRetrievable[Boolean](WhenToSendSamplePage)
+    beRetrievable[Boolean](AreYouSendingSamplesPage)
 
-    beSettable[Boolean](WhenToSendSamplePage)
+    beSettable[Boolean](AreYouSendingSamplesPage)
 
-    beRemovable[Boolean](WhenToSendSamplePage)
+    beRemovable[Boolean](AreYouSendingSamplesPage)
   }
 }

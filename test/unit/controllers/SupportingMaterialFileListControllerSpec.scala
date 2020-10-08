@@ -63,7 +63,7 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase {
       val result = controller().onSubmit(NormalMode)(postRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.WhenToSendSampleController.onPageLoad(NormalMode).url)
+      redirectLocation(result) shouldBe Some(routes.AreYouSendingSamplesController.onPageLoad(NormalMode).url)
     }
 
     "redirect to the same page when delete element" in {

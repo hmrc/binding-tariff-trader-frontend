@@ -21,11 +21,11 @@ import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class WhenToSendSampleFormProvider @Inject() extends Mappings {
+class AreYouSendingSamplesFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("whenToSendSample.error.required")
+      "value" -> boolean("areYouSendingSamples.error.required")
     )
 
 }
