@@ -117,7 +117,7 @@ $(document).ready(function () {
     updateSessionHistory();
 
     // =====================================================
-    // Back link uses a js session storge based history stack
+    // Back link uses a js session storage based history stack
     // =====================================================
     // store referrer value to cater for IE - https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/  */
     var docReferrer = document.referrer
@@ -147,7 +147,8 @@ $(document).ready(function () {
 
     function updateSessionHistory() {
         const historyStack = JSON.parse(sessionStorage.getItem("historyStack")) || [];
-        if (historyStack[historyStack.length - 1] !== window.location.href) {
+        const latestUrl = historyStack[historyStack.length - 1]
+        if (latestUrl !== window.location.href) {
             historyStack.push(window.location.href)
             sessionStorage.setItem("historyStack", JSON.stringify(historyStack));
         }
