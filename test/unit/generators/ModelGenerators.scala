@@ -42,11 +42,11 @@ trait ModelGenerators {
       } yield FileAttachment(id, name, mimeType, size)
     }
 
-  implicit lazy val arbitraryPreviousCommodityCode: Arbitrary[PreviousCommodityCode] =
+  implicit lazy val arbitraryBTIReference: Arbitrary[BTIReference] =
     Arbitrary {
       for {
         field1 <- arbitrary[String]
-      } yield PreviousCommodityCode(field1)
+      } yield BTIReference(field1)
     }
 
   implicit lazy val arbitraryInformationAboutYourItem: Arbitrary[Boolean] =

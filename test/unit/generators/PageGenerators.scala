@@ -39,8 +39,8 @@ trait PageGenerators {
   implicit lazy val arbitraryReturnSamplesPage: Arbitrary[ReturnSamplesPage.type] =
     Arbitrary(ReturnSamplesPage)
 
-  implicit lazy val arbitraryWhenToSendSamplePage: Arbitrary[WhenToSendSamplePage.type] =
-    Arbitrary(WhenToSendSamplePage)
+  implicit lazy val arbitraryAreYouSendingSamplesPage: Arbitrary[AreYouSendingSamplesPage.type] =
+    Arbitrary(AreYouSendingSamplesPage)
 
   implicit lazy val arbitraryCommodityCodeDigitsPage: Arbitrary[CommodityCodeDigitsPage.type] =
     Arbitrary(CommodityCodeDigitsPage)
@@ -51,8 +51,8 @@ trait PageGenerators {
   implicit lazy val arbitraryUploadSupportingMaterialMultiplePage: Arbitrary[UploadSupportingMaterialMultiplePage.type] =
     Arbitrary(UploadSupportingMaterialMultiplePage)
 
-  implicit lazy val arbitraryPreviousCommodityCodePage: Arbitrary[PreviousCommodityCodePage.type] =
-    Arbitrary(PreviousCommodityCodePage)
+  implicit lazy val arbitraryProvideBTIReferencePage: Arbitrary[ProvideBTIReferencePage.type] =
+    Arbitrary(ProvideBTIReferencePage)
 
   implicit lazy val arbitraryEnterContactDetailsPage: Arbitrary[EnterContactDetailsPage.type] =
     Arbitrary(EnterContactDetailsPage)
@@ -60,8 +60,8 @@ trait PageGenerators {
   implicit lazy val arbitraryRegisterBusinessRepresentingPage: Arbitrary[RegisterBusinessRepresentingPage.type] =
     Arbitrary(RegisterBusinessRepresentingPage)
 
-  implicit lazy val arbitrarySelectApplicationTypePage: Arbitrary[SelectApplicationTypePage.type] =
-    Arbitrary(SelectApplicationTypePage)
+  implicit lazy val arbitraryPreviousBTIRulingPage: Arbitrary[PreviousBTIRulingPage.type] =
+    Arbitrary(PreviousBTIRulingPage)
 
   implicit lazy val arbitraryWhichBestDescribesYouPage: Arbitrary[WhichBestDescribesYouPage.type] =
     Arbitrary(WhichBestDescribesYouPage)

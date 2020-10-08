@@ -120,7 +120,7 @@ class Navigator @Inject()() {
     // Do you want to upload any supporting documents?
     loopingJourney(
       journey = Journey.supportingDocuments,
-      continuingTo = WhenToSendSamplePage,
+      continuingTo = AreYouSendingSamplesPage,
       mode = NormalMode
     ),
 
@@ -141,7 +141,7 @@ class Navigator @Inject()() {
     // Have there been any legal problems classifying the goods?
     yesNoJourney(
       journey = Journey.legalProblems,
-      continuingTo = SelectApplicationTypePage,
+      continuingTo = PreviousBTIRulingPage,
       mode = NormalMode
     ),
 

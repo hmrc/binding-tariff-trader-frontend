@@ -16,17 +16,17 @@
 
 package pages
 
-import models.PreviousCommodityCode
+import models.BTIReference
 import pages.behaviours.PageBehaviours
 
-class PreviousCommodityCodePageSpec extends PageBehaviours {
+class ProvideBTIReferencePageSpec extends PageBehaviours {
 
-  "PreviousCommodityCodePage" must {
+  "ProvideBTIReferencePage" must {
 
-    beRetrievable[PreviousCommodityCode](PreviousCommodityCodePage)
+    beRetrievable[BTIReference](ProvideBTIReferencePage)
 
-    beSettable[PreviousCommodityCode](PreviousCommodityCodePage)
+    beSettable[BTIReference](ProvideBTIReferencePage)
 
-    beRemovable[PreviousCommodityCode](PreviousCommodityCodePage)
+    beRemovable[BTIReference](ProvideBTIReferencePage)
   }
 }

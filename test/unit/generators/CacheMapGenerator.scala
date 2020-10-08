@@ -32,11 +32,11 @@ trait CacheMapGenerator {
     arbitrary[(CommodityCodeRulingReferencePage.type, JsValue)] ::
     arbitrary[(SimilarItemCommodityCodePage.type, JsValue)] ::
     arbitrary[(ReturnSamplesPage.type, JsValue)] ::
-    arbitrary[(WhenToSendSamplePage.type, JsValue)] ::
+    arbitrary[(AreYouSendingSamplesPage.type, JsValue)] ::
     arbitrary[(CommodityCodeDigitsPage.type, JsValue)] ::
     arbitrary[(CommodityCodeBestMatchPage.type, JsValue)] ::
     arbitrary[(UploadSupportingMaterialMultiplePage.type, JsValue)] ::
-    arbitrary[(PreviousCommodityCodePage.type, JsValue)] ::
+    arbitrary[(ProvideBTIReferencePage.type, JsValue)] ::
     arbitrary[(EnterContactDetailsPage.type, JsValue)] ::
     arbitrary[(RegisterBusinessRepresentingPage.type, JsValue)] ::
     arbitrary[(WhichBestDescribesYouPage.type, JsValue)] ::
