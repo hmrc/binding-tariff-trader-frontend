@@ -28,6 +28,7 @@ error.summary.title = There is a problem
 
 index.title = Manage your Advance Tariff Rulings - GOV.UK
 index.heading = Your applications and rulings
+index.noapplications = You have not started any applications.
 index.home = Home
 
 global.link.signout = Sign out
@@ -57,7 +58,7 @@ session_expired.title = For your security, we deleted your answers
 session_expired.heading = For your security, we deleted your answers
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
 
-site.start = Start application
+site.start = Start new application
 site.back = Back
 site.delete = Remove
 site.edit = Change
