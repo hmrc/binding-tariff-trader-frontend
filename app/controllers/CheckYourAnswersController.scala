@@ -52,7 +52,7 @@ class CheckYourAnswersController @Inject()(
                                             fileService: FileService,
                                             mapper: CaseRequestMapper,
                                             cc: MessagesControllerComponents
-                                          ) (implicit ec: ExecutionContext)extends FrontendController(cc) with I18nSupport {
+                                          )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private implicit val lang: Lang = appConfig.defaultLang
 
@@ -70,7 +70,7 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.provideConfidentialInformation,
           checkYourAnswersHelper.supportingMaterialFileListChoice,
           checkYourAnswersHelper.supportingMaterialFileList,
-          checkYourAnswersHelper.whenToSendSample,
+          checkYourAnswersHelper.areYouSendingSamples,
           checkYourAnswersHelper.isSampleHazardous,
           checkYourAnswersHelper.returnSamples,
           checkYourAnswersHelper.commodityCodeBestMatch,
@@ -82,8 +82,8 @@ class CheckYourAnswersController @Inject()(
       AnswerSection(
         Some("checkYourAnswers.aboutOtherRulingsSection"),
         Seq(
-          checkYourAnswersHelper.selectApplicationType,
-          checkYourAnswersHelper.previousCommodityCode,
+          checkYourAnswersHelper.previousBTIRuling,
+          checkYourAnswersHelper.provideBTIReference,
           checkYourAnswersHelper.similarItemCommodityCode,
           checkYourAnswersHelper.commodityCodeRulingReference
         ).flatten

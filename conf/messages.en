@@ -67,7 +67,7 @@ session_expired.title = For your security, we deleted your answers
 session_expired.heading = For your security, we deleted your answers
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
 
-site.start = Start application
+site.start = Start new application
 site.back = Back
 site.delete = Remove
 site.edit = Change
@@ -133,11 +133,11 @@ whichBestDescribesYou.businessRepresentative = A different business or organisat
 whichBestDescribesYou.checkYourAnswersLabel = This application is for
 whichBestDescribesYou.error.required = Select if this application is for the business or organisation you work for or own, or a business, organisation or individual that you are representing
 
-selectApplicationType.title = Do you have a previous BTI ruling reference for the goods? - Manage your Advance Tariff Rulings - GOV.UK
-selectApplicationType.heading = Do you have a previous BTI ruling reference for the {0}?
-selectApplicationType.checkYourAnswersLabel = Renewing a BTI?
-selectApplicationType.error.required = Select yes if you are renewing a previous BTI ruling
-selectApplicationType.caption = About other rulings
+previousBTIRuling.title = Do you have a previous BTI ruling reference for the goods? - Manage your Advance Tariff Rulings - GOV.UK
+previousBTIRuling.heading = Do you have a previous BTI ruling reference for the {0}?
+previousBTIRuling.checkYourAnswersLabel = Renewing a BTI?
+previousBTIRuling.error.required = Select yes if you are renewing a previous BTI ruling
+previousBTIRuling.caption = About other rulings
 
 registerBusinessRepresenting.title =  What are the registered details of the business, organisation or individual you’re representing? - Manage your Advance Tariff Rulings - GOV.UK
 registerBusinessRepresenting.heading = What are the registered details of the business, organisation or individual you’re representing?
@@ -191,13 +191,13 @@ acceptItemInformationList.askfor.paragraph2 = You can let us know if you:
 acceptItemInformationList.askfor.item1 = think you have found the correct commodity code
 acceptItemInformationList.askfor.item2 = need to send samples
 
-previousCommodityCode.title = Provide the reference number for the previous BTI ruling - Manage your Advance Tariff Rulings - GOV.UK
-previousCommodityCode.heading = Provide the reference number for the previous BTI ruling
-previousCommodityCode.caption = About other rulings
-previousCommodityCode.previousCommodityCode.hint = The reference number, for example GB12345678, is on the ruling certificate.
-previousCommodityCode.checkYourAnswersLabel = Renewal reference
-previousCommodityCode.error.previousCommodityCode.required = Enter a ruling reference
-previousCommodityCode.error.previousCommodityCode.length = Previous ruling reference must be 100 characters or less
+provideBTIReference.title = Provide the reference number for the previous BTI ruling - Manage your Advance Tariff Rulings - GOV.UK
+provideBTIReference.heading = Provide the reference number for the previous BTI ruling
+provideBTIReference.caption = About other rulings
+provideBTIReference.hint = The reference number, for example GB12345678, is on the ruling certificate.
+provideBTIReference.checkYourAnswersLabel = Renewal reference
+provideBTIReference.error.required = Enter a ruling reference
+provideBTIReference.error.length = Previous ruling reference must be 100 characters or less
 
 provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
 provideGoodsName.heading = Provide a name for the goods
@@ -311,18 +311,16 @@ commodityCodeDigits.checkYourAnswersLabel = Commodity code
 commodityCodeDigits.error.required = Enter at least 2 digits of a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
 
-whenToSendSample.title = Will you send a sample of the goods to HMRC? - Manage your Advance Tariff Rulings - GOV.UK
-whenToSendSample.caption = About the goods
-whenToSendSample.heading = Will you send a sample of the {0} to HMRC?
-whenToSendSample.yesProvideSample = Yes
-whenToSendSample.notSendingSample = No
-whenToSendSample.checkYourAnswersLabel = Sending samples?
-whenToSendSample.error.required = Select yes if you are sending a sample
-whenToSendSample.first.paragraph = Samples are usually required if the goods are:
-whenToSendSample.second.paragraph = If you are not sure whether you need to provide a sample, you can wait for the Tariff Classification Team to contact you if one is needed.
-whenToSendSample.listItem1 = textiles
-whenToSendSample.listItem2 = shoes
-whenToSendSample.listItem3 = ceramics
+areYouSendingSamples.title = Will you send a sample of the goods to HMRC? - Manage your Advance Tariff Rulings - GOV.UK
+areYouSendingSamples.caption = About the goods
+areYouSendingSamples.heading = Will you send a sample of the {0} to HMRC?
+areYouSendingSamples.checkYourAnswersLabel = Sending samples?
+areYouSendingSamples.error.required = Select yes if you are sending a sample
+areYouSendingSamples.first.paragraph = Samples are usually required if the goods are:
+areYouSendingSamples.second.paragraph = If you are not sure whether you need to provide a sample, you can wait for the Tariff Classification Team to contact you if one is needed.
+areYouSendingSamples.listItem1 = textiles
+areYouSendingSamples.listItem2 = shoes
+areYouSendingSamples.listItem3 = ceramics
 
 isSampleHazardous.title = Could the sample be potentially hazardous? - Manage your Advance Tariff Rulings - GOV.UK
 isSampleHazardous.heading = Could the sample be potentially hazardous?
@@ -353,7 +351,7 @@ commodityCodeRulingReference.heading = Provide the reference number of a similar
 commodityCodeRulingReference.caption = About other rulings
 commodityCodeRulingReference.hint = The reference number, for example FR12345678, is on the ruling certificate.
 commodityCodeRulingReference.checkYourAnswersLabel = Similar renewal references
-commodityCodeRulingReference.error.required = Enter the ruling reference number
+commodityCodeRulingReference.error.required = Enter a ruling reference number
 
 legalChallenge.title = Have there been any legal problems classifying the goods? - Manage your Advance Tariff Rulings - GOV.UK
 legalChallenge.heading = Have there been any legal problems classifying the {0}?
@@ -370,7 +368,7 @@ legalChallenge.listItem2 = commodity codes under review
 legalChallengeDetails.title = Provide details of the legal problems classifying the goods - Manage your Advance Tariff Rulings - GOV.UK
 legalChallengeDetails.heading = Provide details of the legal problems classifying the {0}
 legalChallengeDetails.caption = About the goods
-legalChallengeDetails.checkYourAnswersLabel = Problem classifying
+legalChallengeDetails.checkYourAnswersLabel = Problems classifying?
 legalChallengeDetails.first.paragraph = Providing this legal or administrative information can help to identify goods with similar rulings.
 legalChallengeDetails.second.paragraph = This may include details of:
 legalChallengeDetails.item1 = court rulings
@@ -522,7 +520,7 @@ case.tabs.applications = Applications
 case.tabs.applications.notSubmitted = Submitted applications will appear here
 
 case.tabs.applications.table.reference = Reference
-case.tabs.applications.table.itemName = Item name
+case.tabs.applications.table.itemName = Name of goods
 case.tabs.applications.table.dateSubmitted = Date submitted
 case.tabs.applications.table.status = Status
 case.tabs.applications.table.download =
@@ -536,8 +534,18 @@ case.application.status.infoRequested = Info requested
 case.application.status.completed = Completed
 case.application.status.draft = Draft
 case.application.status.suspended = Suspended
+case.application.status.submitted = Submitted
+case.application.ruling.status.expired = Expired ruling
+case.application.status.approvedRuling = Approved ruling
+case.application.status.approvedRulingExpiring = Ruling expires in {0} days
+case.application.status.cancelled = Cancelled ruling
+case.application.ruling.viewRuling = View ruling
+case.application.ruling.renewRuling = Renew ruling
+case.application.ruling.table.download = Download
+
 
 case.application.viewApplication = View application
+case.application.deleteApplication = Delete application
 case.application.viewApplication.hidden = View application for reference {0}
 
 case.tabs.rulings = Rulings
@@ -964,4 +972,4 @@ accessibility.howWeTested.p2.text=. The full service was tested by HMRC and incl
 accessibility.howWeTested.p3=This page was prepared on 1 September 2020.
 accessibility.howWeTested.p4=It was last updated on 1 September 2020.
 
-
+application.dashboard.status.title = Advance Tariff Rulings

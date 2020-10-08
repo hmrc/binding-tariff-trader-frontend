@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import controllers.routes
-import models.{ Mode, PreviousCommodityCode }
-import play.api.mvc.Call
+import play.api.libs.json._
 
-case object PreviousCommodityCodePage extends QuestionPage[PreviousCommodityCode] {
-  def route(mode: Mode): Call =
-    routes.PreviousCommodityCodeController.onPageLoad(mode)
-  override def toString: String =
-    "previousCommodityCode"
+case class BTIReference (reference: String)
+
+object BTIReference {
+  implicit val format = Json.format[BTIReference]
 }

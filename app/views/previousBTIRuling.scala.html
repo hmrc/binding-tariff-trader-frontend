@@ -23,11 +23,11 @@
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("selectApplicationType.title")}",
+    title = s"${errorPrefix(form)} ${messages("previousBTIRuling.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = SelectApplicationTypeController.onSubmit(mode)) {
+    @helpers.form(action = PreviousBTIRulingController.onSubmit(mode)) {
 
         @components.back_link()
 
@@ -44,7 +44,7 @@
 
 @heading = {
     @components.heading(
-        messages("selectApplicationType.heading", goodsName),
-        captionMsg = Some(messages("selectApplicationType.caption"))
+        messages("previousBTIRuling.heading", goodsName),
+        captionMsg = Some(messages("previousBTIRuling.caption"))
     )
 }
