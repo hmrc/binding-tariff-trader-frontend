@@ -34,6 +34,7 @@ import play.api.test.Helpers._
 import service.{CasesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
+import viewmodels.PdfViewModel
 import views.html.declaration
 
 import scala.concurrent.Future.{failed, successful}
@@ -52,6 +53,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
   private val fileService = mock[FileService]
   private val btiApp = mock[Application]
   private val contact = mock[Contact]
+  private val pdf = mock[PdfViewModel]
 
   private implicit val mat: Materializer = app.materializer
 
@@ -65,6 +67,7 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     when(btiApp.contact).thenReturn(contact)
     when(contact.email).thenReturn("luigi@example.test")
     when(contact.name).thenReturn("luigi")
+    when(contact.phone).thenReturn(Some("02123335566"))
 
     when(mapper.map(any[UserAnswers])).thenReturn(newCaseReq)
   }
@@ -125,6 +128,8 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       givenTheCaseCreatesSuccessfully()
       givenTheAttachmentPublishSucceeds()
       givenTheCaseCreatedEventIsSuccessful
+
+      when()
 
       val result = await(controller(extractDataFromCache).onSubmit(NormalMode)(fakeRequest))
 

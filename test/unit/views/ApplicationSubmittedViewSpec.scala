@@ -31,10 +31,9 @@ import views.html.components.view_application
 class ApplicationSubmittedViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "view.application"
-  private val agentCase = oCase.btiCaseExample
-  private val pdf = PdfViewModel(agentCase)
+  private val pdfView = oCase.pdf
 
-  private def createView(pdfViewModel: PdfViewModel = pdf): Html = view_application(frontendAppConfig, pdfViewModel)(fakeRequest, messages)
+  private def createView(pdfViewModel: PdfViewModel = pdfView): Html = view_application(frontendAppConfig, pdfViewModel)(fakeRequest, messages)
 
   protected def view(html: Html): Document = {
     Jsoup.parse(html.toString())
@@ -42,18 +41,11 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
 
   "Confirmation view" must {
 
-    "contain a page title" in {
-      val doc = view(createView())
-
-      doc should containElementWithID("my-heading")
-      doc.getElementById("my-heading") should containText(messages("view.application.header"))
-    }
-
     "contain a page heading" in {
       val doc = view(createView())
 
-      doc should containElementWithID("my-heading")
-      doc.getElementById("my-heading") should containText(messages("view.application.header"))
+      doc should containElementWithID("pdf-id")
+      doc.getElementById("pdf-id") should containText(messages("view.application.header"))
     }
 
     "contain a page description" in {
@@ -81,6 +73,12 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
       doc should containText(messages("view.application.contact.phone"))
     }
 
+    "contain application date submitted" in {
+      val doc = view(createView()).getElementById("print-pages")
+
+      doc should containText(messages("view.application.contact.date"))
+    }
+
     "contain goods name and goods details" in {
       val doc = view(createView()).getElementById("print-pages")
 
@@ -89,28 +87,28 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     }
 
     "contain confidential information question when user selects NO" in {
-      val doc = view(createView(pdf.copy(confidentialInformation = None))).getElementById("print-pages")
+      val doc = view(createView(pdfView.copy(confidentialInformation = None))).getElementById("print-pages")
 
       doc should containText(messages("provideConfidentialInformation.provideConfidentialInformation"))
     }
 
     "contain confidential information question details when user selects YES" in {
       val doc =
-        view(createView(pdf.copy(confidentialInformation = Some("confidential information"))))
+        view(createView(pdfView.copy(confidentialInformation = Some("confidential information"))))
           .getElementById("print-pages")
 
       doc should containText(messages("provideConfidentialInformation.checkYourAnswersLabel"))
     }
 
     "contain sending samples question when user selects NO" in {
-      val doc = view(createView(pdf)).getElementById("print-pages")
+      val doc = view(createView(pdfView.copy(sendingSample = false))).getElementById("print-pages")
 
       doc should containText(messages("whenToSendSample.checkYourAnswersLabel"))
     }
 
     "contain hazardous samples and samples to be returned question when user selects YES to sending samples" in {
       val doc =
-        view(createView(pdf.copy(sendingSample = true, hazardousSample = Some(true), returnSample = true)))
+        view(createView(pdfView.copy(sendingSample = true, hazardousSample = Some(true), returnSample = true)))
           .getElementById("print-pages")
 
       doc should containText(messages("isSampleHazardous.checkYourAnswersLabel"))
@@ -118,28 +116,28 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     }
 
     "contain commodity code question when user selects NO" in {
-      val doc = view(createView(pdf.copy(foundCommodityCode = None))).getElementById("print-pages")
+      val doc = view(createView(pdfView.copy(foundCommodityCode = None))).getElementById("print-pages")
 
       doc should containText(messages("view.applicationPdf.foundComodityCode"))
     }
 
     "contain commodity code when user selects YES" in {
       val doc =
-        view(createView(pdf.copy(foundCommodityCode = Some("commodity code"))))
+        view(createView(pdfView.copy(foundCommodityCode = Some("commodity code"))))
           .getElementById("print-pages")
 
       doc should containText(messages("application.section.aboutItem.envisagedCommodityCode"))
     }
 
     "contain legal problems question when user selects NO" in {
-      val doc = view(createView(pdf.copy(legalProblems = None))).getElementById("print-pages")
+      val doc = view(createView(pdfView.copy(legalProblems = None))).getElementById("print-pages")
 
       doc should containText(messages("view.applicationPdf.legalProblemQuestion"))
     }
 
     "contain legal problem details when user selects YES" in {
       val doc =
-        view(createView(pdf.copy(legalProblems = Some("legal"))))
+        view(createView(pdfView.copy(legalProblems = Some("legal"))))
           .getElementById("print-pages")
 
       doc should containText(messages("view.applicationPdf.legalProblem"))
@@ -148,7 +146,7 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain footer date" in {
       val dateSubmitted = Instant.now
       val doc =
-        view(createView(pdf.copy(dateSubmitted = dateSubmitted)))
+        view(createView(pdfView.copy(dateSubmitted = dateSubmitted)))
           .getElementById("print-pages")
 
       doc.text() should include(Dates.formatForPdf(dateSubmitted))
