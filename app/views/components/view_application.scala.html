@@ -194,6 +194,12 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     <dt class="cya-question">@messages("view.application.goods.details")</dt>
                     <dd class="cya-answer">@pdf.goodsDetails</dd>
                 </div>
+                @if(pdf.confidentialInformation.isDefined) {
+                <div>
+                    <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer">@pdf.confidentialInformation</dd>
+                </div>
+                }
                 <div>
                     <dt class="cya-question">@messages("whenToSendSample.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
@@ -213,6 +219,10 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
             </dl>
             <h3 class="heading-medium">@messages("beforeYouStart.subheading2")</h3>
             <dl class="govuk-check-your-answers cya-questions-short">
+                <div>
+                    <dt class="cya-question">@messages("previousCommodityCode.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                </div>
             </dl>
             <div class="footer-info footer-page-break">
                 <span class="footer-page-no"></span>

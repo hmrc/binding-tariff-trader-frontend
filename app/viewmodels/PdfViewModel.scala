@@ -18,7 +18,7 @@ package viewmodels
 
 import java.time.Instant
 
-import models.{Case, Contact, EORIDetails}
+import models.{Attachment, Case, Contact, EORIDetails}
 
 case class PdfViewModel(
                          eori: String,
@@ -31,7 +31,9 @@ case class PdfViewModel(
                          confidentialInformation: Option[String],
                          sendingSample: Boolean,
                          hazardousSample: Option[Boolean],
-                         returnSample: Boolean
+                         returnSample: Boolean,
+                         attachment: Seq[Attachment] = Seq.empty,
+
                        )
 
 object PdfViewModel{
@@ -47,7 +49,8 @@ object PdfViewModel{
     confidentialInformation = c.application.confidentialInformation,
     sendingSample = c.application.sampleToBeProvided,
     hazardousSample = c.application.sampleIsHazardous,
-    returnSample = c.application.sampleToBeReturned
+    returnSample = c.application.sampleToBeReturned,
+    attachment = c.attachments.seq
   )
 
   private def yesNoAnswer(x: Boolean) = if (x) "site.yes" else "site.no"
