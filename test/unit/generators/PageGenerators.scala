@@ -60,8 +60,8 @@ trait PageGenerators {
   implicit lazy val arbitraryRegisterBusinessRepresentingPage: Arbitrary[RegisterBusinessRepresentingPage.type] =
     Arbitrary(RegisterBusinessRepresentingPage)
 
-  implicit lazy val arbitrarySelectApplicationTypePage: Arbitrary[SelectApplicationTypePage.type] =
-    Arbitrary(SelectApplicationTypePage)
+  implicit lazy val arbitraryPreviousBTIRulingPage: Arbitrary[PreviousBTIRulingPage.type] =
+    Arbitrary(PreviousBTIRulingPage)
 
   implicit lazy val arbitraryWhichBestDescribesYouPage: Arbitrary[WhichBestDescribesYouPage.type] =
     Arbitrary(WhichBestDescribesYouPage)

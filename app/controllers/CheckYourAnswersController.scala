@@ -61,7 +61,7 @@ class CheckYourAnswersController @Inject()(
       AnswerSection(
         Some("checkYourAnswers.informationAboutYourItemSection"),
         Seq(
-          checkYourAnswersHelper.selectApplicationType,
+          checkYourAnswersHelper.previousBTIRuling,
           checkYourAnswersHelper.provideBTIReference,
           checkYourAnswersHelper.provideGoodsName,
           checkYourAnswersHelper.provideGoodsDescription,

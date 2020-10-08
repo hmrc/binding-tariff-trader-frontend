@@ -72,9 +72,9 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.similarItemCommodityCode.get.answer shouldBe "site.yes"
       }
 
-      "return a row with the correct answer for SelectApplicationTypePage" in {
-        given(userAnswers.get(SelectApplicationTypePage)).willReturn(Option(true))
-        checkHelper.selectApplicationType.get.answer shouldBe "site.yes"
+      "return a row with the correct answer for PreviousBTIRulingPage" in {
+        given(userAnswers.get(PreviousBTIRulingPage)).willReturn(Option(true))
+        checkHelper.previousBTIRuling.get.answer shouldBe "site.yes"
       }
     }
 

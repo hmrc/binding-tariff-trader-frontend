@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-import forms.mappings.Mappings
-import play.api.data.Form
-
-class SelectApplicationTypeFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("selectApplicationType.error.required")
-    )
-
+case object PreviousBTIRulingPage extends QuestionPage[Boolean] {
+  def route(mode: Mode): Call =
+    routes.PreviousBTIRulingController.onPageLoad(mode)
+  override def toString: String =
+    "previousBTIRuling"
 }

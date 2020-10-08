@@ -123,11 +123,11 @@ whichBestDescribesYou.businessRepresentative = A different business or organisat
 whichBestDescribesYou.checkYourAnswersLabel = This application is for
 whichBestDescribesYou.error.required = Select if this application is for the business or organisation you work for or own, or a business, organisation or individual that you are representing
 
-selectApplicationType.title = Do you have a previous BTI ruling reference for the goods? - Manage your Advance Tariff Rulings - GOV.UK
-selectApplicationType.heading = Do you have a previous BTI ruling reference for the {0}?
-selectApplicationType.checkYourAnswersLabel = Renewing a BTI?
-selectApplicationType.error.required = Select yes if you are renewing a previous BTI ruling
-selectApplicationType.caption = About other rulings
+previousBTIRuling.title = Do you have a previous BTI ruling reference for the goods? - Manage your Advance Tariff Rulings - GOV.UK
+previousBTIRuling.heading = Do you have a previous BTI ruling reference for the {0}?
+previousBTIRuling.checkYourAnswersLabel = Renewing a BTI?
+previousBTIRuling.error.required = Select yes if you are renewing a previous BTI ruling
+previousBTIRuling.caption = About other rulings
 
 registerBusinessRepresenting.title =  What are the registered details of the business, organisation or individual you’re representing? - Manage your Advance Tariff Rulings - GOV.UK
 registerBusinessRepresenting.heading = What are the registered details of the business, organisation or individual you’re representing?

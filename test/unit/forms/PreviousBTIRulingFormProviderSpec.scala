@@ -14,18 +14,31 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import pages.behaviours.PageBehaviours
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-class SelectApplicationTypePageSpec extends PageBehaviours {
+class PreviousBTIRulingFormProviderSpec extends BooleanFieldBehaviours {
 
-  "YourLocation" must {
+  val form = new PreviousBTIRulingFormProvider()()
 
-    beRetrievable[Boolean](SelectApplicationTypePage)
+  ".value" must {
 
-    beSettable[Boolean](SelectApplicationTypePage)
+    val fieldName = "value"
+    val requiredKey = "previousBTIRuling.error.required"
+    val invalidKey = "error.boolean"
 
-    beRemovable[Boolean](SelectApplicationTypePage)
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
   }
 }
