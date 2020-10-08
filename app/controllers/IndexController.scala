@@ -83,7 +83,9 @@ class IndexController @Inject()(
           successful(Ok(account_dashboard_statuses(appConfig, pagedResult)))
         }
 
-      case None => successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
+      case None =>
+        val initialAnswers = UserAnswers(request.identifier)
+        Future.successful(Redirect(navigator.nextPage(IndexPage, NormalMode)(initialAnswers)))
     }
 
   }
