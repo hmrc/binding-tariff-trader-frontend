@@ -27,15 +27,16 @@ class CountriesService  {
   def getAllCountriesById: Map[String, Country] = countriesById
 
   def autoCompleteSynonymCountries(implicit messages: Messages): JsObject = {
-      countries.flatMap(country => country.toNewAutoCompleteJson)
-        .foldLeft(JsObject.empty){(countryList, c) => countryList + (c) }
+    countries.flatMap(country => country.toNewAutoCompleteJson)
+      .foldLeft(JsObject.empty){(countryList, c) => countryList + (c) }
   }
 
   private val countries = List(
-    Country("AE0", "title.abu_dhabi", "AE0", Nil),
+    Country("AE-AZ", "title.abu_dhabi", "AE-AZ", Nil),
     Country("AF", "title.afghanistan", "AF", Nil),
-    Country("AE1", "title.ajman", "AE1", Nil),
+    Country("AE-AJ", "title.ajman", "AE-AJ", Nil),
     Country("AX", "title.aland_islands", "AX", List("Aland Islands")),
+    Country("XQZ", "title.akrotiri", "XQZ", Nil),
     Country("AL", "title.albania", "AL", Nil),
     Country("DZ", "title.algeria", "DZ", Nil),
     Country("AS", "title.american_samoa", "AS", Nil),
@@ -97,12 +98,15 @@ class CountriesService  {
     Country("CU", "title.cuba", "CU", Nil),
     Country("CW", "title.curacao", "CW", List("Curacao", "Curacoa")),
     Country("CY", "title.cyprus", "CY", Nil),
-    Country("CZ", "title.czech_republic", "CZ", List("Czechoslovakia", "Czechia")),
+    Country("CZ", "title.czech_republic", "CZ", List("Czechia")),
+    Country("CS", "title.czechoslovakia", "CS", Nil),
     Country("DK", "title.denmark", "DK", List("Danish")),
+    Country("XXD", "title.dhekelia", "XXD", Nil),
     Country("DJ", "title.djibouti", "DJ", Nil),
     Country("DM", "title.dominica", "DM", Nil),
     Country("DO", "title.dominican_republic", "DO", Nil),
     Country("AE2", "title.dubai", "AE2", Nil),
+    Country("DD", "title.east_germany", "DD", Nil),
     Country("TL", "title.e_east_timor", "TL", Nil),
     Country("EC", "title.ecuador", "EC", Nil),
     Country("EG", "title.egypt", "EG", Nil),
@@ -110,6 +114,7 @@ class CountriesService  {
     Country("GQ", "title.equatorial_guinea", "GQ", Nil),
     Country("ER", "title.eritrea", "ER", Nil),
     Country("EE", "title.estonia", "EE", Nil),
+    Country("SZ", "title.eswatini", "SZ", Nil),
     Country("ET", "title.ethiopia", "ET", Nil),
     Country("FK", "title.falkland_islands", "FK", List("Falklands")),
     Country("FO", "title.faroe_islands", "FO", List("Faroes")),
@@ -202,6 +207,7 @@ class CountriesService  {
     Country("MM", "title.myanmar", "MM", Nil),
     Country("NA", "title.namibia", "NA", Nil),
     Country("NR", "title.nauru", "NR", Nil),
+    Country("UM-76", "title.navassa_island", "UM-76", Nil),
     Country("NP", "title.nepal", "NP", Nil),
     Country("NL", "title.netherlands", "NL", List("Holland", "Dutch", "Amsterdam")),
     Country("NC", "title.new_caledonia", "NC", Nil),
@@ -213,10 +219,12 @@ class CountriesService  {
     Country("NF", "title.norfolk_island", "NF", Nil),
     Country("MP", "title.northern_mariana_islands", "MP", Nil),
     Country("NO", "title.norway", "NO", Nil),
+    Country("MK", "title.north_macedonia", "MK", Nil),
     Country("PS", "title.occupied_palestinian_territory", "PS", Nil),
     Country("OM", "title.oman", "OM", Nil),
     Country("PK", "title.pakistan", "PK", Nil),
     Country("PW", "title.palau", "PW", Nil),
+    Country("UM-95", "title.palmyra_atoll", "UM-95", Nil),
     Country("PA", "title.panama", "PA", Nil),
     Country("PG", "title.papua_new_guinea", "PG", Nil),
     Country("PY", "title.paraguay", "PY", Nil),
@@ -281,6 +289,7 @@ class CountriesService  {
     Country("TM", "title.turkmenistan", "TM", Nil),
     Country("TC", "title.turks_and_caicos_islands", "TC", Nil),
     Country("TV", "title.tuvalu", "TV", Nil),
+    Country("SU", "title.ussr", "SU", Nil),
     Country("UG", "title.uganda", "UG", Nil),
     Country("UA", "title.ukraine", "UA", Nil),
     Country("AE", "title.united_arab_emirates", "AE", List("UAE", "emirati", "dubai", "abu dahbi", "abu dhabi")),
@@ -298,6 +307,7 @@ class CountriesService  {
     Country("WF", "title.wallis_and_futuna", "WF", Nil),
     Country("EH", "title.western_sahara", "EH", Nil),
     Country("YE", "title.yemen", "YE", Nil),
+    Country("YU", "title.yugoslavia", "YU", Nil),
     Country("ZM", "title.zambia", "ZM", Nil),
     Country("ZW", "title.zimbabwe", "ZW", Nil)
   )
