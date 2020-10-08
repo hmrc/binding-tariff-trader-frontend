@@ -16,6 +16,8 @@
 
 package controllers
 
+import java.time.Instant
+
 import akka.stream.Materializer
 import audit.AuditService
 import connectors.FakeDataCacheConnector
@@ -61,13 +63,20 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     super.beforeEach()
 
     when(createdCase.reference).thenReturn("reference")
+    when(createdCase.attachments).thenReturn(Seq.empty)
+    when(createdCase.createdDate).thenReturn(Instant.now)
     when(createdCase.application).thenReturn(btiApp)
     when(btiApp.agent).thenReturn(None)
     when(btiApp.holder).thenReturn(EORIDetails("eori", "", "", "", "", "", ""))
-    when(btiApp.contact).thenReturn(contact)
-    when(contact.email).thenReturn("luigi@example.test")
-    when(contact.name).thenReturn("luigi")
-    when(contact.phone).thenReturn(Some("02123335566"))
+    when(btiApp.contact).thenReturn(Contact("luigi", "luigi@example.test", Some("0123")))
+    when(btiApp.goodName).thenReturn("goods name")
+    when(btiApp.goodDescription).thenReturn("goods description")
+    when(btiApp.confidentialInformation).thenReturn(Some("goods description"))
+    when(btiApp.envisagedCommodityCode).thenReturn(Some("goods description"))
+    when(btiApp.knownLegalProceedings).thenReturn(Some("goods description"))
+    when(btiApp.sampleToBeProvided).thenReturn(true)
+    when(btiApp.sampleIsHazardous).thenReturn(Some(true))
+    when(btiApp.sampleToBeReturned).thenReturn(true)
 
     when(mapper.map(any[UserAnswers])).thenReturn(newCaseReq)
   }
@@ -128,8 +137,6 @@ class DeclarationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       givenTheCaseCreatesSuccessfully()
       givenTheAttachmentPublishSucceeds()
       givenTheCaseCreatedEventIsSuccessful
-
-      when()
 
       val result = await(controller(extractDataFromCache).onSubmit(NormalMode)(fakeRequest))
 
