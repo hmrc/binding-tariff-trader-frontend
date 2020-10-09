@@ -108,11 +108,9 @@ class CheckYourAnswersHelper(
       routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
     )
 
-    userAnswers.get(SupportingMaterialFileListPage).map {
+    userAnswers.get(SupportingMaterialFileListPage).collect {
       case filenames if filenames.fileAttachments.nonEmpty =>
         filesRow(filenames.fileAttachments.map(_.name))
-      case _ =>
-        filesRow(Seq("No files attached"))
     }
   }
 
@@ -120,8 +118,19 @@ class CheckYourAnswersHelper(
     x => AnswerRow("provideBTIReference.checkYourAnswersLabel", s"${x.reference}", false, routes.ProvideBTIReferenceController.onPageLoad(CheckMode).url)
   }
 
-  def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", Seq(x.name, x.email, x.phoneNumber.orNull), false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  def enterContactDetailsName: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+      x => AnswerRow("enterContactDetails.checkYourAnswersLabel.name", s"${x.name}", false,
+        routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  }
+
+  def enterContactDetailsEmail: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.email", s"${x.email}", false,
+      routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  }
+
+  def enterContactDetailsPhone: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.phone", s"${x.phoneNumber.getOrElse("")}", false,
+      routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
   }
 
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {
