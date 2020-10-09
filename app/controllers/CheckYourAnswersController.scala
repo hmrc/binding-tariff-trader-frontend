@@ -61,8 +61,8 @@ class CheckYourAnswersController @Inject()(
       AnswerSection(
         Some("checkYourAnswers.informationAboutYourItemSection"),
         Seq(
-          checkYourAnswersHelper.selectApplicationType,
-          checkYourAnswersHelper.previousCommodityCode,
+          checkYourAnswersHelper.previousBTIRuling,
+          checkYourAnswersHelper.provideBTIReference,
           checkYourAnswersHelper.provideGoodsName,
           checkYourAnswersHelper.provideGoodsDescription,
           checkYourAnswersHelper.addConfidentialInformation,
@@ -71,7 +71,7 @@ class CheckYourAnswersController @Inject()(
           checkYourAnswersHelper.supportingMaterialFileList,
           checkYourAnswersHelper.commodityCodeBestMatch,
           checkYourAnswersHelper.commodityCodeDigits,
-          checkYourAnswersHelper.whenToSendSample,
+          checkYourAnswersHelper.areYouSendingSamples,
           checkYourAnswersHelper.isSampleHazardous,
           checkYourAnswersHelper.returnSamples,
           checkYourAnswersHelper.similarItemCommodityCode,

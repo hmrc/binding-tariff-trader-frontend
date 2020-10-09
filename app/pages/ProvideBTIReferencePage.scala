@@ -17,12 +17,12 @@
 package pages
 
 import controllers.routes
-import models.Mode
+import models.{ Mode, BTIReference }
 import play.api.mvc.Call
 
-case object SelectApplicationTypePage extends QuestionPage[Boolean] {
+case object ProvideBTIReferencePage extends QuestionPage[BTIReference] {
   def route(mode: Mode): Call =
-    routes.SelectApplicationTypeController.onPageLoad(mode)
+    routes.ProvideBTIReferenceController.onPageLoad(mode)
   override def toString: String =
-    "selectApplicationType"
+    "provideBTIReference"
 }

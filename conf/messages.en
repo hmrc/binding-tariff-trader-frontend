@@ -124,11 +124,11 @@ whichBestDescribesYou.businessRepresentative = A different business or organisat
 whichBestDescribesYou.checkYourAnswersLabel = This application is for
 whichBestDescribesYou.error.required = Select if this application is for the business or organisation you work for or own, or a business, organisation or individual that you are representing
 
-selectApplicationType.title = Do you have a previous BTI ruling reference for the goods? - Manage your Advance Tariff Rulings - GOV.UK
-selectApplicationType.heading = Do you have a previous BTI ruling reference for the {0}?
-selectApplicationType.checkYourAnswersLabel = Renewing a BTI?
-selectApplicationType.error.required = Select yes if you are renewing a previous BTI ruling
-selectApplicationType.caption = About other rulings
+previousBTIRuling.title = Do you have a previous BTI ruling reference for the goods? - Manage your Advance Tariff Rulings - GOV.UK
+previousBTIRuling.heading = Do you have a previous BTI ruling reference for the {0}?
+previousBTIRuling.checkYourAnswersLabel = Renewing a BTI?
+previousBTIRuling.error.required = Select yes if you are renewing a previous BTI ruling
+previousBTIRuling.caption = About other rulings
 
 registerBusinessRepresenting.title =  What are the registered details of the business, organisation or individual you’re representing? - Manage your Advance Tariff Rulings - GOV.UK
 registerBusinessRepresenting.heading = What are the registered details of the business, organisation or individual you’re representing?
@@ -180,13 +180,13 @@ acceptItemInformationList.askfor.paragraph2 = You can let us know if you:
 acceptItemInformationList.askfor.item1 = think you have found the correct commodity code
 acceptItemInformationList.askfor.item2 = need to send samples
 
-previousCommodityCode.title = Provide the reference number for the previous BTI ruling - Manage your Advance Tariff Rulings - GOV.UK
-previousCommodityCode.heading = Provide the reference number for the previous BTI ruling
-previousCommodityCode.caption = About other rulings
-previousCommodityCode.previousCommodityCode.hint = The reference number, for example GB12345678, is on the ruling certificate.
-previousCommodityCode.checkYourAnswersLabel = Renewal reference
-previousCommodityCode.error.previousCommodityCode.required = Enter a ruling reference
-previousCommodityCode.error.previousCommodityCode.length = Previous ruling reference must be 100 characters or less
+provideBTIReference.title = Provide the reference number for the previous BTI ruling - Manage your Advance Tariff Rulings - GOV.UK
+provideBTIReference.heading = Provide the reference number for the previous BTI ruling
+provideBTIReference.caption = About other rulings
+provideBTIReference.hint = The reference number, for example GB12345678, is on the ruling certificate.
+provideBTIReference.checkYourAnswersLabel = Renewal reference
+provideBTIReference.error.required = Enter a ruling reference
+provideBTIReference.error.length = Previous ruling reference must be 100 characters or less
 
 provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
 provideGoodsName.heading = Provide a name for the goods
@@ -300,18 +300,16 @@ commodityCodeDigits.checkYourAnswersLabel = Commodity code
 commodityCodeDigits.error.required = Enter at least 2 digits of a commodity code
 commodityCodeDigits.error.length = Commodity code must be 100 characters or less
 
-whenToSendSample.title = Will you send a sample of the goods to HMRC? - Manage your Advance Tariff Rulings - GOV.UK
-whenToSendSample.caption = About the goods
-whenToSendSample.heading = Will you send a sample of the {0} to HMRC?
-whenToSendSample.yesProvideSample = Yes
-whenToSendSample.notSendingSample = No
-whenToSendSample.checkYourAnswersLabel = Are you sending a sample?
-whenToSendSample.error.required = Select yes if you are sending a sample
-whenToSendSample.first.paragraph = Samples are usually required if the goods are:
-whenToSendSample.second.paragraph = If you are not sure whether you need to provide a sample, you can wait for the Tariff Classification Team to contact you if one is needed.
-whenToSendSample.listItem1 = textiles
-whenToSendSample.listItem2 = shoes
-whenToSendSample.listItem3 = ceramics
+areYouSendingSamples.title = Will you send a sample of the goods to HMRC? - Manage your Advance Tariff Rulings - GOV.UK
+areYouSendingSamples.caption = About the goods
+areYouSendingSamples.heading = Will you send a sample of the {0} to HMRC?
+areYouSendingSamples.checkYourAnswersLabel = Are you sending a sample?
+areYouSendingSamples.error.required = Select yes if you are sending a sample
+areYouSendingSamples.first.paragraph = Samples are usually required if the goods are:
+areYouSendingSamples.second.paragraph = If you are not sure whether you need to provide a sample, you can wait for the Tariff Classification Team to contact you if one is needed.
+areYouSendingSamples.listItem1 = textiles
+areYouSendingSamples.listItem2 = shoes
+areYouSendingSamples.listItem3 = ceramics
 
 isSampleHazardous.title = Could the sample be potentially hazardous? - Manage your Advance Tariff Rulings - GOV.UK
 isSampleHazardous.heading = Could the sample be potentially hazardous?
@@ -526,7 +524,7 @@ case.tabs.applications = Applications
 case.tabs.applications.notSubmitted = Submitted applications will appear here
 
 case.tabs.applications.table.reference = Reference
-case.tabs.applications.table.itemName = Item name
+case.tabs.applications.table.itemName = Name of goods
 case.tabs.applications.table.dateSubmitted = Date submitted
 case.tabs.applications.table.status = Status
 case.tabs.applications.table.download =

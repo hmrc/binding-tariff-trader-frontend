@@ -74,8 +74,8 @@ class CheckYourAnswersHelper(
     x => AnswerRow("isSampleHazardous.checkYourAnswersLabel", yesNoAnswer(x), true, routes.IsSampleHazardousController.onPageLoad(CheckMode).url)
   }
 
-  def whenToSendSample: Option[AnswerRow] = userAnswers.get(WhenToSendSamplePage) map {
-    x => AnswerRow("whenToSendSample.checkYourAnswersLabel", yesNoAnswer(x), true, routes.WhenToSendSampleController.onPageLoad(CheckMode).url)
+  def areYouSendingSamples: Option[AnswerRow] = userAnswers.get(AreYouSendingSamplesPage) map {
+    x => AnswerRow("areYouSendingSamples.checkYourAnswersLabel", yesNoAnswer(x), true, routes.AreYouSendingSamplesController.onPageLoad(CheckMode).url)
   }
 
   def commodityCodeDigits: Option[AnswerRow] = userAnswers.get(CommodityCodeDigitsPage) map {
@@ -116,8 +116,8 @@ class CheckYourAnswersHelper(
     }
   }
 
-  def previousCommodityCode: Option[AnswerRow] = userAnswers.get(PreviousCommodityCodePage) map {
-    x => AnswerRow("previousCommodityCode.checkYourAnswersLabel", s"${x.previousCommodityCode}", false, routes.PreviousCommodityCodeController.onPageLoad(CheckMode).url)
+  def provideBTIReference: Option[AnswerRow] = userAnswers.get(ProvideBTIReferencePage) map {
+    x => AnswerRow("provideBTIReference.checkYourAnswersLabel", s"${x.reference}", false, routes.ProvideBTIReferenceController.onPageLoad(CheckMode).url)
   }
 
   def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
@@ -132,8 +132,8 @@ class CheckYourAnswersHelper(
         routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
   }
 
-  def selectApplicationType: Option[AnswerRow] = userAnswers.get(SelectApplicationTypePage) map {
-    x => AnswerRow("selectApplicationType.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SelectApplicationTypeController.onPageLoad(CheckMode).url)
+  def previousBTIRuling: Option[AnswerRow] = userAnswers.get(PreviousBTIRulingPage) map { x =>
+    AnswerRow("previousBTIRuling.checkYourAnswersLabel", yesNoAnswer(x), true, routes.PreviousBTIRulingController.onPageLoad(CheckMode).url)
   }
 
   def whichBestDescribesYou: Option[AnswerRow] = None
