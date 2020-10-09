@@ -16,31 +16,23 @@
 
 package forms
 
-import forms.behaviours.StringFieldBehaviours
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class PreviousCommodityCodeFormProviderSpec extends StringFieldBehaviours {
+class PreviousBTIRulingFormProviderSpec extends BooleanFieldBehaviours {
 
-  val form = new PreviousCommodityCodeFormProvider()()
+  val form = new PreviousBTIRulingFormProvider()()
 
-  ".btiReference" must {
+  ".value" must {
 
-    val fieldName = "btiReference"
-    val requiredKey = "previousCommodityCode.error.previousCommodityCode.required"
-    val lengthKey = "previousCommodityCode.error.previousCommodityCode.length"
-    val maxLength = 100
+    val fieldName = "value"
+    val requiredKey = "previousBTIRuling.error.required"
+    val invalidKey = "error.boolean"
 
-    behave like fieldThatBindsValidData(
+    behave like booleanField(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(

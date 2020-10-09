@@ -18,26 +18,26 @@ package controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import controllers.behaviours.AnswerCachingControllerBehaviours
-import forms.PreviousCommodityCodeFormProvider
-import models.{NormalMode, PreviousCommodityCode}
+import controllers.behaviours.YesNoCachingControllerBehaviours
+import forms.AreYouSendingSamplesFormProvider
+import models.NormalMode
 import navigation.FakeNavigator
+import pages.ProvideGoodsNamePage
 import play.api.data.Form
+import play.api.libs.json.JsString
 import play.api.mvc.{ Call, Request }
-import play.api.libs.json.JsValue
-import views.html.previousCommodityCode
+import views.html.areYouSendingSamples
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.mvc.Request
 
-class PreviousCommodityCodeControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
+class AreYouSendingSamplesControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
-  private val formProvider = new PreviousCommodityCodeFormProvider()
-
-  def viewAsString(form: Form[_], request: Request[_]): String =
-    previousCommodityCode(frontendAppConfig, form, NormalMode)(request, messages).toString
+  private val formProvider = new AreYouSendingSamplesFormProvider()
+  private val goodsName = "some-goods-name"
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
-    new PreviousCommodityCodeController(
+    new AreYouSendingSamplesController(
       frontendAppConfig,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
@@ -48,21 +48,17 @@ class PreviousCommodityCodeControllerSpec extends ControllerSpecBase with Answer
       cc
     )
 
-  private def onwardRoute = Call("GET", "/foo")
+  private def onwardRoute: Call = Call("GET", "/foo")
 
-  val validFormData = Map("btiReference" -> "value 1")
-  val invalidFormData = Map("value" -> "invalid value")
-  val backgroundData = Map.empty[String, JsValue]
+  private def viewAsString(form: Form[Boolean], request: Request[_]): String =
+    areYouSendingSamples(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
-  "PreviousCommodityCodeController" must {
-    behave like answerCachingController(
+  "AreYouSendingSamplesController" must {
+    behave like yesNoCachingController(
       controller,
       onwardRoute,
       viewAsString,
-      validFormData,
-      invalidFormData,
-      backgroundData,
-      PreviousCommodityCode("value 1")
+      backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
     )
   }
 }

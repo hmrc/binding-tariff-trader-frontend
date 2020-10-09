@@ -25,7 +25,7 @@ object Journey {
     YesNoJourney(AddConfidentialInformationPage, List(ProvideConfidentialInformationPage))
 
   val samples =
-    YesNoJourney(WhenToSendSamplePage, List(IsSampleHazardousPage, ReturnSamplesPage))
+    YesNoJourney(AreYouSendingSamplesPage, List(IsSampleHazardousPage, ReturnSamplesPage))
 
   val commodityCode =
     YesNoJourney(CommodityCodeBestMatchPage, List(CommodityCodeDigitsPage))
@@ -34,7 +34,7 @@ object Journey {
     YesNoJourney(LegalChallengePage, List(LegalChallengeDetailsPage))
   
   val previousBTI =
-    YesNoJourney(SelectApplicationTypePage, List(PreviousCommodityCodePage))
+    YesNoJourney(PreviousBTIRulingPage, List(ProvideBTIReferencePage))
   
   val similarItem =
     YesNoJourney(SimilarItemCommodityCodePage, List(CommodityCodeRulingReferencePage))
