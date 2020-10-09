@@ -208,6 +208,11 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
                 @if(pdf.sendingSample){
                 <div>
+                    <dt class="cya-question">@messages("whenToSendSample.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                </div>
+                @if(pdf.hazardousSample) {
+                <div>
                     <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@{if(pdf.hazardousSample.get) {messages("site.yes")} else {messages("site.no")}}</dd>
                 </div>
@@ -216,6 +221,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
                 </div>
+                }
                 } else {
                 <div>
                     <dt class="cya-question">@messages("whenToSendSample.checkYourAnswersLabel")</dt>
