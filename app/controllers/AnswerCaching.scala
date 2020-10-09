@@ -30,19 +30,42 @@ import scala.util.{ Success, Failure }
 import play.api.libs.json.Format
 import scala.collection.generic.CanBuildFrom
 
-trait ListAnswerCaching[A] extends AccumulatingAnswerCaching[List[A], A] {
+trait ListAnswerCaching[A] extends AccumulatingAnswerCaching[List[A], A, Int] {
   val cbf = List.canBuildFrom[A]
+  def updateIndex(list: List[A], index: Int, elem: A): List[A] =
+    list.take(index) ++ List(elem) ++ list.drop(index + 1)
 }
 
-trait MapAnswerCaching[K, V] extends AccumulatingAnswerCaching[Map[K, V], (K, V)] {
+trait MapAnswerCaching[K, V] extends AccumulatingAnswerCaching[Map[K, V], (K, V), K] {
   val cbf = Map.canBuildFrom[K, V]
+  def updateIndex(map: Map[K,V], index: K, elem: (K, V)): Map[K,V] =
+    map + elem
 }
 
-trait AccumulatingAnswerCaching[F <: TraversableOnce[A], A] {
+trait AccumulatingAnswerCaching[F <: TraversableOnce[A], A, I] {
   def cbf: CanBuildFrom[F, A, F]
   def dataCacheConnector: DataCacheConnector
   def navigator: Navigator
   def questionPage: QuestionPage[F]
+
+  def updateIndex(f: F, index: I, elem: A): F
+
+  def updateAnswer(index: I, answer: A, mode: Mode)(implicit request: DataRequest[_], writes: Format[F], ec: ExecutionContext): Future[Result] = {
+    request.userAnswers.get(questionPage).map { fa =>
+
+      val updatedAnswers = request.userAnswers.set(questionPage, updateIndex(fa, index, answer))
+
+      dataCacheConnector.save(updatedAnswers.cacheMap)
+        .transformWith {
+          case Failure(NonFatal(_)) =>
+            Future.successful(Results.BadGateway)
+          case Success(_) =>
+            Future.successful(Results.Redirect(navigator.nextPage(questionPage, mode)(updatedAnswers)))
+        }
+    }.getOrElse {
+      Future.successful(Results.BadRequest)
+    }
+  }
 
   def submitAnswer(answer: A, mode: Mode)(implicit request: DataRequest[_], writes: Format[F], ec: ExecutionContext): Future[Result] = {
     val withNewAnswer = request.userAnswers.get(questionPage).map { fa =>

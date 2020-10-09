@@ -153,7 +153,7 @@ class Navigator @Inject()() {
     ),
 
     // Do you know of a similar item that already has an Advance Tariff Ruling?
-    yesNoJourney(
+    loopingJourney(
       journey = Journey.similarItem,
       continuingTo = RegisteredAddressForEoriPage,
       mode = NormalMode
@@ -166,10 +166,7 @@ class Navigator @Inject()() {
     normalPage(EnterContactDetailsPage, CheckYourAnswersPage, NormalMode),
 
     // Check your answers
-    normalPage(CheckYourAnswersPage, DeclarationPage, NormalMode),
-
-    // Your declaration
-    normalPage(DeclarationPage, ConfirmationPage, NormalMode)
+    normalPage(CheckYourAnswersPage, ConfirmationPage, NormalMode)
 
   ).foldLeft(Map.empty[Page, UserAnswers => Call])(_ ++ _)
 
@@ -217,7 +214,7 @@ class Navigator @Inject()() {
     ),
 
     // Do you know of a similar item that already has an Advance Tariff Ruling?
-    yesNoJourney(
+    loopingJourney(
       journey = Journey.similarItem,
       continuingTo = CheckYourAnswersPage,
       mode = CheckMode

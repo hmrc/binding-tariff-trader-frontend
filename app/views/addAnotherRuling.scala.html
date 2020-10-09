@@ -38,12 +38,12 @@
         @if(rulings.nonEmpty) {
             @if(rulings.size == 1) {
                 @components.heading(
-                    messages("addAnotherRuling.addRulingCounter.singular", rulings),
+                    messages("addAnotherRuling.addRulingCounter.singular", rulings.length),
                     captionMsg = Some(messages("addAnotherRuling.caption"))
                 )
             } else {
                 @components.heading(
-                    messages("addAnotherRuling.addRulingCounter.plural", rulings.size, rulings),
+                    messages("addAnotherRuling.addRulingCounter.plural", rulings.length),
                     captionMsg = Some(messages("addAnotherRuling.caption"))
                 )
             }
