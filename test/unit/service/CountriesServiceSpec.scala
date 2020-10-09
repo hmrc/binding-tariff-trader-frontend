@@ -18,8 +18,10 @@ package service
 
 import base.SpecBase
 import models.Country
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
+import org.scalacheck.Gen
 
-class CountriesServiceSpec extends SpecBase {
+class CountriesServiceSpec extends SpecBase with ScalaCheckDrivenPropertyChecks {
 
   val expectedCountriesList = List(
     Country("AE0", "title.abu_dhabi", "AE0", Nil),
@@ -323,6 +325,12 @@ class CountriesServiceSpec extends SpecBase {
 
     "return the expected countries" in {
       countriesService.getAllCountries shouldBe expectedCountriesList
+    }
+
+    "return countries by ID" in {
+      forAll(Gen.oneOf(expectedCountriesList)) { country =>
+        countriesService.getAllCountriesById(country.code) shouldBe country
+      }
     }
   }
 }

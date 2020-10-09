@@ -24,6 +24,8 @@ class CountriesService  {
 
   def getAllCountries: List[Country] = countries
 
+  def getAllCountriesById: Map[String, Country] = countriesById
+
   def autoCompleteSynonymCountries(implicit messages: Messages): JsObject = {
       countries.flatMap(country => country.toNewAutoCompleteJson)
         .foldLeft(JsObject.empty){(countryList, c) => countryList + (c) }
@@ -324,4 +326,9 @@ class CountriesService  {
     Country("ZM", "title.zambia", "ZM", Nil),
     Country("ZW", "title.zimbabwe", "ZW", Nil)
   )
+
+  private val countriesById = countries.map {
+    case country @ Country(code, _, _, _) =>
+      code -> country
+  }.toMap
 }
