@@ -47,9 +47,9 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.commodityCodeBestMatch.get.answer shouldBe "site.yes"
       }
 
-      "return a row with the correct answer for WhenToSendSamplePage" in {
-        given(userAnswers.get(WhenToSendSamplePage)).willReturn(Option(true))
-        checkHelper.whenToSendSample.get.answer shouldBe "site.yes"
+      "return a row with the correct answer for AreYouSendingSamplesPage" in {
+        given(userAnswers.get(AreYouSendingSamplesPage)).willReturn(Option(true))
+        checkHelper.areYouSendingSamples.get.answer shouldBe "site.yes"
       }
 
       "return a row with the correct answer for IsSampleHazardous" in {
@@ -72,9 +72,9 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.similarItemCommodityCode.get.answer shouldBe "site.yes"
       }
 
-      "return a row with the correct answer for SelectApplicationTypePage" in {
-        given(userAnswers.get(SelectApplicationTypePage)).willReturn(Option(true))
-        checkHelper.selectApplicationType.get.answer shouldBe "site.yes"
+      "return a row with the correct answer for PreviousBTIRulingPage" in {
+        given(userAnswers.get(PreviousBTIRulingPage)).willReturn(Option(true))
+        checkHelper.previousBTIRuling.get.answer shouldBe "site.yes"
       }
     }
 
@@ -100,14 +100,24 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.commodityCodeRulingReference.get.answer shouldBe "code ruling"
       }
 
-      "return a row with the correct answer for PreviousCommodityCodePage" in {
-        given(userAnswers.get(PreviousCommodityCodePage)).willReturn(Option(PreviousCommodityCode("122523847624")))
-        checkHelper.previousCommodityCode.get.answer shouldBe "122523847624"
+      "return a row with the correct answer for ProvideBTIReferencePage" in {
+        given(userAnswers.get(ProvideBTIReferencePage)).willReturn(Option(BTIReference("122523847624")))
+        checkHelper.provideBTIReference.get.answer shouldBe "122523847624"
       }
 
-      "return a row with the correct answer for EnterContactDetailsPage" in {
+      "return a row with the correct answer for EnterContactDetailsPage Name" in {
         given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
-        checkHelper.enterContactDetails.get.answer shouldBe "name\nemail\nphoneNumber"
+        checkHelper.enterContactDetailsName.get.answer shouldBe "name"
+      }
+
+      "return a row with the correct answer for EnterContactDetailsPage Email" in {
+        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
+        checkHelper.enterContactDetailsEmail.get.answer shouldBe "email"
+      }
+
+      "return a row with the correct answer for EnterContactDetailsPage Telephone" in {
+        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
+        checkHelper.enterContactDetailsPhone.get.answer shouldBe "phoneNumber"
       }
 
       "return a row with the correct answer for RegisterBusinessRepresentingPage" in {

@@ -58,6 +58,10 @@ captionMsg = Some(messages("application.dashboard.status.title")))
 
 <div id="applications-rulings-list">
 
+@components.button_link(messages("site.start"), routes.BeforeYouStartController.onPageLoad.url, id = Some("start-application"))
+
+<div id="applications-rulings-list">
+ @paginate("mb-2", "top")
  <table id="applications-rulings-list-table">
   <thead>
   <tr>

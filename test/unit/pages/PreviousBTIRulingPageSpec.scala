@@ -18,14 +18,14 @@ package pages
 
 import pages.behaviours.PageBehaviours
 
-class SelectApplicationTypePageSpec extends PageBehaviours {
+class PreviousBTIRulingPageSpec extends PageBehaviours {
 
   "YourLocation" must {
 
-    beRetrievable[Boolean](SelectApplicationTypePage)
+    beRetrievable[Boolean](PreviousBTIRulingPage)
 
-    beSettable[Boolean](SelectApplicationTypePage)
+    beSettable[Boolean](PreviousBTIRulingPage)
 
-    beRemovable[Boolean](SelectApplicationTypePage)
+    beRemovable[Boolean](PreviousBTIRulingPage)
   }
 }

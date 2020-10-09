@@ -92,7 +92,7 @@ class Navigator @Inject()() {
       SupportingMaterialFileListPage -> { (answers: UserAnswers) =>
         answers.get(SupportingMaterialFileListPage).flatMap(_.addAnotherDecision) match {
           case Some(true) => routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)
-          case Some(false) => routes.WhenToSendSampleController.onPageLoad(NormalMode)
+          case Some(false) => routes.AreYouSendingSamplesController.onPageLoad(NormalMode)
           case _ => routes.SupportingMaterialFileListController.onPageLoad(NormalMode)
         }
       },
@@ -116,7 +116,7 @@ class Navigator @Inject()() {
     // Have there been any legal problems classifying the goods?
     yesNoJourney(
       journey = Journey.legalProblems,
-      continuingTo = SelectApplicationTypePage,
+      continuingTo = PreviousBTIRulingPage,
       mode = NormalMode
     ),
 
@@ -141,10 +141,7 @@ class Navigator @Inject()() {
     normalPage(EnterContactDetailsPage, CheckYourAnswersPage, NormalMode),
 
     // Check your answers
-    normalPage(CheckYourAnswersPage, DeclarationPage, NormalMode),
-
-    // Your declaration
-    normalPage(DeclarationPage, ConfirmationPage, NormalMode)
+    normalPage(CheckYourAnswersPage, ConfirmationPage, NormalMode)
 
   ).foldLeft(Map.empty[Page, UserAnswers => Call])(_ ++ _)
 

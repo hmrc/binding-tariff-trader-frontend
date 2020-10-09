@@ -23,32 +23,32 @@
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("whenToSendSample.title")}",
+    title = s"${errorPrefix(form)} ${messages("areYouSendingSamples.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = WhenToSendSampleController.onSubmit(mode)) {
+    @helpers.form(action = AreYouSendingSamplesController.onSubmit(mode)) {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("whenToSendSample.heading", goodsName),
-            captionMsg=Some(messages("whenToSendSample.caption")))
+        @components.heading(messages("areYouSendingSamples.heading", goodsName),
+            captionMsg=Some(messages("areYouSendingSamples.caption")))
 
         <div class="form-group">
-            <p>@messages("whenToSendSample.second.paragraph")</p>
-            <p>@messages("whenToSendSample.first.paragraph")</p>
+            <p>@messages("areYouSendingSamples.second.paragraph")</p>
+            <p>@messages("areYouSendingSamples.first.paragraph")</p>
             <ul class="list list-bullet">
-                <li>@messages("whenToSendSample.listItem1")</li>
-                <li>@messages("whenToSendSample.listItem2")</li>
-                <li>@messages("whenToSendSample.listItem3")</li>
+                <li>@messages("areYouSendingSamples.listItem1")</li>
+                <li>@messages("areYouSendingSamples.listItem2")</li>
+                <li>@messages("areYouSendingSamples.listItem3")</li>
             </ul>
         </div>
 
         @components.input_yes_no(
             field = form("value"),
-            label = Some(messages("whenToSendSample.heading", goodsName)),
+            label = Some(messages("areYouSendingSamples.heading", goodsName)),
             labelClass = Some("visually-hidden")
         )
 

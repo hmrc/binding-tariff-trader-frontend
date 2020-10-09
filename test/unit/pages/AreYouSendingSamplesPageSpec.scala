@@ -16,13 +16,16 @@
 
 package pages
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
+import pages.behaviours.PageBehaviours
 
-case object SelectApplicationTypePage extends QuestionPage[Boolean] {
-  def route(mode: Mode): Call =
-    routes.SelectApplicationTypeController.onPageLoad(mode)
-  override def toString: String =
-    "selectApplicationType"
+class AreYouSendingSamplesPageSpec extends PageBehaviours {
+
+  "AreYouSendingSamplesPage" must {
+
+    beRetrievable[Boolean](AreYouSendingSamplesPage)
+
+    beSettable[Boolean](AreYouSendingSamplesPage)
+
+    beRemovable[Boolean](AreYouSendingSamplesPage)
+  }
 }

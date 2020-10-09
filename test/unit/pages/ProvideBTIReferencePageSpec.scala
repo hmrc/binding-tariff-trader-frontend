@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+import models.BTIReference
+import pages.behaviours.PageBehaviours
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class ProvideBTIReferencePageSpec extends PageBehaviours {
 
-class SelectApplicationTypeFormProvider @Inject() extends Mappings {
+  "ProvideBTIReferencePage" must {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("selectApplicationType.error.required")
-    )
+    beRetrievable[BTIReference](ProvideBTIReferencePage)
 
+    beSettable[BTIReference](ProvideBTIReferencePage)
+
+    beRemovable[BTIReference](ProvideBTIReferencePage)
+  }
 }
