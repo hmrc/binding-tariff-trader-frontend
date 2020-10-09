@@ -22,11 +22,11 @@ import controllers.actions._
 import forms.AddAnotherRulingFormProvider
 import javax.inject.Inject
 import models.requests.DataRequest
-import models.Mode
+import models.{FileAttachment, Mode, UserAnswers}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
 import views.html.addAnotherRuling
 
@@ -50,5 +50,31 @@ class AddAnotherRulingController @Inject()(
     val rulings = request.userAnswers.get(CommodityCodeRulingReferencePage).getOrElse(List.empty)
     addAnotherRuling(appConfig, form, mode, rulings)
   }
+
+  def removeRuling(index: Int, userAnswers: UserAnswers): UserAnswers = {
+    val rulings = userAnswers.get(CommodityCodeRulingReferencePage).getOrElse(List.empty[String])
+    val remainingRulings = rulings.take(index) ++ rulings.drop(index + 1)
+
+    val updatedAnswers = userAnswers.set(CommodityCodeRulingReferencePage, remainingRulings)
+
+    if (remainingRulings.isEmpty)
+      updatedAnswers.remove(SimilarItemCommodityCodePage)
+    else
+      updatedAnswers
+  }
+
+  def onRemove(index: Int, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val updatedAnswers = removeRuling(index, request.userAnswers)
+
+    val onwardRoute = if (updatedAnswers.get(SimilarItemCommodityCodePage).isEmpty)
+      routes.SimilarItemCommodityCodeController.onPageLoad(mode)
+    else
+      routes.AddAnotherRulingController.onPageLoad(mode)
+
+    dataCacheConnector
+      .save(updatedAnswers.cacheMap)
+      .map { _ => Redirect(onwardRoute) }
+  }
+
 
 }

@@ -32,7 +32,7 @@ class CaseRequestMapper {
     val provideConfidentialInformation = confidentialInfo(answers)
     val contactDetails: Option[EnterContactDetails] = answers.get(EnterContactDetailsPage)
     val provideBTIReference: Option[BTIReference] = answers.get(ProvideBTIReferencePage)
-    val commodityCodeRulingReference: Option[String] = answers.get(CommodityCodeRulingReferencePage)
+    val commodityCodeRulingReference: Option[List[String]] = answers.get(CommodityCodeRulingReferencePage)
     val legalChallengeDetails: Option[String] = answers.get(LegalChallengeDetailsPage)
     val commodityCodeDigits: Option[String] = answers.get(CommodityCodeDigitsPage)
 
@@ -55,7 +55,7 @@ class CaseRequestMapper {
       confidentialInformation = provideConfidentialInformation,
       otherInformation = None,
       reissuedBTIReference = provideBTIReference.map(_.reference),
-      relatedBTIReference = commodityCodeRulingReference,
+      relatedBTIReference = None,
       knownLegalProceedings = legalChallengeDetails,
       envisagedCommodityCode = commodityCodeDigits,
       sampleToBeProvided = sampleProvided,
