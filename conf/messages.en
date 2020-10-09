@@ -521,6 +521,7 @@ pdf.ruling.section.ruling.legalInformation.section2.paragraph2.listitem1 = infor
 pdf.ruling.created.label = File created
 
 case.tabs.applications = Applications
+case.no.applications.started = You have not started any applications.
 
 case.tabs.applications.notSubmitted = Submitted applications will appear here
 
@@ -546,7 +547,7 @@ case.application.status.approvedRulingExpiring = Ruling expires in {0} days
 case.application.status.cancelled = Cancelled ruling
 case.application.ruling.viewRuling = View ruling
 case.application.ruling.renewRuling = Renew ruling
-case.application.ruling.table.download = Download
+case.application.ruling.table.download = Application and ruling actions
 
 
 case.application.viewApplication = View application
