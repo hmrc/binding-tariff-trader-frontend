@@ -16,7 +16,13 @@
 
 package pages
 
-case object AddAnotherRulingPage extends QuestionPage[Seq[String]] {
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
+
+case object AddAnotherRulingPage extends QuestionPage[Boolean] {
+  def route(mode: Mode): Call =
+    routes.AddAnotherRulingController.onPageLoad(mode)
 
   override def toString: String = "addAnotherRulingPage"
 }

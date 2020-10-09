@@ -16,7 +16,7 @@
 
 @import views.ViewUtils._
 
-@(rulings: Seq[String], mode: Mode)(implicit messages: Messages)
+@(rulings: List[String], mode: Mode)(implicit messages: Messages)
 
 <dl class="ruling-list mb-5">
     @for((rulings: String, index: Int) <- rulings.zipWithIndex) {

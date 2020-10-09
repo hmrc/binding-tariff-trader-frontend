@@ -15,20 +15,20 @@
  *@
 
 @import config.FrontendAppConfig
-@import controllers.routes._
+@import controllers.routes
 @import models.Mode
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
 
-@(appConfig: FrontendAppConfig, form: Form[_], rulings: Seq[String], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, rulings: List[String])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("addAnotherRuling.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = AddAnotherRulingController.onSubmit(mode)) {
+    @helpers.form(action = routes.AddAnotherRulingController.onSubmit(mode)) {
 
         @components.back_link()
 

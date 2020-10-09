@@ -26,77 +26,29 @@ import models.Mode
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.{addAnotherRuling}
+import play.api.mvc.MessagesControllerComponents
+import play.twirl.api.HtmlFormat
+import views.html.addAnotherRuling
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class AddAnotherRulingController @Inject()(
   appConfig: FrontendAppConfig,
-  dataCacheConnector: DataCacheConnector,
-  navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
   formProvider: AddAnotherRulingFormProvider,
   cc: MessagesControllerComponents
-  )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with YesNoBehaviour[Map[String, Boolean]] {
+  )(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
 
-  private lazy val form = formProvider()
+  lazy val form: Form[Boolean] = formProvider()
+  val questionPage: QuestionPage[Boolean] = AddAnotherRulingPage
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
-    Ok(addAnotherRuling(appConfig, form, existingRulings, mode))
-  }
-
-  private def existingRulings(implicit request: DataRequest[AnyContent]): Map[String, Boolean] = {
-    request.userAnswers.get(AddAnotherRulingPage).getOrElse(Map.empty[String, Boolean])
-  }
-
-  // def onRemove()
-
-  // def onChange()
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    form.bindFromRequest().fold(
-          (formWithErrors: Form[_]) =>
-            Future.successful(BadRequest(addAnotherRuling(appConfig, formWithErrors, existingRulings, mode))),
-          {
-            value => { //CHECK THIS
-              val updatedAnswers = request.userAnswers.set(AddAnotherRulingPage, Map.empty[String, Boolean])
-              dataCacheConnector.save(updatedAnswers.cacheMap).map(
-                _ => Redirect(navigator.nextPage(LegalChallengePage, mode)(updatedAnswers))
-              )
-            }
-          }
-        )
-
-
-//    def defaultCachePageAndRedirect: Future[Result] = {
-//
-//      val updatedAnswers: Future[UserAnswers] = request.userAnswers.get(AddAnotherRulingPage) match {
-//        case None =>
-//          val updatedAnswers = request.userAnswers.set(AddAnotherRulingPage, Seq.empty)
-//          dataCacheConnector.save(updatedAnswers.cacheMap).map(_ => updatedAnswers)
-//        case _ => successful(request.userAnswers)
-//      }
-//
-//      updatedAnswers.map { userAnswers =>
-//        Redirect(navigator.nextPage(LegalChallengePage, mode)(userAnswers))
-//      }
-//    }
-
-//    form.bindFromRequest().fold(
-//      (formWithErrors: Form[_]) =>
-//        Future.successful(BadRequest(addAnotherRuling(appConfig, formWithErrors, existingRulings, mode))),
-//      {
-//        //case true => successful(Redirect(navigator.nextPage(AddAnotherRulingPage, mode)(userAnswers))) CORRECT IMPLEMENTATION
-//        case true => successful(Redirect(routes.CommodityCodeRulingReferenceController.onPageLoad(mode)))
-//        case false => defaultCachePageAndRedirect
-//      }
-//    )
+  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+    val rulings = request.userAnswers.get(CommodityCodeRulingReferencePage).getOrElse(List.empty)
+    addAnotherRuling(appConfig, form, mode, rulings)
   }
 
 }
