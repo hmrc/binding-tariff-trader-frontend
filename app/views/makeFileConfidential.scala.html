@@ -16,11 +16,10 @@
 
 @import config.FrontendAppConfig
 @import controllers.routes._
-@import helper._
 @import models.Mode
+@import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
-@import uk.gov.hmrc.play.views.html.helpers
 @(appConfig: FrontendAppConfig, makeFileConfidentialForm: Form[_], mode: Mode, fileId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(

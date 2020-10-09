@@ -16,8 +16,8 @@
 
 @import config.FrontendAppConfig
 @import controllers.routes._
-@import helper._
 @import models.Mode
+@import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
 @this()
@@ -29,7 +29,7 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @form(action = AddConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
+    @helpers.form(action = AddConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
