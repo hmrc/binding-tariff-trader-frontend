@@ -22,6 +22,7 @@ import models.{CheckMode, Country, UserAnswers}
 import pages._
 import play.api.i18n.{Lang, MessagesApi}
 import viewmodels.AnswerRow
+import models.FileAttachment
 
 class CheckYourAnswersHelper(
                               userAnswers: UserAnswers,
@@ -103,9 +104,19 @@ class CheckYourAnswersHelper(
       routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
     )
 
+    val keepConfidential = userAnswers
+      .get(MakeFileConfidentialPage)
+      .getOrElse(Map.empty)
+
+    def confidentialLabel(attachment: FileAttachment) =
+      if (keepConfidential(attachment.id)) " - Keep confidential" else ""
+
     userAnswers.get(UploadSupportingMaterialMultiplePage).collect {
       case attachments if attachments.nonEmpty =>
-        filesRow(attachments.map(_.name))
+        val attachmentLabels = attachments.map { att =>
+          att.name + confidentialLabel(att)
+        }
+        filesRow(attachmentLabels)
     }
   }
 
