@@ -18,29 +18,29 @@ package views
 
 import controllers.routes
 import play.api.data.Form
-import forms.WhenToSendSampleFormProvider
+import forms.AreYouSendingSamplesFormProvider
 import models.NormalMode
 import views.behaviours.YesNoViewBehaviours
-import views.html.whenToSendSample
+import views.html.areYouSendingSamples
 
-class WhenToSendSampleViewSpec extends YesNoViewBehaviours {
+class AreYouSendingSamplesViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "whenToSendSample"
+  val messageKeyPrefix = "areYouSendingSamples"
 
   val goodsName = "some-goods-name"
 
-  val form = new WhenToSendSampleFormProvider()()
+  val form = new AreYouSendingSamplesFormProvider()()
 
-  def createView = () => whenToSendSample(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createView = () => areYouSendingSamples(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => whenToSendSample(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => areYouSendingSamples(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  "WhenToSendSample view" must {
+  "AreYouSendingSamples view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.WhenToSendSampleController.onSubmit(NormalMode).url)
+    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.AreYouSendingSamplesController.onSubmit(NormalMode).url)
 
   }
 

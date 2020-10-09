@@ -16,17 +16,13 @@
 
 package pages
 
-import pages.behaviours.PageBehaviours
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-
-class DeclarationPageSpec extends PageBehaviours {
-
-  "DeclarationPage" must {
-
-    beRetrievable[String](DeclarationPage)
-
-    beSettable[String](DeclarationPage)
-
-    beRemovable[String](DeclarationPage)
-  }
+case object PreviousBTIRulingPage extends QuestionPage[Boolean] {
+  def route(mode: Mode): Call =
+    routes.PreviousBTIRulingController.onPageLoad(mode)
+  override def toString: String =
+    "previousBTIRuling"
 }

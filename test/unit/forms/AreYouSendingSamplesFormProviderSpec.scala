@@ -19,11 +19,11 @@ package forms
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class WhenToSendSampleFormProviderSpec extends BooleanFieldBehaviours {
+class AreYouSendingSamplesFormProviderSpec extends BooleanFieldBehaviours {
 
-  val form = new WhenToSendSampleFormProvider()()
+  val form = new AreYouSendingSamplesFormProvider()()
 
-  val requiredKey = "whenToSendSample.error.required"
+  val requiredKey = "areYouSendingSamples.error.required"
   val invalidKey = "error.boolean"
 
 
