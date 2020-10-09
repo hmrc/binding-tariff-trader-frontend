@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package pages
 
-import models.NormalMode
-import views.behaviours.ViewBehaviours
-import views.html.declaration
+import controllers.routes
+import models.{ Mode, BTIReference }
+import play.api.mvc.Call
 
-class DeclarationViewSpec extends ViewBehaviours {
-
-  private val messageKeyPrefix = "declaration"
-
-  def createView = () => declaration(frontendAppConfig, NormalMode)(fakeRequest, messages)
-
-  "Declaration view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
-  }
-
+case object ProvideBTIReferencePage extends QuestionPage[BTIReference] {
+  def route(mode: Mode): Call =
+    routes.ProvideBTIReferenceController.onPageLoad(mode)
+  override def toString: String =
+    "provideBTIReference"
 }

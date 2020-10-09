@@ -16,17 +16,14 @@
 
 package pages
 
-import models.PreviousCommodityCode
-import pages.behaviours.PageBehaviours
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
-class PreviousCommodityCodePageSpec extends PageBehaviours {
+case object AreYouSendingSamplesPage extends QuestionPage[Boolean] {
+  def route(mode: Mode): Call =
+    routes.AreYouSendingSamplesController.onPageLoad(mode)
 
-  "PreviousCommodityCodePage" must {
-
-    beRetrievable[PreviousCommodityCode](PreviousCommodityCodePage)
-
-    beSettable[PreviousCommodityCode](PreviousCommodityCodePage)
-
-    beRemovable[PreviousCommodityCode](PreviousCommodityCodePage)
-  }
+  override def toString: String =
+    "areYouSendingSamples"
 }

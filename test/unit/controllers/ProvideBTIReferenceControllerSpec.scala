@@ -18,26 +18,26 @@ package controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import controllers.behaviours.YesNoCachingControllerBehaviours
-import forms.WhenToSendSampleFormProvider
-import models.NormalMode
+import controllers.behaviours.AnswerCachingControllerBehaviours
+import forms.ProvideBTIReferenceFormProvider
+import models.{NormalMode, BTIReference}
 import navigation.FakeNavigator
-import pages.ProvideGoodsNamePage
 import play.api.data.Form
-import play.api.libs.json.JsString
 import play.api.mvc.{ Call, Request }
-import views.html.whenToSendSample
+import play.api.libs.json.JsValue
+import views.html.provideBTIReference
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.mvc.Request
 
-class WhenToSendSampleControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
+class ProvideBTIReferenceControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
 
-  private val formProvider = new WhenToSendSampleFormProvider()
-  private val goodsName = "some-goods-name"
+  private val formProvider = new ProvideBTIReferenceFormProvider()
+
+  def viewAsString(form: Form[_], request: Request[_]): String =
+    provideBTIReference(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
-    new WhenToSendSampleController(
+    new ProvideBTIReferenceController(
       frontendAppConfig,
       FakeDataCacheConnector,
       new FakeNavigator(onwardRoute),
@@ -48,17 +48,21 @@ class WhenToSendSampleControllerSpec extends ControllerSpecBase with YesNoCachin
       cc
     )
 
-  private def onwardRoute: Call = Call("GET", "/foo")
+  private def onwardRoute = Call("GET", "/foo")
 
-  private def viewAsString(form: Form[Boolean], request: Request[_]): String =
-    whenToSendSample(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
+  val validFormData = Map("btiReference" -> "value 1")
+  val invalidFormData = Map("value" -> "invalid value")
+  val backgroundData = Map.empty[String, JsValue]
 
-  "WhenToSendSampleController" must {
-    behave like yesNoCachingController(
+  "ProvideBTIReferenceController" must {
+    behave like answerCachingController(
       controller,
       onwardRoute,
       viewAsString,
-      backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      validFormData,
+      invalidFormData,
+      backgroundData,
+      BTIReference("value 1")
     )
   }
 }

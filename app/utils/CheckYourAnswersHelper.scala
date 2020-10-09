@@ -74,8 +74,8 @@ class CheckYourAnswersHelper(
     x => AnswerRow("isSampleHazardous.checkYourAnswersLabel", yesNoAnswer(x), true, routes.IsSampleHazardousController.onPageLoad(CheckMode).url)
   }
 
-  def whenToSendSample: Option[AnswerRow] = userAnswers.get(WhenToSendSamplePage) map {
-    x => AnswerRow("whenToSendSample.checkYourAnswersLabel", yesNoAnswer(x), true, routes.WhenToSendSampleController.onPageLoad(CheckMode).url)
+  def areYouSendingSamples: Option[AnswerRow] = userAnswers.get(AreYouSendingSamplesPage) map {
+    x => AnswerRow("areYouSendingSamples.checkYourAnswersLabel", yesNoAnswer(x), true, routes.AreYouSendingSamplesController.onPageLoad(CheckMode).url)
   }
 
   def commodityCodeDigits: Option[AnswerRow] = userAnswers.get(CommodityCodeDigitsPage) map {
@@ -108,20 +108,29 @@ class CheckYourAnswersHelper(
       routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
     )
 
-    userAnswers.get(SupportingMaterialFileListPage).map {
+    userAnswers.get(SupportingMaterialFileListPage).collect {
       case filenames if filenames.fileAttachments.nonEmpty =>
         filesRow(filenames.fileAttachments.map(_.name))
-      case _ =>
-        filesRow(Seq("No files attached"))
     }
   }
 
-  def previousCommodityCode: Option[AnswerRow] = userAnswers.get(PreviousCommodityCodePage) map {
-    x => AnswerRow("previousCommodityCode.checkYourAnswersLabel", s"${x.previousCommodityCode}", false, routes.PreviousCommodityCodeController.onPageLoad(CheckMode).url)
+  def provideBTIReference: Option[AnswerRow] = userAnswers.get(ProvideBTIReferencePage) map {
+    x => AnswerRow("provideBTIReference.checkYourAnswersLabel", s"${x.reference}", false, routes.ProvideBTIReferenceController.onPageLoad(CheckMode).url)
   }
 
-  def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", Seq(x.name, x.email, x.phoneNumber.orNull), false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  def enterContactDetailsName: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+      x => AnswerRow("enterContactDetails.checkYourAnswersLabel.name", s"${x.name}", false,
+        routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  }
+
+  def enterContactDetailsEmail: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.email", s"${x.email}", false,
+      routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  }
+
+  def enterContactDetailsPhone: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.phone", s"${x.phoneNumber.getOrElse("")}", false,
+      routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
   }
 
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {
@@ -132,8 +141,8 @@ class CheckYourAnswersHelper(
         routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
   }
 
-  def selectApplicationType: Option[AnswerRow] = userAnswers.get(SelectApplicationTypePage) map {
-    x => AnswerRow("selectApplicationType.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SelectApplicationTypeController.onPageLoad(CheckMode).url)
+  def previousBTIRuling: Option[AnswerRow] = userAnswers.get(PreviousBTIRulingPage) map { x =>
+    AnswerRow("previousBTIRuling.checkYourAnswersLabel", yesNoAnswer(x), true, routes.PreviousBTIRulingController.onPageLoad(CheckMode).url)
   }
 
   def whichBestDescribesYou: Option[AnswerRow] = None

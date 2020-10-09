@@ -73,7 +73,7 @@ class WhichBestDescribesYouController @Inject()(
 
     def nextPage: WhichBestDescribesYou => Page = {
       case BusinessRepresentative => RegisterBusinessRepresentingPage
-      case BusinessOwner => SelectApplicationTypePage
+      case BusinessOwner => PreviousBTIRulingPage
     }
 
     form.bindFromRequest().fold(

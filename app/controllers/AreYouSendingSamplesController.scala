@@ -19,35 +19,35 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import forms.SelectApplicationTypeFormProvider
+import forms.AreYouSendingSamplesFormProvider
 import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.ProvideGoodsNamePage
+import pages._
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
-import views.html.selectApplicationType
+import play.twirl.api.HtmlFormat
+import views.html.areYouSendingSamples
 
 import scala.concurrent.ExecutionContext
-import play.twirl.api.HtmlFormat
 import navigation.Journey
 
-class SelectApplicationTypeController @Inject()(
+class AreYouSendingSamplesController @Inject()(
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
   val requireData: DataRequiredAction,
-  formProvider: SelectApplicationTypeFormProvider,
+  formProvider: AreYouSendingSamplesFormProvider,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
   lazy val form = formProvider()
-  val journey = Journey.previousBTI
+  val journey = Journey.samples
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    selectApplicationType(appConfig, preparedForm, goodsName, mode)
+    areYouSendingSamples(appConfig, preparedForm, mode, goodsName)
   }
 }

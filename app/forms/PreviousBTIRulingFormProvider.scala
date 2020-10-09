@@ -20,16 +20,12 @@ import javax.inject.Inject
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import play.api.data.Forms._
-import models.PreviousCommodityCode
 
-class PreviousCommodityCodeFormProvider @Inject() extends Mappings {
+class PreviousBTIRulingFormProvider @Inject() extends Mappings {
 
-   def apply(): Form[PreviousCommodityCode] = Form(
-     mapping(
-      "btiReference" -> text("previousCommodityCode.error.previousCommodityCode.required")
-        .verifying(maxLength(100, "previousCommodityCode.error.previousCommodityCode.length"))
-     )(PreviousCommodityCode.apply)(PreviousCommodityCode.unapply)
-   )
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("previousBTIRuling.error.required")
+    )
 
 }

@@ -14,18 +14,31 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import pages.behaviours.PageBehaviours
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-class WhenToSendSamplePageSpec extends PageBehaviours {
+class PreviousBTIRulingFormProviderSpec extends BooleanFieldBehaviours {
 
-  "WhenToSendSamplePage" must {
+  val form = new PreviousBTIRulingFormProvider()()
 
-    beRetrievable[Boolean](WhenToSendSamplePage)
+  ".value" must {
 
-    beSettable[Boolean](WhenToSendSamplePage)
+    val fieldName = "value"
+    val requiredKey = "previousBTIRuling.error.required"
+    val invalidKey = "error.boolean"
 
-    beRemovable[Boolean](WhenToSendSamplePage)
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
   }
 }
