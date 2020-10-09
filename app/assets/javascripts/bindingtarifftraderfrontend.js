@@ -131,10 +131,12 @@ $(document).ready(function () {
         if (window.history && window.history.back && typeof window.history.back === 'function' &&
             (docReferrer !== "" && docReferrer.indexOf(window.location.host) !== -1)) {
             const historyStack = JSON.parse(sessionStorage.getItem("historyStack")) || [];
-            historyStack.pop();    //take the url for page just exited off the stack
-            const previousUrl = historyStack[historyStack.length - 1]
-            window.location.href = previousUrl
-            sessionStorage.setItem("historyStack", JSON.stringify(historyStack));
+            if (historyStack.length > 0) {
+                historyStack.pop();    //take the url for page just exited off the stack
+                const previousUrl = historyStack[historyStack.length - 1]
+                window.location.href = previousUrl
+                sessionStorage.setItem("historyStack", JSON.stringify(historyStack));
+            }
         }
     })
 
@@ -146,10 +148,19 @@ $(document).ready(function () {
     }
 
     function updateSessionHistory() {
+        function isEmpty(stack) {
+            return stack.length === 0
+        }
+
+        function last(stack) {
+            return stack[stack.length - 1]
+        }
+
         const historyStack = JSON.parse(sessionStorage.getItem("historyStack")) || [];
-        const latestUrl = historyStack[historyStack.length - 1]
-        if (latestUrl !== window.location.href) {
-            historyStack.push(window.location.href)
+        const currentUrl = window.location.href;
+
+        if (isEmpty(historyStack) || last(historyStack) !== currentUrl) {
+            historyStack.push(currentUrl)
             sessionStorage.setItem("historyStack", JSON.stringify(historyStack));
         }
     }
