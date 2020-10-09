@@ -16,7 +16,9 @@
 
 @import config.FrontendAppConfig
 @import viewmodels.AnswerSection
+@import controllers.routes._
 
+@import uk.gov.hmrc.play.views.html.helpers
 @(appConfig: FrontendAppConfig, answerSections: Seq[AnswerSection])(implicit request: Request[_], messages: Messages)
 
     @main_template(
@@ -30,5 +32,20 @@
             @components.answer_section(section)
         }
 
-        @components.button_link(messages("site.continue"), routes.DeclarationController.onPageLoad(NormalMode).url)
+        @helpers.form(action = CheckYourAnswersController.onSubmit()) {
+
+
+            <h2 class="heading-large">@messages("checkYourAnswers.declaration.subheading")</h2>
+
+            <p>@messages("checkYourAnswers.declaration.paragraph0")</p>
+            <p>@messages("checkYourAnswers.declaration.paragraph1")</p>
+
+            <ul class="list list-bullet">
+                <li>@messages("checkYourAnswers.declaration.listItem1")</li>
+                <li>@messages("checkYourAnswers.declaration.listItem2")</li>
+            </ul>
+
+            @components.submit_button(Some(messages("checkYourAnswers.declaration.submit")))
+
+        }
     }
