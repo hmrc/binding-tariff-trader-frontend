@@ -23,11 +23,11 @@
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("previousCommodityCode.title")}",
+    title = s"${errorPrefix(form)} ${messages("provideBTIReference.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = PreviousCommodityCodeController.onSubmit(mode)) {
+    @helpers.form(action = ProvideBTIReferenceController.onSubmit(mode)) {
 
         @components.back_link()
 
@@ -36,7 +36,7 @@
         @components.input_text(
             field = form("btiReference"),
             labelHtml = Some(heading),
-            hint = Some(messages("previousCommodityCode.previousCommodityCode.hint"))
+            hint = Some(messages("provideBTIReference.hint"))
         )
 
         @components.submit_button(Some(messages("site.save_and_continue")))
@@ -45,7 +45,7 @@
 
 @heading = {
     @components.heading(
-        messages("previousCommodityCode.heading"),
-        captionMsg = Some(messages("previousCommodityCode.caption"))
+        messages("provideBTIReference.heading"),
+        captionMsg = Some(messages("provideBTIReference.caption"))
     )
 }

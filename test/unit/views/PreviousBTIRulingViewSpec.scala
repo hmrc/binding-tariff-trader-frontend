@@ -18,31 +18,31 @@ package views
 
 import controllers.routes
 import play.api.data.Form
-import forms.SelectApplicationTypeFormProvider
+import forms.PreviousBTIRulingFormProvider
 import models.NormalMode
 import views.behaviours.ViewBehaviours
-import views.html.selectApplicationType
+import views.html.previousBTIRuling
 import views.behaviours.YesNoViewBehaviours
 
-class SelectApplicationTypeViewSpec extends YesNoViewBehaviours {
+class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "selectApplicationType"
+  val messageKeyPrefix = "previousBTIRuling"
   val goodsName = "some-goods-name"
 
-  val form = new SelectApplicationTypeFormProvider()()
+  val form = new PreviousBTIRulingFormProvider()()
 
-  def createView = () => selectApplicationType(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  def createView = () => previousBTIRuling(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => selectApplicationType(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm = (form: Form[_]) => previousBTIRuling(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   override protected def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)
 
-  "SelectApplicationType view" must {
+  "PreviousBTIRuling view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.SelectApplicationTypeController.onSubmit(NormalMode).url)
+    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.PreviousBTIRulingController.onSubmit(NormalMode).url)
   }
 }

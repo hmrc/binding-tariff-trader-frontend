@@ -10,6 +10,7 @@
 @import 'partials/_registerBusinessRepresenting';
 @import 'partials/_tabs';
 @import 'partials/_view_application';
+@import 'partials/_check-your-answers';
 // WCAG 4.11.0 Updates
 @import 'partials/_header';
 
@@ -21,3 +22,5 @@
 // WCAG 2.1 Updates
 @import 'partials/_palette';
 @import 'partials/_focus';
+// include tags styles for new account dashboard
+@import 'partials/_tags';

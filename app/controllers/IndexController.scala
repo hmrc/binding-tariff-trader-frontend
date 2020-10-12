@@ -27,10 +27,11 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CasesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.CaseDetailTab
-import views.html.components.{ table_applications, table_rulings }
-import views.html.index
+import views.html.components.{table_applications, table_rulings}
+import views.html.{account_dashboard_statuses, index}
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.Future.successful
+import scala.concurrent.{ExecutionContext, Future}
 
 class IndexController @Inject()(
   val appConfig: FrontendAppConfig,
@@ -74,5 +75,19 @@ class IndexController @Inject()(
         val initialAnswers = UserAnswers(request.identifier)
         Future.successful(Redirect(navigator.nextPage(IndexPage, NormalMode)(initialAnswers)))
     }
+  }
+
+  def getApplicationsAndRulings(page: Int): Action[AnyContent] = identify.async { implicit request =>
+    request.eoriNumber match {
+      case Some(eori: String) =>
+        service.getCases(eori, applicationStatuses, SearchPagination(page), Sort()) flatMap { pagedResult =>
+          successful(Ok(account_dashboard_statuses(appConfig, pagedResult)))
+        }
+
+      case None =>
+        val initialAnswers = UserAnswers(request.identifier)
+        successful(Redirect(navigator.nextPage(IndexPage, NormalMode)(initialAnswers)))
+    }
+
   }
 }

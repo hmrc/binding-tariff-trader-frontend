@@ -16,23 +16,90 @@
 
 package controllers
 
-import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeIdentifierAction}
+import java.time.Instant
+
+import audit.AuditService
+import connectors.FakeDataCacheConnector
+import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeDataRetrievalAction, FakeIdentifierAction}
+import mapper.CaseRequestMapper
+import models.{Application, Case, Contact, EORIDetails, FileAttachment, NewCaseRequest, NormalMode, Operator, PublishedFileAttachment, UserAnswers}
+import navigation.FakeNavigator
+import org.mockito.ArgumentMatchers.{any, refEq}
+import org.mockito.Mockito.{never, reset, times, verify, verifyNoMoreInteractions, when}
+import org.scalatest.BeforeAndAfterEach
+import pages.{CheckYourAnswersPage, UploadSupportingMaterialMultiplePage}
+import play.api.http.Status
+import play.api.libs.json.{JsString, Json}
+import play.api.mvc.Call
 import play.api.test.Helpers._
-import service.CountriesService
-import viewmodels.AnswerSection
+import service.{CasesService, CountriesService, FileService}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.cache.client.CacheMap
+import viewmodels.{AnswerSection, PdfViewModel}
 import views.html.check_your_answers
 
-class CheckYourAnswersControllerSpec extends ControllerSpecBase {
+import scala.concurrent.Future.{failed, successful}
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
+
+  private lazy val error = new IllegalStateException("expected error")
+  private val testAnswer = "answer"
+
+  private val mapper = mock[CaseRequestMapper]
+  private val newCaseReq = mock[NewCaseRequest]
+  private val attachment = mock[FileAttachment]
+  private val publishedAttachment = mock[PublishedFileAttachment]
+  private val createdCase = mock[Case]
+  private val auditService = mock[AuditService]
+  private val casesService = mock[CasesService]
+  private val fileService = mock[FileService]
+  private val btiApp = mock[Application]
+  private val contact = mock[Contact]
+  private val pdf = mock[PdfViewModel]
 
   private val countriesService = new CountriesService
+
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+
+    when(createdCase.attachments).thenReturn(Seq.empty)
+    when(createdCase.createdDate).thenReturn(Instant.now)
+    when(createdCase.reference).thenReturn("reference")
+    when(createdCase.application).thenReturn(btiApp)
+    when(btiApp.agent).thenReturn(None)
+    when(btiApp.holder).thenReturn(EORIDetails("eori", "", "", "", "", "", ""))
+    when(btiApp.contact).thenReturn(Contact("luigi", "luigi@example.test", Some("0123")))
+    when(btiApp.goodName).thenReturn("goods name")
+    when(btiApp.goodDescription).thenReturn("goods description")
+    when(btiApp.confidentialInformation).thenReturn(Some("goods description"))
+    when(btiApp.envisagedCommodityCode).thenReturn(Some("goods description"))
+    when(btiApp.knownLegalProceedings).thenReturn(Some("goods description"))
+    when(btiApp.sampleToBeProvided).thenReturn(true)
+    when(btiApp.sampleIsHazardous).thenReturn(Some(true))
+    when(btiApp.sampleToBeReturned).thenReturn(true)
+
+    when(mapper.map(any[UserAnswers])).thenReturn(newCaseReq)
+  }
+
+  override protected def afterEach(): Unit = {
+    super.afterEach()
+    reset(casesService, auditService)
+  }
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CheckYourAnswersController(
       frontendAppConfig,
+      FakeDataCacheConnector,
+      auditService,
+      new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
       countriesService,
+      casesService,
+      fileService,
+      mapper,
       cc
     )
 
@@ -58,6 +125,100 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
+  }
+
+  "return OK and the correct view for a POST" in {
+    givenTheCaseCreatesSuccessfully()
+    givenTheAttachmentPublishSucceeds()
+    givenTheCaseCreatedEventIsSuccessful
+
+    val result = await(controller(extractDataFromCache).onSubmit()(fakeRequest))
+
+    result.header.status shouldBe Status.SEE_OTHER
+    result.header.headers(LOCATION) shouldBe "/foo"
+  }
+
+  "create an event when the ATAR application has been submitted successfully" in {
+    givenTheCaseCreatesSuccessfully()
+    givenTheCaseCreatedEventIsSuccessful()
+
+    val c = controller(extractDataFromCache)
+    val req = fakeRequest
+
+    await(c.onSubmit()(req))
+
+    verify(casesService, times(1)).addCaseCreatedEvent(
+      refEq(createdCase), refEq(Operator("", Some("luigi"))))(any[HeaderCarrier])
+  }
+
+
+  "not create an event when the ATAR application failed to be submitted " in {
+    givenTheCaseCreateFails()
+
+    val c = controller(extractDataFromCache)
+    val req = fakeRequest
+
+    val caught = intercept[RuntimeException] {
+      await(c.onSubmit()(req))
+    }
+
+    caught shouldBe error
+
+    verify(casesService, never()).addCaseCreatedEvent(any[Case], any[Operator])(any[HeaderCarrier])
+  }
+
+  "send the expected explicit audit events when the ATAR application has been submitted successfully" in {
+    givenTheCaseCreatesSuccessfully()
+    givenTheCaseCreatedEventIsSuccessful
+
+    val c = controller(extractDataFromCache)
+    val req = fakeRequest
+
+    await(c.onSubmit()(req))
+
+    verify(auditService, times(1)).auditBTIApplicationSubmissionSuccessful(refEq(createdCase))(any[HeaderCarrier])
+    verifyNoMoreInteractions(auditService)
+  }
+
+  "not send the expected explicit audit events when the ATAR application failed to be submitted" in {
+    givenTheCaseCreateFails()
+
+    val c = controller(extractDataFromCache)
+    val req = fakeRequest
+
+    val caught = intercept[error.type] {
+      await(c.onSubmit()(req))
+    }
+    caught shouldBe error
+
+    verify(auditService, never).auditBTIApplicationSubmissionSuccessful(any[Case])(any[HeaderCarrier])
+    verifyNoMoreInteractions(auditService)
+  }
+
+  private def onwardRoute = Call("GET", "/foo")
+
+  private def givenTheCaseCreatesSuccessfully(): Unit = {
+    when(casesService.create(any[NewCaseRequest])(any[HeaderCarrier])).thenReturn(successful(createdCase))
+  }
+
+  private def givenTheCaseCreatedEventIsSuccessful(): Unit = {
+    when(casesService.addCaseCreatedEvent(any[Case], any[Operator])(any[HeaderCarrier])).thenReturn(successful(()))
+  }
+
+  private def givenTheCaseCreateFails(): Unit = {
+    when(casesService.create(any[NewCaseRequest])(any[HeaderCarrier])).thenReturn(failed(error))
+  }
+
+  private def givenTheAttachmentPublishSucceeds(): Unit = {
+    when(fileService.publish(any[Seq[FileAttachment]])(any[HeaderCarrier])).thenReturn(successful(Seq(publishedAttachment)))
+  }
+
+  private def extractDataFromCache: DataRetrievalAction = {
+    val validData = Map(
+      CheckYourAnswersPage.toString -> JsString(testAnswer),
+      UploadSupportingMaterialMultiplePage.toString -> Json.toJson(Seq(attachment))
+    )
+    new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
   }
 
 }

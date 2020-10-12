@@ -35,11 +35,10 @@
         @components.error_summary(form.errors)
 
         @if(form("eori").value.isDefined) {
-            @components.heading(messages("registeredAddressForEori.heading", form("eori").value.get))
+            @components.heading(messages("registeredAddressForEori.heading", form("eori").value.get),
+                captionMsg=Some(messages("registeredAddressForEori.caption")))
 
-            <div role="note" class="application-notice info-notice">
-                <p> @messages("registeredAddressForEori.note") </p>
-            </div>
+            @components.warning_text(messages("registeredAddressForEori.note"))
 
             @components.input_hidden(field = form("eori"))
         } else {

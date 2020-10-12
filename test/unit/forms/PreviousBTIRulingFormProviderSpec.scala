@@ -16,16 +16,29 @@
 
 package forms
 
-import javax.inject.Inject
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class PreviousBTIRulingFormProviderSpec extends BooleanFieldBehaviours {
 
-class SelectApplicationTypeFormProvider @Inject() extends Mappings {
+  val form = new PreviousBTIRulingFormProvider()()
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("selectApplicationType.error.required")
+  ".value" must {
+
+    val fieldName = "value"
+    val requiredKey = "previousBTIRuling.error.required"
+    val invalidKey = "error.boolean"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
     )
 
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

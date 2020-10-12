@@ -15,33 +15,36 @@
  *@
 
 @import config.FrontendAppConfig
+@import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+@import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${messages("declaration.title")}",
+    title = s"${errorPrefix(form)} ${messages("previousBTIRuling.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = DeclarationController.onSubmit(mode)) {
+    @helpers.form(action = PreviousBTIRulingController.onSubmit(mode)) {
 
         @components.back_link()
 
-        @components.heading(messages("declaration.heading"))
+        @components.error_summary(form.errors)
 
-        <p>@messages("declaration.paragraph0")</p>
-        <p>@messages("declaration.paragraph1")</p>
+        @components.input_yes_no(
+            field = form("value"),
+            labelHtml = Some(heading)
+        )
 
-        <ul class="list list-bullet">
-          <li>@messages("declaration.listItem1")</li>
-          <li>@messages("declaration.listItem2")</li>
-        </ul>
-
-        <p>@messages("declaration.paragraph2")</p>
-
-        @components.submit_button(Some(messages("declaration.submit")))
+        @components.submit_button(Some(messages("site.save_and_continue")))
     }
+}
+
+@heading = {
+    @components.heading(
+        messages("previousBTIRuling.heading", goodsName),
+        captionMsg = Some(messages("previousBTIRuling.caption"))
+    )
 }
