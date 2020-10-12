@@ -51,7 +51,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
     } else if(confirmation.sendingSamples) {
 
-        <p class="break-word">@messages("confirmation.paragraph.whatNext0.sample") <span>@messages("confirmation.paragraph.whatNext1") <a href="#">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
+        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="#">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
 
         @components.icon_important("confirmation.sendingSamples.important")
 

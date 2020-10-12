@@ -28,11 +28,10 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
   private val confirm = Confirmation("reference", "eori", "marisa@example.test", sendingSamples = true)
   private val confirmNoSample = Confirmation("referenceNoSample", "eori", "marisa.nosample@example.test", sendingSamples = false)
-  private val agentCase = oCase.btiCaseExample
-  private val pdf = PdfViewModel(agentCase)
+  private val pdfViewModel = oCase.pdf
 
-  private def createView: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdf)(fakeRequest, messages)
-  private def createViewNoSamples: () => Html = () => confirmation(frontendAppConfig, confirmNoSample, "token", pdf)(fakeRequest, messages)
+  private def createView: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel)(fakeRequest, messages)
+  private def createViewNoSamples: () => Html = () => confirmation(frontendAppConfig, confirmNoSample, "token", pdfViewModel)(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)()
@@ -44,17 +43,16 @@ class ConfirmationViewSpec extends ViewBehaviours {
       text should include("We have sent your confirmation email to marisa@example.test")
       text should include("Your application will not be processed until we receive your samples")
       text should include("21 Victoria Avenue")
-      text should include("We will give you your ruling within 30 to 60 days of receiving your samples")
+      text should include(messages("view.application.paragraph.whatNext0.nosample"))
     }
 
-/*    "not display sample related text when no samples are sent" in {
+    "not display sample related text when no samples are sent" in {
       val text = asDocument(createViewNoSamples()).text()
 
       text should include("referenceNoSample")
       text should include(messages("confirmation.paragraph.confirmationEmail", "marisa.nosample@example.test"))
-      text should not include messages("confirmation.sendingSamples.important")
-      text should not include "21 Victoria Avenue"
-      text should include(messages("confirmation.paragraph.whatNext0.nosample"))
-    }*/
+      text should include (messages("confirmation.sendingSamples.important"))
+      text should not include(messages("confirmation.paragraph.whatNext0.nosample"))
+    }
   }
 }
