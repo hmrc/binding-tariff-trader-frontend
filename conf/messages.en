@@ -38,6 +38,7 @@ error.summary.title = There is a problem
 
 index.title = Manage your Advance Tariff Rulings - GOV.UK
 index.heading = Your applications and rulings
+index.noapplications = You have not started any applications.
 index.home = Home
 
 global.link.signout = Sign out
