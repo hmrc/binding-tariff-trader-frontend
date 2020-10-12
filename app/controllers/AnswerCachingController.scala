@@ -30,18 +30,17 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class ListCachingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A]) extends AccumulatingCachingController[List[A], A, Int](cc) with ListAnswerCaching[A]
+abstract class ListCachingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A]) extends AccumulatingCachingController[List[A], A](cc) with ListAnswerCaching[A]
 
-abstract class MapCachingController[V](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[V]) extends AccumulatingCachingController[Map[String, V], (String, V), String](cc) with MapAnswerCaching[String, V]
+abstract class MapCachingController[V](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[V]) extends AccumulatingCachingController[Map[String, V], (String, V)](cc) with MapAnswerCaching[String, V]
 
-abstract class AccumulatingCachingController[F <: TraversableOnce[A], A, I](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[F]) extends FrontendController(cc) with I18nSupport with AccumulatingAnswerCaching[F, A, I] {
+abstract class AccumulatingCachingController[F <: TraversableOnce[A], A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[F]) extends FrontendController(cc) with I18nSupport with AccumulatingAnswerCaching[F, A] {
   def identify: IdentifierAction
   def getData: DataRetrievalAction
   def requireData: DataRequiredAction
   def form: Form[A]
 
   def submitAction(mode: Mode): Call
-  def changeSubmitAction(index: I, mode: Mode): Call
 
   def questionPage: QuestionPage[F]
 
@@ -51,18 +50,9 @@ abstract class AccumulatingCachingController[F <: TraversableOnce[A], A, I](cc: 
     Ok(renderView(form, submitAction(mode), mode))
   }
 
-  def onPageEditLoad(index: I, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request: DataRequest[_] =>
-    Ok(renderView(form, changeSubmitAction(index, mode), mode))
-  }
-
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>
     val badRequest = (formWithErrors: Form[A]) => Future.successful(Results.BadRequest(renderView(formWithErrors, submitAction(mode), mode)))
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
-  }
-
-  def onChangeSubmit(index: I, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>
-    val badRequest = (formWithErrors: Form[A]) => Future.successful(Results.BadRequest(renderView(formWithErrors, changeSubmitAction(index, mode), mode)))
-    form.bindFromRequest().fold(badRequest, updateAnswer(index, _, mode))
   }
 }
 

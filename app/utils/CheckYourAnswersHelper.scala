@@ -59,7 +59,7 @@ class CheckYourAnswersHelper(
   }
 
   def commodityCodeRulingReference: Option[AnswerRow] = userAnswers.get(CommodityCodeRulingReferencePage) map {
-    x => AnswerRow("commodityCodeRulingReference.checkYourAnswersLabel", s"$x", false, routes.CommodityCodeRulingReferenceController.onPageLoad(CheckMode).url)
+    x => AnswerRow("commodityCodeRulingReference.checkYourAnswersLabel", x.mkString("\n"), false, routes.AddAnotherRulingController.onPageLoad(CheckMode).url)
   }
 
   def similarItemCommodityCode: Option[AnswerRow] = userAnswers.get(SimilarItemCommodityCodePage) map {

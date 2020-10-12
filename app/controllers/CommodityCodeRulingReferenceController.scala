@@ -41,13 +41,13 @@ class CommodityCodeRulingReferenceController @Inject()(
   val requireData: DataRequiredAction,
   formProvider: CommodityCodeRulingReferenceFormProvider,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends ListCachingController[String](cc) {
+)(implicit ec: ExecutionContext) extends ListEditingController[String](cc) {
   lazy val form = formProvider()
   val questionPage = CommodityCodeRulingReferencePage
 
   def submitAction(mode: Mode): Call = routes.CommodityCodeRulingReferenceController.onSubmit(mode)
 
-  def changeSubmitAction(index: Int, mode: Mode): Call = routes.CommodityCodeRulingReferenceController.onChangeSubmit(index, mode)
+  def editSubmitAction(index: Int, mode: Mode): Call = routes.CommodityCodeRulingReferenceController.onEditSubmit(index, mode)
 
   def renderView(preparedForm: Form[String], submitAction: Call, mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
     commodityCodeRulingReference(appConfig, preparedForm, submitAction, mode)
