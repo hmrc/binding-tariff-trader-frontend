@@ -114,8 +114,10 @@ $(document).ready(function () {
     // =====================================================
     GOVUK.shimLinksWithButtonRole.init()
 
+    updateSessionHistory();
+
     // =====================================================
-    // Back link mimics browser back functionality
+    // Back link uses a js session storage based history stack
     // =====================================================
     // store referrer value to cater for IE - https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/  */
     var docReferrer = document.referrer
@@ -128,7 +130,13 @@ $(document).ready(function () {
         e.preventDefault();
         if (window.history && window.history.back && typeof window.history.back === 'function' &&
             (docReferrer !== "" && docReferrer.indexOf(window.location.host) !== -1)) {
-            window.history.back();
+            const historyStack = JSON.parse(sessionStorage.getItem("historyStack")) || [];
+            if (historyStack.length > 0) {
+                historyStack.pop();    //take the url for page just exited off the stack
+                const previousUrl = historyStack[historyStack.length - 1]
+                window.location.href = previousUrl
+                sessionStorage.setItem("historyStack", JSON.stringify(historyStack));
+            }
         }
     })
 
@@ -137,6 +145,24 @@ $(document).ready(function () {
     //======================================================
     if ($('.error-summary a').length > 0) {
         $('.error-summary').focus();
+    }
+
+    function updateSessionHistory() {
+        function isEmpty(stack) {
+            return stack.length === 0
+        }
+
+        function last(stack) {
+            return stack[stack.length - 1]
+        }
+
+        const historyStack = JSON.parse(sessionStorage.getItem("historyStack")) || [];
+        const currentUrl = window.location.href;
+
+        if (isEmpty(historyStack) || last(historyStack) !== currentUrl) {
+            historyStack.push(currentUrl)
+            sessionStorage.setItem("historyStack", JSON.stringify(historyStack));
+        }
     }
 
     // =====================================================
