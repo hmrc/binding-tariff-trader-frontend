@@ -105,9 +105,19 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.provideBTIReference.get.answer shouldBe "122523847624"
       }
 
-      "return a row with the correct answer for EnterContactDetailsPage" in {
+      "return a row with the correct answer for EnterContactDetailsPage Name" in {
         given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
-        checkHelper.enterContactDetails.get.answer shouldBe "name\nemail\nphoneNumber"
+        checkHelper.enterContactDetailsName.get.answer shouldBe "name"
+      }
+
+      "return a row with the correct answer for EnterContactDetailsPage Email" in {
+        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
+        checkHelper.enterContactDetailsEmail.get.answer shouldBe "email"
+      }
+
+      "return a row with the correct answer for EnterContactDetailsPage Telephone" in {
+        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
+        checkHelper.enterContactDetailsPhone.get.answer shouldBe "phoneNumber"
       }
 
       "return a row with the correct answer for RegisterBusinessRepresentingPage" in {
