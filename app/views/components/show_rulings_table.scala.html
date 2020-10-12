@@ -14,8 +14,6 @@
  * limitations under the License.
  *@
 
-@import views.ViewUtils._
-
 @(rulings: List[String], mode: Mode)(implicit messages: Messages)
 
 <dl class="ruling-list mb-5">
@@ -23,7 +21,7 @@
         <div id="rulings-row-@{index}" class="ruling-list-row">
             <dt class="ruling-list-name" id="rulings-row-@{index}-title">@ruling</dt>
             <dd class="ruling-list-link" id="rulings-row-@{index}-change">
-                <a id="ruling-row-@{index}-remove-ruling" class="remove" href="@routes.CommodityCodeRulingReferenceController.onPageEditLoad(index, mode)">
+                <a id="ruling-row-@{index}-remove-ruling" class="remove" href="@routes.CommodityCodeRulingReferenceController.onEditPageLoad(index, mode)">
                     <span aria-hidden="true">@messages("addAnotherRuling.change.ruling.text")</span>
                     <span class="visually-hidden">@messages("addAnotherRuling.change.ruling.hidden.text")</span>
                 </a>
