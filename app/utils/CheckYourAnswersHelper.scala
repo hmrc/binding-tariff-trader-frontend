@@ -22,10 +22,11 @@ import models.{CheckMode, Country, UserAnswers}
 import pages._
 import play.api.i18n.{Lang, MessagesApi}
 import viewmodels.AnswerRow
+import models.RegisteredAddressForEori
 
 class CheckYourAnswersHelper(
                               userAnswers: UserAnswers,
-                              countries: List[Country],
+                              countries: Map[String, Country],
                               messagesApi: MessagesApi,
                               implicit val lang: Lang
                             ) {
@@ -118,6 +119,27 @@ class CheckYourAnswersHelper(
     x => AnswerRow("provideBTIReference.checkYourAnswersLabel", s"${x.reference}", false, routes.ProvideBTIReferenceController.onPageLoad(CheckMode).url)
   }
 
+  def registeredName: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage).map { regAddress =>
+    AnswerRow(
+      "registeredAddressForEori.registeredName.checkYourAnswersLabel", s"${regAddress.businessName}", false,
+      routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url
+    )
+  }
+
+  def registeredAddress: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage).map { regAddress =>
+    val formattedAddress = List(
+      regAddress.addressLine1,
+      regAddress.townOrCity,
+      regAddress.postcode.getOrElse(""),
+      messagesApi(getCountryName(regAddress.country).mkString)
+    ).filterNot(_.isEmpty).mkString("\n")
+
+    AnswerRow(
+      "registeredAddressForEori.registeredAddress.checkYourAnswersLabel", formattedAddress, false,
+      routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url
+    )
+  }
+
   def enterContactDetailsName: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
       x => AnswerRow("enterContactDetails.checkYourAnswersLabel.name", s"${x.name}", false,
         routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
@@ -163,5 +185,6 @@ class CheckYourAnswersHelper(
 
   private def yesNoAnswer(x: Boolean) = if (x) "site.yes" else "site.no"
 
-  def getCountryName(code: String): Option[String] = countries.find(_.code == code).map(_.countryName)
+  def getCountryName(code: String): Option[String] =
+    countries.get(code).map(_.countryName)
 }

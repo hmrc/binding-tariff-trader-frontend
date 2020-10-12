@@ -32,7 +32,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
   private val userAnswers = mock[UserAnswers]
   private val checkHelper = new CheckYourAnswersHelper(
     userAnswers,
-    countriesService.getAllCountries,
+    countriesService.getAllCountriesById,
     messagesApi,
     lang
   )
@@ -143,6 +143,15 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.registeredAddressForEori(requestWithEori).get.answer shouldBe "f1\nf2\nf3\nf4\nIrish Republic"
       }
 
+      "return a row with the correct answer for registered name" in {
+        given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
+        checkHelper.registeredName.get.answer shouldBe "f1"
+      }
+
+      "return a row with the correct answer for registered address" in {
+        given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
+        checkHelper.registeredAddress.get.answer shouldBe "f2\nf3\nf4\nIrish Republic"
+      }
     }
   }
 }

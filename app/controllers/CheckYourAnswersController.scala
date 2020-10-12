@@ -58,7 +58,7 @@ class CheckYourAnswersController @Inject()(
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-    val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountries, messagesApi, lang)
+    val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountriesById, messagesApi, lang)
 
     val sections = Seq(
       AnswerSection(
@@ -91,6 +91,8 @@ class CheckYourAnswersController @Inject()(
       AnswerSection(
         Some("checkYourAnswers.aboutTheApplicantSection"),
         Seq(
+          checkYourAnswersHelper.registeredName,
+          checkYourAnswersHelper.registeredAddress,
           checkYourAnswersHelper.enterContactDetailsName,
           checkYourAnswersHelper.enterContactDetailsEmail,
           checkYourAnswersHelper.enterContactDetailsPhone
