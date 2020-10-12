@@ -150,7 +150,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
 
       "return a row with the correct answer for registered address" in {
         given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
-        checkHelper.registeredAddress.get.answer shouldBe "f2\nf3\nf4\nIrish Republic"
+        checkHelper.registeredAddress.get.answer shouldBe "f2\nf3\nf4\nIreland"
       }
     }
   }
