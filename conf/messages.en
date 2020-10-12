@@ -104,7 +104,7 @@ eori.number = EORI number
 eori.details = EORI details
 caseReference.format = {0}
 
-registeredAddressForEori.title = What is the registered name and address for this EORI number? - Manage your Advance Tariff Rulings - GOV.UK
+registeredAddressForEori.title = Provide the name and address for this EORI number - Manage your Advance Tariff Rulings - GOV.UK
 registeredAddressForEori.heading = Provide the name and address for EORI number {0}
 registeredAddressForEori.caption = About the applicant
 registeredAddressForEori.headingNoEORI = What is your EORI number and what are the details of your registered EORI address?
