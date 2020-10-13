@@ -276,13 +276,8 @@ class NavigatorSpec extends SpecBase {
           routes.CheckYourAnswersController.onPageLoad()
       }
 
-      "redirect to DeclarationPage from CheckYourAnswersPage" in {
+      "redirect to ConfirmationPage from CheckYourAnswersPage" in {
         navigator.nextPage(CheckYourAnswersPage, NormalMode)(mock[UserAnswers]) shouldBe
-          routes.DeclarationController.onPageLoad(NormalMode)
-      }
-
-      "redirect to ConfirmationPage from DeclarationPage" in {
-        navigator.nextPage(DeclarationPage, NormalMode)(mock[UserAnswers]) shouldBe
           routes.ConfirmationController.onPageLoad()
       }
 

@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package views
+@(content: String)(implicit messages: Messages)
 
-import models.NormalMode
-import views.behaviours.ViewBehaviours
-import views.html.declaration
-
-class DeclarationViewSpec extends ViewBehaviours {
-
-  private val messageKeyPrefix = "declaration"
-
-  def createView = () => declaration(frontendAppConfig, NormalMode)(fakeRequest, messages)
-
-  "Declaration view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
-  }
-
-}
+<p class="notice">
+ <i class="icon icon-important">
+  <span class="visually-hidden">Warning</span>
+ </i>
+ <strong class="bold-small">
+  @content
+ </strong>
+</p>

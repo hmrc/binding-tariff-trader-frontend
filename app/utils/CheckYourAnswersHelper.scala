@@ -22,10 +22,11 @@ import models.{CheckMode, Country, UserAnswers}
 import pages._
 import play.api.i18n.{Lang, MessagesApi}
 import viewmodels.AnswerRow
+import models.FileAttachment
 
 class CheckYourAnswersHelper(
                               userAnswers: UserAnswers,
-                              countries: List[Country],
+                              countries: Map[String, Country],
                               messagesApi: MessagesApi,
                               implicit val lang: Lang
                             ) {
@@ -103,9 +104,19 @@ class CheckYourAnswersHelper(
       routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
     )
 
+    val keepConfidential = userAnswers
+      .get(MakeFileConfidentialPage)
+      .getOrElse(Map.empty)
+
+    def confidentialLabel(attachment: FileAttachment) =
+      if (keepConfidential(attachment.id)) " - Keep confidential" else ""
+
     userAnswers.get(UploadSupportingMaterialMultiplePage).collect {
       case attachments if attachments.nonEmpty =>
-        filesRow(attachments.map(_.name))
+        val attachmentLabels = attachments.map { att =>
+          att.name + confidentialLabel(att)
+        }
+        filesRow(attachmentLabels)
     }
   }
 
@@ -113,8 +124,40 @@ class CheckYourAnswersHelper(
     x => AnswerRow("provideBTIReference.checkYourAnswersLabel", s"${x.reference}", false, routes.ProvideBTIReferenceController.onPageLoad(CheckMode).url)
   }
 
-  def enterContactDetails: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-    x => AnswerRow("enterContactDetails.checkYourAnswersLabel", Seq(x.name, x.email, x.phoneNumber.orNull), false, routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  def registeredName: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage).map { regAddress =>
+    AnswerRow(
+      "registeredAddressForEori.registeredName.checkYourAnswersLabel", s"${regAddress.businessName}", false,
+      routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url
+    )
+  }
+
+  def registeredAddress: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage).map { regAddress =>
+    val formattedAddress = List(
+      regAddress.addressLine1,
+      regAddress.townOrCity,
+      regAddress.postcode.getOrElse(""),
+      messagesApi(getCountryName(regAddress.country).mkString)
+    ).filterNot(_.isEmpty).mkString("\n")
+
+    AnswerRow(
+      "registeredAddressForEori.registeredAddress.checkYourAnswersLabel", formattedAddress, false,
+      routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url
+    )
+  }
+
+  def enterContactDetailsName: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+      x => AnswerRow("enterContactDetails.checkYourAnswersLabel.name", s"${x.name}", false,
+        routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  }
+
+  def enterContactDetailsEmail: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.email", s"${x.email}", false,
+      routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+  }
+
+  def enterContactDetailsPhone: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.phone", s"${x.phoneNumber.getOrElse("")}", false,
+      routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
   }
 
   def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {
@@ -147,5 +190,6 @@ class CheckYourAnswersHelper(
 
   private def yesNoAnswer(x: Boolean) = if (x) "site.yes" else "site.no"
 
-  def getCountryName(code: String): Option[String] = countries.find(_.code == code).map(_.countryName)
+  def getCountryName(code: String): Option[String] =
+    countries.get(code).map(_.countryName)
 }
