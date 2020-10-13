@@ -38,6 +38,7 @@ error.summary.title = There is a problem
 
 index.title = Manage your Advance Tariff Rulings - GOV.UK
 index.heading = Your applications and rulings
+index.noapplications = You have not started any applications.
 index.home = Home
 
 global.link.signout = Sign out
@@ -103,10 +104,11 @@ eori.number = EORI number
 eori.details = EORI details
 caseReference.format = {0}
 
-registeredAddressForEori.title = What is the registered name and address for this EORI number? - Manage your Advance Tariff Rulings - GOV.UK
-registeredAddressForEori.heading = What is the registered name and address for EORI number {0}?
+registeredAddressForEori.title = Provide the name and address for this EORI number - Manage your Advance Tariff Rulings - GOV.UK
+registeredAddressForEori.heading = Provide the name and address for EORI number {0}
+registeredAddressForEori.caption = About the applicant
 registeredAddressForEori.headingNoEORI = What is your EORI number and what are the details of your registered EORI address?
-registeredAddressForEori.note = The details you enter must match the exact format of the registered EORI address
+registeredAddressForEori.note = The details you enter must match the exact format of the registered EORI name and address.
 registeredAddressForEori.eori = EORI number
 registeredAddressForEori.eori.hint = The number starts with a country code, for example GB for Great Britain, and is then followed by upto 15 characters.
 registeredAddressForEori.businessName = Business, organisation or individual’s name
@@ -114,7 +116,8 @@ registeredAddressForEori.addressLine1 = Address line 1
 registeredAddressForEori.townCity = Town or city
 registeredAddressForEori.postcode = Postcode
 registeredAddressForEori.country = Country
-registeredAddressForEori.checkYourAnswersLabel = Your registered details
+registeredAddressForEori.registeredName.checkYourAnswersLabel = Registered name
+registeredAddressForEori.registeredAddress.checkYourAnswersLabel = Registered address
 registeredAddressForEori.error.eori.required = Enter your EORI
 registeredAddressForEori.error.businessName.required = Enter a business, organisation or individual’s name
 registeredAddressForEori.error.addressLine1.required = Enter address line 1

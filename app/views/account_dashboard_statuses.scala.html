@@ -46,8 +46,15 @@ bodyClasses = None) {
 @components.heading(messages("index.heading"),
 captionMsg = Some(messages("application.dashboard.status.title")))
 
+@if(cases.isEmpty) {
+<div>
+ @messages("index.noapplications")
+</div>
+}
+
 @components.button_link(messages("site.start"), routes.BeforeYouStartController.onPageLoad.url, id = Some("start-application"))
 
+@if(cases.nonEmpty){
 <div id="applications-rulings-list">
  @paginate("mb-2", "top")
  <table id="applications-rulings-list-table">
@@ -93,5 +100,5 @@ captionMsg = Some(messages("application.dashboard.status.title")))
  </table>
  @paginate("mt-2", "bottom")
 </div>
-
+}
 }
