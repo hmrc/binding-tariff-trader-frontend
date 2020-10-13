@@ -67,8 +67,8 @@ class MakeFileConfidentialControllerSpec extends ControllerSpecBase with Accumul
       cc
     )
 
-  private def viewAsString(form: Form[_], request: Request[_]): String =
-    makeFileConfidential(frontendAppConfig, form, onwardRoute, NormalMode, lastFileUploadedId)(request, messages).toString
+  private def viewAsString(form: Form[_], submitAction: Call, request: Request[_]): String =
+    makeFileConfidential(frontendAppConfig, form, submitAction, NormalMode, lastFileUploadedId)(request, messages).toString
 
   val invalidFormData = Map("file-id-1" -> "", "confidential" -> "")
 
