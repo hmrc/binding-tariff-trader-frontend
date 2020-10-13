@@ -43,7 +43,7 @@ class MakeFileConfidentialControllerSpec extends ControllerSpecBase with Accumul
     UploadSupportingMaterialMultiplePage.toString -> JsArray(Seq(
       Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
       Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
-      Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
+      Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L))
     ))
   )
 

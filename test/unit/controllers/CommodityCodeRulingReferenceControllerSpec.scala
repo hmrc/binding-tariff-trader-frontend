@@ -18,27 +18,50 @@ package controllers
 
 import connectors.FakeDataCacheConnector
 import controllers.actions._
-import controllers.behaviours.AnswerCachingControllerBehaviours
+import controllers.behaviours.AccumulatingCachingControllerBehaviours
 import forms.CommodityCodeRulingReferenceFormProvider
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
 import navigation.FakeNavigator
+import org.scalatest.BeforeAndAfterEach
+import pages.{CommodityCodeRulingReferencePage, ProvideGoodsNamePage, QuestionPage}
 import play.api.data.Form
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import views.html.commodityCodeRulingReference
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.libs.json.JsValue
+import play.api.libs.json.{Format, JsArray, JsString, JsValue, Json}
+import uk.gov.hmrc.http.cache.client.CacheMap
 
-class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
+class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase with AccumulatingCachingControllerBehaviours with BeforeAndAfterEach {
 
   private def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new CommodityCodeRulingReferenceFormProvider()
+  private val goodsName = "some-goods-name"
+  private val testAnswer = "answer"
+  private val validFormData = List(Map("value" -> testAnswer))
+  private val invalidFormData = Map("value" -> "")
+
+  val backgroundData = Map(
+    ProvideGoodsNamePage.toString -> JsString(goodsName),
+    CommodityCodeRulingReferencePage.toString -> JsArray(Seq(
+      Json.toJson("01234567890"),
+      Json.toJson("09876543210")
+    ))
+  )
+
+  val fakeCacheConnector =
+    new FakeDataCacheConnector(Map(cacheMapId -> CacheMap(cacheMapId, backgroundData)))
+
+  override protected def beforeEach(): Unit = {
+    await(fakeCacheConnector.remove(CacheMap(cacheMapId, Map.empty)))
+    await(fakeCacheConnector.save(CacheMap(cacheMapId, backgroundData)))
+  }
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new CommodityCodeRulingReferenceController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      fakeCacheConnector,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
@@ -50,20 +73,25 @@ class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase with
   def viewAsString(form: Form[_], request: Request[_]): String =
     commodityCodeRulingReference(frontendAppConfig, form, onwardRoute, NormalMode)(request, messages).toString
 
-  val testAnswer = "answer"
-  val validFormData = Map("value" -> testAnswer)
-  val invalidFormData = Map("value" -> "")
-  val backgroundData = Map.empty[String, JsValue]
+  def userAnswersFor[A: Format](backgroundData: Map[String, JsValue], questionPage: QuestionPage[A], answer: A) = {
+    UserAnswers(CacheMap(cacheMapId, backgroundData ++ Map(questionPage.toString -> Json.toJson(answer))))
+  }
+
+  val expectedUserAnswers = List(
+    userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("01234567890")),
+    userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("01234567890", "09876543210")),
+    userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("01234567890", "09876543210"))
+  )
 
   "CommodityCodeRulingReferenceController" must {
-    behave like answerCachingController(
+    behave like listEditingController(
       controller,
       onwardRoute,
       viewAsString,
-      validFormData,
-      invalidFormData,
       backgroundData,
-      testAnswer
+      invalidFormData,
+      validFormData,
+      expectedUserAnswers
     )
   }
 }

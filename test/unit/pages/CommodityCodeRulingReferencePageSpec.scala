@@ -23,10 +23,10 @@ class CommodityCodeRulingReferencePageSpec extends PageBehaviours {
 
   "CommodityCodeRulingReferencePage" must {
 
-    beRetrievable[String](CommodityCodeRulingReferencePage)
+    beRetrievable[List[String]](CommodityCodeRulingReferencePage)
 
-    beSettable[String](CommodityCodeRulingReferencePage)
+    beSettable[List[String]](CommodityCodeRulingReferencePage)
 
-    beRemovable[String](CommodityCodeRulingReferencePage)
+    beRemovable[List[String]](CommodityCodeRulingReferencePage)
   }
 }

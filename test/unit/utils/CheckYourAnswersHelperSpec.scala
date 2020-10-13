@@ -96,7 +96,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       }
 
       "return a row with the correct answer for CommodityCodeRulingReferencePage" in {
-        given(userAnswers.get(CommodityCodeRulingReferencePage)).willReturn(Option("code ruling"))
+        given(userAnswers.get(CommodityCodeRulingReferencePage)).willReturn(Option(List("code ruling")))
         checkHelper.commodityCodeRulingReference.get.answer shouldBe "code ruling"
       }
 
