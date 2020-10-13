@@ -112,12 +112,6 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 </div>
 
                 <div class="grid-row">
-
-                    @if(pdf.sendingSample && pdf.hazardousSample.get) {
-                    <div class="panel panel-border-wide mt-2">
-                        @messages("view.application.paragraph.do.not.send.sample")
-                    </div>
-                    } else {
                     <div class="column-two-thirds">
                         <h3>@messages("confirmation.heading2.whatNext")</h3>
                         <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
@@ -130,7 +124,6 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
                         }
                     </div>
-                    }
                     @if(pdf.sendingSample){
                     <div class="column-one-third">
                         <div class="about-this-result-box">
@@ -138,11 +131,6 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                                 <div class="date-of-result">
                                     <h2>@messages("application.footer.sendingSamples.heading")</h2>
                                 </div>
-                                @if(pdf.hazardousSample.get){
-                                <div class="date-of-result decision-service-version">
-                                    <div>@messages("view.application.paragraph.do.not.send.sample")</div>
-                                </div>
-                                } else {
                                 <div class="date-of-result decision-service-version">
                                     <div>@messages("view.application.sending.sample.paragraph1")</div>
                                     <div class="bold mb-2">@pdf.reference</div>
@@ -161,7 +149,6 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                                         </dt>
                                     </dl>
                                 </div>
-                                }
                             </div>
                         </div>
                     </div>

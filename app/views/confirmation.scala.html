@@ -45,13 +45,10 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
     <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
 
-    @if(confirmation.sendingSamples && pdf.hazardousSample.get) {
-
-        @components.icon_important("view.application.paragraph.do.not.send.sample")
-
-    } else if(confirmation.sendingSamples) {
-
-        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="#">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
+    @if(confirmation.sendingSamples) {
+        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
+            <span>@messages("confirmation.paragraph.whatNext1")
+                <a href="#">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
 
         @components.icon_important("confirmation.sendingSamples.important")
 
