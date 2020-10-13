@@ -103,7 +103,7 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain sending samples question when user selects NO" in {
       val doc = view(createView(pdfView.copy(sendingSample = false))).getElementById("print-pages")
 
-      doc should containText(messages("whenToSendSample.checkYourAnswersLabel"))
+      doc should containText(messages("areYouSendingSamples.checkYourAnswersLabel"))
     }
 
     "contain hazardous samples and samples to be returned question when user selects YES to sending samples" in {
