@@ -48,7 +48,7 @@ class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase with
     )
 
   def viewAsString(form: Form[_], request: Request[_]): String =
-    commodityCodeRulingReference(frontendAppConfig, form, NormalMode)(request, messages).toString
+    commodityCodeRulingReference(frontendAppConfig, form, onwardRoute, NormalMode)(request, messages).toString
 
   val testAnswer = "answer"
   val validFormData = Map("value" -> testAnswer)
