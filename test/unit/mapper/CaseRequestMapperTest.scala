@@ -171,7 +171,7 @@ class CaseRequestMapperTest extends UnitSpec {
               "Reissued BTI Reference"
             )
           ),
-          CommodityCodeRulingReferencePage.toString -> js("Related BTI Reference"),
+          CommodityCodeRulingReferencePage.toString -> js(List("Related BTI Reference")),
           LegalChallengeDetailsPage.toString -> js("Known Legal Proceedings"),
           CommodityCodeDigitsPage.toString -> js("Envisaged Commodity Code"),
           AreYouSendingSamplesPage.toString -> js(true),

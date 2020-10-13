@@ -20,10 +20,12 @@ import base.SpecBase
 import models.WhichBestDescribesYou.BusinessOwner
 import models._
 import models.requests.DataRequest
+import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import pages._
 import play.api.test.FakeRequest
 import service.CountriesService
+import play.api.libs.json.Reads
 
 class CheckYourAnswersHelperSpec extends SpecBase {
 
@@ -96,7 +98,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       }
 
       "return a row with the correct answer for CommodityCodeRulingReferencePage" in {
-        given(userAnswers.get(CommodityCodeRulingReferencePage)).willReturn(Option(List("code ruling")))
+        given(userAnswers.get(any[CommodityCodeRulingReferencePage.type])(any[Reads[List[String]]])).willReturn(Option(List("code ruling")))
         checkHelper.commodityCodeRulingReference.get.answer shouldBe "code ruling"
       }
 
