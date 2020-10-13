@@ -20,9 +20,9 @@ import controllers.routes
 import models.Mode
 import play.api.mvc.Call
 
-case object SupportingMaterialFileListPage extends QuestionPage[Boolean] {
+case object MakeFileConfidentialPage extends QuestionPage[Map[String, Boolean]] {
   def route(mode: Mode): Call =
-    routes.SupportingMaterialFileListController.onPageLoad(mode)
+    routes.MakeFileConfidentialController.onPageLoad(mode)
   override def toString: String =
-    "supportingMaterialFileListPage"
+    "makeFileConfidential"
 }

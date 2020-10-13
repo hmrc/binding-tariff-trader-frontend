@@ -20,32 +20,38 @@
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
-@this()
-
-@(appConfig: FrontendAppConfig, goodsNameForm: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, makeFileConfidentialForm: Form[_], mode: Mode, fileId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(goodsNameForm)} ${messages("provideGoodsName.title")}",
+    title = s"${errorPrefix(makeFileConfidentialForm)} ${messages("makeFileConfidential.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = ProvideGoodsNameController.onSubmit(mode), 'autoComplete -> "off") {
+    @helpers.form(action = MakeFileConfidentialController.onSubmit(mode)) {
 
         @components.back_link()
 
-        @components.error_summary(goodsNameForm.errors)
+        @components.error_summary(makeFileConfidentialForm.errors)
 
-        @components.heading(messages("provideGoodsName.heading"),
-            captionMsg = Some(messages("provideGoodsName.caption")))
+        @components.heading(
+            messages("makeFileConfidential.heading"),
+            captionMsg = Some(messages("makeFileConfidential.caption"))
+        )
 
-        <p>@messages("provideGoodsName.paragraph")</p>
+        <p>@messages("makeFileConfidential.infoText")<p/>
 
-        @components.input_text(
-            field = goodsNameForm("goodsName"),
-            label = Some(messages("provideGoodsName.heading")),
+        <input type="hidden"
+               id="@{makeFileConfidentialForm("fileId").id}"
+               name="@{makeFileConfidentialForm("fileId").name}"
+               value="@{fileId}"/>
+
+        @components.input_yes_no(
+            field = makeFileConfidentialForm("confidential"),
+            label = Some(messages("makeFileConfidential.heading")),
             labelClass = Some("visually-hidden")
         )
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }
 }
+

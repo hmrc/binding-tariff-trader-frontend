@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-case object SupportingMaterialFileListPage extends QuestionPage[Boolean] {
-  def route(mode: Mode): Call =
-    routes.SupportingMaterialFileListController.onPageLoad(mode)
-  override def toString: String =
-    "supportingMaterialFileListPage"
+class AddSupportingDocumentsFormProvider @Inject() extends Mappings {
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("addSupportingDocuments.error.required")
+    )
 }

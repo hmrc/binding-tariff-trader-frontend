@@ -16,13 +16,17 @@
 
 package pages
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
+import pages.behaviours.PageBehaviours
 
-case object SupportingMaterialFileListPage extends QuestionPage[Boolean] {
-  def route(mode: Mode): Call =
-    routes.SupportingMaterialFileListController.onPageLoad(mode)
-  override def toString: String =
-    "supportingMaterialFileListPage"
+class AddSupportingDocumentsPageSpec extends PageBehaviours {
+
+  "AddSupportingDocumentsPage" must {
+
+    beRetrievable[Boolean](AddSupportingDocumentsPage)
+
+    beSettable[Boolean](AddSupportingDocumentsPage)
+
+    beRemovable[Boolean](AddSupportingDocumentsPage)
+  }
+
 }

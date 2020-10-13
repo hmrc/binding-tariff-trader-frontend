@@ -19,7 +19,25 @@ package views.behaviours
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 
-trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
+trait YesNoViewBehaviours extends BooleanViewBehaviours[Boolean] {
+  def yesNoPage(
+    createView: Form[Boolean] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    expectedFormAction: String,
+    idPrefix: String = "value"
+  ): Unit = {
+    booleanPage(
+      createView,
+      identity,
+      messageKeyPrefix,
+      expectedFormAction,
+      idPrefix
+    )(true, false)
+  }
+
+}
+
+trait BooleanViewBehaviours[T] extends QuestionViewBehaviours[T] {
 
   protected def expectedLegend(messageKeyPrefix: String): String = {
     def has(value: String): Boolean = {
@@ -33,10 +51,13 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
     }
   }
 
-  protected def yesNoPage(createView: Form[Boolean] => HtmlFormat.Appendable,
-                          messageKeyPrefix: String,
-                          expectedFormAction: String,
-                          idPrefix: String = "value"): Unit = {
+  protected def booleanPage(
+    createView: Form[T] => HtmlFormat.Appendable,
+    choiceFrom: T => Boolean,
+    messageKeyPrefix: String,
+    expectedFormAction: String,
+    idPrefix: String = "value"
+  )(choices: T*): Unit = {
 
     "behave like a page with a Yes/No question" when {
       "rendered" must {
@@ -66,12 +87,10 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
         }
       }
 
-      "rendered with a value of true" must {
-        behave like answeredYesNoPage(createView, answer = true, idPrefix=idPrefix)
-      }
-
-      "rendered with a value of false" must {
-        behave like answeredYesNoPage(createView, answer = false, idPrefix=idPrefix)
+      choices.foreach { choice =>
+        s"rendered with a value of ${choiceFrom(choice)}" must {
+          behave like answeredYesNoPage(createView, choiceFrom, answer = choice, idPrefix=idPrefix)
+        }
       }
 
       "rendered with an error" must {
@@ -95,15 +114,16 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
   }
 
   protected def answeredYesNoPage(
-                                   createView: Form[Boolean] => HtmlFormat.Appendable,
-                                   answer: Boolean,
+                                   createView: Form[T] => HtmlFormat.Appendable,
+                                   choiceFrom: T => Boolean,
+                                   answer: T,
                                    idPrefix: String = "value"
                                  ): Unit = {
 
     "have only the correct value checked" in {
       val doc = asDocument(createView(form.fill(answer)))
-      assert(doc.getElementById(s"${idPrefix}-yes").hasAttr("checked") == answer)
-      assert(doc.getElementById(s"${idPrefix}-no").hasAttr("checked") != answer)
+      assert(doc.getElementById(s"${idPrefix}-yes").hasAttr("checked") == choiceFrom(answer))
+      assert(doc.getElementById(s"${idPrefix}-no").hasAttr("checked") != choiceFrom(answer))
     }
 
     "not render an error summary" in {

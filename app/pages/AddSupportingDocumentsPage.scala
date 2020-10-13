@@ -20,9 +20,10 @@ import controllers.routes
 import models.Mode
 import play.api.mvc.Call
 
-case object SupportingMaterialFileListPage extends QuestionPage[Boolean] {
+case object AddSupportingDocumentsPage extends QuestionPage[Boolean] {
   def route(mode: Mode): Call =
-    routes.SupportingMaterialFileListController.onPageLoad(mode)
+    routes.AddSupportingDocumentsController.onPageLoad(mode)
+
   override def toString: String =
-    "supportingMaterialFileListPage"
+    "addSupportingDocuments"
 }

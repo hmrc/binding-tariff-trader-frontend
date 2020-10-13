@@ -20,31 +20,38 @@
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("returnSamples.title")}",
+    title = s"${errorPrefix(form)} ${messages("addSupportingDocuments.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = ReturnSamplesController.onSubmit(mode)) {
+    @helpers.form(action = AddSupportingDocumentsController.onSubmit(mode)) {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
         @components.heading(
-            headingMsg = messages("returnSamples.heading"),
-            captionMsg = Some(messages("returnSamples.caption"))
+            messages("addSupportingDocuments.heading", goodsName),
+            captionMsg = Some(messages("addSupportingDocuments.caption"))
         )
 
-        <div role="note" class="mb-4">
-            <p> @messages("returnSamples.first.paragraph")</p>
+        <div class="form-group">
+            <p>@messages("addSupportingDocuments.indications")</p>
+            <ul class="list list-bullet">
+                <li>@messages("addSupportingDocuments.indications.bullet1")</li>
+                <li>@messages("addSupportingDocuments.indications.bullet2")</li>
+                <li>@messages("addSupportingDocuments.indications.bullet3")</li>
+                <li>@messages("addSupportingDocuments.indications.bullet4")</li>
+                <li>@messages("addSupportingDocuments.indications.bullet5")</li>
+            </ul>
         </div>
 
         @components.input_yes_no(
             field = form("value"),
-            label = Some(messages("returnSamples.heading")),
+            label = Some(messages("addSupportingDocuments.heading")),
             labelClass = Some("visually-hidden")
         )
 

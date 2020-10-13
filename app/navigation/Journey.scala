@@ -18,7 +18,14 @@ package navigation
 
 import pages._
 
-case class YesNoJourney(questionPage: QuestionPage[Boolean], detailPages: List[QuestionPage[_]])
+sealed abstract class Journey extends Product with Serializable {
+  def questionPage: QuestionPage[Boolean]
+  def detailPages: List[QuestionPage[_]]
+}
+
+case class YesNoJourney(questionPage: QuestionPage[Boolean], detailPages: List[QuestionPage[_]]) extends Journey
+
+case class LoopingJourney(questionPage: QuestionPage[Boolean], detailPages: List[QuestionPage[_]], continuePage: QuestionPage[Boolean]) extends Journey
 
 object Journey {
   val confidentialInformation =
@@ -26,6 +33,9 @@ object Journey {
 
   val samples =
     YesNoJourney(AreYouSendingSamplesPage, List(IsSampleHazardousPage, ReturnSamplesPage))
+
+  val supportingDocuments =
+    LoopingJourney(AddSupportingDocumentsPage, List(UploadSupportingMaterialMultiplePage, MakeFileConfidentialPage), SupportingMaterialFileListPage)
 
   val commodityCode =
     YesNoJourney(CommodityCodeBestMatchPage, List(CommodityCodeDigitsPage))

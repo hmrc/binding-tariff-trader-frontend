@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
+import play.api.data.Forms.tuple
 
-case object SupportingMaterialFileListPage extends QuestionPage[Boolean] {
-  def route(mode: Mode): Call =
-    routes.SupportingMaterialFileListController.onPageLoad(mode)
-  override def toString: String =
-    "supportingMaterialFileListPage"
+class MakeFileConfidentialFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[(String, Boolean)] =
+    Form(tuple(
+      "fileId" -> text(),
+      "confidential" -> boolean("makeFileConfidential.error.required")
+    ))
 }

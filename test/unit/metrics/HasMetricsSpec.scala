@@ -140,7 +140,7 @@ class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues w
       "increment failure counter when the user throws an exception constructing their code block" in withTestMetrics { metrics =>
         assertThrows[RuntimeException] {
           metrics.withMetricsTimerAsync(TestMetric) { _ =>
-            Future.successful(throw new RuntimeException)
+            throw new RuntimeException
           }
         }
 
@@ -200,7 +200,7 @@ class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues w
       "increment failure counter when the user throws an exception constructing their code block" in withTestMetrics { metrics =>
         assertThrows[RuntimeException] {
           metrics.withMetricsTimerResult(TestMetric) {
-            Future.successful(throw new RuntimeException)
+            throw new RuntimeException
           }
         }
 

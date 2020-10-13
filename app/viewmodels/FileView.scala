@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-package pages
+package viewmodels
 
-import controllers.routes
-import models.Mode
-import play.api.mvc.Call
-
-case object SupportingMaterialFileListPage extends QuestionPage[Boolean] {
-  def route(mode: Mode): Call =
-    routes.SupportingMaterialFileListController.onPageLoad(mode)
-  override def toString: String =
-    "supportingMaterialFileListPage"
-}
+case class FileView(id: String, name: String, confidential: Boolean)
