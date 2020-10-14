@@ -114,23 +114,33 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 <div class="grid-row">
                     <div class="column-two-thirds">
                         <h3>@messages("confirmation.heading2.whatNext")</h3>
-                        <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
+                        @if(!pdf.sendingSample) {
+                            <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
+                        }
 
                         @if(pdf.sendingSample) {
 
-                        @components.icon_important("confirmation.sendingSamples.important")
+                            @if(pdf.sendingSample && pdf.hazardousSample){
+                                <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+                            } else {
 
-                        <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
+                            @components.icon_important("confirmation.sendingSamples.important")
 
+                            <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
+                            }
                         }
+
                     </div>
                     @if(pdf.sendingSample){
                     <div class="column-one-third">
-                        <div class="about-this-result-box">
+                        <div class=@if(pdf.sendingSample && pdf.hazardousSample){"about-this-result-box-do-not-send about-this-result-box"}else {"about-this-result-box"}>
                             <div id="aboutThisResult" class="about-this-result">
                                 <div class="date-of-result">
                                     <h2>@messages("application.footer.sendingSamples.heading")</h2>
                                 </div>
+                                @if(pdf.sendingSample && pdf.hazardousSample){
+                                <div>@messages("view.application.paragraph.do.not.send.sample")</div>
+                                } else {
                                 <div class="date-of-result decision-service-version">
                                     <div>@messages("view.application.sending.sample.paragraph1")</div>
                                     <div class="bold mb-2">@pdf.reference</div>
@@ -149,6 +159,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                                         </dt>
                                     </dl>
                                 </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -199,7 +210,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 </div>
                 } else {
                 <div>
-                    <dt class="cya-question">@messages("provideConfidentialInformation.provideConfidentialInformation")</dt>
+                    <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@messages("site.no")</dd>
                 </div>
                 }
@@ -209,17 +220,17 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
                 </div>
-                @if(pdf.hazardousSample) {
+                @if(pdf.hazardousSample.getOrElse(false)) {
                 <div>
+                    test.....
                     <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@{if(pdf.hazardousSample.get) {messages("site.yes")} else {messages("site.no")}}</dd>
                 </div>
-
+                }
                 <div>
                     <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
                 </div>
-                }
                 } else {
                 <div>
                     <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
