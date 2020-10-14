@@ -56,7 +56,4 @@ object PdfViewModel{
     legalProblems = c.application.knownLegalProceedings
   )
 
-  private def yesNoAnswer(x: Boolean) = if (x) "site.yes" else "site.no"
-
-
 }
