@@ -120,7 +120,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
                         @if(pdf.sendingSample) {
 
-                            @if(pdf.hazardousSample.get){
+                            @if(pdf.hazardousSample.getOrElse(false)){
                                 <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
                             } else {
 
@@ -133,12 +133,12 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     </div>
                     @if(pdf.sendingSample) {
                     <div class="column-one-third">
-                        <div class=@if(pdf.hazardousSample.get){"about-this-result-box-do-not-send about-this-result-box"} else {"about-this-result-box"}>
+                        <div class=@if(pdf.hazardousSample.getOrElse(false)){"about-this-result-box-do-not-send about-this-result-box"} else {"about-this-result-box"}>
                             <div id="aboutThisResult" class="about-this-result">
                                 <div class="date-of-result">
                                     <h2>@messages("application.footer.sendingSamples.heading")</h2>
                                 </div>
-                                @if(pdf.hazardousSample.get) {
+                                @if(pdf.hazardousSample.getOrElse(false)) {
                                     <div>@messages("view.application.paragraph.do.not.send.sample")</div>
                                 } else {
                                     <div class="date-of-result decision-service-version">
@@ -220,12 +220,10 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                         <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
                         <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
                     </div>
-                    @if(pdf.hazardousSample.get) {
                     <div>
                         <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@{if(pdf.hazardousSample.get) {messages("site.yes")} else {messages("site.no")}}</dd>
+                        <dd class="cya-answer">@{if(pdf.hazardousSample.getOrElse(false)) {messages("site.yes")} else {messages("site.no")}}</dd>
                     </div>
-                    }
                     <div>
                         <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
                         <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
