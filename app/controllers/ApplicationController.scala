@@ -25,9 +25,11 @@ import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import viewmodels.PdfViewModel
+import views.html.components.{view_application, view_application_pdf}
 import views.html.templates._
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   identify: IdentifierAction,
@@ -94,7 +96,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
       letter <- fileService.getLetterOfAuthority(c)
       out <- pdf match {
         case true =>
-          generatePdf(applicationTemplate(appConfig, c, attachments, letter, getCountryName), s"BTIConfirmation$reference.pdf")
+          generatePdf(view_application_pdf(appConfig, PdfViewModel.apply(c)), s"BTIConfirmation$reference.pdf")
         case false =>
           Future.successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
       }
