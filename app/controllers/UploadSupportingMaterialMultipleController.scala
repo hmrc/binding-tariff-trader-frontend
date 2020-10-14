@@ -24,7 +24,6 @@ import javax.inject.Inject
 import models.{FileAttachment, Mode}
 import navigation.Navigator
 import pages._
-import play.api.data.FormError
 import play.api.i18n.{I18nSupport, Lang}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc._
@@ -33,7 +32,12 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.concurrent.Future.successful
+import models.UserAnswers
+import uk.gov.hmrc.http.HeaderCarrier
+import models.requests.DataRequest
+import scala.util.Failure
+import scala.util.Success
+import scala.util.control.NonFatal
 
 class UploadSupportingMaterialMultipleController @Inject()(
   appConfig: FrontendAppConfig,
@@ -46,54 +50,67 @@ class UploadSupportingMaterialMultipleController @Inject()(
   fileService: FileService,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
-
   private lazy val form = formProvider()
   private implicit val lang: Lang = appConfig.defaultLang
 
+  def hasMaxFiles(userAnswers: UserAnswers): Boolean = {
+    val numberOfFiles = userAnswers
+      .get(UploadSupportingMaterialMultiplePage)
+      .map(_.size)
+      .getOrElse(0)
+
+    numberOfFiles >= 10
+  }
+
+  def addFile(file: FileAttachment, userAnswers: UserAnswers): UserAnswers = {
+    val updatedFiles = userAnswers
+      .get(UploadSupportingMaterialMultiplePage)
+      .map(files => files :+ file)
+      .getOrElse(Seq(file))
+
+    userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
+  }
+
+  def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier, request: DataRequest[_]): Future[UserAnswers] = {
+    for {
+      attachment <- fileService.upload(validFile)
+      updatedAnswers = addFile(attachment, request.userAnswers)
+      _ <- dataCacheConnector.save(updatedAnswers.cacheMap)
+    } yield updatedAnswers
+  }
+
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-
     Ok(uploadSupportingMaterialMultiple(appConfig, form, goodsName, mode))
   }
 
   def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
     .async(parse.multipartFormData) { implicit request =>
-      def badRequest(errorKey: String, errorMessage: String): Future[Result] = {
+
+      def badRequest(mode: Mode, errorKey: String, errorMessage: String): Future[Result] = {
         val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-        successful(BadRequest(
-          uploadSupportingMaterialMultiple(appConfig, form.copy(errors = Seq(FormError(errorKey, errorMessage))), goodsName, mode)
-        ))
-      }
-
-      def saveAndRedirect(file: FileAttachment): Future[Result] = {
-        val updatedFiles = request.userAnswers.get(SupportingMaterialFileListPage)
-          .map(curAnswers => curAnswers.copy(curAnswers.addAnotherDecision, curAnswers.fileAttachments ++ Seq(file)) ) getOrElse FileListAnswers(None, Seq(file))
-        val updatedAnswers = request.userAnswers.set(SupportingMaterialFileListPage, updatedFiles)
-        dataCacheConnector.save(updatedAnswers.cacheMap)
-          .map(_ => Redirect(navigator.nextPage(UploadSupportingMaterialMultiplePage, mode)(updatedAnswers)))
-      }
-
-      def uploadFile(validFile: MultipartFormData.FilePart[TemporaryFile]): Future[Result] = {
-        fileService.upload(validFile) flatMap {
-          case file: FileAttachment => saveAndRedirect(file)
-          case _ => badRequest("upload-error", "File upload has failed. Try again")
-        }
-      }
-
-      def hasMaxFiles: Boolean = {
-        request.userAnswers.get(SupportingMaterialFileListPage).map(_.fileAttachments.size).getOrElse(0) >= 10
+        val formWithError = form.withError(errorKey, errorMessage)
+        Future.successful(BadRequest(uploadSupportingMaterialMultiple(appConfig, formWithError, goodsName, mode)))
       }
 
       request.body.file("file-input").filter(_.filename.nonEmpty) match {
-        case Some(_) if hasMaxFiles => badRequest("validation-error", messagesApi("uploadSupportingMaterialMultiple.error.numberFiles"))
-        case Some(file) => fileService.validate(file) match {
-          case Right(rightFile) => uploadFile(rightFile)
-          case Left(errorMessage) => badRequest("file-input", errorMessage)
-        }
+        case _ if hasMaxFiles(request.userAnswers) =>
+          badRequest(mode, "validation-error", messagesApi("uploadSupportingMaterialMultiple.error.numberFiles"))
+        case Some(file) =>
+          fileService.validate(file).fold(
+            errorMessage =>
+              badRequest(mode, "file-input", errorMessage),
+            validFile => {
+              uploadFile(validFile).transformWith {
+                case Failure(NonFatal(_)) =>
+                  Future.successful(Results.BadGateway)
+                case Success(updatedAnswers) =>
+                  Future.successful(Results.Redirect(navigator.nextPage(UploadSupportingMaterialMultiplePage, mode)(updatedAnswers)))
+              }
+            }
+          )
         case _ =>
-          badRequest("file-input", messagesApi("uploadSupportingMaterialMultiple.upload.selectFile"))
+          badRequest(mode, "file-input", messagesApi("uploadSupportingMaterialMultiple.upload.selectFile"))
       }
-
     }
-
 }

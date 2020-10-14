@@ -26,7 +26,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import pages.{FileListAnswers, ProvideGoodsNamePage, SupportingMaterialFileListPage}
+import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.JsString
@@ -40,6 +40,7 @@ import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import pages.UploadSupportingMaterialMultiplePage
 
 class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
   private val fileService = mock[FileService]
@@ -108,7 +109,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       verify(cacheConnector).save(captor.capture())
       val cache: CacheMap = captor.getValue
 
-      cache.getEntry[FileListAnswers](SupportingMaterialFileListPage.toString) shouldBe Some(FileListAnswers(None,Seq(FileAttachment("id", "file-name", "type", file.toPath.toFile.length()))))
+      cache.getEntry[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage.toString) shouldBe Some(Seq(FileAttachment("id", "file-name", "type", file.toPath.toFile.length())))
     }
 
     "respond with bad request if a file has wrong extension" in {

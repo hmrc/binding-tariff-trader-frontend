@@ -16,19 +16,36 @@
 
 package connectors
 
+import java.util.concurrent.atomic.AtomicReference
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.CacheMap
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object FakeDataCacheConnector extends DataCacheConnector {
+object FakeDataCacheConnector extends FakeDataCacheConnector(Map.empty[String, CacheMap])
 
-  override def save[A](cacheMap: CacheMap): Future[CacheMap] = Future.successful(cacheMap)
+class FakeDataCacheConnector(initialData: Map[String, CacheMap]) extends DataCacheConnector {
+  val cache = new AtomicReference(initialData)
 
-  override def fetch(cacheId: String): Future[Option[CacheMap]] = Future(Some(CacheMap(cacheId, Map())))
+  override def save[A](cacheMap: CacheMap): Future[CacheMap] = Future.successful {
+    cache.updateAndGet { current =>
+      current.updated(cacheMap.id, cacheMap)
+    }
 
-  override def getEntry[A](cacheId: String, key: String)(implicit fmt: Format[A]): Future[Option[A]] = ???
+    cacheMap
+  }
 
-  override def remove(cacheMap: CacheMap): Future[Boolean] = Future.successful(true)
+  override def fetch(cacheId: String): Future[Option[CacheMap]] =
+    Future.successful(cache.get().get(cacheId))
+
+  override def getEntry[A](cacheId: String, key: String)(implicit fmt: Format[A]): Future[Option[A]] =
+    Future.successful(cache.get().get(cacheId).flatMap(_.getEntry(key)))
+
+  override def remove(cacheMap: CacheMap): Future[Boolean] = Future.successful {
+    cache.updateAndGet { current =>
+      current - cacheMap.id
+    }
+
+    true
+  }
 }

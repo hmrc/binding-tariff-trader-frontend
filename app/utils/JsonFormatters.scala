@@ -19,7 +19,6 @@ package utils
 import audit.CaseAuditPayload
 import models._
 import models.requests.NewEventRequest
-import pages.FileListAnswers
 import play.api.libs.json._
 import uk.gov.hmrc.play.json.Union
 import viewmodels.PdfViewModel

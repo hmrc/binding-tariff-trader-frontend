@@ -22,7 +22,7 @@ import models.{CheckMode, Country, UserAnswers}
 import pages._
 import play.api.i18n.{Lang, MessagesApi}
 import viewmodels.AnswerRow
-import models.RegisteredAddressForEori
+import models.FileAttachment
 
 class CheckYourAnswersHelper(
                               userAnswers: UserAnswers,
@@ -88,17 +88,12 @@ class CheckYourAnswersHelper(
   }
 
   def supportingMaterialFileListChoice: Option[AnswerRow] = {
-    def choiceRow(hasFiles: Boolean): AnswerRow = AnswerRow(
-      "supportingMaterialFileList.choice.checkYourAnswersLabel",
-      yesNoAnswer(hasFiles), true,
-      routes.SupportingMaterialFileListController.onClear().url
-    )
-
-    userAnswers.get(SupportingMaterialFileListPage).map {
-      case filenames if filenames.fileAttachments.nonEmpty =>
-        choiceRow(true)
-      case _ =>
-        choiceRow(false)
+    userAnswers.get(AddSupportingDocumentsPage).map { addDocuments =>
+      AnswerRow(
+        "supportingMaterialFileList.choice.checkYourAnswersLabel",
+        yesNoAnswer(addDocuments), true,
+        routes.AddSupportingDocumentsController.onPageLoad(CheckMode).url
+      )
     }
   }
 
@@ -109,9 +104,19 @@ class CheckYourAnswersHelper(
       routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
     )
 
-    userAnswers.get(SupportingMaterialFileListPage).collect {
-      case filenames if filenames.fileAttachments.nonEmpty =>
-        filesRow(filenames.fileAttachments.map(_.name))
+    val keepConfidential = userAnswers
+      .get(MakeFileConfidentialPage)
+      .getOrElse(Map.empty)
+
+    def confidentialLabel(attachment: FileAttachment) =
+      if (keepConfidential(attachment.id)) " - Keep confidential" else ""
+
+    userAnswers.get(UploadSupportingMaterialMultiplePage).collect {
+      case attachments if attachments.nonEmpty =>
+        val attachmentLabels = attachments.map { att =>
+          att.name + confidentialLabel(att)
+        }
+        filesRow(attachmentLabels)
     }
   }
 

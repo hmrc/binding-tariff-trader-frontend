@@ -88,6 +88,13 @@ trait Constraints {
     }
   }
 
+  protected def minLength(minimum: Int, errorKey: String): Constraint[String] = {
+    Constraint {
+      case str: String if str.length >= minimum => Valid
+      case _ => Invalid(errorKey, minimum)
+    }
+  }
+
   protected def optionalPostCodeMaxLength(errorKey: String): Constraint[Option[String]] = {
     optionalMaxLength(postCodeMaxLength, errorKey)
   }

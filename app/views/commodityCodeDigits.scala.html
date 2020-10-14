@@ -15,9 +15,9 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
 @import models.Mode
+@import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
@@ -38,7 +38,7 @@
 
         <p>@messages("commodityCodeDigits.bodyText")</p>
 
-        @components.input_text(
+        @components.input_number(
             field = form("value"),
             labelClass = Some("visually-hidden"),
             label = Some(messages("commodityCodeDigits.heading", goodsName))
