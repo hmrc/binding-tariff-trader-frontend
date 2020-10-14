@@ -120,7 +120,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
                         @if(pdf.sendingSample) {
 
-                            @if(pdf.sendingSample && pdf.hazardousSample){
+                            @if(pdf.hazardousSample.get){
                                 <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
                             } else {
 
@@ -131,34 +131,34 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                         }
 
                     </div>
-                    @if(pdf.sendingSample){
+                    @if(pdf.sendingSample) {
                     <div class="column-one-third">
-                        <div class=@if(pdf.sendingSample && pdf.hazardousSample){"about-this-result-box-do-not-send about-this-result-box"}else {"about-this-result-box"}>
+                        <div class=@if(pdf.hazardousSample.get){"about-this-result-box-do-not-send about-this-result-box"} else {"about-this-result-box"}>
                             <div id="aboutThisResult" class="about-this-result">
                                 <div class="date-of-result">
                                     <h2>@messages("application.footer.sendingSamples.heading")</h2>
                                 </div>
-                                @if(pdf.sendingSample && pdf.hazardousSample){
-                                <div>@messages("view.application.paragraph.do.not.send.sample")</div>
+                                @if(pdf.hazardousSample.get) {
+                                    <div>@messages("view.application.paragraph.do.not.send.sample")</div>
                                 } else {
-                                <div class="date-of-result decision-service-version">
-                                    <div>@messages("view.application.sending.sample.paragraph1")</div>
-                                    <div class="bold mb-2">@pdf.reference</div>
-                                </div>
-                                <div class="decision-service-version">
-                                    <div class="mb-2">@messages("confirmation.paragraph0.sendingSamples")</div>
-                                </div>
-                                <div>
-                                    <dl>
-                                        <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span></p>
-                                        </dt>
-                                        <address>
-                                            @Html(messages("confirmation.sendingSamples.address"))
-                                        </address>
-                                        <dt class="mb-2">@messages("application.footer.sendingSamples.address.line8")
-                                        </dt>
-                                    </dl>
-                                </div>
+                                    <div class="date-of-result decision-service-version">
+                                        <div>@messages("view.application.sending.sample.paragraph1")</div>
+                                        <div class="bold mb-2">@pdf.reference</div>
+                                    </div>
+                                    <div class="decision-service-version">
+                                        <div class="mb-2">@messages("confirmation.paragraph0.sendingSamples")</div>
+                                    </div>
+                                    <div>
+                                        <dl>
+                                            <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span></p>
+                                            </dt>
+                                            <address>
+                                                @Html(messages("confirmation.sendingSamples.address"))
+                                            </address>
+                                            <dt class="mb-2">@messages("application.footer.sendingSamples.address.line8")
+                                            </dt>
+                                        </dl>
+                                    </div>
                                 }
                             </div>
                         </div>
@@ -215,27 +215,26 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 </div>
                 }
 
-                @if(pdf.sendingSample){
-                <div>
-                    <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                </div>
-                @if(pdf.hazardousSample.getOrElse(false)) {
-                <div>
-                    test.....
-                    <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@{if(pdf.hazardousSample.get) {messages("site.yes")} else {messages("site.no")}}</dd>
-                </div>
-                }
-                <div>
-                    <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                </div>
+                @if(pdf.sendingSample) {
+                    <div>
+                        <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
+                        <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                    </div>
+                    @if(pdf.hazardousSample.get) {
+                    <div>
+                        <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
+                        <dd class="cya-answer">@{if(pdf.hazardousSample.get) {messages("site.yes")} else {messages("site.no")}}</dd>
+                    </div>
+                    }
+                    <div>
+                        <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
+                        <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                    </div>
                 } else {
-                <div>
-                    <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@messages("site.no")</dd>
-                </div>
+                    <div>
+                        <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
+                        <dd class="cya-answer">@messages("site.no")</dd>
+                    </div>
                 }
 
                 @if(pdf.foundCommodityCode.isDefined) {
