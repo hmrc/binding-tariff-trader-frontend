@@ -18,10 +18,10 @@
 @import controllers.routes._
 @import models.Mode
 @import uk.gov.hmrc.play.views.html._
+@import viewmodels.FileView
 @import views.ViewUtils._
 
-
-@(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, files: Seq[FileAttachment], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, files: Seq[FileView], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("supportingMaterialFileList.title")}",

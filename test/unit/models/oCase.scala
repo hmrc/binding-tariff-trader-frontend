@@ -22,7 +22,7 @@ import java.util.UUID
 import viewmodels.PdfViewModel
 
 object oCase {
-  val fileAttachment = Attachment(id = UUID.randomUUID().toString)
+  val fileAttachment = Attachment(id = UUID.randomUUID().toString, false)
   val eoriDetailsExample = EORIDetails("eoriTrader", "Trader Business Name", "line1", "line2", "line3", "postcode", "country")
   val eoriAgentDetailsExample = AgentDetails(EORIDetails("eoriAgent", "Agent Business Name", "line1", "line2", "line3", "postcode", "country"),
     Some(fileAttachment))

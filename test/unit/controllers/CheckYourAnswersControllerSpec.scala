@@ -22,14 +22,14 @@ import audit.AuditService
 import connectors.FakeDataCacheConnector
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeDataRetrievalAction, FakeIdentifierAction}
 import mapper.CaseRequestMapper
-import models.{Application, Case, Contact, EORIDetails, FileAttachment, NewCaseRequest, NormalMode, Operator, PublishedFileAttachment, UserAnswers}
+import models._
 import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers.{any, refEq}
 import org.mockito.Mockito.{never, reset, times, verify, verifyNoMoreInteractions, when}
 import org.scalatest.BeforeAndAfterEach
-import pages.{CheckYourAnswersPage, UploadSupportingMaterialMultiplePage}
+import pages.{CheckYourAnswersPage, MakeFileConfidentialPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
-import play.api.libs.json.{JsString, Json}
+import play.api.libs.json._
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import service.{CasesService, CountriesService, FileService}
@@ -48,8 +48,8 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
   private val mapper = mock[CaseRequestMapper]
   private val newCaseReq = mock[NewCaseRequest]
-  private val attachment = mock[FileAttachment]
-  private val publishedAttachment = mock[PublishedFileAttachment]
+  private val attachment = FileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
+  private val publishedAttachment = PublishedFileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
   private val createdCase = mock[Case]
   private val auditService = mock[AuditService]
   private val casesService = mock[CasesService]
@@ -216,7 +216,8 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private def extractDataFromCache: DataRetrievalAction = {
     val validData = Map(
       CheckYourAnswersPage.toString -> JsString(testAnswer),
-      UploadSupportingMaterialMultiplePage.toString -> Json.toJson(Seq(attachment))
+      UploadSupportingMaterialMultiplePage.toString -> Json.toJson(Seq(attachment)),
+      MakeFileConfidentialPage.toString -> JsObject(Map("file-id" -> JsBoolean(false)))
     )
     new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
   }

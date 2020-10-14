@@ -39,21 +39,22 @@ import utils.JsonFormatters._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.successful
+import pages.UploadSupportingMaterialMultiplePage
 
 class CheckYourAnswersController @Inject()(
-                                            appConfig: FrontendAppConfig,
-                                            dataCacheConnector: DataCacheConnector,
-                                            auditService: AuditService,
-                                            navigator: Navigator,
-                                            identify: IdentifierAction,
-                                            getData: DataRetrievalAction,
-                                            requireData: DataRequiredAction,
-                                            countriesService: CountriesService,
-                                            caseService: CasesService,
-                                            fileService: FileService,
-                                            mapper: CaseRequestMapper,
-                                            cc: MessagesControllerComponents
-                                          )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+  appConfig: FrontendAppConfig,
+  dataCacheConnector: DataCacheConnector,
+  auditService: AuditService,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  countriesService: CountriesService,
+  caseService: CasesService,
+  fileService: FileService,
+  mapper: CaseRequestMapper,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private implicit val lang: Lang = appConfig.defaultLang
 
@@ -109,14 +110,23 @@ class CheckYourAnswersController @Inject()(
     val answers = request.userAnswers
     val newCaseRequest = mapper.map(answers)
 
-    val attachments: Seq[FileAttachment] = answers
-      .get(SupportingMaterialFileListPage).map(_.fileAttachments)
+    val fileAttachments: Seq[FileAttachment] = answers
+      .get(UploadSupportingMaterialMultiplePage)
       .getOrElse(Seq.empty)
 
+    val keepConfidential = answers
+      .get(MakeFileConfidentialPage)
+      .getOrElse(Map.empty)
+
+    val withStatus = fileAttachments
+      .map(att => Attachment(att.id, keepConfidential(att.id)))
+
     for {
-      att: Seq[PublishedFileAttachment] <- fileService.publish(attachments)
+      published   <- fileService.publish(fileAttachments)
+      publishIds  = published.map(_.id)
+      attachments = withStatus.filter(att => publishIds.contains(att.id))
       letter      <- getPublishedLetter(answers)
-      atar        <- createCase(newCaseRequest, att, letter, answers)
+      atar        <- createCase(newCaseRequest, attachments, letter, answers)
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
       _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
       userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar))
@@ -138,23 +148,28 @@ class CheckYourAnswersController @Inject()(
     }
   }
 
-  private def createCase(newCaseRequest: NewCaseRequest, attachments: Seq[PublishedFileAttachment],
-                         letter: Option[PublishedFileAttachment], answers: UserAnswers)
-                        (implicit headerCarrier: HeaderCarrier): Future[Case] = {
+  private def createCase(
+    newCaseRequest: NewCaseRequest,
+    attachments: Seq[Attachment],
+    letter: Option[PublishedFileAttachment],
+    answers: UserAnswers
+  )(implicit headerCarrier: HeaderCarrier): Future[Case] = {
     caseService.create(appendAttachments(newCaseRequest, attachments, letter, answers))
   }
 
-  private def appendAttachments(caseRequest: NewCaseRequest, attachments: Seq[PublishedFileAttachment],
-                                letter: Option[PublishedFileAttachment], answers: UserAnswers): NewCaseRequest = {
-    def toAttachment: PublishedFileAttachment => Attachment = file => Attachment(file.id)
-
+  private def appendAttachments(
+    caseRequest: NewCaseRequest,
+    attachments: Seq[Attachment],
+    letter: Option[PublishedFileAttachment],
+    answers: UserAnswers
+  ): NewCaseRequest = {
     if (theUserIsAnAgent(answers)) {
-      val letterOfAuth: Option[Attachment] = letter.map(toAttachment)
+      val letterOfAuth = letter.map(att => Attachment(att.id, false))
       val agentDetails = caseRequest.application.agent.map(_.copy(letterOfAuthorisation = letterOfAuth))
       val application = caseRequest.application.copy(agent = agentDetails)
-      caseRequest.copy(application = application, attachments = attachments.map(toAttachment))
+      caseRequest.copy(application = application, attachments = attachments)
     } else {
-      caseRequest.copy(attachments = attachments.map(toAttachment))
+      caseRequest.copy(attachments = attachments)
     }
   }
 

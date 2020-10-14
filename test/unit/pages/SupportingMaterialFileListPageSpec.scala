@@ -20,12 +20,13 @@ import pages.behaviours.PageBehaviours
 
 class SupportingMaterialFileListPageSpec extends PageBehaviours {
 
-  "UploadSupportingMaterialMultiplePage" must {
+  "SupportingMaterialFileListPage" must {
 
-    beRetrievable[FileListAnswers](SupportingMaterialFileListPage)
+    beRetrievable[Boolean](SupportingMaterialFileListPage)
 
-    beSettable[FileListAnswers](SupportingMaterialFileListPage)
+    beSettable[Boolean](SupportingMaterialFileListPage)
 
-    beRemovable[FileListAnswers](SupportingMaterialFileListPage)
+    beRemovable[Boolean](SupportingMaterialFileListPage)
   }
+
 }

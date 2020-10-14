@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package unit.pages
+package pages
 
-import pages.ProvideConfidentialInformationPage
 import pages.behaviours.PageBehaviours
-
 
 class ProvideConfidentialInformationPageSpec extends PageBehaviours {
 

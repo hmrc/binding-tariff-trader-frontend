@@ -19,6 +19,8 @@ package controllers
 import controllers.actions._
 import models.Mode
 import models.requests.DataRequest
+import navigation.Journey
+import pages.QuestionPage
 import play.api.data.Form
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Results }
 import play.api.i18n.I18nSupport
@@ -27,11 +29,33 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ ExecutionContext, Future }
-import navigation.YesNoJourney
-import pages.QuestionPage
+
+abstract class ListCachingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A]) extends AccumulatingCachingController[List[A], A](cc) with ListAnswerCaching[A]
+
+abstract class MapCachingController[V](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[V]) extends AccumulatingCachingController[Map[String, V], (String, V)](cc) with MapAnswerCaching[String, V]
+
+abstract class AccumulatingCachingController[F <: TraversableOnce[A], A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[F]) extends FrontendController(cc) with I18nSupport with AccumulatingAnswerCaching[F, A] {
+  def identify: IdentifierAction
+  def getData: DataRetrievalAction
+  def requireData: DataRequiredAction
+  def form: Form[A]
+
+  def questionPage: QuestionPage[F]
+
+  def renderView(preparedForm: Form[A], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable
+
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request: DataRequest[_] =>
+    Ok(renderView(form, mode))
+  }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>
+    val badRequest = (formWithErrors: Form[A]) => Future.successful(Results.BadRequest(renderView(formWithErrors, mode)))
+    form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
+  }
+}
 
 abstract class YesNoCachingController(cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) with YesNoCaching {
-  def journey: YesNoJourney
+  def journey: Journey
   override def questionPage: QuestionPage[Boolean] = journey.questionPage
   override def detailPages: List[QuestionPage[_]] = journey.detailPages
 }
