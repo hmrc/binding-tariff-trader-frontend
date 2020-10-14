@@ -89,7 +89,7 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain confidential information question when user selects NO" in {
       val doc = view(createView(pdfView.copy(confidentialInformation = None))).getElementById("print-pages")
 
-      doc should containText(messages("provideConfidentialInformation.provideConfidentialInformation"))
+      doc should containText(messages("provideConfidentialInformation.checkYourAnswersLabel"))
     }
 
     "contain confidential information question details when user selects YES" in {
