@@ -46,7 +46,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
     <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
 
     @if(confirmation.sendingSamples) {
-        @if(pdf.hazardousSample.get){
+        @if(pdf.hazardousSample){
         <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
         } else {
             <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
