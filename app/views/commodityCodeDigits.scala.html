@@ -38,7 +38,7 @@
 
         <p>@messages("commodityCodeDigits.bodyText")</p>
 
-        @components.input_text(
+        @components.input_number(
             field = form("value"),
             labelClass = Some("visually-hidden"),
             label = Some(messages("commodityCodeDigits.heading", goodsName))
