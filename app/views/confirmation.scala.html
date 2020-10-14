@@ -51,7 +51,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
         } else {
             <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
                 <span>@messages("confirmation.paragraph.whatNext1")
-                    <a href="#">@messages("view.application.whatNext0.check.status.linkText")</a>
+                    <a href="@routes.IndexController.getApplications().url">@messages("view.application.whatNext0.check.status.linkText")</a>
                 </span>
             </p>
 
@@ -72,7 +72,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
         </p>
         }
     } else {
-        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="#">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
+        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="@routes.IndexController.getApplications().url">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
         <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
         @messages("confirmation.get.moreInformation")</a>
         </p>
