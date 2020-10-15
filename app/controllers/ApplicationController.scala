@@ -30,6 +30,7 @@ import views.html.components.{view_application, view_application_pdf}
 import views.html.templates._
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.io.Source
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   identify: IdentifierAction,
@@ -96,19 +97,30 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
       letter <- fileService.getLetterOfAuthority(c)
       out <- pdf match {
         case true =>
-          generatePdf(view_application_pdf(appConfig, PdfViewModel.apply(c)), s"BTIConfirmation$reference.pdf")
+          generatePdf(view_application_pdf(appConfig, PdfViewModel(c)), s"BTIConfirmation$reference.pdf")
         case false =>
           Future.successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
       }
     } yield out
   }
 
-  private def generatePdf(htmlContent: Html, filename: String): Future[Result] = {
-    pdfService.generatePdf(htmlContent) map { pdfFile =>
+  private def generatePdf(htmlContent: Html, filename: String)
+                         (implicit request: Request[AnyContent]): Future[Result] = {
+    val styledHtml = addPdfStyles(htmlContent)
+    pdfService.generatePdf(styledHtml) map { pdfFile =>
       Results.Ok(pdfFile.content)
         .as(pdfFile.contentType)
         .withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
     }
+  }
+
+  private def addPdfStyles(htmlContent: Html)
+                          (implicit request: Request[AnyContent]): Html = {
+    //TODO: find out the secure flag to set to true
+    val css = Source.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css").absoluteURL()).mkString
+    Html(htmlContent.toString
+      .replace("<head>", s"<head><style>$css</style>")
+    )
   }
 
   private def getRulingPDF(eori: Eori, reference: CaseReference)
