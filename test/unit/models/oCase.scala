@@ -24,7 +24,7 @@ object oCase {
   val eoriDetailsExample = EORIDetails("eoriTrader", "Trader Business Name", "line1", "line2", "line3", "postcode", "country")
   val eoriAgentDetailsExample = AgentDetails(EORIDetails("eoriAgent", "Agent Business Name", "line1", "line2", "line3", "postcode", "country"),
     Some(fileAttachment))
-  val contactExample = Contact("name", "email", Some("phone"))
+  val contactExample = Contact("name", "email", "phone")
   val btiApplicationExample = Application(
     "BTI",
     eoriDetailsExample,

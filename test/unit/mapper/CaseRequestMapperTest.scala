@@ -54,7 +54,7 @@ class CaseRequestMapperTest extends UnitSpec {
       val contact: Contact = application.contact
       contact.name shouldBe "Name"
       contact.email shouldBe "Email"
-      contact.phone shouldBe None
+      contact.phone shouldBe "Tel No"
 
       application.offline shouldBe false
       application.goodName shouldBe "Good Name"
@@ -92,7 +92,7 @@ class CaseRequestMapperTest extends UnitSpec {
       val contact: Contact = application.contact
       contact.name shouldBe "Name"
       contact.email shouldBe "Email"
-      contact.phone shouldBe Some("12345")
+      contact.phone shouldBe "12345"
 
       val agent: AgentDetails = application.agent.get
       agent.eoriDetails.eori shouldBe "Agent EORI"
@@ -138,7 +138,7 @@ class CaseRequestMapperTest extends UnitSpec {
             EnterContactDetails(
               "Name",
               "Email",
-              Some("12345")
+              "12345"
             )
           ),
           ProvideGoodsNamePage.toString -> js(
@@ -201,7 +201,7 @@ class CaseRequestMapperTest extends UnitSpec {
             EnterContactDetails(
               "Name",
               "Email",
-              None
+              "Tel No"
             )
           ),
           ProvideGoodsNamePage.toString -> js(
@@ -238,7 +238,7 @@ class CaseRequestMapperTest extends UnitSpec {
             EnterContactDetails(
               "Name",
               "Email",
-              Some("Phone")
+              "Phone"
             )
           ),
           AreYouSendingSamplesPage.toString -> js(true)
