@@ -30,17 +30,13 @@
         <title>@messages("application.title.pdf")</title>
 
     </head>
-    <style>
-
-    </style>
     <body>
 
-        <div id= "pdf-id" class="grid-row hidden-print">
+        <div class="grid-row hidden-print">
             <div class="column-two-thirds">
                 <div class="heading-xlarge">@messages("view.application.header")</div>
             </div>
         </div>
-
 
         <div id="print-pages" class="print-pages">
             <div class="print-document">
@@ -51,7 +47,7 @@
                             <span>@messages("view.application.logo.text")</span>
                         </p>
                     </div>
-                    <div class="column-two-thirds">
+                    <div>
                         <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
                         @messages("view.application.title.text")
                         </h2>
@@ -62,7 +58,7 @@
                     <div class="column-full">
                         <h3>@messages("view.application.your.record.text")</h3>
                     </div>
-                    <div class="column-half">
+                    <div class="column-half column-one-half">
                         <dl class="body-text">
                             <dt class="bold">@messages("view.application.eori")</dt>
                             <dt>@pdf.eori</dt>
@@ -79,7 +75,7 @@
                             <dt>@pdf.accountDetails.postcode</dt>
                         </dl>
                     </div>
-                    <div class="column-half">
+                    <div class="column-half column-one-half">
                         <dl class="body-text">
                             <dt class="bold">@messages("view.application.contact.name")</dt>
                             <dt>@pdf.contact.name</dt>
@@ -180,7 +176,7 @@
                         <span>@messages("view.application.logo.text")</span>
                     </p>
                 </div>
-                <div class="column-two-thirds">
+                <div>
                     <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
                     @messages("view.application.title.text")
                     </h2>
@@ -264,11 +260,12 @@
                             <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
                         </div>
                     </dl>
-                    <div class="footer-info footer-page-break">
-                        <span class="footer-page-no"></span>
-                        <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
-                    </div>
+
                 </div>
+            </div>
+            <div class="footer-info footer-page-break">
+                <span class="footer-page-no"></span>
+                <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
             </div>
         </div>
         </div>

@@ -4,9 +4,16 @@ body {
     height: auto;
     margin: 0;
 }
+.footer-page-no {
+    width: 66%;
+    float: left;
+}
 span.footer-page-no::before {
     counter-increment: sec-counter;
     content: "Page " counter(sec-counter) " of 2 ";
+}
+.heading-xlarge {
+    display: none;
 }
 .print-document {
     border: 1px solid #6f777b;
@@ -65,7 +72,7 @@ print-header__hmrc-logo {
    font-size: 24px;
    font-weight: normal;
    margin: 0;
-   line-height: 1;
+   line-height: 2.1;
 }
 .print-document .print-header h2 {
     text-align: right;
@@ -118,8 +125,10 @@ print-header__hmrc-logo {
 .print-document .footer-info {
     font-size: 14px;
     margin-top: 2em;
-    display: block;
-    }
+    position: absolute;
+    width: 210mm;
+    bottom: 10px;
+}
 .print-document__information-box {
     border: 2px solid #00703C;
     display: block;
