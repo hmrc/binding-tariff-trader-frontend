@@ -199,7 +199,7 @@ provideBTIReference.heading = Provide the reference number for the previous BTI 
 provideBTIReference.caption = About other rulings
 provideBTIReference.hint = The reference number, for example GB12345678, is on the ruling certificate.
 provideBTIReference.checkYourAnswersLabel = Renewal reference
-provideBTIReference.error.required = Enter a ruling reference
+provideBTIReference.error.required = Enter a reference number for the previous BTI ruling
 provideBTIReference.error.length = Previous ruling reference must be 100 characters or less
 
 provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
