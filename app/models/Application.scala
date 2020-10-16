@@ -58,5 +58,5 @@ case class Contact
 (
   name: String,
   email: String,
-  phone: String
+  phone: Option[String]
 )
