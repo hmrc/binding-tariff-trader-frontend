@@ -1,127 +1,130 @@
 body {
-    font-family: "nta",Arial,sans-serif;
-}
-
-a:after{content:" (" attr(href) ") ";font-size:0.8em;font-weight:normal;}
-
-#print-and-save-result {
-    display: none;
-}
-
-.column-full {
-    float: left;
-    width: 100%;
-}
-
-table {
-    width: 100%;
-}
-
-.divider--bottom {
-    border-bottom:1px solid #bfc1c3
-}
-
-table td {
-    border-bottom: 1px solid #ddd;
-}
-
-.column-full {
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.column-two-thirds {
-    width: 62%;
-    float: left;
-}
-
-.column-one-third {
-    width: 38%;
-    float: left;
-}
-
-.print-header .column-one-third {
-    width: 36%;
-    float: left;
-}
-
-.column-one-half {
-    width: 50%;
-    float: left;
-}
-
-.bold-medium {
+    counter-reset: sec-counter;
+    width: auto;
+    height: auto;
     margin: 0;
-    font-size: 24px;
-    line-height: 1.25;
-    font-family: "nta",Arial,sans-serif;
-    font-weight: 700;
-    text-transform: none;
 }
-
-.bold {
-    font-weight: 700;
+span.footer-page-no::before {
+    counter-increment: sec-counter;
+    content: "Page " counter(sec-counter) " of 2 ";
 }
-
-.column-full {
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    float: left;
-    width: 100%;
-}
-
 .print-document {
+    border: 1px solid #6f777b;
+    box-shadow: 6px 6px 0 0 #dee0e2;
+    padding: 50px 50px;
+    position: relative;
+    margin-bottom: 15em;
+    zoom: 100%;
     width: 210mm;
     height: 297mm;
-    position: relative;
+}
+.print-document .logotype {
+    font-size: 1.4em;
+    font-weight: normal;
+    margin: 0;
+    line-height: 1.6;
+    padding-top: 15px;
+}
+.print-document {
+page-break-after  : always;
 }
 
+ul li {
+    font-size: 16px;
+}
+.body-text {
+   margin-top: .26316em;
+   margin-bottom: 1.05263em;
+}
 .print-document table td {
     border: none;
     padding: 0;
     margin: 0;
 }
-
 .print-document h2, h3, h4 {
     margin-top: 0;
 }
-
-.print-document .print-header {
-    width: 210mm;
-    position: absolute;
-    top: 0mm;
+.print-document h2 {
+    text-align: right;
+    margin-top: 2em;
+    font-size: 1.2em;
+    color: #00703C;
+    font-weight: 600;
 }
-
+print-header__hmrc-logo {
+    margin-bottom: 10px;
+}
+.print-document .print-header {
+    position: relative;
+}
 .print-document .print-header .column-one-third {
-    border-left: #28A197 solid;
+    border-left: #00703C solid;
     padding-left: 8px;
 }
-
-.print-document .print-header h2 {
-    font-size: 1.4em;
-    font-weight: normal;
-    margin: 0;
-    line-height: 1;
+.print-document .logo-text {
+   font-size: 24px;
+   font-weight: normal;
+   margin: 0;
+   line-height: 1;
 }
-
+.print-document .print-header h2 {
+    text-align: right;
+    margin-top: 2em;
+    font-size: 1.2em;
+    color: #00703C;
+    font-weight: 600;
+}
+.print-document .information-box {
+    border: 2px solid #00703C;
+    display: block;
+    margin-bottom: 1em;
+    padding: 5px 10px;
+    width: 100%;
+    background-color: #e1f3f1;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    display: block;
+}
 .print-document .print-header h3 {
     text-align: right;
     margin-top: 2em;
     font-size: 1.2em;
-    color: #28A197;
+    color: #00703C;
     font-weight: 600
 }
-
+.print-document .hero-text {
+    margin-bottom: 0.26316em;
+    font-size: 1.4em;
+    font-weight: 700;
+}
+.print-document .reference-number {
+    font-size: 36px;
+}
+.print-document .footer-page-date {
+     float: right;
+ }
+.print-document h3 {
+    margin-top: 1em;
+    margin-bottom: 0.4em;
+    font-size: 1.8em;
+    font-weight: 600;
+}
 .print-header, .header-space,
 .print-footer, .footer-space {
-  height: 30mm;
+ height: 15mm;
 }
-
-.print-document .information-box {
-    border: 2px solid #28a197;
+.print-document .footer-info {
+    font-size: 14px;
+    margin-top: 2em;
+    display: block;
+    }
+.print-document__information-box {
+    border: 2px solid #00703C;
     display: block;
     margin-bottom: 1em;
-    width: 100%;
+    padding: 5mm;
     background-color: #e1f3f1;
     text-align: center;
     margin-left: auto;
@@ -129,109 +132,170 @@ table td {
     box-sizing: border-box;
     -webkit-print-color-adjust: exact
 }
-
 .date-of-result, .decision-service-version {
-    border-bottom: 2px solid #28a197
+    border-bottom: 2px solid #00703C
 }
-
 .date-of-result h3 {
     margin-bottom: 0
 }
-
 .about-this-result-box {
     background: #e1f3f1;
     padding: 1px 10px;
     font-size: 15px;
-    -webkit-print-color-adjust: exact
+    -webkit-print-color-adjust: exact;
+    margin-bottom: 20px;
 }
-
+.about-this-result-box-do-not-send {
+    height: 480px;
+}
 .about-this-result, .date-of-result {
     margin-top: 1em;
     margin-bottom: 1em;
 }
-
-.heading-medium {
-    font-size: 30px
-}
-
-tfoot p {
-    position: absolute;
-    bottom: 0mm;
+.column-full {
+    float: left;
     width: 100%;
 }
-
-.page {
-    margin-bottom: 10mm;
+.column-one-half {
+    width: 50%;
+    float: left;
 }
-
-#answer ul {
-    margin-top: 0;
+.column-one-third {
+    width: 36%;
+    float: left;
 }
-
-ul.section {
-    margin: 0;
-    padding:0;
+.column-two-thirds {
+    width: 64%;
+    float: left;
 }
-
-ul.section ul {
-    margin: 0;
-    padding:0;
-    margin-top: 1em;
+.print-pages {
+    -webkit-transform-origin:  top left;
+    -moz-transform-origin:  top left;
+    -ms-transform-origin:  top left;
+    -o-transform-origin:  top left;
+    transform-origin:  top left;
 }
-
-ul.section > li{
-    list-style-type: none;
-    margin-bottom: 1em;
-}
-
-ul.section > ul > li {
-    list-style-type: none;
-    margin-bottom: 1em;
-}
-
-ul.section ul + h2 {
-    margin-top: 2.5em;
-}
-
-p.form-hint{
-    margin: 0 0 0.5em 0;
-}
-
-.notice {
-    min-height: 2em;
-}
-
 .section-heading {
     color: #005EA5;
     margin-top: 1em;
 }
-
 .answer--container {
     display: table;
+    margin-top: 1em;
     page-break-inside: avoid !important;
     width: 100%;
 }
-
 .answer--question {
     float: left;
     width: 50%;
 }
-
-
 .answer--question p {
     margin-top: 0.5em;
 }
-
 .answer--question p strong {
     font-weight: 700;
 }
-
 .answer--answer {
     float: left;
     width: 50%;
 }
-
 .answer--answer p {
     margin-top: 0.5em;
     margin-left: 1em;
+}
+.print-header, .header-space,
+.print-footer, .footer-space {
+    height: 25mm;
+}
+.govuk-check-your-answers.cya-questions-short, .govuk-check-your-answers.cya-questions-long {
+    width: 100%;
+}
+.govuk-check-your-answers {
+    display: table;
+}
+.govuk-check-your-answers > * {
+    display: table-row;
+    border-bottom-width: 0;
+}
+.govuk-check-your-answers > * {
+    position: relative;
+    border-bottom: 1px solid #bfc1c3;
+}
+.govuk-check-your-answers.cya-questions-short .cya-question {
+    width: 30%;
+}
+.govuk-check-your-answers > *:first-child .cya-question {
+    margin-top: 0;
+}
+.govuk-check-your-answers .cya-question {
+    font-weight: bold;
+    margin: 0.63158em 4em 0.21053em 0;
+}
+.govuk-check-your-answers .cya-answer {
+    padding-bottom: 0.47368em;
+}
+.govuk-check-your-answers > *:first-child > * {
+    padding-top: 0;
+}
+.cya-answer {
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+.cya-question {
+    font-weight: bold;
+    margin: .63158em 4em .21053em 0;
+    width: 50%;
+  }
+.cya-answer {
+    padding-bottom: .47368em;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    width: 50%;
+}
+.govuk-check-your-answers>*>* {
+    display: table-cell;
+    border-bottom: 1px solid #bfc1c3;
+    padding: .63158em 1.05263em .47368em 0;
+    margin: 0;
+}
+  > *:first-child .cya-question {
+    margin-top: 0;
+  }
+  .notice .icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -17px;
+}
+.icon-important {
+    width: 35px;
+    height: 35px;
+    background-image: url(../images/icon-important.png);
+}
+.visually-hidden {
+    display:none;
+}
+.panel {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    clear: both;
+    border-left-style: solid;
+    border-color: #bfc1c3;
+    padding: .78947em;
+    margin-bottom: .78947em;
+}
+.panel-border-wide {
+    border-left-width: 10px;
+}
+.mt-2 {
+    margin-top: 2rem !important;
+}
+.icon {
+    display: inline-block;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+}
+address {
+    font-style: normal;
 }

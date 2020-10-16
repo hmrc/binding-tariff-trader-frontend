@@ -28,9 +28,12 @@
 <html>
     <head>
         <title>@messages("application.title.pdf")</title>
+
     </head>
-    <body>
-        <div>
+<style>
+
+</style>
+<body>
 
 <div id="print-pages" class="print-pages">
     <div class="print-document">
@@ -41,7 +44,7 @@
                     <span>@messages("view.application.logo.text")</span>
                 </p>
             </div>
-            <div class="column-two-thirds">
+            <div class="">
                 <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
                 @messages("view.application.title.text")
                 </h2>
@@ -52,7 +55,7 @@
             <div class="column-full">
                 <h3>@messages("view.application.your.record.text")</h3>
             </div>
-            <div class="column-half">
+            <div class="column-one-half">
                 <dl class="body-text">
                     <dt class="bold">@messages("view.application.eori")</dt>
                     <dt>@pdf.eori</dt>
@@ -69,7 +72,7 @@
                     <dt>@pdf.accountDetails.postcode</dt>
                 </dl>
             </div>
-            <div class="column-half">
+            <div class="column-one-half">
                 <dl class="body-text">
                     <dt class="bold">@messages("view.application.contact.name")</dt>
                     <dt>@pdf.contact.name</dt>
@@ -153,7 +156,7 @@
                 }
             </div>
 
-            <div class="footer-info footer-page-break">
+            <div class="footer-info column-full">
                 <span class="footer-page-no"></span>
                 <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
             </div>
@@ -162,7 +165,7 @@
 </div>
 
 
-<div class="print-document">
+    <div class="print-document">
     <div class="grid-row print-header">
         <div class="column-one-third">
             <img class="print-header__hmrc-logo" alt="HM Revenue and Customs" src="@createLink("images/hmrc_logo.jpg")"" />
@@ -170,7 +173,7 @@
                 <span>@messages("view.application.logo.text")</span>
             </p>
         </div>
-        <div class="column-two-thirds">
+        <div class="">
             <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
             @messages("view.application.title.text")
             </h2>
@@ -178,15 +181,14 @@
     </div>
 
     <div class="grid-row main-content">
-        <div class="column-full">
-
+        <div class="">
             <h3 class="heading-medium">@messages("beforeYouStart.subheading1")</h3>
             <dl class="govuk-check-your-answers cya-questions-short">
-                <div>
-                    <dt class="cya-question">@messages("provideGoodsName.checkYourAnswersLabel")</dt>
+                <div class="check-your-answer-wrapper">
+                    <dt class="cya-question" style="width:70%;">@messages("provideGoodsName.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@pdf.goodsName</dd>
                 </div>
-                <div>
+                <div >
                     <dt class="cya-question">@messages("view.application.goods.details")</dt>
                     <dd class="cya-answer">@pdf.goodsDetails</dd>
                 </div>
@@ -254,17 +256,16 @@
                     <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
                 </div>
             </dl>
-            <div class="footer-info footer-page-break">
+            <div class="footer-info">
                 <span class="footer-page-no"></span>
                 <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
             </div>
         </div>
     </div>
 </div>
-    </div>
 
-        </div>
+</div>
 
-    </body>
+</body>
 
 </html>
