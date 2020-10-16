@@ -26,7 +26,7 @@ import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.PdfViewModel
-import views.html.components.{view_application, view_application_pdf}
+import views.html.components.view_application
 import views.html.templates._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -97,7 +97,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
       letter <- fileService.getLetterOfAuthority(c)
       out <- pdf match {
         case true =>
-          generatePdf(view_application_pdf(appConfig, PdfViewModel(c)), s"BTIConfirmation$reference.pdf")
+          generatePdf(view_application(appConfig, PdfViewModel(c)), s"BTIConfirmation$reference.pdf")
         case false =>
           Future.successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
       }
@@ -110,10 +110,9 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
     pdfService.generatePdf(styledHtml) map { pdfFile =>
       Results.Ok(pdfFile.content)
         .as(pdfFile.contentType)
-        .withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
+        .withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$filename")
     }
   }
-
   private def addPdfStyles(htmlContent: Html)
                           (implicit request: Request[AnyContent]): Html = {
     //TODO: find out the secure flag to set to true
