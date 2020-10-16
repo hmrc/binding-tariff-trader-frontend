@@ -106,17 +106,17 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       }
 
       "return a row with the correct answer for EnterContactDetailsPage Name" in {
-        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
+        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
         checkHelper.enterContactDetailsName.get.answer shouldBe "name"
       }
 
       "return a row with the correct answer for EnterContactDetailsPage Email" in {
-        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
+        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
         checkHelper.enterContactDetailsEmail.get.answer shouldBe "email"
       }
 
       "return a row with the correct answer for EnterContactDetailsPage Telephone" in {
-        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
+        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
         checkHelper.enterContactDetailsPhone.get.answer shouldBe "phoneNumber"
       }
 
