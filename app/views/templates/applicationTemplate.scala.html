@@ -273,17 +273,17 @@
 
         <tr>
             <td>@messages("application.section.aboutItem.similarRuling")</td>
-            <td id="application.relatedBTIReference.defined">@if(c.application.relatedBTIReference.isDefined) {
+            <td id="application.relatedBTIReference.defined">@if(!c.application.relatedBTIReferences.isEmpty) {
                 @messages("site.yes")
                 } else {
                 @messages("site.no")
                 }</td>
         </tr>
 
-        @if(c.application.relatedBTIReference.isDefined) {
+        @if(!c.application.relatedBTIReferences.isEmpty) {
         <tr>
             <td>@messages("application.section.aboutItem.similarRuling.BTIRef")</td>
-            <td id="application.relatedBTIReference"><span class="pre-wrap">@c.application.relatedBTIReference.get</span></td>
+            <td id="application.relatedBTIReference"><span class="pre-wrap">@c.application.relatedBTIReferences.mkString("\\n")</span></td>
         </tr>
         }
 

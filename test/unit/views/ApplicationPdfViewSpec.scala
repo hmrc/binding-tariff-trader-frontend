@@ -65,7 +65,7 @@ class ApplicationPdfViewSpec extends ViewSpecBase {
 
     "contain the details for related BTI case" in {
       val doc = asDocument(createPdfView(traderCase.copy(application = traderApplication.copy(
-        relatedBTIReference = Some("RELATED1234"))), Seq.empty))
+        relatedBTIReferences = List("RELATED1234"))), Seq.empty))
 
       doc.getElementById("application.relatedBTIReference").text() shouldBe "RELATED1234"
     }

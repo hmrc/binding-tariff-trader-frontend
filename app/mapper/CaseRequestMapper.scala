@@ -55,7 +55,7 @@ class CaseRequestMapper {
       confidentialInformation = provideConfidentialInformation,
       otherInformation = None,
       reissuedBTIReference = provideBTIReference.map(_.reference),
-      relatedBTIReference = None,
+      relatedBTIReferences = commodityCodeRulingReference.getOrElse(Nil),
       knownLegalProceedings = legalChallengeDetails,
       envisagedCommodityCode = commodityCodeDigits,
       sampleToBeProvided = sampleProvided,
