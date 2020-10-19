@@ -16,6 +16,8 @@
 
 package controllers
 
+import java.io.ByteArrayInputStream
+
 import controllers.actions._
 import models.requests.IdentifierRequest
 import models.{Case, PdfFile, oCase}
@@ -23,6 +25,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import play.api.mvc.RequestHeader
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
@@ -30,6 +33,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.{failed, successful}
+import scala.io.{BufferedSource, Source}
 
 class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
@@ -101,10 +105,16 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     when(pdfService.generatePdf(any[Html])).thenReturn(successful(expectedResult))
   }
 
+  private def givenTheSourceMockReturnsTheCSS(): Unit = {
+    def fromURL(url: String): BufferedSource = Source.createBufferedSource(new ByteArrayInputStream("abc".getBytes))
+
+    when(fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css").absoluteURL()(any[RequestHeader]))).thenReturn(any[BufferedSource])
+  }
 
   "Application Pdf" must {
 
     "return PdfService result" in {
+      givenTheSourceMockReturnsTheCSS
       givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseServiceFindsTheCase()
       givenTheFileServiceFindsTheAttachments()
