@@ -57,8 +57,8 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase with AnswerCa
 
   "EnterContactDetailsController" must {
     val validAnswers = List(
-      EnterContactDetails("value 1", "value 2", Some("value 3")),
-      EnterContactDetails("value 1", "value 2", None)
+      EnterContactDetails("value 1", "value 2", "value 3"),
+      EnterContactDetails("value 1", "value 2", "another tel number")
     )
 
     behave like answerCachingController(

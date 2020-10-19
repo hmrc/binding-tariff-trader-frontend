@@ -20,6 +20,7 @@
         labelClass: Option[String] = None,
         labelHtml: Option[Html] = None,
         inputClass: Option[String] = None,
+        inputType: String = "text",
         hint: Option[String] = None,
         maxlength: Int = 1000,
         inputPurpose: Option[String] = None
@@ -42,7 +43,7 @@
     <div class="form-control-wrapper">
         <input
         class="form-control @inputClass"
-        type="text"
+        type=@inputType
         maxlength=@maxlength
         id="@{field.id}"
         name="@{field.name}"
