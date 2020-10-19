@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.io.ByteArrayInputStream
-
 import controllers.actions._
 import models.requests.IdentifierRequest
 import models.{Case, PdfFile, oCase}
@@ -25,15 +23,14 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import play.api.mvc.RequestHeader
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
+import unit.utils.MockSourceUtil
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.{failed, successful}
-import scala.io.{BufferedSource, Source}
 
 class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
@@ -67,6 +64,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       caseService,
       fileService,
       countriesService,
+      MockSourceUtil,
       cc
     )
   }
@@ -105,16 +103,9 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     when(pdfService.generatePdf(any[Html])).thenReturn(successful(expectedResult))
   }
 
-  private def givenTheSourceMockReturnsTheCSS(): Unit = {
-    def fromURL(url: String): BufferedSource = Source.createBufferedSource(new ByteArrayInputStream("abc".getBytes))
-
-    when(fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css").absoluteURL()(any[RequestHeader]))).thenReturn(any[BufferedSource])
-  }
-
   "Application Pdf" must {
 
     "return PdfService result" in {
-      givenTheSourceMockReturnsTheCSS
       givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseServiceFindsTheCase()
       givenTheFileServiceFindsTheAttachments()
@@ -129,32 +120,32 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     }
 
     "error when case not found" in {
-      givenThePdfServiceDecodesTheTokenWith("eori")
-      givenTheCaseServiceDoesNotFindTheCase()
+        givenThePdfServiceDecodesTheTokenWith("eori")
+        givenTheCaseServiceDoesNotFindTheCase()
 
-      val caught: Exception = intercept[Exception] {
-        await(controller().applicationPdf(caseRef, Some(token))(request))
+        val caught: Exception = intercept[Exception] {
+          await(controller().applicationPdf(caseRef, Some(token))(request))
+        }
+        caught.getMessage shouldBe "Case not found"
       }
-      caught.getMessage shouldBe "Case not found"
-    }
 
-    "redirect to session expired when the token is invalid" in {
-      givenThePdfServiceFailsToDecodeTheToken()
+          "redirect to session expired when the token is invalid" in {
+           givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
+           val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
 
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
+           status(result) shouldBe SEE_OTHER
+           redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+         }
 
-    "redirect to unauthorized when the token is empty and session EORI is not present" in {
-      givenThePdfServiceFailsToDecodeTheToken()
+         "redirect to unauthorized when the token is empty and session EORI is not present" in {
+           givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, None)(request)
+           val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, None)(request)
 
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad().url)
-    }
+           status(result) shouldBe SEE_OTHER
+           redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad().url)
+         }
 
   }
 
@@ -281,7 +272,5 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       result shouldBe Some("title.irish_republic")
     }
-
   }
-
 }

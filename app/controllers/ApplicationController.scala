@@ -25,12 +25,12 @@ import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.SourceUtil
 import viewmodels.PdfViewModel
 import views.html.components.view_application
 import views.html.templates._
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.io.Source
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   identify: IdentifierAction,
@@ -38,6 +38,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   caseService: CasesService,
   fileService: FileService,
   countriesService: CountriesService,
+  source: SourceUtil,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
@@ -116,7 +117,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   private def addPdfStyles(htmlContent: Html)
                           (implicit request: Request[AnyContent]): Html = {
     //TODO: find out the secure flag to set to true
-    val css = Source.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css").absoluteURL()).mkString
+    val css = source.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css").absoluteURL()).mkString
     Html(htmlContent.toString
       .replace("<head>", s"<head><style>$css</style>")
     )

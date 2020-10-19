@@ -44,8 +44,8 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain a page heading" in {
       val doc = view(createView())
 
-      doc should containElementWithID("pdf-id")
-      doc.getElementById("pdf-id") should containText(messages("view.application.header"))
+      doc should containElementWithID("print-pages")
+      doc.getElementById("print-pages") should containText(messages("view.application.header"))
     }
 
     "contain a page description" in {
