@@ -456,7 +456,7 @@ view.applicationPdf.legalProblemQuestion = Have there been any legal problems cl
 view.applicationPdf.legalProblem = Problem classifying
 
 confirmation.yourRefNumber = Your application reference
-confirmation.paragraph.confirmationEmail = We have sent your confirmation email to {0}
+confirmation.paragraph.confirmationEmail = We have sent your confirmation email to {0}.
 confirmation.download.link.PDF = Download a PDF of the application (opens in a new window or tab)
 confirmation.download.link.accessibleText = Download an accessible text file of the application
 
