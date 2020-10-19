@@ -82,7 +82,7 @@ class SupportingMaterialFileListController @Inject()(
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    // We will not use the prepared form here because we don't want to prepopulate the choice
-    supportingMaterialFileList(appConfig, form, goodsName, getFileViews(request.userAnswers), mode)
+    // We will not use the prepared form here because we don't want to prepopulate the choice; we will only ensure existing errors are populated
+    supportingMaterialFileList(appConfig, form.copy(errors = preparedForm.errors), goodsName, getFileViews(request.userAnswers), mode)
   }
 }
