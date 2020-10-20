@@ -423,10 +423,40 @@ confirmation.homeLink = Return to your ATaR home page
 confirmation.heading2.whatNext = What happens next
 confirmation.paragraph.whatNext0.sample = We will give you your ruling within 30 to 60 days of receiving your samples.
 confirmation.paragraph.whatNext0.nosample = We will give you your ruling within 30 to 60 days.
-confirmation.paragraph.whatNext1 = You can sign in to check the status of your application.
+view.application.paragraph.whatNext0.nosample = We will give you your ruling within 120 days.
+confirmation.paragraph.whatNext1 = You can sign in to
+view.application.whatNext0.check.status.linkText = check the status of your application.
+confirmation.get.moreInformation = Get more information about samples (opens in a new window or tab)
+confirmation.returned.sample.note = Sample will be returned where possible. In some cases they may be damaged during testing. If you want to send the samples back, you must include return postage. Or you can collect your samples from our Southend Office.
+
+view.application.home.Link = Go to your applications and rulings
+view.application.header = Your application
+view.application.logo.text = HM Revenue & Customs
+view.application.title.text = Your Advance Tariff Ruling application
+view.application.print.application = Print your application
+view.application.save.application = Save your application
+view.application.your.record.text = For your records
+view.application.eori = EORI
+view.application.account.name = Account name
+view.application.account.address = Account address
+view.application.contact.name = Contact name
+view.application.contact.email = Contact email
+view.application.contact.phone = Contact Phone
+view.application.contact.date = Date submitted
+view.application.ref.text = Your application reference number is
+view.application.goods.details = Goods details
+view.application.sending.sample.paragraph1 = You must label your sample with the application reference number
+view.application.sending.sample.paragraph2 = if you consider a sample to be hazardous, it is important your email tariff.classification@hmrc.gov.uk before you send them. We may not accept the sample for heal and safety reason.
+view.application.paragraph.whatNext = We will give you your ruling within 120 days. You can sign in to Advance Tariff Rulings check the status of your application.
+view.application.paragraph.do.not.send.sample = Do not send a sample unless one has been requested by the Tariff Classification Team.
+
+view.applicationPdf.provideConfidentialInformation = Provide confidential information for the item?
+view.applicationPdf.foundComodityCode = Have you found a commodity code for the item?
+view.applicationPdf.legalProblemQuestion = Have there been any legal problems classifying the item?
+view.applicationPdf.legalProblem = Problem classifying
 
 confirmation.yourRefNumber = Your application reference
-confirmation.paragraph.confirmationEmail = We have sent your confirmation email to {0}
+confirmation.paragraph.confirmationEmail = We have sent your confirmation email to {0}.
 confirmation.download.link.PDF = Download a PDF of the application (opens in a new window or tab)
 confirmation.download.link.accessibleText = Download an accessible text file of the application
 

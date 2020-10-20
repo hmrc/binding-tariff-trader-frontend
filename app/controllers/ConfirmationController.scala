@@ -21,42 +21,41 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import javax.inject.Inject
 import models.Confirmation
-import pages.ConfirmationPage
+import pages.{ConfirmationPage, PdfViewPage}
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.PdfService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.JsonFormatters._
+import viewmodels.PdfViewModel
 import views.html.confirmation
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmationController @Inject()(
-  appConfig: FrontendAppConfig,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  dataCacheConnector: DataCacheConnector,
-  pdfService: PdfService,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
+                                        appConfig: FrontendAppConfig,
+                                        identify: IdentifierAction,
+                                        getData: DataRetrievalAction,
+                                        requireData: DataRequiredAction,
+                                        dataCacheConnector: DataCacheConnector,
+                                        pdfService: PdfService,
+                                        cc: MessagesControllerComponents
+                                      )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    def show(c: Confirmation): Future[Result] = for {
+    def show(c: Confirmation, pdf: PdfViewModel): Future[Result] = for {
       removed <- dataCacheConnector.remove(request.userAnswers.cacheMap)
       _ = if (!removed) logger.warn("Session entry failed to be removed from the cache")
 
       token: String = pdfService.encodeToken(c.eori)
-    } yield Ok(confirmation(appConfig, c, token))
+    } yield Ok(confirmation(appConfig, c, token, pdf))
 
-    request.userAnswers.get(ConfirmationPage) match {
-      case Some(confirmation) =>
-        show(confirmation)
-      case _ =>
-        Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+    (request.userAnswers.get(ConfirmationPage), request.userAnswers.get(PdfViewPage)) match {
+      case (Some(c: Confirmation), Some(pdf: PdfViewModel)) => show(c, pdf)
+      case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
 
   }
-
 }
