@@ -242,7 +242,7 @@ class IndexControllerSpec extends ControllerSpecBase {
       given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
         .willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
 
-      val result = controller().getApplicationsAndRulings(page = 1)(fakeRequest)
+      val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
 
       status(result) shouldBe OK
       contentAsString(result) should include("applications-rulings-list-table")
@@ -250,7 +250,7 @@ class IndexControllerSpec extends ControllerSpecBase {
 
 
     "redirect to BeforeYouStart when EORI unavailable" in {
-      val result = controller(givenUserDoesntHaveAnEORI).getApplicationsAndRulings(page = 1)(fakeRequest)
+      val result = controller(givenUserDoesntHaveAnEORI).getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
@@ -263,7 +263,7 @@ class IndexControllerSpec extends ControllerSpecBase {
         given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
           .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
 
-        val result = controller().getApplicationsAndRulings(page = 1)(fakeRequest)
+        val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
 
         status(result) shouldBe OK
 
@@ -308,7 +308,7 @@ class IndexControllerSpec extends ControllerSpecBase {
       given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
         .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
 
-      val result = controller().getApplicationsAndRulings(page = 1)(fakeRequest)
+      val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
 
       status(result) shouldBe OK
 
@@ -327,7 +327,7 @@ class IndexControllerSpec extends ControllerSpecBase {
       given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
         .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
 
-      val result = controller().getApplicationsAndRulings(page = 1)(fakeRequest)
+      val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
 
       status(result) shouldBe OK
 

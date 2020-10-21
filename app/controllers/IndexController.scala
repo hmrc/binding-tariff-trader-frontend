@@ -19,6 +19,8 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
 import javax.inject.Inject
+import models.SortDirection.SortDirection
+import models.SortField.SortField
 import models._
 import navigation.Navigator
 import pages.IndexPage
@@ -26,6 +28,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CasesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import viewmodels.Dashboard
 import views.CaseDetailTab
 import views.html.components.{table_applications, table_rulings}
 import views.html.{account_dashboard_statuses, index}
@@ -77,11 +80,12 @@ class IndexController @Inject()(
     }
   }
 
-  def getApplicationsAndRulings(page: Int): Action[AnyContent] = identify.async { implicit request =>
+  def getApplicationsAndRulings(page: Int, sortBy: Option[SortField], order: Option[SortDirection]): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
-        service.getCases(eori, applicationStatuses, SearchPagination(page), Sort()) flatMap { pagedResult =>
-          successful(Ok(account_dashboard_statuses(appConfig, pagedResult)))
+        val sort = Sort(sortBy.getOrElse(Dashboard.defaultSortField), order)
+        service.getCases(eori, applicationStatuses, SearchPagination(page), sort) flatMap { pagedResult =>
+          successful(Ok(account_dashboard_statuses(appConfig, Dashboard.create(pagedResult, sort))))
         }
 
       case None =>

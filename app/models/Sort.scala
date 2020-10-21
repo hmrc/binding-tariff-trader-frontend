@@ -16,24 +16,88 @@
 
 package models
 
-import models.SortDirection.SortDirection
-import models.SortField.SortField
+import models.SortDirection.{ASCENDING, DESCENDING, SortDirection}
+import models.SortField.{CREATED_DATE, SortField}
+import play.api.mvc.QueryStringBindable
 
+case class Sort(field: SortField, direction: SortDirection)
+
+object Sort {
+
+  def apply(): Sort =
+    apply(CREATED_DATE)
+
+  def apply(field: SortField, sortDirection: Option[SortDirection] = None): Sort =
+    Sort(
+      field,
+      sortDirection.getOrElse(SortField.defaultDirections(field))
+    )
+}
 
 object SortDirection extends Enumeration {
+
   type SortDirection = Value
+
   val DESCENDING = Value("desc")
   val ASCENDING = Value("asc")
+
+  def reverse(order: SortDirection): SortDirection =
+    order match {
+      case ASCENDING  => DESCENDING
+      case DESCENDING => ASCENDING
+      case o          => throw new IllegalArgumentException(s"Unrecognised SortDirection: $o")
+    }
+
+  implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String]) = new QueryStringBindable[SortDirection] {
+    override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortDirection]] = {
+      for {
+        order <- stringBinder.bind("order", params)
+      } yield {
+        order match {
+          case Right(sortDirection) => Right(SortDirection.withName(sortDirection))
+          case _                    => Left("Unable to bind a SortDirection")
+        }
+      }
+    }
+
+    override def unbind(key: String, sortDirection: SortDirection): String = {
+      stringBinder.unbind("order", sortDirection.toString)
+    }
+  }
 }
 
+//TODO: BT: are we tying column name in the front end to SortField name in the model and in turn to the field name in the backend?
 object SortField extends Enumeration {
+
   type SortField = Value
+  val REFERENCE = Value("reference")
   val CREATED_DATE = Value("created-date")
   val DECISION_START_DATE = Value("decision-start-date")
-}
+  val APPLICATION_STATUS = Value("application.status")
+  val GOODS_NAME = Value("application.goodName")        //TODO: BT: does the name need to match the path and name in Application?
 
-case class Sort
-(
-  field: SortField = SortField.CREATED_DATE,
-  direction: SortDirection = SortDirection.DESCENDING
-)
+  val defaultDirections = Map(
+    REFERENCE -> ASCENDING,
+    CREATED_DATE -> DESCENDING,
+    DECISION_START_DATE -> DESCENDING,
+    APPLICATION_STATUS -> ASCENDING,
+    GOODS_NAME -> ASCENDING
+  )
+
+  implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String]) = new QueryStringBindable[SortField] {
+    override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortField]] = {
+      for {
+        sortBy <- stringBinder.bind("sortBy", params)
+      } yield {
+        sortBy match {
+          case Right(sortByField) => Right(SortField.withName(sortByField))
+          case _                  => Left("Unable to bind a SortField")
+        }
+      }
+    }
+
+    override def unbind(key: String, sortField: SortField): String = {
+      stringBinder.unbind("sortBy", sortField.toString)
+    }
+  }
+}
