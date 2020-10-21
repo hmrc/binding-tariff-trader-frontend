@@ -247,11 +247,14 @@ ul li {
         width: 210mm;
         margin: 0;
     }
-    body {
-        width: auto;
-        height: auto;
-        margin: 0;
-   }
+     html, body {
+            border: 1px solid white;
+            width: auto;
+            height: 95%;
+            page-break-after: avoid;
+            page-break-before: avoid;
+            margin: 0;
+    }
    .hidden-print {
        display: none !important;
     }
@@ -262,10 +265,17 @@ ul li {
       margin: 10mm;
       border: none;
       width: 210mm;
-      height: 297mm;
+      height: 296mm;
       padding: 10mm;
       box-shadow: none;
       zoom: 100%;
+   }
+   .print-document .footer-info {
+   font-size: 14px;
+       margin-top: 2em;
+       position: absolute;
+           width: 210mm;
+           bottom: 10px;
    }
    .information-box {
       background: #e1f3f1;

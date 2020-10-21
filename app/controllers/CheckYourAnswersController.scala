@@ -133,7 +133,6 @@ class CheckYourAnswersController @Inject()(
       _           <- dataCacheConnector.save(userAnswers.cacheMap)
       res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
     } yield res
-
   }
 
   private def getPublishedLetter(answers: UserAnswers)

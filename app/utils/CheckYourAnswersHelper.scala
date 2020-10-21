@@ -156,7 +156,7 @@ class CheckYourAnswersHelper(
   }
 
   def enterContactDetailsPhone: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.phone", s"${x.phoneNumber.getOrElse("")}", false,
+    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.phone", s"${x.phoneNumber}", false,
       routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
   }
 

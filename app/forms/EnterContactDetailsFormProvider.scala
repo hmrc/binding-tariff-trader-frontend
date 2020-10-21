@@ -31,8 +31,8 @@ class EnterContactDetailsFormProvider @Inject() extends Mappings with Constraint
        "email" -> text("enterContactDetails.error.email.required")
          .verifying(validEmailAddress("enterContactDetails.error.email.invalid"))
          .verifying(maxLength(100, "enterContactDetails.error.email.length")),
-       "phoneNumber" -> optional(text("enterContactDetails.error.phoneNumber.required"))
-         .verifying(optionalMaxLength(20, "enterContactDetails.error.phoneNumber.length"))
+       "phoneNumber" -> text("enterContactDetails.error.phoneNumber.required")
+         .verifying(maxLength(20, "enterContactDetails.error.phoneNumber.length"))
      )(EnterContactDetails.apply)(EnterContactDetails.unapply)
    )
 

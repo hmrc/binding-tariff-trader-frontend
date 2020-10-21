@@ -218,6 +218,17 @@ trait YesNoCachingControllerBehaviours extends AnswerCachingControllerBehaviours
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
+
+    "show error when submitted without answering yes/no" in {
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
+      val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody((formField, ""))
+
+      val controllerWithData = controller(getRelevantData)
+      val result = controllerWithData.onSubmit(NormalMode)(postRequest)
+
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) should include(s"error-message-$formField-input")
+    }
   }
 }
 
