@@ -48,7 +48,7 @@ class AddAnotherRulingController @Inject()(
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val rulings = request.userAnswers.get(CommodityCodeRulingReferencePage).getOrElse(List.empty)
-    addAnotherRuling(appConfig, form, mode, rulings)
+    addAnotherRuling(appConfig, form.copy(errors = preparedForm.errors), mode, rulings)
   }
 
   def removeRuling(index: Int, userAnswers: UserAnswers): UserAnswers = {
