@@ -21,6 +21,7 @@ import models._
 import models.requests.NewEventRequest
 import play.api.libs.json._
 import uk.gov.hmrc.play.json.Union
+import viewmodels.PdfViewModel
 
 object JsonFormatters {
 
@@ -34,6 +35,7 @@ object JsonFormatters {
   implicit val newCaseRequestFormat: OFormat[NewCaseRequest] = Json.format[NewCaseRequest]
   implicit val caseAuditPayloadFormat: OFormat[CaseAuditPayload] = Json.format[CaseAuditPayload]
   implicit val operator: Format[Operator] = Json.using[Json.WithDefaultValues].format[Operator]
+  implicit val pdfFormat: OFormat[PdfViewModel] = Json.format[PdfViewModel]
 
   implicit val formatCaseCreated: OFormat[CaseCreated] = Json.using[Json.WithDefaultValues].format[CaseCreated]
   implicit val formatEventDetail: Format[Details] = Union.from[Details]("type")

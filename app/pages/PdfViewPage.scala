@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
+import viewmodels.PdfViewModel
 
-import forms.mappings.Mappings
-import play.api.data.Form
 
-class CommodityCodeDigitsFormProvider @Inject() extends Mappings {
+case object PdfViewPage extends DataPage[PdfViewModel] {
+  override def toString: String = "pdfViewPage"
 
-  def apply(): Form[String] =
-    Form(
-      "value" -> text("commodityCodeDigits.error.required")
-        .verifying(maxLength(25, "commodityCodeDigits.error.maxLength"))
-        .verifying(minLength(2, "commodityCodeDigits.error.minLength"))
-        .verifying(regexp("^\\d+$", "commodityCodeDigits.error.type"))
-    )
+  override def route(mode: Mode): Call =
+    routes.ConfirmationController.onPageLoad()
 
 }

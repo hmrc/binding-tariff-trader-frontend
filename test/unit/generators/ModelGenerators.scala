@@ -59,7 +59,7 @@ trait ModelGenerators {
       for {
         field1 <- arbitrary[String]
         field2 <- arbitrary[String]
-        field3 <- arbitrary[Option[String]]
+        field3 <- arbitrary[String]
       } yield EnterContactDetails(field1, field2, field3)
     }
 

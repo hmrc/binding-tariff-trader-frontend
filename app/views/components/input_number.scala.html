@@ -20,9 +20,8 @@
         labelClass: Option[String] = None,
         labelHtml: Option[Html] = None,
         inputClass: Option[String] = None,
-        inputType: String = "text",
         hint: Option[String] = None,
-        maxlength: Int = 1000,
+        max: Int = 1000,
         inputPurpose: Option[String] = None
 )(implicit messages: Messages)
 
@@ -43,8 +42,9 @@
     <div class="form-control-wrapper">
         <input
         class="form-control @inputClass"
-        type=@inputType
-        maxlength=@maxlength
+        type="text"
+        inputmode="numeric"
+        max="max"
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"

@@ -22,8 +22,11 @@ import play.api.data.FormError
 class CommodityCodeDigitsFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "commodityCodeDigits.error.required"
-  val lengthKey = "commodityCodeDigits.error.length"
-  val maxLength = 100
+  val maxLengthKey = "commodityCodeDigits.error.maxLength"
+  val minLengthKey = "commodityCodeDigits.error.minLength"
+  val numericType = "commodityCodeDigits.error.type"
+  val maxLength = 25
+  val minLength = 2
 
   val form = new CommodityCodeDigitsFormProvider()()
 
@@ -37,17 +40,19 @@ class CommodityCodeDigitsFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(maxLength)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like commodityCodeField(
+      form,
+      fieldName,
+      requiredErrorKey = FormError(fieldName, requiredKey),
+      notNumericTypeErrorKey = FormError(fieldName, numericType),
+      maxLengthErrorKey = FormError(fieldName, maxLengthKey, Seq(maxLength)),
+      minLengthErrorKey = FormError(fieldName, minLengthKey, Seq(minLength))
     )
   }
 }

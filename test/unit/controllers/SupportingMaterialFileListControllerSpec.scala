@@ -55,9 +55,9 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       cc
     )
 
-  // We ignore the provided form here - the controller does not prepopulate the view
+  // We will not use the provided form here - errors aside, the controller does not prepopulate the view
   private def viewAsString(form: Form[_], request: Request[_]): String =
-    supportingMaterialFileList(frontendAppConfig, formProvider(), goodsName, Seq.empty, NormalMode)(request, messages).toString
+    supportingMaterialFileList(frontendAppConfig, formProvider().copy(errors = form.errors), goodsName, Seq.empty, NormalMode)(request, messages).toString
 
   "SupportingMaterialFileListController" must {
     behave like yesNoCachingController(

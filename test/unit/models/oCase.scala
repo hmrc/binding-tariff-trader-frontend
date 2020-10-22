@@ -19,6 +19,8 @@ package models
 import java.time.Instant
 import java.util.UUID
 
+import viewmodels.PdfViewModel
+
 object oCase {
   val fileAttachment = Attachment(id = UUID.randomUUID().toString, false)
   val eoriDetailsExample = EORIDetails("eoriTrader", "Trader Business Name", "line1", "line2", "line3", "postcode", "country")
@@ -62,5 +64,6 @@ object oCase {
 
   val btiCaseExample = Case(reference = "ref", status = CaseStatus.OPEN, application = btiApplicationExample)
   val newBtiCaseExample = NewCaseRequest(btiApplicationExample, Seq.empty)
-
+  val pdf = PdfViewModel("eori", "reference", eoriDetailsExample, contactExample, Instant.now, "goods name", "goods details",
+    Some("confidential info"), true, Some(false), true, Seq(fileAttachment), Some("commodity code"), Some("legal"))
 }

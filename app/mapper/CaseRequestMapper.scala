@@ -121,7 +121,7 @@ class CaseRequestMapper {
     Contact(
       name = details.name,
       email = details.email,
-      phone = details.phoneNumber
+      phone = Option(details.phoneNumber)
     )
   }
 

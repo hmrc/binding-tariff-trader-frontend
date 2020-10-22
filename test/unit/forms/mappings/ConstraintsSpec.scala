@@ -94,6 +94,29 @@ class ConstraintsSpec extends WordSpec with MustMatchers with Constraints {
     }
   }
 
+  "minLength" must {
+
+    "return Invalid for a string shorter than the allowed length" in {
+      val result = minLength(10, "error.length")("a" * 9)
+      result mustEqual Invalid("error.length", 10)
+    }
+
+    "return Invalid for an empty string" in {
+      val result = minLength(10, "error.length")("")
+      result mustEqual Invalid("error.length", 10)
+    }
+
+    "return Valid for a string equal to the allowed length" in {
+      val result = minLength(10, "error.length")("a" * 10)
+      result mustEqual Valid
+    }
+
+    "return Valid for a string longer than the allowed length" in {
+      val result = minLength(10, "error.length")("a" * 11)
+      result mustEqual Valid
+    }
+  }
+
   "maxLength" must {
 
     "return Valid for a string shorter than the allowed length" in {

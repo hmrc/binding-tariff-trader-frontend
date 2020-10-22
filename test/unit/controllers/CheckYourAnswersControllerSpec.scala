@@ -16,6 +16,8 @@
 
 package controllers
 
+import java.time.Instant
+
 import audit.AuditService
 import connectors.FakeDataCacheConnector
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeDataRetrievalAction, FakeIdentifierAction}
@@ -33,7 +35,7 @@ import play.api.test.Helpers._
 import service.{CasesService, CountriesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
-import viewmodels.AnswerSection
+import viewmodels.{AnswerSection, PdfViewModel}
 import views.html.check_your_answers
 
 import scala.concurrent.Future.{failed, successful}
@@ -54,19 +56,28 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private val fileService = mock[FileService]
   private val btiApp = mock[Application]
   private val contact = mock[Contact]
+  private val pdf = mock[PdfViewModel]
 
   private val countriesService = new CountriesService
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
+    when(createdCase.attachments).thenReturn(Seq.empty)
+    when(createdCase.createdDate).thenReturn(Instant.now)
     when(createdCase.reference).thenReturn("reference")
     when(createdCase.application).thenReturn(btiApp)
     when(btiApp.agent).thenReturn(None)
     when(btiApp.holder).thenReturn(EORIDetails("eori", "", "", "", "", "", ""))
-    when(btiApp.contact).thenReturn(contact)
-    when(contact.email).thenReturn("luigi@example.test")
-    when(contact.name).thenReturn("luigi")
+    when(btiApp.contact).thenReturn(Contact("luigi", "luigi@example.test", Some("0123")))
+    when(btiApp.goodName).thenReturn("goods name")
+    when(btiApp.goodDescription).thenReturn("goods description")
+    when(btiApp.confidentialInformation).thenReturn(Some("goods description"))
+    when(btiApp.envisagedCommodityCode).thenReturn(Some("goods description"))
+    when(btiApp.knownLegalProceedings).thenReturn(Some("goods description"))
+    when(btiApp.sampleToBeProvided).thenReturn(true)
+    when(btiApp.sampleIsHazardous).thenReturn(Some(true))
+    when(btiApp.sampleToBeReturned).thenReturn(true)
 
     when(mapper.map(any[UserAnswers])).thenReturn(newCaseReq)
   }
