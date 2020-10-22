@@ -14,68 +14,67 @@
  * limitations under the License.
  */
 
-package views
+package unit.views
 
-import forms.SupportingMaterialFileListFormProvider
-import models.{FileAttachment, NormalMode}
+import forms.AddAnotherRulingFormProvider
+import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.supportingMaterialFileList
-import viewmodels.FileView
+import views.html.addAnotherRuling
 
-class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
+class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
 
-  private lazy val messageKeyPrefix = "supportingMaterialFileList"
-  private val goodsName = "some-goods-name"
+  private lazy val messageKeyPrefix = "addAnotherRuling"
 
-  override protected val form = new SupportingMaterialFileListFormProvider()()
+  override protected val form = new AddAnotherRulingFormProvider()()
 
   private def createView: () => HtmlFormat.Appendable = { () => createViewWithForm(form) }
 
-  private def createViewWithForm(f: Form[Boolean], files: Seq[FileView] = Seq.empty): HtmlFormat.Appendable =
-    supportingMaterialFileList(frontendAppConfig, f, goodsName, files, NormalMode)(fakeRequest, messages)
+  private def createViewWithForm(f: Form[Boolean], rulings: List[String] = List.empty): HtmlFormat.Appendable =
+    addAnotherRuling(frontendAppConfig, form, NormalMode, rulings)(fakeRequest, messages)
 
-  "SupportingMaterialFileList view" must {
+  "AddAnotherRuling view" must {
 
-    behave like normalPage(createView, messageKeyPrefix, goodsName)()
+    behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 
-    "show the expected heading when no files have been uploaded" in {
+    "show the expected heading when no rulings have been added" in {
       assertHeading(0)
     }
 
-    "show the expected heading when 1 file has been uploaded" in {
+    "show the expected heading when 1 ruling has been added" in {
       assertHeading(1)
     }
 
-    "show the expected heading when multiple file have been uploaded" in {
+    "show the expected heading when multiple rulings have been added" in {
       assertHeading(2)
     }
 
   }
 
   private def assertHeading: Int => Unit = { n: Int =>
-    val filesForm = new SupportingMaterialFileListFormProvider
-    val htmlView = asDocument(createViewWithForm(filesForm(), generateFiles(n)))
+    val rulingForm = new AddAnotherRulingFormProvider
+    val htmlView = asDocument(createViewWithForm(form, generateRulings(n)))
 
     val headings = htmlView.getElementsByTag("h1")
     assert(headings.size() == 1)
     val heading = headings.first().ownText()
 
     if (n == 1) {
-      assert(heading == messagesApi(s"${messageKeyPrefix}.uploadFileCounter.singular", goodsName))
+      assert(heading == messagesApi(s"${messageKeyPrefix}.addRulingCounter.singular", n))
     } else if (n > 1) {
-      assert(heading == messagesApi(s"${messageKeyPrefix}.uploadFileCounter.plural", n, goodsName))
+      assert(heading == messagesApi(s"${messageKeyPrefix}.addRulingCounter.plural", n))
     } else {
-      assert(heading == messagesApi(s"${messageKeyPrefix}.heading", goodsName))
+      assert(heading == messagesApi(s"${messageKeyPrefix}.heading"))
     }
   }
 
-  private def generateFiles(number: Int): Seq[FileView] = {
+  private def generateRulings(number: Int): List[String] = {
     (1 to number).map { idx =>
-      FileView(s"id$idx", s"name$idx", false)
+      s"ruling$idx"
     }
+      .toList
   }
 }

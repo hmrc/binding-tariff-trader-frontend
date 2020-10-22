@@ -18,15 +18,15 @@ package pages
 
 import pages.behaviours.PageBehaviours
 
-class IsSampleHazardousPageSpec extends PageBehaviours {
+class AddAnotherRulingPageSpec extends PageBehaviours {
 
-  "IsSampleHazardousPage" must {
+  "AddAnotherRulingPage" must {
 
-    beRetrievable[Boolean](IsSampleHazardousPage)
+    beRetrievable[Boolean](AddAnotherRulingPage)
 
-    beSettable[Boolean](IsSampleHazardousPage)
+    beSettable[Boolean](AddAnotherRulingPage)
 
-    beRemovable[Boolean](IsSampleHazardousPage)
+    beRemovable[Boolean](AddAnotherRulingPage)
   }
 
 }
