@@ -38,6 +38,8 @@ import models.requests.DataRequest
 import scala.util.Failure
 import scala.util.Success
 import scala.util.control.NonFatal
+import models.requests.FileStoreInitiateRequest
+import java.{util => ju}
 
 class UploadSupportingMaterialMultipleController @Inject()(
   appConfig: FrontendAppConfig,
@@ -79,18 +81,28 @@ class UploadSupportingMaterialMultipleController @Inject()(
     } yield updatedAnswers
   }
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    Ok(uploadSupportingMaterialMultiple(appConfig, form, goodsName, mode))
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    fileService.initiate(FileStoreInitiateRequest(
+      successRedirect = Some(routes.MakeFileConfidentialController.onPageLoad(mode).absoluteURL),
+      errorRedirect = Some(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode).absoluteURL)
+    )).transformWith {
+      case Failure(NonFatal(_)) =>
+        Future.successful(BadGateway)
+      case Success(response) =>
+        val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+        Future.successful(Ok(uploadSupportingMaterialMultiple(appConfig, response, form, goodsName, mode)))
+    }
   }
 
   def onSubmit(mode: Mode): Action[MultipartFormData[TemporaryFile]] = (identify andThen getData andThen requireData)
     .async(parse.multipartFormData) { implicit request =>
 
       def badRequest(mode: Mode, errorKey: String, errorMessage: String): Future[Result] = {
-        val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-        val formWithError = form.withError(errorKey, errorMessage)
-        Future.successful(BadRequest(uploadSupportingMaterialMultiple(appConfig, formWithError, goodsName, mode)))
+        fileService.initiate(FileStoreInitiateRequest()).map { response =>
+          val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+          val formWithError = form.withError(errorKey, errorMessage)
+          BadRequest(uploadSupportingMaterialMultiple(appConfig, response, formWithError, goodsName, mode))
+        }
       }
 
       request.body.file("file-input").filter(_.filename.nonEmpty) match {

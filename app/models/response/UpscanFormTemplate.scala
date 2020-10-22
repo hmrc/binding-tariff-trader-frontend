@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package forms
+package models.response
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import play.api.libs.json.{ OFormat, Json }
 
-class UploadSupportingMaterialMultipleFormProvider @Inject() extends Mappings {
+case class UpscanFormTemplate(href: String, fields: Map[String, String])
 
-  def apply(): Form[String] =
-    Form(
-      "file" -> text()
-    )
-
+object UpscanFormTemplate {
+  implicit val format: OFormat[UpscanFormTemplate] = Json.format[UpscanFormTemplate]
 }

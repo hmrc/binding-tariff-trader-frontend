@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package models.requests
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import play.api.libs.json.{ OFormat, Json }
 
-class UploadSupportingMaterialMultipleFormProvider @Inject() extends Mappings {
+case class FileStoreInitiateRequest(
+  id: Option[String] = None,
+  successRedirect: Option[String] = None,
+  errorRedirect: Option[String] = None,
+  expectedContentType: Option[String] = None,
+  publishable: Boolean = false
+)
 
-  def apply(): Form[String] =
-    Form(
-      "file" -> text()
-    )
-
+object FileStoreInitiateRequest {
+  implicit val format: OFormat[FileStoreInitiateRequest] = Json.format[FileStoreInitiateRequest]
 }

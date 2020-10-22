@@ -30,6 +30,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.{sequence, successful}
+import models.requests.FileStoreInitiateRequest
+import models.response.FileStoreInitiateResponse
 
 @Singleton
 class FileService @Inject()(
@@ -40,6 +42,10 @@ class FileService @Inject()(
 
   private val messagesApi = cc.messagesApi
   private implicit val lang = Lang.defaultLang
+
+  def initiate(request: FileStoreInitiateRequest)(implicit hc: HeaderCarrier): Future[FileStoreInitiateResponse] = {
+    connector.initiate(request)
+  }
 
   def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
     connector.upload(f).map(toFileAttachment(f.ref.path.toFile.length))

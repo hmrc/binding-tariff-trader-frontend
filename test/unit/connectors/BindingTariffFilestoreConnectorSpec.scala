@@ -26,6 +26,9 @@ import play.api.mvc.MultipartFormData
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import models.requests.FileStoreInitiateRequest
+import models.response.FileStoreInitiateResponse
+import models.response.UpscanFormTemplate
 
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
@@ -34,6 +37,33 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
   private def withHeaderCarrier(key: String, value: String) = HeaderCarrier(extraHeaders = Seq(key -> value))
 
   "Connector" should {
+
+    "Initiate" in {
+      stubFor(
+        post("/file/initiate")
+          .willReturn(
+            aResponse()
+              .withStatus(Status.ACCEPTED)
+              .withBody(fromResource("binding-tariff-filestore_initiate-response.json"))
+          )
+      )
+
+      val initiateRequest = FileStoreInitiateRequest()
+
+      await(connector.initiate(initiateRequest)) shouldBe FileStoreInitiateResponse(
+        id = "id",
+        upscanReference = "ref",
+        uploadRequest = UpscanFormTemplate(
+          "http://localhost:20001/upscan/upload",
+          Map("key" -> "value")
+        )
+      )
+
+      verify(
+        postRequestedFor(urlEqualTo("/file/initiate"))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
+      )
+    }
 
     "Upload" in {
       stubFor(
