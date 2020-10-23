@@ -65,30 +65,6 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
       )
     }
 
-    "Upload" in {
-      stubFor(
-        post("/file")
-          .willReturn(
-            aResponse()
-              .withStatus(Status.ACCEPTED)
-              .withBody(fromResource("binding-tariff-filestore_upload-response.json"))
-          )
-      )
-
-      val file = MultipartFormData.FilePart[TemporaryFile]("file", "file-name", Some("text/plain"), tempFileCreator.create("file-name.txt"))
-
-      await(connector.upload(file)) shouldBe FilestoreResponse(
-        id = "id",
-        fileName = "file-name.txt",
-        mimeType = "text/plain"
-      )
-
-      verify(
-        postRequestedFor(urlEqualTo("/file"))
-          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
-      )
-    }
-
     "Get" in {
       stubFor(
         get("/file/id")

@@ -31,10 +31,6 @@ class CheckYourAnswersHelper(
                               implicit val lang: Lang
                             ) {
 
-  def uploadWrittenAuthorisation: Option[AnswerRow] = userAnswers.get(UploadWrittenAuthorisationPage) map {
-    x => AnswerRow("uploadWrittenAuthorisation.checkYourAnswersLabel", x.name, false, routes.UploadWrittenAuthorisationController.onPageLoad(CheckMode).url)
-  }
-
   def provideGoodsName: Option[AnswerRow] = userAnswers.get(ProvideGoodsNamePage) map {
     x => AnswerRow("provideGoodsName.checkYourAnswersLabel", s"$x", false, routes.ProvideGoodsNameController.onPageLoad(CheckMode).url)
   }
@@ -158,14 +154,6 @@ class CheckYourAnswersHelper(
   def enterContactDetailsPhone: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
     x => AnswerRow("enterContactDetails.checkYourAnswersLabel.phone", s"${x.phoneNumber}", false,
       routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
-  }
-
-  def registerBusinessRepresenting: Option[AnswerRow] = userAnswers.get(RegisterBusinessRepresentingPage) map {
-    x =>
-      AnswerRow("registerBusinessRepresenting.checkYourAnswersLabel",
-        Seq(x.eoriNumber, x.businessName, x.addressLine1, x.town, x.postCode.getOrElse(""), messagesApi(getCountryName(x.country).mkString)),
-        false,
-        routes.RegisterBusinessRepresentingController.onPageLoad(CheckMode).url)
   }
 
   def previousBTIRuling: Option[AnswerRow] = userAnswers.get(PreviousBTIRulingPage) map { x =>

@@ -24,7 +24,6 @@ import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierA
 import mapper.CaseRequestMapper
 import models._
 import models.requests.DataRequest
-import models.WhichBestDescribesYou.theUserIsAnAgent
 import navigation.Navigator
 import pages._
 import play.api.i18n.{I18nSupport, Lang}
@@ -125,8 +124,7 @@ class CheckYourAnswersController @Inject()(
       published   <- fileService.publish(fileAttachments)
       publishIds  = published.map(_.id)
       attachments = withStatus.filter(att => publishIds.contains(att.id))
-      letter      <- getPublishedLetter(answers)
-      atar        <- createCase(newCaseRequest, attachments, letter, answers)
+      atar        <- createCase(newCaseRequest, attachments)
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
       _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
       userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar))
@@ -135,41 +133,10 @@ class CheckYourAnswersController @Inject()(
     } yield res
   }
 
-  private def getPublishedLetter(answers: UserAnswers)
-                                (implicit headerCarrier: HeaderCarrier): Future[Option[PublishedFileAttachment]] = {
-
-    if (theUserIsAnAgent(answers)) {
-      answers.get(UploadWrittenAuthorisationPage)
-        .map(fileService.publish(_).map(Some(_)))
-        .getOrElse(successful(None))
-    } else {
-      successful(None)
-    }
-  }
-
   private def createCase(
     newCaseRequest: NewCaseRequest,
-    attachments: Seq[Attachment],
-    letter: Option[PublishedFileAttachment],
-    answers: UserAnswers
+    attachments: Seq[Attachment]
   )(implicit headerCarrier: HeaderCarrier): Future[Case] = {
-    caseService.create(appendAttachments(newCaseRequest, attachments, letter, answers))
+    caseService.create(newCaseRequest.copy(attachments = attachments))
   }
-
-  private def appendAttachments(
-    caseRequest: NewCaseRequest,
-    attachments: Seq[Attachment],
-    letter: Option[PublishedFileAttachment],
-    answers: UserAnswers
-  ): NewCaseRequest = {
-    if (theUserIsAnAgent(answers)) {
-      val letterOfAuth = letter.map(att => Attachment(att.id, false))
-      val agentDetails = caseRequest.application.agent.map(_.copy(letterOfAuthorisation = letterOfAuth))
-      val application = caseRequest.application.copy(agent = agentDetails)
-      caseRequest.copy(application = application, attachments = attachments)
-    } else {
-      caseRequest.copy(attachments = attachments)
-    }
-  }
-
 }

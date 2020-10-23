@@ -24,8 +24,7 @@ import javax.inject.Inject
 import models.{FileAttachment, Mode}
 import navigation.Navigator
 import pages._
-import play.api.i18n.{I18nSupport, Lang}
-import play.api.libs.Files.TemporaryFile
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import service.FileService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -33,13 +32,11 @@ import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.{ ExecutionContext, Future }
 import models.UserAnswers
-import uk.gov.hmrc.http.HeaderCarrier
 import models.requests.DataRequest
 import scala.util.Failure
 import scala.util.Success
 import scala.util.control.NonFatal
 import models.requests.FileStoreInitiateRequest
-import models.response.ScanResult
 import java.{util => ju}
 import play.api.data.Form
 import play.api.Logging
@@ -56,7 +53,6 @@ class UploadSupportingMaterialMultipleController @Inject()(
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
   private lazy val form = formProvider()
-  private implicit val lang: Lang = appConfig.defaultLang
 
   def hasMaxFiles(userAnswers: UserAnswers): Boolean = {
     val numberOfFiles = userAnswers
@@ -82,15 +78,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
     userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
   }
 
-  def onFileScanned(id: String): Action[ScanResult] = Action(parse.json[ScanResult]).async { implicit request =>
-    fileService
-      .notify(id, request.body)
-      .map(_ => Accepted)
-  }
-
   def onFileUploadSuccess(id: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
-    logger.info(s"File upload succeeded for id: ${id}, user answers: ${request.userAnswers}")
-
     val updatedAnswers = for {
       files <- request.userAnswers.get(UploadSupportingMaterialMultiplePage)
       file <- files.find(_.id == id)
@@ -99,26 +87,31 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
     val userAnswers = updatedAnswers.getOrElse(request.userAnswers)
 
-    logger.info(s"Updated user answers: ${userAnswers}")
-
     dataCacheConnector
       .save(userAnswers.cacheMap)
       .map(_ => Redirect(navigator.nextPage(UploadSupportingMaterialMultiplePage, mode)(userAnswers)))
   }
 
-  def onFileUploadError(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request: DataRequest[AnyContent] =>
-    val errorCode = request.getQueryString("errorCode")
-    val errorMessage = request.getQueryString("errorMessage")
-    Ok
+  def onFileUploadError(id: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
+    val errorCode = request.getQueryString("errorCode").getOrElse("")
+    val errorMessage = request.getQueryString("errorMessage").getOrElse("")
+    logger.error(s"File upload for file with id ${id} failed with error code ${errorCode}: ${errorMessage}")
+
+    val updatedAnswers = for {
+      files <- request.userAnswers.get(UploadSupportingMaterialMultiplePage)
+      updatedFiles = files.filterNot(_.id == id)
+    } yield request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
+
+    val userAnswers = updatedAnswers.getOrElse(request.userAnswers)
+
+    dataCacheConnector
+      .save(userAnswers.cacheMap)
+      .map(_ => Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
   }
 
   def onFileSelected(): Action[FileAttachment] =
     (identify andThen getData andThen requireData).async[FileAttachment](parse.json[FileAttachment]) { implicit request: DataRequest[FileAttachment] =>
-      logger.info(s"File selected for id: ${request.body.id}, user answers: ${request.userAnswers}")
-
       val updatedAnswers = upsertFile(request.body, request.userAnswers)
-
-      logger.info(s"Updated user answers: ${updatedAnswers}")
 
       dataCacheConnector
         .save(updatedAnswers.cacheMap)
@@ -130,9 +123,8 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
     fileService.initiate(FileStoreInitiateRequest(
       id = Some(fileId),
-      callbackUrl = routes.UploadSupportingMaterialMultipleController.onFileScanned(fileId).absoluteURL,
       successRedirect = Some(routes.UploadSupportingMaterialMultipleController.onFileUploadSuccess(fileId, mode).absoluteURL),
-      errorRedirect = Some(routes.UploadSupportingMaterialMultipleController.onFileUploadError(mode).absoluteURL)
+      errorRedirect = Some(routes.UploadSupportingMaterialMultipleController.onFileUploadError(fileId, mode).absoluteURL)
     )).transformWith {
       case Failure(NonFatal(_)) =>
         Future.successful(BadGateway)

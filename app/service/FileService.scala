@@ -31,7 +31,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.{sequence, successful}
 import models.requests.FileStoreInitiateRequest
-import models.response.{ FileStoreInitiateResponse, ScanResult }
+import models.response.FileStoreInitiateResponse
 import play.api.libs.json.JsValue
 
 @Singleton
@@ -46,14 +46,6 @@ class FileService @Inject()(
 
   def initiate(request: FileStoreInitiateRequest)(implicit hc: HeaderCarrier): Future[FileStoreInitiateResponse] = {
     connector.initiate(request)
-  }
-
-  def notify(id: String, scanResult: ScanResult)(implicit hc: HeaderCarrier): Future[JsValue] = {
-    connector.notify(id, scanResult)
-  }
-
-  def upload(f: MultipartFormData.FilePart[TemporaryFile])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
-    connector.upload(f).map(toFileAttachment(f.ref.path.toFile.length))
   }
 
   def refresh(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FileAttachment] = {

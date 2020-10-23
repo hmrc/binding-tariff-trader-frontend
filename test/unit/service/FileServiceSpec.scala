@@ -78,18 +78,6 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
     }
   }
 
-  "Upload" should {
-    val fileUploading = MultipartFormData.FilePart[TemporaryFile]("key", "filename", Some("type"), tempFileCreator.create())
-    val connectorResponse = FilestoreResponse("id", "filename-updated", "type")
-    val fileUploaded = FileAttachment("id", "filename-updated", "type", 0)
-
-    "Delegate to connector" in {
-      given(connector.upload(refEq(fileUploading))(any[HeaderCarrier])).willReturn(successful(connectorResponse))
-
-      await(service.upload(fileUploading)) shouldBe fileUploaded
-    }
-  }
-
   "Refresh" should {
     val outdatedFile = FileAttachment("id", "filename", "type", 0)
     val connectorResponse = FilestoreResponse("id", "filename-updated", "type")
