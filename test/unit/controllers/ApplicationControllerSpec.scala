@@ -269,7 +269,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     "return a valid country when given a valid country code" in {
       val result: Option[String] = controller().getCountryName("IE")
 
-      result shouldBe Some("title.irish_republic")
+      result shouldBe Some("title.ireland")
     }
 
   }
