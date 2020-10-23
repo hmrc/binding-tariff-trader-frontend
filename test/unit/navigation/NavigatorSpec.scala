@@ -252,9 +252,9 @@ class NavigatorSpec extends SpecBase {
           routes.CommodityCodeRulingReferenceController.onPageLoad(NormalMode)
       }
 
-      "redirect to RegisteredAddressForEoriPage from CommodityCodeRulingReferencePage" in {
+      "redirect to AddAnotherRulingPage from CommodityCodeRulingReferencePage" in {
         navigator.nextPage(CommodityCodeRulingReferencePage, NormalMode)(mock[UserAnswers]) shouldBe
-          routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)
+          routes.AddAnotherRulingController.onPageLoad(NormalMode)
       }
 
       "redirect to RegisteredAddressForEoriPage when user selects NO from SimilarItemCommodityCodePage" in {
@@ -263,6 +263,24 @@ class NavigatorSpec extends SpecBase {
         when(mockUserAnswers.get(SimilarItemCommodityCodePage)).thenReturn(Some(false))
 
         navigator.nextPage(SimilarItemCommodityCodePage, NormalMode)(mockUserAnswers) shouldBe
+          routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)
+      }
+
+      "redirect back to CommodityCodeRulingReferencePage when user selects yes to add another ruling on AddAnotherRulingPage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(AddAnotherRulingPage)).thenReturn(Some(true))
+
+        navigator.nextPage(AddAnotherRulingPage, NormalMode)(mockUserAnswers) shouldBe
+          routes.CommodityCodeRulingReferenceController.onPageLoad(NormalMode)
+      }
+
+      "redirect to RegisteredAddressForEoriPage when user selects no to adding another ruling from AddAnotherRulingPage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(AddAnotherRulingPage)).thenReturn(Some(false))
+
+        navigator.nextPage(AddAnotherRulingPage, NormalMode)(mockUserAnswers) shouldBe
           routes.RegisteredAddressForEoriController.onPageLoad(NormalMode)
       }
 
@@ -490,6 +508,29 @@ class NavigatorSpec extends SpecBase {
         when(mockUserAnswers.get(SimilarItemCommodityCodePage)).thenReturn(Some(false))
 
         navigator.nextPage(SimilarItemCommodityCodePage, CheckMode)(mockUserAnswers) shouldBe
+          routes.CheckYourAnswersController.onPageLoad()
+      }
+
+      "go to AddAnotherRulingPage from CommodityCodeRulingReferencePage" in {
+        navigator.nextPage(CommodityCodeRulingReferencePage, CheckMode)(mock[UserAnswers]) shouldBe
+          routes.AddAnotherRulingController.onPageLoad(CheckMode)
+      }
+
+      "go to CommodityCodeRulingReferencePage when yes is selected to add another ruling on AddAnotherRulingPage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(AddAnotherRulingPage)).thenReturn(Some(true))
+
+        navigator.nextPage(AddAnotherRulingPage, CheckMode)(mockUserAnswers) shouldBe
+          routes.CommodityCodeRulingReferenceController.onPageLoad(CheckMode)
+      }
+
+      "go back to CheckYourAnswersPage when no is selected to stop adding rulings on AddAnotherRulingPage" in {
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.get(AddAnotherRulingPage)).thenReturn(Some(false))
+
+        navigator.nextPage(AddAnotherRulingPage, CheckMode)(mockUserAnswers) shouldBe
           routes.CheckYourAnswersController.onPageLoad()
       }
     }

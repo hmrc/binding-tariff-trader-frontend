@@ -16,17 +16,13 @@
 
 package pages
 
-import pages.behaviours.PageBehaviours
+import controllers.routes
+import models.Mode
+import play.api.mvc.Call
 
+case object AddAnotherRulingPage extends QuestionPage[Boolean] {
+  def route(mode: Mode): Call =
+    routes.AddAnotherRulingController.onPageLoad(mode)
 
-class CommodityCodeRulingReferencePageSpec extends PageBehaviours {
-
-  "CommodityCodeRulingReferencePage" must {
-
-    beRetrievable[List[String]](CommodityCodeRulingReferencePage)
-
-    beSettable[List[String]](CommodityCodeRulingReferencePage)
-
-    beRemovable[List[String]](CommodityCodeRulingReferencePage)
-  }
+  override def toString: String = "addAnotherRulingPage"
 }

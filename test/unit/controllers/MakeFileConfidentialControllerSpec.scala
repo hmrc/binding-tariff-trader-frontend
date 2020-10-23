@@ -43,7 +43,7 @@ class MakeFileConfidentialControllerSpec extends ControllerSpecBase with Accumul
     UploadSupportingMaterialMultiplePage.toString -> JsArray(Seq(
       Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
       Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
-      Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
+      Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L))
     ))
   )
 
@@ -67,8 +67,8 @@ class MakeFileConfidentialControllerSpec extends ControllerSpecBase with Accumul
       cc
     )
 
-  private def viewAsString(form: Form[_], request: Request[_]): String =
-    makeFileConfidential(frontendAppConfig, form, NormalMode, lastFileUploadedId)(request, messages).toString
+  private def viewAsString(form: Form[_], submitAction: Call, request: Request[_]): String =
+    makeFileConfidential(frontendAppConfig, form, submitAction, NormalMode, lastFileUploadedId)(request, messages).toString
 
   val invalidFormData = Map("file-id-1" -> "", "confidential" -> "")
 

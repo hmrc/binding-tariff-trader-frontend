@@ -20,14 +20,14 @@
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[_], submitAction: Call, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("commodityCodeRulingReference.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = CommodityCodeRulingReferenceController.onSubmit(mode)) {
+    @helpers.form(action = submitAction) {
 
         @components.back_link()
 

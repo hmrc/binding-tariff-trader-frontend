@@ -20,6 +20,7 @@ import controllers.routes
 import forms.CommodityCodeRulingReferenceFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
 import views.html.commodityCodeRulingReference
@@ -27,13 +28,14 @@ import views.html.commodityCodeRulingReference
 class CommodityCodeRulingReferenceViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "commodityCodeRulingReference"
+  private def onwardRoute = Call("GET", "/foo")
 
   val form = new CommodityCodeRulingReferenceFormProvider()()
 
-  def createView: () => HtmlFormat.Appendable = () => commodityCodeRulingReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable = () => commodityCodeRulingReference(frontendAppConfig, form, onwardRoute, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[String] => HtmlFormat.Appendable = (form: Form[String]) =>
-    commodityCodeRulingReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+    commodityCodeRulingReference(frontendAppConfig, form, onwardRoute, NormalMode)(fakeRequest, messages)
 
   "CommodityCodeRulingReference view" must {
     behave like normalPage(createView, messageKeyPrefix)()
