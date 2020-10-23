@@ -18,7 +18,7 @@ package viewmodels
 
 import java.time.Instant
 
-import models.{Attachment, Case, Contact, EORIDetails}
+import models.{Case, Contact, EORIDetails}
 
 case class PdfViewModel(
                          eori: String,
@@ -32,14 +32,14 @@ case class PdfViewModel(
                          sendingSample: Boolean,
                          hazardousSample: Option[Boolean],
                          returnSample: Boolean,
-                         attachment: Seq[Attachment] = Seq.empty,
+                         attachments: Seq[FileView] = Seq.empty,
                          foundCommodityCode: Option[String],
                          legalProblems: Option[String]
                        )
 
 object PdfViewModel{
 
-  def apply(c: Case): PdfViewModel = new PdfViewModel(
+  def apply(c: Case, fileView: Seq[FileView]): PdfViewModel = new PdfViewModel(
     eori = c.application.holder.eori,
     reference = c.reference,
     accountDetails = c.application.holder,
@@ -51,7 +51,7 @@ object PdfViewModel{
     sendingSample = c.application.sampleToBeProvided,
     hazardousSample = c.application.sampleIsHazardous,
     returnSample = c.application.sampleToBeReturned,
-    attachment = c.attachments.seq,
+    attachments = fileView,
     foundCommodityCode = c.application.envisagedCommodityCode,
     legalProblems = c.application.knownLegalProceedings
   )
