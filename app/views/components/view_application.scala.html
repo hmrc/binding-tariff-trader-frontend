@@ -116,17 +116,17 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                         <h3>@messages("confirmation.heading2.whatNext")</h3>
                         @if(!pdf.sendingSample) {
                             <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
-                        }
+                        }else{
+                            @if(pdf.sendingSample) {
 
-                        @if(pdf.sendingSample) {
+                                @if(pdf.hazardousSample){
+                                    <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+                                } else {
 
-                            @if(pdf.hazardousSample){
-                                <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
-                            } else {
+                                @components.icon_important("confirmation.sendingSamples.important")
 
-                            @components.icon_important("confirmation.sendingSamples.important")
-
-                            <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
+                                <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
+                                }
                             }
                         }
 
@@ -155,8 +155,6 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                                             <address>
                                                 @Html(messages("confirmation.sendingSamples.address"))
                                             </address>
-                                            <dt class="mb-2">@messages("application.footer.sendingSamples.address.line8")
-                                            </dt>
                                         </dl>
                                     </div>
                                 }
@@ -178,7 +176,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
     <div class="print-document">
     <div class="grid-row print-header">
         <div class="column-one-third">
-            <img class="print-header__hmrc-logo" alt="HM Revenue and Customs" src="@createLink("images/hmrc_logo.jpg")"" />
+            <img class="print-header__hmrc-logo" alt="HM Revenue and Customs" src="@createLink("images/hmrc_logo.jpg")" />
             <p class="logo-text">
                 <span>@messages("view.application.logo.text")</span>
             </p>
