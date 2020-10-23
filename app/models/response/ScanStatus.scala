@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package models.response
 
-import play.api.libs.json.{Json, OFormat}
+import utils.EnumJson
 
-/*
-  All sizes are stored as KiloBytes
- */
+object ScanStatus extends Enumeration {
+  type ScanStatus = Value
 
-case class FileAttachment(id: String, name: String, mimeType: String, size: Long, uploaded: Boolean = false)
+  val READY, FAILED = Value
 
-object FileAttachment {
-  implicit val format: OFormat[FileAttachment] = Json.using[Json.WithDefaultValues].format[FileAttachment]
+  implicit val format = EnumJson.format(ScanStatus)
 }
-
-case class PublishedFileAttachment
-(
-  id: String,
-  name: String,
-  mimeType: String,
-  size: Long
-)

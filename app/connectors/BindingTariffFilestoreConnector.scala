@@ -33,7 +33,8 @@ import play.api.mvc.MultipartFormData.FilePart
 import scala.concurrent.{ ExecutionContext, Future }
 import uk.gov.hmrc.http.HeaderCarrier
 import models.requests.FileStoreInitiateRequest
-import models.response.FileStoreInitiateResponse
+import models.response.{ FileStoreInitiateResponse, ScanResult }
+import play.api.libs.json.JsValue
 
 @Singleton
 class BindingTariffFilestoreConnector @Inject()(
@@ -68,6 +69,14 @@ class BindingTariffFilestoreConnector @Inject()(
     withMetricsTimerAsync("initiate-file-upload") { _ =>
       client.POST[FileStoreInitiateRequest, FileStoreInitiateResponse](
         s"${appConfig.bindingTariffFileStoreUrl}/file/initiate", request
+      )(implicitly, implicitly, addAuth, implicitly)
+    }
+  }
+
+  def notify(id: String, scanResult: ScanResult)(implicit hc: HeaderCarrier): Future[JsValue] = {
+    withMetricsTimerAsync("notify-file-scanned") { _ =>
+      client.POST[ScanResult, JsValue](
+        s"${appConfig.bindingTariffFileStoreUrl}/file/${id}/notify", scanResult
       )(implicitly, implicitly, addAuth, implicitly)
     }
   }

@@ -19,6 +19,7 @@
 @import models.Mode
 @import models.response.FileStoreInitiateResponse
 @import uk.gov.hmrc.play.views.html._
+@import views.html.helper.CSRF
 @import views.ViewUtils._
 
 @(appConfig: FrontendAppConfig, initiateResponse: FileStoreInitiateResponse, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -62,5 +63,14 @@
 
         @components.submit_button(Some(messages("site.save_and_continue")))
 
+        <script>
+            const id = "@initiateResponse.id";
+            const targetURL = "@UploadSupportingMaterialMultipleController.onFileSelected().url";
+            const csrfToken = "@CSRF.getToken.value";
+
+            document
+                .getElementById("file")
+                .addEventListener("change", onFileSelected(id, targetURL, csrfToken));
+        </script>
     }
 }

@@ -20,6 +20,7 @@ import play.api.libs.json.{ OFormat, Json }
 
 case class FileStoreInitiateRequest(
   id: Option[String] = None,
+  callbackUrl: String,
   successRedirect: Option[String] = None,
   errorRedirect: Option[String] = None,
   expectedContentType: Option[String] = None,
