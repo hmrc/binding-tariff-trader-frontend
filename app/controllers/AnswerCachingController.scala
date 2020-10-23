@@ -22,13 +22,13 @@ import models.requests.DataRequest
 import navigation.Journey
 import pages.QuestionPage
 import play.api.data.Form
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Results }
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 abstract class ListCachingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A]) extends AccumulatingCachingController[List[A], A](cc) with ListAnswerCaching[A]
 
@@ -40,16 +40,18 @@ abstract class AccumulatingCachingController[F <: TraversableOnce[A], A](cc: Mes
   def requireData: DataRequiredAction
   def form: Form[A]
 
+  def submitAction(mode: Mode): Call
+
   def questionPage: QuestionPage[F]
 
-  def renderView(preparedForm: Form[A], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable
+  def renderView(preparedForm: Form[A], submitAction: Call, mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request: DataRequest[_] =>
-    Ok(renderView(form, mode))
+    Ok(renderView(form, submitAction(mode), mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>
-    val badRequest = (formWithErrors: Form[A]) => Future.successful(Results.BadRequest(renderView(formWithErrors, mode)))
+    val badRequest = (formWithErrors: Form[A]) => Future.successful(Results.BadRequest(renderView(formWithErrors, submitAction(mode), mode)))
     form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
   }
 }

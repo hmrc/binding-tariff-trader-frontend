@@ -20,7 +20,7 @@ import controllers.routes
 import models.Mode
 import play.api.mvc.Call
 
-case object CommodityCodeRulingReferencePage extends QuestionPage[String] {
+case object CommodityCodeRulingReferencePage extends QuestionPage[List[String]] {
   def route(mode: Mode): Call =
     routes.CommodityCodeRulingReferenceController.onPageLoad(mode)
   override def toString: String =

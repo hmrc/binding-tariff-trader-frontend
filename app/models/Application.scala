@@ -29,7 +29,7 @@ case class Application
   confidentialInformation: Option[String],
   otherInformation: Option[String],
   reissuedBTIReference: Option[String],
-  relatedBTIReference: Option[String],
+  relatedBTIReferences: List[String],
   knownLegalProceedings: Option[String],
   envisagedCommodityCode: Option[String],
   sampleToBeProvided: Boolean,
