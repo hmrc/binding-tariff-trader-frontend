@@ -41,9 +41,14 @@
     <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
 
     @if(confirmation.sendingSamples) {
-        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
-            <span>@messages("confirmation.paragraph.whatNext1")
-                <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
+        @if(pdf.hazardousSample){
+        <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+        } else {
+            <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
+                <span>@messages("confirmation.paragraph.whatNext1")
+                    <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a>
+                </span>
+            </p>
 
         @components.icon_important("confirmation.sendingSamples.important")
 
@@ -57,13 +62,16 @@
         <address>
         @Html(messages("confirmation.sendingSamples.address"))
         </address>
+        <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+            @messages("confirmation.get.moreInformation")</a>
+        </p>
+        }
     } else {
         <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
+        <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+        @messages("confirmation.get.moreInformation")</a>
+        </p>
     }
-
-    <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
-        @messages("confirmation.get.moreInformation")
-    </a></p>
 
     <div class="mt-2 footer-page-break">
         @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplicationsAndRulings().url)
