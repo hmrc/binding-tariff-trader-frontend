@@ -34,17 +34,21 @@ case class PdfViewModel(
                          returnSample: Boolean,
                          attachments: Seq[FileView] = Seq.empty,
                          foundCommodityCode: Option[String],
-                         legalProblems: Option[String]
+                         legalProblems: Option[String],
+                         similarAtarReferences: List[String]
                        ) {
 
   def supportingMaterialFileList: String = {
-
     def confidentialLabel(isConfidential: Boolean): String = if (isConfidential) "- Keep confidential" else ""
-     attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential)}" + "\n").mkString("\n")
+
+    attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential)}" + "\n").mkString("\n")
   }
+
+  def similarAtarCodes: String = similarAtarReferences.mkString("\n")
+
 }
 
-object PdfViewModel{
+object PdfViewModel {
 
   def apply(c: Case, fileView: Seq[FileView]): PdfViewModel = new PdfViewModel(
     eori = c.application.holder.eori,
@@ -60,7 +64,8 @@ object PdfViewModel{
     returnSample = c.application.sampleToBeReturned,
     attachments = fileView,
     foundCommodityCode = c.application.envisagedCommodityCode,
-    legalProblems = c.application.knownLegalProceedings
+    legalProblems = c.application.knownLegalProceedings,
+    similarAtarReferences = c.application.relatedBTIReferences
   )
 
 }

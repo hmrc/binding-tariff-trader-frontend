@@ -165,6 +165,19 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
       doc should containText(messages("view.applicationPdf.legalProblem"))
     }
 
+    "contain similar good codes when user selects YES and adds similar good codes " in {
+      val doc = view(createView(pdfView.copy(similarAtarReferences = List("12345", "23456")))).getElementById("print-pages")
+
+      doc should containText(messages("similarItemCommodityCode.checkYourAnswersLabel"))
+      doc should containText(pdfView.similarAtarReferences.mkString)
+    }
+
+    "not contain similar good codes when user selects NO" in {
+      val doc = view(createView(pdfView)).getElementById("print-pages")
+
+      doc should containText(messages("similarItemCommodityCode.checkYourAnswersLabel"))
+    }
+
     "contain footer date" in {
       val dateSubmitted = Instant.now
       val doc =
