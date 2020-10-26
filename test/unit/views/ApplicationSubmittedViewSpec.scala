@@ -104,7 +104,7 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
       val doc =
         view(createView(pdfView)).getElementById("print-pages")
 
-      doc should containText(messages("addSupportingDocuments.checkYourAnswersLabel"))
+      doc should containText(messages("supportingMaterialFileList.checkYourAnswersLabel"))
     }
 
     "contain supporting material file list details with Keep confidential flag on" in {
@@ -112,14 +112,14 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
         view(createView(pdfView.copy(
           attachments = Seq(FileView("file id", "confidential file.pdf", true))))).getElementById("print-pages")
 
-      doc should containText(messages("addSupportingDocuments.checkYourAnswersLabel"))
+      doc should containText(messages("supportingMaterialFileList.checkYourAnswersLabel"))
       doc should containText("- Keep confidential")
     }
 
     "contain supporting material file list when user selects NO" in {
       val doc = view(createView(pdfView.copy(attachments = Seq()))).getElementById("print-pages")
 
-      doc should containText(messages("addSupportingDocuments.checkYourAnswersLabel"))
+      doc should containText(messages("supportingMaterialFileList.checkYourAnswersLabel"))
     }
 
     "contain sending samples question when user selects NO" in {
@@ -168,14 +168,28 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain similar good codes when user selects YES and adds similar good codes " in {
       val doc = view(createView(pdfView.copy(similarAtarReferences = List("12345", "23456")))).getElementById("print-pages")
 
-      doc should containText(messages("similarItemCommodityCode.checkYourAnswersLabel"))
+      doc should containText(messages("commodityCodeRulingReference.checkYourAnswersLabel"))
       doc should containText(pdfView.similarAtarReferences.mkString)
     }
 
     "not contain similar good codes when user selects NO" in {
       val doc = view(createView(pdfView)).getElementById("print-pages")
 
-      doc should containText(messages("similarItemCommodityCode.checkYourAnswersLabel"))
+      doc should containText(messages("commodityCodeRulingReference.checkYourAnswersLabel"))
+    }
+
+    "contain reissuedBTIReference when user provides a reference" in {
+      val doc = view(createView(pdfView.copy(reissuedBTIReference =
+        Some("reissuedBTIReference")))).getElementById("print-pages")
+
+      doc should containText(messages("provideBTIReference.checkYourAnswersLabel"))
+      doc should containText("reissuedBTIReference")
+    }
+
+    "not contain reissuedBTIReference when user does not provide a reference" in {
+      val doc = view(createView(pdfView)).getElementById("print-pages")
+
+      doc should containText(messages("provideBTIReference.checkYourAnswersLabel"))
     }
 
     "contain footer date" in {

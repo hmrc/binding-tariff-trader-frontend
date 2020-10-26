@@ -35,7 +35,8 @@ case class PdfViewModel(
                          attachments: Seq[FileView] = Seq.empty,
                          foundCommodityCode: Option[String],
                          legalProblems: Option[String],
-                         similarAtarReferences: List[String]
+                         similarAtarReferences: List[String],
+                         reissuedBTIReference: Option[String]
                        ) {
 
   def supportingMaterialFileList: String = {
@@ -44,7 +45,7 @@ case class PdfViewModel(
     attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential)}" + "\n").mkString("\n")
   }
 
-  def similarAtarCodes: String = similarAtarReferences.mkString("\n")
+  def similarAtarCodes: String = similarAtarReferences.map(_ + "\n").mkString("\n")
 
 }
 
@@ -65,7 +66,8 @@ object PdfViewModel {
     attachments = fileView,
     foundCommodityCode = c.application.envisagedCommodityCode,
     legalProblems = c.application.knownLegalProceedings,
-    similarAtarReferences = c.application.relatedBTIReferences
+    similarAtarReferences = c.application.relatedBTIReferences,
+    reissuedBTIReference = c.application.reissuedBTIReference
   )
 
 }

@@ -205,12 +205,12 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 }
                 @if(pdf.attachments.isEmpty) {
                 <div>
-                    <dt class="cya-question">@messages("addSupportingDocuments.checkYourAnswersLabel")</dt>
+                    <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@messages("site.no")</dd>
                 </div>
                 } else {
                  <div>
-                    <dt class="cya-question">@messages("addSupportingDocuments.checkYourAnswersLabel")</dt>
+                    <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@pdf.supportingMaterialFileList</dd>
                   </div>
                 }
@@ -265,18 +265,26 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
             </dl>
             <h3 class="heading-medium">@messages("beforeYouStart.subheading2")</h3>
             <dl class="govuk-check-your-answers cya-questions-short">
-                <div>
-                    <dt class="cya-question">@messages("previousBTIRuling.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                </div>
+                @if(pdf.reissuedBTIReference.isEmpty) {
+                    <div>
+                        <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
+                        <dd class="cya-answer">@messages("site.no")</dd>
+                    </div>
+                } else {
+                    <div>
+                        <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
+                        <dd class="cya-answer">@pdf.reissuedBTIReference</dd>
+                    </div>
+                }
+
                 @if(pdf.similarAtarReferences.isEmpty) {
                 <div>
-                    <dt class="cya-question">@messages("similarItemCommodityCode.checkYourAnswersLabel")</dt>
+                    <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@messages("site.no")</dd>
                 </div>
                 } else {
                 <div>
-                    <dt class="cya-question">@messages("similarItemCommodityCode.checkYourAnswersLabel")</dt>
+                    <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
                     <dd class="cya-answer">@pdf.similarAtarReferences</dd>
                 </div>
                 }
