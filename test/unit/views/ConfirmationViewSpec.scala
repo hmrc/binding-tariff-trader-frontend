@@ -18,7 +18,6 @@ package views
 
 import models.{Confirmation, oCase}
 import play.twirl.api.Html
-import viewmodels.PdfViewModel
 import views.behaviours.ViewBehaviours
 import views.html.confirmation
 

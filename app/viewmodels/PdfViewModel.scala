@@ -35,7 +35,14 @@ case class PdfViewModel(
                          attachments: Seq[FileView] = Seq.empty,
                          foundCommodityCode: Option[String],
                          legalProblems: Option[String]
-                       )
+                       ) {
+
+  def supportingMaterialFileList: String = {
+
+    def confidentialLabel(isConfidential: Boolean): String = if (isConfidential) "- Keep confidential" else ""
+     attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential)}" + "\n").mkString("\n")
+  }
+}
 
 object PdfViewModel{
 
@@ -55,6 +62,5 @@ object PdfViewModel{
     foundCommodityCode = c.application.envisagedCommodityCode,
     legalProblems = c.application.knownLegalProceedings
   )
-
 
 }

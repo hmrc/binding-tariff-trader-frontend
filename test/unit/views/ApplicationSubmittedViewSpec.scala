@@ -23,7 +23,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import utils.Dates
-import viewmodels.PdfViewModel
+import viewmodels.{FileView, PdfViewModel}
 import views.ViewMatchers._
 import views.behaviours.ViewBehaviours
 import views.html.components.view_application
@@ -98,6 +98,28 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
           .getElementById("print-pages")
 
       doc should containText(messages("provideConfidentialInformation.checkYourAnswersLabel"))
+    }
+
+    "contain supporting material file list details" in {
+      val doc =
+        view(createView(pdfView)).getElementById("print-pages")
+
+      doc should containText(messages("addSupportingDocuments.checkYourAnswersLabel"))
+    }
+
+    "contain supporting material file list details with Keep confidential flag on" in {
+      val doc =
+        view(createView(pdfView.copy(
+          attachments = Seq(FileView("file id", "confidential file.pdf", true))))).getElementById("print-pages")
+
+      doc should containText(messages("addSupportingDocuments.checkYourAnswersLabel"))
+      doc should containText("- Keep confidential")
+    }
+
+    "contain supporting material file list when user selects NO" in {
+      val doc = view(createView(pdfView.copy(attachments = Seq()))).getElementById("print-pages")
+
+      doc should containText(messages("addSupportingDocuments.checkYourAnswersLabel"))
     }
 
     "contain sending samples question when user selects NO" in {
