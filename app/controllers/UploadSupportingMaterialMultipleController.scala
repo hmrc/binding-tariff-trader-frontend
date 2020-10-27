@@ -67,11 +67,12 @@ class UploadSupportingMaterialMultipleController @Inject()(
     val updatedFiles = userAnswers
       .get(UploadSupportingMaterialMultiplePage)
       .map { files =>
-        val index = files.indexWhere(_.id == file.id)
+        val uploadedFiles = files.filter(_.uploaded)
+        val index = uploadedFiles.indexWhere(_.id == file.id)
         if (index >= 0) {
-          files.take(index) ++ Seq(file) ++ files.drop(index + 1)
+          uploadedFiles.updated(index, file)
         } else {
-          files :+ file
+          uploadedFiles :+ file
         }
       }.getOrElse(Seq(file))
 
@@ -103,10 +104,11 @@ class UploadSupportingMaterialMultipleController @Inject()(
     } yield request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
 
     val userAnswers = updatedAnswers.getOrElse(request.userAnswers)
+    val formWithErrors = form.withError()
 
     dataCacheConnector
       .save(userAnswers.cacheMap)
-      .map(_ => Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)))
+      .map(_ => BadRequest(renderView(formWithErrors, mode)))
   }
 
   def onFileSelected(): Action[FileAttachment] =
