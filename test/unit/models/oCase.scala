@@ -64,7 +64,8 @@ object oCase {
 
   val btiCaseExample = Case(reference = "ref", status = CaseStatus.OPEN, application = btiApplicationExample)
   val newBtiCaseExample = NewCaseRequest(btiApplicationExample, Seq.empty)
-  val pdf = PdfViewModel("eori", "reference", eoriDetailsExample, contactExample, Instant.now, "goods name", "goods details",
-    Some("confidential info"), true, Some(false), true, Seq(FileView("id", "file name", false)),
+  val pdf = PdfViewModel("eori", "reference", eoriDetailsExample, contactExample, Instant.now, "goods name",
+    "goods details", Some("confidential info"), true, false, true, Seq(FileView("id", "file name", false)),
     Some("commodity code"), Some("legal"), List(), None)
+
 }
