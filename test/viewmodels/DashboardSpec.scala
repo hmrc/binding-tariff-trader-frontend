@@ -48,5 +48,13 @@ class DashboardSpec extends UnitSpec {
         dashboard.columnSortUrlFor("reference") shouldBe "/applications-and-rulings?page=1&sortBy=reference&order=asc"
       }
     }
+
+    "supplied with a new column to sort by and dashboard current page higher than 1" should {
+      "generate a url containing page param reset to 1" in {
+        val dashboard = Dashboard.create(Paged(Seq(oCase.btiCaseExample), SearchPagination(page = 2), resultCount = 1), Sort(CREATED_DATE))
+
+        dashboard.columnSortUrlFor("reference") shouldBe "/applications-and-rulings?page=1&sortBy=reference&order=asc"
+      }
+    }
   }
 }

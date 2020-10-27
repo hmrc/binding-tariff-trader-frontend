@@ -32,7 +32,7 @@ case class Dashboard(pageData: Paged[Case], sort: Sort) {
 
   private def queryParamsFor(columnName: String): String =
     this
-      .copy(sort = Sort(SortField.withName(columnName), sortOrderFor(columnName)))
+      .copy(pageData = pageData.copy(pageIndex = 1), sort = Sort(SortField.withName(columnName), sortOrderFor(columnName)))
       .toQueryString
 
   private def toQueryString: String = {
