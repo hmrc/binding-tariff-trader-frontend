@@ -54,7 +54,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
   private lazy val form = formProvider()
 
-  def hasMaxFiles(userAnswers: UserAnswers): Boolean = {
+  private def hasMaxFiles(userAnswers: UserAnswers): Boolean = {
     val numberOfFiles = userAnswers
       .get(UploadSupportingMaterialMultiplePage)
       .map(_.size)
@@ -63,7 +63,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
     numberOfFiles >= 10
   }
 
-  def upsertFile(file: FileAttachment, userAnswers: UserAnswers): UserAnswers = {
+  private def upsertFile(file: FileAttachment, userAnswers: UserAnswers): UserAnswers = {
     val updatedFiles = userAnswers
       .get(UploadSupportingMaterialMultiplePage)
       .map { files =>

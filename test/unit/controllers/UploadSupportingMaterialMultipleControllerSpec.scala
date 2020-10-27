@@ -102,6 +102,28 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       contentAsString(result) shouldBe viewAsString()
     }
 
+    "update user answers with file when file upload succeeds" in {
+      // test onFileUploadSuccess()
+
+    }
+
+    "remove stale metadata entries when the user does not proceed to upload a file" in {
+      // test onFileUploadSuccess()
+
+    }
+
+    "remove metadata entry for file when file upload fails" in {
+      // test onFileUploadError()
+
+
+    }
+
+    "update file metadata when a file is selected in the file input" in {
+      // test onFileSelected()
+
+
+    }
+
     // "respond with accepted and add next page on the location header  when valid data is submitted" in {
     //   // Given A Form
     //   val file = tempFileCreator.create("example-file.txt")
