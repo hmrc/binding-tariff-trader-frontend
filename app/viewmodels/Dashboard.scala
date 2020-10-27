@@ -25,14 +25,14 @@ import models.{SortField, _}
 import play.api.mvc.Request
 import viewmodels.Dashboard.{baseUrl, orderParam, pageParam, sortFieldParam}
 
-class Dashboard(val pageData: Paged[Case], sort: Sort) {
+case class Dashboard(pageData: Paged[Case], sort: Sort) {
 
   def columnSortUrlFor(columnName: String): String =
     baseUrl + queryParamsFor(columnName)
 
   private def queryParamsFor(columnName: String): String =
-    Dashboard
-      .create(pageData, Sort(SortField.withName(columnName), sortOrderFor(columnName)))
+    this
+      .copy(sort = Sort(SortField.withName(columnName), sortOrderFor(columnName)))
       .toQueryString
 
   private def toQueryString: String = {
@@ -58,7 +58,7 @@ class Dashboard(val pageData: Paged[Case], sort: Sort) {
     if (currentColumn)
       SortDirection.reverse(sort.direction)
     else
-      ASCENDING
+      SortField.defaultDirections(SortField.withName(columnName))
   }
 }
 
