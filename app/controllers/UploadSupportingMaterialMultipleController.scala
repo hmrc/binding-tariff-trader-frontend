@@ -104,11 +104,18 @@ class UploadSupportingMaterialMultipleController @Inject()(
     } yield request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
 
     val userAnswers = updatedAnswers.getOrElse(request.userAnswers)
-    val formWithErrors = form.withError()
+    val formWithErrors = form.withError("file",  "uploadSupportingMaterialMultiple.error.uploadError")
 
-    dataCacheConnector
-      .save(userAnswers.cacheMap)
-      .map(_ => BadRequest(renderView(formWithErrors, mode)))
+    for {
+      _ <- dataCacheConnector.save(userAnswers.cacheMap)
+      result <- renderView(mode, formWithErrors)
+        .transformWith {
+          case Failure(NonFatal(_)) =>
+            Future.successful(BadGateway)
+          case Success(html) =>
+            Future.successful(BadRequest(html))
+        }
+    } yield result
   }
 
   def onFileSelected(): Action[FileAttachment] =
@@ -127,16 +134,19 @@ class UploadSupportingMaterialMultipleController @Inject()(
       id = Some(fileId),
       successRedirect = Some(routes.UploadSupportingMaterialMultipleController.onFileUploadSuccess(fileId, mode).absoluteURL),
       errorRedirect = Some(routes.UploadSupportingMaterialMultipleController.onFileUploadError(fileId, mode).absoluteURL)
-    )).transformWith {
-      case Failure(NonFatal(_)) =>
-        Future.successful(BadGateway)
-      case Success(response) =>
+    )).map { response =>
         val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-        Future.successful(Ok(uploadSupportingMaterialMultiple(appConfig, response, form, goodsName, mode)))
+        uploadSupportingMaterialMultiple(appConfig, response, form, goodsName, mode)
     }
   }
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     renderView(mode, form)
+      .transformWith {
+              case Failure(NonFatal(_)) =>
+                Future.successful(BadGateway)
+              case Success(html) =>
+                Future.successful(Ok(html))
+      }
   }
 }

@@ -77,7 +77,7 @@ class SupportingMaterialFileListController @Inject()(
   def getFileViews(userAnswers: UserAnswers): Seq[FileView] = {
     val files = userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty[FileAttachment])
     val confidentialityStatuses = userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty[String, Boolean])
-    files.map { file => FileView(file.id, file.name, confidentialityStatuses(file.id)) }
+    files.filter(_.uploaded).map { file => FileView(file.id, file.name, confidentialityStatuses(file.id)) }
   }
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {

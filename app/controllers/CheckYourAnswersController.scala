@@ -112,6 +112,7 @@ class CheckYourAnswersController @Inject()(
     val fileAttachments: Seq[FileAttachment] = answers
       .get(UploadSupportingMaterialMultiplePage)
       .getOrElse(Seq.empty)
+      .filter(_.uploaded)
 
     val keepConfidential = answers
       .get(MakeFileConfidentialPage)
