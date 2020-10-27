@@ -26,8 +26,9 @@ import models.{FileAttachment, Mode, UserAnswers}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import scala.concurrent.ExecutionContext
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+
+import scala.concurrent.{ExecutionContext, Future}
 import viewmodels.FileView
 import views.html.supportingMaterialFileList
 import play.twirl.api.HtmlFormat
@@ -44,6 +45,18 @@ class SupportingMaterialFileListController @Inject()(
 )(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
   lazy val form = formProvider()
   val questionPage = SupportingMaterialFileListPage
+
+  val FormInputField = "add-file-choice"
+  val MaxFilesMessage = "supportingMaterialFileList.error.numberFiles"
+
+  private def hasMaxFiles(userAnswers: UserAnswers): Boolean = {
+    val numberOfFiles = userAnswers
+      .get(UploadSupportingMaterialMultiplePage)
+      .map(_.size)
+      .getOrElse(0)
+
+    numberOfFiles >= 10
+  }
 
   def removeFile(id: String, userAnswers: UserAnswers): UserAnswers = {
     val files = userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty[FileAttachment])
@@ -84,5 +97,16 @@ class SupportingMaterialFileListController @Inject()(
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     // We will not use the prepared form here because we don't want to prepopulate the choice; we will only ensure existing errors are populated
     supportingMaterialFileList(appConfig, form.copy(errors = preparedForm.errors), goodsName, getFileViews(request.userAnswers), mode)
+  }
+
+
+  override def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>
+    val badRequest = (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(renderView(formWithErrors, mode)))
+    form.bindFromRequest().fold(badRequest, { choice =>
+      if (choice && hasMaxFiles(request.userAnswers))
+        badRequest(form.withError(FormInputField, MaxFilesMessage))
+      else
+        submitAnswer(choice, mode)
+    })
   }
 }

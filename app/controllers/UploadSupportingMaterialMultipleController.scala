@@ -54,14 +54,8 @@ class UploadSupportingMaterialMultipleController @Inject()(
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
   private lazy val form = formProvider()
 
-  private def hasMaxFiles(userAnswers: UserAnswers): Boolean = {
-    val numberOfFiles = userAnswers
-      .get(UploadSupportingMaterialMultiplePage)
-      .map(_.size)
-      .getOrElse(0)
-
-    numberOfFiles >= 10
-  }
+  val FormInputField = "file"
+  val UploadErrorMessage = "uploadSupportingMaterialMultiple.error.uploadError"
 
   private def upsertFile(file: FileAttachment, userAnswers: UserAnswers): UserAnswers = {
     val updatedFiles = userAnswers
@@ -104,7 +98,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
     } yield request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
 
     val userAnswers = updatedAnswers.getOrElse(request.userAnswers)
-    val formWithErrors = form.withError("file",  "uploadSupportingMaterialMultiple.error.uploadError")
+    val formWithErrors = form.withError(FormInputField,  UploadErrorMessage)
 
     for {
       _ <- dataCacheConnector.save(userAnswers.cacheMap)

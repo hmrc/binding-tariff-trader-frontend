@@ -297,6 +297,7 @@ supportingMaterialFileList.indications.bullet3 = lists of materials
 supportingMaterialFileList.indications.bullet4 = images of the goods
 supportingMaterialFileList.indications.bullet5 = images of packaging
 supportingMaterialFileList.error.required = Select yes if you want to upload another supporting document
+supportingMaterialFileList.error.numberFiles = Reduce the number of files to a maximum of 10
 supportingMaterialFile.remove.file.text = Remove
 supportingMaterialFile.remove.file.hidden.text = Remove file {0}
 
@@ -313,7 +314,6 @@ uploadSupportingMaterialMultiple.upload.typeOfFiles = pdf, doc, docx, png, jpg, 
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file types can I upload?
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
-uploadSupportingMaterialMultiple.error.numberFiles = Reduce the number of files to a maximum of 10
 uploadSupportingMaterialMultiple.error.uploadError = The selected file could not be uploaded - try again.
 
 commodityCodeBestMatch.title = Have you found a commodity code for the goods? - Manage your Advance Tariff Rulings - GOV.UK
