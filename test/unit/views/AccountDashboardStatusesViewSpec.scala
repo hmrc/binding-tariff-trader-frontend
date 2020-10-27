@@ -30,22 +30,22 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours {
   def applicationView(dashboard: Dashboard): () => HtmlFormat.Appendable = () => account_dashboard_statuses(frontendAppConfig, dashboard)(fakeRequest, messages)
 
   "no previous applications view" must {
-    behave like normalPage(applicationView(Dashboard(emptyPaged, Sort())), "index")()
+    behave like normalPage(applicationView(Dashboard.create(emptyPaged, Sort())), "index")()
   }
 
   "has previous applications view" must {
-    behave like normalPage(applicationView(Dashboard(paged, Sort())), "index")()
+    behave like normalPage(applicationView(Dashboard.create(paged, Sort())), "index")()
   }
 
   "Applications and ruling view" must {
 
     "show message to say no previous applications when there are none supplied" in {
-      val doc = asDocument(applicationView(Dashboard(emptyPaged, Sort()))())
+      val doc = asDocument(applicationView(Dashboard.create(emptyPaged, Sort()))())
       assertContainsText(doc, messages("index.noapplications"))
     }
 
     "show table containing previous applications when there are some" in {
-      val doc = asDocument(applicationView(Dashboard(paged, Sort()))())
+      val doc = asDocument(applicationView(Dashboard.create(paged, Sort()))())
       assert(!doc.html().contains(messages("index.noapplications")))
       assertRenderedById(doc,"applications-rulings-list")
     }
