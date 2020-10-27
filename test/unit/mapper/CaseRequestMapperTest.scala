@@ -67,7 +67,7 @@ class CaseRequestMapperTest extends UnitSpec {
       application.confidentialInformation shouldBe None
       application.otherInformation shouldBe None
       application.reissuedBTIReference shouldBe None
-      application.relatedBTIReference shouldBe None
+      application.relatedBTIReferences shouldBe Nil
       application.knownLegalProceedings shouldBe None
       application.envisagedCommodityCode shouldBe None
     }
