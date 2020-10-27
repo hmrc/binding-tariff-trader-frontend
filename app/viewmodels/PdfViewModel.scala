@@ -42,7 +42,7 @@ case class PdfViewModel(
   def supportingMaterialFileList: String = {
     def confidentialLabel(isConfidential: Boolean): String = if (isConfidential) "- Keep confidential" else ""
 
-    attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential)}" + "\n").mkString("\n")
+    attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential)}").mkString("\n")
   }
 
   def similarAtarCodes: String = similarAtarReferences.mkString("\n")
@@ -69,5 +69,4 @@ object PdfViewModel {
     similarAtarReferences = c.application.relatedBTIReferences,
     reissuedBTIReference = c.application.reissuedBTIReference
   )
-
 }

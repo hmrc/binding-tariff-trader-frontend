@@ -114,7 +114,7 @@ class CheckYourAnswersHelper(
     userAnswers.get(UploadSupportingMaterialMultiplePage).collect {
       case attachments if attachments.nonEmpty =>
         val attachmentLabels = attachments.map { att =>
-          att.name + confidentialLabel(att) + "\n"
+          att.name + confidentialLabel(att)
         }
         filesRow(attachmentLabels)
     }

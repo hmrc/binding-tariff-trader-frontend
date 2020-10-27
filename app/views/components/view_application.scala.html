@@ -211,7 +211,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 } else {
                  <div>
                     <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@pdf.supportingMaterialFileList</dd>
+                    <dd class="cya-answer"><div class="pre-wrap">@{pdf.supportingMaterialFileList}</div></dd>
                   </div>
                 }
 
@@ -264,7 +264,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
             </dl>
             <h3 class="heading-medium">@messages("beforeYouStart.subheading2")</h3>
-            <dl class="govuk-check-your-answers cya-questions-short">
+            <dl class="govuk-check-your-answers cya-questions-short section">
                 @if(pdf.reissuedBTIReference.isEmpty) {
                     <div>
                         <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
@@ -285,7 +285,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 } else {
                 <div>
                     <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@pdf.similarAtarReferences</dd>
+                    <dd class="cya-answer"><div class="pre-wrap">@{pdf.similarAtarCodes}</div></dd>
                 </div>
                 }
             </dl>
