@@ -108,7 +108,7 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
 
     "contain hazardous samples and samples to be returned question when user selects YES to sending samples" in {
       val doc =
-        view(createView(pdfView.copy(sendingSample = true, hazardousSample = Some(true), returnSample = true)))
+        view(createView(pdfView.copy(sendingSample = true, hazardousSample = true, returnSample = true)))
           .getElementById("print-pages")
 
       doc should containText(messages("isSampleHazardous.checkYourAnswersLabel"))
