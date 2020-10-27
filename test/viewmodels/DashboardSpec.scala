@@ -16,13 +16,16 @@
 
 package unit.viewmodels
 
-import models.SortDirection.DESCENDING
-import models.SortField.{CREATED_DATE, REFERENCE}
-import models.{Paged, SearchPagination, Sort, SortDirection, oCase}
+import models.SortDirection.{ASCENDING, DESCENDING}
+import models.SortField.{CREATED_DATE, GOODS_NAME, REFERENCE}
+import models.{Paged, SearchPagination, Sort, oCase}
+import org.mockito.Mockito.{doReturn, when}
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.Request
 import unit.utils.UnitSpec
 import viewmodels.Dashboard
 
-class DashboardSpec extends UnitSpec {
+class DashboardSpec extends UnitSpec with MockitoSugar {
 
   "columnSortUrlFor" when {
     "supplied with a new column to sort by whose default ordering is ascending" should {
@@ -50,10 +53,96 @@ class DashboardSpec extends UnitSpec {
     }
 
     "supplied with a new column to sort by and dashboard current page higher than 1" should {
-      "generate a url containing page param reset to 1" in {
+      "generate a url containing page reset to 1" in {
         val dashboard = Dashboard.create(Paged(Seq(oCase.btiCaseExample), SearchPagination(page = 2), resultCount = 1), Sort(CREATED_DATE))
 
         dashboard.columnSortUrlFor("reference") shouldBe "/applications-and-rulings?page=1&sortBy=reference&order=asc"
+      }
+    }
+
+    "supplied with the current column to sort by and dashboard current page higher than 1" should {
+      "generate a url containing page reset to 1 and reversed order" in {
+        val dashboard = Dashboard.create(Paged(Seq(oCase.btiCaseExample), SearchPagination(page = 2), resultCount = 1), Sort(GOODS_NAME, ASCENDING))
+
+        dashboard.columnSortUrlFor("application.goodName") shouldBe "/applications-and-rulings?page=1&sortBy=application.goodName&order=desc"
+      }
+    }
+
+    "supplied with an invalid column to sort by" should {
+      "throw NoSuchElementException when attempting to create SortField" in {
+        val dashboard = Dashboard.create(Paged(Seq(oCase.btiCaseExample), SearchPagination(page = 1), resultCount = 1), Sort(CREATED_DATE))
+
+        intercept[NoSuchElementException] {
+          dashboard.columnSortUrlFor("referencee")
+        }
+      }
+    }
+  }
+
+  "getSortBy" when {
+    "supplied with a request containing a valid sortBy param value" should {
+      "result in the expected SortField" in {
+        implicit val request = mock[Request[_]]
+
+        when(request.getQueryString(org.mockito.ArgumentMatchers.eq("sortBy"))).thenReturn(Some("application.goodName"))
+
+        Dashboard.getSortBy.get shouldBe GOODS_NAME
+      }
+    }
+
+    "supplied with a request containing an invalid sortBy param value" should {
+      "throw NoSuchElementException when attempting to create SortField" in {
+        implicit val request = mock[Request[_]]
+
+        when(request.getQueryString(org.mockito.ArgumentMatchers.eq("sortBy"))).thenReturn(Some("application.goodsName"))
+
+        intercept[NoSuchElementException] {
+          Dashboard.getSortBy
+        }
+      }
+    }
+
+    "supplied with a request containing no sortBy param" should {
+      "result in None" in {
+        implicit val request = mock[Request[_]]
+
+        when(request.getQueryString(org.mockito.ArgumentMatchers.eq("sortBy"))).thenReturn(None)
+
+        Dashboard.getSortBy shouldBe None
+      }
+    }
+  }
+
+  "getSortDirection" when {
+    "supplied with a request containing a valid order param value" should {
+      "result in the expected SortDirection" in {
+        implicit val request = mock[Request[_]]
+
+        when(request.getQueryString(org.mockito.ArgumentMatchers.eq("order"))).thenReturn(Some("asc"))
+
+        Dashboard.getSortDirection.get shouldBe ASCENDING
+      }
+    }
+
+    "supplied with a request containing an invalid order param value" should {
+      "throw NoSuchElementException when attempting to create SortDirection" in {
+        implicit val request = mock[Request[_]]
+
+        when(request.getQueryString(org.mockito.ArgumentMatchers.eq("order"))).thenReturn(Some("ascending"))
+
+        intercept[NoSuchElementException] {
+          Dashboard.getSortDirection
+        }
+      }
+    }
+
+    "supplied with a request containing no order param" should {
+      "result in None" in {
+        implicit val request = mock[Request[_]]
+
+        when(request.getQueryString(org.mockito.ArgumentMatchers.eq("order"))).thenReturn(None)
+
+        Dashboard.getSortDirection shouldBe None
       }
     }
   }
