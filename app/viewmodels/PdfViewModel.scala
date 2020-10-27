@@ -45,8 +45,8 @@ case class PdfViewModel(
     attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential)}" + "\n").mkString("\n")
   }
 
-  def similarAtarCodes: String = similarAtarReferences.map(_ + "\n").mkString("\n")
-
+  def similarAtarCodes: String = similarAtarReferences.mkString("\n")
+  
 }
 
 object PdfViewModel {
