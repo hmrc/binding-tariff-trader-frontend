@@ -75,9 +75,11 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
     when(btiApp.confidentialInformation).thenReturn(Some("goods description"))
     when(btiApp.envisagedCommodityCode).thenReturn(Some("goods description"))
     when(btiApp.knownLegalProceedings).thenReturn(Some("goods description"))
+    when(btiApp.relatedBTIReferences).thenReturn(List("similar goods"))
     when(btiApp.sampleToBeProvided).thenReturn(true)
     when(btiApp.sampleIsHazardous).thenReturn(Some(true))
     when(btiApp.sampleToBeReturned).thenReturn(true)
+    when(btiApp.reissuedBTIReference).thenReturn(Some("reissuedBTIReference"))
 
     when(mapper.map(any[UserAnswers])).thenReturn(newCaseReq)
   }
