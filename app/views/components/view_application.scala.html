@@ -130,6 +130,12 @@
                         }
 
                     </div>
+
+
+                    @if(appConfig.samplesToggle){
+                    <!--Remove this-->
+                    } else {
+
                     @if(pdf.sendingSample) {
                     <div class="column-one-third">
                         <div class=@if(pdf.hazardousSample){"about-this-result-box-do-not-send about-this-result-box"} else {"about-this-result-box"}>
@@ -161,6 +167,7 @@
                         </div>
                     </div>
                     }
+                }
                 </div>
 
                 <div class="footer-info footer-page-break">
@@ -223,24 +230,28 @@
                   </div>
                 }
 
-                @if(pdf.sendingSample) {
-                    <div>
-                        <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                    </div>
-                    <div>
-                        <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@{if(pdf.hazardousSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                    </div>
-                    <div>
-                        <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                    </div>
+                @if(appConfig.samplesToggle){
+                <!--Remove this-->
                 } else {
-                    <div>
-                        <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@messages("site.no")</dd>
-                    </div>
+                    @if(pdf.sendingSample) {
+                        <div>
+                            <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                        </div>
+                        <div>
+                            <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer">@{if(pdf.hazardousSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                        </div>
+                        <div>
+                            <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                        </div>
+                    } else {
+                        <div>
+                            <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer">@messages("site.no")</dd>
+                        </div>
+                    }
                 }
 
                 @if(pdf.foundCommodityCode.isDefined) {
