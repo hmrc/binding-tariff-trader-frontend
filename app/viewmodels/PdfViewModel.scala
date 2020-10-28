@@ -18,7 +18,7 @@ package viewmodels
 
 import java.time.Instant
 
-import models.{Attachment, Case, Contact, EORIDetails}
+import models.{Case, Contact, EORIDetails}
 
 case class PdfViewModel(
                          eori: String,
@@ -32,14 +32,26 @@ case class PdfViewModel(
                          sendingSample: Boolean,
                          hazardousSample: Boolean,
                          returnSample: Boolean,
-                         attachment: Seq[Attachment] = Seq.empty,
+                         attachments: Seq[FileView] = Seq.empty,
                          foundCommodityCode: Option[String],
-                         legalProblems: Option[String]
-                       )
+                         legalProblems: Option[String],
+                         similarAtarReferences: List[String],
+                         reissuedBTIReference: Option[String]
+                       ) {
 
-object PdfViewModel{
+  def supportingMaterialFileList: String = {
+    def confidentialLabel(isConfidential: Boolean): String = if (isConfidential) "- Keep confidential" else ""
 
-  def apply(c: Case): PdfViewModel = new PdfViewModel(
+    attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential)}").mkString("\n")
+  }
+
+  def similarAtarCodes: String = similarAtarReferences.mkString("\n")
+  
+}
+
+object PdfViewModel {
+
+  def apply(c: Case, fileView: Seq[FileView]): PdfViewModel = new PdfViewModel(
     eori = c.application.holder.eori,
     reference = c.reference,
     accountDetails = c.application.holder,
@@ -51,10 +63,10 @@ object PdfViewModel{
     sendingSample = c.application.sampleToBeProvided,
     hazardousSample = c.application.sampleIsHazardous.getOrElse(false),
     returnSample = c.application.sampleToBeReturned,
-    attachment = c.attachments.seq,
+    attachments = fileView,
     foundCommodityCode = c.application.envisagedCommodityCode,
-    legalProblems = c.application.knownLegalProceedings
+    legalProblems = c.application.knownLegalProceedings,
+    similarAtarReferences = c.application.relatedBTIReferences,
+    reissuedBTIReference = c.application.reissuedBTIReference
   )
-
-
 }
