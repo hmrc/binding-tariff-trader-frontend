@@ -21,7 +21,7 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import javax.inject.Inject
-import models.{FileAttachment, Mode}
+import models.{FileAttachment, Mode, UploadError, UserAnswers}
 import navigation.Navigator
 import pages._
 import play.api.i18n.I18nSupport
@@ -30,14 +30,15 @@ import service.FileService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
-import scala.concurrent.{ ExecutionContext, Future }
-import models.UserAnswers
+import scala.concurrent.{ExecutionContext, Future}
 import models.requests.DataRequest
+
 import scala.util.Failure
 import scala.util.Success
 import scala.util.control.NonFatal
 import models.requests.FileStoreInitiateRequest
 import java.{util => ju}
+
 import play.api.data.Form
 import play.api.Logging
 
@@ -55,7 +56,6 @@ class UploadSupportingMaterialMultipleController @Inject()(
   private lazy val form = formProvider()
 
   val FormInputField = "file"
-  val UploadErrorMessage = "uploadSupportingMaterialMultiple.error.uploadError"
 
   private def upsertFile(file: FileAttachment, userAnswers: UserAnswers): UserAnswers = {
     val updatedFiles = userAnswers
@@ -97,8 +97,9 @@ class UploadSupportingMaterialMultipleController @Inject()(
       updatedFiles = files.filterNot(_.id == id)
     } yield request.userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
 
+    val uploadError = UploadError.fromErrorCode(errorCode)
     val userAnswers = updatedAnswers.getOrElse(request.userAnswers)
-    val formWithErrors = form.withError(FormInputField,  UploadErrorMessage)
+    val formWithErrors = form.withError(FormInputField,  uploadError.errorMessageKey)
 
     for {
       _ <- dataCacheConnector.save(userAnswers.cacheMap)

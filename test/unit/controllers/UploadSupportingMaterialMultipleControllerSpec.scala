@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, UpscanFormTemplate}
-import models.{FileAttachment, NormalMode}
+import models.{FileAttachment, FileTooLarge, FileTooSmall, NoFileSelected, NormalMode, Other}
 import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
@@ -31,6 +31,7 @@ import pages.{ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
 import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
+import play.api.mvc.request.RequestTarget
 import play.api.test.Helpers._
 import service.FileService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -117,7 +118,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq(uploadedFile)))
     }
 
-    "remove metadata entry for file when file upload fails" in {
+    "remove metadata entry for file when file upload fails with an unknown error" in {
       val fileAttachmentsJson = Json.toJson(Seq(file))
       val validData = Map(
         ProvideGoodsNamePage.toString -> JsString(goodsName),
@@ -132,8 +133,70 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) should include("error-message-file-input")
+      contentAsString(result) should include(messages(Other("").errorMessageKey))
       await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq()))
     }
+
+    "remove metadata entry for file when file upload fails because the file is too small" in {
+      val upscanRequest = request.withTarget(RequestTarget("", "/", Map("errorCode" -> Seq("EntityTooSmall"))))
+      val fileAttachmentsJson = Json.toJson(Seq(file))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
+
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+
+      val result = controller(getRelevantData).onFileUploadError(file.id, NormalMode)(upscanRequest)
+
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) should include("error-message-file-input")
+      contentAsString(result) should include(messages(FileTooSmall.errorMessageKey))
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq()))
+    }
+
+    "remove metadata entry for file when file upload fails because the file is too large" in {
+      val upscanRequest = request.withTarget(RequestTarget("", "/", Map("errorCode" -> Seq("EntityTooLarge"))))
+      val fileAttachmentsJson = Json.toJson(Seq(file))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
+
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+
+      val result = controller(getRelevantData).onFileUploadError(file.id, NormalMode)(upscanRequest)
+
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) should include("error-message-file-input")
+      contentAsString(result) should include(messages(FileTooLarge.errorMessageKey))
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq()))
+    }
+
+    "remove metadata entry for file when file upload fails because a file has not been selected" in {
+      val upscanRequest = request.withTarget(RequestTarget("", "/", Map("errorCode" -> Seq("NoSuchUpload"))))
+      val fileAttachmentsJson = Json.toJson(Seq(file))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
+
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+
+      val result = controller(getRelevantData).onFileUploadError(file.id, NormalMode)(upscanRequest)
+
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) should include("error-message-file-input")
+      contentAsString(result) should include(messages(NoFileSelected.errorMessageKey))
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq()))
+    }
+
 
     "update file metadata when a file is selected in the file input" in {
       val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
