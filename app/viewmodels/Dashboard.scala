@@ -76,10 +76,10 @@ object Dashboard {
     new Dashboard(pageData, sort)
 
   def getSortBy(implicit request: Request[_]): Option[SortField] =
-    request.getQueryString("sortBy").map(s => SortField.withName(s))
+    request.getQueryString(sortFieldParam).map(s => SortField.withName(s))
 
   def getSortDirection(implicit request: Request[_]): Option[SortDirection] =
-    request.getQueryString("order").map(s => SortDirection.withName(s))
+    request.getQueryString(orderParam).map(s => SortDirection.withName(s))
 
 }
 
