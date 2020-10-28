@@ -32,7 +32,7 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
       "generate a url containing expected sortBy and (asc) order query params" in {
         val dashboard = Dashboard.create(Paged(Seq(oCase.btiCaseExample), SearchPagination(page = 1), resultCount = 1), Sort(CREATED_DATE))
 
-        dashboard.columnSortUrlFor("reference") shouldBe "/applications-and-rulings?page=1&sortBy=reference&order=asc"
+        dashboard.columnSortUrlFor("reference") shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=reference&order=asc"
       }
     }
 
@@ -40,7 +40,7 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
       "generate a url containing expected sortBy and (desc) order query params" in {
         val dashboard = Dashboard.create(Paged(Seq(oCase.btiCaseExample), SearchPagination(page = 1), resultCount = 1), Sort(REFERENCE))
 
-        dashboard.columnSortUrlFor("created-date") shouldBe "/applications-and-rulings?page=1&sortBy=created-date&order=desc"
+        dashboard.columnSortUrlFor("created-date") shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=created-date&order=desc"
       }
     }
 
@@ -48,7 +48,7 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
       "generate a url containing expected sortBy and reversed order query params" in {
         val dashboard = Dashboard.create(Paged(Seq(oCase.btiCaseExample), SearchPagination(page = 1), resultCount = 1), Sort(REFERENCE, DESCENDING))
 
-        dashboard.columnSortUrlFor("reference") shouldBe "/applications-and-rulings?page=1&sortBy=reference&order=asc"
+        dashboard.columnSortUrlFor("reference") shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=reference&order=asc"
       }
     }
 
@@ -56,7 +56,7 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
       "generate a url containing page reset to 1" in {
         val dashboard = Dashboard.create(Paged(Seq(oCase.btiCaseExample), SearchPagination(page = 2), resultCount = 1), Sort(CREATED_DATE))
 
-        dashboard.columnSortUrlFor("reference") shouldBe "/applications-and-rulings?page=1&sortBy=reference&order=asc"
+        dashboard.columnSortUrlFor("reference") shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=reference&order=asc"
       }
     }
 
@@ -64,7 +64,7 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
       "generate a url containing page reset to 1 and reversed order" in {
         val dashboard = Dashboard.create(Paged(Seq(oCase.btiCaseExample), SearchPagination(page = 2), resultCount = 1), Sort(GOODS_NAME, ASCENDING))
 
-        dashboard.columnSortUrlFor("application.goodName") shouldBe "/applications-and-rulings?page=1&sortBy=application.goodName&order=desc"
+        dashboard.columnSortUrlFor("application.goodName") shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=application.goodName&order=desc"
       }
     }
 
