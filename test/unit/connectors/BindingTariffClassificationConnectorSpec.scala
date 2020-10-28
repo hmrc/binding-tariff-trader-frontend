@@ -169,7 +169,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           Set(CaseStatus.NEW,
             CaseStatus.OPEN),
           SearchPagination(2),
-          Sort(SortField.CREATED_DATE)
+          Sort()
         )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
       ) shouldBe Paged.empty[Case]
 
@@ -195,7 +195,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           Set(CaseStatus.NEW,
             CaseStatus.OPEN),
           SearchPagination(2),
-          Sort(SortField.CREATED_DATE)
+          Sort()
         )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
       ) shouldBe Paged(Seq(oCase.btiCaseExample))
 
@@ -220,7 +220,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
             "eori1234567",
             Set(CaseStatus.NEW),
             NoPagination(),
-            Sort(SortField.CREATED_DATE)
+            Sort()
           )(withHeaderCarrier("X-Api-Token", appConfig.apiToken)))
       }
 
