@@ -16,4 +16,4 @@ addConfidentialInformation.heading = A ydych am ychwanegu unrhyw wybodaeth gyfri
 addConfidentialInformation.caption = Ynglŷn â’r nwyddau
 addConfidentialInformation.p1 = Ni fydd yr wybodaeth hon yn ymddangos ar wefan y Dyfarniadau Tariffau Uwch.
 addConfidentialInformation.checkYourAnswersLabel = Ychwanegu gwybodaeth gyfrinachol?
-addConfidentialInformation.error.required = Dewiswch ‘Iawn’ os ydych am ychwanegu gwybodaeth gyfrinachol
+addConfidentialInformation.error.required = Dewiswch Iawn os ydych am ychwanegu gwybodaeth gyfrinachol
