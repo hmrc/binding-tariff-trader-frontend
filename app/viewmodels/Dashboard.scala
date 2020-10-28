@@ -23,7 +23,7 @@ import models.SortDirection.SortDirection
 import models.SortField.{CREATED_DATE, SortField}
 import models.{SortField, _}
 import play.api.mvc.Request
-import viewmodels.Dashboard.{baseUrl, orderParam, pageParam, sortFieldParam}
+import viewmodels.Dashboard.{ENCODING, baseUrl, orderParam, pageParam, sortFieldParam}
 
 case class Dashboard(pageData: Paged[Case], sort: Sort) {
 
@@ -37,7 +37,7 @@ case class Dashboard(pageData: Paged[Case], sort: Sort) {
 
   private def toQueryString: String = {
     val query = toMap.map { case (k,v) =>
-      encode(k, "UTF8") + "=" + encode(v, "UTF8")
+      encode(k, ENCODING) + "=" + encode(v, ENCODING)
     }.mkString("&")
 
     if(query.length > 0) "?" + query else ""
@@ -45,9 +45,9 @@ case class Dashboard(pageData: Paged[Case], sort: Sort) {
 
   private def toMap: Map[String, String] = {
     Map(
-      pageParam -> encode(pageData.pageIndex.toString, "utf-8"),
-      sortFieldParam -> encode(sort.field.toString, "utf-8"),
-      orderParam -> encode(sort.direction.toString, "utf-8")
+      pageParam -> encode(pageData.pageIndex.toString, ENCODING),
+      sortFieldParam -> encode(sort.field.toString, ENCODING),
+      orderParam -> encode(sort.direction.toString, ENCODING)
     )
   }
 
@@ -71,6 +71,8 @@ object Dashboard {
   private val pageParam = "page"
   private val sortFieldParam = "sortBy"
   private val orderParam = "order"
+
+  private val ENCODING = "UTF-8"
 
   def getSortBy(implicit request: Request[_]): Option[SortField] =
     request.getQueryString(sortFieldParam).map(s => SortField.withName(s))
