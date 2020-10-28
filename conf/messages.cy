@@ -9,7 +9,7 @@ addConfidentialInformation.heading = A ydych am ychwanegu unrhyw wybodaeth gyfri
 addConfidentialInformation.caption = Ynglŷn â’r nwyddau
 addConfidentialInformation.p1 = Ni fydd yr wybodaeth hon yn ymddangos ar wefan y Dyfarniadau Tariffau Uwch.
 addConfidentialInformation.checkYourAnswersLabel = Ychwanegu gwybodaeth gyfrinachol?
-addConfidentialInformation.error.required = Dewiswch ‘Iawn’ os ydych am ychwanegu gwybodaeth gyfrinachol
+addConfidentialInformation.error.required = Dewiswch Iawn os ydych am ychwanegu gwybodaeth gyfrinachol
 
 commodityCodeDigits.title = Rhowch god nwyddau ar gyfer y nwyddau – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 commodityCodeDigits.heading = Rhowch god nwyddau ar gyfer y {0}
