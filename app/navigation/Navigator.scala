@@ -16,6 +16,7 @@
 
 package navigation
 
+import config.FrontendAppConfig
 import controllers.routes
 import javax.inject.{Inject, Singleton}
 import models._
@@ -23,7 +24,7 @@ import pages._
 import play.api.mvc.Call
 
 @Singleton
-class Navigator @Inject()() {
+class Navigator @Inject()(configuration: FrontendAppConfig) {
 
   private def normalPage(
     page: Page,
@@ -120,7 +121,8 @@ class Navigator @Inject()() {
     // Do you want to upload any supporting documents?
     loopingJourney(
       journey = Journey.supportingDocuments,
-      continuingTo = AreYouSendingSamplesPage,
+      // TODO: This is the next page to go to from supporting documents remove toggle when not needed
+      continuingTo = if(configuration.samplesToggle) CommodityCodeBestMatchPage else AreYouSendingSamplesPage,
       mode = NormalMode
     ),
 

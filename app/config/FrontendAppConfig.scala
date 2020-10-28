@@ -93,4 +93,5 @@ class FrontendAppConfig @Inject()(
   def defaultLang: Lang = English.lang
 
   lazy val host: String = loadConfig("host")
+  lazy val samplesToggle = runModeConfiguration.getOptional[Boolean]("toggle.samples").getOrElse(false)
 }
