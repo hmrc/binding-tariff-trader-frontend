@@ -85,7 +85,7 @@ class IndexController @Inject()(
       case Some(eori: String) =>
         val sort = Sort(sortBy.getOrElse(Dashboard.defaultSortField), order)
         service.getCases(eori, applicationStatuses, SearchPagination(page), sort) flatMap { pagedResult =>
-          successful(Ok(account_dashboard_statuses(appConfig, Dashboard.create(pagedResult, sort))))
+          successful(Ok(account_dashboard_statuses(appConfig, Dashboard(pagedResult, sort))))
         }
 
       case None =>

@@ -72,9 +72,6 @@ object Dashboard {
   private val sortFieldParam = "sortBy"
   private val orderParam = "order"
 
-  def create(pageData: Paged[Case], sort: Sort): Dashboard =
-    new Dashboard(pageData, sort)
-
   def getSortBy(implicit request: Request[_]): Option[SortField] =
     request.getQueryString(sortFieldParam).map(s => SortField.withName(s))
 
