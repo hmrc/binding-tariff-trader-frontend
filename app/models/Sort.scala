@@ -66,7 +66,6 @@ object SortDirection extends Enumeration {
   }
 }
 
-//TODO: BT: are we tying column name in the front end to SortField name in the model and in turn to the field name in the backend?
 object SortField extends Enumeration {
 
   type SortField = Value
@@ -74,7 +73,7 @@ object SortField extends Enumeration {
   val CREATED_DATE = Value("created-date")
   val DECISION_START_DATE = Value("decision-start-date")
   val APPLICATION_STATUS = Value("application.status")
-  val GOODS_NAME = Value("application.goodName")        //TODO: BT: does the name need to match the path and name in Application?
+  val GOODS_NAME = Value("application.goodName")
 
   val defaultDirections = Map(
     REFERENCE -> ASCENDING,

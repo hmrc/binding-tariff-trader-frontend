@@ -19,7 +19,7 @@ package viewmodels
 import java.net.URLEncoder.encode
 
 import controllers.routes
-import models.SortDirection.{ASCENDING, SortDirection}
+import models.SortDirection.SortDirection
 import models.SortField.{CREATED_DATE, SortField}
 import models.{SortField, _}
 import play.api.mvc.Request

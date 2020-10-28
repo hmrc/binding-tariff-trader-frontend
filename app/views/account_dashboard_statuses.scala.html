@@ -16,12 +16,7 @@
 
 @import utils.Dates
 @import config.FrontendAppConfig
-@import java.time.Instant
-@import java.time.temporal.ChronoUnit
 @import components.pagination
-@import components.case_status_tags
-@import SortField.CREATED_DATE
-
 @import viewmodels.Dashboard
 @(appConfig: FrontendAppConfig, dashboard: Dashboard)(implicit request: Request[_], messages: Messages)
 
@@ -60,10 +55,10 @@ captionMsg = Some(messages("application.dashboard.status.title")))
  <table id="applications-rulings-list-table">
   <thead>
   <tr>
-   @sortableColumnHeading("case.tabs.applications.table.reference", "reference")
-   @sortableColumnHeading("case.tabs.applications.table.itemName", "application.goodName")
-   @sortableColumnHeading("case.tabs.applications.table.dateSubmitted", "created-date")
-   @sortableColumnHeading("case.tabs.applications.table.status", "application.status")
+   @sortableColumnHeading("case.tabs.applications.table.reference", SortField.REFERENCE.toString)
+   @sortableColumnHeading("case.tabs.applications.table.itemName", SortField.GOODS_NAME.toString)
+   @sortableColumnHeading("case.tabs.applications.table.dateSubmitted", SortField.CREATED_DATE.toString)
+   @sortableColumnHeading("case.tabs.applications.table.status", SortField.APPLICATION_STATUS.toString)
    <th scope="col"><span class="visuallyhidden">@messages("case.application.ruling.table.download")</span></th>
   </tr>
   </thead>
