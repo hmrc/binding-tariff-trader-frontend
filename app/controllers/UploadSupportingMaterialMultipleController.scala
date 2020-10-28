@@ -58,10 +58,13 @@ class UploadSupportingMaterialMultipleController @Inject()(
   val FormInputField = "file"
 
   private def upsertFile(file: FileAttachment, userAnswers: UserAnswers): UserAnswers = {
+    val confidentialityStatuses = userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty[String, Boolean])
     val updatedFiles = userAnswers
       .get(UploadSupportingMaterialMultiplePage)
       .map { files =>
-        val uploadedFiles = files.filter(_.uploaded)
+        val uploadedFiles = files.filter(file => {
+          file.uploaded && confidentialityStatuses.keySet.contains(file.id)
+        })
         val index = uploadedFiles.indexWhere(_.id == file.id)
         if (index >= 0) {
           uploadedFiles.updated(index, file)
