@@ -55,11 +55,9 @@ class CheckYourAnswersController @Inject()(
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
-  private implicit val lang: Lang = appConfig.defaultLang
-
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-    val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountriesById, messagesApi, lang)
+    val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountriesById)
 
     val sections = Seq(
       AnswerSection(

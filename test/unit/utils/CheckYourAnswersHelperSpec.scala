@@ -33,10 +33,8 @@ class CheckYourAnswersHelperSpec extends SpecBase {
   private val userAnswers = mock[UserAnswers]
   private val checkHelper = new CheckYourAnswersHelper(
     userAnswers,
-    countriesService.getAllCountriesById,
-    messagesApi,
-    lang
-  )
+    countriesService.getAllCountriesById
+  ) (messages)
   private val fileAttachment = FileAttachment("id", "fileName", "mime", 1)
 
   "CheckYourAnswersHelper" when {

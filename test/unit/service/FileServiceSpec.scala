@@ -167,7 +167,7 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
     "Reject invalid file type" in {
       val file = createFileOfType("invalid", "audio/mpeg")
-      service.validate(file) shouldBe Left(messagesApi("uploadWrittenAuthorisation.error.fileType"))
+      service.validate(file) shouldBe Left(messages("uploadWrittenAuthorisation.error.fileType"))
     }
 
   }
@@ -183,7 +183,7 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
     "Reject large file" in {
       val file = createFileOfSize(fileSizeLarge)
-      service.validate(file) shouldBe Left(messagesApi("uploadWrittenAuthorisation.error.size"))
+      service.validate(file) shouldBe Left(messages("uploadWrittenAuthorisation.error.size"))
     }
   }
 

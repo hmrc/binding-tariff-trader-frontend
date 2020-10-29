@@ -20,15 +20,16 @@ import controllers.routes
 import models.requests.DataRequest
 import models.{CheckMode, Country, UserAnswers}
 import pages._
-import play.api.i18n.{Lang, MessagesApi}
+import play.api.i18n.Messages
 import viewmodels.AnswerRow
 import models.FileAttachment
 
 class CheckYourAnswersHelper(
                               userAnswers: UserAnswers,
-                              countries: Map[String, Country],
-                              messagesApi: MessagesApi,
-                              implicit val lang: Lang
+                              countries: Map[String, Country]
+                            )
+                            (
+                              implicit messages: Messages
                             ) {
 
   def provideGoodsName: Option[AnswerRow] = userAnswers.get(ProvideGoodsNamePage) map {
@@ -132,7 +133,7 @@ class CheckYourAnswersHelper(
       regAddress.addressLine1,
       regAddress.townOrCity,
       regAddress.postcode.getOrElse(""),
-      messagesApi(getCountryName(regAddress.country).mkString)
+      messages(getCountryName(regAddress.country).mkString)
     ).filterNot(_.isEmpty).mkString("\n")
 
     AnswerRow(
@@ -169,9 +170,9 @@ class CheckYourAnswersHelper(
   def registeredAddressForEori(implicit request: DataRequest[_]): Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map { x =>
 
     val fields = if (request.eoriNumber.isDefined) {
-      Seq(x.businessName, x.addressLine1, x.townOrCity, x.postcode.getOrElse(""), messagesApi(getCountryName(x.country).mkString))
+      Seq(x.businessName, x.addressLine1, x.townOrCity, x.postcode.getOrElse(""), messages(getCountryName(x.country).mkString))
     } else {
-      Seq(x.eori, x.businessName, x.addressLine1, x.townOrCity, x.postcode.getOrElse(""), messagesApi(getCountryName(x.country).mkString))
+      Seq(x.eori, x.businessName, x.addressLine1, x.townOrCity, x.postcode.getOrElse(""), messages(getCountryName(x.country).mkString))
     }
     AnswerRow("registeredAddressForEori.checkYourAnswersLabel", fields, false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
   }
