@@ -27,7 +27,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import pages.{ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
+import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
 import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
@@ -214,7 +214,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val fileAttachmentsJson = Json.toJson(Seq(uploadedFile))
       val validData = Map(
         ProvideGoodsNamePage.toString -> JsString(goodsName),
-        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson,
+        MakeFileConfidentialPage.toString -> Json.toJson(Map(uploadedFile.id -> true))
       )
 
       val differentFile = file.copy(id = "fileId", name = "MyFile2.docx")
@@ -232,6 +233,23 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val validData = Map(
         ProvideGoodsNamePage.toString -> JsString(goodsName),
         UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
+
+      val differentFile = file.copy(id = "fileId", name = "MyFile2.docx")
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val jsonRequest = request.withBody(differentFile)
+      val result = controller(getRelevantData).onFileSelected()(jsonRequest)
+
+      status(result) shouldBe OK
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq(differentFile)))
+    }
+
+    "remove stale metadata entries where the user never chose confidentiality status" in {
+      val fileAttachmentsJson = Json.toJson(Seq(uploadedFile))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson,
       )
 
       val differentFile = file.copy(id = "fileId", name = "MyFile2.docx")
