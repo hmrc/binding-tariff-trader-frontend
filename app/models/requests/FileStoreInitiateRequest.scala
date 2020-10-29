@@ -23,7 +23,8 @@ case class FileStoreInitiateRequest(
   successRedirect: Option[String] = None,
   errorRedirect: Option[String] = None,
   expectedContentType: Option[String] = None,
-  publishable: Boolean = false
+  publishable: Boolean = false,
+  maxFileSize: Int
 )
 
 object FileStoreInitiateRequest {
