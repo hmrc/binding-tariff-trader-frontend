@@ -39,6 +39,16 @@ addConfidentialInformation.p1 = Ni fydd yr wybodaeth hon yn ymddangos ar wefan y
 addConfidentialInformation.checkYourAnswersLabel = Ychwanegu gwybodaeth gyfrinachol?
 addConfidentialInformation.error.required = Dewiswch Iawn os ydych am ychwanegu gwybodaeth gyfrinachol
 
+commodityCodeDigits.title = Rhowch god nwyddau ar gyfer y nwyddau – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+commodityCodeDigits.heading = Rhowch god nwyddau ar gyfer y {0}
+commodityCodeDigits.bodyText = Gall nodi cod nwyddau, hyd yn oed nodi’r 2 rif cyntaf yn unig, gyflymu prosesu’ch cais.
+commodityCodeDigits.caption = Ynglŷn â’r nwyddau
+commodityCodeDigits.checkYourAnswersLabel = Cod nwyddau
+commodityCodeDigits.error.required = Nodwch o leiaf 2 ddigid cod nwyddau
+commodityCodeDigits.error.maxLength = Mae’n rhaid i’r cod nwyddau fod yn 25 rhif neu lai
+commodityCodeDigits.error.minLength = Mae’n rhaid i’r cod nwyddau fod yn 2 rif neu fwy
+commodityCodeDigits.error.type = Mae’n rhaid i’r codau nwyddau gynnwys rhifau yn unig
+
 uploadSupportingMaterialMultiple.title = Uwchlwytho dogfennau ategol ar gyfer y nwyddau - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
 uploadSupportingMaterialMultiple.heading = Uwchlwytho dogfennau ategol ar gyfer {0}
 uploadSupportingMaterialMultiple.caption = Ynglŷn â’r nwyddau
@@ -54,7 +64,6 @@ uploadSupportingMaterialMultiple.jsDisabled.title = Rhybudd JavaScript
 uploadSupportingMaterialMultiple.jsDisabled.label = Yn anffodus mae’r swyddogaeth hon ond ar gael i ddefnyddwyr sydd â JavaScript wedi’i alluogi
 uploadSupportingMaterialMultiple.error.numberFiles = Gostyngwch nifer y ffeiliau i 10 ar y mwyaf
 addConfidentialInformation.error.required = Dewiswch Iawn os ydych am ychwanegu gwybodaeth gyfrinachol
-
 
 makeFileConfidential.title = A ydych am nodi’r ffeil yn gyfrinachol? - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
 makeFileConfidential.heading = A ydych am nodi’r ffeil yn gyfrinachol?
@@ -73,7 +82,6 @@ addSupportingDocuments.indications.bullet3 = rhestri o ddeunyddiau
 addSupportingDocuments.indications.bullet4 = delweddau o’r nwyddau
 addSupportingDocuments.indications.bullet5 = delweddau o becynnau
 addSupportingDocuments.error.required = Dewiswch Iawn os oes gennych ffeiliau i’w huwchlwytho
-
 
 addConfidentialInformation.error.required = Dewiswch Iawn os ydych am ychwanegu gwybodaeth gyfrinachol
 
