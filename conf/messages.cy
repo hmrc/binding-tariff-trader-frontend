@@ -38,3 +38,4 @@ similarItemCommodityCode.noNotAware = Na
 similarItemCommodityCode.checkYourAnswersLabel = Nwyddau tebyg?
 similarItemCommodityCode.error.required = Dewiswch Iawn os ydych yn gwybod am nwyddau tebyg sydd wedi cael dyfarniad
 similarItemCommodityCode.bodyText = Mae dyfarniad sy’n bodoli eisoes ar gyfer nwyddau sy’n debyg yn gallu helpu i ddarparu dyfarniad, hyd yn oed os cafodd y dyfarniad ei wneud mewn gwlad arall.
+
