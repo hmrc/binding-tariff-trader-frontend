@@ -21,8 +21,7 @@
 @(appConfig: FrontendAppConfig, pdf: PdfViewModel, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
-val protocol = if(req.secure) "https" else "http"
-s"$protocol://${req.host}${routes.Assets.versioned(path)}"
+    s"${appConfig.host}${routes.Assets.versioned(path)}"
 }
 
 
@@ -212,6 +211,17 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     <dd class="cya-answer">@messages("site.no")</dd>
                 </div>
                 }
+                @if(pdf.attachments.isEmpty) {
+                <div>
+                    <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer">@messages("site.no")</dd>
+                </div>
+                } else {
+                 <div>
+                    <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer"><div class="pre-wrap">@{pdf.supportingMaterialFileList}</div></dd>
+                  </div>
+                }
 
                 @if(pdf.sendingSample) {
                     <div>
@@ -259,11 +269,30 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
             </dl>
             <h3 class="heading-medium">@messages("beforeYouStart.subheading2")</h3>
-            <dl class="govuk-check-your-answers cya-questions-short">
+            <dl class="govuk-check-your-answers cya-questions-short section">
+                @if(pdf.reissuedBTIReference.isEmpty) {
+                    <div>
+                        <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
+                        <dd class="cya-answer">@messages("site.no")</dd>
+                    </div>
+                } else {
+                    <div>
+                        <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
+                        <dd class="cya-answer">@pdf.reissuedBTIReference</dd>
+                    </div>
+                }
+
+                @if(pdf.similarAtarReferences.isEmpty) {
                 <div>
-                    <dt class="cya-question">@messages("previousBTIRuling.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                    <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer">@messages("site.no")</dd>
                 </div>
+                } else {
+                <div>
+                    <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer"><div class="pre-wrap">@{pdf.similarAtarCodes}</div></dd>
+                </div>
+                }
             </dl>
             <div class="footer-info footer-page-break">
                 <span class="footer-page-no"></span>
