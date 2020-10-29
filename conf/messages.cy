@@ -29,3 +29,12 @@ addSupportingDocuments.indications.bullet3 = rhestri o ddeunyddiau
 addSupportingDocuments.indications.bullet4 = delweddau o’r nwyddau
 addSupportingDocuments.indications.bullet5 = delweddau o becynnau
 addSupportingDocuments.error.required = Dewiswch Iawn os oes gennych ffeiliau i’w huwchlwytho
+
+similarItemCommodityCode.title = A oes nwyddau tebyg sydd eisoes wedi cael dyfarniad? – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+similarItemCommodityCode.heading = A oes nwyddau tebyg sydd eisoes wedi cael dyfarniad?
+similarItemCommodityCode.caption = Ynglŷn â dyfarniadau eraill
+similarItemCommodityCode.yesAwareSimilarCode = Iawn
+similarItemCommodityCode.noNotAware = Na
+similarItemCommodityCode.checkYourAnswersLabel = Nwyddau tebyg?
+similarItemCommodityCode.error.required = Dewiswch Iawn os ydych yn gwybod am nwyddau tebyg sydd wedi cael dyfarniad
+similarItemCommodityCode.bodyText = Mae dyfarniad sy’n bodoli eisoes ar gyfer nwyddau sy’n debyg yn gallu helpu i ddarparu dyfarniad, hyd yn oed os cafodd y dyfarniad ei wneud mewn gwlad arall.
