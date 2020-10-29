@@ -16,13 +16,15 @@
 
 package mapper
 
+import com.google.inject.Inject
+import config.FrontendAppConfig
 import javax.inject.Singleton
 import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import pages._
 
 @Singleton
-class CaseRequestMapper {
+class CaseRequestMapper @Inject()(appConfig: FrontendAppConfig) {
 
   private def throwError(field: String) = throw new IllegalStateException(s"Missing User Session Data: $field")
 
@@ -36,7 +38,10 @@ class CaseRequestMapper {
     val legalChallengeDetails: Option[String] = answers.get(LegalChallengeDetailsPage)
     val commodityCodeDigits: Option[String] = answers.get(CommodityCodeDigitsPage)
 
-    val sampleProvided: Boolean = answers.get(AreYouSendingSamplesPage).getOrElse(throwError("when to send a sample"))
+    val sampleProvided: Boolean = answers.get(AreYouSendingSamplesPage)
+      .getOrElse(
+        if (appConfig.samplesToggle) false else throwError("when to send a sample")
+      )
     val sampleHazardous: Option[Boolean] = answers.get(IsSampleHazardousPage)
     val returnSample: Boolean = answers.get(ReturnSamplesPage).getOrElse(false)
 
