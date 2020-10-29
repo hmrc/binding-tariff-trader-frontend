@@ -21,8 +21,7 @@
 @(appConfig: FrontendAppConfig, pdf: PdfViewModel, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
-val protocol = if(req.secure) "https" else "http"
-s"$protocol://${req.host}${routes.Assets.versioned(path)}"
+    s"${appConfig.host}${routes.Assets.versioned(path)}"
 }
 
 
