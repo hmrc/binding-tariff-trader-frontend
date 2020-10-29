@@ -74,3 +74,14 @@ addSupportingDocuments.indications.bullet4 = delweddau o’r nwyddau
 addSupportingDocuments.indications.bullet5 = delweddau o becynnau
 addSupportingDocuments.error.required = Dewiswch Iawn os oes gennych ffeiliau i’w huwchlwytho
 
+
+addConfidentialInformation.error.required = Dewiswch Iawn os ydych am ychwanegu gwybodaeth gyfrinachol
+
+commodityCodeBestMatch.title = A ydych wedi dod o hyd i god nwyddau ar gyfer y nwyddau? – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+commodityCodeBestMatch.heading = A ydych wedi dod o hyd i god nwyddau ar gyfer y {0}?
+commodityCodeBestMatch.bodyText = Gall nodi cod nwyddau, hyd yn oed nodi’r 2 rif cyntaf yn unig, gyflymu prosesu’ch cais.
+commodityCodeBestMatch.yesFoundCommodityCode = Iawn
+commodityCodeBestMatch.noHaventFoundCommodityCode = Na
+commodityCodeBestMatch.checkYourAnswersLabel = Wedi dod o hyd i god nwyddau?
+commodityCodeBestMatch.error.required = Dewiswch Iawn os ydych wedi dod o hyd i god nwyddau
+commodityCodeBestMatch.caption = Ynglŷn â’r nwyddau
