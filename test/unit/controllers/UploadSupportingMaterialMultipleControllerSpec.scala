@@ -26,7 +26,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import pages.ProvideGoodsNamePage
+import pages.{ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.JsString
@@ -40,7 +40,6 @@ import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import pages.UploadSupportingMaterialMultiplePage
 
 class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
   private val fileService = mock[FileService]
@@ -55,7 +54,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       cacheConnector,
       FakeIdentifierAction,
       dataRetrievalAction,
-      new Navigator,
+      new Navigator(frontendAppConfig),
       new DataRequiredActionImpl,
       formProvider,
       fileService,

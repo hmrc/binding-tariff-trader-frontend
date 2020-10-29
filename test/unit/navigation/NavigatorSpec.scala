@@ -26,7 +26,7 @@ import play.api.mvc.Call
 
 class NavigatorSpec extends SpecBase {
 
-  val navigator = new Navigator
+  val navigator = new Navigator(frontendAppConfig)
 
   "Navigator" when {
 
@@ -438,7 +438,7 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(AreYouSendingSamplesPage, CheckMode)(mockUserAnswers) shouldBe
           routes.CheckYourAnswersController.onPageLoad()
       }
-      
+
       "go to CommodityCodeDigitsPage when yes is selected in CommodityCodeBestMatchPage" in {
         val mockUserAnswers = mock[UserAnswers]
 
