@@ -138,7 +138,6 @@
 
 
                     @if(appConfig.samplesToggle){
-                            <!--Remove this-->
                     <div class="column-one-third">
 
                         <div class="about-this-result-box-do-not-send about-this-result-box">
@@ -248,9 +247,7 @@
                         </div>
                     }
 
-                    @if(appConfig.samplesToggle){
-                            <!--Remove this-->
-                    } else {
+                    @if(!appConfig.samplesToggle){
                         @if(pdf.sendingSample) {
                             <div>
                                 <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
