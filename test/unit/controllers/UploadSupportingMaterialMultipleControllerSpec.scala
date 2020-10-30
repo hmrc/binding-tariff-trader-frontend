@@ -178,7 +178,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
 
     "remove metadata entry for file when file upload fails because a file has not been selected" in {
-      val upscanRequest = request.withTarget(RequestTarget("", "/", Map("errorCode" -> Seq("NoSuchUpload"))))
+      val upscanRequest = request.withTarget(RequestTarget("", "/", Map("errorCode" -> Seq("400"))))
       val fileAttachmentsJson = Json.toJson(Seq(file))
       val validData = Map(
         ProvideGoodsNamePage.toString -> JsString(goodsName),
