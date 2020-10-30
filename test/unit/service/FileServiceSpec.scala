@@ -60,7 +60,7 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
   }
 
   "Initiate" should {
-    val initiateRequest = FileStoreInitiateRequest()
+    val initiateRequest = FileStoreInitiateRequest(maxFileSize = 0)
 
     val initiateResponse = FileStoreInitiateResponse(
       id = "id",

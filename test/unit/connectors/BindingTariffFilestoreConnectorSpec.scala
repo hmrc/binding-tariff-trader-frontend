@@ -48,7 +48,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           )
       )
 
-      val initiateRequest = FileStoreInitiateRequest()
+      val initiateRequest = FileStoreInitiateRequest(maxFileSize = 0)
 
       await(connector.initiate(initiateRequest)) shouldBe FileStoreInitiateResponse(
         id = "id",

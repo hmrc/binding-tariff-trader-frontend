@@ -488,7 +488,7 @@ uploadWrittenAuthorisation.error.fileType = Your document will not upload becaus
 uploadWrittenAuthorisation.error.required = Enter uploadWrittenAuthorisation
 uploadWrittenAuthorisation.upload.title =  The authorisation must be:
 uploadWrittenAuthorisation.upload.restrictionSize = a maximum file size of 10MB
-uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg and txt files
+uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, xls, xlsx, png, jpg, jpeg and txt files
 uploadWrittenAuthorisation.upload.timeLimit = from within the last 12 months
 uploadWrittenAuthorisation.upload.document = a digital document, a scanned letter or copy of an email from the business, organisation or individual
 

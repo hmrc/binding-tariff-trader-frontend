@@ -131,7 +131,8 @@ class UploadSupportingMaterialMultipleController @Inject()(
     fileService.initiate(FileStoreInitiateRequest(
       id = Some(fileId),
       successRedirect = Some(routes.UploadSupportingMaterialMultipleController.onFileUploadSuccess(fileId, mode).absoluteURL),
-      errorRedirect = Some(routes.UploadSupportingMaterialMultipleController.onFileUploadError(fileId, mode).absoluteURL)
+      errorRedirect = Some(routes.UploadSupportingMaterialMultipleController.onFileUploadError(fileId, mode).absoluteURL),
+      maxFileSize = appConfig.fileUploadMaxSize
     )).map { response =>
         val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
         uploadSupportingMaterialMultiple(appConfig, response, form, goodsName, mode)
