@@ -28,7 +28,8 @@ case object FileTooSmall extends UploadError("EntityTooSmall", "uploadSupporting
 
 case object FileTooLarge extends UploadError("EntityTooLarge", "uploadSupportingMaterialMultiple.error.fileTooLarge")
 
-case object NoFileSelected extends UploadError("NoSuchUpload", "uploadSupportingMaterialMultiple.error.noFileSelected")
+// This is extremely sketchy, but this is the error code that the Upscan stub returns now for no file selected
+case object NoFileSelected extends UploadError("400", "uploadSupportingMaterialMultiple.error.noFileSelected")
 
 case class Other(
                   override val errorCode: String

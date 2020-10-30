@@ -49,6 +49,15 @@ class SupportingMaterialFileListController @Inject()(
   val FormInputField = "add-file-choice"
   val MaxFilesMessage = "supportingMaterialFileList.error.numberFiles"
 
+  private def exceedsMaxFiles(userAnswers: UserAnswers): Boolean = {
+    val numberOfFiles = userAnswers
+      .get(UploadSupportingMaterialMultiplePage)
+      .map(_.size)
+      .getOrElse(0)
+
+    numberOfFiles > 10
+  }
+
   private def hasMaxFiles(userAnswers: UserAnswers): Boolean = {
     val numberOfFiles = userAnswers
       .get(UploadSupportingMaterialMultiplePage)
@@ -99,11 +108,12 @@ class SupportingMaterialFileListController @Inject()(
     supportingMaterialFileList(appConfig, form.copy(errors = preparedForm.errors), goodsName, getFileViews(request.userAnswers), mode)
   }
 
-
   override def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>
     val badRequest = (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(renderView(formWithErrors, mode)))
     form.bindFromRequest().fold(badRequest, { choice =>
       if (choice && hasMaxFiles(request.userAnswers))
+        badRequest(form.withError(FormInputField, MaxFilesMessage))
+      else if (exceedsMaxFiles(request.userAnswers))
         badRequest(form.withError(FormInputField, MaxFilesMessage))
       else
         submitAnswer(choice, mode)
