@@ -121,7 +121,7 @@ class Navigator @Inject()(configuration: FrontendAppConfig) {
     // Do you want to upload any supporting documents?
     loopingJourney(
       journey = Journey.supportingDocuments,
-      // TODO: This is the next page to go to from supporting documents remove toggle when not needed
+      // TODO: Remove the if else condition from getOrElse when the toggle logic is removed.
       continuingTo = if(configuration.samplesToggle) CommodityCodeBestMatchPage else AreYouSendingSamplesPage,
       mode = NormalMode
     ),

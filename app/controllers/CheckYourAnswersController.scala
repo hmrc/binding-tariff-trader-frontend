@@ -133,7 +133,13 @@ class CheckYourAnswersController @Inject()(
       atar        <- createCase(newCaseRequest, attachments, letter, answers)
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
       _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
-      userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar, fileView))
+      userAnswers = {
+        println("hi there :::: ")
+        println("hi there :::: " + atar)
+        println("hi there :::: ")
+        println("hi there :::: " + PdfViewModel(atar, fileView))
+        answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar, fileView))
+      }
       _           <- dataCacheConnector.save(userAnswers.cacheMap)
       res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
     } yield res
