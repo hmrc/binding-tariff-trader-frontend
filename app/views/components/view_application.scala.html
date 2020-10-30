@@ -139,13 +139,19 @@
 
                     @if(appConfig.samplesToggle){
                             <!--Remove this-->
-                        <div class="column-one-third">
+                    <div class="column-one-third">
 
-                            <div class="about-this-result-box-do-not-send about-this-result-box">
-                                <h2>@messages("application.footer.sendingSamples.heading")</h2>
-                                <div>@messages("view.application.paragraph.do.not.send.sample")</div>
-
+                        <div class="about-this-result-box-do-not-send about-this-result-box">
+                            <div id="aboutThisResult" class="about-this-result">
+                                <div class="date-of-result">
+                                    <h2>@messages("application.footer.sendingSamples.heading")</h2>
+                                </div>
+                                <div>
+                                    <div>@messages("view.application.paragraph.do.not.send.sample")</div>
+                                </div>
                             </div>
+                        </div>
+                    </div>
                             } else {
 
                         @if(pdf.sendingSample) {
