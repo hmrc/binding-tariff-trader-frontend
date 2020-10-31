@@ -96,7 +96,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
 
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(request)
+      val result = controller(getRelevantData).onPageLoad(None, NormalMode)(request)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
@@ -119,6 +119,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
 
     "remove metadata entry for file when file upload fails with an unknown error" in {
+      val upscanRequest = request.withTarget(RequestTarget("", "/", Map("errorCode" -> Seq("foo"))))
+
       val fileAttachmentsJson = Json.toJson(Seq(file))
       val validData = Map(
         ProvideGoodsNamePage.toString -> JsString(goodsName),
@@ -129,7 +131,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
 
-      val result = controller(getRelevantData).onFileUploadError(file.id, NormalMode)(request)
+      val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) should include("error-message-file-input")
@@ -149,7 +151,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
 
-      val result = controller(getRelevantData).onFileUploadError(file.id, NormalMode)(upscanRequest)
+      val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) should include("error-message-file-input")
@@ -169,7 +171,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
 
-      val result = controller(getRelevantData).onFileUploadError(file.id, NormalMode)(upscanRequest)
+      val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) should include("error-message-file-input")
@@ -189,7 +191,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
 
-      val result = controller(getRelevantData).onFileUploadError(file.id, NormalMode)(upscanRequest)
+      val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
       status(result) shouldBe BAD_REQUEST
       contentAsString(result) should include("error-message-file-input")
@@ -280,7 +282,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(request)
+      val result = controller(dontGetAnyData).onPageLoad(None, NormalMode)(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)

@@ -48,7 +48,7 @@ lazy val root = (project in file("."))
     // concatenate js
     Concat.groups := Seq(
       "javascripts/bindingtarifftraderfrontend-app.js" ->
-        group(Seq("javascripts/show-hide-content.js", "javascripts/bindingtarifftraderfrontend.js", "javascripts/uploadFiles.js"))
+        group(Seq("javascripts/show-hide-content.js", "javascripts/bindingtarifftraderfrontend.js"))
     ),
     // prevent removal of unused code which generates warning errors due to use of third-party libs
     pipelineStages := Seq(digest),

@@ -55,7 +55,7 @@ class SupportingMaterialFileListController @Inject()(
       .map(_.size)
       .getOrElse(0)
 
-    numberOfFiles > 10
+    numberOfFiles > appConfig.fileUploadMaxFiles
   }
 
   private def hasMaxFiles(userAnswers: UserAnswers): Boolean = {
@@ -64,7 +64,7 @@ class SupportingMaterialFileListController @Inject()(
       .map(_.size)
       .getOrElse(0)
 
-    numberOfFiles >= 10
+    numberOfFiles >= appConfig.fileUploadMaxFiles
   }
 
   def removeFile(id: String, userAnswers: UserAnswers): UserAnswers = {
@@ -112,9 +112,9 @@ class SupportingMaterialFileListController @Inject()(
     val badRequest = (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(renderView(formWithErrors, mode)))
     form.bindFromRequest().fold(badRequest, { choice =>
       if (choice && hasMaxFiles(request.userAnswers))
-        badRequest(form.withError(FormInputField, MaxFilesMessage))
+        badRequest(form.withError(FormInputField, MaxFilesMessage, appConfig.fileUploadMaxFiles))
       else if (exceedsMaxFiles(request.userAnswers))
-        badRequest(form.withError(FormInputField, MaxFilesMessage))
+        badRequest(form.withError(FormInputField, MaxFilesMessage, appConfig.fileUploadMaxFiles))
       else
         submitAnswer(choice, mode)
     })
