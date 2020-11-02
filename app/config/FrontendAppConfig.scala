@@ -94,4 +94,7 @@ class FrontendAppConfig @Inject()(
   def defaultLang: Lang = English.lang
 
   lazy val host: String = loadConfig("host")
+
+  lazy val assetsPrefix = runModeConfiguration.get[String](s"assets.url") + runModeConfiguration
+    .get[String](s"assets.version") + '/'
 }

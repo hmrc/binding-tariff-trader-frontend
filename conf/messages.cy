@@ -83,7 +83,14 @@ addSupportingDocuments.indications.bullet4 = delweddau o’r nwyddau
 addSupportingDocuments.indications.bullet5 = delweddau o becynnau
 addSupportingDocuments.error.required = Dewiswch Iawn os oes gennych ffeiliau i’w huwchlwytho
 
-addConfidentialInformation.error.required = Dewiswch Iawn os ydych am ychwanegu gwybodaeth gyfrinachol
+similarItemCommodityCode.title = A oes nwyddau tebyg sydd eisoes wedi cael dyfarniad? – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+similarItemCommodityCode.heading = A oes nwyddau tebyg sydd eisoes wedi cael dyfarniad?
+similarItemCommodityCode.caption = Ynglŷn â dyfarniadau eraill
+similarItemCommodityCode.yesAwareSimilarCode = Iawn
+similarItemCommodityCode.noNotAware = Na
+similarItemCommodityCode.checkYourAnswersLabel = Nwyddau tebyg?
+similarItemCommodityCode.error.required = Dewiswch Iawn os ydych yn gwybod am nwyddau tebyg sydd wedi cael dyfarniad
+similarItemCommodityCode.bodyText = Mae dyfarniad sy’n bodoli eisoes ar gyfer nwyddau sy’n debyg yn gallu helpu i ddarparu dyfarniad, hyd yn oed os cafodd y dyfarniad ei wneud mewn gwlad arall.
 
 commodityCodeBestMatch.title = A ydych wedi dod o hyd i god nwyddau ar gyfer y nwyddau? – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 commodityCodeBestMatch.heading = A ydych wedi dod o hyd i god nwyddau ar gyfer y {0}?
@@ -93,3 +100,4 @@ commodityCodeBestMatch.noHaventFoundCommodityCode = Na
 commodityCodeBestMatch.checkYourAnswersLabel = Wedi dod o hyd i god nwyddau?
 commodityCodeBestMatch.error.required = Dewiswch Iawn os ydych wedi dod o hyd i god nwyddau
 commodityCodeBestMatch.caption = Ynglŷn â’r nwyddau
+
