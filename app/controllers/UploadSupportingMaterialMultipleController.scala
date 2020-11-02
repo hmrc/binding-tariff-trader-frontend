@@ -92,7 +92,12 @@ class UploadSupportingMaterialMultipleController @Inject()(
       updated = upsertFile(file.copy(uploaded = true), request.userAnswers)
     } yield updated
 
-    val userAnswers = updatedAnswers.getOrElse(request.userAnswers)
+    val userAnswers = updatedAnswers.getOrElse {
+      // There is no metadata entry for this file
+      // The metadata entry is usually created by a JS event handler on the file picker
+      // We can end up here if Javascript is disabled
+      upsertFile(FileAttachment(id, "", "", 0L, uploaded = true), request.userAnswers)
+    }
 
     dataCacheConnector
       .save(userAnswers.cacheMap)

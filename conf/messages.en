@@ -298,6 +298,7 @@ supportingMaterialFileList.indications.bullet4 = images of the goods
 supportingMaterialFileList.indications.bullet5 = images of packaging
 supportingMaterialFileList.error.required = Select yes if you want to upload another supporting document
 supportingMaterialFileList.error.numberFiles = Reduce the number of files to a maximum of {0}
+supportingMaterialFileList.clearFiles = Clear uploaded files
 supportingMaterialFile.remove.file.text = Remove
 supportingMaterialFile.remove.file.hidden.text = Remove file {0}
 

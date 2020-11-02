@@ -49,6 +49,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
   private val goodsName = "goose"
   private val file = FileAttachment("id", "MyFile.jpg", "image/jpeg", 1L, false)
   private val uploadedFile = file.copy(uploaded = true)
+  private val uploadedFileNoMetadata = FileAttachment("id", "", "", 0L, uploaded = true)
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -116,6 +117,22 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
       await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq(uploadedFile)))
+    }
+
+    "update user answers with file when file upload succeeds and JS is disabled (no pre-existing metadata entry)" in {
+      val fileAttachmentsJson = Json.toJson(Seq.empty[FileAttachment])
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
+
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val result = controller(getRelevantData).onFileUploadSuccess(file.id, NormalMode)(request)
+
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(onwardRoute.url)
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq(uploadedFileNoMetadata)))
     }
 
     "remove metadata entry for file when file upload fails with an unknown error" in {

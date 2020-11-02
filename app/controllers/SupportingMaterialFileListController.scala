@@ -97,6 +97,16 @@ class SupportingMaterialFileListController @Inject()(
       .map { _ => Redirect(onwardRoute) }
   }
 
+  def onClear(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val updatedAnswers = request.userAnswers
+      .remove(AddSupportingDocumentsPage)
+      .remove(UploadSupportingMaterialMultiplePage)
+
+    dataCacheConnector
+      .save(updatedAnswers.cacheMap)
+      .map { _ => Redirect(routes.AddSupportingDocumentsController.onPageLoad(mode)) }
+  }
+
   def getFileViews(userAnswers: UserAnswers): Seq[FileView] = {
     val files = userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty[FileAttachment])
     val confidentialityStatuses = userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty[String, Boolean])
