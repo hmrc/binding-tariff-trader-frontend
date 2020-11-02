@@ -16,6 +16,7 @@
 
 package models
 
+import cats.syntax.either._
 import models.SortDirection.{ASCENDING, DESCENDING, SortDirection}
 import models.SortField.{CREATED_DATE, SortField}
 import play.api.mvc.QueryStringBindable
@@ -50,13 +51,13 @@ object SortDirection extends Enumeration {
 
   implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String]) = new QueryStringBindable[SortDirection] {
     override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortDirection]] = {
-      for {
-        order <- stringBinder.bind("order", params)
-      } yield {
-        order match {
-          case Right(sortDirection) => Right(SortDirection.withName(sortDirection))
-          case _                    => Left("Unable to bind a SortDirection")
-        }
+      stringBinder.bind("order", params).map {
+        case Right(sortDirection) =>
+          Either
+            .catchOnly[NoSuchElementException](SortDirection.withName(sortDirection))
+            .leftMap(_ => "Unable to bind a SortDirection")
+        case _ =>
+          Left("Unable to bind a SortDirection")
       }
     }
 
@@ -85,13 +86,13 @@ object SortField extends Enumeration {
 
   implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String]) = new QueryStringBindable[SortField] {
     override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortField]] = {
-      for {
-        sortBy <- stringBinder.bind("sortBy", params)
-      } yield {
-        sortBy match {
-          case Right(sortByField) => Right(SortField.withName(sortByField))
-          case _                  => Left("Unable to bind a SortField")
-        }
+      stringBinder.bind("sortBy", params).map {
+        case Right(sortByField) =>
+          Either
+            .catchOnly[NoSuchElementException](SortField.withName(sortByField))
+            .leftMap(_ => "Unable to bind a SortField")
+        case _ =>
+          Left("Unable to bind a SortField")
       }
     }
 
