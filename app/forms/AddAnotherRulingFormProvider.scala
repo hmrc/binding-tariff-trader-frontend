@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import pages.behaviours.PageBehaviours
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
+class AddAnotherRulingFormProvider @Inject() extends Mappings {
 
-class CommodityCodeRulingReferencePageSpec extends PageBehaviours {
+  def apply(): Form[Boolean] =
+    Form(
+      "add-another-ruling-choice" -> boolean("addAnotherRuling.error.required")
+    )
 
-  "CommodityCodeRulingReferencePage" must {
-
-    beRetrievable[List[String]](CommodityCodeRulingReferencePage)
-
-    beSettable[List[String]](CommodityCodeRulingReferencePage)
-
-    beRemovable[List[String]](CommodityCodeRulingReferencePage)
-  }
 }

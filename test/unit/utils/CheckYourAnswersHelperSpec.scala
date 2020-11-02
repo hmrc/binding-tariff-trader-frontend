@@ -20,10 +20,12 @@ import base.SpecBase
 import models.WhichBestDescribesYou.BusinessOwner
 import models._
 import models.requests.DataRequest
+import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import pages._
 import play.api.test.FakeRequest
 import service.CountriesService
+import play.api.libs.json.Reads
 
 class CheckYourAnswersHelperSpec extends SpecBase {
 
@@ -96,7 +98,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       }
 
       "return a row with the correct answer for CommodityCodeRulingReferencePage" in {
-        given(userAnswers.get(CommodityCodeRulingReferencePage)).willReturn(Option("code ruling"))
+        given(userAnswers.get(any[CommodityCodeRulingReferencePage.type])(any[Reads[List[String]]])).willReturn(Option(List("code ruling")))
         checkHelper.commodityCodeRulingReference.get.answer shouldBe "code ruling"
       }
 
@@ -106,24 +108,24 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       }
 
       "return a row with the correct answer for EnterContactDetailsPage Name" in {
-        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
+        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
         checkHelper.enterContactDetailsName.get.answer shouldBe "name"
       }
 
       "return a row with the correct answer for EnterContactDetailsPage Email" in {
-        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
+        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
         checkHelper.enterContactDetailsEmail.get.answer shouldBe "email"
       }
 
       "return a row with the correct answer for EnterContactDetailsPage Telephone" in {
-        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", Some("phoneNumber"))))
+        given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
         checkHelper.enterContactDetailsPhone.get.answer shouldBe "phoneNumber"
       }
 
       "return a row with the correct answer for RegisterBusinessRepresentingPage" in {
         given(userAnswers.get(RegisterBusinessRepresentingPage)).willReturn(
           Option(RegisterBusinessRepresenting("eoriNumber", "businessName", "addressLine1", "town", Some("postCode"), "IE")))
-        checkHelper.registerBusinessRepresenting.get.answer shouldBe "eoriNumber\nbusinessName\naddressLine1\ntown\npostCode\nIrish Republic"
+        checkHelper.registerBusinessRepresenting.get.answer shouldBe "eoriNumber\nbusinessName\naddressLine1\ntown\npostCode\nIreland"
       }
 
       "return a row with the correct answer for WhichBestDescribesYouPage" in {
@@ -134,13 +136,13 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check disabled" in {
         val requestWithoutEori = DataRequest(FakeRequest(), "", None, mock[UserAnswers])
         given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
-        checkHelper.registeredAddressForEori(requestWithoutEori).get.answer shouldBe "eori\nf1\nf2\nf3\nf4\nIrish Republic"
+        checkHelper.registeredAddressForEori(requestWithoutEori).get.answer shouldBe "eori\nf1\nf2\nf3\nf4\nIreland"
       }
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check enabled" in {
         val requestWithEori = DataRequest(FakeRequest(), "", Some("eori"), mock[UserAnswers])
         given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
-        checkHelper.registeredAddressForEori(requestWithEori).get.answer shouldBe "f1\nf2\nf3\nf4\nIrish Republic"
+        checkHelper.registeredAddressForEori(requestWithEori).get.answer shouldBe "f1\nf2\nf3\nf4\nIreland"
       }
 
       "return a row with the correct answer for registered name" in {
@@ -150,7 +152,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
 
       "return a row with the correct answer for registered address" in {
         given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
-        checkHelper.registeredAddress.get.answer shouldBe "f2\nf3\nf4\nIrish Republic"
+        checkHelper.registeredAddress.get.answer shouldBe "f2\nf3\nf4\nIreland"
       }
     }
   }

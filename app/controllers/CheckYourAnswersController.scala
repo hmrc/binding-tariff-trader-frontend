@@ -33,7 +33,7 @@ import service.{CasesService, CountriesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.CheckYourAnswersHelper
-import viewmodels.{AnswerSection, PdfViewModel}
+import viewmodels.{AnswerSection, FileView, PdfViewModel}
 import views.html.check_your_answers
 import utils.JsonFormatters._
 
@@ -118,6 +118,10 @@ class CheckYourAnswersController @Inject()(
       .get(MakeFileConfidentialPage)
       .getOrElse(Map.empty)
 
+    val fileView = fileAttachments.map {
+      file => FileView(file.id, file.name, keepConfidential(file.id))
+    }
+
     val withStatus = fileAttachments
       .map(att => Attachment(att.id, keepConfidential(att.id)))
 
@@ -128,12 +132,11 @@ class CheckYourAnswersController @Inject()(
       letter      <- getPublishedLetter(answers)
       atar        <- createCase(newCaseRequest, attachments, letter, answers)
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
-      _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
-      userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar))
+      _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
+      userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar, fileView))
       _           <- dataCacheConnector.save(userAnswers.cacheMap)
       res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
     } yield res
-
   }
 
   private def getPublishedLetter(answers: UserAnswers)
@@ -172,5 +175,4 @@ class CheckYourAnswersController @Inject()(
       caseRequest.copy(attachments = attachments)
     }
   }
-
 }

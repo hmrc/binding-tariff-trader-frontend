@@ -48,7 +48,6 @@ class ConfirmationController @Inject()(
     def show(c: Confirmation, pdf: PdfViewModel): Future[Result] = for {
       removed <- dataCacheConnector.remove(request.userAnswers.cacheMap)
       _ = if (!removed) logger.warn("Session entry failed to be removed from the cache")
-
       token: String = pdfService.encodeToken(c.eori)
     } yield Ok(confirmation(appConfig, c, token, pdf))
 

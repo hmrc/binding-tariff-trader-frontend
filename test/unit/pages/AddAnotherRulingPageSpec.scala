@@ -18,15 +18,15 @@ package pages
 
 import pages.behaviours.PageBehaviours
 
+class AddAnotherRulingPageSpec extends PageBehaviours {
 
-class CommodityCodeRulingReferencePageSpec extends PageBehaviours {
+  "AddAnotherRulingPage" must {
 
-  "CommodityCodeRulingReferencePage" must {
+    beRetrievable[Boolean](AddAnotherRulingPage)
 
-    beRetrievable[List[String]](CommodityCodeRulingReferencePage)
+    beSettable[Boolean](AddAnotherRulingPage)
 
-    beSettable[List[String]](CommodityCodeRulingReferencePage)
-
-    beRemovable[List[String]](CommodityCodeRulingReferencePage)
+    beRemovable[Boolean](AddAnotherRulingPage)
   }
+
 }

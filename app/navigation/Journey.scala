@@ -47,5 +47,5 @@ object Journey {
     YesNoJourney(PreviousBTIRulingPage, List(ProvideBTIReferencePage))
   
   val similarItem =
-    YesNoJourney(SimilarItemCommodityCodePage, List(CommodityCodeRulingReferencePage))
+    LoopingJourney(SimilarItemCommodityCodePage, List(CommodityCodeRulingReferencePage), AddAnotherRulingPage)
 }

@@ -26,7 +26,7 @@ import models.requests.DataRequest
 import navigation.Navigator
 import pages.CommodityCodeRulingReferencePage
 import play.api.data.Form
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Call, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
 import views.html.commodityCodeRulingReference
 
@@ -41,10 +41,15 @@ class CommodityCodeRulingReferenceController @Inject()(
   val requireData: DataRequiredAction,
   formProvider: CommodityCodeRulingReferenceFormProvider,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
+)(implicit ec: ExecutionContext) extends ListEditingController[String](cc) {
   lazy val form = formProvider()
   val questionPage = CommodityCodeRulingReferencePage
 
-  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
-    commodityCodeRulingReference(appConfig, preparedForm, mode)
+  def submitAction(mode: Mode): Call = routes.CommodityCodeRulingReferenceController.onSubmit(mode)
+
+  def editSubmitAction(index: Int, mode: Mode): Call = routes.CommodityCodeRulingReferenceController.onEditSubmit(index, mode)
+
+  def renderView(preparedForm: Form[String], submitAction: Call, mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
+    commodityCodeRulingReference(appConfig, preparedForm, submitAction, mode)
+
 }

@@ -54,7 +54,7 @@ class CaseRequestMapperTest extends UnitSpec {
       val contact: Contact = application.contact
       contact.name shouldBe "Name"
       contact.email shouldBe "Email"
-      contact.phone shouldBe None
+      contact.phone shouldBe Some("Tel No")
 
       application.offline shouldBe false
       application.goodName shouldBe "Good Name"
@@ -67,7 +67,7 @@ class CaseRequestMapperTest extends UnitSpec {
       application.confidentialInformation shouldBe None
       application.otherInformation shouldBe None
       application.reissuedBTIReference shouldBe None
-      application.relatedBTIReference shouldBe None
+      application.relatedBTIReferences shouldBe Nil
       application.knownLegalProceedings shouldBe None
       application.envisagedCommodityCode shouldBe None
     }
@@ -112,7 +112,7 @@ class CaseRequestMapperTest extends UnitSpec {
       // Then optional Fields should be blank
       application.confidentialInformation shouldBe Some("Confidential information")
       application.reissuedBTIReference shouldBe Some("Reissued BTI Reference")
-      application.relatedBTIReference shouldBe Some("Related BTI Reference")
+      application.relatedBTIReferences shouldBe List("Related BTI Reference")
       application.knownLegalProceedings shouldBe Some("Known Legal Proceedings")
       application.envisagedCommodityCode shouldBe Some("Envisaged Commodity Code")
     }
@@ -138,7 +138,7 @@ class CaseRequestMapperTest extends UnitSpec {
             EnterContactDetails(
               "Name",
               "Email",
-              Some("12345")
+              "12345"
             )
           ),
           ProvideGoodsNamePage.toString -> js(
@@ -171,11 +171,12 @@ class CaseRequestMapperTest extends UnitSpec {
               "Reissued BTI Reference"
             )
           ),
-          CommodityCodeRulingReferencePage.toString -> js("Related BTI Reference"),
+          CommodityCodeRulingReferencePage.toString -> js(List("Related BTI Reference")),
           LegalChallengeDetailsPage.toString -> js("Known Legal Proceedings"),
           CommodityCodeDigitsPage.toString -> js("Envisaged Commodity Code"),
           AreYouSendingSamplesPage.toString -> js(true),
-          ReturnSamplesPage.toString -> js(true)
+          ReturnSamplesPage.toString -> js(true),
+
         )
       )
     )
@@ -201,7 +202,7 @@ class CaseRequestMapperTest extends UnitSpec {
             EnterContactDetails(
               "Name",
               "Email",
-              None
+              "Tel No"
             )
           ),
           ProvideGoodsNamePage.toString -> js(
@@ -238,7 +239,7 @@ class CaseRequestMapperTest extends UnitSpec {
             EnterContactDetails(
               "Name",
               "Email",
-              Some("Phone")
+              "Phone"
             )
           ),
           AreYouSendingSamplesPage.toString -> js(true)

@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package pages
+package unit.viewmodels
 
-import pages.behaviours.PageBehaviours
+import base.SpecBase
+import models.oCase
 
+class PdfViewModelSpec extends SpecBase{
 
-class CommodityCodeRulingReferencePageSpec extends PageBehaviours {
+  "similarAtarCodes" should {
 
-  "CommodityCodeRulingReferencePage" must {
+    "build a list with similar atar codes" in {
 
-    beRetrievable[List[String]](CommodityCodeRulingReferencePage)
+      val pdf = oCase.pdf.copy(similarAtarReferences = List("12345", "23456"))
 
-    beSettable[List[String]](CommodityCodeRulingReferencePage)
-
-    beRemovable[List[String]](CommodityCodeRulingReferencePage)
+      pdf.similarAtarCodes shouldBe "12345\n23456"
+    }
   }
 }
