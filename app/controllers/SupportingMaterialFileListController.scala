@@ -32,6 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import viewmodels.FileView
 import views.html.supportingMaterialFileList
 import play.twirl.api.HtmlFormat
+import play.api.data.FormError
 
 class SupportingMaterialFileListController @Inject()(
   appConfig: FrontendAppConfig,
@@ -109,12 +110,19 @@ class SupportingMaterialFileListController @Inject()(
   }
 
   override def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>
+    val maxFilesError = FormError(FormInputField, MaxFilesMessage, Seq(appConfig.fileUploadMaxFiles))
     val badRequest = (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(renderView(formWithErrors, mode)))
-    form.bindFromRequest().fold(badRequest, { choice =>
+
+    form.bindFromRequest().fold({ form =>
+      if (exceedsMaxFiles(request.userAnswers))
+        badRequest(form.withError(maxFilesError))
+      else
+        badRequest(form)
+    }, { choice =>
       if (choice && hasMaxFiles(request.userAnswers))
-        badRequest(form.withError(FormInputField, MaxFilesMessage, appConfig.fileUploadMaxFiles))
+        badRequest(form.withError(maxFilesError))
       else if (exceedsMaxFiles(request.userAnswers))
-        badRequest(form.withError(FormInputField, MaxFilesMessage, appConfig.fileUploadMaxFiles))
+        badRequest(form.withError(maxFilesError))
       else
         submitAnswer(choice, mode)
     })

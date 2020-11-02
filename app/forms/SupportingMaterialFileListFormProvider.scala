@@ -25,7 +25,6 @@ class SupportingMaterialFileListFormProvider @Inject() extends Mappings {
   def apply(): Form[Boolean] =
     Form(
       "add-file-choice" -> boolean("supportingMaterialFileList.error.required")
-
     )
 
 }
