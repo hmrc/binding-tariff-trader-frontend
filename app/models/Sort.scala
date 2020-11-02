@@ -72,14 +72,14 @@ object SortField extends Enumeration {
   val REFERENCE = Value("reference")
   val CREATED_DATE = Value("created-date")
   val DECISION_START_DATE = Value("decision-start-date")
-  val APPLICATION_STATUS = Value("application.status")
+  val STATUS = Value("status")
   val GOODS_NAME = Value("application.goodName")
 
   val defaultDirections = Map(
     REFERENCE -> ASCENDING,
     CREATED_DATE -> DESCENDING,
     DECISION_START_DATE -> DESCENDING,
-    APPLICATION_STATUS -> ASCENDING,
+    STATUS -> ASCENDING,
     GOODS_NAME -> ASCENDING
   )
 
