@@ -34,12 +34,12 @@
 
         <div class="grid-row hidden-print">
             <div class="column-two-thirds">
-                <div class="heading-xlarge">@messages("view.application.header")</div>
+                <h2 class="heading-large">@messages("view.application.header")</h2>
             </div>
         </div>
 
         <div id="print-pages" class="print-pages">
-            <div class="print-document">
+            <div id="your-records" class="print-document">
                 <div class="grid-row print-header">
                     <div class="column-one-third">
                         <img class="print-header__hmrc-logo" alt="HM Revenue and Customs" src="@createLink("images/hmrc_logo.jpg")" />
@@ -138,9 +138,6 @@
                                                 <div>@messages("view.application.sending.sample.paragraph1")</div>
                                                 <div class="bold mb-2">@pdf.reference</div>
                                             </div>
-                                            <div class="decision-service-version">
-                                                <div class="mb-2">@messages("confirmation.paragraph0.sendingSamples")</div>
-                                            </div>
                                             <div>
                                                 <dl>
                                                     <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span></p>
@@ -148,8 +145,6 @@
                                                     <address>
                                                     @Html(messages("confirmation.sendingSamples.address"))
                                                     </address>
-                                                    <dt class="mb-2">@messages("application.footer.sendingSamples.address.line8")
-                                                    </dt>
                                                 </dl>
                                             </div>
                                         }
@@ -157,11 +152,6 @@
                                 </div>
                             </div>
                         }
-                    </div>
-
-                    <div class="footer-info footer-page-break">
-                        <span class="footer-page-no"></span>
-                        <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
                     </div>
                 </div>
             </div>
@@ -262,10 +252,6 @@
                     </dl>
 
                 </div>
-            </div>
-            <div class="footer-info footer-page-break">
-                <span class="footer-page-no"></span>
-                <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
             </div>
         </div>
         </div>

@@ -6,10 +6,6 @@ body {
 	background: #00703C;
 	margin-top: 30px;
 }
-span.footer-page-no::before {
-    counter-increment: sec-counter;
-    content: "Page " counter(sec-counter) " of 2 ";
-}
 .print-save-application {
     position: relative;
     display: inline-block;
@@ -28,16 +24,6 @@ span.footer-page-no::before {
     height: auto;
     position: relative;
     margin-bottom: 2em;
-}
-
-ul li {
-    font-size: 16px;
-}
-
-.print-document table td {
-    border: none;
-    padding: 0;
-    margin: 0;
 }
 
 .print-document h2, h3, h4 {
@@ -109,10 +95,6 @@ ul li {
 .print-footer, .footer-space {
   //height: 45mm;
 }
-.print-document .footer-info {
-    font-size: 14px;
-    margin-top: 1em;
-}
 .print-document__information-box {
     border: 2px solid #00703C;
     display: block;
@@ -150,15 +132,15 @@ ul li {
     margin-bottom: 1em;
 }
 
-.column-one-half {
+.print-document .column-one-half {
     width: 50%;
     float: left;
 }
-.column-one-third {
+.print-document .column-one-third {
     width: 33%;
     float: left;
 }
-.column-two-thirds {
+.print-document .column-two-thirds {
     width: 66%;
     float: left;
 }
@@ -241,16 +223,14 @@ ul li {
 }
 
 @media print {
-
     @page {
         height: 297mm;
         width: 210mm;
-        margin: 0;
+        margin: 15px;
     }
     body {
         width: auto;
         height: auto;
-        margin: 0;
    }
    .hidden-print {
        display: none !important;
@@ -258,11 +238,14 @@ ul li {
     .service-info {
         display: none !important;
     }
+    #your-records.print-document {
+        page-break-after: always;
+    }
    .print-document {
       margin: 10mm;
       border: none;
       width: 210mm;
-      height: 297mm;
+      height: auto;
       padding: 10mm;
       box-shadow: none;
       zoom: 100%;
@@ -271,7 +254,7 @@ ul li {
       background: #e1f3f1;
       -webkit-print-color-adjust: exact
    }
-   .column-half {
+   .print-document .column-half {
        width: 50%;
        float: left;
    }
@@ -313,13 +296,17 @@ ul li {
    header {
        display: none;
    }
-   .report-error {
+   .report-error__toggle.js-visible {
        display: none;
    }
-}
-tfoot {
-    position: absolute;
-    bottom: 10mm;
+   .govuk-check-your-answers.cya-questions-short .cya-question {
+       width: 30%;
+   }
+   .govuk-check-your-answers>*>* {
+       display: table-cell;
+       padding: .63158em 1.05263em .47368em 0;
+       margin: 0;
+   }
 }
 .page {
     margin-bottom: 10mm;

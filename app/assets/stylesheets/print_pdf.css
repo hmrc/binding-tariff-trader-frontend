@@ -1,29 +1,18 @@
 body {
-    counter-reset: sec-counter;
     width: auto;
     height: auto;
     margin: 0;
-}
-.footer-page-no {
-    width: 66%;
-    float: left;
-}
-span.footer-page-no::before {
-    counter-increment: sec-counter;
-    content: "Page " counter(sec-counter) " of 2 ";
 }
 .heading-xlarge {
     display: none;
 }
 .print-document {
-    border: 1px solid #6f777b;
-    box-shadow: 6px 6px 0 0 #dee0e2;
-    padding: 50px 50px;
+    padding: 10px 10px;
     position: relative;
     margin-bottom: 15em;
     zoom: 100%;
     width: 210mm;
-    height: 297mm;
+    height: auto;
 }
 .print-document .logotype {
     font-size: 1.4em;
@@ -33,12 +22,9 @@ span.footer-page-no::before {
     padding-top: 15px;
 }
 .print-document {
-page-break-after  : always;
+    page-break-after  : always;
 }
 
-ul li {
-    font-size: 16px;
-}
 .body-text {
    margin-top: .26316em;
    margin-bottom: 1.05263em;
@@ -121,13 +107,6 @@ print-header__hmrc-logo {
 .print-header, .header-space,
 .print-footer, .footer-space {
  height: 15mm;
-}
-.print-document .footer-info {
-    font-size: 14px;
-    margin-top: 2em;
-    position: absolute;
-    width: 210mm;
-    bottom: 10px;
 }
 .print-document__information-box {
     border: 2px solid #00703C;
