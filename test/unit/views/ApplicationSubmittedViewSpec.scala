@@ -143,13 +143,5 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
       doc should containText(messages("view.applicationPdf.legalProblem"))
     }
 
-    "contain footer date" in {
-      val dateSubmitted = Instant.now
-      val doc =
-        view(createView(pdfView.copy(dateSubmitted = dateSubmitted)))
-          .getElementById("print-pages")
-
-      doc.text() should include(Dates.formatForPdf(dateSubmitted))
-    }
   }
 }
