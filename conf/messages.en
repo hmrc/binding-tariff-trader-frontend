@@ -59,7 +59,7 @@ beforeYouStart.subheading1.paragraph2.item1 = upload photographs, manuals, broch
 beforeYouStart.subheading1.paragraph2.item2 = send a sample
 
 beforeYouStart.subheading2 = About other rulings
-beforeYouStart.subheading2.paragraph1 = If you are renewing a previous ruling or referring similar rulings you will need to know the reference numbers.
+beforeYouStart.subheading2.paragraph1 = If you are referring to previous or similar rulings you will need to know the reference numbers.
 
 beforeYouStart.subheading3 = About the applicant
 beforeYouStart.subheading3.paragraph1 = You need to know the contact email and phone number for this application.
@@ -219,12 +219,12 @@ provideGoodsDescription.p2 = This information may appear on the Advance Tariff R
 provideGoodsDescription.error.required = Enter a detailed description of your goods
 provideGoodsDescription.error.length = Description for the goods must be 100 characters or less
 provideGoodsDescription.confidential_info = You will be able to add confidential information and upload files later in the application.
-provideGoodsDescription.paragraph.includes = The description can include:
+provideGoodsDescription.paragraph.includes = The description can include details such as:
 provideGoodsDescription.listItem1 = what it is used for
-provideGoodsDescription.listItem2 = what it is made from, including all materials, parts or ingredients
-provideGoodsDescription.listItem3 = how it is made, including all manufacturing processes
+provideGoodsDescription.listItem2 = what it is made from
+provideGoodsDescription.listItem3 = how it is made
 provideGoodsDescription.listItem4 = how it works
-provideGoodsDescription.listItem5 = how it is packaged, including all materials
+provideGoodsDescription.listItem5 = how it is packaged
 
 addConfidentialInformation.title = Do you want to add any confidential information about the goods? - Manage your Advance Tariff Rulings - GOV.UK
 addConfidentialInformation.heading = Do you want to add any confidential information about the {0}?
@@ -427,7 +427,6 @@ confirmation.title = Application complete - Manage your Advance Tariff Rulings -
 confirmation.heading = Application complete
 confirmation.heading2.sendingSamples = The next steps
 confirmation.sendingSamples.important = Your application will not be processed until we receive your samples.
-confirmation.paragraph0.sendingSamples = If you consider a sample to be hazardous, it is important you email tariff.classification@hmrc.gsi.gov.uk before you send them. We may not accept the sample for health and safety reasons.
 confirmation.paragraph1.sendingSamples = Label your samples with your application reference
 confirmation.paragraph2.sendingSamples = Send the samples to:
 confirmation.paragraph3.sendingSamples.link = Get more information about samples
@@ -436,11 +435,10 @@ confirmation.homeLink = Return to your ATaR home page
 confirmation.heading2.whatNext = What happens next
 confirmation.paragraph.whatNext0.sample = We will give you your ruling within 30 to 60 days of receiving your samples.
 confirmation.paragraph.whatNext0.nosample = We will give you your ruling within 30 to 60 days.
-view.application.paragraph.whatNext0.nosample = We will give you your ruling within 120 days.
+view.application.paragraph.whatNext0.nosample = We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law.
 confirmation.paragraph.whatNext1 = You can sign in to
 view.application.whatNext0.check.status.linkText = check the status of your application.
 confirmation.get.moreInformation = Get more information about samples (opens in a new window or tab)
-confirmation.returned.sample.note = Sample will be returned where possible. In some cases they may be damaged during testing. If you want to send the samples back, you must include return postage. Or you can collect your samples from our Southend Office.
 
 view.application.home.Link = Go to your applications and rulings
 view.application.header = Your application
@@ -460,7 +458,7 @@ view.application.ref.text = Your application reference number is
 view.application.goods.details = Goods details
 view.application.sending.sample.paragraph1 = You must label your sample with the application reference number
 view.application.sending.sample.paragraph2 = if you consider a sample to be hazardous, it is important your email tariff.classification@hmrc.gov.uk before you send them. We may not accept the sample for heal and safety reason.
-view.application.paragraph.whatNext = We will give you your ruling within 120 days. You can sign in to Advance Tariff Rulings check the status of your application.
+view.application.paragraph.whatNext =  We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law. You can sign in to Advance Tariff Rulings to check the status of your application.
 view.application.paragraph.do.not.send.sample = Do not send a sample unless one has been requested by the Tariff Classification Team.
 
 view.applicationPdf.provideConfidentialInformation = Provide confidential information for the item?

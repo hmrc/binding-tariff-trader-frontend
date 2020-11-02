@@ -45,19 +45,17 @@
         <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
         } else {
             <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
-                <span>@messages("confirmation.paragraph.whatNext1")
+                @messages("confirmation.paragraph.whatNext1")
                     <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a>
                 </span>
             </p>
 
         @components.icon_important("confirmation.sendingSamples.important")
 
-        <p>@messages("confirmation.paragraph0.sendingSamples")</p>
-
-        <div class="panel panel-border-wide">@messages("confirmation.returned.sample.note")</div>
-
-        <p>@messages("confirmation.paragraph1.sendingSamples") <span class="bold"> @messages("caseReference.format", confirmation.reference).</span>
-            @messages("confirmation.paragraph2.sendingSamples")</p>
+        <p>@messages("confirmation.paragraph1.sendingSamples")
+            <span class="bold"> @messages("caseReference.format", confirmation.reference)</span>
+            @messages("confirmation.paragraph2.sendingSamples")
+        </p>
 
         <address>
         @Html(messages("confirmation.sendingSamples.address"))
