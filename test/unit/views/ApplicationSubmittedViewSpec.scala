@@ -16,13 +16,10 @@
 
 package unit.views
 
-import java.time.Instant
-
 import models.oCase
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
-import utils.Dates
 import viewmodels.{FileView, PdfViewModel}
 import views.ViewMatchers._
 import views.behaviours.ViewBehaviours
@@ -44,21 +41,21 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain a page heading" in {
       val doc = view(createView())
 
-      doc should containElementWithID("pdf-id")
-      doc.getElementById("pdf-id") should containText(messages("view.application.header"))
+      doc should containElementWithID("print-pages")
+      doc.getElementById("print-pages") should containText(messages("view.application.header"))
     }
 
     "contain a page description" in {
       val doc = view(createView())
 
-      doc should containElementWithID("print-pages")
-      doc.getElementById("print-pages") should containText(messages("view.application.logo.text"))
-      doc.getElementById("print-pages") should containText(messages("view.application.title.text"))
-      doc.getElementById("print-pages") should containText(messages("view.application.your.record.text"))
+      doc should containElementWithID("your-records")
+      doc.getElementById("your-records") should containText(messages("view.application.logo.text"))
+      doc.getElementById("your-records") should containText(messages("view.application.title.text"))
+      doc.getElementById("your-records") should containText(messages("view.application.your.record.text"))
     }
 
     "contain application eori, name, address " in {
-      val doc = view(createView()).getElementById("print-pages")
+      val doc = view(createView()).getElementById("your-records")
 
       doc should containText(messages("view.application.eori"))
       doc should containText(messages("view.application.account.name"))
@@ -66,7 +63,7 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     }
 
     "contain application contact name, contact email, contact phone" in {
-      val doc = view(createView()).getElementById("print-pages")
+      val doc = view(createView()).getElementById("your-records")
 
       doc should containText(messages("view.application.contact.name"))
       doc should containText(messages("view.application.contact.email"))
@@ -74,20 +71,21 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     }
 
     "contain application date submitted" in {
-      val doc = view(createView()).getElementById("print-pages")
+      val doc = view(createView()).getElementById("your-records")
 
       doc should containText(messages("view.application.contact.date"))
     }
 
     "contain goods name and goods details" in {
-      val doc = view(createView()).getElementById("print-pages")
+      val doc = view(createView()).getElementById("print-document")
 
       doc should containText(messages("provideGoodsName.checkYourAnswersLabel"))
       doc should containText(messages("view.application.goods.details"))
     }
 
+
     "contain confidential information question when user selects NO" in {
-      val doc = view(createView(pdfView.copy(confidentialInformation = None))).getElementById("print-pages")
+      val doc = view(createView(pdfView.copy(confidentialInformation = None))).getElementById("print-document")
 
       doc should containText(messages("provideConfidentialInformation.checkYourAnswersLabel"))
     }
@@ -95,14 +93,14 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain confidential information question details when user selects YES" in {
       val doc =
         view(createView(pdfView.copy(confidentialInformation = Some("confidential information"))))
-          .getElementById("print-pages")
+          .getElementById("print-document")
 
       doc should containText(messages("provideConfidentialInformation.checkYourAnswersLabel"))
     }
 
     "contain supporting material file list details" in {
       val doc =
-        view(createView(pdfView)).getElementById("print-pages")
+        view(createView(pdfView)).getElementById("print-document")
 
       doc should containText(messages("supportingMaterialFileList.checkYourAnswersLabel"))
     }
@@ -110,20 +108,20 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain supporting material file list details with Keep confidential flag on" in {
       val doc =
         view(createView(pdfView.copy(
-          attachments = Seq(FileView("file id", "confidential file.pdf", true))))).getElementById("print-pages")
+          attachments = Seq(FileView("file id", "confidential file.pdf", true))))).getElementById("print-document")
 
       doc should containText(messages("supportingMaterialFileList.checkYourAnswersLabel"))
       doc should containText("- Keep confidential")
     }
 
     "contain supporting material file list when user selects NO" in {
-      val doc = view(createView(pdfView.copy(attachments = Seq()))).getElementById("print-pages")
+      val doc = view(createView(pdfView.copy(attachments = Seq()))).getElementById("print-document")
 
       doc should containText(messages("supportingMaterialFileList.checkYourAnswersLabel"))
     }
 
     "contain sending samples question when user selects NO" in {
-      val doc = view(createView(pdfView.copy(sendingSample = false))).getElementById("print-pages")
+      val doc = view(createView(pdfView.copy(sendingSample = false))).getElementById("print-document")
 
       doc should containText(messages("areYouSendingSamples.checkYourAnswersLabel"))
     }
@@ -131,14 +129,14 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain hazardous samples and samples to be returned question when user selects YES to sending samples" in {
       val doc =
         view(createView(pdfView.copy(sendingSample = true, hazardousSample = true, returnSample = true)))
-          .getElementById("print-pages")
+          .getElementById("print-document")
 
       doc should containText(messages("isSampleHazardous.checkYourAnswersLabel"))
       doc should containText(messages("returnSamples.checkYourAnswersLabel"))
     }
 
     "contain commodity code question when user selects NO" in {
-      val doc = view(createView(pdfView.copy(foundCommodityCode = None))).getElementById("print-pages")
+      val doc = view(createView(pdfView.copy(foundCommodityCode = None))).getElementById("print-document")
 
       doc should containText(messages("view.applicationPdf.foundComodityCode"))
     }
@@ -146,13 +144,13 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain commodity code when user selects YES" in {
       val doc =
         view(createView(pdfView.copy(foundCommodityCode = Some("commodity code"))))
-          .getElementById("print-pages")
+          .getElementById("print-document")
 
       doc should containText(messages("application.section.aboutItem.envisagedCommodityCode"))
     }
 
     "contain legal problems question when user selects NO" in {
-      val doc = view(createView(pdfView.copy(legalProblems = None))).getElementById("print-pages")
+      val doc = view(createView(pdfView.copy(legalProblems = None))).getElementById("print-document")
 
       doc should containText(messages("view.applicationPdf.legalProblemQuestion"))
     }
@@ -160,37 +158,36 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain legal problem details when user selects YES" in {
       val doc =
         view(createView(pdfView.copy(legalProblems = Some("legal"))))
-          .getElementById("print-pages")
+          .getElementById("print-document")
 
       doc should containText(messages("view.applicationPdf.legalProblem"))
     }
 
     "contain similar good codes when user selects YES and adds similar good codes " in {
-      val doc = view(createView(pdfView.copy(similarAtarReferences = List("12345", "23456")))).getElementById("print-pages")
+      val doc = view(createView(pdfView.copy(similarAtarReferences = List("12345", "23456")))).getElementById("print-document")
 
       doc should containText(messages("commodityCodeRulingReference.checkYourAnswersLabel"))
       doc should containText(pdfView.similarAtarReferences.mkString)
     }
 
     "not contain similar good codes when user selects NO" in {
-      val doc = view(createView(pdfView)).getElementById("print-pages")
+      val doc = view(createView(pdfView)).getElementById("print-document")
 
       doc should containText(messages("commodityCodeRulingReference.checkYourAnswersLabel"))
     }
 
     "contain reissuedBTIReference when user provides a reference" in {
       val doc = view(createView(pdfView.copy(reissuedBTIReference =
-        Some("reissuedBTIReference")))).getElementById("print-pages")
+        Some("reissuedBTIReference")))).getElementById("print-document")
 
       doc should containText(messages("provideBTIReference.checkYourAnswersLabel"))
       doc should containText("reissuedBTIReference")
     }
 
     "not contain reissuedBTIReference when user does not provide a reference" in {
-      val doc = view(createView(pdfView)).getElementById("print-pages")
+      val doc = view(createView(pdfView)).getElementById("print-document")
 
       doc should containText(messages("provideBTIReference.checkYourAnswersLabel"))
     }
-
   }
 }
