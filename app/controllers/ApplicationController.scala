@@ -102,7 +102,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
       }
       out <- pdf match {
         case true =>
-          generatePdf(view_application(appConfig, PdfViewModel(c, attachmentFileView)), s"BTIConfirmation$reference.pdf")
+          generatePdf(view_application(appConfig, PdfViewModel(c, attachmentFileView), getCountryName), s"BTIConfirmation$reference.pdf")
         case false =>
           Future.successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
       }

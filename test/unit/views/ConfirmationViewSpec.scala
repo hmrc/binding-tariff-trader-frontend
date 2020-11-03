@@ -29,8 +29,10 @@ class ConfirmationViewSpec extends ViewBehaviours {
   private val confirmNoSample = Confirmation("referenceNoSample", "eori", "marisa.nosample@example.test", sendingSamples = false)
   private val pdfViewModel = oCase.pdf
 
-  private def createView: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel)(fakeRequest, messages)
-  private def createViewNoSamples: () => Html = () => confirmation(frontendAppConfig, confirmNoSample, "token", pdfViewModel)(fakeRequest, messages)
+  private def createView: () => Html = () => confirmation(
+    frontendAppConfig, confirm, "token", pdfViewModel, s => Some("example country name"))(fakeRequest, messages)
+  private def createViewNoSamples: () => Html = () => confirmation(
+    frontendAppConfig, confirmNoSample, "token", pdfViewModel, s => Some("example country name"))(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)()

@@ -18,7 +18,8 @@
 @import viewmodels.PdfViewModel
 @import utils.Dates
 
-@(appConfig: FrontendAppConfig, pdf: PdfViewModel, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, pdf: PdfViewModel, getCountryName: String => Option[String],
+        compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"
@@ -69,6 +70,8 @@
                     <dt>@pdf.accountDetails.addressLine2</dt>
                     <dt>@pdf.accountDetails.addressLine3</dt>
                     <dt>@pdf.accountDetails.postcode</dt>
+                    <dt>@messages(getCountryName(pdf.accountDetails.country).mkString)</dt>
+
                 </dl>
             </div>
             <div class="column-half column-one-half">
