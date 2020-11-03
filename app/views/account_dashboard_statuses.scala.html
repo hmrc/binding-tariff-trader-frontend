@@ -48,7 +48,7 @@ captionMsg = Some(messages("application.dashboard.status.title")))
 
 @if(cases.isEmpty) {
 <div>
- @messages("index.noapplications")
+ <h2 class="sub-header">@messages("index.noapplications")</h2>
 </div>
 }
 
@@ -56,7 +56,7 @@ captionMsg = Some(messages("application.dashboard.status.title")))
 
 @if(cases.nonEmpty){
 <div id="applications-rulings-list">
- @paginate("mb-2", "top")
+
  <table id="applications-rulings-list-table">
   <thead>
   <tr>
