@@ -35,9 +35,10 @@
 
         @components.heading(
             messages("commodityCodeRulingReference.heading"),
-            messages("commodityCodeRulingReference.paragraph0"),
             captionMsg = Some(messages("commodityCodeRulingReference.caption"))
         )
+
+        <p>@messages("commodityCodeRulingReference.paragraph0")</p>
 
         @components.input_text(
             field = form("value"),
@@ -45,6 +46,7 @@
             label = Some(messages("commodityCodeRulingReference.heading")),
             hint = Some(messages("commodityCodeRulingReference.hint"))
         )
+
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }
