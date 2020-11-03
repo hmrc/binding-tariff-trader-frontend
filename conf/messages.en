@@ -586,7 +586,7 @@ case.tabs.applications = Applications
 case.tabs.applications.notSubmitted = Submitted applications will appear here
 
 case.tabs.applications.table.reference = Reference
-case.tabs.applications.table.itemName = Name of goods
+case.tabs.applications.table.goodsName = Name of goods
 case.tabs.applications.table.dateSubmitted = Date submitted
 case.tabs.applications.table.status = Status
 case.tabs.applications.table.download =

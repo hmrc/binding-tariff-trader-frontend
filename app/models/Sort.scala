@@ -16,24 +16,88 @@
 
 package models
 
-import models.SortDirection.SortDirection
-import models.SortField.SortField
+import cats.syntax.either._
+import models.SortDirection.{ASCENDING, DESCENDING, SortDirection}
+import models.SortField.{CREATED_DATE, SortField}
+import play.api.mvc.QueryStringBindable
 
+case class Sort(field: SortField, direction: SortDirection)
+
+object Sort {
+
+  def apply(): Sort =
+    apply(CREATED_DATE)
+
+  def apply(field: SortField, sortDirection: Option[SortDirection] = None): Sort =
+    Sort(
+      field,
+      sortDirection.getOrElse(SortField.defaultDirections(field))
+    )
+}
 
 object SortDirection extends Enumeration {
+
   type SortDirection = Value
+
   val DESCENDING = Value("desc")
   val ASCENDING = Value("asc")
+
+  def reverse(order: SortDirection): SortDirection =
+    order match {
+      case ASCENDING  => DESCENDING
+      case DESCENDING => ASCENDING
+      case o          => throw new IllegalArgumentException(s"Unrecognised SortDirection: $o")
+    }
+
+  implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String]) = new QueryStringBindable[SortDirection] {
+    override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortDirection]] = {
+      stringBinder.bind("order", params).map {
+        case Right(sortDirection) =>
+          Either
+            .catchOnly[NoSuchElementException](SortDirection.withName(sortDirection))
+            .leftMap(_ => "Unable to bind a SortDirection")
+        case _ =>
+          Left("Unable to bind a SortDirection")
+      }
+    }
+
+    override def unbind(key: String, sortDirection: SortDirection): String = {
+      stringBinder.unbind("order", sortDirection.toString)
+    }
+  }
 }
 
 object SortField extends Enumeration {
+
   type SortField = Value
+  val REFERENCE = Value("reference")
   val CREATED_DATE = Value("created-date")
   val DECISION_START_DATE = Value("decision-start-date")
-}
+  val STATUS = Value("status")
+  val GOODS_NAME = Value("application.goodName")
 
-case class Sort
-(
-  field: SortField = SortField.CREATED_DATE,
-  direction: SortDirection = SortDirection.DESCENDING
-)
+  val defaultDirections = Map(
+    REFERENCE -> ASCENDING,
+    CREATED_DATE -> DESCENDING,
+    DECISION_START_DATE -> DESCENDING,
+    STATUS -> ASCENDING,
+    GOODS_NAME -> ASCENDING
+  )
+
+  implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String]) = new QueryStringBindable[SortField] {
+    override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortField]] = {
+      stringBinder.bind("sortBy", params).map {
+        case Right(sortByField) =>
+          Either
+            .catchOnly[NoSuchElementException](SortField.withName(sortByField))
+            .leftMap(_ => "Unable to bind a SortField")
+        case _ =>
+          Left("Unable to bind a SortField")
+      }
+    }
+
+    override def unbind(key: String, sortField: SortField): String = {
+      stringBinder.unbind("sortBy", sortField.toString)
+    }
+  }
+}

@@ -15,24 +15,19 @@
  *@
 
 @import utils.Dates
-
 @import config.FrontendAppConfig
-@import java.time.Instant
-@import java.time.temporal.ChronoUnit
 @import components.pagination
-@import components.case_status_tags
-
-
-@(appConfig: FrontendAppConfig,  cases: Paged[Case])(implicit request: Request[_], messages: Messages)
+@import viewmodels.Dashboard
+@(appConfig: FrontendAppConfig, dashboard: Dashboard)(implicit request: Request[_], messages: Messages)
 
 @paginate(containerClass: String, idPrefix: String) = {
 @pagination(
 id = s"$idPrefix-applications-pagination",
 singularName = messages("case.applications.pagination.singular"),
 pluralName = messages("case.applications.pagination.plural"),
-pager = cases,
+pager = dashboard.pageData,
 containerClass = Some(containerClass),
-onChange = page => controllers.routes.IndexController.getApplicationsAndRulings(page)
+onChange = page => controllers.routes.IndexController.getApplicationsAndRulings(page, Dashboard.getSortBy, Dashboard.getSortDirection)
 )
 }
 
@@ -46,7 +41,7 @@ bodyClasses = None) {
 @components.heading(messages("index.heading"),
 captionMsg = Some(messages("application.dashboard.status.title")))
 
-@if(cases.isEmpty) {
+@if(dashboard.pageData.isEmpty) {
 <div>
  @messages("index.noapplications")
 </div>
@@ -54,21 +49,21 @@ captionMsg = Some(messages("application.dashboard.status.title")))
 
 @components.button_link(messages("site.start"), routes.BeforeYouStartController.onPageLoad.url, id = Some("start-application"))
 
-@if(cases.nonEmpty){
+@if(dashboard.pageData.nonEmpty){
 <div id="applications-rulings-list">
  @paginate("mb-2", "top")
  <table id="applications-rulings-list-table">
   <thead>
   <tr>
-   <th scope="col">@messages("case.tabs.applications.table.reference")</th>
-   <th scope="col">@messages("case.tabs.applications.table.itemName")</th>
-   <th scope="col">@messages("case.tabs.applications.table.dateSubmitted")</th>
-   <th scope="col">@messages("case.tabs.applications.table.status")</th>
+   @sortableColumnHeading("case.tabs.applications.table.reference", SortField.REFERENCE.toString)
+   @sortableColumnHeading("case.tabs.applications.table.goodsName", SortField.GOODS_NAME.toString)
+   @sortableColumnHeading("case.tabs.applications.table.dateSubmitted", SortField.CREATED_DATE.toString)
+   @sortableColumnHeading("case.tabs.applications.table.status", SortField.STATUS.toString)
    <th scope="col"><span class="visuallyhidden">@messages("case.application.ruling.table.download")</span></th>
   </tr>
   </thead>
   <tbody id="applications-rulings-list-body">
-  @for((c: Case, index: Int) <- cases.results.zipWithIndex) {
+  @for((c: Case, index: Int) <- dashboard.pageData.results.zipWithIndex) {
   <tr id="applications-rulings-list-row-@{index}">
    <td id="applications-rulings-list-row-@{index}-reference">@c.reference</td>
    <td id="applications-rulings-list-row-@{index}-item_name">@c.application.goodName</td>
@@ -101,4 +96,12 @@ captionMsg = Some(messages("application.dashboard.status.title")))
  @paginate("mt-2", "bottom")
 </div>
 }
+}
+
+@sortableColumnHeading(columnNameKey: String, fieldToOrderBy: String, cssClass: String = "", hidden: Boolean = false) = {
+ <th class="govuk-table__header @cssClass" scope="col">
+  <a href='@{dashboard.columnSortUrlFor(fieldToOrderBy)}' class="govuk-link--no-visited-state" type="button">
+   @messages(columnNameKey)
+  </a>
+ </th>
 }
