@@ -26,7 +26,7 @@ import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.SourceUtil
-import viewmodels.PdfViewModel
+import viewmodels.{FileView, PdfViewModel}
 import views.html.components.view_application
 import views.html.templates._
 
@@ -96,9 +96,13 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
       c <- caseService.getCaseForUser(eori, reference)
       attachments <- fileService.getAttachmentMetadata(c)
       letter <- fileService.getLetterOfAuthority(c)
+      attachmentFileView = (attachments, c.attachments).zipped map {
+        (fileStoreRespAtt, caseAttachment) =>
+          FileView(fileStoreRespAtt.id, fileStoreRespAtt.fileName, caseAttachment.public)
+      }
       out <- pdf match {
         case true =>
-          generatePdf(view_application(appConfig, PdfViewModel(c)), s"BTIConfirmation$reference.pdf")
+          generatePdf(view_application(appConfig, PdfViewModel(c, attachmentFileView)), s"BTIConfirmation$reference.pdf")
         case false =>
           Future.successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
       }
