@@ -46,7 +46,6 @@ global.link.signout = Sign out
 beforeYouStart.title = Information you need to complete an application - Manage your Advance Tariff Rulings - GOV.UK
 beforeYouStart.heading = Information you need to complete an application
 
-beforeYouStart.heading.paragraph1 = You will be able to tell us in your application if any of the information you provide about your goods is confidential. We will not publish confidential information on the Advance Tariff Rulings website.
 beforeYouStart.heading.inset1 = You will be able to save this application and return to it later.
 
 beforeYouStart.subheading1 = About the goods
@@ -389,27 +388,23 @@ commodityCodeRulingReference.hint = The reference number, for example FR12345678
 commodityCodeRulingReference.checkYourAnswersLabel = Similar renewal references
 commodityCodeRulingReference.error.required = Enter a ruling reference number
 
-legalChallenge.title = Have there been any legal problems classifying the goods? - Manage your Advance Tariff Rulings - GOV.UK
-legalChallenge.heading = Have there been any legal problems classifying the {0}?
+legalChallenge.title = Have there been any legal challenges relating to the goods? - Manage your Advance Tariff Rulings - GOV.UK
+legalChallenge.heading = Have there been any legal challenges relating to the {0}?
 legalChallenge.caption = About the goods
 legalChallenge.yesLegalChallenge = Yes
 legalChallenge.noLegalChallenge = No
-legalChallenge.checkYourAnswersLabel = Problems classifying?
-legalChallenge.error.required = Select yes if you are aware of any problems with classifying the goods
+legalChallenge.checkYourAnswersLabel = Legal challenges classifying?
+legalChallenge.error.required = Select yes if there have been any legal challenges relating to the goods
 legalChallenge.paragraph0 = Providing this legal or administrative information can help to identify goods with similar rulings to the {0}.
-legalChallenge.paragraph1 = This may include details of:
-legalChallenge.listItem1 = court rulings
-legalChallenge.listItem2 = commodity codes under review
 
-legalChallengeDetails.title = Provide details of the legal problems classifying the goods - Manage your Advance Tariff Rulings - GOV.UK
-legalChallengeDetails.heading = Provide details of the legal problems classifying the {0}
+legalChallengeDetails.title = Provide details of any legal challenges relating to the goods - Manage your Advance Tariff Rulings - GOV.UK
+legalChallengeDetails.heading = Provide details of any legal challenges relating to the {0}
 legalChallengeDetails.caption = About the goods
-legalChallengeDetails.checkYourAnswersLabel = Problem classifying
-legalChallengeDetails.first.paragraph = Providing this legal or administrative information can help to identify goods with similar rulings.
+legalChallengeDetails.checkYourAnswersLabel = Legal challenges classifying
 legalChallengeDetails.second.paragraph = This may include details of:
 legalChallengeDetails.item1 = court rulings
 legalChallengeDetails.item2 = commodity codes under review
-legalChallengeDetails.error.required = Enter details of the legal problems classifying the goods
+legalChallengeDetails.error.required = Enter details of the legal challenges relating to the goods
 
 supportingInformation.title = Do you need to enter any other information to support this application? - Manage your Advance Tariff Rulings - GOV.UK
 supportingInformation.heading = Do you need to enter any other information to support this application?
@@ -433,6 +428,7 @@ confirmation.paragraph3.sendingSamples.link = Get more information about samples
 confirmation.sendingSamples.address = HM Revenue and Customs<br> Tariff Classification Service<br> 10th Floor SE<br> Alexander House<br> 21 Victoria Avenue<br> Southend-on-Sea<br> Essex<br> SS99 1AA
 confirmation.homeLink = Return to your ATaR home page
 confirmation.heading2.whatNext = What happens next
+confirmation.paragraph.whatNext0.important = We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law. You can sign in to Advance Tariff Rulings check the status of your application.
 confirmation.paragraph.whatNext0.sample = We will give you your ruling within 30 to 60 days of receiving your samples.
 confirmation.paragraph.whatNext0.nosample = We will give you your ruling within 30 to 60 days.
 view.application.paragraph.whatNext0.nosample = We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law.
