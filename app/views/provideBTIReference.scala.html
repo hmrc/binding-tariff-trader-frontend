@@ -33,9 +33,11 @@
 
         @components.error_summary(form.errors)
 
+
         @components.input_text(
             field = form("btiReference"),
             labelHtml = Some(heading),
+            label = Some(messages("provideBTIReference.paragraph")),
             hint = Some(messages("provideBTIReference.hint"))
         )
 
