@@ -145,7 +145,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       // Then
       status(result) shouldBe BAD_REQUEST
-      contentAsString(result) should include("You must select a file")
+      contentAsString(result) should include("Select a file to upload")
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
