@@ -315,10 +315,10 @@ uploadSupportingMaterialMultiple.upload.typeOfFiles = pdf, doc, docx, png, jpg, 
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file types can I upload?
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
-uploadSupportingMaterialMultiple.error.uploadError = The selected file could not be uploaded - try again.
-uploadSupportingMaterialMultiple.error.fileTooSmall = The selected file must be bigger than 1 byte.
-uploadSupportingMaterialMultiple.error.fileTooLarge = The selected file must be smaller than 10MB.
-uploadSupportingMaterialMultiple.error.noFileSelected = Select a file.
+uploadSupportingMaterialMultiple.error.uploadError = The selected file could not be uploaded - try again
+uploadSupportingMaterialMultiple.error.fileTooSmall = The selected file must be bigger than 1 byte
+uploadSupportingMaterialMultiple.error.fileTooLarge = The selected file must be smaller than 10MB
+uploadSupportingMaterialMultiple.error.noFileSelected = Select a file bigger than 1 byte
 
 commodityCodeBestMatch.title = Have you found a commodity code for the goods? - Manage your Advance Tariff Rulings - GOV.UK
 commodityCodeBestMatch.heading = Have you found a commodity code for the {0}?
