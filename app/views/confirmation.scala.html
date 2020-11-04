@@ -42,8 +42,17 @@
 
     @if(confirmation.sendingSamples) {
         @if(pdf.hazardousSample){
-        <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
-        } else {
+            <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+<!--        } else if (!pdf.hazardousSample && pdf.returnSample) {-->
+
+<!--            <p class="break-word">@messages("confirmation.paragraph.whatNext0.important")-->
+<!--                @messages("confirmation.paragraph.whatNext1")-->
+<!--                <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a>-->
+<!--                </span>-->
+<!--            </p>-->
+
+<!--                <div class="panel panel-border-wide">@messages("confirmation.paragraph.whatNext0.sample01")</div>-->
+            } else {
             <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
                 @messages("confirmation.paragraph.whatNext1")
                     <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a>

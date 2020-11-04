@@ -52,7 +52,12 @@ class ConfirmationController @Inject()(
     } yield Ok(confirmation(appConfig, c, token, pdf))
 
     (request.userAnswers.get(ConfirmationPage), request.userAnswers.get(PdfViewPage)) match {
-      case (Some(c: Confirmation), Some(pdf: PdfViewModel)) => show(c, pdf)
+      case (Some(c: Confirmation), Some(pdf: PdfViewModel)) =>
+        {
+         logger.debug("=======================" + pdf.hazardousSample + "")
+          logger.debug("****************" + "sending samples" + c.sendingSamples)
+          show(c, pdf)
+        }
       case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
 

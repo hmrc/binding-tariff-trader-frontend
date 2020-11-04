@@ -140,7 +140,7 @@ previousBTIRuling.title = Do you have a previous ruling reference for the goods?
 previousBTIRuling.heading = Do you have a previous ruling reference for the {0}?
 previousBTIRuling.bodyText = This could be a previous Binding Tariff Information (BTI) ruling.
 previousBTIRuling.checkYourAnswersLabel = Reference previous ruling?
-previousBTIRuling.error.required = Select yes if you are renewing a previous ruling
+previousBTIRuling.error.required = Select yes if you have a previous ruling reference
 previousBTIRuling.caption = About other rulings
 
 registerBusinessRepresenting.title =  What are the registered details of the business, organisation or individual you’re representing? - Manage your Advance Tariff Rulings - GOV.UK
@@ -201,7 +201,7 @@ provideBTIReference.caption = About other rulings
 provideBTIReference.paragraph = This could be a previous Binding Tariff Information (BTI) ruling.
 provideBTIReference.hint = The reference number, for example GB12345678, is on the ruling certificate.
 provideBTIReference.checkYourAnswersLabel = Previous ruling reference
-provideBTIReference.error.required = Enter a reference number for the previous BTI ruling
+provideBTIReference.error.required = Enter a reference number for the previous ruling
 provideBTIReference.error.length = Previous ruling reference must be 100 characters or less
 
 provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
@@ -440,6 +440,8 @@ view.application.paragraph.whatNext0.nosample = We try to issue ATaR decisions w
 confirmation.paragraph.whatNext1 = You can sign in to
 view.application.whatNext0.check.status.linkText = check the status of your application.
 confirmation.get.moreInformation = Get more information about samples (opens in a new window or tab)
+view.application.paragraph.confirmation.paragraph.whatNext0.sample01 = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
+confirmation.paragraph.whatNext0.sample01 = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
 
 view.application.home.Link = Go to your applications and rulings
 view.application.header = Your application

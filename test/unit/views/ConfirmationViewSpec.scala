@@ -31,6 +31,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
   private def createView: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel)(fakeRequest, messages)
   private def createViewNoSamples: () => Html = () => confirmation(frontendAppConfig, confirmNoSample, "token", pdfViewModel)(fakeRequest, messages)
+  private def createViewHazardous: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel.copy(hazardousSample = true))(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)()
@@ -52,6 +53,23 @@ class ConfirmationViewSpec extends ViewBehaviours {
       text should include(messages("confirmation.paragraph.confirmationEmail", "marisa.nosample@example.test"))
       text should include (messages("confirmation.sendingSamples.important"))
       text should not include(messages("confirmation.paragraph.whatNext0.nosample"))
+    }
+
+    "display correct messages when samples are hazardous" in {
+      val text = asDocument(createViewHazardous()).text()
+
+      text should include (messages("view.application.paragraph.do.not.send.sample"))
+      text should not include(messages("confirmation.paragraph.whatNext0.nosample", "confirmation.paragraph.whatNext0.important"))
+
+    }
+
+
+    "display correct messages when samples are not hazardous" in {
+      val text = asDocument(createViewHazardous()).text()
+
+      text should include (messages("confirmation.paragraph.whatNext0.sample01"))
+      text should not include(messages("view.application.paragraph.do.not.send.sample"))
+
     }
   }
 }
