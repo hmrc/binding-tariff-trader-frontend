@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
-import models.Case
+import models.{Case, Confirmation}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.Html
@@ -28,6 +28,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.SourceUtil
 import viewmodels.{FileView, PdfViewModel}
 import views.html.components.view_application
+import views.html.confirmation
 import views.html.templates._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -104,7 +105,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
         case true =>
           generatePdf(view_application(appConfig, PdfViewModel(c, attachmentFileView), getCountryName), s"BTIConfirmation$reference.pdf")
         case false =>
-          Future.successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
+          Future.successful(Ok(applicationView(appConfig, PdfViewModel(c, attachmentFileView), getCountryName)))
       }
     } yield out
   }
