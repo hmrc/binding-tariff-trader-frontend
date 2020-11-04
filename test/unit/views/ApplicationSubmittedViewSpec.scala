@@ -50,7 +50,6 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
       val doc = view(createView())
 
       doc should containElementWithID("your-records")
-      doc.getElementById("your-records") should containText(messages("view.application.logo.text"))
       doc.getElementById("your-records") should containText(messages("view.application.title.text"))
       doc.getElementById("your-records") should containText(messages("view.application.your.record.text"))
     }
@@ -83,7 +82,6 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
       doc should containText(messages("provideGoodsName.checkYourAnswersLabel"))
       doc should containText(messages("view.application.goods.details"))
     }
-
 
     "contain confidential information question when user selects NO" in {
       val doc = view(createView(pdfView.copy(confidentialInformation = None))).getElementById("print-document")
