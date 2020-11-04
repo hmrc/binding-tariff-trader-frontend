@@ -196,7 +196,7 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
       doc should containText(messages("provideBTIReference.checkYourAnswersLabel"))
     }
 
-    "contain a message to not send a sample when not sending samples toggle is on" in {
+    "contain a message to not send a sample when samplesNotAccepted toggle is set to true" in {
         val doc =
           view(createViewWithToggle(pdfView))
             .getElementById("print-pages")
