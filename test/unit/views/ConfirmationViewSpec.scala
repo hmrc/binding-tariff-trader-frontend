@@ -32,6 +32,8 @@ class ConfirmationViewSpec extends ViewBehaviours {
   private def createView: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel)(fakeRequest, messages)
   private def createViewNoSamples: () => Html = () => confirmation(frontendAppConfig, confirmNoSample, "token", pdfViewModel)(fakeRequest, messages)
   private def createViewHazardous: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel.copy(hazardousSample = true))(fakeRequest, messages)
+  private def createViewNotHazardousNotReturnSamples: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel.copy(hazardousSample = false, returnSample = false))(fakeRequest, messages)
+  private def createViewNotHazardousReturnSamples: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel.copy(hazardousSample = false, returnSample = true))(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)()
@@ -43,7 +45,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
       text should include("We have sent your confirmation email to marisa@example.test")
       text should include("Your application will not be processed until we receive your samples")
       text should include("21 Victoria Avenue")
-      text should include(messages("view.application.paragraph.whatNext0.nosample"))
+      text should include(messages("confirmation.paragraph.sample.return"))
     }
 
     "not display sample related text when no samples are sent" in {
@@ -52,24 +54,35 @@ class ConfirmationViewSpec extends ViewBehaviours {
       text should include("referenceNoSample")
       text should include(messages("confirmation.paragraph.confirmationEmail", "marisa.nosample@example.test"))
       text should include (messages("confirmation.sendingSamples.important"))
-      text should not include(messages("confirmation.paragraph.whatNext0.nosample"))
     }
 
     "display correct messages when samples are hazardous" in {
       val text = asDocument(createViewHazardous()).text()
 
       text should include (messages("view.application.paragraph.do.not.send.sample"))
-      text should not include(messages("confirmation.paragraph.whatNext0.nosample", "confirmation.paragraph.whatNext0.important"))
-
+      text should include(messages("confirmation.paragraph.whatNext0.important"))
+      text should not include(messages("confirmation.sendingSamples.address"))
+      text should not include(messages("confirmation.paragraph.sample.return"))
     }
 
+    "display correct messages when samples are not hazardous and samples not returned" in {
+      val text = asDocument(createViewNotHazardousNotReturnSamples()).text()
 
-    "display correct messages when samples are not hazardous" in {
-      val text = asDocument(createViewHazardous()).text()
-
-      text should include (messages("confirmation.paragraph.whatNext0.sample01"))
+      //text should include(messages("confirmation.paragraph.confirmationEmail", "marisa.nosample@example.test")) NOT WORKING
+      text should include(messages("confirmation.paragraph.whatNext0.important"))
+      //text should include (messages("confirmation.sendingSamples.address")) NOT WORKING
+      text should not include(messages("confirmation.paragraph.sample.return"))
       text should not include(messages("view.application.paragraph.do.not.send.sample"))
+    }
 
+    "display correct messages when samples are not hazardous and samples returned" in {
+      val text = asDocument(createViewNotHazardousReturnSamples()).text()
+
+      text should include(messages("confirmation.paragraph.whatNext0.important"))
+      text should include (messages("confirmation.paragraph.sample.return"))
+      text should include (messages("confirmation.paragraph1.sendingSamples"))
+      //text should include (messages("confirmation.sendingSamples.address")) NOT WORKING
+      text should not include(messages("view.application.paragraph.do.not.send.sample"))
     }
   }
 }

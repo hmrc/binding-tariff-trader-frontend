@@ -430,18 +430,15 @@ confirmation.sendingSamples.important = Your application will not be processed u
 confirmation.paragraph1.sendingSamples = Label your samples with your application reference
 confirmation.paragraph2.sendingSamples = Send the samples to:
 confirmation.paragraph3.sendingSamples.link = Get more information about samples
-confirmation.sendingSamples.address = HM Revenue and Customs<br> Tariff Classification Service<br> 10th Floor SE<br> Alexander House<br> 21 Victoria Avenue<br> Southend-on-Sea<br> Essex<br> SS99 1AA
+confirmation.sendingSamples.address = HM Revenue and Customs<br> Tariff Classification Service<br> Alexander House<br> 21 Victoria Avenue<br> Southend-on-Sea<br> Essex<br> SS99 1AA
 confirmation.homeLink = Return to your ATaR home page
 confirmation.heading2.whatNext = What happens next
 confirmation.paragraph.whatNext0.important = We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law. You can sign in to Advance Tariff Rulings check the status of your application.
-confirmation.paragraph.whatNext0.sample = We will give you your ruling within 30 to 60 days of receiving your samples.
-confirmation.paragraph.whatNext0.nosample = We will give you your ruling within 30 to 60 days.
-view.application.paragraph.whatNext0.nosample = We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law.
-confirmation.paragraph.whatNext1 = You can sign in to
-view.application.whatNext0.check.status.linkText = check the status of your application.
+confirmation.important = We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law.
+confirmation.paragraph.signup = You can sign in to
+confirmation.check.status.linkText = check the status of your application.
 confirmation.get.moreInformation = Get more information about samples (opens in a new window or tab)
-view.application.paragraph.confirmation.paragraph.whatNext0.sample01 = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
-confirmation.paragraph.whatNext0.sample01 = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
+confirmation.paragraph.sample.return = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
 
 view.application.home.Link = Go to your applications and rulings
 view.application.header = Your application
@@ -461,11 +458,11 @@ view.application.ref.text = Your application reference number is
 view.application.goods.details = Goods details
 view.application.sending.sample.paragraph1 = You must label your sample with the application reference number
 view.application.sending.sample.paragraph2 = if you consider a sample to be hazardous, it is important your email tariff.classification@hmrc.gov.uk before you send them. We may not accept the sample for heal and safety reason.
-view.application.paragraph.whatNext =  We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law. You can sign in to Advance Tariff Rulings to check the status of your application.
+view.application.paragraph.whatNext = We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law. You can sign in to Advance Tariff Rulings check the status of your application.
 view.application.paragraph.do.not.send.sample = Do not send a sample unless one has been requested by the Tariff Classification Team.
 
 view.applicationPdf.provideConfidentialInformation = Provide confidential information for the item?
-view.applicationPdf.foundComodityCode = Have you found a commodity code for the item?
+view.applicationPdf.foundCommodityCode = Have you found a commodity code for the item?
 view.applicationPdf.legalProblemQuestion = Have there been any legal problems classifying the item?
 view.applicationPdf.legalProblem = Problem classifying
 

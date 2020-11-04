@@ -40,41 +40,50 @@
 
     <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
 
+    <p>
+        @messages("confirmation.important")
+        @messages("confirmation.paragraph.signup")
+        <span>
+            <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("confirmation.check.status.linkText")</a>
+        </span>
+    </p>
+
     @if(confirmation.sendingSamples) {
         @if(pdf.hazardousSample){
             <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
-<!--        } else if (!pdf.hazardousSample && pdf.returnSample) {-->
+        } else if (!pdf.hazardousSample && pdf.returnSample) {
+                <p>@components.icon_important("confirmation.sendingSamples.important")</p>
+                <div class="panel panel-border-wide">@messages("confirmation.paragraph.sample.return")</div>
 
-<!--            <p class="break-word">@messages("confirmation.paragraph.whatNext0.important")-->
-<!--                @messages("confirmation.paragraph.whatNext1")-->
-<!--                <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a>-->
-<!--                </span>-->
-<!--            </p>-->
+                <p>@messages("confirmation.paragraph1.sendingSamples")
+                    <span class="bold"> @messages("caseReference.format", confirmation.reference)</span>
+                    @messages("confirmation.paragraph2.sendingSamples")
+                </p>
 
-<!--                <div class="panel panel-border-wide">@messages("confirmation.paragraph.whatNext0.sample01")</div>-->
+                <address>
+                @Html(messages("confirmation.sendingSamples.address"))
+                </address>
+                <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+                @messages("confirmation.get.moreInformation")</a>
+                </p>
             } else {
-            <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
-                @messages("confirmation.paragraph.whatNext1")
-                    <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a>
-                </span>
-            </p>
 
-        @components.icon_important("confirmation.sendingSamples.important")
+                @components.icon_important("confirmation.sendingSamples.important")
 
-        <p>@messages("confirmation.paragraph1.sendingSamples")
-            <span class="bold"> @messages("caseReference.format", confirmation.reference)</span>
-            @messages("confirmation.paragraph2.sendingSamples")
-        </p>
+                <p>@messages("confirmation.paragraph1.sendingSamples")
+                    <span class="bold"> @messages("caseReference.format", confirmation.reference)</span>
+                    @messages("confirmation.paragraph2.sendingSamples")
+                </p>
 
-        <address>
-        @Html(messages("confirmation.sendingSamples.address"))
-        </address>
-        <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
-            @messages("confirmation.get.moreInformation")</a>
-        </p>
-        }
+                <address>
+                @Html(messages("confirmation.sendingSamples.address"))
+                </address>
+                <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+                    @messages("confirmation.get.moreInformation")</a>
+                </p>
+            }
     } else {
-        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
+        <p class="break-word">@messages("confirmation.paragraph.sample.return") <span>@messages("confirmation.paragraph.signup") <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("confirmation.check.status.linkText")</a></span></p>
         <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
         @messages("confirmation.get.moreInformation")</a>
         </p>
