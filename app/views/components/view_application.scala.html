@@ -113,27 +113,19 @@
                 <div class="grid-row">
                     <div class="column-two-thirds">
                         <h3>@messages("confirmation.heading2.whatNext")</h3>
-                     <p class="govuk-body">@messages("confirmation.paragraph.whatNext0.important")</p>
-                        @if(!pdf.sendingSample) {
-                            <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
-                        }else{
-                            @if(pdf.sendingSample) {
-
-                                @if(pdf.hazardousSample){
-                        @components.icon_important("view.application.paragraph.do.not.send.sample")
-                                } else {
-
-                                @components.icon_important("confirmation.sendingSamples.important")
-
-                                @if(pdf.returnSample){
-                                    <p class="panel panel-border-wide">@messages("confirmation.paragraph.sample.return")</p>
+                     <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
+                        @if(pdf.sendingSample) {
+                            @if(pdf.hazardousSample){
+                                @components.icon_important("view.application.paragraph.do.not.send.sample")
+                            } else {
+                                 @components.icon_important("confirmation.sendingSamples.important")
+                                    @if(pdf.returnSample){
+                                        <p class="panel panel-border-wide">@messages("confirmation.paragraph.sample.return")</p>
+                                    }
                                 }
-
-                                }
-                            }
                         }
-
                     </div>
+
                     @if(pdf.sendingSample) {
                     <div class="column-one-third">
                         <div class=@if(pdf.hazardousSample){"about-this-result-box-do-not-send about-this-result-box"} else {"about-this-result-box"}>

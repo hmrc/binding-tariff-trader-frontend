@@ -67,5 +67,8 @@ object oCase {
   val pdf = PdfViewModel("eori", "reference", eoriDetailsExample, contactExample, Instant.now, "goods name",
     "goods details", Some("confidential info"), true, false, true, Seq(FileView("id", "file name", false)),
     Some("commodity code"), Some("legal"), List(), None)
+  val pdfNoSamples = PdfViewModel("eori", "reference", eoriDetailsExample, contactExample, Instant.now, "goods name",
+    "goods details", Some("confidential info"), false, false, false, Seq(FileView("id", "file name", false)),
+    Some("commodity code"), Some("legal"), List(), None)
 
 }
