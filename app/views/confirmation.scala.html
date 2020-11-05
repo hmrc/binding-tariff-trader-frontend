@@ -44,9 +44,14 @@
         @messages("confirmation.important")
         @messages("confirmation.paragraph.signup")
         <span>
-            <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("confirmation.check.status.linkText")</a>
+            <a href="@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url">@messages("confirmation.check.status.linkText")</a>
         </span>
     </p>
+
+    @if(appConfig.samplesToggle){
+        <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+    } else {
+
 
     <div id = "sampleInformation">
     @if(confirmation.sendingSamples) {
@@ -87,11 +92,12 @@
     </div>
 
     <div class="mt-2 footer-page-break">
-        @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplicationsAndRulings().url)
+        @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url)
     </div>
 </div>
 
     <div id = "pdfView">
         @components.view_application(appConfig, pdf, compositeMode)
     </div>
+    }
 }

@@ -45,7 +45,12 @@
                     captionMsg = Some(messages("supportingMaterialFileList.caption")))
             }
 
-            @components.show_file_table(files, mode)
+            <div class="js-visible">
+                @components.show_file_table(files, mode)
+            </div>
+            <div class="js-hidden">
+                <a href="@routes.SupportingMaterialFileListController.onClear(mode)">@messages("supportingMaterialFileList.clearFiles")</a>
+            </div>
 
             @indicationsContent
 

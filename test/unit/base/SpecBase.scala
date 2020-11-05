@@ -38,16 +38,24 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
   override implicit lazy val app: Application = GuiceApplicationBuilder()
     .configure(
       "metrics.jvm" -> false,
-      "metrics.enabled" -> false
+      "metrics.enabled" -> false,
+      "toggle.samplesNotAccepted" -> false
+    ).build()
+
+  implicit lazy val appWithSamplesToggleOn: Application = GuiceApplicationBuilder()
+    .configure(
+      "metrics.jvm" -> false,
+      "metrics.enabled" -> false,
+      "toggle.samplesNotAccepted" -> true
     ).build()
 
   protected lazy val injector: Injector = app.injector
 
   def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+  def frontendAppConfigWithToggle: FrontendAppConfig = appWithSamplesToggleOn.injector.instanceOf[FrontendAppConfig]
 
   implicit val cc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
   implicit val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-  implicit val lang: Lang = appConfig.defaultLang
 
   def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
 

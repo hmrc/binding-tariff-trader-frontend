@@ -63,23 +63,6 @@ trait ModelGenerators {
       } yield EnterContactDetails(field1, field2, field3)
     }
 
-  implicit lazy val arbitraryRegisterBusinessRepresenting: Arbitrary[RegisterBusinessRepresenting] =
-    Arbitrary {
-      for {
-        eoriNumber <- arbitrary[String]
-        businessName <- arbitrary[String]
-        addressLine1 <- arbitrary[String]
-        town <- arbitrary[String]
-        postCode <- arbitrary[String]
-        country <- arbitrary[String]
-      } yield RegisterBusinessRepresenting(eoriNumber, businessName, addressLine1, town, Some(postCode), country)
-    }
-
-  implicit lazy val arbitraryWhichBestDescribesYou: Arbitrary[WhichBestDescribesYou] =
-    Arbitrary {
-      Gen.oneOf(WhichBestDescribesYou.values.toSeq)
-    }
-
   implicit lazy val arbitraryRegisteredAddressForEori: Arbitrary[RegisteredAddressForEori] =
     Arbitrary {
       for {

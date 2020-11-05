@@ -33,7 +33,11 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
   private val messageKeyPrefix = "view.application"
   private val pdfView = oCase.pdf
 
-  private def createView(pdfViewModel: PdfViewModel = pdfView): Html = view_application(frontendAppConfig, pdfViewModel)(fakeRequest, messages)
+  private def createView(pdfViewModel: PdfViewModel = pdfView): Html =
+    view_application(frontendAppConfig, pdfViewModel)(fakeRequest, messages)
+
+  private def createViewWithToggle(pdfViewModel: PdfViewModel = pdfView): Html =
+    view_application(frontendAppConfigWithToggle, pdfViewModel)(fakeRequest, messages)
 
   protected def view(html: Html): Document = {
     Jsoup.parse(html.toString())
@@ -52,8 +56,6 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
       val doc = view(createView())
 
       doc should containElementWithID("print-pages")
-      doc.getElementById("print-pages") should containText(messages("view.application.logo.text"))
-      doc.getElementById("print-pages") should containText(messages("view.application.title.text"))
       doc.getElementById("print-pages") should containText(messages("view.application.your.record.text"))
     }
 
@@ -123,7 +125,7 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     }
 
     "contain sending samples question when user selects NO" in {
-      val doc = view(createView(pdfView.copy(sendingSample = false))).getElementById("print-pages")
+      val doc = view(createView(pdfView.copy(sendingSample = false))).getElementById("print-document")
 
       doc should containText(messages("areYouSendingSamples.checkYourAnswersLabel"))
     }
@@ -191,6 +193,15 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
 
       doc should containText(messages("provideBTIReference.checkYourAnswersLabel"))
     }
+
+    "contain a message to not send a sample when samplesNotAccepted toggle is set to true" in {
+        val doc =
+          view(createViewWithToggle(pdfView))
+            .getElementById("print-pages")
+
+        doc should containText(messages("view.application.paragraph.do.not.send.sample"))
+    }
+
 
     "contain footer date" in {
       val dateSubmitted = Instant.now

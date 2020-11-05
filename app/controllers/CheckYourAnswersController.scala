@@ -24,7 +24,6 @@ import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierA
 import mapper.CaseRequestMapper
 import models._
 import models.requests.DataRequest
-import models.WhichBestDescribesYou.theUserIsAnAgent
 import navigation.Navigator
 import pages._
 import play.api.i18n.{I18nSupport, Lang}
@@ -56,11 +55,9 @@ class CheckYourAnswersController @Inject()(
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
-  private implicit val lang: Lang = appConfig.defaultLang
-
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
-    val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountriesById, messagesApi, lang)
+    val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountriesById)
 
     val sections = Seq(
       AnswerSection(
@@ -113,6 +110,7 @@ class CheckYourAnswersController @Inject()(
     val fileAttachments: Seq[FileAttachment] = answers
       .get(UploadSupportingMaterialMultiplePage)
       .getOrElse(Seq.empty)
+      .filter(_.uploaded)
 
     val keepConfidential = answers
       .get(MakeFileConfidentialPage)
@@ -129,8 +127,7 @@ class CheckYourAnswersController @Inject()(
       published   <- fileService.publish(fileAttachments)
       publishIds  = published.map(_.id)
       attachments = withStatus.filter(att => publishIds.contains(att.id))
-      letter      <- getPublishedLetter(answers)
-      atar        <- createCase(newCaseRequest, attachments, letter, answers)
+      atar        <- createCase(newCaseRequest, attachments)
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
       _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
       userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar, fileView))
@@ -139,40 +136,10 @@ class CheckYourAnswersController @Inject()(
     } yield res
   }
 
-  private def getPublishedLetter(answers: UserAnswers)
-                                (implicit headerCarrier: HeaderCarrier): Future[Option[PublishedFileAttachment]] = {
-
-    if (theUserIsAnAgent(answers)) {
-      answers.get(UploadWrittenAuthorisationPage)
-        .map(fileService.publish(_).map(Some(_)))
-        .getOrElse(successful(None))
-    } else {
-      successful(None)
-    }
-  }
-
   private def createCase(
     newCaseRequest: NewCaseRequest,
-    attachments: Seq[Attachment],
-    letter: Option[PublishedFileAttachment],
-    answers: UserAnswers
+    attachments: Seq[Attachment]
   )(implicit headerCarrier: HeaderCarrier): Future[Case] = {
-    caseService.create(appendAttachments(newCaseRequest, attachments, letter, answers))
-  }
-
-  private def appendAttachments(
-    caseRequest: NewCaseRequest,
-    attachments: Seq[Attachment],
-    letter: Option[PublishedFileAttachment],
-    answers: UserAnswers
-  ): NewCaseRequest = {
-    if (theUserIsAnAgent(answers)) {
-      val letterOfAuth = letter.map(att => Attachment(att.id, false))
-      val agentDetails = caseRequest.application.agent.map(_.copy(letterOfAuthorisation = letterOfAuth))
-      val application = caseRequest.application.copy(agent = agentDetails)
-      caseRequest.copy(application = application, attachments = attachments)
-    } else {
-      caseRequest.copy(attachments = attachments)
-    }
+    caseService.create(newCaseRequest.copy(attachments = attachments))
   }
 }

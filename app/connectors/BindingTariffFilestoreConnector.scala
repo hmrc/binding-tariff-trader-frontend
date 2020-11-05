@@ -32,6 +32,9 @@ import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
 import scala.concurrent.{ ExecutionContext, Future }
 import uk.gov.hmrc.http.HeaderCarrier
+import models.requests.FileStoreInitiateRequest
+import models.response.FileStoreInitiateResponse
+import play.api.libs.json.JsValue
 
 @Singleton
 class BindingTariffFilestoreConnector @Inject()(
@@ -40,27 +43,18 @@ class BindingTariffFilestoreConnector @Inject()(
   val metrics: Metrics
 )(implicit appConfig: FrontendAppConfig, ec: ExecutionContext) extends InjectAuthHeader with HasMetrics {
 
-  def upload(file: MultipartFormData.FilePart[TemporaryFile])
-            (implicit hc: HeaderCarrier): Future[FilestoreResponse] = 
-    withMetricsTimerAsync("upload-file") { _ =>
-      val filePart: MultipartFormData.Part[Source[ByteString, Future[IOResult]]] = FilePart(
-        "file",
-        file.filename,
-        file.contentType,
-        FileIO.fromPath(file.ref.path)
-      )
-
-      ws.url(s"${appConfig.bindingTariffFileStoreUrl}/file")
-        .addHttpHeaders(hc.headers: _*)
-        .addHttpHeaders(authHeaders(appConfig.apiToken))
-        .post(Source(List(filePart)))
-        .map(response => Json.fromJson[FilestoreResponse](Json.parse(response.body)).get)
-    }
-
   def get(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
     withMetricsTimerAsync("get-file-by-id") { _ =>
       client.GET[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}")(implicitly, addAuth, implicitly)
     }
+
+  def initiate(request: FileStoreInitiateRequest)(implicit hc: HeaderCarrier): Future[FileStoreInitiateResponse] = {
+    withMetricsTimerAsync("initiate-file-upload") { _ =>
+      client.POST[FileStoreInitiateRequest, FileStoreInitiateResponse](
+        s"${appConfig.bindingTariffFileStoreUrl}/file/initiate", request
+      )(implicitly, implicitly, addAuth, implicitly)
+    }
+  }
 
   def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
     withMetricsTimerAsync("publish-file") { _ =>

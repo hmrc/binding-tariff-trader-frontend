@@ -16,22 +16,22 @@
 
 package controllers
 
-import connectors.DataCacheConnector
+import connectors.FakeDataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
-import models.{FileAttachment, NormalMode}
-import navigation.Navigator
-import org.mockito.ArgumentCaptor
+import models.requests.FileStoreInitiateRequest
+import models.response.{FileStoreInitiateResponse, UpscanFormTemplate}
+import models.{FileAttachment, FileTooLarge, FileTooSmall, NoFileSelected, NormalMode, Other}
+import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import pages.ProvideGoodsNamePage
+import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
-import play.api.libs.Files.TemporaryFile
-import play.api.libs.json.JsString
-import play.api.mvc.MultipartFormData
-import play.api.mvc.MultipartFormData.FilePart
+import play.api.libs.json.{JsString, Json}
+import play.api.mvc.Call
+import play.api.mvc.request.RequestTarget
 import play.api.test.Helpers._
 import service.FileService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -39,23 +39,28 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import pages.UploadSupportingMaterialMultiplePage
 
 class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
   private val fileService = mock[FileService]
-  private val cacheConnector = mock[DataCacheConnector]
+  private val cacheConnector = FakeDataCacheConnector
   private val formProvider = new UploadSupportingMaterialMultipleFormProvider()
+  private val request = fakeGETRequestWithCSRF
   private val form = formProvider()
   private val goodsName = "goose"
+  private val file = FileAttachment("id", "MyFile.jpg", "image/jpeg", 1L, false)
+  private val uploadedFile = file.copy(uploaded = true)
+  private val uploadedFileNoMetadata = FileAttachment("id", "", "", 0L, uploaded = true)
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  def onwardRoute = Call("GET", "/foo")
+
+
+  private def controller(dataRetrievalAction: DataRetrievalAction) =
     new UploadSupportingMaterialMultipleController(
       frontendAppConfig,
       cacheConnector,
       FakeIdentifierAction,
       dataRetrievalAction,
-      new Navigator,
+      new FakeNavigator(onwardRoute),
       new DataRequiredActionImpl,
       formProvider,
       fileService,
@@ -67,12 +72,22 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     reset(fileService)
   }
 
+  private val initiateResponse = FileStoreInitiateResponse(
+    id = "id",
+    upscanReference = "ref",
+    uploadRequest = UpscanFormTemplate(
+      "http://localhost:20001/upscan/upload",
+      Map("key" -> "value")
+    )
+  )
+
   private def viewAsString(form: Form[_] = form): String = uploadSupportingMaterialMultiple(
     frontendAppConfig,
+    initiateResponse,
     form,
     goodsName,
     NormalMode
-  )(fakeRequest, messages).toString
+  )(request, messages).toString
 
   "UploadSupportingMaterialMultiple Controller" must {
 
@@ -80,86 +95,211 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+
+      val result = controller(getRelevantData).onPageLoad(None, NormalMode)(request)
 
       status(result) shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 
-    "respond with accepted and add next page on the location header  when valid data is submitted" in {
-      // Given A Form
-      val file = tempFileCreator.create("example-file.txt")
-      val filePart = FilePart[TemporaryFile](key = "file-input", "file.txt", contentType = Some("text/plain"), ref = file)
-      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
-      val postRequest = fakeRequest.withBody(form)
+    "update user answers with file when file upload succeeds" in {
+      val fileAttachmentsJson = Json.toJson(Seq(file))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
 
-      given(fileService.validate(refEq(filePart))).willReturn(Right(filePart))
-      given(fileService.upload(refEq(filePart))(any[HeaderCarrier])).willReturn(concurrent.Future(FileAttachment("id", "file-name", "type", 0)))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      val savedCacheMap = mock[CacheMap]
-      given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
+      val result = controller(getRelevantData).onFileUploadSuccess(file.id, NormalMode)(request)
 
-      // When
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      // Then
       status(result) shouldBe SEE_OTHER
-
-      val captor = ArgumentCaptor.forClass(classOf[CacheMap])
-      verify(cacheConnector).save(captor.capture())
-      val cache: CacheMap = captor.getValue
-
-      cache.getEntry[Seq[FileAttachment]](UploadSupportingMaterialMultiplePage.toString) shouldBe Some(Seq(FileAttachment("id", "file-name", "type", file.toPath.toFile.length())))
+      redirectLocation(result) shouldBe Some(onwardRoute.url)
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq(uploadedFile)))
     }
 
-    "respond with bad request if a file has wrong extension" in {
-      // Given A Form
-      val file = tempFileCreator.create("example-file.txt")
-      val filePart = FilePart[TemporaryFile](key = "file-input", "file.3gp", contentType = Some("video/3gpp"), ref = file)
-      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
-      val postRequest = fakeRequest.withBody(form)
+    "update user answers with file when file upload succeeds and JS is disabled (no pre-existing metadata entry)" in {
+      val fileAttachmentsJson = Json.toJson(Seq.empty[FileAttachment])
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
 
-      given(fileService.validate(refEq(filePart))).willReturn(Left("message something went wrong"))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      val savedCacheMap = mock[CacheMap]
-      given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
+      val result = controller(getRelevantData).onFileUploadSuccess(file.id, NormalMode)(request)
 
-      // When
-      val result = controller().onSubmit(NormalMode)(postRequest)
-
-      // Then
-      status(result) shouldBe BAD_REQUEST
-      contentAsString(result) should include("message something went wrong")
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(onwardRoute.url)
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq(uploadedFileNoMetadata)))
     }
 
-    "respond with bad request if no file is selected" in {
-      // Given A Form
-      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq.empty, badParts = Seq.empty)
-      val postRequest = fakeRequest.withBody(form)
+    "remove metadata entry for file when file upload fails with an unknown error" in {
+      val upscanRequest = request.withTarget(RequestTarget("", "/", Map("errorCode" -> Seq("foo"))))
 
-      val savedCacheMap = mock[CacheMap]
-      given(cacheConnector.save(any[CacheMap])).willReturn(Future.successful(savedCacheMap))
+      val fileAttachmentsJson = Json.toJson(Seq(file))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
 
-      // When
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      // Then
+      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+
+      val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
+
       status(result) shouldBe BAD_REQUEST
-      contentAsString(result) should include("You must select a file")
+      contentAsString(result) should include("error-message-file-input")
+      contentAsString(result) should include(messages(Other("").errorMessageKey))
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq()))
+    }
+
+    "remove metadata entry for file when file upload fails because the file is too small" in {
+      val upscanRequest = request.withTarget(RequestTarget("", "/", Map("errorCode" -> Seq("EntityTooSmall"))))
+      val fileAttachmentsJson = Json.toJson(Seq(file))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
+
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+
+      val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
+
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) should include("error-message-file-input")
+      contentAsString(result) should include(messages(FileTooSmall.errorMessageKey))
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq()))
+    }
+
+    "remove metadata entry for file when file upload fails because the file is too large" in {
+      val upscanRequest = request.withTarget(RequestTarget("", "/", Map("errorCode" -> Seq("EntityTooLarge"))))
+      val fileAttachmentsJson = Json.toJson(Seq(file))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
+
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+
+      val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
+
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) should include("error-message-file-input")
+      contentAsString(result) should include(messages(FileTooLarge.errorMessageKey))
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq()))
+    }
+
+    "remove metadata entry for file when file upload fails because a file has not been selected" in {
+      val upscanRequest = request.withTarget(RequestTarget("", "/", Map("errorCode" -> Seq("400"))))
+      val fileAttachmentsJson = Json.toJson(Seq(file))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
+
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+
+      val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
+
+      status(result) shouldBe BAD_REQUEST
+      contentAsString(result) should include("error-message-file-input")
+      contentAsString(result) should include(messages(NoFileSelected.errorMessageKey))
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq()))
+    }
+
+
+    "update file metadata when a file is selected in the file input" in {
+      val validData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val jsonRequest = request.withBody(file)
+      val result = controller(getRelevantData).onFileSelected()(jsonRequest)
+
+      status(result) shouldBe OK
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq(file)))
+
+    }
+
+    "add more file metadata when user uploads an additional file" in {
+      val fileAttachmentsJson = Json.toJson(Seq(uploadedFile))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson,
+        MakeFileConfidentialPage.toString -> Json.toJson(Map(uploadedFile.id -> true))
+      )
+
+      val differentFile = file.copy(id = "fileId", name = "MyFile2.docx")
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val jsonRequest = request.withBody(differentFile)
+      val result = controller(getRelevantData).onFileSelected()(jsonRequest)
+
+      status(result) shouldBe OK
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq(uploadedFile, differentFile)))
+    }
+
+    "remove stale metadata entries that the user never uploaded" in {
+      val fileAttachmentsJson = Json.toJson(Seq(file))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
+
+      val differentFile = file.copy(id = "fileId", name = "MyFile2.docx")
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val jsonRequest = request.withBody(differentFile)
+      val result = controller(getRelevantData).onFileSelected()(jsonRequest)
+
+      status(result) shouldBe OK
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq(differentFile)))
+    }
+
+    "remove stale metadata entries where the user never chose confidentiality status" in {
+      val fileAttachmentsJson = Json.toJson(Seq(uploadedFile))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson,
+      )
+
+      val differentFile = file.copy(id = "fileId", name = "MyFile2.docx")
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val jsonRequest = request.withBody(differentFile)
+      val result = controller(getRelevantData).onFileSelected()(jsonRequest)
+
+      status(result) shouldBe OK
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq(differentFile)))
+    }
+
+    "replace file metadata when user selects different file on same page" in {
+      val fileAttachmentsJson = Json.toJson(Seq(uploadedFile))
+      val validData = Map(
+        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        UploadSupportingMaterialMultiplePage.toString -> fileAttachmentsJson
+      )
+
+      val differentFile = file.copy(name = "MyFile2.docx")
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+      val jsonRequest = request.withBody(differentFile)
+      val result = controller(getRelevantData).onFileSelected()(jsonRequest)
+
+      status(result) shouldBe OK
+      await(FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)) shouldBe(Some(Seq(differentFile)))
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-      val filePart = FilePart[TemporaryFile](key = "file-input", "file.txt", contentType = Some("text/plain"), ref = tempFileCreator.create("example-file.txt"))
-      val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
-      val postRequest = fakeRequest.withBody(form)
-      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
+      val result = controller(dontGetAnyData).onPageLoad(None, NormalMode)(request)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)

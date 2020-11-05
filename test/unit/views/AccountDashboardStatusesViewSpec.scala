@@ -16,9 +16,9 @@
 
 package unit.views
 
-import models.{Case, Paged, oCase}
-import play.api.i18n.Messages
-import play.twirl.api.{Html, HtmlFormat}
+import models.{Case, Paged, Sort, oCase}
+import play.twirl.api.HtmlFormat
+import viewmodels.Dashboard
 import views.behaviours.ViewBehaviours
 import views.html.account_dashboard_statuses
 
@@ -27,27 +27,25 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours {
   val emptyPaged = Paged.empty[Case]
   val paged = Paged(Seq(oCase.btiCaseExample))
 
-
-  def applicationView(pagedCases: Paged[Case]): () => HtmlFormat.Appendable = () => account_dashboard_statuses(frontendAppConfig,
-    pagedCases)(fakeRequest, messages)
+  def applicationView(dashboard: Dashboard): () => HtmlFormat.Appendable = () => account_dashboard_statuses(frontendAppConfig, dashboard)(fakeRequest, messages)
 
   "no previous applications view" must {
-    behave like normalPage(applicationView(emptyPaged), "index")()
+    behave like normalPage(applicationView(Dashboard(emptyPaged, Sort())), "index")()
   }
 
   "has previous applications view" must {
-    behave like normalPage(applicationView(paged), "index")()
+    behave like normalPage(applicationView(Dashboard(paged, Sort())), "index")()
   }
 
   "Applications and ruling view" must {
 
     "show message to say no previous applications when there are none supplied" in {
-      val doc = asDocument(applicationView(emptyPaged)())
+      val doc = asDocument(applicationView(Dashboard(emptyPaged, Sort()))())
       assertContainsText(doc, messages("index.noapplications"))
     }
 
     "show table containing previous applications when there are some" in {
-      val doc = asDocument(applicationView(paged)())
+      val doc = asDocument(applicationView(Dashboard(paged, Sort()))())
       assert(!doc.html().contains(messages("index.noapplications")))
       assertRenderedById(doc,"applications-rulings-list")
     }

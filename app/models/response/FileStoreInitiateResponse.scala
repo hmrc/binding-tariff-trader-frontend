@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package models.response
 
-import models.WhichBestDescribesYou
-import pages.behaviours.PageBehaviours
+import play.api.libs.json.{ OFormat, Json }
 
-class WhichBestDescribesYouPageSpec extends PageBehaviours {
+case class FileStoreInitiateResponse(id: String, upscanReference: String, uploadRequest: UpscanFormTemplate)
 
-  "YourLocation" must {
-
-    beRetrievable[WhichBestDescribesYou](WhichBestDescribesYouPage)
-
-    beSettable[WhichBestDescribesYou](WhichBestDescribesYouPage)
-
-    beRemovable[WhichBestDescribesYou](WhichBestDescribesYouPage)
-  }
+object FileStoreInitiateResponse {
+  implicit val format: OFormat[FileStoreInitiateResponse] = Json.format[FileStoreInitiateResponse]
 }

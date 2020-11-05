@@ -16,13 +16,14 @@
 
 package mapper
 
+import com.google.inject.Inject
+import config.FrontendAppConfig
 import javax.inject.Singleton
-import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import pages._
 
 @Singleton
-class CaseRequestMapper {
+class CaseRequestMapper @Inject()(appConfig: FrontendAppConfig) {
 
   private def throwError(field: String) = throw new IllegalStateException(s"Missing User Session Data: $field")
 
@@ -36,19 +37,23 @@ class CaseRequestMapper {
     val legalChallengeDetails: Option[String] = answers.get(LegalChallengeDetailsPage)
     val commodityCodeDigits: Option[String] = answers.get(CommodityCodeDigitsPage)
 
-    val sampleProvided: Boolean = answers.get(AreYouSendingSamplesPage).getOrElse(throwError("when to send a sample"))
+    // TODO: Remove the if else condition from getOrElse when the toggle logic is removed.
+    val sampleProvided: Boolean = answers.get(AreYouSendingSamplesPage)
+      .getOrElse(
+        if (appConfig.samplesToggle) false else throwError("when to send a sample")
+      )
+
     val sampleHazardous: Option[Boolean] = answers.get(IsSampleHazardousPage)
     val returnSample: Boolean = answers.get(ReturnSamplesPage).getOrElse(false)
 
     val contact = contactDetails.map(toContact).getOrElse(throwError("contact details"))
 
-    val agentDetails: Option[AgentDetails] = agentDetailsFrom(answers)
     val holderDetails: EORIDetails = holderDetailsFrom(answers)
 
     val app = Application(
       holder = holderDetails,
       contact = contact,
-      agent = agentDetails,
+      agent = None,
       offline = false,
       goodName = goodsName.getOrElse(throwError("goods name")),
       goodDescription = goodsDescription.getOrElse(throwError("goods description")),
@@ -74,35 +79,10 @@ class CaseRequestMapper {
   }
 
   private def holderDetailsFrom(answers: UserAnswers): EORIDetails = {
-    val maybeEoriDetails = if (theUserIsAnAgent(answers)) {
-      answers.get(RegisterBusinessRepresentingPage).map(toEoriDetails)
-    } else {
+    val maybeEoriDetails =
       answers.get(RegisteredAddressForEoriPage).map(toEoriDetails)
-    }
 
     maybeEoriDetails.getOrElse(throwError("holder EORI details"))
-  }
-
-  private def agentDetailsFrom(answers: UserAnswers): Option[AgentDetails] = {
-    if (theUserIsAnAgent(answers)) {
-      answers.get(RegisteredAddressForEoriPage).map { details: RegisteredAddressForEori =>
-        AgentDetails(toEoriDetails(details))
-      }
-    } else {
-      None
-    }
-  }
-
-  private def toEoriDetails(details: RegisterBusinessRepresenting): EORIDetails = {
-    EORIDetails(
-      details.eoriNumber,
-      details.businessName,
-      details.addressLine1,
-      details.town,
-      "", // address line 3 empty
-      details.postCode.getOrElse(""),
-      details.country
-    )
   }
 
   private def toEoriDetails(details: RegisteredAddressForEori): EORIDetails = {
