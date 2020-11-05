@@ -94,7 +94,7 @@ class NavigatorSpec extends SpecBase {
         when(mockUserAnswers.get(AddSupportingDocumentsPage)).thenReturn(Some(true))
 
         navigator.nextPage(AddSupportingDocumentsPage, NormalMode)(mockUserAnswers) shouldBe
-          routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)
+          routes.UploadSupportingMaterialMultipleController.onPageLoad(None, NormalMode)
       }
 
       "redirect to AreYouSendingSamples when user selects no to adding files on AddSupportingDocumentsPage" in {
@@ -112,7 +112,7 @@ class NavigatorSpec extends SpecBase {
         when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(true))
 
         navigator.nextPage(SupportingMaterialFileListPage, NormalMode)(mockUserAnswers) shouldBe
-          routes.UploadSupportingMaterialMultipleController.onPageLoad(NormalMode)
+          routes.UploadSupportingMaterialMultipleController.onPageLoad(None, NormalMode)
       }
 
       "go to MakeFileConfidentialPage after uploading a file on UploadSupportingMaterialMultiplePage" in {
@@ -357,7 +357,7 @@ class NavigatorSpec extends SpecBase {
         when(mockUserAnswers.get(AddSupportingDocumentsPage)).thenReturn(Some(true))
 
         navigator.nextPage(AddSupportingDocumentsPage, CheckMode)(mockUserAnswers) shouldBe
-          routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode)
+          routes.UploadSupportingMaterialMultipleController.onPageLoad(None, CheckMode)
       }
 
       "redirect to CheckYourAnswersPage when user selects no to adding files on AddSupportingDocumentsPage" in {
@@ -375,7 +375,7 @@ class NavigatorSpec extends SpecBase {
         when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(true))
 
         navigator.nextPage(SupportingMaterialFileListPage, CheckMode)(mockUserAnswers) shouldBe
-          routes.UploadSupportingMaterialMultipleController.onPageLoad(CheckMode)
+          routes.UploadSupportingMaterialMultipleController.onPageLoad(None, CheckMode)
       }
 
       "go to MakeFileConfidentialPage after uploading a file on UploadSupportingMaterialMultiplePage" in {

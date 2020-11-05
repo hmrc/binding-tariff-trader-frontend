@@ -1,0 +1,10 @@
+{
+    "id": "id",
+    "upscanReference": "ref",
+    "uploadRequest": {
+        "href": "http://localhost:20001/upscan/upload",
+        "fields": {
+          "key": "value"
+        }
+    }
+}

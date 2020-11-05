@@ -65,11 +65,11 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
     val heading = headings.first().ownText()
 
     if (n == 1) {
-      assert(heading == messagesApi(s"${messageKeyPrefix}.uploadFileCounter.singular", goodsName))
+      assert(heading == messages(s"${messageKeyPrefix}.uploadFileCounter.singular", goodsName))
     } else if (n > 1) {
-      assert(heading == messagesApi(s"${messageKeyPrefix}.uploadFileCounter.plural", n, goodsName))
+      assert(heading == messages(s"${messageKeyPrefix}.uploadFileCounter.plural", n, goodsName))
     } else {
-      assert(heading == messagesApi(s"${messageKeyPrefix}.heading", goodsName))
+      assert(heading == messages(s"${messageKeyPrefix}.heading", goodsName))
     }
   }
 

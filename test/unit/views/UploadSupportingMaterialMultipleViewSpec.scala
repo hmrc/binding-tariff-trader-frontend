@@ -23,6 +23,8 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.FileUploadViewBehaviours
 import views.html.uploadSupportingMaterialMultiple
+import models.response.FileStoreInitiateResponse
+import models.response.UpscanFormTemplate
 
 class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours {
 
@@ -32,23 +34,35 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
 
   val goodsName = "goose"
 
-  def createView: () => HtmlFormat.Appendable = () => uploadSupportingMaterialMultiple(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  val request = fakeGETRequestWithCSRF
+
+  val initiateResponse = FileStoreInitiateResponse(
+    id = "id",
+    upscanReference = "ref",
+    uploadRequest = UpscanFormTemplate(
+      "http://localhost:20001/upscan/upload",
+      Map("key" -> "value")
+    )
+  )
+
+  def createView: () => HtmlFormat.Appendable = () =>
+    uploadSupportingMaterialMultiple(frontendAppConfig, initiateResponse, form, goodsName, NormalMode)(request, messages)
 
   def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
     (form: Form[String]) => uploadSupportingMaterialMultiple(
       frontendAppConfig,
+      initiateResponse,
       form,
       goodsName,
       NormalMode
-    )(fakeRequest, messages)
+    )(request, messages)
 
   "UploadSupportingMaterialMultiple view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()
 
     behave like pageWithBackLink(createView)
 
-    behave like multipleFileUploadPage(createViewUsingForm, messageKeyPrefix, routes.UploadSupportingMaterialMultipleController.onSubmit(NormalMode).url)
-
+    behave like multipleFileUploadPage(createViewUsingForm, messageKeyPrefix, initiateResponse.uploadRequest.href)
   }
 
 }

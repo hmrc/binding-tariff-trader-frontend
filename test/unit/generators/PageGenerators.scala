@@ -21,9 +21,6 @@ import pages._
 
 trait PageGenerators {
 
-  implicit lazy val arbitraryUploadWrittenAuthorisationPage: Arbitrary[UploadWrittenAuthorisationPage.type] =
-    Arbitrary(UploadWrittenAuthorisationPage)
-
   implicit lazy val arbitraryLegalChallengeDetailsPage: Arbitrary[LegalChallengeDetailsPage.type] =
     Arbitrary(LegalChallengeDetailsPage)
 
@@ -57,14 +54,8 @@ trait PageGenerators {
   implicit lazy val arbitraryEnterContactDetailsPage: Arbitrary[EnterContactDetailsPage.type] =
     Arbitrary(EnterContactDetailsPage)
 
-  implicit lazy val arbitraryRegisterBusinessRepresentingPage: Arbitrary[RegisterBusinessRepresentingPage.type] =
-    Arbitrary(RegisterBusinessRepresentingPage)
-
   implicit lazy val arbitraryPreviousBTIRulingPage: Arbitrary[PreviousBTIRulingPage.type] =
     Arbitrary(PreviousBTIRulingPage)
-
-  implicit lazy val arbitraryWhichBestDescribesYouPage: Arbitrary[WhichBestDescribesYouPage.type] =
-    Arbitrary(WhichBestDescribesYouPage)
 
   implicit lazy val arbitraryRegisteredAddressForEoriPage: Arbitrary[RegisteredAddressForEoriPage.type] =
     Arbitrary(RegisteredAddressForEoriPage)
