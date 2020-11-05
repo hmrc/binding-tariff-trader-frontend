@@ -25,22 +25,22 @@
 }
 
 <div id="pdf-id" class="grid-row hidden-print">
-   <div class="column-two-thirds">
-       <h2 class="heading-large">@messages("view.application.header")</h2>
-   </div>
+    <div class="column-two-thirds">
+        <h2 class="heading-large">@messages("view.application.header")</h2>
+    </div>
 </div>
 <div>
     <div class="print-save-application hidden-print">
-          @if(!compositeMode) {
-       <span id="">
+    @if(!compositeMode) {
+        <span id="">
             <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
             <a class="print-this__link" href="javascript:window.print()" data-journey-click="print - click:Your application:Print your application">Print your application</a>
-       </span>
-            }
-   </div>
-   <div class="print-save-application hidden-print">
-       <a id="save-pdf" class="save-this__link"  data-journey-click="save - click:Your application:Save your application">Save your application</a>
-   </div>
+        </span>
+    }
+    </div>
+    <div class="print-save-application hidden-print">
+        <a id="save-pdf" class="save-this__link"  data-journey-click="save - click:Your application:Save your application">Save your application</a>
+    </div>
 </div>
 
 <div id="print-pages" class="print-pages">
@@ -51,7 +51,7 @@
             </div>
             <div class="column-two-thirds">
                 <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
-                    @messages("view.application.title.text")
+                @messages("view.application.title.text")
                 </h2>
             </div>
         </div>
@@ -109,66 +109,90 @@
                 <div class="grid-row">
                     <div class="column-two-thirds">
                         <h3>@messages("confirmation.heading2.whatNext")</h3>
-                        @if(!pdf.sendingSample) {
-                            <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
-                        }else{
-                            @if(pdf.sendingSample) {
 
-                                @if(pdf.hazardousSample){
-                                    <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
-                                } else {
+                        @if(appConfig.samplesToggle){
+                            <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
 
-                                @components.icon_important("confirmation.sendingSamples.important")
+                        } else {
+                            @if(!pdf.sendingSample) {
+                                <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
+                            } else {
+                                @if(pdf.sendingSample) {
 
-                                <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
+                                    @if(pdf.hazardousSample) {
+                                        <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+                                    } else {
+
+                                        @components.icon_important("confirmation.sendingSamples.important")
+
+                                        <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
+                                    }
                                 }
                             }
                         }
-
                     </div>
-                    @if(pdf.sendingSample) {
+
+
+                    @if(appConfig.samplesToggle){
                     <div class="column-one-third">
-                        <div class=@if(pdf.hazardousSample){"about-this-result-box-do-not-send about-this-result-box"} else {"about-this-result-box"}>
+
+                        <div class="about-this-result-box-do-not-send about-this-result-box">
                             <div id="aboutThisResult" class="about-this-result">
                                 <div class="date-of-result">
                                     <h2>@messages("application.footer.sendingSamples.heading")</h2>
                                 </div>
-                                @if(pdf.hazardousSample) {
+                                <div>
                                     <div>@messages("view.application.paragraph.do.not.send.sample")</div>
-                                } else {
-                                    <div class="date-of-result decision-service-version">
-                                        <div>@messages("view.application.sending.sample.paragraph1")</div>
-                                        <div class="bold mb-2">@pdf.reference</div>
-                                    </div>
-                                    <div class="decision-service-version">
-                                        <div class="mb-2">@messages("confirmation.paragraph0.sendingSamples")</div>
-                                    </div>
-                                    <div>
-                                        <dl>
-                                            <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span></p>
-                                            </dt>
-                                            <address>
-                                                @Html(messages("confirmation.sendingSamples.address"))
-                                            </address>
-                                        </dl>
-                                    </div>
-                                }
+                                </div>
                             </div>
                         </div>
+                    </div>
+                            } else {
+
+                        @if(pdf.sendingSample) {
+                            <div class="column-one-third">
+                                <div class=@if(pdf.hazardousSample){"about-this-result-box-do-not-send about-this-result-box"} else {"about-this-result-box"}>
+                                <div id="aboutThisResult" class="about-this-result">
+                                    <div class="date-of-result">
+                                        <h2>@messages("application.footer.sendingSamples.heading")</h2>
+                                    </div>
+                                    @if(pdf.hazardousSample) {
+                                        <div>@messages("view.application.paragraph.do.not.send.sample")</div>
+                                    } else {
+                                        <div class="date-of-result decision-service-version">
+                                            <div>@messages("view.application.sending.sample.paragraph1")</div>
+                                            <div class="bold mb-2">@pdf.reference</div>
+                                        </div>
+                                        <div class="decision-service-version">
+                                            <div class="mb-2">@messages("confirmation.paragraph0.sendingSamples")</div>
+                                        </div>
+                                        <div>
+                                            <dl>
+                                                <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span></p>
+                                                </dt>
+                                                <address>
+                                                @Html(messages("confirmation.sendingSamples.address"))
+                                                </address>
+                                            </dl>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
                     </div>
                     }
                 </div>
 
                 <div class="footer-info footer-page-break">
-                   <span class="footer-page-no"></span>
-                   <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
+                    <span class="footer-page-no"></span>
+                    <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
                 </div>
             </div>
         </div>
     </div>
 
 
-    <div class="print-document">
+    <div id="print-document"  class="print-document">
     <div class="grid-row print-header">
         <div class="column-one-third">
             <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.svg")" />
@@ -176,122 +200,124 @@
         <div class="column-two-thirds">
             <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
                 @messages("view.application.title.text")
-            </h2>
+                </h2>
+            </div>
+        </div>
+
+        <div class="grid-row main-content">
+            <div class="column-full">
+
+                <h3 class="heading-medium">@messages("beforeYouStart.subheading1")</h3>
+                <dl class="govuk-check-your-answers cya-questions-short">
+                    <div>
+                        <dt class="cya-question">@messages("provideGoodsName.checkYourAnswersLabel")</dt>
+                        <dd class="cya-answer">@pdf.goodsName</dd>
+                    </div>
+                    <div>
+                        <dt class="cya-question">@messages("view.application.goods.details")</dt>
+                        <dd class="cya-answer">@pdf.goodsDetails</dd>
+                    </div>
+                    @if(pdf.confidentialInformation.isDefined) {
+                        <div>
+                            <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer">@pdf.confidentialInformation</dd>
+                        </div>
+                    } else {
+                        <div>
+                            <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer">@messages("site.no")</dd>
+                        </div>
+                    }
+                    @if(pdf.attachments.isEmpty) {
+                        <div>
+                            <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer">@messages("site.no")</dd>
+                        </div>
+                    } else {
+                        <div>
+                            <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer"><div class="pre-wrap">@{pdf.supportingMaterialFileList}</div></dd>
+                        </div>
+                    }
+
+                    @if(!appConfig.samplesToggle){
+                        @if(pdf.sendingSample) {
+                            <div>
+                                <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
+                                <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                            </div>
+                            <div>
+                                <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
+                                <dd class="cya-answer">@{if(pdf.hazardousSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                            </div>
+                            <div>
+                                <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
+                                <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                            </div>
+                        } else {
+                            <div>
+                                <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
+                                <dd class="cya-answer">@messages("site.no")</dd>
+                            </div>
+                        }
+                    }
+
+                    @if(pdf.foundCommodityCode.isDefined) {
+                        <div>
+                            <dt class="cya-question">@messages("application.section.aboutItem.envisagedCommodityCode")</dt>
+                            <dd class="cya-answer">@pdf.foundCommodityCode</dd>
+                        </div>
+                    } else {
+                        <div>
+                            <dt class="cya-question">@messages("view.applicationPdf.foundComodityCode")</dt>
+                            <dd class="cya-answer">@messages("site.no")</dd>
+                        </div>
+                    }
+
+                    @if(pdf.legalProblems.isDefined) {
+                        <div>
+                            <dt class="cya-question">@messages("view.applicationPdf.legalProblem")</dt>
+                            <dd class="cya-answer">@pdf.legalProblems</dd>
+                        </div>
+                    } else {
+                        <div>
+                            <dt class="cya-question">@messages("view.applicationPdf.legalProblemQuestion")</dt>
+                            <dd class="cya-answer">@messages("site.no")</dd>
+                        </div>
+                    }
+
+                </dl>
+                <h3 class="heading-medium">@messages("beforeYouStart.subheading2")</h3>
+                <dl class="govuk-check-your-answers cya-questions-short section">
+                    @if(pdf.reissuedBTIReference.isEmpty) {
+                        <div>
+                            <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer">@messages("site.no")</dd>
+                        </div>
+                    } else {
+                        <div>
+                            <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer">@pdf.reissuedBTIReference</dd>
+                        </div>
+                    }
+
+                    @if(pdf.similarAtarReferences.isEmpty) {
+                        <div>
+                            <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer">@messages("site.no")</dd>
+                        </div>
+                    } else {
+                        <div>
+                            <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
+                            <dd class="cya-answer"><div class="pre-wrap">@{pdf.similarAtarCodes}</div></dd>
+                        </div>
+                    }
+                </dl>
+                <div class="footer-info footer-page-break">
+                    <span class="footer-page-no"></span>
+                    <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="grid-row main-content">
-        <div class="column-full">
-
-            <h3 class="heading-medium">@messages("beforeYouStart.subheading1")</h3>
-            <dl class="govuk-check-your-answers cya-questions-short">
-                <div>
-                    <dt class="cya-question">@messages("provideGoodsName.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@pdf.goodsName</dd>
-                </div>
-                <div>
-                    <dt class="cya-question">@messages("view.application.goods.details")</dt>
-                    <dd class="cya-answer">@pdf.goodsDetails</dd>
-                </div>
-                @if(pdf.confidentialInformation.isDefined) {
-                <div>
-                    <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@pdf.confidentialInformation</dd>
-                </div>
-                } else {
-                <div>
-                    <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@messages("site.no")</dd>
-                </div>
-                }
-                @if(pdf.attachments.isEmpty) {
-                <div>
-                    <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@messages("site.no")</dd>
-                </div>
-                } else {
-                 <div>
-                    <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer"><div class="pre-wrap">@{pdf.supportingMaterialFileList}</div></dd>
-                  </div>
-                }
-
-                @if(pdf.sendingSample) {
-                    <div>
-                        <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                    </div>
-                    <div>
-                        <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@{if(pdf.hazardousSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                    </div>
-                    <div>
-                        <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                    </div>
-                } else {
-                    <div>
-                        <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@messages("site.no")</dd>
-                    </div>
-                }
-
-                @if(pdf.foundCommodityCode.isDefined) {
-                <div>
-                    <dt class="cya-question">@messages("application.section.aboutItem.envisagedCommodityCode")</dt>
-                    <dd class="cya-answer">@pdf.foundCommodityCode</dd>
-                </div>
-                } else {
-                <div>
-                    <dt class="cya-question">@messages("view.applicationPdf.foundComodityCode")</dt>
-                    <dd class="cya-answer">@messages("site.no")</dd>
-                </div>
-                }
-
-                @if(pdf.legalProblems.isDefined) {
-                <div>
-                    <dt class="cya-question">@messages("view.applicationPdf.legalProblem")</dt>
-                    <dd class="cya-answer">@pdf.legalProblems</dd>
-                </div>
-                } else {
-                <div>
-                    <dt class="cya-question">@messages("view.applicationPdf.legalProblemQuestion")</dt>
-                    <dd class="cya-answer">@messages("site.no")</dd>
-                </div>
-                }
-
-            </dl>
-            <h3 class="heading-medium">@messages("beforeYouStart.subheading2")</h3>
-            <dl class="govuk-check-your-answers cya-questions-short section">
-                @if(pdf.reissuedBTIReference.isEmpty) {
-                    <div>
-                        <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@messages("site.no")</dd>
-                    </div>
-                } else {
-                    <div>
-                        <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@pdf.reissuedBTIReference</dd>
-                    </div>
-                }
-
-                @if(pdf.similarAtarReferences.isEmpty) {
-                <div>
-                    <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@messages("site.no")</dd>
-                </div>
-                } else {
-                <div>
-                    <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer"><div class="pre-wrap">@{pdf.similarAtarCodes}</div></dd>
-                </div>
-                }
-            </dl>
-            <div class="footer-info footer-page-break">
-                <span class="footer-page-no"></span>
-                <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
-           </div>
-        </div>
-    </div>
-</div>
 </div>

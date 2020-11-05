@@ -97,4 +97,6 @@ class FrontendAppConfig @Inject()(
 
   lazy val assetsPrefix = runModeConfiguration.get[String](s"assets.url") + runModeConfiguration
     .get[String](s"assets.version") + '/'
+
+  lazy val samplesToggle = runModeConfiguration.getOptional[Boolean]("toggle.samplesNotAccepted").getOrElse(false)
 }
