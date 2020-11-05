@@ -48,6 +48,7 @@
         </span>
     </p>
 
+    <div id = "sampleInformation">
     @if(confirmation.sendingSamples) {
         @if(pdf.hazardousSample){
             <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
@@ -88,11 +89,14 @@
         @messages("confirmation.get.moreInformation")</a>
         </p>
     }
+    </div>
 
     <div class="mt-2 footer-page-break">
         @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplicationsAndRulings().url)
     </div>
 </div>
 
-    @components.view_application(appConfig, pdf, compositeMode)
+    <div id = "pdfView">
+        @components.view_application(appConfig, pdf, compositeMode)
+    </div>
 }

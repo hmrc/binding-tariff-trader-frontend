@@ -28,12 +28,15 @@ class ConfirmationViewSpec extends ViewBehaviours {
   private val confirm = Confirmation("reference", "eori", "marisa@example.test", sendingSamples = true)
   private val confirmNoSample = Confirmation("referenceNoSample", "eori", "marisa.nosample@example.test", sendingSamples = false)
   private val pdfViewModel = oCase.pdf
+  private val hazardousSamplePdf = pdfViewModel.copy(hazardousSample = true)
+  private val noHazardousNoReturnSamplesPdf = pdfViewModel.copy(hazardousSample = false, returnSample = false)
+  private val noHazardousReturnSamplesPdf = pdfViewModel.copy(hazardousSample = false, returnSample = true)
 
   private def createView: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel)(fakeRequest, messages)
   private def createViewNoSamples: () => Html = () => confirmation(frontendAppConfig, confirmNoSample, "token", pdfViewModel)(fakeRequest, messages)
-  private def createViewHazardous: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel.copy(hazardousSample = true))(fakeRequest, messages)
-  private def createViewNotHazardousNotReturnSamples: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel.copy(hazardousSample = false, returnSample = false))(fakeRequest, messages)
-  private def createViewNotHazardousReturnSamples: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel.copy(hazardousSample = false, returnSample = true))(fakeRequest, messages)
+  private def createViewHazardous: () => Html = () => confirmation(frontendAppConfig, confirm, "token", hazardousSamplePdf)(fakeRequest, messages)
+  private def createViewNotHazardousNotReturnSamples: () => Html = () => confirmation(frontendAppConfig, confirm, "token", noHazardousNoReturnSamplesPdf)(fakeRequest, messages)
+  private def createViewNotHazardousReturnSamples: () => Html = () => confirmation(frontendAppConfig, confirm, "token", noHazardousReturnSamplesPdf)(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)()
@@ -46,43 +49,81 @@ class ConfirmationViewSpec extends ViewBehaviours {
       text should include("Your application will not be processed until we receive your samples")
       text should include("21 Victoria Avenue")
       text should include(messages("confirmation.paragraph.sample.return"))
-    }
-
-    "not display sample related text when no samples are sent" in {
-      val text = asDocument(createViewNoSamples()).text()
-
-      text should include("referenceNoSample")
-      text should include(messages("confirmation.paragraph.confirmationEmail", "marisa.nosample@example.test"))
-      text should include (messages("confirmation.sendingSamples.important"))
-    }
-
-    "display correct messages when samples are hazardous" in {
-      val text = asDocument(createViewHazardous()).text()
-
-      text should include (messages("view.application.paragraph.do.not.send.sample"))
       text should include(messages("confirmation.paragraph.whatNext0.important"))
-      text should not include(messages("confirmation.sendingSamples.address"))
-      text should not include(messages("confirmation.paragraph.sample.return"))
     }
 
-    "display correct messages when samples are not hazardous and samples not returned" in {
-      val text = asDocument(createViewNotHazardousNotReturnSamples()).text()
+    "Main HTML view" must {
+      "not display sample related text when no samples are sent" in {
+        val text = asDocument(createViewNoSamples()).text()
 
-      //text should include(messages("confirmation.paragraph.confirmationEmail", "marisa.nosample@example.test")) NOT WORKING
-      text should include(messages("confirmation.paragraph.whatNext0.important"))
-      //text should include (messages("confirmation.sendingSamples.address")) NOT WORKING
-      text should not include(messages("confirmation.paragraph.sample.return"))
-      text should not include(messages("view.application.paragraph.do.not.send.sample"))
+        text should include("referenceNoSample")
+        text should include(messages("confirmation.paragraph.confirmationEmail", "marisa.nosample@example.test"))
+        text should include(messages("confirmation.sendingSamples.important"))
+      }
+
+      "display correct messages when samples are hazardous" in {
+        val text = asDocument(createViewHazardous()).getElementById("sampleInformation").text()
+
+        text should include(messages("view.application.paragraph.do.not.send.sample"))
+        text should not include (messages("confirmation.sendingSamples.address"))
+        text should not include (messages("confirmation.paragraph.sample.return"))
+      }
+
+      "display correct messages when samples are not hazardous and samples not returned" in {
+        val text = asDocument(createViewNotHazardousNotReturnSamples()).getElementById("sampleInformation").text()
+        val address = asDocument(createViewNotHazardousReturnSamples()).getElementById("sampleInformation").getElementsByTag("address").first().text()
+
+        address should include(messages("confirmation.sendingSamples.address").split("<")(0))
+        text should not include (messages("confirmation.paragraph.sample.return"))
+        text should not include (messages("view.application.paragraph.do.not.send.sample"))
+      }
+
+      "display correct messages when samples are not hazardous and samples returned" in {
+        val text = asDocument(createViewNotHazardousReturnSamples()).getElementById("sampleInformation").text()
+        val address = asDocument(createViewNotHazardousReturnSamples()).getElementById("sampleInformation").getElementsByTag("address").first().text()
+
+        text should include(messages("confirmation.paragraph.sample.return"))
+        address should include(messages("confirmation.sendingSamples.address").split("<")(0))
+        text should include(messages("confirmation.paragraph1.sendingSamples"))
+        text should not include (messages("view.application.paragraph.do.not.send.sample"))
+      }
     }
 
-    "display correct messages when samples are not hazardous and samples returned" in {
-      val text = asDocument(createViewNotHazardousReturnSamples()).text()
+    "Main PDF view" must {
+      "not display sample related text when no samples are sent" in {
+        val text = asDocument(createViewNoSamples()).text()
 
-      text should include(messages("confirmation.paragraph.whatNext0.important"))
-      text should include (messages("confirmation.paragraph.sample.return"))
-      text should include (messages("confirmation.paragraph1.sendingSamples"))
-      //text should include (messages("confirmation.sendingSamples.address")) NOT WORKING
-      text should not include(messages("view.application.paragraph.do.not.send.sample"))
+        text should include("referenceNoSample")
+        text should include(messages("confirmation.paragraph.confirmationEmail", "marisa.nosample@example.test"))
+        text should include(messages("confirmation.sendingSamples.important"))
+      }
+
+      "display correct messages when samples are hazardous" in {
+        val text = asDocument(createViewHazardous()).getElementById("pdfView").text()
+
+        text should include(messages("view.application.paragraph.do.not.send.sample"))
+        text should not include (messages("confirmation.sendingSamples.address"))
+        text should not include (messages("confirmation.paragraph.sample.return"))
+      }
+
+      "display correct messages when samples are not hazardous and samples not returned" in {
+        val text = asDocument(createViewNotHazardousNotReturnSamples()).getElementById("pdfView").text()
+        val address = asDocument(createViewNotHazardousReturnSamples()).getElementById("pdfView").getElementsByTag("address").first().text()
+
+        address should include(messages("confirmation.sendingSamples.address").split("<")(0))
+        text should not include (messages("confirmation.paragraph.sample.return"))
+        text should not include (messages("view.application.paragraph.do.not.send.sample"))
+      }
+
+      "display correct messages when samples are not hazardous and samples returned" in {
+        val text = asDocument(createViewNotHazardousReturnSamples()).getElementById("pdfView").text()
+        val address = asDocument(createViewNotHazardousReturnSamples()).getElementById("pdfView").getElementsByTag("address").first().text()
+
+        text should include(messages("confirmation.paragraph.sample.return"))
+        address should include(messages("confirmation.sendingSamples.address").split("<")(0))
+        text should include(messages("confirmation.paragraph1.sendingSamples"))
+        text should not include (messages("view.application.paragraph.do.not.send.sample"))
+      }
     }
   }
 }
