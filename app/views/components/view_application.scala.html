@@ -21,8 +21,7 @@
 @(appConfig: FrontendAppConfig, pdf: PdfViewModel, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
-val protocol = if(req.secure) "https" else "http"
-s"$protocol://${req.host}${routes.Assets.versioned(path)}"
+    s"${appConfig.host}${routes.Assets.versioned(path)}"
 }
 
 <div id="pdf-id" class="grid-row hidden-print">
@@ -172,7 +171,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
     <div class="print-document">
     <div class="grid-row print-header">
         <div class="column-one-third">
-            <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.png")" />
+            <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.svg")" />
         </div>
         <div class="column-two-thirds">
             <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
