@@ -38,6 +38,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
   def fieldWithRegex(form: Form[_],
                      fieldName: String,
                      invalidString: String,
+                     maxLength: Int,
                      error: FormError,
                      regex : String): Unit = {
 
@@ -49,8 +50,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
     "bind strings that pass regex" in {
       val gen = RegexpGen.from(regex)
       forAll(gen, minSuccessful(100)){str: String =>
-        whenever(str.length <= 20) {
-          println(str)
+        whenever(str.length <= maxLength) {
           val result = form.bind(Map(fieldName -> str)).apply(fieldName)
           result.errors should be (empty)
         }

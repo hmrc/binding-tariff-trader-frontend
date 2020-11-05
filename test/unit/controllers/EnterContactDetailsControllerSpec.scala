@@ -51,7 +51,7 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase with AnswerCa
   private def viewAsString(form: Form[_], request: Request[_]): String =
     enterContactDetails(frontendAppConfig, form, NormalMode)(request, messages).toString
 
-  val validFormData = Map("name" -> "value 1", "email" -> "value2@me.com", "phoneNumber" -> "value 3")
+  val validFormData = Map("name" -> "value 1", "email" -> "value2@me.com", "phoneNumber" -> "+44 (0)800-443-123")
   val invalidFormData = Map("value" -> "invalid data")
   val backgroundData = Map.empty[String, JsValue]
 

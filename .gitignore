@@ -34,3 +34,7 @@ bin
 /.classpath
 *.iws
 .jvmopts
+project/metals.sbt
+.bloop/
+.metals/
+.vscode/

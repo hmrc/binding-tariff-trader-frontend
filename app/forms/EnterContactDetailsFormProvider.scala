@@ -24,7 +24,7 @@ import models.EnterContactDetails
 
 class EnterContactDetailsFormProvider @Inject() extends Mappings with Constraints {
 
-  val telephoneRegex = """^\+?[-0-9\s\(\).]{1,20}$"""
+  val telephoneRegex = """^\+?[-0-9\s\(\)./]{1,20}$"""
 
    def apply(): Form[EnterContactDetails] = Form(
      mapping(
