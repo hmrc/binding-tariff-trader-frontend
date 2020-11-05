@@ -44,16 +44,18 @@ body {
     color: #00703C;
     font-weight: 600;
 }
-print-header__hmrc-logo {
-    margin-bottom: 10px;
+
+.crown-logo-atar{
+    height: 100px;
+    width:auto;
+    padding-left: 0px;
+    margin-right: -15px;
 }
+
 .print-document .print-header {
     position: relative;
 }
-.print-document .print-header .column-one-third {
-    border-left: #00703C solid;
-    padding-left: 8px;
-}
+
 .print-document .logo-text {
    font-size: 24px;
    font-weight: normal;
