@@ -64,6 +64,14 @@ beforeYouStart.subheading2.paragraph1 = If you are renewing a previous ruling or
 beforeYouStart.subheading3 = About the applicant
 beforeYouStart.subheading3.paragraph1 = You need to know the contact email and phone number for this application.
 
+informationPublic.heading = Some of the information you provide in this application may appear on a public website
+informationPublic.title = Some of the information you provide in this application may appear on a public website - Manage your Advance Tariff Rulings - GOV.UK
+informationPublic.paragraph1.part1 = If you are granted a ruling for your goods it will be published on the
+informationPublic.paragraph1.linkText = Search for Advance Tariff Rulings website (opens in a new tab).
+informationPublic.paragraph1.part2 = This information is available for other traders to view so that they can find a ruling if they are trading with similar goods.
+informationPublic.paragraph2 = You will be told throughout the application which information may appear on the Advance Tariff Rulings website.
+informationPublic.paragraph3 = You will be able to mark information and files as confidential in your application. We will not publish confidential information or files on the Advance Tariff Rulings website
+
 session_expired.title = For your security, we deleted your answers
 session_expired.heading = For your security, we deleted your answers
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.

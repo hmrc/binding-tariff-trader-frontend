@@ -20,6 +20,7 @@ GET         /keep-alive                                                controlle
 GET         /unauthorised                                              controllers.UnauthorisedController.onPageLoad
 
 GET         /information-you-need                                      controllers.BeforeYouStartController.onPageLoad()
+GET         /information-may-be-made-public                            controllers.InformationPublicController.onPageLoad()
 GET         /provide-registered-eori-details                           controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = NormalMode)
 POST        /provide-registered-eori-details                           controllers.RegisteredAddressForEoriController.onSubmit(mode: Mode = NormalMode)
 GET         /change-provide-registered-eori-details                    controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = CheckMode)
