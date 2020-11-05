@@ -16,7 +16,8 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-ui"                          % "8.11.0-play-27",
     "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.30.0-play-27",
     "uk.gov.hmrc"       %% "play-whitelist-filter"            % "3.4.0-play-27",
-    "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.12.0-play-27"
+    "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.12.0-play-27",
+    "org.typelevel"     %% "cats-core"                        % "2.2.0"
   )
 
   private lazy val scope: String = "test"

@@ -56,8 +56,6 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
       val doc = view(createView())
 
       doc should containElementWithID("print-pages")
-      doc.getElementById("print-pages") should containText(messages("view.application.logo.text"))
-      doc.getElementById("print-pages") should containText(messages("view.application.title.text"))
       doc.getElementById("print-pages") should containText(messages("view.application.your.record.text"))
     }
 
