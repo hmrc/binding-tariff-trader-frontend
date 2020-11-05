@@ -46,7 +46,7 @@
         } else {
             <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
                 <span>@messages("confirmation.paragraph.whatNext1")
-                    <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a>
+                    <a href="@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url">@messages("view.application.whatNext0.check.status.linkText")</a>
                 </span>
             </p>
 
@@ -67,14 +67,14 @@
         </p>
         }
     } else {
-        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
+        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
         <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
         @messages("confirmation.get.moreInformation")</a>
         </p>
     }
 
     <div class="mt-2 footer-page-break">
-        @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplicationsAndRulings().url)
+        @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url)
     </div>
 </div>
 

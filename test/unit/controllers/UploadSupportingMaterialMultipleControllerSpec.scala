@@ -304,7 +304,6 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
-
   }
 
 }

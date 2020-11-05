@@ -8,10 +8,10 @@ GET         /this-service-has-been-reset                               controlle
 
 GET         /countries-json                                            controllers.CountriesController.getCountriesJson
 
-GET         /                                                          controllers.Default.redirect(to = controllers.routes.IndexController.getApplicationsAndRulings().url)
+GET         /                                                          controllers.Default.redirect(to = controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url)
 GET         /applications                                              controllers.IndexController.getApplications(page: Int ?= 1)
 GET         /rulings                                                   controllers.IndexController.getRulings(page: Int ?= 1)
-GET         /applications-and-rulings                                  controllers.IndexController.getApplicationsAndRulings(page: Int ?= 1)
+GET         /applications-and-rulings                                  controllers.IndexController.getApplicationsAndRulings(page: Int ?= 1, sortBy: Option[SortField], order: Option[SortDirection])
 
 GET         /sign-out                                                  controllers.SignOutController.startFeedbackSurvey
 GET         /force-sign-out                                            controllers.SignOutController.forceSignOut
@@ -93,14 +93,14 @@ GET         /change-add-another-similar-ruling                         controlle
 POST        /change-add-another-similar-ruling                         controllers.AddAnotherRulingController.onSubmit(mode: Mode = CheckMode)
 GET         /remove-similar-ruling                                     controllers.AddAnotherRulingController.onRemove(index: Int, mode: Mode = NormalMode)
 GET         /change-remove-similar-ruling                              controllers.AddAnotherRulingController.onRemove(index: Int, mode: Mode = CheckMode)
-GET         /any-problems-classifying-goods                            controllers.LegalChallengeController.onPageLoad(mode: Mode = NormalMode)
-POST        /any-problems-classifying-goods                            controllers.LegalChallengeController.onSubmit(mode: Mode = NormalMode)
-GET         /change-any-problems-classifying-goods                     controllers.LegalChallengeController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-any-problems-classifying-goods                     controllers.LegalChallengeController.onSubmit(mode: Mode = CheckMode)
-GET         /what-are-the-problems                                     controllers.LegalChallengeDetailsController.onPageLoad(mode: Mode = NormalMode)
-POST        /what-are-the-problems                                     controllers.LegalChallengeDetailsController.onSubmit(mode: Mode = NormalMode)
-GET         /change-what-are-the-problems                              controllers.LegalChallengeDetailsController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-what-are-the-problems                              controllers.LegalChallengeDetailsController.onSubmit(mode: Mode = CheckMode)
+GET         /any-challenges-classifying-goods                          controllers.LegalChallengeController.onPageLoad(mode: Mode = NormalMode)
+POST        /any-challenges-classifying-goods                          controllers.LegalChallengeController.onSubmit(mode: Mode = NormalMode)
+GET         /change-any-challenges-classifying-goods                   controllers.LegalChallengeController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-any-challenges-classifying-goods                   controllers.LegalChallengeController.onSubmit(mode: Mode = CheckMode)
+GET         /what-are-the-challenges                                   controllers.LegalChallengeDetailsController.onPageLoad(mode: Mode = NormalMode)
+POST        /what-are-the-challenges                                   controllers.LegalChallengeDetailsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-what-are-the-challenges                            controllers.LegalChallengeDetailsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-what-are-the-challenges                            controllers.LegalChallengeDetailsController.onSubmit(mode: Mode = CheckMode)
 GET         /check-your-answers                                        controllers.CheckYourAnswersController.onPageLoad()
 POST        /check-your-answers                                        controllers.CheckYourAnswersController.onSubmit()
 
