@@ -19,9 +19,12 @@ package forms
 import forms.behaviours.{EmailFieldBehaviours, StringFieldBehaviours}
 import play.api.data.FormError
 
+import scala.collection.mutable
+
 class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with EmailFieldBehaviours {
 
-  val form = new EnterContactDetailsFormProvider()()
+  val formProvider = new EnterContactDetailsFormProvider()
+  val form = formProvider()
 
   // name
   ".name" must {
@@ -87,6 +90,8 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
     val fieldName = "phoneNumber"
     val lengthKey = "enterContactDetails.error.phoneNumber.length"
     val maxLength = 20
+    val phoneFormatKey = "enterContactDetails.error.phoneNumber.invalid"
+
 
     behave like fieldThatBindsValidData(
       form,
@@ -100,6 +105,13 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
       maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
-  }
 
+    behave like fieldWithRegex(
+      form,
+      fieldName,
+      "432jfsdfs453fcs",
+      regex = formProvider.telephoneRegex,
+      error = FormError(fieldName, phoneFormatKey, mutable.WrappedArray.empty)
+    )
+  }
 }

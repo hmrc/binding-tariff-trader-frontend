@@ -33,3 +33,4 @@ bin
 /*.ipr
 /.classpath
 *.iws
+.jvmopts
