@@ -120,10 +120,14 @@
                             @if(pdf.sendingSample) {
 
                                 @if(pdf.hazardousSample){
-                                    <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+                        @components.icon_important("view.application.paragraph.do.not.send.sample")
                                 } else {
 
                                 @components.icon_important("confirmation.sendingSamples.important")
+
+                                @if(pdf.returnSample){
+                                    <p class="panel panel-border-wide">@messages("confirmation.paragraph.sample.return")</p>
+                                }
 
                                 }
                             }

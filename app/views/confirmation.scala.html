@@ -51,7 +51,7 @@
     <div id = "sampleInformation">
     @if(confirmation.sendingSamples) {
         @if(pdf.hazardousSample){
-            <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+        @components.icon_important("view.application.paragraph.do.not.send.sample")
         } else if (!pdf.hazardousSample && pdf.returnSample) {
                 <p>@components.icon_important("confirmation.sendingSamples.important")</p>
                 <div class="panel panel-border-wide">@messages("confirmation.paragraph.sample.return")</div>

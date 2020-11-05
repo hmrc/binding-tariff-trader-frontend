@@ -57,8 +57,8 @@ class ConfirmationViewSpec extends ViewBehaviours {
         val text = asDocument(createViewNoSamples()).text()
 
         text should include("referenceNoSample")
-        text should include(messages("confirmation.paragraph.confirmationEmail", "marisa.nosample@example.test"))
         text should include(messages("confirmation.sendingSamples.important"))
+        text should not include(messages("confirmation.paragraph.sample.return"))
       }
 
       "display correct messages when samples are hazardous" in {
@@ -75,6 +75,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
         address should include(messages("confirmation.sendingSamples.address").split("<")(0))
         text should not include (messages("confirmation.paragraph.sample.return"))
+        text should include(messages("confirmation.paragraph1.sendingSamples"))
         text should not include (messages("view.application.paragraph.do.not.send.sample"))
       }
 
@@ -113,6 +114,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
         address should include(messages("confirmation.sendingSamples.address").split("<")(0))
         text should not include (messages("confirmation.paragraph.sample.return"))
         text should not include (messages("view.application.paragraph.do.not.send.sample"))
+        text should include(messages("view.application.sending.sample.paragraph1"))
       }
 
       "display correct messages when samples are not hazardous and samples returned" in {
@@ -121,7 +123,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
         text should include(messages("confirmation.paragraph.sample.return"))
         address should include(messages("confirmation.sendingSamples.address").split("<")(0))
-        text should include(messages("confirmation.paragraph1.sendingSamples"))
+        text should include(messages("view.application.sending.sample.paragraph1"))
         text should not include (messages("view.application.paragraph.do.not.send.sample"))
       }
     }
