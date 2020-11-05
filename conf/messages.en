@@ -296,6 +296,8 @@ supportingMaterialFileList.indications.bullet3 = lists of materials
 supportingMaterialFileList.indications.bullet4 = images of the goods
 supportingMaterialFileList.indications.bullet5 = images of packaging
 supportingMaterialFileList.error.required = Select yes if you want to upload another supporting document
+supportingMaterialFileList.error.numberFiles = Reduce the number of files to a maximum of {0}
+supportingMaterialFileList.clearFiles = Clear uploaded files
 supportingMaterialFile.remove.file.text = Remove
 supportingMaterialFile.remove.file.hidden.text = Remove file {0}
 
@@ -312,7 +314,10 @@ uploadSupportingMaterialMultiple.upload.typeOfFiles = pdf, doc, docx, png, jpg, 
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file types can I upload?
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
-uploadSupportingMaterialMultiple.error.numberFiles = Number of files uploaded must be 10 or less
+uploadSupportingMaterialMultiple.error.uploadError = The selected file could not be uploaded - try again
+uploadSupportingMaterialMultiple.error.fileTooSmall = The selected file must be bigger than 1 byte
+uploadSupportingMaterialMultiple.error.fileTooLarge = The selected file must be smaller than 10MB
+uploadSupportingMaterialMultiple.error.noFileSelected = Select a file bigger than 1 byte
 
 commodityCodeBestMatch.title = Have you found a commodity code for the goods? - Manage your Advance Tariff Rulings - GOV.UK
 commodityCodeBestMatch.heading = Have you found a commodity code for the {0}?
@@ -483,7 +488,7 @@ uploadWrittenAuthorisation.error.fileType = Your document will not upload becaus
 uploadWrittenAuthorisation.error.required = Enter uploadWrittenAuthorisation
 uploadWrittenAuthorisation.upload.title =  The authorisation must be:
 uploadWrittenAuthorisation.upload.restrictionSize = a maximum file size of 10MB
-uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg and txt files
+uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, xls, xlsx, png, jpg, jpeg and txt files
 uploadWrittenAuthorisation.upload.timeLimit = from within the last 12 months
 uploadWrittenAuthorisation.upload.document = a digital document, a scanned letter or copy of an email from the business, organisation or individual
 

@@ -22,10 +22,10 @@ import play.api.libs.json.{Json, OFormat}
   All sizes are stored as KiloBytes
  */
 
-case class FileAttachment(id: String, name: String, mimeType: String, size: Long)
+case class FileAttachment(id: String, name: String, mimeType: String, size: Long, uploaded: Boolean = false)
 
 object FileAttachment {
-  implicit val format: OFormat[FileAttachment] = Json.format[FileAttachment]
+  implicit val format: OFormat[FileAttachment] = Json.using[Json.WithDefaultValues].format[FileAttachment]
 }
 
 case class PublishedFileAttachment

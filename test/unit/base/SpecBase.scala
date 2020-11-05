@@ -47,7 +47,6 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
 
   implicit val cc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
   implicit val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-  implicit val lang: Lang = appConfig.defaultLang
 
   def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
 

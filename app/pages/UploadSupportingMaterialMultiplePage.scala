@@ -22,7 +22,7 @@ import play.api.mvc.Call
 
 case object UploadSupportingMaterialMultiplePage extends QuestionPage[Seq[FileAttachment]] {
   def route(mode: Mode): Call =
-    routes.UploadSupportingMaterialMultipleController.onPageLoad(mode)
+    routes.UploadSupportingMaterialMultipleController.onPageLoad(None, mode)
   override def toString: String =
     "uploadSupportingMaterialMultiple"
 }

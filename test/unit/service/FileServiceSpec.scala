@@ -34,6 +34,9 @@ import play.api.mvc.MultipartFormData.FilePart
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future.{failed, successful}
+import models.requests.FileStoreInitiateRequest
+import models.response.FileStoreInitiateResponse
+import models.response.UpscanFormTemplate
 
 class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
@@ -56,16 +59,22 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
     createFile(extension, mimeType, fileSizeSmall)
   }
 
+  "Initiate" should {
+    val initiateRequest = FileStoreInitiateRequest(maxFileSize = 0)
 
-  "Upload" should {
-    val fileUploading = MultipartFormData.FilePart[TemporaryFile]("key", "filename", Some("type"), tempFileCreator.create())
-    val connectorResponse = FilestoreResponse("id", "filename-updated", "type")
-    val fileUploaded = FileAttachment("id", "filename-updated", "type", 0)
+    val initiateResponse = FileStoreInitiateResponse(
+      id = "id",
+      upscanReference = "ref",
+      uploadRequest = UpscanFormTemplate(
+        "http://localhost:20001/upscan/upload",
+        Map("key" -> "value")
+      )
+    )
 
     "Delegate to connector" in {
-      given(connector.upload(refEq(fileUploading))(any[HeaderCarrier])).willReturn(successful(connectorResponse))
+      given(connector.initiate(initiateRequest)).willReturn(successful(initiateResponse))
 
-      await(service.upload(fileUploading)) shouldBe fileUploaded
+      await(service.initiate(initiateRequest)) shouldBe initiateResponse
     }
   }
 
@@ -158,7 +167,7 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
     "Reject invalid file type" in {
       val file = createFileOfType("invalid", "audio/mpeg")
-      service.validate(file) shouldBe Left(messagesApi("uploadWrittenAuthorisation.error.fileType"))
+      service.validate(file) shouldBe Left(messages("uploadWrittenAuthorisation.error.fileType"))
     }
 
   }
@@ -174,7 +183,7 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
     "Reject large file" in {
       val file = createFileOfSize(fileSizeLarge)
-      service.validate(file) shouldBe Left(messagesApi("uploadWrittenAuthorisation.error.size"))
+      service.validate(file) shouldBe Left(messages("uploadWrittenAuthorisation.error.size"))
     }
   }
 

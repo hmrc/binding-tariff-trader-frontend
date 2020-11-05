@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package models.response
 
-import controllers.routes
-import models.{ Mode, RegisterBusinessRepresenting }
-import play.api.mvc.Call
+import play.api.libs.json.{ OFormat, Json }
 
-case object RegisterBusinessRepresentingPage extends QuestionPage[RegisterBusinessRepresenting] {
-  def route(mode: Mode): Call =
-    routes.RegisterBusinessRepresentingController.onPageLoad(mode)
-  override def toString: String =
-    "registerBusinessRepresenting"
+case class UpscanFormTemplate(href: String, fields: Map[String, String])
+
+object UpscanFormTemplate {
+  implicit val format: OFormat[UpscanFormTemplate] = Json.format[UpscanFormTemplate]
 }

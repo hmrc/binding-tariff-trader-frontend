@@ -17,7 +17,6 @@
 package mapper
 
 import javax.inject.Singleton
-import models.WhichBestDescribesYou.theUserIsAnAgent
 import models._
 import pages._
 
@@ -42,13 +41,12 @@ class CaseRequestMapper {
 
     val contact = contactDetails.map(toContact).getOrElse(throwError("contact details"))
 
-    val agentDetails: Option[AgentDetails] = agentDetailsFrom(answers)
     val holderDetails: EORIDetails = holderDetailsFrom(answers)
 
     val app = Application(
       holder = holderDetails,
       contact = contact,
-      agent = agentDetails,
+      agent = None,
       offline = false,
       goodName = goodsName.getOrElse(throwError("goods name")),
       goodDescription = goodsDescription.getOrElse(throwError("goods description")),
@@ -74,35 +72,10 @@ class CaseRequestMapper {
   }
 
   private def holderDetailsFrom(answers: UserAnswers): EORIDetails = {
-    val maybeEoriDetails = if (theUserIsAnAgent(answers)) {
-      answers.get(RegisterBusinessRepresentingPage).map(toEoriDetails)
-    } else {
+    val maybeEoriDetails =
       answers.get(RegisteredAddressForEoriPage).map(toEoriDetails)
-    }
 
     maybeEoriDetails.getOrElse(throwError("holder EORI details"))
-  }
-
-  private def agentDetailsFrom(answers: UserAnswers): Option[AgentDetails] = {
-    if (theUserIsAnAgent(answers)) {
-      answers.get(RegisteredAddressForEoriPage).map { details: RegisteredAddressForEori =>
-        AgentDetails(toEoriDetails(details))
-      }
-    } else {
-      None
-    }
-  }
-
-  private def toEoriDetails(details: RegisterBusinessRepresenting): EORIDetails = {
-    EORIDetails(
-      details.eoriNumber,
-      details.businessName,
-      details.addressLine1,
-      details.town,
-      "", // address line 3 empty
-      details.postCode.getOrElse(""),
-      details.country
-    )
   }
 
   private def toEoriDetails(details: RegisteredAddressForEori): EORIDetails = {
