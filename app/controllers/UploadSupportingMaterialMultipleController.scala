@@ -116,8 +116,8 @@ class UploadSupportingMaterialMultipleController @Inject()(
   def renderView(fileId: String, mode: Mode, form: Form[String])(implicit request: DataRequest[AnyContent]): Future[Html] = {
     fileService.initiate(FileStoreInitiateRequest(
       id = Some(fileId),
-      successRedirect = Some(routes.UploadSupportingMaterialMultipleController.onFileUploadSuccess(fileId, mode).absoluteURL),
-      errorRedirect = Some(routes.UploadSupportingMaterialMultipleController.onPageLoad(Some(fileId), mode).absoluteURL),
+      successRedirect = Some(appConfig.host + routes.UploadSupportingMaterialMultipleController.onFileUploadSuccess(fileId, mode).url),
+      errorRedirect = Some(appConfig.host + routes.UploadSupportingMaterialMultipleController.onPageLoad(Some(fileId), mode).url),
       maxFileSize = appConfig.fileUploadMaxSize
     )).map { response =>
       val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
