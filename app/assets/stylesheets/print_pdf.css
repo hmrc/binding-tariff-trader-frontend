@@ -265,8 +265,14 @@ body {
   .notice .icon {
     position: absolute;
     left: 0;
-    top: 50%;
-    margin-top: -17px;
+    //top: 50%;
+    margin-top: 0px;
+    margin-right: 10px;
+}
+.notice strong {
+    display: block;
+    padding-left: 65px;
+    margin-left: -15px;
 }
 .icon-important_ {
     width: 35px;
