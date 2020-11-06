@@ -27,14 +27,17 @@ bodyClasses = None) {
 
 @components.heading(messages("informationPublic.heading"))
 
-<p>@messages("informationPublic.paragraph1.part1")<span><a href="" target="_blank">
- @messages("informationPublic.paragraph1.linkText")</a></span>
+<p>@messages("informationPublic.paragraph1.part1")
+ <span>
+   <a href="@appConfig.bindingTariffRulingsHomeUrl" target="_blank">
+   @messages("informationPublic.paragraph1.linkText")</a>
+ </span>
     @messages("informationPublic.paragraph1.part2")
 </p>
 
 <p>@messages("informationPublic.paragraph2")</p>
 <p>@messages("informationPublic.paragraph3")</p>
 
-@components.button_link(messages("site.continue"), routes.ProvideGoodsNameController.onPageLoad(NormalMode).url)
+@components.button_link(messages("site.agree_and_continue"), routes.ProvideGoodsNameController.onPageLoad(NormalMode).url)
 
 }
