@@ -26,7 +26,7 @@ import play.api.mvc.Call
 
 class NavigatorSpec extends SpecBase {
 
-  val navigator = new Navigator
+  val navigator = new Navigator(frontendAppConfig)
 
   "Navigator" when {
 

@@ -16,15 +16,17 @@
 
 package mapper
 
+import controllers.actions.FakeIdentifierAction.frontendAppConfig
 import models._
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import pages._
 import play.api.libs.json.{JsValue, Json, Writes}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import unit.utils.UnitSpec
 
-class CaseRequestMapperTest extends UnitSpec {
+class CaseRequestMapperTest extends UnitSpec with GuiceOneAppPerSuite {
 
-  private val mapper = new CaseRequestMapper()
+  private val mapper = new CaseRequestMapper(frontendAppConfig)
 
   "Mapper" should {
 
