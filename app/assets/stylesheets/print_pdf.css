@@ -268,10 +268,9 @@ body {
     top: 50%;
     margin-top: -17px;
 }
-.icon-important {
+.icon-important_ {
     width: 35px;
     height: 35px;
-    background-image: url(../images/icon-important.png);
 }
 .visually-hidden {
     display:none;
