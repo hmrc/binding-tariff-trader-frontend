@@ -104,22 +104,17 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 <div class="grid-row">
                     <div class="column-two-thirds">
                         <h3>@messages("confirmation.heading2.whatNext")</h3>
-                        @if(!pdf.sendingSample) {
-                            <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
-                        }else{
-                            @if(pdf.sendingSample) {
-
+                        @if(pdf.sendingSample) {
                                 @if(pdf.hazardousSample){
                                     <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
-                                } else {
-
-                                @components.icon_important("confirmation.sendingSamples.important")
-
-                                <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
+                                }else{
+                                    @components.icon_important("confirmation.sendingSamples.important")
+                                    <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
                                 }
-                            }
-                        }
+                            }else{
 
+                            <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
+                        }
                             </div>
                             @if(pdf.sendingSample) {
                                 <div class="column-one-third">
