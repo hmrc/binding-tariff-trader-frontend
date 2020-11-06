@@ -37,7 +37,6 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
   private val cache = mock[DataCacheConnector]
   private val cacheMap = mock[CacheMap]
   private val pdfService = mock[PdfService]
-  private val agentCase = oCase.btiCaseExample
   private val pdfViewModel = oCase.pdf
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
@@ -53,14 +52,14 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
   }
 
   private def viewAsString: String = {
-    confirmation(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true), "token", pdfViewModel)(fakeRequest, messages).toString
+    confirmation(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test"), "token", pdfViewModel)(fakeRequest, messages).toString
   }
 
   "Confirmation Controller" must {
 
     "return OK and the correct view for a GET" in {
       given(cache.remove(cacheMap)).willReturn(Future.successful(true))
-      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true)))
+      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
       given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdfViewModel))
       given(pdfService.encodeToken("eori")).willReturn("token")
 

@@ -54,7 +54,7 @@
 
 
     <div id = "sampleInformation">
-    @if(confirmation.sendingSamples) {
+    @if(pdf.sendingSample) {
         @if(pdf.hazardousSample){
         @components.icon_important("view.application.paragraph.do.not.send.sample")
         } else if (!pdf.hazardousSample && pdf.returnSample) {
