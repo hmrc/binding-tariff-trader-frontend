@@ -33,14 +33,14 @@ import views.html.templates._
 import scala.concurrent.{ExecutionContext, Future}
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
-  identify: IdentifierAction,
-  pdfService: PdfService,
-  caseService: CasesService,
-  fileService: FileService,
-  countriesService: CountriesService,
-  source: SourceUtil,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+                                      identify: IdentifierAction,
+                                      pdfService: PdfService,
+                                      caseService: CasesService,
+                                      fileService: FileService,
+                                      countriesService: CountriesService,
+                                      source: SourceUtil,
+                                      cc: MessagesControllerComponents
+                                     )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private type Eori = String
   private type CaseReference = String
@@ -80,12 +80,12 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
 
   private def getApplicationPDF(eori: Eori, reference: CaseReference)
                                (implicit request: Request[AnyContent]): Future[Result] = {
-    getApplicationPDForHtml(eori,reference,true)
+    getApplicationPDForHtml(eori,reference, pdf = true)
   }
 
   private def getApplicationView(eori: Eori, reference: CaseReference)
                                (implicit request: Request[AnyContent]): Future[Result] = {
-    getApplicationPDForHtml(eori,reference,false)
+    getApplicationPDForHtml(eori,reference, pdf = false)
   }
 
 
