@@ -39,7 +39,7 @@
                 captionMsg = Some(messages("enterContactDetails.caption")))
             </legend>
 
-            <p>@messages("enterContactDetails.bodyText")</p>
+            <p>@Html(messages("enterContactDetails.bodyText"))</p>
 
             @components.input_text(
                 field = form("name"),

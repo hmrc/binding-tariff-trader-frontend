@@ -170,7 +170,7 @@ registerBusinessRepresenting.error.postCode.gb = Enter a real postcode
 
 enterContactDetails.title = Provide the contact details for this application - Manage your Advance Tariff Rulings - GOV.UK
 enterContactDetails.heading = Provide the contact details for this application
-enterContactDetails.bodyText = These details will only be used to contact you with questions relating to this application.
+enterContactDetails.bodyText = These details <span style="font-weight:bold;">will only</span> be used to contact you with questions relating to this application.
 enterContactDetails.caption = About the applicant
 enterContactDetails.name = Full name
 enterContactDetails.email = Email address
