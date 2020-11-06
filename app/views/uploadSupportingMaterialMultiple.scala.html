@@ -18,8 +18,7 @@
 @import controllers.routes._
 @import models.Mode
 @import models.response.FileStoreInitiateResponse
-@import uk.gov.hmrc.play.views.html._
-@import views.html.helper.CSRF
+@import views.html.helper.{form, CSRF}
 @import views.ViewUtils._
 
 @(appConfig: FrontendAppConfig, initiateResponse: FileStoreInitiateResponse, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -29,7 +28,7 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(
+    @helper.form(
         action = Call("POST", initiateResponse.uploadRequest.href),
         'enctype -> "multipart/form-data",
         'id -> "upload-files-form") {
