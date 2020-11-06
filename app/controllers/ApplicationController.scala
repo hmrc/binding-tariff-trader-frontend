@@ -95,7 +95,6 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
     for {
       c <- caseService.getCaseForUser(eori, reference)
       attachments <- fileService.getAttachmentMetadata(c)
-      letter <- fileService.getLetterOfAuthority(c)
       attachmentFileView = (attachments, c.attachments).zipped map {
         (fileStoreRespAtt, caseAttachment) =>
           FileView(fileStoreRespAtt.id, fileStoreRespAtt.fileName, caseAttachment.public)
