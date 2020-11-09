@@ -36,7 +36,7 @@ class ConstraintsSpec extends WordSpec with MustMatchers with Constraints {
 
     "return Invalid when the second constraint fails" in {
       val result = firstError(maxLength(10, "error.length"), regexp("""^\w+$""", "error.regexp"))("")
-      result mustEqual Invalid("error.regexp", """^\w+$""")
+      result mustEqual Invalid("error.regexp")
     }
 
     "return Invalid for the first error when both constraints fail" in {
@@ -90,7 +90,7 @@ class ConstraintsSpec extends WordSpec with MustMatchers with Constraints {
 
     "return Invalid for an input that does not match the expression" in {
       val result = regexp("""^\d+$""", "error.invalid")("foo")
-      result mustEqual Invalid("error.invalid", """^\d+$""")
+      result mustEqual Invalid("error.invalid")
     }
   }
 
