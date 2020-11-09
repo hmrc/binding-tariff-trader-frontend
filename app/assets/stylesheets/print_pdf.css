@@ -303,3 +303,6 @@ body {
 address {
     font-style: normal;
 }
+.pre-wrap {
+    white-space: pre-wrap;
+}
