@@ -22,8 +22,7 @@
         compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
-val protocol = if(req.secure) "https" else "http"
-s"$protocol://${req.host}${routes.Assets.versioned(path)}"
+    s"${appConfig.host}${routes.Assets.versioned(path)}"
 }
 
 <html>
@@ -104,7 +103,12 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 <div class="grid-row">
                     <div class="column-two-thirds">
                         <h3>@messages("confirmation.heading2.whatNext")</h3>
-                        @if(pdf.sendingSample) {
+
+                        @if(appConfig.samplesToggle){
+                            <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+
+                        } else {
+                            @if(pdf.sendingSample) {
                                 @if(pdf.hazardousSample){
                                     <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
                                 }else{
@@ -114,55 +118,78 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                                             <img src="@createLink("images/icon-important.png")"/>
                                         </i>
                                         <strong class="bold-small">
-                                            @messages("confirmation.sendingSamples.important")
+                                        @messages("confirmation.sendingSamples.important")
                                         </strong>
                                     </div>
                                     <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
                                 }
                             }else{
 
-                            <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
+                                <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
+                            }
                         }
+                    </div>
+
+
+                    @if(appConfig.samplesToggle){
+                    <div class="column-one-third">
+
+                        <div class="about-this-result-box-do-not-send about-this-result-box">
+                            <div id="aboutThisResult" class="about-this-result">
+                                <div class="date-of-result">
+                                    <h2>@messages("application.footer.sendingSamples.heading")</h2>
+                                </div>
+                                <div>
+                                    <div>@messages("view.application.paragraph.do.not.send.sample")</div>
+                                </div>
                             </div>
-                            @if(pdf.sendingSample) {
-                                <div class="column-one-third">
-                                    <div class=@if(pdf.hazardousSample){"about-this-result-box-do-not-send about-this-result-box"} else {"about-this-result-box"}>
-                                    <div id="aboutThisResult" class="about-this-result">
-                                        <div class="date-of-result">
-                                            <h2>@messages("application.footer.sendingSamples.heading")</h2>
-                                        </div>
-                                        @if(pdf.hazardousSample) {
-                                            <div>@messages("view.application.paragraph.do.not.send.sample")</div>
-                                        } else {
-                                            <div class="date-of-result decision-service-version">
-                                                <div>@messages("view.application.sending.sample.paragraph1")</div>
-                                                <div class="bold mb-2">@pdf.reference</div>
-                                            </div>
-                                            <div>
-                                                <dl>
-                                                    <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span></p>
-                                                    </dt>
-                                                    <address>
-                                                    @Html(messages("confirmation.sendingSamples.address"))
-                                                    </address>
-                                                </dl>
-                                            </div>
-                                        }
+                        </div>
+                    </div>
+                            } else {
+
+                        @if(pdf.sendingSample) {
+                            <div class="column-one-third">
+                                <div class=@if(pdf.hazardousSample){"about-this-result-box-do-not-send about-this-result-box"} else {"about-this-result-box"}>
+                                <div id="aboutThisResult" class="about-this-result">
+                                    <div class="date-of-result">
+                                        <h2>@messages("application.footer.sendingSamples.heading")</h2>
                                     </div>
+                                    @if(pdf.hazardousSample) {
+                                        <div>@messages("view.application.paragraph.do.not.send.sample")</div>
+                                    } else {
+                                        <div class="date-of-result decision-service-version">
+                                            <div>@messages("view.application.sending.sample.paragraph1")</div>
+                                            <div class="bold mb-2">@pdf.reference</div>
+                                        </div>
+                                        <div class="decision-service-version">
+                                            <div class="mb-2">@messages("confirmation.paragraph0.sendingSamples")</div>
+                                        </div>
+                                        <div>
+                                            <dl>
+                                                <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span></p>
+                                                </dt>
+                                                <address>
+                                                @Html(messages("confirmation.sendingSamples.address"))
+                                                </address>
+                                            </dl>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         }
                     </div>
+                    }
+                </div>
                 </div>
             </div>
         </div>
     </div>
 
 
-    <div class="print-document" id ="print-document">
+    <div class="print-document" id="print-document">
     <div class="grid-row print-header">
         <div class="column-one-third">
-            <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.png")" />
+            <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.svg")" />
         </div>
         <div>
             <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
@@ -207,25 +234,27 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                   </div>
                 }
 
-                @if(pdf.sendingSample) {
-                    <div>
-                        <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                    </div>
-                    <div>
-                        <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@{if(pdf.hazardousSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                    </div>
-                    <div>
-                        <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                    </div>
-                } else {
-                    <div>
-                        <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@messages("site.no")</dd>
-                    </div>
-                }
+                    @if(!appConfig.samplesToggle){
+                        @if(pdf.sendingSample) {
+                            <div>
+                                <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
+                                <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                            </div>
+                            <div>
+                                <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
+                                <dd class="cya-answer">@{if(pdf.hazardousSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                            </div>
+                            <div>
+                                <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
+                                <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                            </div>
+                        } else {
+                            <div>
+                                <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
+                                <dd class="cya-answer">@messages("site.no")</dd>
+                            </div>
+                        }
+                    }
 
                 @if(pdf.foundCommodityCode.isDefined) {
                 <div>

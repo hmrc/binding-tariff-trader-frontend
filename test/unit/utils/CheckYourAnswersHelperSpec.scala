@@ -17,7 +17,6 @@
 package utils
 
 import base.SpecBase
-import models.WhichBestDescribesYou.BusinessOwner
 import models._
 import models.requests.DataRequest
 import org.mockito.ArgumentMatchers._
@@ -34,10 +33,8 @@ class CheckYourAnswersHelperSpec extends SpecBase {
   private val userAnswers = mock[UserAnswers]
   private val checkHelper = new CheckYourAnswersHelper(
     userAnswers,
-    countriesService.getAllCountriesById,
-    messagesApi,
-    lang
-  )
+    countriesService.getAllCountriesById
+  ) (messages)
   private val fileAttachment = FileAttachment("id", "fileName", "mime", 1)
 
   "CheckYourAnswersHelper" when {
@@ -87,11 +84,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
         checkHelper.commodityCodeDigits.get.answer shouldBe "12131233241324"
       }
 
-      "return a row with the correct answer for UploadWrittenAuthorisationPage" in {
-        given(userAnswers.get(UploadWrittenAuthorisationPage)).willReturn(Option(fileAttachment))
-        checkHelper.uploadWrittenAuthorisation.get.answer shouldBe "fileName"
-      }
-
       "return a row with the correct answer for LegalChallengeDetailsPage" in {
         given(userAnswers.get(LegalChallengeDetailsPage)).willReturn(Option("Legal challenge"))
         checkHelper.legalChallengeDetails.get.answer shouldBe "Legal challenge"
@@ -120,17 +112,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       "return a row with the correct answer for EnterContactDetailsPage Telephone" in {
         given(userAnswers.get(EnterContactDetailsPage)).willReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
         checkHelper.enterContactDetailsPhone.get.answer shouldBe "phoneNumber"
-      }
-
-      "return a row with the correct answer for RegisterBusinessRepresentingPage" in {
-        given(userAnswers.get(RegisterBusinessRepresentingPage)).willReturn(
-          Option(RegisterBusinessRepresenting("eoriNumber", "businessName", "addressLine1", "town", Some("postCode"), "IE")))
-        checkHelper.registerBusinessRepresenting.get.answer shouldBe "eoriNumber\nbusinessName\naddressLine1\ntown\npostCode\nIreland"
-      }
-
-      "return a row with the correct answer for WhichBestDescribesYouPage" in {
-        given(userAnswers.get(WhichBestDescribesYouPage)).willReturn(Option(BusinessOwner))
-        checkHelper.whichBestDescribesYou shouldBe None
       }
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check disabled" in {

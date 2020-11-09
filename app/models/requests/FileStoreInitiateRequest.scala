@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package models.requests
 
-import models.RegisterBusinessRepresenting
-import pages.behaviours.PageBehaviours
+import play.api.libs.json.{ OFormat, Json }
 
-class RegisterBusinessRepresentingPageSpec extends PageBehaviours {
+case class FileStoreInitiateRequest(
+  id: Option[String] = None,
+  successRedirect: Option[String] = None,
+  errorRedirect: Option[String] = None,
+  expectedContentType: Option[String] = None,
+  publishable: Boolean = false,
+  maxFileSize: Int
+)
 
-  "RegisterBusinessRepresentingPage" must {
-
-    beRetrievable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beSettable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beRemovable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-  }
+object FileStoreInitiateRequest {
+  implicit val format: OFormat[FileStoreInitiateRequest] = Json.format[FileStoreInitiateRequest]
 }
