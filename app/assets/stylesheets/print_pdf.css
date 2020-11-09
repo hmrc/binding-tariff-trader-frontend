@@ -265,7 +265,6 @@ body {
   .notice .icon {
     position: absolute;
     left: 0;
-    //top: 50%;
     margin-top: 0px;
     margin-right: 10px;
 }
