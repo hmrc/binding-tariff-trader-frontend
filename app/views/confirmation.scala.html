@@ -46,37 +46,41 @@
 
     <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
 
-    @if(confirmation.sendingSamples) {
-        @if(pdf.hazardousSample){
+    @if(appConfig.samplesToggle){
         <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
-        } else {
-            <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
-                <span>@messages("confirmation.paragraph.whatNext1")
-                    <a href="@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url">@messages("view.application.whatNext0.check.status.linkText")</a>
-                </span>
-            </p>
-
-        @components.icon_important("confirmation.sendingSamples.important")
-
-        <p>@messages("confirmation.paragraph0.sendingSamples")</p>
-
-        <div class="panel panel-border-wide">@messages("confirmation.returned.sample.note")</div>
-
-        <p>@messages("confirmation.paragraph1.sendingSamples") <span class="bold"> @messages("caseReference.format", confirmation.reference).</span>
-            @messages("confirmation.paragraph2.sendingSamples")</p>
-
-        <address>
-        @Html(messages("confirmation.sendingSamples.address"))
-        </address>
-        <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
-            @messages("confirmation.get.moreInformation")</a>
-        </p>
-        }
     } else {
-        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
-        <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
-        @messages("confirmation.get.moreInformation")</a>
-        </p>
+        @if(confirmation.sendingSamples) {
+            @if(pdf.hazardousSample){
+            <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+            } else {
+                <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
+                    <span>@messages("confirmation.paragraph.whatNext1")
+                        <a href="@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url">@messages("view.application.whatNext0.check.status.linkText")</a>
+                    </span>
+                </p>
+
+            @components.icon_important("confirmation.sendingSamples.important")
+
+            <p>@messages("confirmation.paragraph0.sendingSamples")</p>
+
+            <div class="panel panel-border-wide">@messages("confirmation.returned.sample.note")</div>
+
+            <p>@messages("confirmation.paragraph1.sendingSamples") <span class="bold"> @messages("caseReference.format", confirmation.reference).</span>
+                @messages("confirmation.paragraph2.sendingSamples")</p>
+
+            <address>
+            @Html(messages("confirmation.sendingSamples.address"))
+            </address>
+            <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+                @messages("confirmation.get.moreInformation")</a>
+            </p>
+            }
+        } else {
+            <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
+            <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+            @messages("confirmation.get.moreInformation")</a>
+            </p>
+        }
     }
 
     <div class="mt-2 footer-page-break">
@@ -95,7 +99,7 @@
         }
         </div>
         <div class="print-save-application hidden-print">
-            <a class="save-this__link id="save-pdf" href="@controllers.routes.ApplicationController.applicationPdf(pdf.reference).url"
+            <a class="save-this__link" id="save-pdf" href="@controllers.routes.ApplicationController.applicationPdf(pdf.reference).url"
             data-journey-click="save - click:Your application:Save your application">Save your application</a>
         </div>
     </div>

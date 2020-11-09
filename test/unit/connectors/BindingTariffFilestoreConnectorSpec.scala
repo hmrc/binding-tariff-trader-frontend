@@ -26,6 +26,9 @@ import play.api.mvc.MultipartFormData
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import models.requests.FileStoreInitiateRequest
+import models.response.FileStoreInitiateResponse
+import models.response.UpscanFormTemplate
 
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
@@ -35,26 +38,29 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
   "Connector" should {
 
-    "Upload" in {
+    "Initiate" in {
       stubFor(
-        post("/file")
+        post("/file/initiate")
           .willReturn(
             aResponse()
               .withStatus(Status.ACCEPTED)
-              .withBody(fromResource("binding-tariff-filestore_upload-response.json"))
+              .withBody(fromResource("binding-tariff-filestore_initiate-response.json"))
           )
       )
 
-      val file = MultipartFormData.FilePart[TemporaryFile]("file", "file-name", Some("text/plain"), tempFileCreator.create("file-name.txt"))
+      val initiateRequest = FileStoreInitiateRequest(maxFileSize = 0)
 
-      await(connector.upload(file)) shouldBe FilestoreResponse(
+      await(connector.initiate(initiateRequest)) shouldBe FileStoreInitiateResponse(
         id = "id",
-        fileName = "file-name.txt",
-        mimeType = "text/plain"
+        upscanReference = "ref",
+        uploadRequest = UpscanFormTemplate(
+          "http://localhost:20001/upscan/upload",
+          Map("key" -> "value")
+        )
       )
 
       verify(
-        postRequestedFor(urlEqualTo("/file"))
+        postRequestedFor(urlEqualTo("/file/initiate"))
           .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }

@@ -63,11 +63,11 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
     val heading = headings.first().ownText()
 
     if (n == 1) {
-      assert(heading == messagesApi(s"${messageKeyPrefix}.addRulingCounter.singular", n))
+      assert(heading == messages(s"${messageKeyPrefix}.addRulingCounter.singular", n))
     } else if (n > 1) {
-      assert(heading == messagesApi(s"${messageKeyPrefix}.addRulingCounter.plural", n))
+      assert(heading == messages(s"${messageKeyPrefix}.addRulingCounter.plural", n))
     } else {
-      assert(heading == messagesApi(s"${messageKeyPrefix}.heading"))
+      assert(heading == messages(s"${messageKeyPrefix}.heading"))
     }
   }
 

@@ -33,6 +33,9 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
   private def createView(pdfViewModel: PdfViewModel = pdfView): Html =
     view_application(frontendAppConfig, pdfViewModel, s => Some("example country name"))(fakeRequest, messages)
 
+  private def createViewWithToggle(pdfViewModel: PdfViewModel = pdfView): Html =
+    view_application(frontendAppConfigWithToggle, pdfViewModel, s => Some("example country name"))(fakeRequest, messages)
+
   protected def view(html: Html): Document = {
     Jsoup.parse(html.toString())
   }
@@ -187,6 +190,14 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
       val doc = view(createView(pdfView)).getElementById("print-document")
 
       doc should containText(messages("provideBTIReference.checkYourAnswersLabel"))
+    }
+
+    "contain a message to not send a sample when samplesNotAccepted toggle is set to true" in {
+        val doc =
+          view(createViewWithToggle(pdfView))
+            .getElementById("print-pages")
+
+        doc should containText(messages("view.application.paragraph.do.not.send.sample"))
     }
   }
 }

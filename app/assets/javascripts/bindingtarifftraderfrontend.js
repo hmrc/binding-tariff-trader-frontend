@@ -131,10 +131,10 @@ $(document).ready(function () {
         if (window.history && window.history.back && typeof window.history.back === 'function' &&
             (docReferrer !== "" && docReferrer.indexOf(window.location.host) !== -1)) {
             const historyStack = JSON.parse(sessionStorage.getItem("historyStack")) || [];
-            if (historyStack.length > 0) {
+            if (historyStack.length > 1) {
                 historyStack.pop();    //take the url for page just exited off the stack
-                const previousUrl = historyStack[historyStack.length - 1]
-                window.location.href = previousUrl
+                const previousPath = historyStack[historyStack.length - 1];
+                window.location.href = window.location.origin + previousPath;
                 sessionStorage.setItem("historyStack", JSON.stringify(historyStack));
             }
         }
@@ -157,10 +157,10 @@ $(document).ready(function () {
         }
 
         const historyStack = JSON.parse(sessionStorage.getItem("historyStack")) || [];
-        const currentUrl = window.location.href;
+        const currentPath = window.location.pathname;
 
-        if (isEmpty(historyStack) || last(historyStack) !== currentUrl) {
-            historyStack.push(currentUrl)
+        if (isEmpty(historyStack) || currentPath !== last(historyStack)) {
+            historyStack.push(currentPath)
             sessionStorage.setItem("historyStack", JSON.stringify(historyStack));
         }
     }

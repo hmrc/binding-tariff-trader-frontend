@@ -303,13 +303,39 @@ body {
    .report-error__toggle.js-visible {
        display: none;
    }
+   .govuk-check-your-answers.cya-questions-short, .govuk-check-your-answers.cya-questions-long {
+       width: 100%;
+   }
+   .govuk-check-your-answers {
+       display: table;
+   }
+   .govuk-check-your-answers > * {
+       display: table-row;
+       border-bottom-width: 0;
+   }
+   .govuk-check-your-answers > * {
+       position: relative;
+       border-bottom: 1px solid #bfc1c3;
+   }
+   .govuk-check-your-answers>*>* {
+       display: table-cell;
+       border-bottom: 1px solid #bfc1c3;
+       padding: .63158em 1.05263em .47368em 0;
+       margin: 0;
+   }
    .govuk-check-your-answers.cya-questions-short .cya-question {
        width: 30%;
+   }
+   .govuk-check-your-answers>*:first-child>* {
+       padding-top: 0;
    }
    .govuk-check-your-answers>*>* {
        display: table-cell;
        padding: .63158em 1.05263em .47368em 0;
        margin: 0;
+   }
+   .govuk-check-your-answers>*:first-child .cya-question {
+       margin-top: 0;
    }
 }
 .page {

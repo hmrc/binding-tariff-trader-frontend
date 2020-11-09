@@ -26,7 +26,6 @@ trait CacheMapGenerator {
   self: Generators =>
 
   val generators: Seq[Gen[(Page, JsValue)]] =
-    arbitrary[(UploadWrittenAuthorisationPage.type, JsValue)] ::
     arbitrary[(LegalChallengeDetailsPage.type, JsValue)] ::
     arbitrary[(LegalChallengePage.type, JsValue)] ::
     arbitrary[(CommodityCodeRulingReferencePage.type, JsValue)] ::
@@ -38,8 +37,6 @@ trait CacheMapGenerator {
     arbitrary[(UploadSupportingMaterialMultiplePage.type, JsValue)] ::
     arbitrary[(ProvideBTIReferencePage.type, JsValue)] ::
     arbitrary[(EnterContactDetailsPage.type, JsValue)] ::
-    arbitrary[(RegisterBusinessRepresentingPage.type, JsValue)] ::
-    arbitrary[(WhichBestDescribesYouPage.type, JsValue)] ::
     arbitrary[(RegisteredAddressForEoriPage.type, JsValue)] ::
     Nil
 

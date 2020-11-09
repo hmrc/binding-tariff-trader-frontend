@@ -265,13 +265,17 @@ body {
   .notice .icon {
     position: absolute;
     left: 0;
-    top: 50%;
-    margin-top: -17px;
+    margin-top: 0px;
+    margin-right: 10px;
 }
-.icon-important {
+.notice strong {
+    display: block;
+    padding-left: 65px;
+    margin-left: -15px;
+}
+.icon-important_ {
     width: 35px;
     height: 35px;
-    background-image: url(../images/icon-important.png);
 }
 .visually-hidden {
     display:none;
@@ -298,4 +302,7 @@ body {
 }
 address {
     font-style: normal;
+}
+.pre-wrap {
+    white-space: pre-wrap;
 }
