@@ -33,19 +33,18 @@
 
         @components.error_summary(form.errors)
 
+        @components.heading(messages("previousBTIRuling.heading", goodsName),
+            captionMsg=Some(messages("previousBTIRuling.caption")))
+
+        <div class="form-group">
+            <p>@messages("previousBTIRuling.bodyText")</p>
+        </div>
+
         @components.input_yes_no(
             field = form("value"),
-            hint = Some(messages("previousBTIRuling.bodyText")),
-            labelHtml = Some(heading)
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }
-}
-
-@heading = {
-    @components.heading(
-        messages("previousBTIRuling.heading", goodsName),
-        captionMsg = Some(messages("previousBTIRuling.caption"))
-    )
 }

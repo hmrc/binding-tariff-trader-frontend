@@ -336,7 +336,7 @@ commodityCodeDigits.heading = Provide a commodity code for the {0}
 commodityCodeDigits.bodyText = Entering a commodity code, even just the first 2 numbers, may help classify the goods.
 commodityCodeDigits.caption = About the goods
 commodityCodeDigits.checkYourAnswersLabel = Commodity code
-commodityCodeDigits.error.required = Commodity code must be 2 numbers or more
+commodityCodeDigits.error.required = Enter at least 2 digits of a commodity code
 commodityCodeDigits.error.maxLength = Commodity code must be 25 numbers or less
 commodityCodeDigits.error.minLength = Commodity code must be 2 numbers or more
 commodityCodeDigits.error.type = Commodity codes must only include numbers
@@ -404,7 +404,7 @@ legalChallenge.yesLegalChallenge = Yes
 legalChallenge.noLegalChallenge = No
 legalChallenge.checkYourAnswersLabel = Legal challenges?
 legalChallenge.error.required = Select yes if there have been any legal challenges relating to the goods
-legalChallenge.paragraph0 = Providing this legal or administrative information can help to identify goods with similar rulings to the {0}.
+legalChallenge.paragraph0 = Providing this legal or administrative information can help to identify goods with similar rulings.
 
 legalChallengeDetails.title = Provide details of any legal challenges relating to the goods - Manage your Advance Tariff Rulings - GOV.UK
 legalChallengeDetails.heading = Provide details of any legal challenges relating to the {0}

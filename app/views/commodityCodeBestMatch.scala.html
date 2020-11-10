@@ -33,12 +33,17 @@
 
         @components.error_summary(form.errors)
 
+        @components.heading(messages("commodityCodeBestMatch.heading", goodsName),
+        captionMsg=Some(messages("commodityCodeBestMatch.caption")))
+
+        <div class="form-group">
+            <p>@messages("commodityCodeBestMatch.paragraph")</p>
+        </div>
+
         @components.input_yes_no(
-            field = form("value"),
-            labelHtml = Some(components.heading(
-            messages("commodityCodeBestMatch.heading", goodsName),
-            captionMsg = Some(messages("commodityCodeBestMatch.caption")))),
-            hint = Some(messages("commodityCodeBestMatch.paragraph"))
+        field = form("value"),
+            label = Some(messages("legalChallenge.heading", goodsName)),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button(Some(messages("site.save_and_continue")))
