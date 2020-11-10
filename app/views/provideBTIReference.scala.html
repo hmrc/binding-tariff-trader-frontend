@@ -34,20 +34,18 @@
         @components.error_summary(form.errors)
 
 
+        @components.heading(messages("provideBTIReference.heading"),
+            captionMsg=Some(messages("provideBTIReference.caption")))
+
+    <div class="form-group">
+         <p>@messages("provideBTIReference.paragraph")</p>
+    </div>
+
         @components.input_text(
             field = form("btiReference"),
-            labelHtml = Some(heading),
-            label = Some(messages("provideBTIReference.paragraph")),
             hint = Some(messages("provideBTIReference.hint"))
         )
 
         @components.submit_button(Some(messages("site.save_and_continue")))
     }
-}
-
-@heading = {
-    @components.heading(
-        messages("provideBTIReference.heading"),
-        captionMsg = Some(messages("provideBTIReference.caption"))
-    )
 }
