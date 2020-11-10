@@ -389,8 +389,8 @@ addAnotherRuling.remove.ruling.hidden.text = Remove ruling {0}
 addAnotherRuling.change.ruling.text = Change
 addAnotherRuling.change.ruling.hidden.text = Change ruling {0}
 
-commodityCodeRulingReference.title = Provide the reference number of a similar ruling - Manage your Advance Tariff Rulings - GOV.UK
-commodityCodeRulingReference.heading = Provide the reference number of a similar ruling
+commodityCodeRulingReference.title = Provide the reference number for a similar ruling - Manage your Advance Tariff Rulings - GOV.UK
+commodityCodeRulingReference.heading = Provide the reference number for a similar ruling
 commodityCodeRulingReference.caption = About other rulings
 commodityCodeRulingReference.paragraph0 = It can help to provide a ruling if there is already a ruling for goods that are similar, even if the ruling was made in another country.
 commodityCodeRulingReference.hint = The reference number, for example GB12345678 or FR12345678, is on the ruling certificate.
