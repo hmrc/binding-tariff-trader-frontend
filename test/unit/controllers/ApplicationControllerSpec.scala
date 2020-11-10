@@ -27,7 +27,7 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
-import unit.utils.MockSourceUtil
+import unit.utils.MockAssetLoader
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.{failed, successful}
@@ -64,7 +64,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       caseService,
       fileService,
       countriesService,
-      MockSourceUtil,
+      MockAssetLoader,
       cc
     )
   }

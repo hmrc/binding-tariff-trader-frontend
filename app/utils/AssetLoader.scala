@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package unit.utils
+package utils
 
-import java.io.ByteArrayInputStream
-
-import utils.SourceUtil
+import javax.inject.Inject
 
 import scala.io.{BufferedSource, Source}
 
-object MockSourceUtil extends SourceUtil {
+class AssetLoader  @Inject()(){
 
-  override def fromURL(url: String): BufferedSource = Source.createBufferedSource(new ByteArrayInputStream("abc".getBytes))
+  def fromURL(url: String): BufferedSource = Source.fromURL(url)
 
 }
