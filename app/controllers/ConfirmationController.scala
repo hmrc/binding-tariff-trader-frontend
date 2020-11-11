@@ -47,8 +47,9 @@ class ConfirmationController @Inject()(
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def show(c: Confirmation, pdf: PdfViewModel): Future[Result] = for {
-      removed <- dataCacheConnector.remove(request.userAnswers.cacheMap)
-      _ = if (!removed) logger.warn("Session entry failed to be removed from the cache")
+      //removed <- dataCacheConnector.remove(request.userAnswers.cacheMap)
+      //_ = if (!removed) logger.warn("Session entry failed to be removed from the cache")
+      s <- Future(true)
       token: String = pdfService.encodeToken(c.eori)
     } yield Ok(confirmation(appConfig, c, token, pdf, getCountryName))
 
