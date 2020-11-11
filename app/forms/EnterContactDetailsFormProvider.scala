@@ -24,6 +24,8 @@ import models.EnterContactDetails
 
 class EnterContactDetailsFormProvider @Inject() extends Mappings with Constraints {
 
+  val telephoneRegex = """^\+?[-0-9\s\(\)./]{1,20}$"""
+
    def apply(): Form[EnterContactDetails] = Form(
      mapping(
        "name" -> text("enterContactDetails.error.name.required")
@@ -33,6 +35,7 @@ class EnterContactDetailsFormProvider @Inject() extends Mappings with Constraint
          .verifying(maxLength(100, "enterContactDetails.error.email.length")),
        "phoneNumber" -> text("enterContactDetails.error.phoneNumber.required")
          .verifying(maxLength(20, "enterContactDetails.error.phoneNumber.length"))
+         .verifying(regexp(telephoneRegex, "enterContactDetails.error.phoneNumber.invalid"))
      )(EnterContactDetails.apply)(EnterContactDetails.unapply)
    )
 
