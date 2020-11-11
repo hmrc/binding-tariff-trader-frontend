@@ -25,9 +25,12 @@ import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.SourceUtil
+import viewmodels.{FileView, PdfViewModel}
+import views.html.components.view_application
 import views.html.templates._
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   identify: IdentifierAction,
@@ -35,6 +38,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   caseService: CasesService,
   fileService: FileService,
   countriesService: CountriesService,
+  source: SourceUtil,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
@@ -92,21 +96,35 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
       c <- caseService.getCaseForUser(eori, reference)
       attachments <- fileService.getAttachmentMetadata(c)
       letter <- fileService.getLetterOfAuthority(c)
+      attachmentFileView = (attachments, c.attachments).zipped map {
+        (fileStoreRespAtt, caseAttachment) =>
+          FileView(fileStoreRespAtt.id, fileStoreRespAtt.fileName, caseAttachment.public)
+      }
       out <- pdf match {
         case true =>
-          generatePdf(applicationTemplate(appConfig, c, attachments, letter, getCountryName), s"BTIConfirmation$reference.pdf")
+          generatePdf(view_application(appConfig, PdfViewModel(c, attachmentFileView), getCountryName), s"BTIConfirmation$reference.pdf")
         case false =>
           Future.successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
       }
     } yield out
   }
 
-  private def generatePdf(htmlContent: Html, filename: String): Future[Result] = {
-    pdfService.generatePdf(htmlContent) map { pdfFile =>
+  private def generatePdf(htmlContent: Html, filename: String)
+                         (implicit request: Request[AnyContent]): Future[Result] = {
+    val styledHtml = addPdfStyles(htmlContent)
+    pdfService.generatePdf(styledHtml) map { pdfFile =>
       Results.Ok(pdfFile.content)
         .as(pdfFile.contentType)
-        .withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
+        .withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$filename")
     }
+  }
+  private def addPdfStyles(htmlContent: Html)
+                          (implicit request: Request[AnyContent]): Html = {
+    //TODO: find out the secure flag to set to true
+    val css = source.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css").absoluteURL()).mkString
+    Html(htmlContent.toString
+      .replace("<head>", s"<head><style>$css</style>")
+    )
   }
 
   private def getRulingPDF(eori: Eori, reference: CaseReference)
