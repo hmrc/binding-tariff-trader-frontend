@@ -54,7 +54,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
   }
 
   private def viewAsString: String = {
-    confirmation(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test"), "token", pdfViewModel)(fakeRequest, messages).toString
+    confirmation(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test"), "token", pdfViewModel, s => Some(""))(fakeRequest, messages).toString
   }
 
   "Confirmation Controller" must {

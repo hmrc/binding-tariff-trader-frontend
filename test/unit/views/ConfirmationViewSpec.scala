@@ -33,8 +33,8 @@ class ConfirmationViewSpec extends ViewBehaviours {
   private val noHazardousNoReturnSamplesPdf = pdfViewModel.copy(hazardousSample = false, returnSample = false)
   private val noHazardousReturnSamplesPdf = pdfViewModel.copy(hazardousSample = false, returnSample = true)
 
-  private def createView: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel)(fakeRequest, messages)
-  private def createView(pdf: PdfViewModel) = confirmation(frontendAppConfig, confirm, "token", pdf)(fakeRequest, messages)
+  private def createView: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel, s => Some("example country name"))(fakeRequest, messages)
+  private def createView(pdf: PdfViewModel) = confirmation(frontendAppConfig, confirm, "token", pdf, s => Some("example country name"))(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)()
