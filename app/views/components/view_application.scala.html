@@ -18,40 +18,30 @@
 @import viewmodels.PdfViewModel
 @import utils.Dates
 
-@(appConfig: FrontendAppConfig, pdf: PdfViewModel, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, pdf: PdfViewModel, getCountryName: String => Option[String],
+        compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"
 }
 
-<div id="pdf-id" class="grid-row hidden-print">
-    <div class="column-two-thirds">
-        <h2 class="heading-large">@messages("view.application.header")</h2>
-    </div>
-</div>
-<div>
-    <div class="print-save-application hidden-print">
-    @if(!compositeMode) {
-        <span id="">
-            <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
-            <a class="print-this__link" href="javascript:window.print()" data-journey-click="print - click:Your application:Print your application">Print your application</a>
-        </span>
-    }
-    </div>
-    <div class="print-save-application hidden-print">
-        <a id="save-pdf" class="save-this__link"  data-journey-click="save - click:Your application:Save your application">Save your application</a>
-    </div>
-</div>
-
-<div id="print-pages" class="print-pages">
-    <div class="print-document">
+<html>
+    <head>
+        <title>@messages("application.title.pdf")</title>
+    </head>
+    <body>
+        <div class="grid-row hidden-print">
+            <div class="column-two-thirds"></div>
+        </div>
+        <div id="print-pages" class="print-pages">
+    <div id="your-records" class="print-document">
         <div class="grid-row print-header">
             <div class="column-one-third">
                 <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.svg")"/>
             </div>
-            <div class="column-two-thirds">
+            <div>
                 <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
-                @messages("view.application.title.text")
+                    @messages("view.application.title.text")
                 </h2>
             </div>
         </div>
@@ -60,7 +50,7 @@
             <div class="column-full">
                 <h3>@messages("view.application.your.record.text")</h3>
             </div>
-            <div class="column-half">
+            <div class="column-half column-one-half">
                 <dl class="body-text">
                     <dt class="bold">@messages("view.application.eori")</dt>
                     <dt>@pdf.eori</dt>
@@ -75,9 +65,11 @@
                     <dt>@pdf.accountDetails.addressLine2</dt>
                     <dt>@pdf.accountDetails.addressLine3</dt>
                     <dt>@pdf.accountDetails.postcode</dt>
+                    <dt>@messages(getCountryName(pdf.accountDetails.country).mkString)</dt>
+
                 </dl>
             </div>
-            <div class="column-half">
+            <div class="column-half column-one-half">
                 <dl class="body-text">
                     <dt class="bold">@messages("view.application.contact.name")</dt>
                     <dt>@pdf.contact.name</dt>
@@ -175,63 +167,57 @@
                     </div>
                     }
                 </div>
-
-                <div class="footer-info footer-page-break">
-                    <span class="footer-page-no"></span>
-                    <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
                 </div>
             </div>
         </div>
-    </div>
 
-
-    <div id="print-document"  class="print-document">
+    <div class="print-document" id="print-document">
     <div class="grid-row print-header">
         <div class="column-one-third">
             <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.svg")" />
         </div>
-        <div class="column-two-thirds">
+        <div>
             <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
                 @messages("view.application.title.text")
-                </h2>
-            </div>
+            </h2>
         </div>
+    </div>
 
-        <div class="grid-row main-content">
-            <div class="column-full">
+    <div class="grid-row main-content">
+        <div class="column-full">
 
-                <h3 class="heading-medium">@messages("beforeYouStart.subheading1")</h3>
-                <dl class="govuk-check-your-answers cya-questions-short">
-                    <div>
-                        <dt class="cya-question">@messages("provideGoodsName.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@pdf.goodsName</dd>
-                    </div>
-                    <div>
-                        <dt class="cya-question">@messages("view.application.goods.details")</dt>
-                        <dd class="cya-answer">@pdf.goodsDetails</dd>
-                    </div>
-                    @if(pdf.confidentialInformation.isDefined) {
-                        <div>
-                            <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
-                            <dd class="cya-answer">@pdf.confidentialInformation</dd>
-                        </div>
-                    } else {
-                        <div>
-                            <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
-                            <dd class="cya-answer">@messages("site.no")</dd>
-                        </div>
-                    }
-                    @if(pdf.attachments.isEmpty) {
-                        <div>
-                            <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
-                            <dd class="cya-answer">@messages("site.no")</dd>
-                        </div>
-                    } else {
-                        <div>
-                            <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
-                            <dd class="cya-answer"><div class="pre-wrap">@{pdf.supportingMaterialFileList}</div></dd>
-                        </div>
-                    }
+            <h3 class="heading-medium">@messages("beforeYouStart.subheading1")</h3>
+            <dl class="govuk-check-your-answers cya-questions-short">
+                <div>
+                    <dt class="cya-question">@messages("provideGoodsName.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer">@pdf.goodsName</dd>
+                </div>
+                <div>
+                    <dt class="cya-question">@messages("view.application.goods.details")</dt>
+                    <dd class="cya-answer">@pdf.goodsDetails</dd>
+                </div>
+                @if(pdf.confidentialInformation.isDefined) {
+                <div>
+                    <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer">@pdf.confidentialInformation</dd>
+                </div>
+                } else {
+                <div>
+                    <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer">@messages("site.no")</dd>
+                </div>
+                }
+                @if(pdf.attachments.isEmpty) {
+                <div>
+                    <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer">@messages("site.no")</dd>
+                </div>
+                } else {
+                 <div>
+                    <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer"><div class="pre-wrap">@{pdf.supportingMaterialFileList}</div></dd>
+                  </div>
+                }
 
                     @if(!appConfig.samplesToggle){
                         @if(pdf.sendingSample) {
@@ -267,50 +253,49 @@
                 </div>
                 }
 
-                    @if(pdf.legalProblems.isDefined) {
-                        <div>
-                            <dt class="cya-question">@messages("view.applicationPdf.legalProblem")</dt>
-                            <dd class="cya-answer">@pdf.legalProblems</dd>
-                        </div>
-                    } else {
-                        <div>
-                            <dt class="cya-question">@messages("view.applicationPdf.legalProblemQuestion")</dt>
-                            <dd class="cya-answer">@messages("site.no")</dd>
-                        </div>
-                    }
-
-                </dl>
-                <h3 class="heading-medium">@messages("beforeYouStart.subheading2")</h3>
-                <dl class="govuk-check-your-answers cya-questions-short section">
-                    @if(pdf.reissuedBTIReference.isEmpty) {
-                        <div>
-                            <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
-                            <dd class="cya-answer">@messages("site.no")</dd>
-                        </div>
-                    } else {
-                        <div>
-                            <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
-                            <dd class="cya-answer">@pdf.reissuedBTIReference</dd>
-                        </div>
-                    }
-
-                    @if(pdf.similarAtarReferences.isEmpty) {
-                        <div>
-                            <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
-                            <dd class="cya-answer">@messages("site.no")</dd>
-                        </div>
-                    } else {
-                        <div>
-                            <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
-                            <dd class="cya-answer"><div class="pre-wrap">@{pdf.similarAtarCodes}</div></dd>
-                        </div>
-                    }
-                </dl>
-                <div class="footer-info footer-page-break">
-                    <span class="footer-page-no"></span>
-                    <span class="footer-page-date">HMRC @Dates.formatForPdf(pdf.dateSubmitted)</span>
+                @if(pdf.legalProblems.isDefined) {
+                <div>
+                    <dt class="cya-question">@messages("view.applicationPdf.legalProblem")</dt>
+                    <dd class="cya-answer">@pdf.legalProblems</dd>
                 </div>
-            </div>
+                } else {
+                <div>
+                    <dt class="cya-question">@messages("view.applicationPdf.legalProblemQuestion")</dt>
+                    <dd class="cya-answer">@messages("site.no")</dd>
+                </div>
+                }
+
+            </dl>
+            <h3 class="heading-medium">@messages("beforeYouStart.subheading2")</h3>
+            <dl class="govuk-check-your-answers cya-questions-short section">
+                @if(pdf.reissuedBTIReference.isEmpty) {
+                    <div>
+                        <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
+                        <dd class="cya-answer">@messages("site.no")</dd>
+                    </div>
+                } else {
+                    <div>
+                        <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
+                        <dd class="cya-answer">@pdf.reissuedBTIReference</dd>
+                    </div>
+                }
+
+                @if(pdf.similarAtarReferences.isEmpty) {
+                <div>
+                    <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer">@messages("site.no")</dd>
+                </div>
+                } else {
+                <div>
+                    <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
+                    <dd class="cya-answer"><div class="pre-wrap">@{pdf.similarAtarCodes}</div></dd>
+                </div>
+                }
+            </dl>
         </div>
     </div>
 </div>
+</div>
+    </body>
+
+</html>

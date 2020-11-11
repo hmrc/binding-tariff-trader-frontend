@@ -18,16 +18,16 @@ package controllers
 
 import connectors.DataCacheConnector
 import controllers.actions._
-import models.{Confirmation, EORIDetails, oCase}
+import models.{Confirmation, oCase}
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import pages.{ConfirmationPage, PdfViewPage}
 import play.api.test.Helpers._
-import service.PdfService
+import service.{CountriesService, PdfService}
 import uk.gov.hmrc.http.cache.client.CacheMap
+import utils.JsonFormatters._
 import viewmodels.PdfViewModel
 import views.html.confirmation
-import utils.JsonFormatters._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,6 +38,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
   private val cacheMap = mock[CacheMap]
   private val pdfService = mock[PdfService]
   private val pdfViewModel = oCase.pdf
+  private val countriesService = new CountriesService
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
     new ConfirmationController(
@@ -46,6 +47,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
       dataRetrievalAction,
       new DataRequiredActionImpl,
       cache,
+      countriesService,
       pdfService,
       cc
     )

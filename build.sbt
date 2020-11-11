@@ -37,6 +37,7 @@ lazy val root = (project in file("."))
     fork in Test := true,
     resolvers ++= Seq(
       Resolver.bintrayRepo("hmrc", "releases"),
+      Resolver.bintrayRepo("wolfendale", "maven"),
       Resolver.jcenterRepo
     ),
     // Use the silencer plugin to suppress warnings from unused imports in compiled twirl templates

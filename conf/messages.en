@@ -185,6 +185,8 @@ enterContactDetails.error.email.invalid = Enter an email address in the correct 
 enterContactDetails.error.name.length = Full name must be 100 characters or less
 enterContactDetails.error.email.length = Email address must be 100 characters or less
 enterContactDetails.error.phoneNumber.length = Telephone number must be 20 characters or less
+enterContactDetails.error.phoneNumber.invalid = Enter a telephone number, like 01632 960000, 07700 900000 or +44 0808 157 0192
+
 
 acceptItemInformationList.title = Information you must provide about your item to get the correct commodity code - Manage your Advance Tariff Rulings - GOV.UK
 acceptItemInformationList.heading = Information you must provide about your item to get the correct commodity code

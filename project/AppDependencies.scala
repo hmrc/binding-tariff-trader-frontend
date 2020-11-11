@@ -31,6 +31,7 @@ object AppDependencies {
     "org.scalacheck"            %% "scalacheck"             % "1.14.3"            % scope,
     "org.scalatest"             %% "scalatest"              % "3.0.8"             % scope,
     "org.scalatestplus.play"    %% "scalatestplus-play"     % "3.1.3"             % scope,
+    "wolfendale"                %% "scalacheck-gen-regexp"  % "0.1.2"             % scope
   )
 
   def apply(): Seq[ModuleID] = (compile ++ test).map(_ withSources())

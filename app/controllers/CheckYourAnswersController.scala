@@ -121,7 +121,7 @@ class CheckYourAnswersController @Inject()(
     }
 
     val withStatus = fileAttachments
-      .map(att => Attachment(att.id, keepConfidential(att.id)))
+      .map(att => Attachment(att.id, public = !keepConfidential(att.id)))
 
     for {
       published   <- fileService.publish(fileAttachments)

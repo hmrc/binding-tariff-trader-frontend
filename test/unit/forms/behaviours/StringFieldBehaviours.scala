@@ -17,6 +17,7 @@
 package forms.behaviours
 
 import play.api.data.{Form, FormError}
+import wolfendale.scalacheck.regexp.RegexpGen
 
 trait StringFieldBehaviours extends FieldBehaviours {
 
@@ -29,10 +30,31 @@ trait StringFieldBehaviours extends FieldBehaviours {
 
       forAll(stringsLongerThan(maxLength) -> "longString") { str: String =>
         val result = form.bind(Map(fieldName -> str)).apply(fieldName)
-        result.errors shouldEqual Seq(lengthError)
+        result.errors should contain(lengthError)
       }
     }
-
   }
 
+  def fieldWithRegex(form: Form[_],
+                     fieldName: String,
+                     invalidString: String,
+                     maxLength: Int,
+                     error: FormError,
+                     regex : String): Unit = {
+
+    "not bind strings invalidated by regex" in {
+      val result = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+      result.errors should contain(error)
+    }
+
+    "bind strings that pass regex" in {
+      val gen = RegexpGen.from(regex)
+      forAll(gen, minSuccessful(100)){str: String =>
+        whenever(str.length <= maxLength) {
+          val result = form.bind(Map(fieldName -> str)).apply(fieldName)
+          result.errors should be (empty)
+        }
+      }
+    }
+  }
 }
