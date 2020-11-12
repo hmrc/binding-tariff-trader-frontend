@@ -77,7 +77,7 @@ trait Constraints {
   protected def regexp(regex: String, errorKey: String): Constraint[String] = {
     Constraint {
       case str: String if str.matches(regex) => Valid
-      case _ => Invalid(errorKey, regex)
+      case _ => Invalid(errorKey)
     }
   }
 
