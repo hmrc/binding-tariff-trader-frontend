@@ -37,7 +37,7 @@
         @components.heading(messages("provideBTIReference.heading"),
             captionMsg=Some(messages("provideBTIReference.caption")))
 
-    <div class="form-group">
+    <div class="mb-2">
          <p>@messages("provideBTIReference.paragraph")</p>
     </div>
 
@@ -46,6 +46,6 @@
             hint = Some(messages("provideBTIReference.hint"))
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+        @components.submit_button(Some(messages("site.continue")))
     }
 }

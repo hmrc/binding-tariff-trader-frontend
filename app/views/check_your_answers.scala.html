@@ -19,7 +19,7 @@
 @import controllers.routes._
 
 @import uk.gov.hmrc.play.views.html.helpers
-@(appConfig: FrontendAppConfig, answerSections: Seq[AnswerSection])(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, answerSections: Seq[AnswerSection], sendingSamples: Boolean)(implicit request: Request[_], messages: Messages)
 
     @main_template(
         title = messages("checkYourAnswers.title"),
@@ -45,7 +45,9 @@
                 <li>@messages("checkYourAnswers.declaration.listItem2")</li>
             </ul>
 
-            <p>@messages("checkYourAnswers.declaration.paragraph2")</p>
+            @if(sendingSamples) {
+                <p>@messages("checkYourAnswers.declaration.paragraph2")</p>
+            }
 
             @components.submit_button(Some(messages("checkYourAnswers.declaration.submit")))
 

@@ -117,7 +117,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
         AnswerSection(Some("checkYourAnswers.informationAboutYourItemSection"), Seq.empty),
         AnswerSection(Some("checkYourAnswers.otherInformation"), Seq.empty)
       )
-      contentAsString(result) shouldBe check_your_answers(frontendAppConfig, expectedSections)(fakeRequest, messages).toString
+      contentAsString(result) shouldBe check_your_answers(frontendAppConfig, expectedSections, false)(fakeRequest, messages).toString
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
