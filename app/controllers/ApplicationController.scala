@@ -121,15 +121,10 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   private def addPdfStyles(htmlContent: Html)
                           (implicit request: Request[AnyContent]): Html = {
 
-    val cssSource = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css").absoluteURL())
-    try {
-      val css = cssSource.mkString
-      Html(htmlContent.toString
-        .replace("<head>", s"<head><style>$css</style>")
-      )
-    } finally {
-      cssSource.close()
-    }
+    val css = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css").absoluteURL()).mkString
+    Html(htmlContent.toString
+      .replace("<head>", s"<head><style>$css</style>")
+    )
   }
 
   private def getRulingPDF(eori: Eori, reference: CaseReference)
