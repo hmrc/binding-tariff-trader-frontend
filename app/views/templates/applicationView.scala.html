@@ -15,29 +15,42 @@
  *@
 
 @import config.FrontendAppConfig
-@import models.response.FilestoreResponse
 
-@(appConfig: FrontendAppConfig, c: Case, attachments: Seq[FilestoreResponse], letterOfAuthority : Option[FilestoreResponse] = None, getCountryName: String => Option[String])(implicit request: Request[_], messages: Messages)
+@import viewmodels.PdfViewModel
+@(appConfig: FrontendAppConfig, pdf: PdfViewModel, getCountryName: String => Option[String],
+        compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${messages("applicationView.title")}",
-    appConfig = appConfig,
-    bodyClasses = None)  {
+    @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
+    s"${appConfig.host}${routes.Assets.versioned(path)}"
+    }
 
-    @components.back_link()
+    @main_template(
+        title = messages("applicationView.title"),
+        appConfig = appConfig,
+        contentClass = Some("column-full pl-0"),
+        bodyClasses = None) {
 
-    <span class="organisation-logo organisation-logo-medium">HM Revenue & Customs</span>
+        @components.back_link()
 
-    @components.heading(messages("applicationView.mainTitle"))
+        <div class="column-two-thirds p-0 hidden-print">
+            @components.heading(messages("view.application.header"))
 
-    <p>
-        <a id="applicationView.applicationLink" href="@routes.ApplicationController.applicationPdf(c.reference)" target="_blank">
-            @messages("applicationView.applicationPDFLink")
-        </a>
-    </p>
+            <div>
+                <div class="print-save-application hidden-print">
+                @if(!compositeMode) {
+                    <span id="">
+                        <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
+                        <a class="print-this__link" href="javascript:window.print()" data-journey-click="print - click:Your application:Print your application">Print your application</a>
+                    </span>
+                }
+                </div>
+                <div class="print-save-application hidden-print">
+                    <a class="save-this__link id="save-pdf" href="@controllers.routes.ApplicationController.applicationPdf(pdf.reference).url"
+                    data-journey-click="save - click:Your application:Save your application">Save your application</a>
+                </div>
+            </div>
+        </div>
 
-    </br>
 
-    @applicationTemplate(appConfig, c, attachments, letterOfAuthority, getCountryName, true)
-
-}
+        @components.view_application(appConfig, pdf, getCountryName, compositeMode)
+    }
