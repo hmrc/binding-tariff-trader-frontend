@@ -74,10 +74,40 @@ trait ViewBehaviours extends ViewSpecBase {
 
   protected def pageWithoutBackLink(view: () => HtmlFormat.Appendable): Unit = {
 
-    "behave like a page with a back link" must {
-      "have a back link" in {
+    "behave like a page without a back link" must {
+      "not have a back link" in {
         val doc = asDocument(view())
         assertNotRenderedById(doc, "back-link")
+      }
+    }
+  }
+
+  protected def pageWithCancelApplicationLink(view: () => HtmlFormat.Appendable): Unit = {
+
+    "behave like a page with a cancel application link" must {
+      "have a cancel application link" in {
+        val doc = asDocument(view())
+        assertRenderedById(doc, "cancel-application-link")
+      }
+    }
+  }
+
+  protected def pageWithoutCancelApplicationLink(view: () => HtmlFormat.Appendable): Unit = {
+
+    "behave like a page without a cancel application link" must {
+      "not have a cancel application link" in {
+        val doc = asDocument(view())
+        assertNotRenderedById(doc, "cancel-application-link")
+      }
+    }
+  }
+
+  protected def clickCancelApplicationLink(view: () => HtmlFormat.Appendable): Unit = {
+
+    "behave like a page with a cancel application link" must {
+      "contain a href link" in {
+        val doc = asDocument(view())
+        assertLinkContainsHref(doc, "cancel-application-link", "@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None)")
       }
     }
   }

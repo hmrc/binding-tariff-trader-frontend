@@ -62,6 +62,8 @@
 
         @components.submit_button(Some(messages("site.continue")))
 
+        @components.cancel_application_link()
+
         <script>
             const id = "@initiateResponse.id";
             const targetURL = "@UploadSupportingMaterialMultipleController.onFileSelected().url";
