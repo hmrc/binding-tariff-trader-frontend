@@ -58,9 +58,9 @@ class ConfirmationController @Inject()(
     }
   }
 
-  def getCountryName(code: String) =
+  def getCountryName(code: String): Option[String] =
     countriesService
-      .getAllCountries
-      .find(_.code == code)
+      .getAllCountriesById
+      .get(code)
       .map(_.countryName)
 }

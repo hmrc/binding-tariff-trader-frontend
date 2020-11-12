@@ -25,7 +25,7 @@ import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.SourceUtil
+import utils.AssetLoader
 import viewmodels.{FileView, PdfViewModel}
 import views.html.components.view_application
 import views.html.templates._
@@ -33,14 +33,14 @@ import views.html.templates._
 import scala.concurrent.{ExecutionContext, Future}
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
-  identify: IdentifierAction,
-  pdfService: PdfService,
-  caseService: CasesService,
-  fileService: FileService,
-  countriesService: CountriesService,
-  source: SourceUtil,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+                                      identify: IdentifierAction,
+                                      pdfService: PdfService,
+                                      caseService: CasesService,
+                                      fileService: FileService,
+                                      countriesService: CountriesService,
+                                      assetLoader: AssetLoader,
+                                      cc: MessagesControllerComponents
+                                     )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private type Eori = String
   private type CaseReference = String
@@ -80,12 +80,12 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
 
   private def getApplicationPDF(eori: Eori, reference: CaseReference)
                                (implicit request: Request[AnyContent]): Future[Result] = {
-    getApplicationPDForHtml(eori,reference,true)
+    getApplicationPDForHtml(eori,reference, pdf = true)
   }
 
   private def getApplicationView(eori: Eori, reference: CaseReference)
                                (implicit request: Request[AnyContent]): Future[Result] = {
-    getApplicationPDForHtml(eori,reference,false)
+    getApplicationPDForHtml(eori,reference, pdf = false)
   }
 
 
@@ -95,7 +95,6 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
     for {
       c <- caseService.getCaseForUser(eori, reference)
       attachments <- fileService.getAttachmentMetadata(c)
-      letter <- fileService.getLetterOfAuthority(c)
       attachmentFileView = (attachments, c.attachments).zipped map {
         (fileStoreRespAtt, caseAttachment) =>
           FileView(fileStoreRespAtt.id, fileStoreRespAtt.fileName, caseAttachment.public)
@@ -104,7 +103,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
         case true =>
           generatePdf(view_application(appConfig, PdfViewModel(c, attachmentFileView), getCountryName), s"BTIConfirmation$reference.pdf")
         case false =>
-          Future.successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
+          Future.successful(Ok(applicationView(appConfig, PdfViewModel(c, attachmentFileView), getCountryName)))
       }
     } yield out
   }
@@ -118,13 +117,19 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
         .withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$filename")
     }
   }
+
   private def addPdfStyles(htmlContent: Html)
                           (implicit request: Request[AnyContent]): Html = {
-    //TODO: find out the secure flag to set to true
-    val css = source.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css").absoluteURL()).mkString
-    Html(htmlContent.toString
-      .replace("<head>", s"<head><style>$css</style>")
-    )
+
+    val cssSource = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css").absoluteURL())
+    try {
+      val css = cssSource.mkString
+      Html(htmlContent.toString
+        .replace("<head>", s"<head><style>$css</style>")
+      )
+    } finally {
+      cssSource.close()
+    }
   }
 
   private def getRulingPDF(eori: Eori, reference: CaseReference)

@@ -23,15 +23,14 @@
         getCountryName: String => Option[String], compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
-    val protocol = if(req.secure) "https" else "http"
-    s"$protocol://${req.host}${routes.Assets.versioned(path)}"
+    s"${appConfig.host}${routes.Assets.versioned(path)}"
 }
 
 @main_template(
     title = messages("confirmation.title"),
     appConfig = appConfig,
     contentClass = Some("column-full pl-0"),
-    bodyClasses = None) {
+    bodyClasses = None){
 
 <div class="column-two-thirds p-0 hidden-print">
     <div class="govuk-box-highlight govuk-panel--confirmation">
@@ -102,6 +101,8 @@
     </div>
 
     <div>
+        <h2 class="heading-large">@messages("view.application.header")</h2>
+
         <div class="print-save-application hidden-print">
         @if(!compositeMode) {
             <span id="">
@@ -115,6 +116,7 @@
             data-journey-click="save - click:Your application:Save your application">Save your application</a>
         </div>
     </div>
+
 </div>
         <div id = "pdfView">
             @components.view_application(appConfig, pdf, getCountryName, compositeMode)
