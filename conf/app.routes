@@ -18,6 +18,7 @@ GET         /force-sign-out                                            controlle
 GET         /unauthorised-sign-out                                     controllers.SignOutController.unauthorisedSignOut
 GET         /keep-alive                                                controllers.SignOutController.keepAlive
 GET         /unauthorised                                              controllers.UnauthorisedController.onPageLoad
+GET         /cancel-application                                        controllers.SignOutController.cancelApplication
 
 GET         /information-you-need                                      controllers.BeforeYouStartController.onPageLoad()
 GET         /provide-registered-eori-details                           controllers.RegisteredAddressForEoriController.onPageLoad(mode: Mode = NormalMode)

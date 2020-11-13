@@ -82,6 +82,14 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
       redirectLocation(result).get should endWith("/applications")
       cookies(result).size shouldBe 0
     }
+  }
 
+  "Cancel application controller" must {
+    "return a redirect and clear session" in {
+      val result: Future[Result] = controller.cancelApplication(fakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result).get should endWith("/applications-and-rulings")
+      cookies(result).size shouldBe 0
+    }
   }
 }

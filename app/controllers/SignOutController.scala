@@ -54,6 +54,11 @@ class SignOutController @Inject()(
     successful(Ok("OK"))
   }
 
+  def cancelApplication: Action[AnyContent] = (identify andThen getData).async { implicit request =>
+    clearDataCache(request)
+    successful(Results.Redirect(routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None)))
+  }
+
   private def clearDataCache(request: OptionalDataRequest[AnyContent]): Option[Future[Boolean]] = {
     request.userAnswers map { answer => dataCacheConnector.remove(answer.cacheMap) }
   }
