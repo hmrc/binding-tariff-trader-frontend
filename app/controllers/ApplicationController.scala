@@ -121,10 +121,10 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   private def addPdfStyles(htmlContent: Html)
                           (implicit request: Request[AnyContent]): Html = {
 
-    val css = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css")
-      .absoluteURL(secure = true)).mkString
+    val cssSource = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css")
+      .absoluteURL).mkString
     Html(htmlContent.toString
-      .replace("<head>", s"<head><style>$css</style>")
+      .replace("<head>", s"<head><style>$cssSource</style>")
     )
   }
 

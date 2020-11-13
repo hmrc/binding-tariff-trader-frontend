@@ -50,7 +50,7 @@ You will be redirected to the Auth Stub.
 
 The service uses the [HMRC Auth Client](https://github.com/hmrc/auth-client) for authentication with Gov Gateway as the provider. In non production environments you will be redirected to the Auth Stub, to authenticate you need an enrolment with properties:
 
-Key: `HMRC-CUS-ORG`
+Key: `HMRC-ATAR-ORG`
 
 Identifier name: `EORINumber`
 
