@@ -30,7 +30,7 @@
     title = messages("confirmation.title"),
     appConfig = appConfig,
     contentClass = Some("column-full pl-0"),
-    bodyClasses = None) {
+    bodyClasses = None){
 
 <div class="column-two-thirds p-0 hidden-print">
     <div class="govuk-box-highlight govuk-panel--confirmation">
@@ -102,6 +102,7 @@
             data-journey-click="save - click:Your application:Save your application">Save your application</a>
         </div>
     </div>
+
 </div>
 
     @components.view_application(appConfig, pdf, getCountryName, compositeMode)
