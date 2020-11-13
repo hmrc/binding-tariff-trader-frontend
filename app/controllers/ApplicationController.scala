@@ -122,7 +122,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                           (implicit request: Request[AnyContent]): Html = {
 
     val cssSource = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css")
-      .absoluteURL).mkString
+      .absoluteURL(secure = true)).mkString
     Html(htmlContent.toString
       .replace("<head>", s"<head><style>$cssSource</style>")
     )
