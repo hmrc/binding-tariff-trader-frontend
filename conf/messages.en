@@ -321,7 +321,7 @@ uploadSupportingMaterialMultiple.upload.restrictionFiles = one file at a time, u
 uploadSupportingMaterialMultiple.upload.exampleFiles = photographs, manuals, brochures or technical specifications
 uploadSupportingMaterialMultiple.upload.restrictionSize = a maximum individual file size of 10MB
 uploadSupportingMaterialMultiple.upload.selectFile = Select a file to upload
-uploadSupportingMaterialMultiple.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg and txt files
+uploadSupportingMaterialMultiple.upload.typeOfFiles = pdf, doc, docx, xls, xlsx, png, jpg, jpeg and txt files
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file types can I upload?
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
@@ -499,7 +499,7 @@ uploadWrittenAuthorisation.error.fileType = Your document will not upload becaus
 uploadWrittenAuthorisation.error.required = Enter uploadWrittenAuthorisation
 uploadWrittenAuthorisation.upload.title =  The authorisation must be:
 uploadWrittenAuthorisation.upload.restrictionSize = a maximum file size of 10MB
-uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, xls, xlsx, png, jpg, jpeg and txt files
+uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg and txt files
 uploadWrittenAuthorisation.upload.timeLimit = from within the last 12 months
 uploadWrittenAuthorisation.upload.document = a digital document, a scanned letter or copy of an email from the business, organisation or individual
 
