@@ -110,8 +110,8 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
 
   private def generatePdf(htmlContent: Html, filename: String)
                          (implicit request: Request[AnyContent]): Future[Result] = {
-    val styledHtml = addPdfStyles(htmlContent)
-    pdfService.generatePdf(styledHtml) map { pdfFile =>
+    //val styledHtml = addPdfStyles(htmlContent)
+    pdfService.generatePdf(htmlContent) map { pdfFile =>
       Results.Ok(pdfFile.content)
         .as(pdfFile.contentType)
         .withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
