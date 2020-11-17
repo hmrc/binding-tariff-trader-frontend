@@ -44,6 +44,9 @@
             labelClass = Some("visually-hidden")
         )
 
-        @components.submit_button()
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
+
     }
 }

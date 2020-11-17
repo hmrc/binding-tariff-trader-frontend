@@ -31,7 +31,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq.empty)
   )
 
-  private def createTraderView: () => Html = () => check_your_answers(frontendAppConfig, traderAnswers)(fakeRequest, messages)
+  private def createTraderView: () => Html = () => check_your_answers(frontendAppConfig, traderAnswers, sendingSamples = true)(fakeRequest, messages)
+  private def createTraderViewNoSamples: () => Html = () => check_your_answers(frontendAppConfig, traderAnswers, sendingSamples = false)(fakeRequest, messages)
 
   "Check Your Answers view" must {
     behave like normalPage(createTraderView, messageKeyPrefix)()
@@ -42,6 +43,18 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
       text should include("About the applicant")
       text should include(traderAnswer)
+    }
+
+    "samples may be damaged statement is visible when sending samples is true" in {
+      val text = asDocument(createTraderView()).text()
+
+      text should include (messages("checkYourAnswers.declaration.paragraph2"))
+    }
+
+    "samples may be damaged statement is not visible when sending samples is false" in {
+      val text = asDocument(createTraderViewNoSamples()).text()
+
+      text should not include (messages("checkYourAnswers.declaration.paragraph2"))
     }
   }
 }

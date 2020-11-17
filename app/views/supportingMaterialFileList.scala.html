@@ -72,7 +72,9 @@
             )
         }
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }
 

@@ -43,9 +43,12 @@
         @components.input_text(
             field = goodsNameForm("goodsName"),
             label = Some(messages("provideGoodsName.heading")),
+            hint = Some(messages("provideGoodsName.hint")),
             labelClass = Some("visually-hidden")
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }

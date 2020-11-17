@@ -54,16 +54,14 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
   }
 
   private def viewAsString: String = {
-    confirmation(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true),
-      "token", pdfViewModel, s => Some(""))(fakeRequest, messages).toString
+    confirmation(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test"), "token", pdfViewModel, s => Some(""))(fakeRequest, messages).toString
   }
 
   "Confirmation Controller" must {
 
     "return OK and the correct view for a GET" in {
       given(cache.remove(cacheMap)).willReturn(Future.successful(true))
-      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(
-        Some(Confirmation("ref", "eori", "marisa@example.test", sendingSamples = true)))
+      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
       given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdfViewModel))
       given(pdfService.encodeToken("eori")).willReturn("token")
 

@@ -56,7 +56,6 @@ class ConfirmationController @Inject()(
       case (Some(c: Confirmation), Some(pdf: PdfViewModel)) => show(c, pdf)
       case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
-
   }
 
   def getCountryName(code: String): Option[String] =

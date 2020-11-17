@@ -35,7 +35,6 @@
 
         @components.heading(messages("legalChallengeDetails.heading", goodsName), captionMsg = Some(messages("legalChallengeDetails.caption")))
 
-        <p>@messages("legalChallengeDetails.first.paragraph")</p>
         <p>@messages("legalChallengeDetails.second.paragraph")</p>
         <ul class="list list-bullet">
             <li>@messages("legalChallengeDetails.item1")</li>
@@ -48,6 +47,8 @@
             label = Html(messages("legalChallengeDetails.heading", goodsName))
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }

@@ -15,6 +15,7 @@ checkYourAnswers.declaration.paragraph0 = By applying for an Advance Tariff Ruli
 checkYourAnswers.declaration.paragraph1 = You agree that HMRC can:
 checkYourAnswers.declaration.listItem1 = store the information you provided or may provide after you send your application
 checkYourAnswers.declaration.listItem2 = publish information that is not confidential on the Advance Tariff Ruling website
+checkYourAnswers.declaration.paragraph2 = You understand that your samples may be damaged during testing.
 checkYourAnswers.declaration.submit = Accept and apply for a ruling
 
 date.day = Day
@@ -46,7 +47,6 @@ global.link.signout = Sign out
 beforeYouStart.title = Information you need to complete an application - Manage your Advance Tariff Rulings - GOV.UK
 beforeYouStart.heading = Information you need to complete an application
 
-beforeYouStart.heading.paragraph1 = You will be able to tell us in your application if any of the information you provide about your goods is confidential. We will not publish confidential information on the Advance Tariff Rulings website.
 beforeYouStart.heading.inset1 = You will be able to save this application and return to it later.
 
 beforeYouStart.subheading1 = About the goods
@@ -59,7 +59,7 @@ beforeYouStart.subheading1.paragraph2.item1 = upload photographs, manuals, broch
 beforeYouStart.subheading1.paragraph2.item2 = send a sample
 
 beforeYouStart.subheading2 = About other rulings
-beforeYouStart.subheading2.paragraph1 = If you are renewing a previous ruling or referring similar rulings you will need to know the reference numbers.
+beforeYouStart.subheading2.paragraph1 = If you are referring to previous or similar rulings you will need to know the reference numbers.
 
 beforeYouStart.subheading3 = About the applicant
 beforeYouStart.subheading3.paragraph1 = You need to know the contact email and phone number for this application.
@@ -91,6 +91,7 @@ site.submit = Submit
 site.upload_continue = Upload and continue
 site.service_name = Manage your Advance Tariff Rulings
 site.save_and_continue = Save and continue
+site.cancel_application = Cancel application
 site.agree_and_continue = Agree and continue
 
 unauthorised.title = Not registered for CDS
@@ -145,10 +146,11 @@ whichBestDescribesYou.businessRepresentative = A different business or organisat
 whichBestDescribesYou.checkYourAnswersLabel = This application is for
 whichBestDescribesYou.error.required = Select if this application is for the business or organisation you work for or own, or a business, organisation or individual that you are representing
 
-previousBTIRuling.title = Do you have a previous BTI ruling reference for the goods? - Manage your Advance Tariff Rulings - GOV.UK
-previousBTIRuling.heading = Do you have a previous BTI ruling reference for the {0}?
-previousBTIRuling.checkYourAnswersLabel = Renewing a BTI?
-previousBTIRuling.error.required = Select yes if you have a previous BTI ruling reference
+previousBTIRuling.title = Do you have a previous ruling reference for the goods? - Manage your Advance Tariff Rulings - GOV.UK
+previousBTIRuling.heading = Do you have a previous ruling reference for the {0}?
+previousBTIRuling.bodyText = This could be a previous Binding Tariff Information (BTI) ruling.
+previousBTIRuling.checkYourAnswersLabel = Reference previous ruling?
+previousBTIRuling.error.required = Select yes if you have a previous ruling reference
 previousBTIRuling.caption = About other rulings
 
 registerBusinessRepresenting.title =  What are the registered details of the business, organisation or individual you’re representing? - Manage your Advance Tariff Rulings - GOV.UK
@@ -178,7 +180,7 @@ registerBusinessRepresenting.error.postCode.gb = Enter a real postcode
 
 enterContactDetails.title = Provide the contact details for this application - Manage your Advance Tariff Rulings - GOV.UK
 enterContactDetails.heading = Provide the contact details for this application
-enterContactDetails.bodyText = These details may be used to contact you with questions relating to this application.
+enterContactDetails.bodyText = These details <span style="font-weight:bold;">will only</span> be used to contact you with questions relating to this application.
 enterContactDetails.caption = About the applicant
 enterContactDetails.name = Full name
 enterContactDetails.email = Email address
@@ -205,16 +207,18 @@ acceptItemInformationList.askfor.paragraph2 = You can let us know if you:
 acceptItemInformationList.askfor.item1 = think you have found the correct commodity code
 acceptItemInformationList.askfor.item2 = need to send samples
 
-provideBTIReference.title = Provide the reference number for the previous BTI ruling - Manage your Advance Tariff Rulings - GOV.UK
-provideBTIReference.heading = Provide the reference number for the previous BTI ruling
+provideBTIReference.title = Provide the reference number for the previous ruling - Manage your Advance Tariff Rulings - GOV.UK
+provideBTIReference.heading = Provide the reference number for the previous ruling
 provideBTIReference.caption = About other rulings
+provideBTIReference.paragraph = This could be a previous Binding Tariff Information (BTI) ruling.
 provideBTIReference.hint = The reference number, for example GB12345678, is on the ruling certificate.
-provideBTIReference.checkYourAnswersLabel = Renewal reference
-provideBTIReference.error.required = Enter a reference number for the previous BTI ruling
+provideBTIReference.checkYourAnswersLabel = Previous ruling reference
+provideBTIReference.error.required = Enter a reference number for the previous ruling
 provideBTIReference.error.length = Previous ruling reference must be 100 characters or less
 
 provideGoodsName.title = Provide a name for the goods - Manage your Advance Tariff Rulings - GOV.UK
 provideGoodsName.heading = Provide a name for the goods
+provideGoodsName.hint = This should be a short description, for example Silicone Smartphone Case.
 provideGoodsName.caption = About the goods
 provideGoodsName.checkYourAnswersLabel = Goods name
 provideGoodsName.error.required = Enter a short name to describe the goods
@@ -229,12 +233,12 @@ provideGoodsDescription.p1 = The more detailed the description is, the faster we
 provideGoodsDescription.p2 = This information may appear on the Advance Tariff Rulings website.
 provideGoodsDescription.error.required = Enter a detailed description of your goods
 provideGoodsDescription.confidential_info = You will be able to add confidential information and upload files later in the application.
-provideGoodsDescription.paragraph.includes = The description can include:
+provideGoodsDescription.paragraph.includes = The description can include details such as:
 provideGoodsDescription.listItem1 = what it is used for
-provideGoodsDescription.listItem2 = what it is made from, including all materials, parts or ingredients
-provideGoodsDescription.listItem3 = how it is made, including all manufacturing processes
+provideGoodsDescription.listItem2 = what it is made from
+provideGoodsDescription.listItem3 = how it is made
 provideGoodsDescription.listItem4 = how it works
-provideGoodsDescription.listItem5 = how it is packaged, including all materials
+provideGoodsDescription.listItem5 = how it is packaged
 
 addConfidentialInformation.title = Do you want to add any confidential information about the goods? - Manage your Advance Tariff Rulings - GOV.UK
 addConfidentialInformation.heading = Do you want to add any confidential information about the {0}?
@@ -332,7 +336,7 @@ uploadSupportingMaterialMultiple.error.noFileSelected = Select a file bigger tha
 
 commodityCodeBestMatch.title = Have you found a commodity code for the goods? - Manage your Advance Tariff Rulings - GOV.UK
 commodityCodeBestMatch.heading = Have you found a commodity code for the {0}?
-commodityCodeBestMatch.bodyText = Entering a commodity code, even just the first 2 numbers, may speed up the processing of your application.
+commodityCodeBestMatch.paragraph = Entering a commodity code, even just the first 2 numbers, may help classify the goods.
 commodityCodeBestMatch.yesFoundCommodityCode = Yes
 commodityCodeBestMatch.noHaventFoundCommodityCode = No
 commodityCodeBestMatch.checkYourAnswersLabel = Found commodity code?
@@ -341,21 +345,21 @@ commodityCodeBestMatch.caption = About the goods
 
 commodityCodeDigits.title = Provide a commodity code for the goods - Manage your Advance Tariff Rulings - GOV.UK
 commodityCodeDigits.heading = Provide a commodity code for the {0}
-commodityCodeDigits.bodyText = Entering a commodity code, even just the first 2 numbers, may speed up the processing of your application.
+commodityCodeDigits.bodyText = Entering a commodity code, even just the first 2 numbers, may help classify the goods.
 commodityCodeDigits.caption = About the goods
 commodityCodeDigits.checkYourAnswersLabel = Commodity code
-commodityCodeDigits.error.required = Commodity code must be 2 numbers or more
+commodityCodeDigits.error.required = Enter at least 2 digits of a commodity code
 commodityCodeDigits.error.maxLength = Commodity code must be 25 numbers or less
 commodityCodeDigits.error.minLength = Commodity code must be 2 numbers or more
 commodityCodeDigits.error.type = Commodity codes must only include numbers
 
-areYouSendingSamples.title = Will you send a sample of the goods to HMRC? - Manage your Advance Tariff Rulings - GOV.UK
+areYouSendingSamples.title = Are you sending a sample of the goods to HMRC? - Manage your Advance Tariff Rulings - GOV.UK
 areYouSendingSamples.caption = About the goods
-areYouSendingSamples.heading = Will you send a sample of the {0} to HMRC?
+areYouSendingSamples.heading = Are you sending a sample of the {0} to HMRC?
 areYouSendingSamples.checkYourAnswersLabel = Sending samples?
 areYouSendingSamples.error.required = Select yes if you are sending a sample
 areYouSendingSamples.first.paragraph = Samples are usually required if the goods are:
-areYouSendingSamples.second.paragraph = If you are not sure whether you need to provide a sample, you can wait for the Tariff Classification Team to contact you if one is needed.
+areYouSendingSamples.second.paragraph = If you are not sure whether you need to send a sample, you can wait for the Tariff Classification Team to contact you.
 areYouSendingSamples.listItem1 = textiles
 areYouSendingSamples.listItem2 = shoes
 areYouSendingSamples.listItem3 = ceramics
@@ -397,34 +401,31 @@ addAnotherRuling.remove.ruling.hidden.text = Remove ruling {0}
 addAnotherRuling.change.ruling.text = Change
 addAnotherRuling.change.ruling.hidden.text = Change ruling {0}
 
-commodityCodeRulingReference.title = Provide the reference number of a similar ruling - Manage your Advance Tariff Rulings - GOV.UK
-commodityCodeRulingReference.heading = Provide the reference number of a similar ruling
+commodityCodeRulingReference.title = Provide the reference number for a similar ruling - Manage your Advance Tariff Rulings - GOV.UK
+commodityCodeRulingReference.heading = Provide the reference number for a similar ruling
 commodityCodeRulingReference.caption = About other rulings
-commodityCodeRulingReference.hint = The reference number, for example FR12345678, is on the ruling certificate.
-commodityCodeRulingReference.checkYourAnswersLabel = Similar renewal references
+commodityCodeRulingReference.paragraph0 = It can help to provide a ruling if there is already a ruling for goods that are similar, even if the ruling was made in another country.
+commodityCodeRulingReference.hint = The reference number, for example GB12345678 or FR12345678, is on the ruling certificate.
+commodityCodeRulingReference.checkYourAnswersLabel = Similar ruling references
 commodityCodeRulingReference.error.required = Enter a ruling reference number
 
-legalChallenge.title = Have there been any legal problems classifying the goods? - Manage your Advance Tariff Rulings - GOV.UK
-legalChallenge.heading = Have there been any legal problems classifying the {0}?
+legalChallenge.title = Have there been any legal challenges relating to the goods? - Manage your Advance Tariff Rulings - GOV.UK
+legalChallenge.heading = Have there been any legal challenges relating to the {0}?
 legalChallenge.caption = About the goods
 legalChallenge.yesLegalChallenge = Yes
 legalChallenge.noLegalChallenge = No
-legalChallenge.checkYourAnswersLabel = Problems classifying?
-legalChallenge.error.required = Select yes if there have been any legal challenges with classifying the goods
-legalChallenge.paragraph0 = Providing this legal or administrative information can help to identify goods with similar rulings to the {0}.
-legalChallenge.paragraph1 = This may include details of:
-legalChallenge.listItem1 = court rulings
-legalChallenge.listItem2 = commodity codes under review
+legalChallenge.checkYourAnswersLabel = Legal challenges?
+legalChallenge.error.required = Select yes if there have been any legal challenges relating to the goods
+legalChallenge.paragraph0 = Providing this legal or administrative information can help to identify goods with similar rulings.
 
-legalChallengeDetails.title = Provide details of the legal problems classifying the goods - Manage your Advance Tariff Rulings - GOV.UK
-legalChallengeDetails.heading = Provide details of the legal problems classifying the {0}
+legalChallengeDetails.title = Provide details of any legal challenges relating to the goods - Manage your Advance Tariff Rulings - GOV.UK
+legalChallengeDetails.heading = Provide details of any legal challenges relating to the {0}
 legalChallengeDetails.caption = About the goods
-legalChallengeDetails.checkYourAnswersLabel = Problem classifying
-legalChallengeDetails.first.paragraph = Providing this legal or administrative information can help to identify goods with similar rulings.
+legalChallengeDetails.checkYourAnswersLabel = Legal challenges
 legalChallengeDetails.second.paragraph = This may include details of:
 legalChallengeDetails.item1 = court rulings
 legalChallengeDetails.item2 = commodity codes under review
-legalChallengeDetails.error.required = Enter details of the legal challenges classifying the goods
+legalChallengeDetails.error.required = Enter details of the legal challenges relating to the goods
 
 supportingInformation.title = Do you need to enter any other information to support this application? - Manage your Advance Tariff Rulings - GOV.UK
 supportingInformation.heading = Do you need to enter any other information to support this application?
@@ -442,20 +443,17 @@ confirmation.title = Application complete - Manage your Advance Tariff Rulings -
 confirmation.heading = Application complete
 confirmation.heading2.sendingSamples = The next steps
 confirmation.sendingSamples.important = Your application will not be processed until we receive your samples.
-confirmation.paragraph0.sendingSamples = If you consider a sample to be hazardous, it is important you email tariff.classification@hmrc.gsi.gov.uk before you send them. We may not accept the sample for health and safety reasons.
 confirmation.paragraph1.sendingSamples = Label your samples with your application reference
 confirmation.paragraph2.sendingSamples = Send the samples to:
 confirmation.paragraph3.sendingSamples.link = Get more information about samples
-confirmation.sendingSamples.address = HM Revenue and Customs<br> Tariff Classification Service<br> 10th Floor SE<br> Alexander House<br> 21 Victoria Avenue<br> Southend-on-Sea<br> Essex<br> SS99 1AA
+confirmation.sendingSamples.address = HM Revenue and Customs<br> Tariff Classification Service<br> Alexander House<br> 21 Victoria Avenue<br> Southend-on-Sea<br> Essex<br> SS99 1AA
 confirmation.homeLink = Return to your ATaR home page
 confirmation.heading2.whatNext = What happens next
-confirmation.paragraph.whatNext0.sample = We will give you your ruling within 30 to 60 days of receiving your samples.
-confirmation.paragraph.whatNext0.nosample = We will give you your ruling within 30 to 60 days.
-view.application.paragraph.whatNext0.nosample = We will give you your ruling within 120 days.
-confirmation.paragraph.whatNext1 = You can sign in to
-view.application.whatNext0.check.status.linkText = check the status of your application.
+confirmation.important = We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law.
+confirmation.paragraph.signup = You can sign in to
+confirmation.check.status.linkText = check the status of your application.
 confirmation.get.moreInformation = Get more information about samples (opens in a new window or tab)
-confirmation.returned.sample.note = Sample will be returned where possible. In some cases they may be damaged during testing. If you want to send the samples back, you must include return postage. Or you can collect your samples from our Southend Office.
+confirmation.paragraph.sample.return = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
 
 view.application.home.Link = Go to your applications and rulings
 view.application.header = Your application
@@ -475,13 +473,13 @@ view.application.ref.text = Your application reference number is
 view.application.goods.details = Goods details
 view.application.sending.sample.paragraph1 = You must label your sample with the application reference number
 view.application.sending.sample.paragraph2 = if you consider a sample to be hazardous, it is important your email tariff.classification@hmrc.gov.uk before you send them. We may not accept the sample for heal and safety reason.
-view.application.paragraph.whatNext = We will give you your ruling within 120 days. You can sign in to Advance Tariff Rulings check the status of your application.
+view.application.paragraph.whatNext = We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law. You can sign in to Advance Tariff Rulings check the status of your application.
 view.application.paragraph.do.not.send.sample = Do not send a sample unless one has been requested by the Tariff Classification Team.
 
 view.applicationPdf.provideConfidentialInformation = Provide confidential information for the item?
-view.applicationPdf.foundComodityCode = Have you found a commodity code for the item?
-view.applicationPdf.legalProblemQuestion = Have there been any legal problems classifying the item?
-view.applicationPdf.legalProblem = Problem classifying
+view.applicationPdf.foundCommodityCode = Have you found a commodity code for the item?
+view.applicationPdf.legalProblemQuestion = Have there been any legal challenges relating to the goods?
+view.applicationPdf.legalProblem = Legal challenges
 
 confirmation.yourRefNumber = Your application reference
 confirmation.paragraph.confirmationEmail = We have sent your confirmation email to {0}.

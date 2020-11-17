@@ -140,7 +140,7 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     "contain commodity code question when user selects NO" in {
       val doc = view(createView(pdfView.copy(foundCommodityCode = None))).getElementById("print-document")
 
-      doc should containText(messages("view.applicationPdf.foundComodityCode"))
+      doc should containText(messages("view.applicationPdf.foundCommodityCode"))
     }
 
     "contain commodity code when user selects YES" in {

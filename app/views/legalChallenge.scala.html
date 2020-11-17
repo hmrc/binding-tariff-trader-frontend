@@ -38,11 +38,6 @@
 
         <div class="form-group">
             <p>@messages("legalChallenge.paragraph0", goodsName)</p>
-            <p>@messages("legalChallenge.paragraph1")</p>
-            <ul class="list list-bullet">
-                <li>@messages("legalChallenge.listItem1")</li>
-                <li>@messages("legalChallenge.listItem2")</li>
-            </ul>
         </div>
 
         @components.input_yes_no(
@@ -51,6 +46,8 @@
             labelClass = Some("visually-hidden")
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }

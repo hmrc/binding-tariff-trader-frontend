@@ -57,6 +57,8 @@ class CheckYourAnswersController @Inject()(
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
+    val sendingSamplesAnswer = request.userAnswers.get(AreYouSendingSamplesPage).getOrElse(false)
+
     val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountriesById)
 
     val sections = Seq(
@@ -99,7 +101,7 @@ class CheckYourAnswersController @Inject()(
       )
     )
 
-    Ok(check_your_answers(appConfig, sections))
+    Ok(check_your_answers(appConfig, sections, sendingSamplesAnswer))
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>

@@ -39,7 +39,7 @@
                 captionMsg = Some(messages("enterContactDetails.caption")))
             </legend>
 
-            <p>@messages("enterContactDetails.bodyText")</p>
+            <p>@Html(messages("enterContactDetails.bodyText"))</p>
 
             @components.input_text(
                 field = form("name"),
@@ -60,7 +60,9 @@
                 inputType = "tel"
             )
 
-            @components.submit_button(Some(messages("site.save_and_continue")))
+            @components.submit_button(Some(messages("site.continue")))
+
+            @components.cancel_application_link()
 
         </fieldset>
     }

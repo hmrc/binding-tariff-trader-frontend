@@ -106,6 +106,7 @@
                             <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
 
                         } else {
+                            <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
                             @if(pdf.sendingSample) {
                                 @if(pdf.hazardousSample){
                                     <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
@@ -119,11 +120,10 @@
                                         @messages("confirmation.sendingSamples.important")
                                         </strong>
                                     </div>
-                                    <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
+                                    @if(pdf.returnSample) {
+                                        <div class="panel panel-border-wide mt-2">@messages("confirmation.paragraph.sample.return")</div>
+                                    }
                                 }
-                            }else{
-
-                                <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
                             }
                         }
                     </div>
@@ -158,9 +158,6 @@
                                         <div class="date-of-result decision-service-version">
                                             <div>@messages("view.application.sending.sample.paragraph1")</div>
                                             <div class="bold mb-2">@pdf.reference</div>
-                                        </div>
-                                        <div class="decision-service-version">
-                                            <div class="mb-2">@messages("confirmation.paragraph0.sendingSamples")</div>
                                         </div>
                                         <div>
                                             <dl>
@@ -259,7 +256,7 @@
                 </div>
                 } else {
                 <div>
-                    <dt class="cya-question">@messages("view.applicationPdf.foundComodityCode")</dt>
+                    <dt class="cya-question">@messages("view.applicationPdf.foundCommodityCode")</dt>
                     <dd class="cya-answer">@messages("site.no")</dd>
                 </div>
                 }
