@@ -116,7 +116,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
     pdfService.generatePdf(htmlContent) map { pdfFile =>
       Results.Ok(pdfFile.content)
         .as(pdfFile.contentType)
-        .withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$filename")
+        .withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
     }
   }
 
@@ -124,7 +124,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                           (implicit request: Request[AnyContent]): Html = {
 
     val cssSource = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css")
-      .absoluteURL()).mkString
+      .absoluteURL(secure = false)).mkString
     Html(htmlContent.toString
       .replace("<head>", s"<head><style>$cssSource</style>")
     )
