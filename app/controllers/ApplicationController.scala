@@ -26,7 +26,6 @@ import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.AssetLoader
 import viewmodels.{FileView, PdfViewModel}
 import views.html.components.view_application_pdf
 import views.html.templates._
@@ -39,7 +38,6 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                                       caseService: CasesService,
                                       fileService: FileService,
                                       countriesService: CountriesService,
-                                      assetLoader: AssetLoader,
                                       cc: MessagesControllerComponents
                                      )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
 
@@ -111,22 +109,11 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
 
   private def generatePdf(htmlContent: Html, filename: String)
                          (implicit request: Request[AnyContent]): Future[Result] = {
-    val styledHtml = addPdfStyles(htmlContent)
-    pdfService.generatePdf(styledHtml) map { pdfFile =>
+    pdfService.generatePdf(htmlContent) map { pdfFile =>
       Results.Ok(pdfFile.content)
         .as(pdfFile.contentType)
         .withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$filename")
     }
-  }
-
-  private def addPdfStyles(htmlContent: Html)
-                          (implicit request: Request[AnyContent]): Html = {
-
-    val cssSource = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css")
-      .absoluteURL()).mkString
-    Html(htmlContent.toString
-      .replace("<head>", s"<head><style>$cssSource</style>")
-    )
   }
 
   private def getRulingPDF(eori: Eori, reference: CaseReference)
