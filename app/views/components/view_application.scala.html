@@ -21,9 +21,9 @@
 @(appConfig: FrontendAppConfig, pdf: PdfViewModel, getCountryName: String => Option[String],
         compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
-<!--@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
+@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"
-}-->
+}
 
 <html>
     <head>
@@ -34,19 +34,17 @@
             <div class="column-two-thirds"></div>
         </div>
         <div id="print-pages" class="print-pages">
-    <div id="your-records" class="print-document">
-        <div class="grid-row print-header">
-            <div class="column-one-third">
-<!--
-                <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.svg")"/>
--->
-            </div>
-            <div>
-                <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
-                    @messages("view.application.title.text")
-                </h2>
-            </div>
-        </div>
+            <div id="your-records" class="print-document">
+                <div class="grid-row print-header">
+                    <div class="column-one-third">
+                        <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.svg")"/>
+                    </div>
+                    <div>
+                        <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
+                        @messages("view.application.title.text")
+                        </h2>
+                    </div>
+                </div>
 
         <div class="grid-row">
             <div class="column-full">
@@ -116,9 +114,7 @@
                                     <div class="notice">
                                         <i class="icon icon-important_">
                                             <span class="visually-hidden">Warning</span>
-<!--
                                             <img src="@createLink("images/icon-important.png")"/>
--->
                                         </i>
                                         <strong class="bold-small">
                                         @messages("confirmation.sendingSamples.important")
@@ -186,9 +182,7 @@
     <div class="print-document" id="print-document">
     <div class="grid-row print-header">
         <div class="column-one-third">
-<!--
             <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.svg")" />
--->
         </div>
         <div>
             <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
