@@ -20,7 +20,6 @@ import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
 import models.Case
-import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.Html
@@ -112,11 +111,10 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   private def generatePdf(htmlContent: Html, filename: String)
                          (implicit request: Request[AnyContent]): Future[Result] = {
     //val styledHtml = addPdfStyles(htmlContent)
-    Logger.logger.info("html content is: " + htmlContent)
     pdfService.generatePdf(htmlContent) map { pdfFile =>
       Results.Ok(pdfFile.content)
         .as(pdfFile.contentType)
-        .withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$filename")
+        .withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
     }
   }
 
@@ -124,7 +122,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                           (implicit request: Request[AnyContent]): Html = {
 
     val cssSource = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css")
-      .absoluteURL()).mkString
+      .absoluteURL(secure = false)).mkString
     Html(htmlContent.toString
       .replace("<head>", s"<head><style>$cssSource</style>")
     )
