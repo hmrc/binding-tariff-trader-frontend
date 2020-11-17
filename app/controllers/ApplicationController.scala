@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
 import models.Case
+import play.api.{Logger, Logging}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.Html
@@ -40,7 +41,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                                       countriesService: CountriesService,
                                       assetLoader: AssetLoader,
                                       cc: MessagesControllerComponents
-                                     )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+                                     )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
 
   private type Eori = String
   private type CaseReference = String
@@ -110,21 +111,22 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
 
   private def generatePdf(htmlContent: Html, filename: String)
                          (implicit request: Request[AnyContent]): Future[Result] = {
-    val styledHtml = addPdfStyles(htmlContent)
-    pdfService.generatePdf(styledHtml) map { pdfFile =>
+    //val styledHtml = addPdfStyles(htmlContent)
+    logger.info("html content is: " + htmlContent)
+    pdfService.generatePdf(htmlContent) map { pdfFile =>
       Results.Ok(pdfFile.content)
         .as(pdfFile.contentType)
-        .withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$filename")
+        .withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
     }
   }
 
   private def addPdfStyles(htmlContent: Html)
                           (implicit request: Request[AnyContent]): Html = {
 
-    val css = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css")
-      .absoluteURL(secure = true)).mkString
+    val cssSource = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css")
+      .absoluteURL(secure = false)).mkString
     Html(htmlContent.toString
-      .replace("<head>", s"<head><style>$css</style>")
+      .replace("<head>", s"<head><style>$cssSource</style>")
     )
   }
 

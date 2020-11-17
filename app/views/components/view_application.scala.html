@@ -21,9 +21,9 @@
 @(appConfig: FrontendAppConfig, pdf: PdfViewModel, getCountryName: String => Option[String],
         compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
 
-@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
+<!--@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"
-}
+}-->
 
 <html>
     <head>
@@ -37,7 +37,9 @@
     <div id="your-records" class="print-document">
         <div class="grid-row print-header">
             <div class="column-one-third">
+<!--
                 <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.svg")"/>
+-->
             </div>
             <div>
                 <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
@@ -107,17 +109,28 @@
 
                         } else {
                             <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
-                                @if(pdf.sendingSample) {
-                                    @if(pdf.hazardousSample) {
-                                        @components.icon_important("view.application.paragraph.do.not.send.sample")
-                                    } else {
-                                        @components.icon_important("confirmation.sendingSamples.important")
-                                        @if(pdf.returnSample) {
-                                            <p class="panel panel-border-wide">@messages("confirmation.paragraph.sample.return")</p>
-                                        }
-                                    }
+                            @if(pdf.sendingSample) {
+                                @if(pdf.hazardousSample){
+                                    <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+                                }else{
+                                    <div class="notice">
+                                        <i class="icon icon-important_">
+                                            <span class="visually-hidden">Warning</span>
+<!--
+                                            <img src="@createLink("images/icon-important.png")"/>
+-->
+                                        </i>
+                                        <strong class="bold-small">
+                                        @messages("confirmation.sendingSamples.important")
+                                        </strong>
+                                    </div>
+                                    <div class="panel panel-border-wide mt-2">@messages("confirmation.returned.sample.note")</div>
                                 }
-                             }
+                            }else{
+
+                                <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
+                            }
+                        }
                     </div>
 
 
@@ -174,7 +187,9 @@
     <div class="print-document" id="print-document">
     <div class="grid-row print-header">
         <div class="column-one-third">
+<!--
             <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink("images/hmrc.svg")" />
+-->
         </div>
         <div>
             <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">

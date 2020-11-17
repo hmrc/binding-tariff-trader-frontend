@@ -64,6 +64,14 @@ beforeYouStart.subheading2.paragraph1 = If you are referring to previous or simi
 beforeYouStart.subheading3 = About the applicant
 beforeYouStart.subheading3.paragraph1 = You need to know the contact email and phone number for this application.
 
+informationPublic.heading = Some of the information you provide in this application may appear on a public website
+informationPublic.title = Some of the information you provide in this application may appear on a public website - Manage your Advance Tariff Rulings - GOV.UK
+informationPublic.paragraph1.part1 = If you are granted a ruling for your goods it will be published on the
+informationPublic.paragraph1.linkText = Search for Advance Tariff Rulings website (opens in a new tab).
+informationPublic.paragraph1.part2 = This information is available for other traders to view so that they can find a ruling if they are trading with similar goods.
+informationPublic.paragraph2 = You will be told throughout the application which information may appear on the Advance Tariff Rulings website.
+informationPublic.paragraph3 = You will be able to mark information and files as confidential in your application. We will not publish confidential information or files on the Advance Tariff Rulings website
+
 session_expired.title = For your security, we deleted your answers
 session_expired.heading = For your security, we deleted your answers
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
@@ -84,6 +92,7 @@ site.upload_continue = Upload and continue
 site.service_name = Manage your Advance Tariff Rulings
 site.save_and_continue = Save and continue
 site.cancel_application = Cancel application
+site.agree_and_continue = Agree and continue
 
 unauthorised.title = Not registered for CDS
 unauthorised.heading = To apply for an Advance Tariff Ruling (ATaR) you need to get access to CDS
@@ -316,7 +325,7 @@ uploadSupportingMaterialMultiple.upload.restrictionFiles = one file at a time, u
 uploadSupportingMaterialMultiple.upload.exampleFiles = photographs, manuals, brochures or technical specifications
 uploadSupportingMaterialMultiple.upload.restrictionSize = a maximum individual file size of 10MB
 uploadSupportingMaterialMultiple.upload.selectFile = Select a file to upload
-uploadSupportingMaterialMultiple.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg and txt files
+uploadSupportingMaterialMultiple.upload.typeOfFiles = pdf, doc, docx, xls, xlsx, png, jpg, jpeg and txt files
 uploadSupportingMaterialMultiple.upload.typeOfFiles.title = What file types can I upload?
 uploadSupportingMaterialMultiple.jsDisabled.title = JavaScript Warning
 uploadSupportingMaterialMultiple.jsDisabled.label = Unfortunately this functionality is only available for users with JavaScript enabled
@@ -488,7 +497,7 @@ uploadWrittenAuthorisation.error.fileType = Your document will not upload becaus
 uploadWrittenAuthorisation.error.required = Enter uploadWrittenAuthorisation
 uploadWrittenAuthorisation.upload.title =  The authorisation must be:
 uploadWrittenAuthorisation.upload.restrictionSize = a maximum file size of 10MB
-uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, xls, xlsx, png, jpg, jpeg and txt files
+uploadWrittenAuthorisation.upload.typeOfFiles = pdf, doc, docx, png, jpg, jpeg and txt files
 uploadWrittenAuthorisation.upload.timeLimit = from within the last 12 months
 uploadWrittenAuthorisation.upload.document = a digital document, a scanned letter or copy of an email from the business, organisation or individual
 
