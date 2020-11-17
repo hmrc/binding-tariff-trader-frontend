@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
 import models.Case
-import play.api.{Logger, Logging}
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.Html
@@ -28,7 +28,7 @@ import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.AssetLoader
 import viewmodels.{FileView, PdfViewModel}
-import views.html.components.view_application
+import views.html.components.view_application_pdf
 import views.html.templates._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -63,9 +63,9 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   }
 
   private def getPdfOrHtml(maybeEoriNumber: Option[Eori],
-                     reference: CaseReference,
-                     token: Option[String],
-                     toView: (Eori, CaseReference) => Future[Result]): Future[Result] = {
+                           reference: CaseReference,
+                           token: Option[String],
+                           toView: (Eori, CaseReference) => Future[Result]): Future[Result] = {
     (maybeEoriNumber, token) match {
       case (Some(eori), _) => toView(eori, reference)
       case (_, Some(tkn)) => pdfService.decodeToken(tkn) match {
@@ -85,13 +85,13 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   }
 
   private def getApplicationView(eori: Eori, reference: CaseReference)
-                               (implicit request: Request[AnyContent]): Future[Result] = {
+                                (implicit request: Request[AnyContent]): Future[Result] = {
     getApplicationPDForHtml(eori,reference, pdf = false)
   }
 
 
   private def getApplicationPDForHtml(eori: Eori, reference: CaseReference, pdf : Boolean)
-                               (implicit request: Request[AnyContent]): Future[Result] = {
+                                     (implicit request: Request[AnyContent]): Future[Result] = {
 
     for {
       c <- caseService.getCaseForUser(eori, reference)
@@ -102,7 +102,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
       }
       out <- pdf match {
         case true =>
-          generatePdf(view_application(appConfig, PdfViewModel(c, attachmentFileView), getCountryName), s"BTIConfirmation$reference.pdf")
+          generatePdf(view_application_pdf(appConfig, PdfViewModel(c, attachmentFileView), getCountryName), s"BTIConfirmation$reference.pdf")
         case false =>
           Future.successful(Ok(applicationView(appConfig, PdfViewModel(c, attachmentFileView), getCountryName)))
       }
@@ -111,12 +111,11 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
 
   private def generatePdf(htmlContent: Html, filename: String)
                          (implicit request: Request[AnyContent]): Future[Result] = {
-    //val styledHtml = addPdfStyles(htmlContent)
-    logger.info("html content is: " + htmlContent)
-    pdfService.generatePdf(htmlContent) map { pdfFile =>
+    val styledHtml = addPdfStyles(htmlContent)
+    pdfService.generatePdf(styledHtml) map { pdfFile =>
       Results.Ok(pdfFile.content)
         .as(pdfFile.contentType)
-        .withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
+        .withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$filename")
     }
   }
 
@@ -124,7 +123,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
                           (implicit request: Request[AnyContent]): Html = {
 
     val cssSource = assetLoader.fromURL(controllers.routes.Assets.versioned("stylesheets/print_pdf.css")
-      .absoluteURL(secure = false)).mkString
+      .absoluteURL()).mkString
     Html(htmlContent.toString
       .replace("<head>", s"<head><style>$cssSource</style>")
     )
@@ -139,7 +138,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   }
 
   def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)
-                           (implicit request: Request[AnyContent]): Future[Result] = {
+                               (implicit request: Request[AnyContent]): Future[Result] = {
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
       Future.successful(Ok(rulingCertificateView(appConfig, c, getCountryName)))
     }
