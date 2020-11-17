@@ -102,14 +102,4 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
-  protected def clickCancelApplicationLink(view: () => HtmlFormat.Appendable): Unit = {
-
-    "behave like a page with a cancel application link" must {
-      "contain a href link" in {
-        val doc = asDocument(view())
-        assertLinkContainsHref(doc, "cancel-application-link", "@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None)")
-      }
-    }
-  }
-
 }
