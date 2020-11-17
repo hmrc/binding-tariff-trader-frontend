@@ -21,23 +21,26 @@ import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
 import metrics.HasMetrics
 import models.PdfFile
+import play.api.Logging
 import play.api.http.Status
 import play.api.libs.ws.WSClient
 import play.twirl.api.Html
-import scala.concurrent.{ ExecutionContext, Future }
+
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 
 @Singleton
 class PdfGeneratorServiceConnector @Inject()(
   configuration: FrontendAppConfig,
   ws: WSClient,
   val metrics: Metrics
-)(implicit ec: ExecutionContext) extends HasMetrics {
+)(implicit ec: ExecutionContext) extends HasMetrics with Logging {
 
   private lazy val url = s"${configuration.pdfGeneratorUrl}/pdf-generator-service/generate"
 
   def generatePdf(html: Html): Future[PdfFile] =
-    withMetricsTimerAsync("generate-pdf") { _ =>
-      ws.url(url).post(Map("html" -> Seq(html.toString))).flatMap { response =>
+    withMetricsTimerAsync("generate-pdf") { timer =>
+      val pdfResult = ws.url(url).post(Map("html" -> Seq(html.toString))).flatMap { response =>
         response.status match {
           case Status.OK =>
             Future.successful(PdfFile(content = response.bodyAsBytes.toArray))
@@ -45,5 +48,11 @@ class PdfGeneratorServiceConnector @Inject()(
             Future.failed(new RuntimeException(s"Error calling pdf-generator-service - ${response.body}"))
         }
       }
+
+      pdfResult.onFailure {
+        case NonFatal(e) =>
+          logger.error(s"pdf generator failed after ${timer.completeWithFailure()}", e)
+      }
+      pdfResult
     }
 }

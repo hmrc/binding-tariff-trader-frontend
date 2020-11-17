@@ -66,10 +66,13 @@ trait HasMetrics {
       }
     }
 
-    def completeWithFailure(): Unit = {
+    def completeWithFailure(): Long = {
       if (timerRunning.compareAndSet(true, false)) {
-        localMetrics.stopTimer(timer)
+        val duration = localMetrics.stopTimer(timer)
         localMetrics.incrementFailedCounter(metric)
+        duration
+      } else {
+        0
       }
     }
   }
