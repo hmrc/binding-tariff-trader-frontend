@@ -15,29 +15,30 @@
  *@
 
 @import config.FrontendAppConfig
-@import models.requests.OptionalDataRequest
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-title = messages("informationPublic.title"),
-appConfig = appConfig,
-bodyClasses = None) {
+    title = messages("informationPublic.title"),
+    appConfig = appConfig,
+    bodyClasses = None) {
 
-@components.back_link()
+    @components.back_link()
 
-@components.heading(messages("informationPublic.heading"))
+    @components.heading(messages("informationPublic.heading"))
 
-<p>@messages("informationPublic.paragraph1.part1")
- <span>
-   <a href="@appConfig.bindingTariffRulingsHomeUrl" target="_blank">
-   @messages("informationPublic.paragraph1.linkText")</a>
- </span>
-    @messages("informationPublic.paragraph1.part2")
-</p>
+    <p>@messages("informationPublic.paragraph1.part1")
+       <span>
+         <a href="@appConfig.bindingTariffRulingsHomeUrl" target="_blank">
+         @messages("informationPublic.paragraph1.linkText")</a>
+       </span>
+       @messages("informationPublic.paragraph1.part2")
+    </p>
 
-<p>@messages("informationPublic.paragraph2")</p>
-<p>@messages("informationPublic.paragraph3")</p>
+    <p>@messages("informationPublic.paragraph2")</p>
+    <p>@messages("informationPublic.paragraph3")</p>
 
-@components.button_link(messages("site.agree_and_continue"), routes.ProvideGoodsNameController.onPageLoad(NormalMode).url)
+    @components.button_link(messages("site.agree_and_continue"), routes.ProvideGoodsNameController.onPageLoad(NormalMode).url)
+
+    @components.cancel_application_link()
 
 }
