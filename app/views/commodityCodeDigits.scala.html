@@ -29,8 +29,6 @@
 
     @helpers.form(action = CommodityCodeDigitsController.onSubmit(mode)) {
 
-        @components.back_link()
-
         @components.error_summary(form.errors)
 
         @components.heading(messages("commodityCodeDigits.heading", goodsName),

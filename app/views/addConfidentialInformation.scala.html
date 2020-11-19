@@ -31,19 +31,14 @@
 
     @helpers.form(action = AddConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
 
         @components.error_summary(addConfidentialInformationForm.errors)
-
-        @components.heading(messages("addConfidentialInformation.heading", goodsName),
-            captionMsg = Some(messages("addConfidentialInformation.caption")))
-
-        <p>@messages("addConfidentialInformation.p1")<p/>
 
         @components.input_yes_no(
             field = addConfidentialInformationForm("value"),
             label = Some(messages("addConfidentialInformation.heading", goodsName)),
-            labelClass = Some("visually-hidden")
+            captionMsg = Some(messages("addConfidentialInformation.caption")),
+            paragraph = Some(messages("addConfidentialInformation.p1"))
         )
 
         @components.submit_button(Some(messages("site.continue")))

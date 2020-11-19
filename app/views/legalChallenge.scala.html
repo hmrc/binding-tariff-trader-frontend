@@ -29,21 +29,14 @@
 
     @helpers.form(action = LegalChallengeController.onSubmit(mode)) {
 
-        @components.back_link()
 
         @components.error_summary(form.errors)
-
-        @components.heading(messages("legalChallenge.heading", goodsName),
-            captionMsg=Some(messages("legalChallenge.caption")))
-
-        <div class="form-group">
-            <p>@messages("legalChallenge.paragraph0", goodsName)</p>
-        </div>
 
         @components.input_yes_no(
             field = form("value"),
             label = Some(messages("legalChallenge.heading", goodsName)),
-            labelClass = Some("visually-hidden")
+            captionMsg = Some(messages("legalChallenge.caption")),
+            paragraph = Some(messages("legalChallenge.paragraph0", "goodsName"))
         )
 
         @components.submit_button(Some(messages("site.continue")))

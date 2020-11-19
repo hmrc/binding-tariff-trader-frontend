@@ -44,6 +44,26 @@ p.font-xsmall{
   white-space: pre-wrap;
 }
 /* added captions color line with GDS */
+.heading-xlarge h1 {
+    font-weight: 700;
+}
 .heading-xlarge .heading-secondary {
     color: #505a5f;
+    margin: 0px;
+}
+.main-wrapper.govuk-width-container {
+    background-color: #fff;
+    padding-bottom: 1.05263em
+}
+.back-link-text {
+    margin-bottom: 0px;
+}
+@media screen and (max-width: 767px) {
+    .heading-xlarge {
+        margin-top: 0px;
+        padding-top: 15px;
+    }
+}
+.hide-elements {
+    display: none;
 }

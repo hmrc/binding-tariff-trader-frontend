@@ -29,14 +29,10 @@
 
     @helpers.form(action = AddSupportingDocumentsController.onSubmit(mode)) {
 
-        @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading(
-            messages("addSupportingDocuments.heading", goodsName),
-            captionMsg = Some(messages("addSupportingDocuments.caption"))
-        )
+
 
         <div class="form-group">
             <p>@messages("addSupportingDocuments.indications")</p>

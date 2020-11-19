@@ -31,12 +31,13 @@
 
     @helpers.form(action = ProvideConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
 
         @components.error_summary(provideConfidentialInformationForm.errors)
 
         @components.heading(messages("provideConfidentialInformation.heading", goodsName),
-            captionMsg=Some(messages("provideConfidentialInformation.caption")))
+            captionMsg=Some(messages("provideConfidentialInformation.caption")),
+            labelId=Some("confidentialInformation"))
+
         <p>@messages("provideConfidentialInformation.description")</p>
 
         @components.inset_text(Html(messages("provideConfidentialInformation.inset")))

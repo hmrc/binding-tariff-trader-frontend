@@ -27,14 +27,14 @@
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
-    <label class="form-label" for="@{field.id}">
+    <label class="form-label">
         @labelHtml.map { lb => @lb }
 
         @if(label.isDefined){
             <div class="@if(labelClass.nonEmpty) {@labelClass}">@label</div>
         }
         @if(hint.isDefined){
-            <div class="form-hint">@hint</div>
+            <div class="form-hint" id="hint-@{field.id}">@hint</div>
         }
         @field.errors.map { error =>
             <span class="error-message" id="error-message-@{field.id}-input"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
@@ -48,7 +48,7 @@
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
-        @if(field.hasErrors){aria-describedby="error-message-@{field.id}-input"}
+        @if(field.hasErrors || hint.isDefined){aria-describedby="@if(hint.isDefined){hint-@{field.id}}@if(field.hasErrors && hint.isDefined){ }@if(field.hasErrors){error-message-@{field.id}-input}"}
         @if(inputPurpose.isDefined) {autocomplete="@inputPurpose"}
         />
     </div>

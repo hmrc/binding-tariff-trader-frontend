@@ -1,6 +1,3 @@
-body {
-    counter-reset: sec-counter;
-}
 .govuk-panel--confirmation {
 	color: #fff;
 	background: #00703C;
@@ -346,27 +343,53 @@ body {
     color: #005EA5;
     margin-top: 1em;
 }
-.answer--container {
+.print-document .answer--container {
     display: table;
     margin-top: 1em;
     page-break-inside: avoid !important;
     width: 100%;
 }
-.answer--question {
+.print-document .answer--question {
     float: left;
     width: 50%;
 }
-.answer--question p {
+.print-document .answer--question p {
     margin-top: 0.5em;
 }
-.answer--question p strong {
+.print-document .answer--question p strong {
     font-weight: 700;
 }
-.answer--answer {
+.print-document .answer--answer {
     float: left;
     width: 50%;
 }
-.answer--answer p {
-    margin-top: 0.5em;
+.print-document .answer--answer p {
     margin-left: 1em;
+}
+@media screen and (max-width: 767px) {
+    .application-confirmation {
+        padding-top: 30px
+    }
+    .application-confirmation .govuk-panel--confirmation{
+        margin-top: 0px;
+    }
+    .print-document .column-one-half {
+        width: 100%;
+    }
+    .print-document .column-one-third {
+        width: 100%;
+    }
+    .print-document .column-two-thirds {
+        width: 100%;
+    }
+    .print-pages {
+        width: 100%;
+    }
+    .print-document {
+        padding: 15px 15px;
+    }
+    .print-pages {
+        display: inline;
+        width: 100%;
+    }
 }

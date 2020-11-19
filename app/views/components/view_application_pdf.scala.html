@@ -359,38 +359,38 @@
                     <div class="column-half column-one-half">
                         <dl class="body-text">
                             <dt class="bold">@messages("view.application.eori")</dt>
-                            <dt>@pdf.eori</dt>
+                            <dd>@pdf.eori</dd>
                         </dl>
                         <dl class="body-text">
                             <dt class="bold">@messages("view.application.account.name")</dt>
-                            <dt>@pdf.accountDetails.businessName</dt>
+                            <dd>@pdf.accountDetails.businessName</dd>
                         </dl>
                         <dl class="body-text">
                             <dt class="bold">@messages("view.application.account.address")</dt>
-                            <dt>@pdf.accountDetails.addressLine1</dt>
-                            <dt>@pdf.accountDetails.addressLine2</dt>
-                            <dt>@pdf.accountDetails.addressLine3</dt>
-                            <dt>@pdf.accountDetails.postcode</dt>
-                            <dt>@messages(getCountryName(pdf.accountDetails.country).mkString)</dt>
+                            <dd>@pdf.accountDetails.addressLine1</dd>
+                            <dd>@pdf.accountDetails.addressLine2</dd>
+                            <dd>@pdf.accountDetails.addressLine3</dd>
+                            <dd>@pdf.accountDetails.postcode</dd>
+                            <dd>@messages(getCountryName(pdf.accountDetails.country).mkString)</dd>
 
                         </dl>
                     </div>
                     <div class="column-half column-one-half">
                         <dl class="body-text">
                             <dt class="bold">@messages("view.application.contact.name")</dt>
-                            <dt>@pdf.contact.name</dt>
+                            <dd>@pdf.contact.name</dd>
                         </dl>
                         <dl class="body-text">
                             <dt class="bold">@messages("view.application.contact.email")</dt>
-                            <dt>@pdf.contact.email</dt>
+                            <dd>@pdf.contact.email</dd>
                         </dl>
                         <dl class="body-text">
                             <dt class="bold">@messages("view.application.contact.phone")</dt>
-                            <dt>@pdf.contact.phone</dt>
+                            <dd>@pdf.contact.phone</dd>
                         </dl>
                         <dl class="body-text">
                             <dt class="bold">@messages("view.application.contact.date")</dt>
-                            <dt>@Dates.format(pdf.dateSubmitted)</dt>
+                            <dd>@Dates.format(pdf.dateSubmitted)</dd>
                         </dl>
                     </div>
                 </div>

@@ -31,12 +31,12 @@
 
     @helpers.form(action = ProvideGoodsDescriptionController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
 
         @components.error_summary(goodsDescriptionForm.errors)
 
-        @components.heading(messages("provideGoodsDescription.heading", goodsName),
-            captionMsg = Some(messages("provideGoodsDescription.caption")))
+        @components.heading(messages("provideGoodsName.heading"),
+        captionMsg = Some(messages("provideGoodsName.caption")),
+        labelId=Some("goodsDescription"))
 
         <p>@messages("provideGoodsDescription.p2")</p>
 
@@ -56,7 +56,7 @@
         @components.input_textarea(
             field = goodsDescriptionForm("goodsDescription"),
             label = Html(messages("provideGoodsDescription.heading", goodsName)),
-            labelClass = Some("visually-hidden"),
+            labelClass = Some("hide-elements"),
             inputFormControl = "form-control--full-width",
             numRows = 15,
             maxlength = 50000

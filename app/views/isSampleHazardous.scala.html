@@ -31,8 +31,6 @@
 
     @helpers.form(action = IsSampleHazardousController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
-
         @components.error_summary(isSampleHazardousForm.errors)
 
         @components.heading(messages("isSampleHazardous.heading"),
