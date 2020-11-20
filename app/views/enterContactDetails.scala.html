@@ -22,6 +22,12 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@heading = {
+    @components.heading(
+    messages("enterContactDetails.heading"),
+    captionMsg = Some(messages("enterContactDetails.caption")))
+}
+
 @main_template(
     title = s"${errorPrefix(form)} ${messages("enterContactDetails.title")}",
     appConfig = appConfig,
@@ -32,11 +38,7 @@
 
         @components.error_summary(form.errors)
 
-        <fieldset>
-            <legend>
-                @components.heading(messages("enterContactDetails.heading"),
-                captionMsg = Some(messages("enterContactDetails.caption")))
-            </legend>
+        @components.fieldset_wrapper(legendHtml = Some(heading)) {
 
             <p>@Html(messages("enterContactDetails.bodyText"))</p>
 
@@ -58,11 +60,10 @@
                 inputPurpose=Some("phoneNumber"),
                 inputType = "tel"
             )
-
+        }
             @components.submit_button(Some(messages("site.continue")))
 
             @components.cancel_application_link()
 
-        </fieldset>
     }
 }

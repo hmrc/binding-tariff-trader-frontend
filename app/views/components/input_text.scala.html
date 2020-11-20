@@ -27,7 +27,7 @@
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
-    <label class="form-label">
+    <label class="form-label" for="@{field.id}">
         @labelHtml.map { lb => @lb }
 
         @if(label.isDefined){

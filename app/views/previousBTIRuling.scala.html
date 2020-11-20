@@ -22,6 +22,12 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+    <div class="form-group">
+        <p>@messages("previousBTIRuling.bodyText")</p>
+    </div>
+}
+
 @main_template(
     title = s"${errorPrefix(form)} ${messages("previousBTIRuling.title")}",
     appConfig = appConfig,
@@ -32,17 +38,12 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("previousBTIRuling.heading", goodsName),
-            captionMsg=Some(messages("previousBTIRuling.caption")))
-
-        <div class="form-group">
-            <p>@messages("previousBTIRuling.bodyText")</p>
-        </div>
-
         @components.input_yes_no(
             field = form("value"),
             labelClass = Some("visually-hidden"),
-            label = Some(messages("previousBTIRuling.heading", goodsName))
+            label = Some(messages("previousBTIRuling.heading", goodsName)),
+            captionMsg=Some(messages("previousBTIRuling.caption")),
+            contentHtml = Some(contents)
         )
 
         @components.submit_button(Some(messages("site.continue")))

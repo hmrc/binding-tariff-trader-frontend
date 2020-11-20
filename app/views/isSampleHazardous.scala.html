@@ -33,12 +33,11 @@
 
         @components.error_summary(isSampleHazardousForm.errors)
 
-        @components.heading(messages("isSampleHazardous.heading"),
-            captionMsg = Some(messages("isSampleHazardous.caption")))
 
         @components.input_yes_no(
             field = isSampleHazardousForm("isSampleHazardous"),
             label = Some(messages("isSampleHazardous.heading")),
+            captionMsg = Some(messages("isSampleHazardous.caption")),
             labelClass = Some("visually-hidden")
         )
 

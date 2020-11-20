@@ -230,6 +230,9 @@
         width: 210mm;
         margin: 15px;
     }
+    .main-wrapper.govuk-width-container {
+        display: none;
+    }
     body {
         width: auto;
         height: auto;

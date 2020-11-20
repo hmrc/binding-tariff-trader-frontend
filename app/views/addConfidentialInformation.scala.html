@@ -24,6 +24,9 @@
 
 @(appConfig: FrontendAppConfig, addConfidentialInformationForm: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+<p class="mt-0">@messages("addConfidentialInformation.p1")</p>
+}
 @main_template(
     title = s"${errorPrefix(addConfidentialInformationForm)} ${messages("addConfidentialInformation.title", goodsName)}",
     appConfig = appConfig,
@@ -38,7 +41,7 @@
             field = addConfidentialInformationForm("value"),
             label = Some(messages("addConfidentialInformation.heading", goodsName)),
             captionMsg = Some(messages("addConfidentialInformation.caption")),
-            paragraph = Some(messages("addConfidentialInformation.p1"))
+            contentHtml = Some(contents)
         )
 
         @components.submit_button(Some(messages("site.continue")))
