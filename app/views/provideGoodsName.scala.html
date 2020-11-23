@@ -24,6 +24,10 @@
 
 @(appConfig: FrontendAppConfig, goodsNameForm: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+    <p>@messages("provideGoodsName.paragraph")</p>
+}
+
 @main_template(
     title = s"${errorPrefix(goodsNameForm)} ${messages("provideGoodsName.title")}",
     appConfig = appConfig,
@@ -33,17 +37,15 @@
 
         @components.error_summary(goodsNameForm.errors)
 
-        @components.heading(messages("provideGoodsName.heading"),
-            captionMsg = Some(messages("provideGoodsName.caption")),
-            labelId=Some("goodsName")
-        )
-
-        <p>@messages("provideGoodsName.paragraph")</p>
-
-        @components.input_text(
+        @components.single_input_text(
             field = goodsNameForm("goodsName"),
-            hint = Some(messages("provideGoodsName.hint"))
+            label = messages("provideGoodsName.heading"),
+            captionMsg = Some(messages("provideGoodsName.caption")),
+            hint = Some(messages("provideGoodsName.hint")),
+            contentHtml = Some(contents),
+            headingIsLabel = true
         )
+
 
         @components.submit_button(Some(messages("site.continue")))
 
