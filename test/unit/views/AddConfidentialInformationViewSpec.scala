@@ -51,7 +51,8 @@ class AddConfidentialInformationViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm,
+    behave like yesNoPage(
+      createViewUsingForm,
       messageKeyPrefix,
       routes.AddConfidentialInformationController.onSubmit(NormalMode).url)
   }

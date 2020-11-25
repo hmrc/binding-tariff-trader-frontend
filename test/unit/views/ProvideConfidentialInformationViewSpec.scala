@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.views
+package views
 
 import controllers.routes
 import forms.ProvideConfidentialInformationFormProvider
@@ -31,6 +31,8 @@ class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
 
   val form = new ProvideConfidentialInformationFormProvider()()
 
+  val formElementId = "confidentialInformation"
+
   val fakeGETRequest = fakeGETRequestWithCSRF
 
   val goodsName = "shoos"
@@ -46,10 +48,19 @@ class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like pageWithTextFields(
+    behave like textareaPage(
       createViewUsingForm,
       messageKeyPrefix,
       routes.ProvideConfidentialInformationController.onSubmit(NormalMode).url,
-    "confidentialInformation")
+      formElementId,
+      List(goodsName)
+    )
+
+    "not allow unescaped HTML" in {
+      val xss = "<script>alert('foo');</script>"
+      val doc = asDocument(provideConfidentialInformation(frontendAppConfig, form, xss, NormalMode)(fakeGETRequest, messages))
+      val scriptTag = doc.getElementsByAttributeValue("for", formElementId).select("script").first
+      Option(scriptTag) shouldBe None
+    }
   }
 }

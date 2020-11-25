@@ -17,6 +17,7 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
+@import play.twirl.api.HtmlFormat
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
@@ -44,7 +45,7 @@
         @components.input_textarea(
             field = legalChallengeForm("legalChallengeDetails"),
             labelClass = Some("visually-hidden"),
-            label = Html(messages("legalChallengeDetails.heading", goodsName))
+            label = Html(messages("legalChallengeDetails.heading", HtmlFormat.escape(goodsName)))
         )
 
         @components.submit_button(Some(messages("site.continue")))

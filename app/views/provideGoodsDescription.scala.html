@@ -17,6 +17,7 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
+@import play.twirl.api.HtmlFormat
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
@@ -55,7 +56,7 @@
 
         @components.input_textarea(
             field = goodsDescriptionForm("goodsDescription"),
-            label = Html(messages("provideGoodsDescription.heading", goodsName)),
+            label = Html(messages("provideGoodsDescription.heading", HtmlFormat.escape(goodsName))),
             labelClass = Some("visually-hidden"),
             inputFormControl = "form-control--full-width",
             numRows = 15,

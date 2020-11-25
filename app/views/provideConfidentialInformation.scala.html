@@ -17,6 +17,7 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
+@import play.twirl.api.HtmlFormat
 @import uk.gov.hmrc.play.views.html._
 @import views.ViewUtils._
 
@@ -49,7 +50,7 @@
         </ul>
         @components.input_textarea(
           field = provideConfidentialInformationForm("confidentialInformation"),
-          label = Html(messages("provideConfidentialInformation.heading", goodsName)),
+          label = Html(messages("provideConfidentialInformation.heading", HtmlFormat.escape(goodsName))),
           labelClass = Some("visually-hidden"),
           inputFormControl = "form-control--full-width",
           numRows = 15,
