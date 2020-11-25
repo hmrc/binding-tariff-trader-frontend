@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.views
+package views
 
 import controllers.routes
 import forms.ProvideGoodsDescriptionFormProvider
@@ -29,6 +29,8 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
 
   val goodsName = "goods Name"
   val form = new ProvideGoodsDescriptionFormProvider()()
+
+  val formElementId = "goodsDescription"
 
   val fakeGETRequest = fakeGETRequestWithCSRF
 
@@ -46,10 +48,19 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like pageWithTextFields(
+    behave like textareaPage(
       createViewUsingForm,
       messageKeyPrefix,
       routes.ProvideGoodsDescriptionController.onSubmit(NormalMode).url,
-      "goodsDescription")
+      formElementId,
+      List(goodsName)
+    )
+
+    "not allow unescaped HTML" in {
+      val xss = "<script>alert('foo');</script>"
+      val doc = asDocument(provideGoodsDescriptionView(frontendAppConfig, form, xss, NormalMode)(fakeGETRequest, messages))
+      val scriptTag = doc.getElementsByAttributeValue("for", formElementId).select("script").first
+      Option(scriptTag) shouldBe None
+    }
   }
 }
