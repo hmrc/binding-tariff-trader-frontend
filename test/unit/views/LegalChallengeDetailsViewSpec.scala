@@ -29,6 +29,7 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
   val messageKeyPrefix = "legalChallengeDetails"
 
   val form = new LegalChallengeDetailsFormProvider()()
+  val formElementId = "legalChallengeDetails"
 
   def createView = () => legalChallengeDetails(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
 
@@ -43,8 +44,15 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
       createView = createViewUsingForm,
       messageKeyPrefix = messageKeyPrefix,
       expectedFormAction = routes.LegalChallengeDetailsController.onSubmit(NormalMode).url,
-      expectedFormElementId = "legalChallengeDetails",
+      expectedFormElementId = formElementId,
       messageArgs = Seq("goodsName")
     )
+
+    "not allow unescaped HTML" in {
+      val xss = "<script>alert('foo');</script>"
+      val doc = asDocument(legalChallengeDetails(frontendAppConfig, form, NormalMode, xss)(fakeRequest, messages))
+      val scriptTag = doc.getElementsByAttributeValue("for", formElementId).select("script").first
+      Option(scriptTag) shouldBe None
+    }
   }
 }
