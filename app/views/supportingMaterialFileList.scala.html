@@ -58,16 +58,13 @@
                 labelHtml = Some(addAnotherFile)
             )
         } else {
-            @components.heading(
-                messages("supportingMaterialFileList.heading", goodsName),
-                captionMsg = Some(messages("supportingMaterialFileList.caption")))
 
             @indicationsContent
 
             @components.input_yes_no(
                 field = form("add-file-choice"),
-                label = Some(messages("supportingMaterialFileList.heading")),
-                labelClass = Some("visually-hidden")
+                label = Some(messages("supportingMaterialFileList.heading", goodsName)),
+                captionMsg = Some(messages("supportingMaterialFileList.caption"))
             )
         }
 

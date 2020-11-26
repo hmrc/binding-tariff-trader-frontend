@@ -22,6 +22,10 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], submitAction: Call, mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+    <p>@messages("commodityCodeRulingReference.paragraph0")</p>
+}
+
 @main_template(
     title = s"${errorPrefix(form)} ${messages("commodityCodeRulingReference.title")}",
     appConfig = appConfig,
@@ -31,18 +35,13 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(
-            messages("commodityCodeRulingReference.heading"),
-            captionMsg = Some(messages("commodityCodeRulingReference.caption"))
-        )
-
-        <p>@messages("commodityCodeRulingReference.paragraph0")</p>
-
         @components.input_text(
             field = form("value"),
-            labelClass = Some("visually-hidden"),
             label = Some(messages("commodityCodeRulingReference.heading")),
-            hint = Some(messages("commodityCodeRulingReference.hint"))
+            captionMsg = Some(messages("commodityCodeRulingReference.caption")),
+            hint = Some(messages("commodityCodeRulingReference.hint")),
+            contentHtml = Some(contents),
+            headingIsLabel = true
         )
 
         @components.submit_button(Some(messages("site.continue")))

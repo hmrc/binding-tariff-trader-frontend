@@ -42,7 +42,7 @@ trait ViewSpecBase extends SpecBase {
     val headers = doc.getElementsByTag("h1")
     headers.size() match {
       case 0 => ()
-      case 1 => headers.first.ownText.replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
+      case 1 => headers.first.text().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
       case _ => throw new RuntimeException(s"Pages should only have (at most) one h1 element. Found ${headers.size}")
     }
   }
@@ -76,7 +76,7 @@ trait ViewSpecBase extends SpecBase {
   def assertContainsLabel(doc: Document, forElement: String, expectedText: String, expectedHintText: Option[String] = None): Assertion = {
     val labels = doc.getElementsByAttributeValue("for", forElement)
     assert(labels.size == 1, s"\n\nLabel for $forElement was not rendered on the page.")
-    val label = labels.first.child(0)
+    val label = labels.first
 
     def assertLabel(label: Element, expectedText: String, forElement: String) = {
       assert(label.text() == expectedText, s"\n\nLabel for $forElement was not $expectedText")

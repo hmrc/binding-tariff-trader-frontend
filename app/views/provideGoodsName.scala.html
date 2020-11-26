@@ -37,9 +37,9 @@
 
         @components.error_summary(goodsNameForm.errors)
 
-        @components.single_input_text(
+        @components.input_text(
             field = goodsNameForm("goodsName"),
-            label = messages("provideGoodsName.heading"),
+            label = Some(messages("provideGoodsName.heading")),
             captionMsg = Some(messages("provideGoodsName.caption")),
             hint = Some(messages("provideGoodsName.hint")),
             contentHtml = Some(contents),

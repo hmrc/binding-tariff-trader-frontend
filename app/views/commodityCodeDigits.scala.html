@@ -22,6 +22,10 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+    <p>@messages("commodityCodeDigits.bodyText")</p>
+}
+
 @main_template(
     title = s"${errorPrefix(form)} ${messages("commodityCodeDigits.title", goodsName)}",
     appConfig = appConfig,
@@ -31,15 +35,13 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("commodityCodeDigits.heading", goodsName),
-            captionMsg = Some(messages("commodityCodeDigits.caption")))
-
-        <p>@messages("commodityCodeDigits.bodyText")</p>
 
         @components.input_number(
             field = form("value"),
-            labelClass = Some("visually-hidden"),
-            label = Some(messages("commodityCodeDigits.heading", goodsName))
+            label = Some(messages("commodityCodeDigits.heading", goodsName)),
+            captionMsg = Some(messages("commodityCodeDigits.caption")),
+            contentHtml = Some(contents),
+            headingIsLabel = true
         )
 
         @components.submit_button(Some(messages("site.continue")))
