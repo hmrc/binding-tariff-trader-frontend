@@ -357,41 +357,41 @@
                         <h3>@messages("view.application.your.record.text")</h3>
                     </div>
                     <div class="column-half column-one-half">
-                        <dl class="body-text">
-                            <dt class="bold">@messages("view.application.eori")</dt>
-                            <dd>@pdf.eori</dd>
-                        </dl>
-                        <dl class="body-text">
-                            <dt class="bold">@messages("view.application.account.name")</dt>
-                            <dd>@pdf.accountDetails.businessName</dd>
-                        </dl>
-                        <dl class="body-text">
-                            <dt class="bold">@messages("view.application.account.address")</dt>
-                            <dd>@pdf.accountDetails.addressLine1</dd>
-                            <dd>@pdf.accountDetails.addressLine2</dd>
-                            <dd>@pdf.accountDetails.addressLine3</dd>
-                            <dd>@pdf.accountDetails.postcode</dd>
-                            <dd>@messages(getCountryName(pdf.accountDetails.country).mkString)</dd>
+                        <div class="body-text">
+                            <div class="bold">@messages("view.application.eori")</div>
+                            <div>@pdf.eori</div>
+                        </div>
+                        <div class="body-text">
+                            <div class="bold">@messages("view.application.account.name")</div>
+                            <div>@pdf.accountDetails.businessName</div>
+                        </div>
+                        <div class="body-text">
+                            <div class="bold">@messages("view.application.account.address")</div>
+                            <div>@pdf.accountDetails.addressLine1</div>
+                            <div>@pdf.accountDetails.addressLine2</div>
+                            <div>@pdf.accountDetails.addressLine3</div>
+                            <div>@pdf.accountDetails.postcode</div>
+                            <div>@messages(getCountryName(pdf.accountDetails.country).mkString)</div>
 
-                        </dl>
+                        </div>
                     </div>
                     <div class="column-half column-one-half">
-                        <dl class="body-text">
-                            <dt class="bold">@messages("view.application.contact.name")</dt>
-                            <dd>@pdf.contact.name</dd>
-                        </dl>
-                        <dl class="body-text">
-                            <dt class="bold">@messages("view.application.contact.email")</dt>
-                            <dd>@pdf.contact.email</dd>
-                        </dl>
-                        <dl class="body-text">
-                            <dt class="bold">@messages("view.application.contact.phone")</dt>
-                            <dd>@pdf.contact.phone</dd>
-                        </dl>
-                        <dl class="body-text">
-                            <dt class="bold">@messages("view.application.contact.date")</dt>
-                            <dd>@Dates.format(pdf.dateSubmitted)</dd>
-                        </dl>
+                        <div class="body-text">
+                            <div class="bold">@messages("view.application.contact.name")</div>
+                            <div>@pdf.contact.name</div>
+                        </div>
+                        <div class="body-text">
+                            <div class="bold">@messages("view.application.contact.email")</div>
+                            <div>@pdf.contact.email</div>
+                        </div>
+                        <div class="body-text">
+                            <div class="bold">@messages("view.application.contact.phone")</div>
+                            <div>@pdf.contact.phone</div>
+                        </div>
+                        <div class="body-text">
+                            <div class="bold">@messages("view.application.contact.date")</div>
+                            <div>@Dates.format(pdf.dateSubmitted)</div>
+                        </div>
                     </div>
                 </div>
 
