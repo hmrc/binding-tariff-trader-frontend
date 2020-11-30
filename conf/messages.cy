@@ -105,3 +105,27 @@ enterContactDetails.error.email.length = Mae’n rhaid i’r cyfeiriad e-bost fo
 enterContactDetails.error.phoneNumber.length = Mae’n rhaid i’r rhif ffôn uniongyrchol fod yn 20 o gymeriadau neu lai
 
 
+registeredAddressForEori.title = Rhoi’r enw a’r cyfeiriad ar gyfer y rhif EORI hwn – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+registeredAddressForEori.heading = Rhoi’r enw a’r cyfeiriad ar gyfer rhif EORI {0}
+registeredAddressForEori.caption =	Ynglŷn â’r ymgeisydd
+registeredAddressForEori.headingNoEORI = Beth yw’ch rhif EORI a beth yw manylion eich cyfeiriad cofrestredig ar gyfer EORI?
+registeredAddressForEori.note =	Mae’n rhaid i’r manylion a nodwch gyd-fynd ag union fformat yr enw a’r cyfeiriad cofrestredig ar gyfer EORI.
+registeredAddressForEori.eori =	Rhif EORI
+registeredAddressForEori.eori.hint = Mae’r rhif yn dechrau gyda chod gwlad, er enghraifft GB ar gyfer Prydain Fawr, ac yna mae hyd at 15 o gymeriadau yn ei ddilyn.
+registeredAddressForEori.businessName = Enw’r busnes, sefydliad neu unigolyn
+registeredAddressForEori.addressLine1 =	Cyfeiriad – llinell 1
+registeredAddressForEori.townCity =	Tref neu ddinas
+registeredAddressForEori.postcode = Cod post
+registeredAddressForEori.country = Gwlad
+registeredAddressForEori.registeredName.checkYourAnswersLabel = Enw cofrestredig
+registeredAddressForEori.registeredAddress.checkYourAnswersLabel = Cyfeiriad cofrestredig
+registeredAddressForEori.error.eori.required =	Nodwch eich rhif EORI
+registeredAddressForEori.error.businessName.required = Nodwch enw’r busnes, sefydliad neu unigolyn
+registeredAddressForEori.error.addressLine1.required =	Nodwch gyfeiriad – llinell 1
+registeredAddressForEori.error.townOrCity.required = Nodwch dref neu ddinas
+registeredAddressForEori.error.postcode.required = Nodwch god post
+registeredAddressForEori.error.country.required = Nodwch wlad
+registeredAddressForEori.error.addressLine1.length = Mae’n rhaid i gyfeiriad – llinell 1 fod yn 70 o gymeriadau neu lai
+registeredAddressForEori.error.townOrCity.length = Mae’n rhaid i’r dref neu’r ddinas fod yn 35 o gymeriadau neu lai
+registeredAddressForEori.error.postcode.length = Mae’n rhaid i’r cod post fod yn {0} o gymeriadau neu lai
+registeredAddressForEori.error.postcode.gb = Nodwch god post go iawn
