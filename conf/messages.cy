@@ -36,6 +36,17 @@ addConfidentialInformation.p1 = Ni fydd yr wybodaeth hon yn ymddangos ar wefan y
 addConfidentialInformation.checkYourAnswersLabel = Ychwanegu gwybodaeth gyfrinachol?
 addConfidentialInformation.error.required = Dewiswch Iawn os ydych am ychwanegu gwybodaeth gyfrinachol
 
+provideConfidentialInformation.title = Rhoi unrhyw wybodaeth gyfrinachol am y nwyddau – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+provideConfidentialInformation.heading = Rhoi unrhyw wybodaeth gyfrinachol am y(r) {0}
+provideConfidentialInformation.caption = Ynglŷn â’r nwyddau
+provideConfidentialInformation.checkYourAnswersLabel = Gwybodaeth gyfrinachol
+provideConfidentialInformation.error.required = Nodwch yr wybodaeth gyfrinachol ar gyfer eich nwyddau
+provideConfidentialInformation.description = Ni fydd yr wybodaeth hon yn ymddangos ar wefan y Dyfarniadau Tariffau Uwch.
+provideConfidentialInformation.inset = Byddwch yn gallu uwchlwytho ffeiliau yn hwyrach yn y cais.
+provideConfidentialInformation.thismayinclude = Gallai hyn gynnwys:
+provideConfidentialInformation.modelnumbers = rhifau modelau
+provideConfidentialInformation.patentinfo = gwybodaeth am batentau
+
 commodityCodeDigits.title = Rhowch god nwyddau ar gyfer y nwyddau – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 commodityCodeDigits.heading = Rhowch god nwyddau ar gyfer y {0}
 commodityCodeDigits.bodyText = Gall nodi cod nwyddau, hyd yn oed nodi’r 2 rif cyntaf yn unig, gyflymu prosesu’ch cais.
