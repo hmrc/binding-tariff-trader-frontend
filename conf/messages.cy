@@ -86,3 +86,22 @@ commodityCodeBestMatch.checkYourAnswersLabel = Wedi dod o hyd i god nwyddau?
 commodityCodeBestMatch.error.required = Dewiswch Iawn os ydych wedi dod o hyd i god nwyddau
 commodityCodeBestMatch.caption = Ynglŷn â’r nwyddau
 
+enterContactDetails.title = Rhowch y manylion cyswllt ar gyfer y cais hwn – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+enterContactDetails.heading = Rhowch y manylion cyswllt ar gyfer y cais hwn
+enterContactDetails.bodyText = Mae’n bosibl y caiff y manylion hyn eu defnyddio er mwyn cysylltu â chi i ofyn cwestiynau sy’n ymwneud â’r cais hwn.
+enterContactDetails.caption = Ynglŷn â’r ymgeisydd
+enterContactDetails.name = Enw llawn
+enterContactDetails.email = Cyfeiriad e-bost
+enterContactDetails.phoneNumber = Rhif ffôn
+enterContactDetails.checkYourAnswersLabel.name = Enw cyswllt
+enterContactDetails.checkYourAnswersLabel.email = E-bost cyswllt
+enterContactDetails.checkYourAnswersLabel.phone = Rhif ffôn cyswllt
+enterContactDetails.error.name.required = Nodwch enw llawn
+enterContactDetails.error.email.required = Nodwch gyfeiriad e-bost
+enterContactDetails.error.phoneNumber.required = Nodwch rif ffôn
+enterContactDetails.error.email.invalid = Nodwch gyfeiriad e-bost yn y fformat cywir
+enterContactDetails.error.name.length = Mae’n rhaid i’r enw llawn fod yn 100 o gymeriadau neu lai
+enterContactDetails.error.email.length = Mae’n rhaid i’r cyfeiriad e-bost fod yn 100 o gymeriadau neu lai
+enterContactDetails.error.phoneNumber.length = Mae’n rhaid i’r rhif ffôn uniongyrchol fod yn 20 o gymeriadau neu lai
+
+
