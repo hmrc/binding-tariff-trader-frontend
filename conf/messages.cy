@@ -57,6 +57,26 @@ commodityCodeDigits.error.maxLength = Mae’n rhaid i’r cod nwyddau fod yn 25 
 commodityCodeDigits.error.minLength = Mae’n rhaid i’r cod nwyddau fod yn 2 rif neu fwy
 commodityCodeDigits.error.type = Mae’n rhaid i’r codau nwyddau gynnwys rhifau yn unig
 
+supportingMaterialFileList.title = A ydych eisiau uwchlwytho unrhyw ddogfennau ategol? - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
+supportingMaterialFileList.heading = A ydych eisiau uwchlwytho unrhyw ddogfennau ategol?
+supportingMaterialFileList.caption = Ynglŷn â’r nwyddau
+supportingMaterialFileList.uploadFileCounter.singular = Rydych wedi uwchlwytho 1 ddogfen ategol ar gyfer y(r) {0}
+supportingMaterialFileList.uploadFileCounter.plural = Rydych wedi uwchlwytho {0} o ddogfennau ategol ar gyfer y(r) {1}
+supportingMaterialFileList.choice.checkYourAnswersLabel = Uwchlwytho dogfennau ategol?
+supportingMaterialFileList.checkYourAnswersLabel = Dogfennau wedi’u huwchlwytho
+supportingMaterialFileList.label.anotherFile =  A ydych eisiau uwchlwytho dogfen ategol arall?
+supportingMaterialFileList.indications = Er mwyn cael cyngor cywir ynghylch codau nwyddau, gallwch roi’r canlynol i ni:
+supportingMaterialFileList.indications.bullet1 = rhestri o gynhwysion ar gyfer nwyddau bwyd a diod
+supportingMaterialFileList.indications.bullet2 = manylebau technegol
+supportingMaterialFileList.indications.bullet3 = rhestri o ddeunyddiau
+supportingMaterialFileList.indications.bullet4 = delweddau o’r nwyddau
+supportingMaterialFileList.indications.bullet5 = delweddau o becynnau
+supportingMaterialFileList.error.required = Dewiswch ‘Iawn’ os oes gennych ffeiliau i’w huwchlwytho
+supportingMaterialFileList.error.numberFiles = Reduce the number of files to a maximum of {0}
+supportingMaterialFileList.clearFiles = Clear uploaded files
+supportingMaterialFile.remove.file.text = Dileu
+supportingMaterialFile.remove.file.hidden.text = Dileu ffeil {0}
+
 uploadSupportingMaterialMultiple.title = Uwchlwytho dogfennau ategol ar gyfer y nwyddau - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
 uploadSupportingMaterialMultiple.heading = Uwchlwytho dogfennau ategol ar gyfer {0}
 uploadSupportingMaterialMultiple.caption = Ynglŷn â’r nwyddau
@@ -114,7 +134,6 @@ enterContactDetails.error.email.invalid = Nodwch gyfeiriad e-bost yn y fformat c
 enterContactDetails.error.name.length = Mae’n rhaid i’r enw llawn fod yn 100 o gymeriadau neu lai
 enterContactDetails.error.email.length = Mae’n rhaid i’r cyfeiriad e-bost fod yn 100 o gymeriadau neu lai
 enterContactDetails.error.phoneNumber.length = Mae’n rhaid i’r rhif ffôn uniongyrchol fod yn 20 o gymeriadau neu lai
-
 
 registeredAddressForEori.title = Rhoi’r enw a’r cyfeiriad ar gyfer y rhif EORI hwn – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 registeredAddressForEori.heading = Rhoi’r enw a’r cyfeiriad ar gyfer rhif EORI {0}
