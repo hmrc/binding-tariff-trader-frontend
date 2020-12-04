@@ -22,19 +22,33 @@
         inputClass: Option[String] = None,
         hint: Option[String] = None,
         max: Int = 1000,
-        inputPurpose: Option[String] = None
+        inputPurpose: Option[String] = None,
+        headingIsLabel: Boolean = false,
+        contentHtml : Option[Html] = None,
+        captionMsg: Option[String] = None
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
     <label class="form-label" for="@{field.id}">
         @labelHtml.map { lb => @lb }
 
-        @if(label.isDefined){
-            <div class="@if(labelClass.nonEmpty) {@labelClass}">@label</div>
+        @if(headingIsLabel){
+        <div class="heading-xlarge ">
+            @captionMsg.map{caption => <span class="heading-secondary"><span class="visuallyhidden">This section is </span>@caption</span>}
+            <h1><label for="@{field.id}">@label</label></h1>
+        </div>
+        } else {
+        <label class="form-label @if(labelClass.nonEmpty){@labelClass}" for="@{field.id}">
+            @label
+        </label>
         }
+
         @if(hint.isDefined){
             <div class="form-hint">@hint</div>
         }
+
+        @contentHtml.map {content => @content}
+
         @field.errors.map { error =>
             <span class="error-message" id="error-message-@{field.id}-input"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
         }

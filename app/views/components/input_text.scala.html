@@ -23,23 +23,35 @@
         inputType: String = "text",
         hint: Option[String] = None,
         maxlength: Int = 1000,
-        inputPurpose: Option[String] = None
+        inputPurpose: Option[String] = None,
+        headingIsLabel: Boolean = false,
+        captionMsg: Option[String] = None,
+        contentHtml : Option[Html] = None
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
-    <label class="form-label" for="@{field.id}">
+    @if(headingIsLabel){
+    <div class="heading-xlarge ">
+        @captionMsg.map{caption => <span class="heading-secondary"><span class="visuallyhidden">This section is </span>@caption</span>}
+        <h1><label for="@{field.id}">@label</label></h1>
+    </div>
+    } else {
+        <label class="form-label @if(labelClass.nonEmpty){@labelClass}" for="@{field.id}">
+            @label
+        </label>
+    }
+
         @labelHtml.map { lb => @lb }
 
-        @if(label.isDefined){
-            <div class="@if(labelClass.nonEmpty) {@labelClass}">@label</div>
-        }
+        @contentHtml.map {content => @content}
+
         @if(hint.isDefined){
-            <div class="form-hint">@hint</div>
+            <div class="form-hint" id="hint-@{field.id}">@hint</div>
         }
         @field.errors.map { error =>
             <span class="error-message" id="error-message-@{field.id}-input"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
         }
-    </label>
+
     <div class="form-control-wrapper">
         <input
         class="form-control @inputClass"
@@ -48,7 +60,7 @@
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
-        @if(field.hasErrors){aria-describedby="error-message-@{field.id}-input"}
+        @if(field.hasErrors || hint.isDefined){aria-describedby="@if(hint.isDefined){hint-@{field.id}}@if(field.hasErrors && hint.isDefined){ }@if(field.hasErrors){error-message-@{field.id}-input}"}
         @if(inputPurpose.isDefined) {autocomplete="@inputPurpose"}
         />
     </div>

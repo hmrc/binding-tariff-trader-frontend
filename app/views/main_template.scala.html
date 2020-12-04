@@ -15,7 +15,6 @@
  *@
 
 @import config.FrontendAppConfig
-@import views.html.components.languageSelection
 
 @(title: String,
   appConfig: FrontendAppConfig,
@@ -28,6 +27,7 @@
   inlineScript: Option[Html] = None,
   inlineLinkElem: Option[Html] = None,
   hasTimeOut: Boolean = true,
+  backLink: Boolean = true,
   signOutLink: String = routes.SignOutController.startFeedbackSurvey.url)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @import uk.gov.hmrc.play.views.html.layouts
@@ -38,15 +38,6 @@
     @if(sidebarLinks.isDefined) {
         @layouts.sidebar(sidebarLinks.get, Some("sidebar"))
     }
-}
-
-@contentHeaderWithLanguageSelection = {
-    <div class="govuk-options-end">
-        @if(appConfig.languageTranslationEnabled) {
-            @languageSelection()
-        }
-    </div>
-    @contentHeader.getOrElse("")
 }
 
 @content = {
@@ -80,10 +71,10 @@
                mainClass = mainClass,
                bodyClasses = bodyClasses,
                sidebar = sidebar,
-               contentHeader = Some(contentHeaderWithLanguageSelection),
                mainContent = content,
                serviceInfoContent = serviceInfoContent,
                scriptElem = Some(scriptElement),
                linkElem = inlineLinkElem,
-               signOutLink = signOutLink
+               signOutLink = signOutLink,
+               backLink = backLink
 )

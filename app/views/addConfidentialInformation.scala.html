@@ -24,6 +24,9 @@
 
 @(appConfig: FrontendAppConfig, addConfidentialInformationForm: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+<p class="mt-0">@messages("addConfidentialInformation.p1")</p>
+}
 @main_template(
     title = s"${errorPrefix(addConfidentialInformationForm)} ${messages("addConfidentialInformation.title", goodsName)}",
     appConfig = appConfig,
@@ -31,19 +34,14 @@
 
     @helpers.form(action = AddConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
 
         @components.error_summary(addConfidentialInformationForm.errors)
-
-        @components.heading(messages("addConfidentialInformation.heading", goodsName),
-            captionMsg = Some(messages("addConfidentialInformation.caption")))
-
-        <p>@messages("addConfidentialInformation.p1")<p/>
 
         @components.input_yes_no(
             field = addConfidentialInformationForm("value"),
             label = Some(messages("addConfidentialInformation.heading", goodsName)),
-            labelClass = Some("visually-hidden")
+            captionMsg = Some(messages("addConfidentialInformation.caption")),
+            contentHtml = Some(contents)
         )
 
         @components.submit_button(Some(messages("site.continue")))

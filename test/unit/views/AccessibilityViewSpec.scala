@@ -27,7 +27,7 @@ class AccessibilityViewSpec extends ViewBehaviours{
   "AccessibilityView view" must {
 
     behave like normalPage(view, messageKeyPrefix)()
-    behave like pageWithoutBackLink(view)
+    behave like pageWithBackLink(view)
 
     "contain a link to gov Accessibility Help page" in {
       val doc = asDocument(view())

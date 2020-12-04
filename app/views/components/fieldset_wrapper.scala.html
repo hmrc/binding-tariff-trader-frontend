@@ -14,20 +14,14 @@
  * limitations under the License.
  *@
 
-@import config.FrontendAppConfig
-@import models.Mode
+@(
+legendHtml: Option[Html] = None
+)(content: Html)
 
-@(appConfig: FrontendAppConfig, mode: Mode)(implicit request: Request[_], messages: Messages)
+<fieldset class="fieldset">
+    <legend>
+        @legendHtml.map { legend => @legend }
+    </legend>
 
-@main_template(
-    title = s"${messages("contactCustomsDutyLiabilityTeam.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
-
-
-    @components.heading(messages("contactCustomsDutyLiabilityTeam.heading"))
-
-    <p>@Html(messages("contactCustomsDutyLiabilityTeam.forGeneralAdvice"))</p>
-
-    <p>@messages("contactCustomsDutyLiabilityTeam.onlyUseTheApply")</p>
-}
+    @content
+</fieldset>

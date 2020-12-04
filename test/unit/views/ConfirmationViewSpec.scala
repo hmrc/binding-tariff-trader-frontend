@@ -38,6 +38,8 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)()
+    behave like pageWithoutBackLink(createView)
+
 
     "with reference" in {
       val text = asDocument(createView(pdfViewModel)).text()

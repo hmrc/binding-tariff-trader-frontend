@@ -29,8 +29,9 @@
 @main_template(
     title = messages("confirmation.title"),
     appConfig = appConfig,
-    contentClass = Some("column-full pl-0"),
-    bodyClasses = None){
+    contentClass = Some("column-full pl-0 application-confirmation"),
+    bodyClasses = None,
+    backLink = false){
 
 <div class="column-two-thirds p-0 hidden-print">
     <div class="govuk-box-highlight govuk-panel--confirmation">

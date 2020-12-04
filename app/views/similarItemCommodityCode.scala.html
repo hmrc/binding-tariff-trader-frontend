@@ -22,6 +22,10 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+<p>@messages("similarItemCommodityCode.bodyText")</p>
+}
+
 @main_template(
     title = s"${errorPrefix(form)} ${messages("similarItemCommodityCode.title")}",
     appConfig = appConfig,
@@ -29,19 +33,14 @@
 
     @helpers.form(action = SimilarItemCommodityCodeController.onSubmit(mode)) {
 
-        @components.back_link()
 
         @components.error_summary(form.errors)
-
-        @components.heading(messages("similarItemCommodityCode.heading"),
-                            captionMsg=Some(messages("similarItemCommodityCode.caption")))
-
-        <p>@messages("similarItemCommodityCode.bodyText")</p>
 
         @components.input_yes_no(
             field = form("value"),
             label = Some(messages("similarItemCommodityCode.heading")),
-            labelClass = Some("visually-hidden")
+            labelClass = Some("visually-hidden"),
+            captionMsg=Some(messages("similarItemCommodityCode.caption"))
         )
 
         @components.submit_button(Some(messages("site.continue")))

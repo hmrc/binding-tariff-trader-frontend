@@ -16,20 +16,34 @@
 
 @(
         field: Field,
-        label: Html,
+        label: String,
         labelClass: Option[String] = None,
         inputClass: Option[String] = None,
         inputFormControl: String = "form-control-3-4",
         hint: Option[Html] = None,
         numRows: Int = 5,
-        maxlength: Int = 90000
+        maxlength: Int = 90000,
+contentHtml : Option[Html] = None,
+headingIsLabel: Boolean = false,
+captionMsg: Option[String] = None
 )(implicit messages: Messages)
 
 @ariaDescribeElements={@hint.map{_ =>@{field.id}-hint}@field.error.map{_ =>error-message-@{field.id}-input}}
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
 
-    <label @labelClass.map{_ => class="@labelClass"} for="@{field.id}"><span>@label</span></label>
+    @if(headingIsLabel){
+    <div class="heading-xlarge ">
+        @captionMsg.map{caption => <span class="heading-secondary"><span class="visuallyhidden">This section is </span>@caption</span>}
+        <h1><label for="@{field.id}">@label</label></h1>
+    </div>
+    } else {
+    <label class="form-label @if(labelClass.nonEmpty){@labelClass}" for="@{field.id}">
+        @label
+    </label>
+    }
+
+    @contentHtml.map {content => @content}
 
     @hint.map { hint =>
         <span id="@{field.id}-hint" class="form-hint">@hint</span>
@@ -42,7 +56,7 @@
             class="form-control @inputFormControl @inputClass"
             id="@{field.id}"
             name="@{field.id}"
-            @if(hint.isDefined || field.hasErrors){aria-describedby="@ariaDescribeElements"}
+            @if(field.hasErrors || hint.isDefined){aria-describedby="@if(hint.isDefined){@{field.id}-hint}@if(field.hasErrors && hint.isDefined){ }@if(field.hasErrors){error-message-@{field.id}-input}"}
             rows=@numRows
             maxlength=@maxlength
         >@{field.value}</textarea>
