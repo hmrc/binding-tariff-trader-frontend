@@ -44,6 +44,6 @@ object ViewUtils {
     f"${bytes / divisor}%.1f $unitString"
   }
 
-  def confidentialityStatusLabel(confidential: Boolean): String =
-    if (confidential) "Keep confidential" else ""
+  def confidentialityStatusLabel(confidential: Boolean)(implicit messages: Messages): String =
+    if (confidential) messages("site.keep_confidential") else ""
 }

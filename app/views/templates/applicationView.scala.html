@@ -42,13 +42,13 @@
                 @if(!compositeMode) {
                     <span id="">
                         <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
-                        <a class="print-this__link" href="javascript:window.print()" data-journey-click="print - click:Your application:Print your application">Print your application</a>
+                        <a class="print-this__link" href="javascript:window.print()" data-journey-click="print - click:Your application:Print your application">@messages("site.print_your_application")</a>
                     </span>
                 }
                 </div>
                 <div class="print-save-application hidden-print">
                     <a id="save-pdf" class="save-this__link"  href="@controllers.routes.ApplicationController.applicationPdf(pdf.reference).url"
-                    data-journey-click="save - click:Your application:Save your application">Save your application</a>
+                    data-journey-click="save - click:Your application:Save your application">@messages("site.save_your_application")</a>
                 </div>
             </div>
         </div>

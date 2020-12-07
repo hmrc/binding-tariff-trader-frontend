@@ -48,6 +48,9 @@ site.service_name = Rheoli’ch Dyfarniadau Tariffau Uwch
 site.save_and_continue = Cadw ac yn eich blaen
 site.cancel_application = Canslo’r cais
 site.agree_and_continue = Cytuno ac yn eich blaen
+site.keep_confidential = Cadwch yn gyfrinachol
+site.save_your_application = Cadwch eich cais
+site.print_your_application = Argraffwch eich cais
 
 beforeYouStart.title = Gwybodaeth sydd ei hangen arnoch i lenwi cais - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
 beforeYouStart.heading = Gwybodaeth sydd ei hangen arnoch i lenwi cais
@@ -74,7 +77,7 @@ informationPublic.paragraph3 = Byddwch yn gallu marcio bod gwybodaeth a ffeiliau
 
 provideGoodsName.title = Rhoi enw ar gyfer y nwyddau – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 provideGoodsName.heading = Rhoi enw ar gyfer y nwyddau
-provideGoodsName.hint =
+provideGoodsName.hint = Dylai hwn fod yn ddisgrifiad byr, er enghraifft ‘cas Ffôn Clyfar Silicôn’.
 provideGoodsName.caption = Ynglŷn â’r nwyddau
 provideGoodsName.checkYourAnswersLabel = Enw’r nwyddau
 provideGoodsName.error.required = Nodwch enw byr er mwyn disgrifio’r nwyddau
@@ -116,14 +119,14 @@ provideConfidentialInformation.patentinfo = gwybodaeth am batentau
 
 commodityCodeBestMatch.title = A ydych wedi dod o hyd i god nwyddau ar gyfer y nwyddau? – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 commodityCodeBestMatch.heading = A ydych wedi dod o hyd i god nwyddau ar gyfer y {0}?
-commodityCodeBestMatch.paragraph =
+commodityCodeBestMatch.paragraph = Gall nodi cod nwyddau, hyd yn oed nodi’r ddau rif cyntaf yn unig, helpu dosbarthu’r nwyddau.
 commodityCodeBestMatch.checkYourAnswersLabel = Wedi dod o hyd i god nwyddau?
 commodityCodeBestMatch.error.required = Dewiswch Iawn os ydych wedi dod o hyd i god nwyddau
 commodityCodeBestMatch.caption = Ynglŷn â’r nwyddau
 
 commodityCodeDigits.title = Rhowch god nwyddau ar gyfer y nwyddau – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 commodityCodeDigits.heading = Rhowch god nwyddau ar gyfer y {0}
-commodityCodeDigits.bodyText =
+commodityCodeDigits.bodyText = Gall nodi cod nwyddau, hyd yn oed nodi’r ddau rif cyntaf yn unig, helpu dosbarthu’r nwyddau.
 commodityCodeDigits.caption = Ynglŷn â’r nwyddau
 commodityCodeDigits.checkYourAnswersLabel = Cod nwyddau
 commodityCodeDigits.error.required = Nodwch o leiaf 2 ddigid cod nwyddau
@@ -131,13 +134,13 @@ commodityCodeDigits.error.maxLength = Mae’n rhaid i’r cod nwyddau fod yn 25 
 commodityCodeDigits.error.minLength = Mae’n rhaid i’r cod nwyddau fod yn 2 rif neu fwy
 commodityCodeDigits.error.type = Mae’n rhaid i’r codau nwyddau gynnwys rhifau yn unig
 
-areYouSendingSamples.title =
+areYouSendingSamples.title = A ydych yn anfon sampl o’r nwyddau i CThEM? - Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 areYouSendingSamples.caption = Ynglŷn â’r nwyddau
-areYouSendingSamples.heading =
+areYouSendingSamples.heading = A ydych yn anfon sampl o’r {0} i CThEM?
 areYouSendingSamples.checkYourAnswersLabel = Anfon samplau?
 areYouSendingSamples.error.required = Dewiswch ‘Iawn’ os ydych yn anfon sampl
 areYouSendingSamples.first.paragraph = Fel arfer, gofynnir am samplau os mai un o’r canlynol yw’r nwyddau:
-areYouSendingSamples.second.paragraph =
+areYouSendingSamples.second.paragraph = Os nad ydych yn siŵr a oes angen i chi anfon sampl, gallwch aros i’r Tîm Dosbarthu Tariffau gysylltu â chi.
 areYouSendingSamples.listItem1 = tecstilau
 areYouSendingSamples.listItem2 = esgidiau
 areYouSendingSamples.listItem3 = gweithiau ceramig
@@ -170,8 +173,8 @@ supportingMaterialFileList.indications.bullet3 = rhestri o ddeunyddiau
 supportingMaterialFileList.indications.bullet4 = delweddau o’r nwyddau
 supportingMaterialFileList.indications.bullet5 = delweddau o becynnau
 supportingMaterialFileList.error.required = Dewiswch ‘Iawn’ os oes gennych ffeiliau i’w huwchlwytho
-supportingMaterialFileList.error.numberFiles =
-supportingMaterialFileList.clearFiles =
+supportingMaterialFileList.error.numberFiles = Gostyngwch nifer y ffeiliau i {0} ar y mwyaf
+supportingMaterialFileList.clearFiles = Clirio ffeiliau wedi’u huwchlwytho
 supportingMaterialFile.remove.file.text = Dileu
 supportingMaterialFile.remove.file.hidden.text = Dileu ffeil {0}
 
@@ -187,7 +190,7 @@ uploadSupportingMaterialMultiple.upload.typeOfFiles = ffeiliau pdf, doc, docx, x
 uploadSupportingMaterialMultiple.error.uploadError = Nid oedd modd uwchlwytho’r ffeil dan sylw – rhowch gynnig arall arni
 uploadSupportingMaterialMultiple.error.fileTooSmall = Mae’n rhaid i’r ffeil dan sylw fod yn fwy nag 1 beit
 uploadSupportingMaterialMultiple.error.fileTooLarge = Mae’n rhaid i’r ffeil dan sylw fod yn llai na 10MB
-uploadSupportingMaterialMultiple.error.noFileSelected = Dewiswch ffeil
+uploadSupportingMaterialMultiple.error.noFileSelected = Dewis ffeil sy’n fwy nag 1 beit
 
 makeFileConfidential.title = A ydych am nodi’r ffeil yn gyfrinachol? - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
 makeFileConfidential.heading = A ydych am nodi’r ffeil yn gyfrinachol?
@@ -257,12 +260,12 @@ addAnotherRuling.remove.ruling.hidden.text = Dileu dyfarniad {0}
 addAnotherRuling.change.ruling.text = Newid
 addAnotherRuling.change.ruling.hidden.text = Newid dyfarniad {0}
 
-commodityCodeRulingReference.title =
-commodityCodeRulingReference.heading =
+commodityCodeRulingReference.title = Rhowch y cyfeirnod ar gyfer dyfarniad tebyg - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
+commodityCodeRulingReference.heading = Rhowch y cyfeirnod ar gyfer dyfarniad tebyg
 commodityCodeRulingReference.caption = Ynglŷn â dyfarniadau eraill
 commodityCodeRulingReference.paragraph0 = Mae dyfarniad sy’n bodoli eisoes ar gyfer nwyddau sy’n debyg yn gallu helpu i ddarparu dyfarniad, hyd yn oed os cafodd y dyfarniad ei wneud mewn gwlad arall.
 commodityCodeRulingReference.hint = Mae’r cyfeirnod, er enghraifft GB12345678 neu FR12345678, i’w weld ar dystysgrif y dyfarniad.
-commodityCodeRulingReference.checkYourAnswersLabel =
+commodityCodeRulingReference.checkYourAnswersLabel = Cyfeirnodau ar gyfer dyfarniadau tebyg
 commodityCodeRulingReference.error.required =  Nodwch gyfeirnod dyfarniad
 
 enterContactDetails.title = Rhowch y manylion cyswllt ar gyfer y cais hwn – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
@@ -335,7 +338,7 @@ confirmation.check.status.linkText = wirio statws eich cais.
 confirmation.get.moreInformation = Rhagor o wybodaeth am samplau (yn agor ffenestr neu dab newydd)
 confirmation.paragraph.sample.return = Caiff samplau eu dychwelyd pan fo hynny’n bosibl. Mewn rhai achosion, efallai y caiff samplau eu difrodi wrth eu profi. Os hoffech i ni anfon y samplau yn ôl atoch, mae’n rhaid i chi gynnwys cost y stampiau post. Fel arall, gallwch gasglu’ch samplau o’n swyddfa yn Southend.
 
-view.application.home.Link =
+view.application.home.Link = Ewch i’ch ceisiadau a’ch dyfarniadau
 view.application.header = eich cais
 view.application.title.text = Eich cais am Ddyfarniad Tariffau Uwch
 view.application.print.application = Argraffwch eich cais
@@ -350,9 +353,9 @@ view.application.contact.phone = Rhif ffôn cyswllt
 view.application.contact.date = Dyddiad cyflwyno
 view.application.ref.text = Cyfeirnod eich cais yw
 view.application.goods.details = Manylion y nwyddau
-view.application.sending.sample.paragraph1 =
+view.application.sending.sample.paragraph1 = Mae’n rhaid i chi labeli eich samplau gyda chyfeirnod eich cais
 view.application.paragraph.whatNext = Rydym yn ceisio anfon penderfyniadau o ran Dyfarniadau Tariffau Uwch (ATaR) cyn pen 30 diwrnod i ddyddiad derbyn y cais. Fodd bynnag, mae’n gallu cymryd hyd at 120 diwrnod, yn unol â chyfraith y DU. Gallwch fewngofnodi i’ch cyfrif Dyfarniadau Tariffau Uwch i wirio statws eich cais.
-view.application.paragraph.do.not.send.sample =
+view.application.paragraph.do.not.send.sample = Peidiwch ag anfon sampl oni bai bod y Tîm Dosbarthu Tariffau wedi gofyn am un.
 
 view.applicationPdf.legalProblem = Heriau cyfreithiol
 
@@ -363,7 +366,9 @@ application.title = Eich cais am Ddyfarniad Tariffau Uwch
 application.title.pdf = Eich cais am Ddyfarniad Tariffau Uwch (PDF) – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 application.submitted = Cais wedi’i gyflwyno
 application.reference = Cyfeirnod y cais
+
 application.footer.sendingSamples.heading = Anfon samplau
+application.footer.sendingSamplesTo.heading = Anfonwch eich samplau i
 
 application.dashboard.status.title = Dyfarniadau Tariffau Uwch
 
@@ -375,7 +380,6 @@ timeoutDialog.minutes = o funudau
 timeoutDialog.minute = munud
 timeoutDialog.button = Parhau i fod wedi’ch mewngofnodi
 timeoutDialog.p1 = Er eich diogelwch, byddwn yn eich allgofnodi ac yn dileu’ch atebion cyn pen
-
 
 case.tabs.applications.notSubmitted = Bydd ceisiadau sydd wedi’u cyflwyno yn ymddangos yma
 
@@ -391,7 +395,7 @@ case.application.status.inProgress = Ar y gweill
 case.application.status.rejected = Wedi’i wrthod
 case.application.status.infoRequested = Gwybodaeth y gofynnwyd amdani
 case.application.status.completed = Wedi’i gwblhau
-case.application.status.draft =
+case.application.status.draft = Drafft
 case.application.status.suspended = Wedi’i ohirio
 case.application.status.submitted = Wedi’i gyflwyno
 case.application.ruling.status.expired = Dyfarniad sydd wedi dod i ben
@@ -402,7 +406,8 @@ case.application.ruling.viewRuling = Bwrw golwg dros y dyfarniad
 case.application.ruling.renewRuling = Adnewyddu’r dyfarniad
 case.application.ruling.table.download = Lawrlwytho
 
-case.application.viewApplication =
+case.application.viewApplication = Bwrw golwg dros y cais
+case.application.viewApplication.hidden = Bwrw golwg dros y cais i gyfeirio ato {0}
 
 caseReference.format = {0}
 
