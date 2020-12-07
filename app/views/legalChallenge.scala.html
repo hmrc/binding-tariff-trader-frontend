@@ -22,6 +22,11 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+    <div class="form-group">
+        <p>@messages("legalChallenge.paragraph0", goodsName)</p>
+    </div>
+}
 @main_template(
     title = s"${errorPrefix(form)} ${messages("legalChallenge.title")}",
     appConfig = appConfig,
@@ -29,21 +34,16 @@
 
     @helpers.form(action = LegalChallengeController.onSubmit(mode)) {
 
-        @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("legalChallenge.heading", goodsName),
-            captionMsg=Some(messages("legalChallenge.caption")))
-
-        <div class="form-group">
-            <p>@messages("legalChallenge.paragraph0", goodsName)</p>
-        </div>
 
         @components.input_yes_no(
             field = form("value"),
             label = Some(messages("legalChallenge.heading", goodsName)),
-            labelClass = Some("visually-hidden")
+            labelClass = Some("visually-hidden"),
+            captionMsg=Some(messages("legalChallenge.caption")),
+            contentHtml = Some(contents)
         )
 
         @components.submit_button(Some(messages("site.continue")))
