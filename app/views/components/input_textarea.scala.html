@@ -35,7 +35,7 @@ captionMsg: Option[String] = None
     @if(headingIsLabel){
     <div class="heading-xlarge ">
         @captionMsg.map{caption => <span class="heading-secondary"><span class="visuallyhidden">This section is </span>@caption</span>}
-        <h1><label for="@{field.id}">@label</label></h1>
+        <h1 class="mt-0"><label class="heading-xlarge-label" for="@{field.id}">@label</label></h1>
     </div>
     } else {
     <label class="form-label @if(labelClass.nonEmpty){@labelClass}" for="@{field.id}">
