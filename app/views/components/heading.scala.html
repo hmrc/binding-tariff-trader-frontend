@@ -19,7 +19,7 @@
 
 <div class="@headingSize @headingClass.map{classes => classes}">
   @captionMsg.map{caption => <span class="heading-secondary"><span class="visuallyhidden">This section is </span>@caption</span>}
-  <h1>
+  <h1 class="mt-0 heading-xlarge-label">
       @if(labelId.nonEmpty){
         <label for="@labelId">@headingMsg</label>
       } else {
