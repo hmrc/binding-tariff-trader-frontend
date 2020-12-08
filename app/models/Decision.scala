@@ -28,7 +28,8 @@ case class Decision
   methodSearch: Option[String] = None,
   methodCommercialDenomination: Option[String] = None,
   methodExclusion: Option[String] = None,
-  explanation: Option[String] = None
+  explanation: Option[String] = None,
+  decisionPdf: Option[Attachment] = None
 )
 
 

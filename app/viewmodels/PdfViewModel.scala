@@ -19,6 +19,7 @@ package viewmodels
 import java.time.Instant
 
 import models.{Case, Contact, EORIDetails}
+import models.Application
 
 case class PdfViewModel(
                          eori: String,
@@ -46,7 +47,7 @@ case class PdfViewModel(
   }
 
   def similarAtarCodes: String = similarAtarReferences.mkString("\n")
-  
+
 }
 
 object PdfViewModel {

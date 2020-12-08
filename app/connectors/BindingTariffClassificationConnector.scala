@@ -40,6 +40,12 @@ class BindingTariffClassificationConnector @Inject()(
       client.POST[NewCaseRequest, Case](url = url, body = c)(implicitly, implicitly, addAuth, implicitly)
     }
 
+  def updateCase(c: Case)(implicit hc: HeaderCarrier): Future[Case] =
+    withMetricsTimerAsync("update-case") { _ =>
+      val url = s"${configuration.bindingTariffClassificationUrl}/cases/${c.reference}"
+      client.PUT[Case, Case](url = url, body = c)(implicitly, implicitly, addAuth, implicitly)
+    }
+
   def findCase(reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] =
     withMetricsTimerAsync("get-case-by-reference") { _ =>
       val url = s"${configuration.bindingTariffClassificationUrl}/cases/$reference"

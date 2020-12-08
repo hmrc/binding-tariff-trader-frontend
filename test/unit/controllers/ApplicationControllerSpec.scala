@@ -30,19 +30,22 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.{failed, successful}
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
+import models.Attachment
+import models.response.FilestoreResponse
 
 class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
-  private val pdfService = mock[PdfService]
-  private val caseService = mock[CasesService]
-  private val fileService = mock[FileService]
-  private val countriesService = new CountriesService
-  private val expectedResult = PdfFile("Some content".getBytes)
-  private val testCase = oCase.btiCaseExample
+  private val pdfService         = mock[PdfService]
+  private val caseService        = mock[CasesService]
+  private val fileService        = mock[FileService]
+  private val countriesService   = new CountriesService
+  private val testCase           = oCase.btiCaseExample
   private val testCaseWithRuling = oCase.btiCaseWithDecision
-  private val caseRef = "ref"
-  private val token = "123"
-  private val userEori = "eori-789012"
+  private val caseRef            = "ref"
+  private val token              = "123"
+  private val userEori           = "eori-789012"
 
   private val request = IdentifierRequest(fakeRequest, "id", Some(userEori))
 
@@ -55,7 +58,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     )
   }
 
-  private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): ApplicationController = {
+  private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): ApplicationController =
     new ApplicationController(
       frontendAppConfig,
       action,
@@ -65,40 +68,39 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       countriesService,
       cc
     )
-  }
 
-  private def givenTheCaseServiceFindsTheCase(): Unit = {
+  private def givenTheCaseServiceFindsTheCase(): Unit =
     when(caseService.getCaseForUser(any[String], any[String])(any[HeaderCarrier])).thenReturn(successful(testCase))
-  }
 
-  private def givenTheCaseWithRulingFindsTheCaseWithRuling(): Unit = {
-    when(caseService.getCaseWithRulingForUser(any[String], any[String])(any[HeaderCarrier])).thenReturn(successful(testCaseWithRuling))
-  }
+  private def givenTheCaseWithRulingFindsTheCaseWithRuling(): Unit =
+    when(caseService.getCaseWithRulingForUser(any[String], any[String])(any[HeaderCarrier]))
+      .thenReturn(successful(testCaseWithRuling))
 
   private def givenTheCaseServiceDoesNotFindTheCase(): Unit = {
-    when(caseService.getCaseForUser(any[String], any[String])(any[HeaderCarrier])).thenReturn(failed(new RuntimeException("Case not found")))
-    when(caseService.getCaseWithRulingForUser(any[String], any[String])(any[HeaderCarrier])).thenReturn(failed(new RuntimeException("Case not found")))
+    when(caseService.getCaseForUser(any[String], any[String])(any[HeaderCarrier]))
+      .thenReturn(failed(new RuntimeException("Case not found")))
+    when(caseService.getCaseWithRulingForUser(any[String], any[String])(any[HeaderCarrier]))
+      .thenReturn(failed(new RuntimeException("Case not found")))
   }
 
-  private def givenTheFileServiceFindsTheAttachments(): Unit = {
+  private def givenTheFileServiceFindsTheAttachments(): Unit =
     when(fileService.getAttachmentMetadata(any[Case])(any[HeaderCarrier])).thenReturn(successful(Seq.empty))
-  }
 
-  private def givenTheFileServiceHaveNoLetterOfAuthority(): Unit = {
+  private def givenTheFileServiceHaveNoLetterOfAuthority(): Unit =
     when(fileService.getLetterOfAuthority(any[Case])(any[HeaderCarrier])).thenReturn(successful(None))
-  }
 
-
-  private def givenThePdfServiceDecodesTheTokenWith(eori: String): Unit = {
+  private def givenThePdfServiceDecodesTheTokenWith(eori: String): Unit =
     when(pdfService.decodeToken(any[String])).thenReturn(Some(eori))
-  }
 
-  private def givenThePdfServiceFailsToDecodeTheToken(): Unit = {
+  private def givenThePdfServiceFailsToDecodeTheToken(): Unit =
     when(pdfService.decodeToken(any[String])).thenReturn(None)
-  }
 
-  private def givenThePdfServiceGeneratesThePdf(): Unit = {
-    when(pdfService.generatePdf(any[Html])).thenReturn(successful(expectedResult))
+  private def givenTheFileServiceFindsThePdf(): Unit = {
+    when(fileService.getAttachmentMetadata(any[Attachment])(any[HeaderCarrier])).thenReturn(
+      successful(Some(FilestoreResponse("id", "some.pdf", "application/pdf", Some("http://localhost:4572/file/id"))))
+    )
+    when(fileService.downloadFile(any[String])(any[HeaderCarrier]))
+      .thenReturn(successful(Some(Source.single(ByteString("Some content".getBytes())))))
   }
 
   "Application Pdf" must {
@@ -108,42 +110,43 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       givenTheCaseServiceFindsTheCase()
       givenTheFileServiceFindsTheAttachments()
       givenTheFileServiceHaveNoLetterOfAuthority()
-      givenThePdfServiceGeneratesThePdf()
+      givenTheFileServiceFindsThePdf()
 
       val result = controller().applicationPdf(caseRef, Some(token))(request)
 
-      status(result) shouldBe OK
-      contentAsString(result) shouldBe "Some content"
-      contentType(result) shouldBe Some("application/pdf")
+      status(result)                        shouldBe OK
+      contentAsString(result)               shouldBe "Some content"
+      contentType(result)                   shouldBe Some("application/pdf")
+      header("Content-Disposition", result) shouldBe (Some("attachment; filename=some.pdf"))
     }
 
     "error when case not found" in {
-        givenThePdfServiceDecodesTheTokenWith("eori")
-        givenTheCaseServiceDoesNotFindTheCase()
+      givenThePdfServiceDecodesTheTokenWith("eori")
+      givenTheCaseServiceDoesNotFindTheCase()
 
-        val caught: Exception = intercept[Exception] {
-          await(controller().applicationPdf(caseRef, Some(token))(request))
-        }
-        caught.getMessage shouldBe "Case not found"
+      val caught: Exception = intercept[Exception] {
+        await(controller().applicationPdf(caseRef, Some(token))(request))
       }
+      caught.getMessage shouldBe "Case not found"
+    }
 
-          "redirect to session expired when the token is invalid" in {
-           givenThePdfServiceFailsToDecodeTheToken()
+    "redirect to session expired when the token is invalid" in {
+      givenThePdfServiceFailsToDecodeTheToken()
 
-           val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
+      val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
 
-           status(result) shouldBe SEE_OTHER
-           redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
-         }
+      status(result)           shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+    }
 
-         "redirect to unauthorized when the token is empty and session EORI is not present" in {
-           givenThePdfServiceFailsToDecodeTheToken()
+    "redirect to unauthorized when the token is empty and session EORI is not present" in {
+      givenThePdfServiceFailsToDecodeTheToken()
 
-           val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, None)(request)
+      val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, None)(request)
 
-           status(result) shouldBe SEE_OTHER
-           redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad().url)
-         }
+      status(result)           shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad().url)
+    }
 
   }
 
@@ -157,9 +160,9 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       val result = controller().viewApplication(caseRef, Some(token))(request)
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) should include(messages("view.application.header"))
-      contentType(result) shouldBe Some("text/html")
+      contentType(result)     shouldBe Some("text/html")
     }
 
     "error when case not found" in {
@@ -177,24 +180,23 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
   }
-
 
   "Ruling Pdf" must {
 
     "return PdfService result" in {
       givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseWithRulingFindsTheCaseWithRuling()
-      givenThePdfServiceGeneratesThePdf()
+      givenTheFileServiceFindsThePdf()
 
       val result = controller().rulingCertificatePdf(caseRef, Some(token))(request)
 
-      status(result) shouldBe OK
-      contentAsString(result) shouldBe "Some content"
-      contentType(result) shouldBe Some("application/pdf")
+      status(result)                        shouldBe OK
+      contentType(result)                   shouldBe Some("application/pdf")
+      header("Content-Disposition", result) shouldBe (Some("attachment; filename=some.pdf"))
     }
 
     "error when case not found" in {
@@ -212,7 +214,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       val result = controller(FakeIdentifierAction(None)).rulingCertificatePdf(caseRef, Some(token))(request)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
@@ -221,7 +223,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       val result = controller(FakeIdentifierAction(None)).rulingCertificatePdf(caseRef, None)(request)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad().url)
     }
 
@@ -235,10 +237,10 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       val result = controller().viewRulingCertificate(caseRef, Some(token))(request)
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) should include("Binding Tariff Information ruling")
       contentAsString(result) should include("rulingInformation.certificateLink")
-      contentType(result) shouldBe Some("text/html")
+      contentType(result)     shouldBe Some("text/html")
     }
 
     "error when case not found" in {
@@ -256,7 +258,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       val result = controller(FakeIdentifierAction(None)).viewRulingCertificate(caseRef, Some(token))(request)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 

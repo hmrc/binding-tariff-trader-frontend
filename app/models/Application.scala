@@ -34,7 +34,8 @@ case class Application
   envisagedCommodityCode: Option[String],
   sampleToBeProvided: Boolean,
   sampleIsHazardous: Option[Boolean],
-  sampleToBeReturned: Boolean
+  sampleToBeReturned: Boolean,
+  applicationPdf: Option[Attachment] = None
 )
 
 case class EORIDetails

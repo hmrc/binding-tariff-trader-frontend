@@ -34,7 +34,8 @@ import scala.concurrent.{ ExecutionContext, Future }
 import uk.gov.hmrc.http.HeaderCarrier
 import models.requests.FileStoreInitiateRequest
 import models.response.FileStoreInitiateResponse
-import play.api.libs.json.JsValue
+import play.api.mvc.MultipartFormData.DataPart
+import play.api.libs.json.JsResult
 
 @Singleton
 class BindingTariffFilestoreConnector @Inject()(
@@ -55,6 +56,44 @@ class BindingTariffFilestoreConnector @Inject()(
       )(implicitly, implicitly, addAuth, implicitly)
     }
   }
+
+  def uploadApplicationPdf(reference: String, file: TemporaryFile)
+          (implicit hc: HeaderCarrier): Future[FilestoreResponse] =
+  withMetricsTimerAsync("upload-file") { _ =>
+    val dataPart: MultipartFormData.DataPart = DataPart("publish", "true")
+    val filePart: MultipartFormData.Part[Source[ByteString, Future[IOResult]]] = FilePart(
+      "file",
+      s"ATaRApplication_${reference}.pdf",
+      Some("application/pdf"),
+      FileIO.fromPath(file.path)
+    )
+    ws.url(s"${appConfig.bindingTariffFileStoreUrl}/file")
+      .addHttpHeaders(hc.headers: _*)
+      .addHttpHeaders(authHeaders(appConfig.apiToken))
+      .post(Source(List(dataPart, filePart)))
+      .flatMap { response =>
+        Future.fromTry {
+          JsResult.toTry(Json.fromJson[FilestoreResponse](Json.parse(response.body)))
+        }
+      }
+  }
+
+  def downloadFile(url: String)(implicit hc: HeaderCarrier): Future[Option[Source[ByteString, _]]] =
+    withMetricsTimerAsync("download-file") { _ =>
+      val fileStoreResponse = ws.url(url)
+        .withHttpHeaders(hc.headers: _*)
+        .withHttpHeaders(authHeaders(appConfig.apiToken))
+        .get()
+
+      fileStoreResponse.flatMap { response =>
+        if (response.status / 100 == 2)
+          Future.successful(Some(response.bodyAsSource))
+        else if (response.status / 100 > 4)
+          Future.failed(new RuntimeException(s"Unable to retrieve file ${url} from filestore"))
+        else
+          Future.successful(None)
+      }
+    }
 
   def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
     withMetricsTimerAsync("publish-file") { _ =>
