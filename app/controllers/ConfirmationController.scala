@@ -25,7 +25,7 @@ import pages.{ConfirmationPage, PdfViewPage}
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import service.PdfService
+import service.{CountriesService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.JsonFormatters._
 import viewmodels.PdfViewModel
@@ -39,6 +39,7 @@ class ConfirmationController @Inject()(
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
                                         dataCacheConnector: DataCacheConnector,
+                                        countriesService: CountriesService,
                                         pdfService: PdfService,
                                         cc: MessagesControllerComponents
                                       )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
@@ -48,14 +49,18 @@ class ConfirmationController @Inject()(
     def show(c: Confirmation, pdf: PdfViewModel): Future[Result] = for {
       removed <- dataCacheConnector.remove(request.userAnswers.cacheMap)
       _ = if (!removed) logger.warn("Session entry failed to be removed from the cache")
-
       token: String = pdfService.encodeToken(c.eori)
-    } yield Ok(confirmation(appConfig, c, token, pdf))
+    } yield Ok(confirmation(appConfig, c, token, pdf, getCountryName))
 
     (request.userAnswers.get(ConfirmationPage), request.userAnswers.get(PdfViewPage)) match {
       case (Some(c: Confirmation), Some(pdf: PdfViewModel)) => show(c, pdf)
       case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
-
   }
+
+  def getCountryName(code: String): Option[String] =
+    countriesService
+      .getAllCountriesById
+      .get(code)
+      .map(_.countryName)
 }

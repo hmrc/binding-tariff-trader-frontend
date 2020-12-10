@@ -22,6 +22,17 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+    <div class="form-group">
+        <p>@messages("areYouSendingSamples.second.paragraph")</p>
+        <p>@messages("areYouSendingSamples.first.paragraph")</p>
+        <ul class="list list-bullet">
+            <li>@messages("areYouSendingSamples.listItem1")</li>
+            <li>@messages("areYouSendingSamples.listItem2")</li>
+            <li>@messages("areYouSendingSamples.listItem3")</li>
+        </ul>
+    </div>
+}
 @main_template(
     title = s"${errorPrefix(form)} ${messages("areYouSendingSamples.title")}",
     appConfig = appConfig,
@@ -29,29 +40,20 @@
 
     @helpers.form(action = AreYouSendingSamplesController.onSubmit(mode)) {
 
-        @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("areYouSendingSamples.heading", goodsName),
-            captionMsg=Some(messages("areYouSendingSamples.caption")))
-
-        <div class="form-group">
-            <p>@messages("areYouSendingSamples.second.paragraph")</p>
-            <p>@messages("areYouSendingSamples.first.paragraph")</p>
-            <ul class="list list-bullet">
-                <li>@messages("areYouSendingSamples.listItem1")</li>
-                <li>@messages("areYouSendingSamples.listItem2")</li>
-                <li>@messages("areYouSendingSamples.listItem3")</li>
-            </ul>
-        </div>
 
         @components.input_yes_no(
             field = form("value"),
             label = Some(messages("areYouSendingSamples.heading", goodsName)),
+            captionMsg=Some(messages("areYouSendingSamples.caption")),
+            contentHtml = Some(contents),
             labelClass = Some("visually-hidden")
         )
 
-        @components.submit_button(label = Some(messages("site.save_and_continue")))
+        @components.submit_button(label = Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }

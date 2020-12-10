@@ -22,6 +22,14 @@
 
 @(appConfig: FrontendAppConfig, legalChallengeForm: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+    <p>@messages("legalChallengeDetails.second.paragraph")</p>
+    <ul class="list list-bullet">
+        <li>@messages("legalChallengeDetails.item1")</li>
+        <li>@messages("legalChallengeDetails.item2")</li>
+    </ul>
+}
+
 @main_template(
     title = s"${errorPrefix(legalChallengeForm)} ${messages("legalChallengeDetails.title")}",
     appConfig = appConfig,
@@ -29,25 +37,19 @@
 
     @helpers.form(action = LegalChallengeDetailsController.onSubmit(mode)) {
 
-        @components.back_link()
 
         @components.error_summary(legalChallengeForm.errors)
 
-        @components.heading(messages("legalChallengeDetails.heading", goodsName), captionMsg = Some(messages("legalChallengeDetails.caption")))
-
-        <p>@messages("legalChallengeDetails.first.paragraph")</p>
-        <p>@messages("legalChallengeDetails.second.paragraph")</p>
-        <ul class="list list-bullet">
-            <li>@messages("legalChallengeDetails.item1")</li>
-            <li>@messages("legalChallengeDetails.item2")</li>
-        </ul>
-
         @components.input_textarea(
             field = legalChallengeForm("legalChallengeDetails"),
-            labelClass = Some("visually-hidden"),
-            label = Html(messages("legalChallengeDetails.heading", goodsName))
+            label = messages("legalChallengeDetails.heading", goodsName),
+            captionMsg = Some(messages("legalChallengeDetails.caption")),
+            headingIsLabel = true,
+            contentHtml = Some(contents)
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }

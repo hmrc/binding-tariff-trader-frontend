@@ -20,7 +20,7 @@ import connectors.PdfGeneratorServiceConnector
 import javax.inject.{Inject, Singleton}
 import models.PdfFile
 import org.apache.commons.codec.binary.Base64
-import play.api.Logger
+import play.api.{Logger, Logging}
 import play.twirl.api.Html
 import uk.gov.hmrc.crypto.{CompositeSymmetricCrypto, Crypted, PlainText}
 
@@ -28,7 +28,7 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 @Singleton
-class PdfService @Inject()(connector: PdfGeneratorServiceConnector, crypto: CompositeSymmetricCrypto) {
+class PdfService @Inject()(connector: PdfGeneratorServiceConnector, crypto: CompositeSymmetricCrypto) extends Logging{
 
   private def encrypt(string: String): String = crypto.encrypt(PlainText(string)).value
 
@@ -57,7 +57,9 @@ class PdfService @Inject()(connector: PdfGeneratorServiceConnector, crypto: Comp
   }
 
   def generatePdf(htmlContent: Html): Future[PdfFile] = {
-    connector.generatePdf(htmlContent)
+    val pdf = connector.generatePdf(htmlContent)
+    logger.info("returned pdf is: " + pdf)
+    pdf
   }
 
 }

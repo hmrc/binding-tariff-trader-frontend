@@ -19,13 +19,19 @@
 @import viewmodels.AnswerSection
 @import viewmodels.PdfViewModel
 
-@(appConfig: FrontendAppConfig, confirmation: Confirmation, pdfToken: String, pdf: PdfViewModel, compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, confirmation: Confirmation, pdfToken: String, pdf: PdfViewModel,
+        getCountryName: String => Option[String], compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+
+@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
+    s"${appConfig.host}${routes.Assets.versioned(path)}"
+}
 
 @main_template(
     title = messages("confirmation.title"),
     appConfig = appConfig,
-    contentClass = Some("column-full pl-0"),
-    bodyClasses = None) {
+    contentClass = Some("column-full pl-0 application-confirmation"),
+    bodyClasses = None,
+    backLink = false){
 
 <div class="column-two-thirds p-0 hidden-print">
     <div class="govuk-box-highlight govuk-panel--confirmation">
@@ -40,35 +46,85 @@
 
     <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
 
-    @if(confirmation.sendingSamples) {
-        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample")
-            <span>@messages("confirmation.paragraph.whatNext1")
-                <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
+    <p>
+        @messages("confirmation.important")
+        @messages("confirmation.paragraph.signup")
+        <span>
+            <a href="@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url">@messages("confirmation.check.status.linkText")</a>
+        </span>
+    </p>
 
-        @components.icon_important("confirmation.sendingSamples.important")
+    <!--Samples toggle logic start-->
 
-        <p>@messages("confirmation.paragraph0.sendingSamples")</p>
-
-        <div class="panel panel-border-wide">@messages("confirmation.returned.sample.note")</div>
-
-        <p>@messages("confirmation.paragraph1.sendingSamples") <span class="bold"> @messages("caseReference.format", confirmation.reference).</span>
-            @messages("confirmation.paragraph2.sendingSamples")</p>
-
-        <address>
-        @Html(messages("confirmation.sendingSamples.address"))
-        </address>
+    @if(appConfig.samplesToggle){
+        <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
     } else {
-        <p class="break-word">@messages("view.application.paragraph.whatNext0.nosample") <span>@messages("confirmation.paragraph.whatNext1") <a href="@routes.IndexController.getApplicationsAndRulings().url">@messages("view.application.whatNext0.check.status.linkText")</a></span></p>
-    }
+        <div id = "sampleInformation">
+            @if(pdf.sendingSample) {
+                @if(pdf.hazardousSample){
+                @components.icon_important("view.application.paragraph.do.not.send.sample")
+                } else if (!pdf.hazardousSample && pdf.returnSample) {
+                        <p>@components.icon_important("confirmation.sendingSamples.important")</p>
+                        <div class="panel panel-border-wide">@messages("confirmation.paragraph.sample.return")</div>
 
-    <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
-        @messages("confirmation.get.moreInformation")
-    </a></p>
+                        <p>@messages("confirmation.paragraph1.sendingSamples")
+                            <span class="bold"> @messages("caseReference.format", confirmation.reference)</span>
+                            @messages("confirmation.paragraph2.sendingSamples")
+                        </p>
+
+                        <address>
+                        @Html(messages("confirmation.sendingSamples.address"))
+                        </address>
+                        <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+                        @messages("confirmation.get.moreInformation")</a>
+                        </p>
+                    } else {
+
+                        @components.icon_important("confirmation.sendingSamples.important")
+
+                        <p>@messages("confirmation.paragraph1.sendingSamples")
+                            <span class="bold"> @messages("caseReference.format", confirmation.reference)</span>
+                            @messages("confirmation.paragraph2.sendingSamples")
+                        </p>
+
+                        <address>
+                        @Html(messages("confirmation.sendingSamples.address"))
+                        </address>
+                        <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+                            @messages("confirmation.get.moreInformation")</a>
+                        </p>
+                    }
+            }
+        </div>
+    }
+    <!--Samples toggle logic end-->
 
     <div class="mt-2 footer-page-break">
-        @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplicationsAndRulings().url)
+        @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url)
     </div>
+
+    <div>
+        <h2 class="heading-large">@messages("view.application.header")</h2>
+
+        <div class="print-save-application hidden-print">
+        @if(!compositeMode) {
+            <span id="">
+                <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
+                <a class="print-this__link" href="javascript:window.print()" data-journey-click="print - click:Your application:Print your application">Print your application</a>
+            </span>
+        }
+        </div>
+        <div class="print-save-application hidden-print">
+            <a class="save-this__link" id="save-pdf" href="@controllers.routes.ApplicationController.applicationPdf(pdf.reference).url"
+            data-journey-click="save - click:Your application:Save your application">Save your application</a>
+        </div>
+    </div>
+
 </div>
 
-    @components.view_application(appConfig, pdf, compositeMode)
+        <div id = "pdfView">
+            @components.view_application(appConfig, pdf, getCountryName, compositeMode)
+        </div>
+
+
 }

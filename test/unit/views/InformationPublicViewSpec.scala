@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package pages
+package views
 
-import models.WhichBestDescribesYou
-import pages.behaviours.PageBehaviours
+import models.requests.IdentifierRequest
+import views.behaviours.ViewBehaviours
+import views.html.informationPublic
 
-class WhichBestDescribesYouPageSpec extends PageBehaviours {
+class  InformationPublicViewSpec extends ViewBehaviours {
 
-  "YourLocation" must {
+  private val messageKeyPrefix = "informationPublic"
 
-    beRetrievable[WhichBestDescribesYou](WhichBestDescribesYouPage)
+  private def createView(eori: Option[String] = Some("eori")) = () => informationPublic(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages)
 
-    beSettable[WhichBestDescribesYou](WhichBestDescribesYouPage)
+  "InformationPublic view" must {
+    behave like normalPage(createView(), messageKeyPrefix)()
 
-    beRemovable[WhichBestDescribesYou](WhichBestDescribesYouPage)
+    behave like pageWithBackLink(createView())
   }
+
 }
+

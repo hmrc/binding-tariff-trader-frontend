@@ -75,9 +75,11 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
     when(btiApp.confidentialInformation).thenReturn(Some("goods description"))
     when(btiApp.envisagedCommodityCode).thenReturn(Some("goods description"))
     when(btiApp.knownLegalProceedings).thenReturn(Some("goods description"))
+    when(btiApp.relatedBTIReferences).thenReturn(List("similar goods"))
     when(btiApp.sampleToBeProvided).thenReturn(true)
     when(btiApp.sampleIsHazardous).thenReturn(Some(true))
     when(btiApp.sampleToBeReturned).thenReturn(true)
+    when(btiApp.reissuedBTIReference).thenReturn(Some("reissuedBTIReference"))
 
     when(mapper.map(any[UserAnswers])).thenReturn(newCaseReq)
   }
@@ -115,7 +117,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
         AnswerSection(Some("checkYourAnswers.informationAboutYourItemSection"), Seq.empty),
         AnswerSection(Some("checkYourAnswers.otherInformation"), Seq.empty)
       )
-      contentAsString(result) shouldBe check_your_answers(frontendAppConfig, expectedSections)(fakeRequest, messages).toString
+      contentAsString(result) shouldBe check_your_answers(frontendAppConfig, expectedSections, false)(fakeRequest, messages).toString
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

@@ -24,7 +24,7 @@ class UploadSupportingMaterialMultipleFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "file-input" -> text()
+      "file" -> text()
     )
 
 }

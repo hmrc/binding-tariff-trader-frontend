@@ -20,23 +20,26 @@ import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
 import models.Case
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import viewmodels.{FileView, PdfViewModel}
+import views.html.components.view_application_pdf
 import views.html.templates._
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class ApplicationController @Inject()(appConfig: FrontendAppConfig,
-  identify: IdentifierAction,
-  pdfService: PdfService,
-  caseService: CasesService,
-  fileService: FileService,
-  countriesService: CountriesService,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+                                      identify: IdentifierAction,
+                                      pdfService: PdfService,
+                                      caseService: CasesService,
+                                      fileService: FileService,
+                                      countriesService: CountriesService,
+                                      cc: MessagesControllerComponents
+                                     )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
 
   private type Eori = String
   private type CaseReference = String
@@ -58,9 +61,9 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   }
 
   private def getPdfOrHtml(maybeEoriNumber: Option[Eori],
-                     reference: CaseReference,
-                     token: Option[String],
-                     toView: (Eori, CaseReference) => Future[Result]): Future[Result] = {
+                           reference: CaseReference,
+                           token: Option[String],
+                           toView: (Eori, CaseReference) => Future[Result]): Future[Result] = {
     (maybeEoriNumber, token) match {
       case (Some(eori), _) => toView(eori, reference)
       case (_, Some(tkn)) => pdfService.decodeToken(tkn) match {
@@ -76,36 +79,40 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
 
   private def getApplicationPDF(eori: Eori, reference: CaseReference)
                                (implicit request: Request[AnyContent]): Future[Result] = {
-    getApplicationPDForHtml(eori,reference,true)
+    getApplicationPDForHtml(eori,reference, pdf = true)
   }
 
   private def getApplicationView(eori: Eori, reference: CaseReference)
-                               (implicit request: Request[AnyContent]): Future[Result] = {
-    getApplicationPDForHtml(eori,reference,false)
+                                (implicit request: Request[AnyContent]): Future[Result] = {
+    getApplicationPDForHtml(eori,reference, pdf = false)
   }
 
 
   private def getApplicationPDForHtml(eori: Eori, reference: CaseReference, pdf : Boolean)
-                               (implicit request: Request[AnyContent]): Future[Result] = {
+                                     (implicit request: Request[AnyContent]): Future[Result] = {
 
     for {
       c <- caseService.getCaseForUser(eori, reference)
       attachments <- fileService.getAttachmentMetadata(c)
-      letter <- fileService.getLetterOfAuthority(c)
+      attachmentFileView = (attachments, c.attachments).zipped map {
+        (fileStoreRespAtt, caseAttachment) =>
+          FileView(fileStoreRespAtt.id, fileStoreRespAtt.fileName, caseAttachment.public)
+      }
       out <- pdf match {
         case true =>
-          generatePdf(applicationTemplate(appConfig, c, attachments, letter, getCountryName), s"BTIConfirmation$reference.pdf")
+          generatePdf(view_application_pdf(appConfig, PdfViewModel(c, attachmentFileView), getCountryName), s"BTIConfirmation$reference.pdf")
         case false =>
-          Future.successful(Ok(applicationView(appConfig, c, attachments, letter, getCountryName)))
+          Future.successful(Ok(applicationView(appConfig, PdfViewModel(c, attachmentFileView), getCountryName)))
       }
     } yield out
   }
 
-  private def generatePdf(htmlContent: Html, filename: String): Future[Result] = {
+  private def generatePdf(htmlContent: Html, filename: String)
+                         (implicit request: Request[AnyContent]): Future[Result] = {
     pdfService.generatePdf(htmlContent) map { pdfFile =>
       Results.Ok(pdfFile.content)
         .as(pdfFile.contentType)
-        .withHeaders(CONTENT_DISPOSITION -> s"filename=$filename")
+        .withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$filename")
     }
   }
 
@@ -118,7 +125,7 @@ class ApplicationController @Inject()(appConfig: FrontendAppConfig,
   }
 
   def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)
-                           (implicit request: Request[AnyContent]): Future[Result] = {
+                               (implicit request: Request[AnyContent]): Future[Result] = {
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
       Future.successful(Ok(rulingCertificateView(appConfig, c, getCountryName)))
     }

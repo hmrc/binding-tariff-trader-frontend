@@ -22,6 +22,12 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+    <div class="mb-2">
+        <p>@messages("provideBTIReference.paragraph")</p>
+    </div>
+}
+
 @main_template(
     title = s"${errorPrefix(form)} ${messages("provideBTIReference.title")}",
     appConfig = appConfig,
@@ -29,23 +35,20 @@
 
     @helpers.form(action = ProvideBTIReferenceController.onSubmit(mode)) {
 
-        @components.back_link()
 
         @components.error_summary(form.errors)
 
         @components.input_text(
             field = form("btiReference"),
-            labelHtml = Some(heading),
-            hint = Some(messages("provideBTIReference.hint"))
+            label = Some(messages("provideBTIReference.heading")),
+            captionMsg = Some(messages("provideBTIReference.caption")),
+            hint = Some(messages("provideBTIReference.hint")),
+            contentHtml = Some(contents),
+            headingIsLabel = true
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
-    }
-}
+        @components.submit_button(Some(messages("site.continue")))
 
-@heading = {
-    @components.heading(
-        messages("provideBTIReference.heading"),
-        captionMsg = Some(messages("provideBTIReference.caption"))
-    )
+        @components.cancel_application_link()
+    }
 }

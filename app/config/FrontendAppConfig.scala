@@ -66,6 +66,7 @@ class FrontendAppConfig @Inject()(
   lazy val digitalcentre = loadConfig("accessibility-urls.digitalcentre")
   //accessibility Urls end
 
+  lazy val fileUploadMaxFiles: Int = loadConfig("fileupload.maxFiles").toInt
   lazy val fileUploadMaxSize: Int = loadConfig("fileupload.maxSize").toInt
   lazy val fileUploadMimeTypes: Set[String] = loadConfig("fileupload.mimeTypes").split(",").map(_.trim).toSet
 
@@ -77,6 +78,9 @@ class FrontendAppConfig @Inject()(
 
   private lazy val eoriCommonComponentUrl = loadConfig("eori-common-component-frontend.host")
   lazy val atarSubscribeUrl: String = s"$eoriCommonComponentUrl/customs-enrolment-services/atar/subscribe"
+
+  private lazy val bindingTariffRulingsUrl = loadConfig("binding-tariff-ruling-frontend.host")
+  lazy val bindingTariffRulingsHomeUrl: String = s"$bindingTariffRulingsUrl/binding-tariff-rulings"
 
   private lazy val feedbackUrl: String = loadConfig("feedback-frontend.host")
   private lazy val feedbackServiceName: String = "ABTIR"
@@ -91,4 +95,11 @@ class FrontendAppConfig @Inject()(
   lazy val enableRefresh: Boolean = runModeConfiguration.getOptional[Boolean]("timeoutDialog.enableRefresh").getOrElse(true)
 
   def defaultLang: Lang = English.lang
+
+  lazy val host: String = loadConfig("host")
+
+  lazy val assetsPrefix = runModeConfiguration.get[String](s"assets.url") + runModeConfiguration
+    .get[String](s"assets.version") + '/'
+
+  lazy val samplesToggle = runModeConfiguration.getOptional[Boolean]("toggle.samplesNotAccepted").getOrElse(false)
 }

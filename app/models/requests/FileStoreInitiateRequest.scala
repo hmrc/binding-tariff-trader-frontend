@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package models.requests
 
-import controllers.routes
-import models.{ Mode, RegisterBusinessRepresenting }
-import play.api.mvc.Call
+import play.api.libs.json.{ OFormat, Json }
 
-case object RegisterBusinessRepresentingPage extends QuestionPage[RegisterBusinessRepresenting] {
-  def route(mode: Mode): Call =
-    routes.RegisterBusinessRepresentingController.onPageLoad(mode)
-  override def toString: String =
-    "registerBusinessRepresenting"
+case class FileStoreInitiateRequest(
+  id: Option[String] = None,
+  successRedirect: Option[String] = None,
+  errorRedirect: Option[String] = None,
+  expectedContentType: Option[String] = None,
+  publishable: Boolean = false,
+  maxFileSize: Int
+)
+
+object FileStoreInitiateRequest {
+  implicit val format: OFormat[FileStoreInitiateRequest] = Json.format[FileStoreInitiateRequest]
 }

@@ -31,20 +31,19 @@
 
     @helpers.form(action = IsSampleHazardousController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
-
         @components.error_summary(isSampleHazardousForm.errors)
 
-        @components.heading(messages("isSampleHazardous.heading"),
-            captionMsg = Some(messages("isSampleHazardous.caption")))
 
         @components.input_yes_no(
             field = isSampleHazardousForm("isSampleHazardous"),
             label = Some(messages("isSampleHazardous.heading")),
+            captionMsg = Some(messages("isSampleHazardous.caption")),
             labelClass = Some("visually-hidden")
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }
 

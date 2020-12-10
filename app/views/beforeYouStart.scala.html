@@ -23,13 +23,8 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @components.back_link()
 
     @components.heading(messages("beforeYouStart.heading"))
-
-    <p>@messages("beforeYouStart.heading.paragraph1")</p>
-
-    @components.inset_text(Html(messages("beforeYouStart.heading.inset1")))
 
     <h2>@messages("beforeYouStart.subheading1")</h2>
 
@@ -56,5 +51,7 @@
 
     <p>@messages("beforeYouStart.subheading3.paragraph1")</p>
 
-    @components.button_link(messages("site.continue"), routes.ProvideGoodsNameController.onPageLoad(NormalMode).url)
+    @components.button_link(messages("site.continue"), routes.InformationPublicController.onPageLoad().url)
+
+    @components.cancel_application_link()
 }

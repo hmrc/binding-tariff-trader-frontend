@@ -22,6 +22,11 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+    <div class="form-group">
+        <p>@messages("commodityCodeBestMatch.paragraph")</p>
+    </div>
+}
 @main_template(
     title = s"${errorPrefix(form)} ${messages("commodityCodeBestMatch.title")}",
     appConfig = appConfig,
@@ -29,18 +34,19 @@
 
     @helpers.form(action = CommodityCodeBestMatchController.onSubmit(mode)) {
 
-        @components.back_link()
 
         @components.error_summary(form.errors)
 
         @components.input_yes_no(
             field = form("value"),
-            labelHtml = Some(components.heading(
-                messages("commodityCodeBestMatch.heading", goodsName),
-                captionMsg = Some(messages("commodityCodeBestMatch.caption")))),
-            hint = Some(messages("commodityCodeBestMatch.bodyText"))
+            label = Some(messages("commodityCodeBestMatch.heading", goodsName)),
+            labelClass = Some("visually-hidden"),
+            captionMsg=Some(messages("commodityCodeBestMatch.caption")),
+            contentHtml = Some(contents)
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }

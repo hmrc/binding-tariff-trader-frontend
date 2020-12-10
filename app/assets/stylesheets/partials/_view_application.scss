@@ -1,14 +1,7 @@
-body {
-    counter-reset: sec-counter;
-}
 .govuk-panel--confirmation {
 	color: #fff;
 	background: #00703C;
 	margin-top: 30px;
-}
-span.footer-page-no::before {
-    counter-increment: sec-counter;
-    content: "Page " counter(sec-counter) " of 2 ";
 }
 .print-save-application {
     position: relative;
@@ -21,6 +14,7 @@ span.footer-page-no::before {
     font-size: 16px;
     text-decoration: none;
 }
+
 .print-document {
     border: 1px solid #6f777b;
     box-shadow: 6px 6px 0 0 #dee0e2;
@@ -28,16 +22,6 @@ span.footer-page-no::before {
     height: auto;
     position: relative;
     margin-bottom: 2em;
-}
-
-ul li {
-    font-size: 16px;
-}
-
-.print-document table td {
-    border: none;
-    padding: 0;
-    margin: 0;
 }
 
 .print-document h2, h3, h4 {
@@ -49,12 +33,7 @@ ul li {
     //top: 10mm;
 }
 
-.print-document .print-header .column-one-third {
-    border-left: #00703C solid;
-    padding-left: 8px;
-    margin-left: 15px;
-    margin-right: -15px;
-}
+
 .print-document .logo-text {
    font-size: 24px;
    font-weight: normal;
@@ -67,7 +46,16 @@ ul li {
     font-size: 1.2em;
     color: #00703C;
     font-weight: 600;
+    margin-right: 15px;
 }
+
+.crown-logo-atar{
+    height: 100px;
+    width:auto;
+    padding-left: 8px;
+    margin-right: -15px;
+}
+
 .print-document .information-box {
     border: 2px solid #00703C;
     display: block;
@@ -109,10 +97,6 @@ ul li {
 .print-footer, .footer-space {
   //height: 45mm;
 }
-.print-document .footer-info {
-    font-size: 14px;
-    margin-top: 1em;
-}
 .print-document__information-box {
     border: 2px solid #00703C;
     display: block;
@@ -141,21 +125,24 @@ ul li {
     font-size: 15px;
     -webkit-print-color-adjust: exact
 }
+.about-this-result-box-do-not-send {
+    height: 480px;
+}
 
 .about-this-result, .date-of-result {
     margin-top: 1em;
     margin-bottom: 1em;
 }
 
-.column-one-half {
+.print-document .column-one-half {
     width: 50%;
     float: left;
 }
-.column-one-third {
+.print-document .column-one-third {
     width: 33%;
     float: left;
 }
-.column-two-thirds {
+.print-document .column-two-thirds {
     width: 66%;
     float: left;
 }
@@ -238,47 +225,41 @@ ul li {
 }
 
 @media print {
-
     @page {
         height: 297mm;
         width: 210mm;
-        margin: 0;
+        margin: 15px;
     }
-     html, body {
-            border: 1px solid white;
-            width: auto;
-            height: 95%;
-            page-break-after: avoid;
-            page-break-before: avoid;
-            margin: 0;
+    .main-wrapper.govuk-width-container {
+        display: none;
     }
+    body {
+        width: auto;
+        height: auto;
+   }
    .hidden-print {
        display: none !important;
     }
     .service-info {
         display: none !important;
     }
+    #your-records.print-document {
+        page-break-after: always;
+    }
    .print-document {
       margin: 10mm;
       border: none;
       width: 210mm;
-      height: 296mm;
+      height: auto;
       padding: 10mm;
       box-shadow: none;
       zoom: 100%;
-   }
-   .print-document .footer-info {
-   font-size: 14px;
-       margin-top: 2em;
-       position: absolute;
-           width: 210mm;
-           bottom: 10px;
    }
    .information-box {
       background: #e1f3f1;
       -webkit-print-color-adjust: exact
    }
-   .column-half {
+   .print-document .column-half {
        width: 50%;
        float: left;
    }
@@ -320,13 +301,43 @@ ul li {
    header {
        display: none;
    }
-   .report-error {
+   .report-error__toggle.js-visible {
        display: none;
    }
-}
-tfoot {
-    position: absolute;
-    bottom: 10mm;
+   .govuk-check-your-answers.cya-questions-short, .govuk-check-your-answers.cya-questions-long {
+       width: 100%;
+   }
+   .govuk-check-your-answers {
+       display: table;
+   }
+   .govuk-check-your-answers > * {
+       display: table-row;
+       border-bottom-width: 0;
+   }
+   .govuk-check-your-answers > * {
+       position: relative;
+       border-bottom: 1px solid #bfc1c3;
+   }
+   .govuk-check-your-answers>*>* {
+       display: table-cell;
+       border-bottom: 1px solid #bfc1c3;
+       padding: .63158em 1.05263em .47368em 0;
+       margin: 0;
+   }
+   .govuk-check-your-answers.cya-questions-short .cya-question {
+       width: 30%;
+   }
+   .govuk-check-your-answers>*:first-child>* {
+       padding-top: 0;
+   }
+   .govuk-check-your-answers>*>* {
+       display: table-cell;
+       padding: .63158em 1.05263em .47368em 0;
+       margin: 0;
+   }
+   .govuk-check-your-answers>*:first-child .cya-question {
+       margin-top: 0;
+   }
 }
 .page {
     margin-bottom: 10mm;
@@ -335,27 +346,53 @@ tfoot {
     color: #005EA5;
     margin-top: 1em;
 }
-.answer--container {
+.print-document .answer--container {
     display: table;
     margin-top: 1em;
     page-break-inside: avoid !important;
     width: 100%;
 }
-.answer--question {
+.print-document .answer--question {
     float: left;
     width: 50%;
 }
-.answer--question p {
+.print-document .answer--question p {
     margin-top: 0.5em;
 }
-.answer--question p strong {
+.print-document .answer--question p strong {
     font-weight: 700;
 }
-.answer--answer {
+.print-document .answer--answer {
     float: left;
     width: 50%;
 }
-.answer--answer p {
-    margin-top: 0.5em;
+.print-document .answer--answer p {
     margin-left: 1em;
+}
+@media screen and (max-width: 767px) {
+    .application-confirmation {
+        padding-top: 30px
+    }
+    .application-confirmation .govuk-panel--confirmation{
+        margin-top: 0px;
+    }
+    .print-document .column-one-half {
+        width: 100%;
+    }
+    .print-document .column-one-third {
+        width: 100%;
+    }
+    .print-document .column-two-thirds {
+        width: 100%;
+    }
+    .print-pages {
+        width: 100%;
+    }
+    .print-document {
+        padding: 15px 15px;
+    }
+    .print-pages {
+        display: inline;
+        width: 100%;
+    }
 }

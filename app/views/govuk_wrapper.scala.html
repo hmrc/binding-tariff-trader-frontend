@@ -15,6 +15,8 @@
  *@
 
 @import play.twirl.api.HtmlFormat._
+@import views.html.components.languageSelection
+
 @(appConfig: config.FrontendAppConfig,
   title: String,
   mainClass: Option[String] = None,
@@ -26,6 +28,7 @@
   mainContent: Html = empty,
   serviceInfoContent: Html = empty,
   scriptElem: Option[Html] = None,
+  backLink: Boolean = true,
   signOutLink: String)(implicit request: Request[_], messages: Messages)
 
 @import layouts.{govuk_template => hmrcGovUkTemplate}
@@ -43,6 +46,7 @@
       headScripts = None)
     <meta name="format-detection" content="telephone=no" />
     <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")' />
+    <script type="text/javascript" src="@routes.Assets.versioned("javascripts/file-input-handler.js")"></script>
 
 
 }
@@ -56,7 +60,31 @@
       navLinks = Some(signOutMarkup))
 }
 
-@afterHeader = {}
+@contentHeaderWithLanguageSelection = {
+    <div class="govuk-options-end">
+        @if(appConfig.languageTranslationEnabled) {
+        @languageSelection()
+        }
+    </div>
+}
+
+@afterHeader = {
+<div class="main-wrapper govuk-width-container">
+    <div class="centered-content">
+    @uiLayouts.serviceInfo(
+    betaBanner = phaseBanner,
+    includeHMRCBranding = false,
+    includeGridWrapper = false,
+    serviceInfoContent = Some(serviceInfoContent))
+
+    @contentHeaderWithLanguageSelection
+
+    @if(backLink) {
+        @components.back_link()
+    }
+    </div>
+</div>
+}
 
 @bodyEnd = {
     @uiLayouts.footer(
@@ -68,7 +96,7 @@
       <script src="@routes.Assets.versioned("javascripts/location-autocomplete.min.js")"></script>
       <script src='@routes.Assets.versioned("javascripts/bindingtarifftraderfrontend-app.js")'> </script>
       <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NDJKHWK" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P39VTVL" height="0" width="0" style="display:none;visibility:hidden"></iframe>
       </noscript>
       <script type="text/javascript" src=@routes.Assets.versioned("javascripts/ga-tag-manager.js")></script>
 }
@@ -114,7 +142,6 @@
       mainClass = mainClass,
       mainDataAttributes = mainDataAttributes,
       mainContentHeader = mainContentHeader,
-      serviceInfo = serviceInfo,
       getHelpForm = getHelpForm,
       sidebar = sidebar)
 }

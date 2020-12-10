@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package pages
+@(
+legendHtml: Option[Html] = None
+)(content: Html)
 
-import models.FileAttachment
-import pages.behaviours.PageBehaviours
+<fieldset class="fieldset">
+    <legend>
+        @legendHtml.map { legend => @legend }
+    </legend>
 
-
-class UploadWrittenAuthorisationPageSpec extends PageBehaviours {
-
-  "UploadWrittenAuthorisationPage" must {
-
-    beRetrievable[FileAttachment](UploadWrittenAuthorisationPage)
-
-    beSettable[FileAttachment](UploadWrittenAuthorisationPage)
-
-    beRemovable[FileAttachment](UploadWrittenAuthorisationPage)
-  }
-}
+    @content
+</fieldset>

@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package pages
+@()(implicit messages: Messages)
 
-import models.RegisterBusinessRepresenting
-import pages.behaviours.PageBehaviours
-
-class RegisterBusinessRepresentingPageSpec extends PageBehaviours {
-
-  "RegisterBusinessRepresentingPage" must {
-
-    beRetrievable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beSettable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-
-    beRemovable[RegisterBusinessRepresenting](RegisterBusinessRepresentingPage)
-  }
-}
+<div class="js-visible">
+  <p>
+   <a id="cancel-application-link" class="govuk-link"
+      href="@routes.SignOutController.cancelApplication">@messages("site.cancel_application")</a>
+  </p>
+</div>

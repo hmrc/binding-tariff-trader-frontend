@@ -22,6 +22,11 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+<div role="note" class="mb-4">
+    <p> @messages("returnSamples.first.paragraph")</p>
+</div>
+}
 @main_template(
     title = s"${errorPrefix(form)} ${messages("returnSamples.title")}",
     appConfig = appConfig,
@@ -29,25 +34,20 @@
 
     @helpers.form(action = ReturnSamplesController.onSubmit(mode)) {
 
-        @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading(
-            headingMsg = messages("returnSamples.heading"),
-            captionMsg = Some(messages("returnSamples.caption"))
-        )
-
-        <div role="note" class="mb-4">
-            <p> @messages("returnSamples.first.paragraph")</p>
-        </div>
 
         @components.input_yes_no(
             field = form("value"),
             label = Some(messages("returnSamples.heading")),
-            labelClass = Some("visually-hidden")
+            labelClass = Some("visually-hidden"),
+            captionMsg = Some(messages("returnSamples.caption")),
+            contentHtml = Some(contents)
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }

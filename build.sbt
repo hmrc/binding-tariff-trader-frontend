@@ -26,7 +26,7 @@ lazy val root = (project in file("."))
     name := appName,
     scalaVersion := "2.12.12",
     targetJvm := "jvm-1.8",
-    RoutesKeys.routesImport ++= Seq("models._", "models.Languages._"),
+    RoutesKeys.routesImport ++= Seq("models._", "models.Languages._", "models.SortField._", "models.SortDirection._"),
     PlayKeys.playDefaultPort := 9582,
     scalacOptions ~= { opts => opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard")) },
     libraryDependencies ++= AppDependencies(),
@@ -37,6 +37,7 @@ lazy val root = (project in file("."))
     fork in Test := true,
     resolvers ++= Seq(
       Resolver.bintrayRepo("hmrc", "releases"),
+      Resolver.bintrayRepo("wolfendale", "maven"),
       Resolver.jcenterRepo
     ),
     // Use the silencer plugin to suppress warnings from unused imports in compiled twirl templates
@@ -48,7 +49,7 @@ lazy val root = (project in file("."))
     // concatenate js
     Concat.groups := Seq(
       "javascripts/bindingtarifftraderfrontend-app.js" ->
-        group(Seq("javascripts/show-hide-content.js", "javascripts/bindingtarifftraderfrontend.js", "javascripts/uploadFiles.js"))
+        group(Seq("javascripts/show-hide-content.js", "javascripts/bindingtarifftraderfrontend.js"))
     ),
     // prevent removal of unused code which generates warning errors due to use of third-party libs
     pipelineStages := Seq(digest),

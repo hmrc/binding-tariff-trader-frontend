@@ -16,7 +16,8 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-ui"                          % "8.11.0-play-27",
     "uk.gov.hmrc"       %% "simple-reactivemongo"             % "7.30.0-play-27",
     "uk.gov.hmrc"       %% "play-whitelist-filter"            % "3.4.0-play-27",
-    "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.12.0-play-27"
+    "uk.gov.hmrc"       %% "play-json-union-formatter"        % "1.12.0-play-27",
+    "org.typelevel"     %% "cats-core"                        % "2.2.0"
   )
 
   private lazy val scope: String = "test"
@@ -30,6 +31,7 @@ object AppDependencies {
     "org.scalacheck"            %% "scalacheck"             % "1.14.3"            % scope,
     "org.scalatest"             %% "scalatest"              % "3.0.8"             % scope,
     "org.scalatestplus.play"    %% "scalatestplus-play"     % "3.1.3"             % scope,
+    "wolfendale"                %% "scalacheck-gen-regexp"  % "0.1.2"             % scope
   )
 
   def apply(): Seq[ModuleID] = (compile ++ test).map(_ withSources())

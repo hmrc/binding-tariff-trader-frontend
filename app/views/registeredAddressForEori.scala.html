@@ -23,6 +23,17 @@
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, countries: List[Country])(implicit request: Request[_], messages: Messages)
 
+@heading = {
+    @if(form("eori").value.isDefined) {
+        @components.heading(
+        messages("registeredAddressForEori.heading", form("eori").value.get),
+        captionMsg=Some(messages("registeredAddressForEori.caption"))
+        )
+    } else {
+        @components.heading(messages("registeredAddressForEori.headingNoEORI"))
+    }
+}
+
 @main_template(
     title = s"${errorPrefix(form)} ${messages("registeredAddressForEori.title")}",
     appConfig = appConfig,
@@ -30,60 +41,58 @@
 
     @helpers.form(action = RegisteredAddressForEoriController.onSubmit(mode)) {
 
-        @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @if(form("eori").value.isDefined) {
-            @components.heading(messages("registeredAddressForEori.heading", form("eori").value.get),
-                captionMsg=Some(messages("registeredAddressForEori.caption")))
+        @components.fieldset_wrapper(legendHtml = Some(heading)) {
 
-            @components.warning_text(messages("registeredAddressForEori.note"))
+            @if(form("eori").value.isDefined) {
+                @components.warning_text(messages("registeredAddressForEori.note"))
 
             @components.input_hidden(field = form("eori"))
-        } else {
-            @components.heading(messages("registeredAddressForEori.headingNoEORI"))
-
-            @components.input_text(
+            } else {
+                @components.input_text(
                 field = form("eori"),
                 hint  = Some(messages("registeredAddressForEori.eori.hint")),
                 label = Some(messages("registeredAddressForEori.eori"))
             )
+            }
+
+            @components.input_text(
+                field = form("businessName"),
+                label = Some(messages("registeredAddressForEori.businessName")),
+                inputPurpose=Some("section-registered organization")
+            )
+
+            @components.input_text(
+                field = form("addressLine1"),
+                label = Some(messages("registeredAddressForEori.addressLine1")),
+                inputPurpose=Some("section-registered address-line1")
+            )
+
+            @components.input_text(
+                field = form("townOrCity"),
+                label = Some(messages("registeredAddressForEori.townCity")),
+                inputPurpose=Some("section-registered address-level1")
+            )
+
+            @components.input_text(
+                field = form("postcode"),
+                label = Some(messages("registeredAddressForEori.postcode")),
+                inputPurpose=Some("section-registered postal-code")
+            )
+            <div class="govuk-!-width-one-half">
+                @components.select(
+                field = form("country"),
+                elementOptions = ("","") :: countries.map(c => (c.code,messages(c.countryName))),
+                displayEmptyValue = true,
+                '_label -> messages("registeredAddressForEori.country"),
+                '_selectClass -> "js-autocomplete"
+                )
+            </div>
         }
+            @components.submit_button(Some(messages("site.continue")))
 
-        @components.input_text(
-            field = form("businessName"),
-            label = Some(messages("registeredAddressForEori.businessName")),
-            inputPurpose=Some("section-registered organization")
-        )
-
-        @components.input_text(
-            field = form("addressLine1"),
-            label = Some(messages("registeredAddressForEori.addressLine1")),
-            inputPurpose=Some("section-registered address-line1")
-        )
-
-        @components.input_text(
-            field = form("townOrCity"),
-            label = Some(messages("registeredAddressForEori.townCity")),
-            inputPurpose=Some("section-registered address-level1")
-        )
-
-        @components.input_text(
-            field = form("postcode"),
-            label = Some(messages("registeredAddressForEori.postcode")),
-            inputPurpose=Some("section-registered postal-code")
-        )
-        <div class="govuk-!-width-one-half">
-        @components.select(
-            field = form("country"),
-            elementOptions = ("","") :: countries.map(c => (c.code,messages(c.countryName))),
-            displayEmptyValue = true,
-            '_label -> messages("registeredAddressForEori.country"),
-            '_selectClass -> "js-autocomplete"
-        )
-        </div>
-
-        @components.submit_button()
+            @components.cancel_application_link()
     }
 }

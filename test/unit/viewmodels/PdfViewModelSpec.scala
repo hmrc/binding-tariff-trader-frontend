@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package forms
+package unit.viewmodels
 
-import forms.behaviours.StringFieldBehaviours
-import org.scalacheck.Arbitrary.arbitrary
+import base.SpecBase
+import models.oCase
 
-class UploadWrittenAuthorisationFormProviderSpec extends StringFieldBehaviours {
+class PdfViewModelSpec extends SpecBase{
 
-  val requiredKey = "uploadWrittenAuthorisation.error.required"
+  "similarAtarCodes" should {
 
-  val form = new UploadWrittenAuthorisationFormProvider()()
+    "build a list with similar atar codes" in {
 
-  ".file-input" must {
+      val pdf = oCase.pdf.copy(similarAtarReferences = List("12345", "23456"))
 
-    val fieldName = "file-input"
-
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      arbitrary[String]
-    )
+      pdf.similarAtarCodes shouldBe "12345\n23456"
+    }
   }
 }

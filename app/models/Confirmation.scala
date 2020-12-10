@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class Confirmation(reference: String, eori: String, emailAddress: String, sendingSamples: Boolean)
+case class Confirmation(reference: String, eori: String, emailAddress: String)
 
 object Confirmation {
   implicit val format: OFormat[Confirmation] = Json.format[Confirmation]
@@ -26,7 +26,6 @@ object Confirmation {
   def apply(c: Case): Confirmation = new Confirmation(
     c.reference,
     c.application.agent.map(_.eoriDetails.eori).getOrElse(c.application.holder.eori),
-    c.application.contact.email,
-    c.application.sampleToBeProvided
+    c.application.contact.email
   )
 }

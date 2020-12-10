@@ -24,6 +24,10 @@
 
 @(appConfig: FrontendAppConfig, goodsNameForm: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+    <p>@messages("provideGoodsName.paragraph")</p>
+}
+
 @main_template(
     title = s"${errorPrefix(goodsNameForm)} ${messages("provideGoodsName.title")}",
     appConfig = appConfig,
@@ -31,21 +35,20 @@
 
     @helpers.form(action = ProvideGoodsNameController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
-
         @components.error_summary(goodsNameForm.errors)
-
-        @components.heading(messages("provideGoodsName.heading"),
-            captionMsg = Some(messages("provideGoodsName.caption")))
-
-        <p>@messages("provideGoodsName.paragraph")</p>
 
         @components.input_text(
             field = goodsNameForm("goodsName"),
             label = Some(messages("provideGoodsName.heading")),
-            labelClass = Some("visually-hidden")
+            captionMsg = Some(messages("provideGoodsName.caption")),
+            hint = Some(messages("provideGoodsName.hint")),
+            contentHtml = Some(contents),
+            headingIsLabel = true
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }

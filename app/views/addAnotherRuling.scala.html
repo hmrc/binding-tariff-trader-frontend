@@ -30,50 +30,55 @@
 
     @helpers.form(action = routes.AddAnotherRulingController.onSubmit(mode)) {
 
-        @components.back_link()
-
         @components.error_summary(form.errors)
 
 
         @if(rulings.nonEmpty) {
             @if(rulings.size == 1) {
-                @components.heading(
-                    messages("addAnotherRuling.addRulingCounter.singular", rulings.length),
-                    captionMsg = Some(messages("addAnotherRuling.caption"))
+
+                @components.input_yes_no(
+                field = form("add-another-ruling-choice"),
+                label = Some(messages("addAnotherRuling.addRulingCounter.singular", rulings.length)),
+                captionMsg = Some(messages("addAnotherRuling.caption")),
+                contentHtml = Some(addAdditionalRuling)
+
                 )
+
             } else {
-                @components.heading(
-                    messages("addAnotherRuling.addRulingCounter.plural", rulings.length),
-                    captionMsg = Some(messages("addAnotherRuling.caption"))
+
+                @components.input_yes_no(
+                field = form("add-another-ruling-choice"),
+                label = Some(messages("addAnotherRuling.addRulingCounter.plural", rulings.length)),
+                captionMsg = Some(messages("addAnotherRuling.caption")),
+                contentHtml = Some(addAdditionalRuling)
                 )
+
             }
 
-            @components.show_rulings_table(rulings, mode)
 
-            @components.input_yes_no(
-                field = form("add-another-ruling-choice"),
-                labelHtml = Some(addAdditionalRuling)
-            )
+
+
         } else {
-            @components.heading(
-                messages("addAnotherRuling.heading"),
-                captionMsg = Some(messages("addAnotherRuling.caption"))
-            )
 
             @components.input_yes_no(
                 field = form("add-another-ruling-choice"),
                 label = Some(messages("addAnotherRuling.heading")),
-                labelClass = Some("visually-hidden")
+                captionMsg = Some(messages("addAnotherRuling.caption"))
             )
         }
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
-    }
+        @components.submit_button(Some(messages("site.continue")))
 
+        @components.cancel_application_link()
+    }
 }
 
 @addAdditionalRuling = {
+
+    @components.show_rulings_table(rulings, mode)
+
     <div class="heading-large mb-2">
         @messages("addAnotherRuling.label.anotherRuling")
     </div>
+
     }

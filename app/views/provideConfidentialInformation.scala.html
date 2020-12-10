@@ -24,6 +24,19 @@
 
 @(appConfig: FrontendAppConfig, provideConfidentialInformationForm: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+    <p>@messages("provideConfidentialInformation.description")</p>
+
+    @components.inset_text(Html(messages("provideConfidentialInformation.inset")))
+
+    <p>@messages("provideConfidentialInformation.thismayinclude")</p>
+
+    <ul class="list list-bullet">
+        <li>@messages("provideConfidentialInformation.modelnumbers")</li>
+        <li>@messages("provideConfidentialInformation.patentinfo")</li>
+    </ul>
+}
+
 @main_template(
     title = s"${errorPrefix(provideConfidentialInformationForm)} ${messages("provideConfidentialInformation.title", goodsName)}",
     appConfig = appConfig,
@@ -31,32 +44,22 @@
 
     @helpers.form(action = ProvideConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
 
         @components.error_summary(provideConfidentialInformationForm.errors)
 
-        @components.heading(messages("provideConfidentialInformation.heading", goodsName),
-            captionMsg=Some(messages("provideConfidentialInformation.caption")))
-        <p>@messages("provideConfidentialInformation.description")</p>
-
-        @components.inset_text(Html(messages("provideConfidentialInformation.inset")))
-
-        <p>@messages("provideConfidentialInformation.thismayinclude")</p>
-
-        <ul class="list list-bullet">
-            <li>@messages("provideConfidentialInformation.modelnumbers")</li>
-            <li>@messages("provideConfidentialInformation.patentinfo")</li>
-        </ul>
         @components.input_textarea(
           field = provideConfidentialInformationForm("confidentialInformation"),
-          label = Html(messages("provideConfidentialInformation.heading", goodsName)),
-          labelClass = Some("visually-hidden"),
+          label = messages("provideConfidentialInformation.heading", goodsName),
+          captionMsg = Some(messages("provideConfidentialInformation.caption")),
+          headingIsLabel = true,
           inputFormControl = "form-control--full-width",
           numRows = 15,
-          maxlength = 50000
+          maxlength = 50000,
+          contentHtml = Some(contents)
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
-    }
+        @components.submit_button(Some(messages("site.continue")))
 
+        @components.cancel_application_link()
+    }
 }

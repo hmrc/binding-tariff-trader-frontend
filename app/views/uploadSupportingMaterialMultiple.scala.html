@@ -17,26 +17,29 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+@import models.response.FileStoreInitiateResponse
+@import views.html.helper.{form, CSRF}
 @import views.ViewUtils._
 
-@(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, initiateResponse: FileStoreInitiateResponse, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("uploadSupportingMaterialMultiple.title")}",
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = UploadSupportingMaterialMultipleController.onSubmit(mode),
-         'enctype -> "multipart/form-data",
-         'id -> "upload-files-form") {
+    @helper.form(
+        action = Call("POST", initiateResponse.uploadRequest.href),
+        'enctype -> "multipart/form-data",
+        'id -> "upload-files-form") {
 
-        @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading(messages("uploadSupportingMaterialMultiple.heading", goodsName),
-            captionMsg = Some(messages("uploadSupportingMaterialMultiple.caption")))
+        @components.heading(
+            messages("uploadSupportingMaterialMultiple.heading", goodsName),
+            captionMsg = Some(messages("uploadSupportingMaterialMultiple.caption"))
+        )
 
         <p>@messages("uploadSupportingMaterialMultiple.upload.title")</p>
         <ul class="bullets">
@@ -46,26 +49,28 @@
             <li>@messages("uploadSupportingMaterialMultiple.upload.typeOfFiles")</li>
         </ul>
 
-        <div class="js-visible mt-3">
-            @components.input_file(
-                field = form("file-input"),
-                label = messages("uploadSupportingMaterialMultiple.label"),
-                accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt")
-            )
+        @for((key, value) <- initiateResponse.uploadRequest.fields) {
+            <input type="hidden" name="@key" value="@value" />
+        }
 
-            <div id="list-of-files-table" class="draganddroptable"></div>
-        </div>
+        @components.input_file(
+            field = form("file"),
+            label = messages("uploadSupportingMaterialMultiple.label"),
+            accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt")
+        )
 
-        <div class="notice js-hidden my-3">
-            <i class="icon icon-important">
-                <span class="visually-hidden">@messages("uploadSupportingMaterialMultiple.jsDisabled.title")</span>
-            </i>
-            <strong class="bold-small">
-                @messages("uploadSupportingMaterialMultiple.jsDisabled.label")
-            </strong>
-        </div>
+        @components.submit_button(Some(messages("site.continue")))
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+        @components.cancel_application_link()
 
+        <script>
+            const id = "@initiateResponse.id";
+            const targetURL = "@UploadSupportingMaterialMultipleController.onFileSelected().url";
+            const csrfToken = "@CSRF.getToken.value";
+
+            document
+                .getElementById("file")
+                .addEventListener("change", onFileSelected(id, targetURL, csrfToken));
+        </script>
     }
 }

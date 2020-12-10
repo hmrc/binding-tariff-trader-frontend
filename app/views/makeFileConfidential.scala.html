@@ -22,6 +22,10 @@
 
 @(appConfig: FrontendAppConfig, makeFileConfidentialForm: Form[_], submitAction: Call, mode: Mode, fileId: String)(implicit request: Request[_], messages: Messages)
 
+@contents = {
+<p>@messages("makeFileConfidential.infoText")</p>
+}
+
 @main_template(
     title = s"${errorPrefix(makeFileConfidentialForm)} ${messages("makeFileConfidential.title")}",
     appConfig = appConfig,
@@ -29,16 +33,9 @@
 
     @helpers.form(action = submitAction) {
 
-        @components.back_link()
 
         @components.error_summary(makeFileConfidentialForm.errors)
 
-        @components.heading(
-            messages("makeFileConfidential.heading"),
-            captionMsg = Some(messages("makeFileConfidential.caption"))
-        )
-
-        <p>@messages("makeFileConfidential.infoText")<p/>
 
         <input type="hidden"
                id="@{makeFileConfidentialForm("fileId").id}"
@@ -48,10 +45,14 @@
         @components.input_yes_no(
             field = makeFileConfidentialForm("confidential"),
             label = Some(messages("makeFileConfidential.heading")),
-            labelClass = Some("visually-hidden")
+            labelClass = Some("visually-hidden"),
+            captionMsg = Some(messages("makeFileConfidential.caption")),
+            contentHtml = Some(contents)
         )
 
-        @components.submit_button(Some(messages("site.save_and_continue")))
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }
 
