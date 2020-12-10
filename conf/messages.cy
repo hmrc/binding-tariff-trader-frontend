@@ -57,14 +57,14 @@ beforeYouStart.heading = Gwybodaeth sydd ei hangen arnoch i lenwi cais
 beforeYouStart.subheading1 = Ynglŷn â’r nwyddau
 beforeYouStart.subheading1.paragraph1 = Bydd angen i chi wybod y canlynol:
 beforeYouStart.subheading1.paragraph1.item1 = sut y caiff ei wneud gan gynnwys rhestr o gynhwysion neu rannau
-beforeYouStart.subheading1.paragraph1.item2 = yr hyn y caiff ei ddefnyddio ar ei gyfer a sut mae'n gweithio
+beforeYouStart.subheading1.paragraph1.item2 = yr hyn y caiff ei ddefnyddio ar ei gyfer a sut mae’n gweithio
 beforeYouStart.subheading1.paragraph1.item3 = sut y caiff ei becynnu
 beforeYouStart.subheading1.paragraph2 = Os yw’n berthnasol, bydd angen i chi hefyd wneud y canlynol:
 beforeYouStart.subheading1.paragraph2.item1 = uwchlwytho ffotograffau, llawlyfrau, llyfrynnau neu fanylebau technegol
 beforeYouStart.subheading1.paragraph2.item2 = anfon sampl
 beforeYouStart.subheading2 = Ynglŷn â dyfarniadau eraill
 beforeYouStart.subheading2.paragraph1 = Os byddwch yn cyfeirio at ddyfarniadau blaenorol neu debyg, bydd angen i chi wybod y cyfeirnodau.
-beforeYouStart.subheading3 = Ynglŷn â'r ymgeisydd
+beforeYouStart.subheading3 = Ynglŷn â’r ymgeisydd
 beforeYouStart.subheading3.paragraph1 = Mae angen i chi wybod yr e-bost a’r rhif ffôn cyswllt ar gyfer y cais hwn.
 
 informationPublic.heading = Mae’n bosibl y bydd peth o’r wybodaeth, a roddir gennych yn y cais hwn, yn ymddangos ar wefan gyhoeddus
@@ -287,8 +287,8 @@ enterContactDetails.error.email.length = Mae’n rhaid i’r cyfeiriad e-bost fo
 enterContactDetails.error.phoneNumber.length = Mae’n rhaid i’r rhif ffôn fod yn 20 o gymeriadau neu lai
 enterContactDetails.error.phoneNumber.invalid = Nodwch rif ffôn, fel 01632 960000, 07700 900000 neu +44 0808 157 0192
 
-registeredAddressForEori.title = Rhoi’r enw a’r cyfeiriad ar gyfer y rhif EORI hwn – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
-registeredAddressForEori.heading = Rhoi’r enw a’r cyfeiriad ar gyfer rhif EORI {0}
+registeredAddressForEori.title = Rhowch yr enw a’r cyfeiriad ar gyfer y rhif EORI hwn – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+registeredAddressForEori.heading = Rhowch yr enw a’r cyfeiriad ar gyfer rhif EORI {0}
 registeredAddressForEori.caption =	Ynglŷn â’r ymgeisydd
 registeredAddressForEori.headingNoEORI = Beth yw’ch rhif EORI a beth yw manylion eich cyfeiriad cofrestredig ar gyfer EORI?
 registeredAddressForEori.note =	Mae’n rhaid i’r manylion a nodwch gyd-fynd ag union fformat yr enw a’r cyfeiriad cofrestredig ar gyfer EORI.
@@ -339,7 +339,7 @@ confirmation.get.moreInformation = Rhagor o wybodaeth am samplau (yn agor ffenes
 confirmation.paragraph.sample.return = Caiff samplau eu dychwelyd pan fo hynny’n bosibl. Mewn rhai achosion, efallai y caiff samplau eu difrodi wrth eu profi. Os hoffech i ni anfon y samplau yn ôl atoch, mae’n rhaid i chi gynnwys cost y stampiau post. Fel arall, gallwch gasglu’ch samplau o’n swyddfa yn Southend.
 
 view.application.home.Link = Ewch i’ch ceisiadau a’ch dyfarniadau
-view.application.header = eich cais
+view.application.header = Eich cais
 view.application.title.text = Eich cais am Ddyfarniad Tariffau Uwch
 view.application.print.application = Argraffwch eich cais
 view.application.save.application = Cadwch eich cais
@@ -357,6 +357,8 @@ view.application.sending.sample.paragraph1 = Mae’n rhaid i chi labeli eich sam
 view.application.paragraph.whatNext = Rydym yn ceisio anfon penderfyniadau o ran Dyfarniadau Tariffau Uwch (ATaR) cyn pen 30 diwrnod i ddyddiad derbyn y cais. Fodd bynnag, mae’n gallu cymryd hyd at 120 diwrnod, yn unol â chyfraith y DU. Gallwch fewngofnodi i’ch cyfrif Dyfarniadau Tariffau Uwch i wirio statws eich cais.
 view.application.paragraph.do.not.send.sample = Peidiwch ag anfon sampl oni bai bod y Tîm Dosbarthu Tariffau wedi gofyn am un.
 
+view.applicationPdf.foundCommodityCode = A ydych wedi dod o hyd i god nwyddau ar gyfer y nwyddau?
+view.applicationPdf.legalProblemQuestion = A fu unrhyw heriau cyfreithiol mewn perthynas â’r nwyddau?
 view.applicationPdf.legalProblem = Heriau cyfreithiol
 
 confirmation.yourRefNumber = Cyfeirnod eich cais yw
