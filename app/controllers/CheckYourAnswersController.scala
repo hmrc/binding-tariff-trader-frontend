@@ -147,7 +147,7 @@ class CheckYourAnswersController @Inject()(
 
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
       _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
-      userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar, fileView))
+      userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, pdf)
       _           <- dataCacheConnector.save(userAnswers.cacheMap)
       res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
     } yield res
