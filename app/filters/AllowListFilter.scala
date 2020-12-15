@@ -21,15 +21,15 @@ import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.http.HttpVerbs.GET
 import play.api.mvc.Call
-import uk.gov.hmrc.whitelist.AkamaiWhitelistFilter
+import uk.gov.hmrc.allowlist.AkamaiAllowlistFilter
 
 @Singleton
 class AllowListFilter @Inject()(
                                   config: Configuration,
                                   override val mat: Materializer
-                                ) extends AkamaiWhitelistFilter {
+                                ) extends AkamaiAllowlistFilter {
 
-  override val whitelist: Seq[String] = {
+  override val allowlist: Seq[String] = {
     config
       .underlying
       .getString("filters.allowlist.ips")
