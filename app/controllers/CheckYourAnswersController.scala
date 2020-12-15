@@ -26,7 +26,7 @@ import models._
 import models.requests.DataRequest
 import navigation.Navigator
 import pages._
-import play.api.i18n.{I18nSupport, Lang}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, CountriesService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -123,7 +123,7 @@ class CheckYourAnswersController @Inject()(
     }
 
     val withStatus = fileAttachments
-      .map(att => Attachment(att.id, public = !keepConfidential(att.id), shouldPublishToRulings = if(keepConfidential(att.id)) true else false))
+      .map(att => Attachment(att.id, public = !keepConfidential(att.id), shouldPublishToRulings = if(keepConfidential(att.id)) false else true))
 
 
     for {

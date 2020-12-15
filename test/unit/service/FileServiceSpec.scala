@@ -244,7 +244,8 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
   private def anAttachmentWithId(id: String): Attachment = {
     Attachment(
       id = id,
-      public = true
+      public = true,
+      shouldPublishToRulings = true
     )
   }
 

@@ -25,7 +25,7 @@ case class Attachment
   id: String,
   public: Boolean,
   timestamp: ZonedDateTime = ZonedDateTime.now(),
-  shouldPublishToRulings : Boolean
+  shouldPublishToRulings: Boolean
 )
 
 object Attachment {
