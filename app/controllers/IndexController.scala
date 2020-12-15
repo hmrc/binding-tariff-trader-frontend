@@ -80,7 +80,7 @@ class IndexController @Inject()(
     }
   }
 
-  def getApplicationsAndRulings(page: Int, sortBy: Option[SortField], order: Option[SortDirection]): Action[AnyContent] = identify.async { implicit request =>
+  def getApplicationsAndRulings(page: Int, sortBy: Option[SortField], order: Option[SortDirection], enableTrackingConsent: Boolean = true): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
         val sort = Sort(sortBy.getOrElse(Dashboard.defaultSortField), order)
