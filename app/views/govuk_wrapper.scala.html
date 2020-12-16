@@ -100,11 +100,11 @@
       analyticsHost = appConfig.analyticsHost,
       ssoUrl = None,
       scriptElem = scriptElem,
-      gaCalls = None,
-      analyticsAdditionalJs = Some(gaDataLayer)
+      gaCalls = None
     )
     <script src="@routes.Assets.versioned("javascripts/location-autocomplete.min.js")"></script>
     <script src='@routes.Assets.versioned("javascripts/bindingtarifftraderfrontend-app.js")'> </script>
+    @gaDataLayer
 }
 
 @footerTop = {}
