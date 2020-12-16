@@ -87,11 +87,13 @@
 }
 
 @gaDataLayer = {
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-        'Session id (cd67)': '@request.session.get("sessionId")',
-        'Timestamp (cd68)': @Instant.now.toEpochMilli
-    });
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            'Session id (cd67)': '@request.session.get("sessionId")',
+            'Timestamp (cd68)': @Instant.now.toEpochMilli
+        });
+    </script>
 }
 
 @bodyEnd = {
