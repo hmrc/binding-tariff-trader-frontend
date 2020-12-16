@@ -88,6 +88,9 @@ site.service_name = Manage your Advance Tariff Rulings
 site.save_and_continue = Save and continue
 site.cancel_application = Cancel application
 site.agree_and_continue = Agree and continue
+site.keep_confidential = Keep confidential
+site.save_your_application = Save your application
+site.print_your_application = Print your application
 
 unauthorised.title = Not registered for CDS
 unauthorised.heading = To apply for an Advance Tariff Ruling (ATaR) you need to get access to CDS
@@ -469,7 +472,6 @@ case.application.status.cancelled = Cancelled ruling
 case.application.ruling.viewRuling = View ruling
 case.application.ruling.renewRuling = Renew ruling
 case.application.ruling.table.download = Download
-
 
 case.application.viewApplication = View application
 case.application.viewApplication.hidden = View application for reference {0}

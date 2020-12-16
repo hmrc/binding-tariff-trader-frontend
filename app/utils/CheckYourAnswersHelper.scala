@@ -105,8 +105,8 @@ class CheckYourAnswersHelper(
       .get(MakeFileConfidentialPage)
       .getOrElse(Map.empty)
 
-    def confidentialLabel(attachment: FileAttachment) =
-      if (keepConfidential(attachment.id)) " - Keep confidential" else ""
+    def confidentialLabel(attachment: FileAttachment)(implicit messages: Messages) =
+      if (keepConfidential(attachment.id)) "- " + messages("site.keep_confidential") else ""
 
     userAnswers.get(UploadSupportingMaterialMultiplePage).collect {
       case attachments if attachments.nonEmpty =>
