@@ -18,13 +18,12 @@ package controllers
 
 import controllers.actions._
 import models.requests.IdentifierRequest
-import models.{Case, PdfFile, oCase}
+import models.{Case, oCase}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.Helpers._
-import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -103,9 +102,15 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       .thenReturn(successful(Some(Source.single(ByteString("Some content".getBytes())))))
   }
 
+  private def givenTheFileServiceCannotBeReached(): Unit =
+    when(fileService.getAttachmentMetadata(any[Attachment])(any[HeaderCarrier])).thenReturn(failed(new Exception))
+
+  private def givenTheFileServiceFindsNoPdf(): Unit =
+    when(fileService.getAttachmentMetadata(any[Attachment])(any[HeaderCarrier])).thenReturn(successful(None))
+
   "Application Pdf" must {
 
-    "return PdfService result" in {
+    "return 200 when a PDF can be found" in {
       givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseServiceFindsTheCase()
       givenTheFileServiceFindsTheAttachments()
@@ -120,7 +125,32 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       header("Content-Disposition", result) shouldBe (Some("attachment; filename=some.pdf"))
     }
 
-    "error when case not found" in {
+    "return 404 when there is no PDF" in {
+      givenThePdfServiceDecodesTheTokenWith("eori")
+      givenTheCaseServiceFindsTheCase()
+      givenTheFileServiceFindsTheAttachments()
+      givenTheFileServiceHaveNoLetterOfAuthority()
+      givenTheFileServiceFindsNoPdf()
+
+      val result = controller().applicationPdf(caseRef, Some(token))(request)
+
+      status(result)          shouldBe NOT_FOUND
+      contentAsString(result) should include(messages("documentNotFound.application"))
+      contentType(result)     shouldBe Some("text/html")
+    }
+
+    "return 502 when the filestore cannot be reached" in {
+      givenThePdfServiceDecodesTheTokenWith("eori")
+      givenTheCaseServiceFindsTheCase()
+      givenTheFileServiceFindsTheAttachments()
+      givenTheFileServiceCannotBeReached()
+
+      val result = controller().applicationPdf(caseRef, Some(token))(request)
+
+      status(result) shouldBe BAD_GATEWAY
+    }
+
+    "return 404 when no case is found" in {
       givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseServiceDoesNotFindTheCase()
 
@@ -178,7 +208,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     "redirect to session expired when the token is invalid" in {
       givenThePdfServiceFailsToDecodeTheToken()
 
-      val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
+      val result = controller(FakeIdentifierAction(None)).viewApplication(caseRef, Some(token))(request)
 
       status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
@@ -187,7 +217,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
   "Ruling Pdf" must {
 
-    "return PdfService result" in {
+    "return 200 when a PDF can be found" in {
       givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseWithRulingFindsTheCaseWithRuling()
       givenTheFileServiceFindsThePdf()
@@ -199,7 +229,29 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       header("Content-Disposition", result) shouldBe (Some("attachment; filename=some.pdf"))
     }
 
-    "error when case not found" in {
+    "return 404 when there is no PDF" in {
+      givenThePdfServiceDecodesTheTokenWith("eori")
+      givenTheCaseWithRulingFindsTheCaseWithRuling()
+      givenTheFileServiceFindsNoPdf()
+
+      val result = controller().rulingCertificatePdf(caseRef, Some(token))(request)
+
+      status(result)          shouldBe NOT_FOUND
+      contentAsString(result) should include(messages("documentNotFound.rulingCertificate"))
+      contentType(result)     shouldBe Some("text/html")
+    }
+
+    "return 502 when the filestore cannot be reached" in {
+      givenThePdfServiceDecodesTheTokenWith("eori")
+      givenTheCaseWithRulingFindsTheCaseWithRuling()
+      givenTheFileServiceCannotBeReached()
+
+      val result = controller().rulingCertificatePdf(caseRef, Some(token))(request)
+
+      status(result) shouldBe BAD_GATEWAY
+    }
+
+    "return 404 when no case is found" in {
       givenThePdfServiceDecodesTheTokenWith("eori")
       givenTheCaseServiceDoesNotFindTheCase()
 
