@@ -37,6 +37,9 @@ import scala.concurrent.Future.{failed, successful}
 import models.requests.FileStoreInitiateRequest
 import models.response.FileStoreInitiateResponse
 import models.response.UpscanFormTemplate
+import play.api.libs.Files.SingletonTemporaryFileCreator
+import akka.util.ByteString
+import akka.stream.scaladsl.Source
 
 class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
@@ -75,6 +78,27 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
       given(connector.initiate(initiateRequest)).willReturn(successful(initiateResponse))
 
       await(service.initiate(initiateRequest)) shouldBe initiateResponse
+    }
+  }
+
+  "Upload" should {
+    val filestoreResponse = FilestoreResponse("id", "some.pdf", "application/pdf")
+    val tempFile = SingletonTemporaryFileCreator.create("foo", "pdf")
+
+    "Delegate to connector" in {
+      given(connector.uploadApplicationPdf(any[String], any[TemporaryFile])(any[HeaderCarrier])).willReturn(successful(filestoreResponse))
+
+      await(service.uploadApplicationPdf("foo", tempFile)) shouldBe FileAttachment("id", "some.pdf", "application/pdf", 0L, false)
+    }
+  }
+
+  "DownloadFile" should {
+    val fileContent = Some(Source.single(ByteString("Some file content".getBytes())))
+
+    "Delegate to connector" in {
+      given(connector.downloadFile(any[String])(any[HeaderCarrier])).willReturn(successful(fileContent))
+
+      await(service.downloadFile("http://localhost:4572/foo")) shouldBe fileContent
     }
   }
 

@@ -17,6 +17,7 @@
 package viewmodels
 
 import java.time.Instant
+
 import models.{Case, Contact, EORIDetails}
 import play.api.i18n.Messages
 

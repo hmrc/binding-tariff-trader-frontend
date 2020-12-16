@@ -33,6 +33,8 @@ import scala.concurrent.Future.{sequence, successful}
 import models.requests.FileStoreInitiateRequest
 import models.response.FileStoreInitiateResponse
 import play.api.libs.json.JsValue
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
 
 @Singleton
 class FileService @Inject()(
@@ -48,12 +50,23 @@ class FileService @Inject()(
     connector.initiate(request)
   }
 
+  def uploadApplicationPdf(reference: String, f: TemporaryFile)(implicit hc: HeaderCarrier): Future[FileAttachment] = {
+    connector.uploadApplicationPdf(reference, f).map(toFileAttachment(f.path.toFile.length))
+  }
+
+  def downloadFile(url: String)(implicit hc: HeaderCarrier): Future[Option[Source[ByteString, _]]] =
+    connector.downloadFile(url)
+
   def refresh(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FileAttachment] = {
     connector.get(file).map(toFileAttachment(file.size))
   }
 
   private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
     r => FileAttachment(r.id, r.fileName, r.mimeType, size)
+  }
+
+  def getAttachmentMetadata(att: Attachment)(implicit hc: HeaderCarrier): Future[Option[FilestoreResponse]] = {
+    connector.getFileMetadata(Seq(att)).map(_.headOption)
   }
 
   def getAttachmentMetadata(c: Case)(implicit hc: HeaderCarrier): Future[Seq[FilestoreResponse]] = {

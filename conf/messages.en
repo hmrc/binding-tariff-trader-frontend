@@ -522,6 +522,13 @@ rulingInformation.ruling = Ruling reference
 rulingInformation.startDate = Start date
 rulingInformation.expiryDate = Expiry date
 
+documentNotFound.title = Page not found - Manage your Advance Tariff Rulings - GOV.UK
+documentNotFound.heading = Page not found
+documentNotFound.message = The {0} for application reference: {1} could not be found
+documentNotFound.email = You can email tariff.classification@hmrc.gov.uk to ask for a copy of this document.
+documentNotFound.application = application document
+documentNotFound.rulingCertificate = ruling certificate
+
 applicationView.title = Your application for an Advance Tariff Ruling - Manage your Advance Tariff Rulings - GOV.UK
 
 timeoutDialog.title= You are about to be signed out and your answers deleted
