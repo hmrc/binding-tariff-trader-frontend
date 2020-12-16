@@ -27,7 +27,6 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.http.HeaderCarrier
 import viewmodels.{FileView, PdfViewModel}
 import views.html.templates._
 
@@ -96,35 +95,52 @@ class ApplicationController @Inject() (
   ): Future[Result] =
     getApplicationPDForHtml(eori, reference, pdf = false)
 
+  def fetchApplicationPdf(cse: Case)(implicit request: Request[AnyContent]) = {
+    val applicationResponse = for {
+      pdf    <- OptionT.fromOption[Future](cse.application.applicationPdf)
+      meta   <- OptionT(fileService.getAttachmentMetadata(pdf))
+      url    <- OptionT.fromOption[Future](meta.url)
+      result <- OptionT(fileService.downloadFile(url))
+    } yield Ok
+      .streamed(result, None, Some(meta.mimeType))
+      .withHeaders("Content-Disposition" -> s"attachment; filename=${meta.fileName}")
+
+    val messages     = request.messages
+    val documentType = messages("documentNotFound.application")
+
+    applicationResponse
+      .getOrElse(NotFound(views.html.documentNotFound(appConfig, documentType, cse.reference)))
+      .recover {
+        case NonFatal(_) => BadGateway
+      }
+  }
+
+  def renderApplicationHtml(cse: Case)(implicit request: Request[AnyContent]) =
+    for {
+      attachments <- fileService.getAttachmentMetadata(cse)
+      attachmentFileView = (attachments, cse.attachments).zipped.map { (fileStoreRespAtt, caseAttachment) =>
+        FileView(fileStoreRespAtt.id, fileStoreRespAtt.fileName, caseAttachment.public)
+      }
+    } yield Ok(applicationView(appConfig, PdfViewModel(cse, attachmentFileView), getCountryName))
+
   private def getApplicationPDForHtml(eori: Eori, reference: CaseReference, pdf: Boolean)(
     implicit request: Request[AnyContent]
   ): Future[Result] =
-    for {
-      c           <- caseService.getCaseForUser(eori, reference)
-      attachments <- fileService.getAttachmentMetadata(c)
-      attachmentFileView = (attachments, c.attachments).zipped map { (fileStoreRespAtt, caseAttachment) =>
-        FileView(fileStoreRespAtt.id, fileStoreRespAtt.fileName, caseAttachment.public)
+    caseService.getCaseForUser(eori, reference).flatMap { c =>
+      val result = if (pdf) {
+        fetchApplicationPdf(c)
+      } else {
+        renderApplicationHtml(c)
       }
-      out <- {
-        if (pdf) {
-          val applicationResponse = for {
-            pdf  <- OptionT.fromOption[Future](c.application.applicationPdf)
-            meta <- OptionT(fileService.getAttachmentMetadata(pdf))
-            url  <- OptionT.fromOption[Future](meta.url)
-            result <- OptionT(fileService.downloadFile(url))
-          } yield Ok.streamed(result, None, Some(meta.mimeType)).withHeaders("Content-Disposition" -> s"attachment; filename=${meta.fileName}")
 
-          applicationResponse.getOrElse(NotFound).recover {
-            case NonFatal(_) =>
-              BadGateway
-          }
-        } else {
-          Future.successful(Ok(applicationView(appConfig, PdfViewModel(c, attachmentFileView), getCountryName)))
-        }
+      result.recover {
+        case NonFatal(_) => BadGateway
       }
-    } yield out
+    }
 
-  private def getRulingPDF(eori: Eori, reference: CaseReference)(implicit hc: HeaderCarrier): Future[Result] =
+  private def getRulingPDF(eori: Eori, reference: CaseReference)(
+    implicit request: Request[AnyContent]
+  ): Future[Result] =
     caseService.getCaseWithRulingForUser(eori, reference).flatMap { c: Case =>
       val rulingResponse = for {
         decision <- OptionT.fromOption[Future].apply(c.decision)
@@ -132,11 +148,15 @@ class ApplicationController @Inject() (
         meta     <- OptionT(fileService.getAttachmentMetadata(pdf))
         url      <- OptionT.fromOption[Future](meta.url)
         result   <- OptionT(fileService.downloadFile(url))
-      } yield Ok.streamed(result, None, Some(meta.mimeType)).withHeaders("Content-Disposition" -> s"attachment; filename=${meta.fileName}")
+      } yield Ok
+        .streamed(result, None, Some(meta.mimeType))
+        .withHeaders("Content-Disposition" -> s"attachment; filename=${meta.fileName}")
 
-      rulingResponse.getOrElse(NotFound).recover {
-        case NonFatal(_) =>
-          BadGateway
+      val messages     = request.messages
+      val documentType = messages("documentNotFound.rulingCertificate")
+
+      rulingResponse.getOrElse(NotFound(views.html.documentNotFound(appConfig, documentType, reference))).recover {
+        case NonFatal(_) => BadGateway
       }
     }
 
