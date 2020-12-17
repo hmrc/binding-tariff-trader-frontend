@@ -80,7 +80,7 @@ class FrontendAppConfig @Inject()(
   lazy val atarSubscribeUrl: String = s"$eoriCommonComponentUrl/customs-enrolment-services/atar/subscribe"
 
   private lazy val bindingTariffRulingsUrl = loadConfig("binding-tariff-ruling-frontend.host")
-  lazy val bindingTariffRulingsHomeUrl: String = s"$bindingTariffRulingsUrl/binding-tariff-rulings"
+  lazy val bindingTariffRulingsHomeUrl: String = s"$bindingTariffRulingsUrl/search-for-advance-tariff-rulings"
 
   private lazy val feedbackUrl: String = loadConfig("feedback-frontend.host")
   private lazy val feedbackServiceName: String = "ABTIR"
