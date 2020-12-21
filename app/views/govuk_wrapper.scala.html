@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import java.time.Instant
 @import play.twirl.api.HtmlFormat._
 @import views.html.components.languageSelection
 
@@ -41,14 +42,13 @@
 
 
 @head = {
-    @uiLayouts.head(
+    @uiLayouts.headWithTrackingConsent(
       linkElem = linkElem,
-      headScripts = None)
+      headScripts = None
+    )
     <meta name="format-detection" content="telephone=no" />
     <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")' />
     <script type="text/javascript" src="@routes.Assets.versioned("javascripts/file-input-handler.js")"></script>
-
-
 }
 
 
@@ -86,19 +86,27 @@
 </div>
 }
 
+@gaDataLayer = {
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            'Session id (cd67)': '@request.session.get("sessionId")',
+            'Timestamp (cd68)': new Date().getTime()
+        });
+    </script>
+}
+
 @bodyEnd = {
     @uiLayouts.footer(
       analyticsToken = Some(appConfig.analyticsToken),
       analyticsHost = appConfig.analyticsHost,
       ssoUrl = None,
       scriptElem = scriptElem,
-      gaCalls = None)
-      <script src="@routes.Assets.versioned("javascripts/location-autocomplete.min.js")"></script>
-      <script src='@routes.Assets.versioned("javascripts/bindingtarifftraderfrontend-app.js")'> </script>
-      <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P39VTVL" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-      </noscript>
-      <script type="text/javascript" src=@routes.Assets.versioned("javascripts/ga-tag-manager.js")></script>
+      gaCalls = None
+    )
+    <script src="@routes.Assets.versioned("javascripts/location-autocomplete.min.js")"></script>
+    <script src='@routes.Assets.versioned("javascripts/bindingtarifftraderfrontend-app.js")'> </script>
+    @gaDataLayer
 }
 
 @footerTop = {}

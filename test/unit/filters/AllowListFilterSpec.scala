@@ -77,7 +77,7 @@ class AllowListFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks w
           )
 
           val allowedlistFilter = new AllowListFilter(config, mockMaterializer)
-          allowedlistFilter.whitelist shouldBe empty
+          allowedlistFilter.allowlist shouldBe empty
         }
       }
     }
@@ -101,7 +101,7 @@ class AllowListFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks w
           )
 
           val allowedlistFilter = new AllowListFilter(config, mockMaterializer)
-          allowedlistFilter.whitelist should contain theSameElementsAs ips
+          allowedlistFilter.allowlist should contain theSameElementsAs ips
         }
       }
     }
