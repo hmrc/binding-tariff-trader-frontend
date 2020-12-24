@@ -471,7 +471,7 @@ case.application.status.approvedRulingExpiring = Ruling expires in {0} days
 case.application.status.cancelled = Cancelled ruling
 case.application.ruling.viewRuling = View ruling
 case.application.ruling.renewRuling = Renew ruling
-case.application.ruling.table.download = Download
+case.application.ruling.table.download = Application and ruling actions
 
 case.application.viewApplication = View application
 case.application.viewApplication.hidden = View application for reference {0}
