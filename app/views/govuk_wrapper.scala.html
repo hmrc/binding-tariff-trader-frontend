@@ -138,7 +138,7 @@
 
 @footerLinks = {
     @uiLayouts.footer_links(
-    accessibilityFooterUrl = Some(controllers.routes.AccessibilityController.onPageLoad().url)
+        accessibilityFooterUrl = Some(appConfig.accessibilityStatementUrl(request.uri))
     )
 }
 
