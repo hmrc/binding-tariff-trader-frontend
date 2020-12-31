@@ -118,11 +118,11 @@ class ApplicationController @Inject() (
   def renderApplicationHtml(cse: Case)(implicit request: Request[AnyContent]) =
     for {
       attachments <- fileService.getAttachmentMetadata(cse)
-      attachmentFileView = (attachments, cse.attachments).zipped.map { (fileStoreRespAtt, caseAttachment) =>
+      attachmentFileView = attachments.map { attachment =>
         FileView(
-          id           = fileStoreRespAtt.id,
-          name         = fileStoreRespAtt.fileName,
-          confidential = !caseAttachment.public
+          id           = attachment.id,
+          name         = attachment.fileName,
+          confidential = cse.attachments.find(_.id == attachment.id).exists(!_.public)
         )
       }
     } yield Ok(applicationView(appConfig, PdfViewModel(cse, attachmentFileView), getCountryName))
