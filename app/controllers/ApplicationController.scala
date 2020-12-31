@@ -119,7 +119,11 @@ class ApplicationController @Inject() (
     for {
       attachments <- fileService.getAttachmentMetadata(cse)
       attachmentFileView = (attachments, cse.attachments).zipped.map { (fileStoreRespAtt, caseAttachment) =>
-        FileView(fileStoreRespAtt.id, fileStoreRespAtt.fileName, caseAttachment.public)
+        FileView(
+          id           = fileStoreRespAtt.id,
+          name         = fileStoreRespAtt.fileName,
+          confidential = !caseAttachment.public
+        )
       }
     } yield Ok(applicationView(appConfig, PdfViewModel(cse, attachmentFileView), getCountryName))
 
