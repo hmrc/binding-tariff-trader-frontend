@@ -16,10 +16,6 @@ function onFileSelected(id, targetURL, csrf) {
                 $('#submit').attr('disabled', false);
             };
 
-            xhr.onerror = function() {
-                $('#submit').attr('disabled', false);
-            };
-
             const request = JSON.stringify({
                 id: id,
                 name: files[0].name,
@@ -27,7 +23,17 @@ function onFileSelected(id, targetURL, csrf) {
                 size: files[0].size
             });
 
-            xhr.send(request);
+            try {
+                xhr.send(request);
+                if (xhr.status != 200) {
+                    console.log(xhr.status);
+                } else {
+                    alert(xhr.response);
+                }
+            } catch(err) { // instead of onerror
+                $('#submit').attr('disabled', false);
+                reject(new TypeError('Network request failed'));
+            }
         }
     }
 }
