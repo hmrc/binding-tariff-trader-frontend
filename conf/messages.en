@@ -431,19 +431,19 @@ pdf.ruling.section.ruling.commodityCode.label = Commodity code
 pdf.ruling.section.ruling.rulingReference.label = Ruling reference
 pdf.ruling.section.ruling.validFrom.label = Valid from
 pdf.ruling.section.ruling.validTo.label = Expires on
-pdf.ruling.section.ruling.description.label = Item description
+pdf.ruling.section.ruling.description.label = Goods description
 pdf.ruling.section.ruling.commercialDenomination.label = Commercial denomination
 pdf.ruling.section.ruling.commercialDenomination.sublabel = (confidential information not included in the published ruling)
 pdf.ruling.section.ruling.justification.label = Justification
 pdf.ruling.section.ruling.legalInformation.section1.label = Legal information about this ruling
 pdf.ruling.section.ruling.legalInformation.section1.paragraph1 = This ruling is valid for 3 years and has been issued under the authority of HM Revenue & Customs. The holder has the right to appeal against this ruling.
 pdf.ruling.section.ruling.legalInformation.section1.paragraph2 = The information provided in the application, including photographs, documents and images will be stored on a UK database.
-pdf.ruling.section.ruling.legalInformation.section2.label = Publishing this ruling on ‘Find a BTI ruling’ search
+pdf.ruling.section.ruling.legalInformation.section2.label = Publishing this ruling on ‘Search for Advance Tariff Rulings’
 pdf.ruling.section.ruling.legalInformation.section2.paragraph1 = We will not publish:
 pdf.ruling.section.ruling.legalInformation.section2.paragraph1.listitem1 = the holder details
 pdf.ruling.section.ruling.legalInformation.section2.paragraph1.listitem2 = commercial denomination information (confidential information about the item)
 pdf.ruling.section.ruling.legalInformation.section2.paragraph2 = We might publish:
-pdf.ruling.section.ruling.legalInformation.section2.paragraph2.listitem1 = information about the item that is not confidential
+pdf.ruling.section.ruling.legalInformation.section2.paragraph2.listitem1 = information about the goods that is not confidential
 
 case.tabs.applications = Applications
 
@@ -500,7 +500,7 @@ case.ruling.status.in.progress = In progress
 case.ruling.viewRuling = View BTI ruling
 
 rulingInformation.title = Binding Tariff Information ruling certificate - Manage your Advance Tariff Rulings - GOV.UK
-rulingInformation.maintitle = Binding Tariff Information ruling certificate
+rulingInformation.maintitle = Advance Tariff Ruling
 rulingInformation.heading = Important information about ATaR ruling
 rulingInformation.summary = Ruling summary
 rulingInformation.commoditySubheading = The commodity code we have issued and why we made this decision
