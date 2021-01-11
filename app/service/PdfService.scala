@@ -58,7 +58,6 @@ class PdfService @Inject()(connector: PdfGeneratorServiceConnector, crypto: Comp
 
   def generatePdf(htmlContent: Html): Future[PdfFile] = {
     val pdf = connector.generatePdf(htmlContent)
-    logger.info("returned pdf is: " + pdf)
     pdf
   }
 

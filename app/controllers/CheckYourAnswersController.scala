@@ -39,6 +39,12 @@ import utils.JsonFormatters._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.successful
 import pages.UploadSupportingMaterialMultiplePage
+import service.PdfService
+import play.api.mvc.MultipartFormData
+import play.api.libs.Files.TemporaryFile
+import play.api.libs.Files.SingletonTemporaryFileCreator
+import java.nio.file.Files
+import java.nio.file.StandardOpenOption
 
 class CheckYourAnswersController @Inject()(
   appConfig: FrontendAppConfig,
@@ -50,6 +56,7 @@ class CheckYourAnswersController @Inject()(
   requireData: DataRequiredAction,
   countriesService: CountriesService,
   caseService: CasesService,
+  pdfService: PdfService,
   fileService: FileService,
   mapper: CaseRequestMapper,
   cc: MessagesControllerComponents
@@ -130,9 +137,17 @@ class CheckYourAnswersController @Inject()(
       publishIds  = published.map(_.id)
       attachments = withStatus.filter(att => publishIds.contains(att.id))
       atar        <- createCase(newCaseRequest, attachments)
+
+      pdf = PdfViewModel(atar, fileView)
+      pdfFile <- pdfService.generatePdf(views.html.components.view_application_pdf(appConfig, pdf, getCountryName))
+      pdfStored <- fileService.uploadApplicationPdf(atar.reference, createApplicationPdf(atar.reference, pdfFile))
+      pdfAttachment = Attachment(pdfStored.id, false)
+      atarWithPdf = atar.copy(application = atar.application.copy(applicationPdf = Some(pdfAttachment)))
+      _           <- caseService.update(atarWithPdf)
+
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
       _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
-      userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, PdfViewModel(atar, fileView))
+      userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, pdf)
       _           <- dataCacheConnector.save(userAnswers.cacheMap)
       res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
     } yield res
@@ -144,4 +159,13 @@ class CheckYourAnswersController @Inject()(
   )(implicit headerCarrier: HeaderCarrier): Future[Case] = {
     caseService.create(newCaseRequest.copy(attachments = attachments))
   }
+
+  def createApplicationPdf(reference: String, pdf: PdfFile): TemporaryFile = {
+    val tempFile = SingletonTemporaryFileCreator.create(reference, "pdf")
+    Files.write(tempFile.path, pdf.content, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)
+    tempFile
+  }
+
+  private def getCountryName(code: String): Option[String] =
+    countriesService.getAllCountriesById.get(code).map(_.countryName)
 }

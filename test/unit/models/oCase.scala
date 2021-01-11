@@ -43,7 +43,8 @@ object oCase {
     None,
     sampleToBeProvided = false,
     sampleIsHazardous = None,
-    sampleToBeReturned = false
+    sampleToBeReturned = false,
+    applicationPdf = Some(Attachment("id", false))
   )
 
   def decisionExample(exp: Option[String] = Some("This is some explanation")) = {
@@ -54,7 +55,8 @@ object oCase {
       justification = "justification-content",
       goodsDescription = "goodsDescription-content",
       methodCommercialDenomination = Some("commercial-denomination-content"),
-      explanation = exp
+      explanation = exp,
+      decisionPdf = Some(Attachment("id", false))
     )
   }
 

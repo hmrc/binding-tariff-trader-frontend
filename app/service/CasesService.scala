@@ -45,6 +45,9 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector, em
     } yield c
   }
 
+  def update(c: Case)(implicit hc: HeaderCarrier): Future[Case] =
+    connector.updateCase(c)
+
   private def loggingAnError(ref: String): PartialFunction[Throwable, Unit] = {
     case t: Throwable => Logger.error(s"Failed to send email for Application [$ref]", t)
   }
@@ -80,7 +83,7 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector, em
     val event = NewEventRequest(details, operator)
     connector.createEvent(atar, event) recover {
       case t: Throwable =>
-        Logger.error(s"Could not create Event for case [${atar.reference}] with payload [$event]", t)
+        Logger.error(s"Could not create Event for case [${atar.reference}] with payload [${event.details}]", t)
     } map (_ => ())
   }
 }

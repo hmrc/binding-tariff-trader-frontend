@@ -19,6 +19,7 @@ package viewmodels
 import java.time.Instant
 
 import models.{Case, Contact, EORIDetails}
+import play.api.i18n.Messages
 
 case class PdfViewModel(
                          eori: String,
@@ -39,10 +40,10 @@ case class PdfViewModel(
                          reissuedBTIReference: Option[String]
                        ) {
 
-  def supportingMaterialFileList: String = {
-    def confidentialLabel(isConfidential: Boolean): String = if (isConfidential) "- Keep confidential" else ""
+  def supportingMaterialFileList(implicit messages: Messages): String = {
+    def confidentialLabel(isConfidential: Boolean): String = if (isConfidential) "- " + messages("site.keep_confidential") else ""
 
-    attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential)}").mkString("\n")
+    attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential) }").mkString("\n")
   }
 
   def similarAtarCodes: String = similarAtarReferences.mkString("\n")

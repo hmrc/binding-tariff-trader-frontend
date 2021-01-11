@@ -30,9 +30,11 @@ import org.scalatest.BeforeAndAfterEach
 import pages.{CheckYourAnswersPage, MakeFileConfidentialPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
 import play.api.libs.json._
+import play.api.libs.Files.TemporaryFile
 import play.api.mvc.Call
 import play.api.test.Helpers._
-import service.{CasesService, CountriesService, FileService}
+import play.twirl.api.Html
+import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
 import viewmodels.{AnswerSection, PdfViewModel}
@@ -50,9 +52,11 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private val newCaseReq = mock[NewCaseRequest]
   private val attachment = FileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
   private val publishedAttachment = PublishedFileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
+  private val applicationPdf = FileAttachment("id", "file.pdf", "application/pdf", 0L)
   private val createdCase = mock[Case]
   private val auditService = mock[AuditService]
   private val casesService = mock[CasesService]
+  private val pdfService = mock[PdfService]
   private val fileService = mock[FileService]
   private val btiApp = mock[Application]
   private val contact = mock[Contact]
@@ -100,6 +104,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       new DataRequiredActionImpl,
       countriesService,
       casesService,
+      pdfService,
       fileService,
       mapper,
       cc
@@ -132,6 +137,9 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   "return OK and the correct view for a POST" in {
     givenTheCaseCreatesSuccessfully()
     givenTheAttachmentPublishSucceeds()
+    givenTheApplicationPdfGenerates()
+    givenTheApplicationPdfIsUploaded()
+    givenTheCaseIsUpdatedWithPdf()
     givenTheCaseCreatedEventIsSuccessful
 
     val result = await(controller(extractDataFromCache).onSubmit()(fakeRequest))
@@ -142,6 +150,10 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
   "create an event when the ATAR application has been submitted successfully" in {
     givenTheCaseCreatesSuccessfully()
+    givenTheAttachmentPublishSucceeds()
+    givenTheApplicationPdfGenerates()
+    givenTheApplicationPdfIsUploaded()
+    givenTheCaseIsUpdatedWithPdf()
     givenTheCaseCreatedEventIsSuccessful()
 
     val c = controller(extractDataFromCache)
@@ -171,6 +183,10 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
   "send the expected explicit audit events when the ATAR application has been submitted successfully" in {
     givenTheCaseCreatesSuccessfully()
+    givenTheAttachmentPublishSucceeds()
+    givenTheApplicationPdfGenerates()
+    givenTheApplicationPdfIsUploaded()
+    givenTheCaseIsUpdatedWithPdf()
     givenTheCaseCreatedEventIsSuccessful
 
     val c = controller(extractDataFromCache)
@@ -213,6 +229,18 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
   private def givenTheAttachmentPublishSucceeds(): Unit = {
     when(fileService.publish(any[Seq[FileAttachment]])(any[HeaderCarrier])).thenReturn(successful(Seq(publishedAttachment)))
+  }
+
+  private def givenTheApplicationPdfGenerates(): Unit = {
+    when(pdfService.generatePdf(any[Html])).thenReturn(successful(PdfFile(Array.empty, "application/pdf")))
+  }
+
+  private def givenTheApplicationPdfIsUploaded(): Unit = {
+    when(fileService.uploadApplicationPdf(any[String], any[TemporaryFile])(any[HeaderCarrier])).thenReturn(successful(applicationPdf))
+  }
+
+  private def givenTheCaseIsUpdatedWithPdf(): Unit = {
+    when(casesService.update(any[Case])(any[HeaderCarrier])).thenReturn(successful(createdCase))
   }
 
   private def extractDataFromCache: DataRetrievalAction = {

@@ -32,6 +32,7 @@ import play.api.test.{FakeHeaders, FakeRequest}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import unit.base.WireMockObject
 import unit.utils.UnitSpec
+import akka.stream.Materializer
 
 trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
 
@@ -79,6 +80,7 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
 
   def tempFileCreator: TemporaryFileCreator = injector.instanceOf[TemporaryFileCreator]
 
-  WireMockObject.start()
+  implicit lazy val mat: Materializer = injector.instanceOf[Materializer]
 
+  WireMockObject.start()
 }

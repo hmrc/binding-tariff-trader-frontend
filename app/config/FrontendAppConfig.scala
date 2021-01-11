@@ -20,6 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import models.Languages.English
 import play.api.Configuration
 import play.api.i18n.Lang
+import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
@@ -33,7 +34,7 @@ class FrontendAppConfig @Inject()(
   }
 
   private lazy val contactHost = runModeConfiguration.getOptional[String]("contact-frontend.host").getOrElse("")
-  private val contactFormServiceIdentifier = "BindingTariffApplication"
+  private val contactFormServiceIdentifier = "AdvanceTariffApplication"
 
   lazy val analyticsToken: String = loadConfig("google-analytics.token")
   lazy val analyticsHost: String = loadConfig("google-analytics.host")
@@ -50,21 +51,11 @@ class FrontendAppConfig @Inject()(
   lazy val emailUrl: String = serviceConfig.baseUrl("email")
   lazy val pdfGeneratorUrl: String = serviceConfig.baseUrl("pdf-generator-service")
 
-  //accessibility Urls
-  lazy val accessibilityUrl = loadConfig("accessibility-urls.accessibility")
-  lazy val govukAccessibilityUrl = loadConfig("accessibility-urls.govukAccessibilityUrl")
-  lazy val subdomainUrl = loadConfig("accessibility-urls.subdomainUrl")
-  lazy val abilityNetUrl = loadConfig("accessibility-urls.abilityNetUrl")
-  lazy val webStandards = loadConfig("accessibility-urls.webStandards")
-  lazy val reportEmail = loadConfig("accessibility-urls.reportEmail")
-  lazy val eassUrl = loadConfig("accessibility-urls.eassUrl")
-  lazy val ecniUrl = loadConfig("accessibility-urls.ecniUrl")
-  lazy val dacUrl = loadConfig("accessibility-urls.dacUrl")
-  lazy val equalityadvisoryservice = loadConfig("accessibility-urls.equalityadvisoryservice")
-  lazy val equalityni = loadConfig("accessibility-urls.equalityni")
-  lazy val extrasupport = loadConfig("accessibility-urls.extrasupport")
-  lazy val digitalcentre = loadConfig("accessibility-urls.digitalcentre")
-  //accessibility Urls end
+  lazy val accessibilityBaseUrl: String = loadConfig(s"accessibility-statement.baseUrl")
+  lazy private val accessibilityRedirectUrl: String = loadConfig(s"accessibility-statement.redirectUrl")
+  def accessibilityStatementUrl(referrer: String) =
+    s"$accessibilityBaseUrl/accessibility-statement$accessibilityRedirectUrl?referrerUrl=${SafeRedirectUrl(
+      accessibilityBaseUrl + referrer).encodedUrl}"
 
   lazy val fileUploadMaxFiles: Int = loadConfig("fileupload.maxFiles").toInt
   lazy val fileUploadMaxSize: Int = loadConfig("fileupload.maxSize").toInt
@@ -80,7 +71,7 @@ class FrontendAppConfig @Inject()(
   lazy val atarSubscribeUrl: String = s"$eoriCommonComponentUrl/customs-enrolment-services/atar/subscribe"
 
   private lazy val bindingTariffRulingsUrl = loadConfig("binding-tariff-ruling-frontend.host")
-  lazy val bindingTariffRulingsHomeUrl: String = s"$bindingTariffRulingsUrl/binding-tariff-rulings"
+  lazy val bindingTariffRulingsHomeUrl: String = s"$bindingTariffRulingsUrl/search-for-advance-tariff-rulings"
 
   private lazy val feedbackUrl: String = loadConfig("feedback-frontend.host")
   private lazy val feedbackServiceName: String = "ABTIR"
