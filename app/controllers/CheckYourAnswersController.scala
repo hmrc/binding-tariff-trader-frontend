@@ -21,14 +21,16 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import java.nio.file.{Files, StandardOpenOption}
 import mapper.CaseRequestMapper
 import models._
 import models.requests.DataRequest
 import navigation.Navigator
 import pages._
 import play.api.i18n.{I18nSupport, Lang}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import service.{CasesService, CountriesService, FileService}
+import play.api.libs.Files.{TemporaryFileCreator, TemporaryFile}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MultipartFormData, Result}
+import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.CheckYourAnswersHelper
@@ -38,13 +40,6 @@ import utils.JsonFormatters._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.successful
-import pages.UploadSupportingMaterialMultiplePage
-import service.PdfService
-import play.api.mvc.MultipartFormData
-import play.api.libs.Files.TemporaryFile
-import play.api.libs.Files.SingletonTemporaryFileCreator
-import java.nio.file.Files
-import java.nio.file.StandardOpenOption
 
 class CheckYourAnswersController @Inject()(
   appConfig: FrontendAppConfig,
@@ -59,6 +54,7 @@ class CheckYourAnswersController @Inject()(
   pdfService: PdfService,
   fileService: FileService,
   mapper: CaseRequestMapper,
+  tempFileCreator: TemporaryFileCreator,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
@@ -142,9 +138,10 @@ class CheckYourAnswersController @Inject()(
       pdfFile <- pdfService.generatePdf(views.html.components.view_application_pdf(appConfig, pdf, getCountryName))
       pdfStored <- fileService.uploadApplicationPdf(atar.reference, createApplicationPdf(atar.reference, pdfFile))
       pdfAttachment = Attachment(pdfStored.id, false)
-      atarWithPdf = atar.copy(application = atar.application.copy(applicationPdf = Some(pdfAttachment)))
-      _           <- caseService.update(atarWithPdf)
-
+      caseUpdate = CaseUpdate(Some(ApplicationUpdate(
+        applicationPdf = SetValue(Some(pdfAttachment))
+      )))
+      _           <- caseService.update(atar.reference, caseUpdate)
       _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
       _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
       userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, pdf)
@@ -161,7 +158,7 @@ class CheckYourAnswersController @Inject()(
   }
 
   def createApplicationPdf(reference: String, pdf: PdfFile): TemporaryFile = {
-    val tempFile = SingletonTemporaryFileCreator.create(reference, "pdf")
+    val tempFile = tempFileCreator.create(reference, "pdf")
     Files.write(tempFile.path, pdf.content, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)
     tempFile
   }

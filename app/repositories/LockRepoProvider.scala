@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package viewmodels
+package repositories
 
-import models.Attachment
+import javax.inject.{Inject, Singleton}
+import com.google.inject.ImplementedBy
+import uk.gov.hmrc.lock.LockRepository
+import uk.gov.hmrc.lock.LockMongoRepository
 
-case class FileView(id: String, name: String, confidential: Boolean)
+@ImplementedBy(classOf[LockRepo])
+trait LockRepoProvider {
+  def repo: () => LockRepository
+}
 
-object FileView {
-  def fromAttachment(att: Attachment, name: String) =
-    FileView(
-      id = att.id,
-      name = name,
-      confidential = !att.public
-    )
+@Singleton
+class LockRepo @Inject() (mongodb: MongoDbProvider) extends LockRepoProvider {
+  def repo = () => LockMongoRepository(mongodb.mongo)
 }
