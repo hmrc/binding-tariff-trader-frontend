@@ -1,5 +1,5 @@
 @*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,8 @@ captionMsg = Some(messages("application.dashboard.status.title")))
     <p>
     @if(Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED).contains(c.status)) {
     <a id="applications-rulings-list-row-@{index}-view-rulings-link" href="@routes.RulingController.viewRuling(c.reference)">
-     @messages("case.application.ruling.viewRuling")
+     <span aria-hidden="true">@messages("case.application.ruling.viewRuling")</span>
+     <span class="visually-hidden">@messages("case.application.ruling.viewRuling.hidden", c.reference)</span>
     </a>
     }
     </p>
