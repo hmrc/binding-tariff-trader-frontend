@@ -229,7 +229,7 @@ class IndexControllerSpec extends ControllerSpecBase {
         val notShowLinkStatuses = Set(CaseStatus.REJECTED, CaseStatus.SUSPENDED, CaseStatus.NEW, CaseStatus.OPEN, CaseStatus.REFERRED)
         val expectedLinkText = if(notShowLinkStatuses.contains(testCase.status)) { "" } else { messages("case.ruling.viewRuling") }
 
-        actualLinkText shouldBe expectedLinkText
+        actualLinkText should startWith(expectedLinkText)
       }
     }
 
@@ -317,7 +317,7 @@ class IndexControllerSpec extends ControllerSpecBase {
 
       val expectedLinkTextView = messages("case.application.ruling.viewRuling")
 
-      actualLinkText shouldBe expectedLinkTextView
+      actualLinkText should startWith(expectedLinkTextView)
     }
 
 
