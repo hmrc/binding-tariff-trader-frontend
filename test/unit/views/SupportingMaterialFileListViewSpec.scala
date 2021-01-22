@@ -38,7 +38,6 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
   "SupportingMaterialFileList view" must {
 
-    behave like normalPage(createView, messageKeyPrefix, goodsName)()
 
     behave like pageWithBackLink(createView)
 

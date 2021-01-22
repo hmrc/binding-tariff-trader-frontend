@@ -24,7 +24,7 @@
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, files: Seq[FileView], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${if(files.size == 1) {messages("supportingMaterialFileList.title.singular.title", goodsName)} else {messages("supportingMaterialFileList.title.plural.title", files.size, goodsName)}}",
+    title = s"${errorPrefix(form)} ${if(files.size == 1) {messages("supportingMaterialFileList.title.singular", goodsName)} else {messages("supportingMaterialFileList.title.plural", files.size, goodsName)}}",
     appConfig = appConfig,
     bodyClasses = None) {
 
