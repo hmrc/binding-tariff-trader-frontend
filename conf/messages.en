@@ -89,7 +89,7 @@ site.save_and_continue = Save and continue
 site.cancel_application = Cancel application
 site.agree_and_continue = Agree and continue
 site.keep_confidential = Keep confidential
-site.save_your_application = Save your application
+site.save_your_application = Save application as a PDF
 site.print_your_application = Print your application
 
 unauthorised.title = Not registered for CDS
