@@ -24,7 +24,7 @@
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, files: Seq[FileView], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("supportingMaterialFileList.title")}",
+    title = s"${errorPrefix(form)} ${if(files.size == 1) {messages("supportingMaterialFileList.title.singular.title", goodsName)} else {messages("supportingMaterialFileList.title.plural.title", files.size, goodsName)}}",
     appConfig = appConfig,
     bodyClasses = None) {
 
@@ -75,9 +75,9 @@
 }
 
 @addAnotherFile = {
-    <div class="heading-large mb-2">
+    <h2 class="heading-large mb-2">
         @messages("supportingMaterialFileList.label.anotherFile")
-    </div>
+    </h2>
 }
 
 @indicationsContent = {
