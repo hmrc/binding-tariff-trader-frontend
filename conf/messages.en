@@ -242,7 +242,8 @@ makeFileConfidential.caption = About the goods
 makeFileConfidential.infoText = Files marked as confidential will not appear on the Advance Tariff Rulings website.
 makeFileConfidential.error.required = Select yes if you want this file to be confidential
 
-supportingMaterialFileList.title = Do you want to upload any supporting documents? - Manage your Advance Tariff Rulings - GOV.UK
+supportingMaterialFileList.title.singular = You have uploaded 1 supporting document for the {0} - Manage your Advance Tariff Rulings - GOV.UK
+supportingMaterialFileList.title.plural =  You have uploaded {0} supporting documents for the {1} - Manage your Advance Tariff Rulings - GOV.UK
 supportingMaterialFileList.heading = Do you want to upload any supporting documents?
 supportingMaterialFileList.caption = About the goods
 supportingMaterialFileList.uploadFileCounter.singular = You have uploaded 1 supporting document for the {0}
