@@ -471,12 +471,12 @@ case.application.status.approvedRuling = Approved ruling
 case.application.status.approvedRulingExpiring = Ruling expires in {0} days
 case.application.status.cancelled = Cancelled ruling
 case.application.ruling.viewRuling = View ruling
-case.application.ruling.viewRuling.hidden = View ruling for reference {0}
+case.application.ruling.viewRuling.hidden = View ruling for {0}
 case.application.ruling.renewRuling = Renew ruling
-case.application.ruling.table.download = Application and ruling actions
+case.application.ruling.table.download = Actions
 
 case.application.viewApplication = View application
-case.application.viewApplication.hidden = View application for reference {0}
+case.application.viewApplication.hidden = View application for {0}
 
 case.tabs.rulings = Rulings
 case.rulings.noRulings = BTI rulings will appear here
