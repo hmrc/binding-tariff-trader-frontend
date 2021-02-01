@@ -17,20 +17,21 @@
 package service
 
 import connectors.{BindingTariffClassificationConnector, EmailConnector}
-import javax.inject.{Inject, Singleton}
 import models.CaseStatus.CaseStatus
 import models._
 import models.requests.NewEventRequest
-import play.api.Logger
+import play.api.Logging
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class CasesService @Inject()(connector: BindingTariffClassificationConnector, emailConnector: EmailConnector) {
+class CasesService @Inject() (connector: BindingTariffClassificationConnector, emailConnector: EmailConnector)
+    extends Logging {
 
-  def create(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] = {
+  def create(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] =
     for {
       c <- connector.createCase(c)
 
@@ -43,47 +44,41 @@ class CasesService @Inject()(connector: BindingTariffClassificationConnector, em
       )
       _ <- emailConnector.send(email) recover loggingAnError(c.reference)
     } yield c
-  }
 
   def update(c: Case)(implicit hc: HeaderCarrier): Future[Case] =
     connector.updateCase(c)
 
   private def loggingAnError(ref: String): PartialFunction[Throwable, Unit] = {
-    case t: Throwable => Logger.error(s"Failed to send email for Application [$ref]", t)
+    case t: Throwable => logger.error(s"Failed to send email for Application [$ref]", t)
   }
 
-  def getCases(eori: String, statuses: Set[CaseStatus], pagination: Pagination, sort: Sort)
-              (implicit hc: HeaderCarrier): Future[Paged[Case]] = {
+  def getCases(eori: String, statuses: Set[CaseStatus], pagination: Pagination, sort: Sort)(
+    implicit hc: HeaderCarrier
+  ): Future[Paged[Case]] =
     connector.findCasesBy(eori, statuses, pagination, sort)
-  }
 
-  def getCaseForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Case] = {
+  def getCaseForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Case] =
     getCase(reference, _.hasEoriNumber(userEori))
-  }
 
-  def getCaseWithRulingForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Case] = {
+  def getCaseWithRulingForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Case] =
     getCase(reference, c => c.hasEoriNumber(userEori) && c.hasRuling)
-  }
 
-
-  private def getCase(reference: String, caseFilter: Case => Boolean)(implicit hc: HeaderCarrier): Future[Case] = {
+  private def getCase(reference: String, caseFilter: Case => Boolean)(implicit hc: HeaderCarrier): Future[Case] =
     connector.findCase(reference).map(_.filter(caseFilter)) flatMap {
       case Some(c) => Future.successful(c)
-      case _ => Future.failed(new RuntimeException("Case not found"))
+      case _       => Future.failed(new RuntimeException("Case not found"))
     }
-  }
 
   def addCaseCreatedEvent(atar: Case, operator: Operator)(implicit hc: HeaderCarrier): Future[Unit] = {
-    val details =CaseCreated("Application submitted")
+    val details = CaseCreated("Application submitted")
     addEvent(atar, details, operator)
   }
 
-  private def addEvent(atar: Case, details: Details, operator: Operator)
-                      (implicit hc: HeaderCarrier): Future[Unit] = {
+  private def addEvent(atar: Case, details: Details, operator: Operator)(implicit hc: HeaderCarrier): Future[Unit] = {
     val event = NewEventRequest(details, operator)
     connector.createEvent(atar, event) recover {
       case t: Throwable =>
-        Logger.error(s"Could not create Event for case [${atar.reference}] with payload [${event.details}]", t)
+        logger.error(s"Could not create Event for case [${atar.reference}] with payload [${event.details}]", t)
     } map (_ => ())
   }
 }

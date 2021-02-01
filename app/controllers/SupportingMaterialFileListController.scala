@@ -20,19 +20,18 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SupportingMaterialFileListFormProvider
-import javax.inject.Inject
 import models.requests.DataRequest
 import models.{FileAttachment, Mode, UserAnswers}
 import navigation.Navigator
 import pages._
-import play.api.data.Form
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
-
-import scala.concurrent.{ExecutionContext, Future}
+import play.api.data.{Form, FormError}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.twirl.api.HtmlFormat
 import viewmodels.FileView
 import views.html.supportingMaterialFileList
-import play.twirl.api.HtmlFormat
-import play.api.data.FormError
+
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class SupportingMaterialFileListController @Inject()(
   appConfig: FrontendAppConfig,

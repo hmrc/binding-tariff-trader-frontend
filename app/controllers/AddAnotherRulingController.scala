@@ -20,9 +20,8 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.AddAnotherRulingFormProvider
-import javax.inject.Inject
 import models.requests.DataRequest
-import models.{FileAttachment, Mode, UserAnswers}
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages._
 import play.api.data.Form
@@ -30,9 +29,10 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
 import views.html.addAnotherRuling
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class AddAnotherRulingController @Inject()(
+class AddAnotherRulingController @Inject() (
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
@@ -41,9 +41,10 @@ class AddAnotherRulingController @Inject()(
   val requireData: DataRequiredAction,
   formProvider: AddAnotherRulingFormProvider,
   cc: MessagesControllerComponents
-  )(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
+)(implicit ec: ExecutionContext)
+    extends AnswerCachingController[Boolean](cc) {
 
-  lazy val form: Form[Boolean] = formProvider()
+  lazy val form: Form[Boolean]            = formProvider()
   val questionPage: QuestionPage[Boolean] = AddAnotherRulingPage
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
@@ -52,7 +53,7 @@ class AddAnotherRulingController @Inject()(
   }
 
   def removeRuling(index: Int, userAnswers: UserAnswers): UserAnswers = {
-    val rulings = userAnswers.get(CommodityCodeRulingReferencePage).getOrElse(List.empty[String])
+    val rulings          = userAnswers.get(CommodityCodeRulingReferencePage).getOrElse(List.empty[String])
     val remainingRulings = rulings.take(index) ++ rulings.drop(index + 1)
 
     val updatedAnswers = userAnswers.set(CommodityCodeRulingReferencePage, remainingRulings)
@@ -63,18 +64,19 @@ class AddAnotherRulingController @Inject()(
       updatedAnswers
   }
 
-  def onRemove(index: Int, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val updatedAnswers = removeRuling(index, request.userAnswers)
+  def onRemove(index: Int, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+    implicit request =>
+      val updatedAnswers = removeRuling(index, request.userAnswers)
 
-    val onwardRoute = if (updatedAnswers.get(SimilarItemCommodityCodePage).isEmpty)
-      routes.SimilarItemCommodityCodeController.onPageLoad(mode)
-    else
-      routes.AddAnotherRulingController.onPageLoad(mode)
+      val onwardRoute =
+        if (updatedAnswers.get(SimilarItemCommodityCodePage).isEmpty)
+          routes.SimilarItemCommodityCodeController.onPageLoad(mode)
+        else
+          routes.AddAnotherRulingController.onPageLoad(mode)
 
-    dataCacheConnector
-      .save(updatedAnswers.cacheMap)
-      .map { _ => Redirect(onwardRoute) }
+      dataCacheConnector
+        .save(updatedAnswers.cacheMap)
+        .map(_ => Redirect(onwardRoute))
   }
-
 
 }

@@ -25,28 +25,23 @@ import mapper.CaseRequestMapper
 import models._
 import models.requests.DataRequest
 import navigation.Navigator
-import pages._
-import play.api.i18n.{I18nSupport, Lang}
+import pages.{UploadSupportingMaterialMultiplePage, _}
+import play.api.i18n.I18nSupport
+import play.api.libs.Files.{SingletonTemporaryFileCreator, TemporaryFile}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import service.{CasesService, CountriesService, FileService}
+import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.CheckYourAnswersHelper
+import utils.JsonFormatters._
 import viewmodels.{AnswerSection, FileView, PdfViewModel}
 import views.html.check_your_answers
-import utils.JsonFormatters._
 
-import scala.concurrent.{ExecutionContext, Future}
+import java.nio.file.{Files, StandardOpenOption}
 import scala.concurrent.Future.successful
-import pages.UploadSupportingMaterialMultiplePage
-import service.PdfService
-import play.api.mvc.MultipartFormData
-import play.api.libs.Files.TemporaryFile
-import play.api.libs.Files.SingletonTemporaryFileCreator
-import java.nio.file.Files
-import java.nio.file.StandardOpenOption
+import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersController @Inject()(
+class CheckYourAnswersController @Inject() (
   appConfig: FrontendAppConfig,
   dataCacheConnector: DataCacheConnector,
   auditService: AuditService,
@@ -60,10 +55,11 @@ class CheckYourAnswersController @Inject()(
   fileService: FileService,
   mapper: CaseRequestMapper,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+)(implicit ec: ExecutionContext)
+    extends FrontendController(cc)
+    with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-
     val sendingSamplesAnswer = request.userAnswers.get(AreYouSendingSamplesPage).getOrElse(false)
 
     val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountriesById)
@@ -111,54 +107,51 @@ class CheckYourAnswersController @Inject()(
     Ok(check_your_answers(appConfig, sections, sendingSamplesAnswer))
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+    implicit request: DataRequest[_] =>
+      val answers        = request.userAnswers
+      val newCaseRequest = mapper.map(answers)
 
-    val answers = request.userAnswers
-    val newCaseRequest = mapper.map(answers)
+      val fileAttachments: Seq[FileAttachment] = answers
+        .get(UploadSupportingMaterialMultiplePage)
+        .getOrElse(Seq.empty)
+        .filter(_.uploaded)
 
-    val fileAttachments: Seq[FileAttachment] = answers
-      .get(UploadSupportingMaterialMultiplePage)
-      .getOrElse(Seq.empty)
-      .filter(_.uploaded)
+      val keepConfidential = answers
+        .get(MakeFileConfidentialPage)
+        .getOrElse(Map.empty)
 
-    val keepConfidential = answers
-      .get(MakeFileConfidentialPage)
-      .getOrElse(Map.empty)
+      val fileView = fileAttachments.map(file => FileView(file.id, file.name, keepConfidential(file.id)))
 
-    val fileView = fileAttachments.map {
-      file => FileView(file.id, file.name, keepConfidential(file.id))
-    }
+      val withStatus = fileAttachments
+        .map(att => Attachment(att.id, public = !keepConfidential(att.id)))
 
-    val withStatus = fileAttachments
-      .map(att => Attachment(att.id, public = !keepConfidential(att.id)))
+      for {
+        published <- fileService.publish(fileAttachments)
+        publishIds  = published.map(_.id)
+        attachments = withStatus.filter(att => publishIds.contains(att.id))
+        atar <- createCase(newCaseRequest, attachments)
 
-    for {
-      published   <- fileService.publish(fileAttachments)
-      publishIds  = published.map(_.id)
-      attachments = withStatus.filter(att => publishIds.contains(att.id))
-      atar        <- createCase(newCaseRequest, attachments)
+        pdf = PdfViewModel(atar, fileView)
+        pdfFile   <- pdfService.generatePdf(views.html.components.view_application_pdf(appConfig, pdf, getCountryName))
+        pdfStored <- fileService.uploadApplicationPdf(atar.reference, createApplicationPdf(atar.reference, pdfFile))
+        pdfAttachment = Attachment(pdfStored.id, false)
+        atarWithPdf   = atar.copy(application = atar.application.copy(applicationPdf = Some(pdfAttachment)))
+        _ <- caseService.update(atarWithPdf)
 
-      pdf = PdfViewModel(atar, fileView)
-      pdfFile <- pdfService.generatePdf(views.html.components.view_application_pdf(appConfig, pdf, getCountryName))
-      pdfStored <- fileService.uploadApplicationPdf(atar.reference, createApplicationPdf(atar.reference, pdfFile))
-      pdfAttachment = Attachment(pdfStored.id, false)
-      atarWithPdf = atar.copy(application = atar.application.copy(applicationPdf = Some(pdfAttachment)))
-      _           <- caseService.update(atarWithPdf)
-
-      _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
-      _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
-      userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, pdf)
-      _           <- dataCacheConnector.save(userAnswers.cacheMap)
-      res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
-    } yield res
+        _ <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
+        _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
+        userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, pdf)
+        _           <- dataCacheConnector.save(userAnswers.cacheMap)
+        res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
+      } yield res
   }
 
   private def createCase(
     newCaseRequest: NewCaseRequest,
     attachments: Seq[Attachment]
-  )(implicit headerCarrier: HeaderCarrier): Future[Case] = {
+  )(implicit headerCarrier: HeaderCarrier): Future[Case] =
     caseService.create(newCaseRequest.copy(attachments = attachments))
-  }
 
   def createApplicationPdf(reference: String, pdf: PdfFile): TemporaryFile = {
     val tempFile = SingletonTemporaryFileCreator.create(reference, "pdf")

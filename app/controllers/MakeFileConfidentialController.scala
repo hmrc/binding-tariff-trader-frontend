@@ -19,7 +19,6 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import controllers.routes
 import forms.MakeFileConfidentialFormProvider
 import javax.inject.Inject
 import models.Mode
