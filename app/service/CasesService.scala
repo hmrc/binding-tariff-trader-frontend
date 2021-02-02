@@ -45,12 +45,18 @@ class CasesService @Inject() (connector: BindingTariffClassificationConnector, e
       _ <- emailConnector.send(email) recover loggingAnError(c.reference)
     } yield c
 
-  def update(c: Case)(implicit hc: HeaderCarrier): Future[Case] =
-    connector.updateCase(c)
+  def put(c: Case)(implicit hc: HeaderCarrier): Future[Case] =
+    connector.putCase(c)
+
+  def update(reference: String, update: CaseUpdate)(implicit hc: HeaderCarrier): Future[Option[Case]] =
+    connector.updateCase(reference, update)
 
   private def loggingAnError(ref: String): PartialFunction[Throwable, Unit] = {
     case t: Throwable => logger.error(s"Failed to send email for Application [$ref]", t)
   }
+
+  def allCases(pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] =
+    connector.allCases(pagination, sort)
 
   def getCases(eori: String, statuses: Set[CaseStatus], pagination: Pagination, sort: Sort)(
     implicit hc: HeaderCarrier

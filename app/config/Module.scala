@@ -16,21 +16,25 @@
 
 package config
 
-import com.google.inject.AbstractModule
 import connectors._
 import controllers.actions._
+import java.time.Clock
+import play.api.{Configuration, Environment}
+import play.api.inject.{Binding, Module => PlayModule}
 import uk.gov.hmrc.crypto.CompositeSymmetricCrypto
+import workers.MigrationWorker
 
-class Module extends AbstractModule {
-
-  override def configure(): Unit = {
-
-    // Bind the actions for DI
-    bind(classOf[DataRetrievalAction]).to(classOf[DataRetrievalActionImpl]).asEagerSingleton()
-    bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl]).asEagerSingleton()
-    bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction]).asEagerSingleton()
-    bind(classOf[DataCacheConnector]).to(classOf[MongoCacheConnector]).asEagerSingleton()
-    bind(classOf[CompositeSymmetricCrypto]).to(classOf[Crypto])
+class Module extends PlayModule {
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
+    Seq(
+      bind[DataRetrievalAction].to[DataRetrievalActionImpl].eagerly,
+      bind[DataRequiredAction].to[DataRequiredActionImpl].eagerly,
+      bind[IdentifierAction].to[AuthenticatedIdentifierAction].eagerly,
+      bind[DataCacheConnector].to[MongoCacheConnector].eagerly,
+      bind[CompositeSymmetricCrypto].to[Crypto],
+      bind[Clock].to(Clock.systemUTC()),
+      bind[MigrationWorker].toSelf.eagerly
+    )
   }
 }
 

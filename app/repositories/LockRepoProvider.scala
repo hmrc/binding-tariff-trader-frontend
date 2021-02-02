@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package repositories
 
-import play.api.libs.json.{Json, Writes}
-import utils.JsonFormatters._
+import javax.inject.{Inject, Singleton}
+import com.google.inject.ImplementedBy
+import uk.gov.hmrc.lock.LockRepository
+import uk.gov.hmrc.lock.LockMongoRepository
 
+@ImplementedBy(classOf[LockRepo])
+trait LockRepoProvider {
+  def repo: () => LockRepository
+}
 
-object CasePayloads {
-
-  val pagedGatewayCases: String = jsonOf(Paged(Seq(oCase.btiCaseExample), NoPagination(), 1))
-  val pagedEmpty: String = jsonOf(Paged.empty[Case])
-
-  def jsonOf[A: Writes](a: A) = {
-    Json.toJson(a).toString()
-  }
+@Singleton
+class LockRepo @Inject() (mongodb: MongoDbProvider) extends LockRepoProvider {
+  def repo = () => LockMongoRepository(mongodb.mongo)
 }

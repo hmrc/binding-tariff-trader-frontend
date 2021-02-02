@@ -40,16 +40,32 @@ class BindingTariffClassificationConnector @Inject()(
       client.POST[NewCaseRequest, Case](url = url, body = c)(implicitly, implicitly, addAuth, implicitly)
     }
 
-  def updateCase(c: Case)(implicit hc: HeaderCarrier): Future[Case] =
-    withMetricsTimerAsync("update-case") { _ =>
+  def putCase(c: Case)(implicit hc: HeaderCarrier): Future[Case] =
+    withMetricsTimerAsync("put-case") { _ =>
       val url = s"${configuration.bindingTariffClassificationUrl}/cases/${c.reference}"
       client.PUT[Case, Case](url = url, body = c)(implicitly, implicitly, addAuth, implicitly)
+    }
+
+  def updateCase(reference: String, update: CaseUpdate)(implicit hc: HeaderCarrier): Future[Option[Case]] =
+    withMetricsTimerAsync("update-case") { _ =>
+      val url = s"${configuration.bindingTariffClassificationUrl}/cases/${reference}"
+      client.POST[CaseUpdate, Option[Case]](url, update)(implicitly, implicitly, addAuth, implicitly)
     }
 
   def findCase(reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] =
     withMetricsTimerAsync("get-case-by-reference") { _ =>
       val url = s"${configuration.bindingTariffClassificationUrl}/cases/$reference"
       client.GET[Option[Case]](url)(implicitly, addAuth, implicitly)
+    }
+
+  def allCases(pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] =
+    withMetricsTimerAsync("all-cases") { _ =>
+      val url = s"${configuration.bindingTariffClassificationUrl}/cases" +
+        s"?sort_by=${sort.field}&sort_direction=${sort.direction}" +
+        s"&page=${pagination.page}&page_size=${pagination.pageSize}" +
+        "&application_type=BTI&migrated=false"
+
+      client.GET[Paged[Case]](url)(implicitly, addAuth, implicitly)
     }
 
   def findCasesBy(eori: String, status: Set[CaseStatus], pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] =

@@ -93,4 +93,6 @@ class FrontendAppConfig @Inject()(
     .get[String](s"assets.version") + '/'
 
   lazy val samplesToggle = runModeConfiguration.getOptional[Boolean]("toggle.samplesNotAccepted").getOrElse(false)
+
+  lazy val migrationWorkerEnabled = runModeConfiguration.getOptional[Boolean]("migration-worker.enabled").getOrElse(false)
 }
