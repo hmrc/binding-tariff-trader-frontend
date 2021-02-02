@@ -46,6 +46,23 @@ object JsonFormatters {
   implicit val eventFormat: OFormat[Event] = Json.format[Event]
   implicit val newEventRequestFormat: OFormat[NewEventRequest] = Json.using[Json.WithDefaultValues].format[NewEventRequest]
 
+  implicit def formatSetValue[A: Format]: OFormat[SetValue[A]] = Json.format[SetValue[A]]
+  implicit val formatNoChange: OFormat[NoChange.type] = Json.format[NoChange.type]
+
+  implicit def formatUpdate[A: Format]: Format[Update[A]] = Union
+    .from[Update[A]]("type")
+    .and[SetValue[A]](UpdateType.SetValue.name)
+    .and[NoChange.type](UpdateType.NoChange.name)
+    .format
+
+  implicit def formatApplicationUpdate: OFormat[ApplicationUpdate] = {
+    implicit def optFormat[A: Format]: Format[Option[A]] = Format(
+      Reads.optionNoError[A],
+      Writes.optionWithNull[A]
+    )
+    Json.format[ApplicationUpdate]
+  }
+  implicit val formatCaseUpdate: OFormat[CaseUpdate] = Json.format[CaseUpdate]
 }
 
 object EnumJson {

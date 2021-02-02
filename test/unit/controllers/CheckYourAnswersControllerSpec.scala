@@ -30,7 +30,7 @@ import org.scalatest.BeforeAndAfterEach
 import pages.{CheckYourAnswersPage, MakeFileConfidentialPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
 import play.api.libs.json._
-import play.api.libs.Files.TemporaryFile
+import play.api.libs.Files.{SingletonTemporaryFileCreator, TemporaryFile}
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -107,6 +107,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       pdfService,
       fileService,
       mapper,
+      SingletonTemporaryFileCreator,
       cc
     )
 
@@ -240,7 +241,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   }
 
   private def givenTheCaseIsUpdatedWithPdf(): Unit = {
-    when(casesService.update(any[Case])(any[HeaderCarrier])).thenReturn(successful(createdCase))
+    when(casesService.update(any[String], any[CaseUpdate])(any[HeaderCarrier])).thenReturn(successful(Some(createdCase)))
   }
 
   private def extractDataFromCache: DataRetrievalAction = {
