@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.play.views.html._
 @import viewmodels.FileView
 @import views.ViewUtils._
+@import components.notification_banner
 
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, files: Seq[FileView], mode: Mode)(implicit request: Request[_], messages: Messages)
 
@@ -32,6 +33,8 @@
 
 
         @components.error_summary(form.errors)
+
+        @notification_banner()(request.flash, messages)
 
         @if(files.nonEmpty) {
             @if(files.size == 1) {
