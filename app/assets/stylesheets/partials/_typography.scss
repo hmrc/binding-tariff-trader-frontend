@@ -72,3 +72,10 @@ p.font-xsmall{
     line-height: 1.04167;
     font-weight: 700;
 }
+/* added correct link colour */
+a:hover{
+  color: #003078;
+}
+a:active {
+  color: #0b0c0c;
+}
