@@ -71,13 +71,13 @@ captionMsg = Some(messages("application.dashboard.status.title")))
    <td id="applications-rulings-list-row-@{index}-date_submitted">@Dates.format(c.createdDate)</td>
    <td id="applications-rulings-list-row-@{index}-status">@components.case_status_tags(c)</td>
    <td id="applications-rulings-list-row-@{index}-download">
-    <a id="applications-rulings-list-row-@{index}-view-application-link" href="@routes.ApplicationController.viewApplication(c.reference)">
+    <a class="font-18px-only-mobile" id="applications-rulings-list-row-@{index}-view-application-link" href="@routes.ApplicationController.viewApplication(c.reference)">
      <span aria-hidden="true">@messages("case.application.viewApplication")</span>
      <span class="visually-hidden">@messages("case.application.viewApplication.hidden", c.reference)</span>
     </a>
     <p>
     @if(Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED).contains(c.status)) {
-    <a id="applications-rulings-list-row-@{index}-view-rulings-link" href="@routes.RulingController.viewRuling(c.reference)">
+    <a class="font-18px-only-mobile" id="applications-rulings-list-row-@{index}-view-rulings-link" href="@routes.RulingController.viewRuling(c.reference)">
      <span aria-hidden="true">@messages("case.application.ruling.viewRuling")</span>
      <span class="visually-hidden">@messages("case.application.ruling.viewRuling.hidden", c.reference)</span>
     </a>

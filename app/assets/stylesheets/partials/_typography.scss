@@ -79,3 +79,9 @@ a:hover{
 a:active {
   color: #0b0c0c;
 }
+
+@media screen and (max-width: 767px) {
+    .font-18px-only-mobile {
+        font-size : 18px;
+    }
+}
