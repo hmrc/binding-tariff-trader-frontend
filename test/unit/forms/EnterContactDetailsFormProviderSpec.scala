@@ -25,6 +25,7 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
 
   val formProvider = new EnterContactDetailsFormProvider()
   val form = formProvider()
+  val formWithTelValidation = formProvider.formWithMinTelNumber
 
   // name
   ".name" must {
@@ -85,7 +86,7 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
   }
 
   // phone number
-  ".phoneNumber" must {
+  ".phoneNumber in rest of the world" must {
 
     val fieldName = "phoneNumber"
     val lengthKey = "enterContactDetails.error.phoneNumber.length"
@@ -112,6 +113,47 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
       "432jfsdfs453fcs",
       maxLength = maxLength,
       regex = formProvider.telephoneRegex,
+      error = FormError(fieldName, phoneFormatKey, mutable.WrappedArray.empty)
+    )
+  }
+
+  ".phoneNumber in UK" must {
+
+    val fieldName = "phoneNumber"
+    val lengthKey = "enterContactDetails.error.phoneNumber.length"
+    val minLengthKey = "enterContactDetails.error.phoneNumber.minLength"
+    val minLength = 10
+    val maxLength = 20
+    val phoneFormatKey = "enterContactDetails.error.phoneNumber.invalid"
+
+
+    behave like fieldThatBindsValidData(
+      formWithTelValidation,
+      fieldName,
+      stringsWithMaxLength(maxLength),
+    )
+
+    behave like fieldWithMaxLength(
+      formWithTelValidation,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like fieldWithMinLength(
+      formWithTelValidation,
+      fieldName,
+      minLength = minLength,
+      lengthError = FormError(fieldName, minLengthKey, Seq(minLength))
+    )
+
+    behave like fieldWithRegexAndMinTelLength(
+      formWithTelValidation,
+      fieldName,
+      "432jfsdfs453fcs",
+      minLength = minLength,
+      maxLength = maxLength,
+      regex = """[0-9]{1,20}$""",
       error = FormError(fieldName, phoneFormatKey, mutable.WrappedArray.empty)
     )
   }
