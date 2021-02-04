@@ -88,7 +88,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
     "bind strings that pass regex" in {
       val gen = RegexpGen.from(regex)
       forAll(gen, minSuccessful(100)){str: String =>
-        whenever(str.length <= maxLength && str.length >= minLength) {
+        whenever(str.length <= maxLength && str.replaceAll("[^0-9]", "").length >= minLength) {
           val result = form.bind(Map(fieldName -> str)).apply(fieldName)
           result.errors should be (empty)
         }

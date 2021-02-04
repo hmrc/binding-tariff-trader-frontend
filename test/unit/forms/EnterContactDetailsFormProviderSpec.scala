@@ -153,7 +153,7 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
       "432jfsdfs453fcs",
       minLength = minLength,
       maxLength = maxLength,
-      regex = formProvider.telephoneRegex,
+      regex = """[0-9]{1,20}$""",
       error = FormError(fieldName, phoneFormatKey, mutable.WrappedArray.empty)
     )
   }
