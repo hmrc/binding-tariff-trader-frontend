@@ -16,4 +16,15 @@
 
 package viewmodels
 
+import models.Attachment
+
 case class FileView(id: String, name: String, confidential: Boolean)
+
+object FileView {
+  def fromAttachment(att: Attachment, name: String) =
+    FileView(
+      id           = att.id,
+      name         = name,
+      confidential = !att.public
+    )
+}

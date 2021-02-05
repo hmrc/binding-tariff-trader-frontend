@@ -23,31 +23,34 @@ import models._
 import models.requests.NewEventRequest
 import org.apache.http.HttpStatus
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream5xxResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, UpstreamErrorResponse}
 import utils.JsonFormatters._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
-  private val connector = new BindingTariffClassificationConnector(authenticatedHttpClient, metrics)(mockConfig, implicitly)
+  private val connector =
+    new BindingTariffClassificationConnector(authenticatedHttpClient, metrics)(mockConfig, implicitly)
 
   private def withHeaderCarrier(key: String, value: String) = HeaderCarrier(extraHeaders = Seq(key -> value))
 
   "Connector 'Create Case'" should {
-    val request = oCase.newBtiCaseExample
+    val request     = oCase.newBtiCaseExample
     val requestJSON = Json.toJson(request).toString()
 
     "Create valid case with x-api-token" in {
-      val response = oCase.btiCaseExample
+      val response     = oCase.btiCaseExample
       val responseJSON = Json.toJson(response).toString()
 
-      stubFor(post(urlEqualTo("/cases"))
-        .withRequestBody(equalToJson(requestJSON))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_OK)
-          .withBody(responseJSON)
-        )
+      stubFor(
+        post(urlEqualTo("/cases"))
+          .withRequestBody(equalToJson(requestJSON))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_OK)
+              .withBody(responseJSON)
+          )
       )
 
       await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", "custom token"))) shouldBe response
@@ -61,11 +64,13 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     "Find valid case with x-api-token" in {
       val responseJSON = Json.toJson(oCase.btiCaseExample).toString()
 
-      stubFor(get(urlEqualTo("/cases/id"))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_OK)
-          .withBody(responseJSON)
-        )
+      stubFor(
+        get(urlEqualTo("/cases/id"))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_OK)
+              .withBody(responseJSON)
+          )
       )
 
       await(
@@ -79,13 +84,15 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "propagate errors with x-api-token" in {
-      stubFor(post(urlEqualTo("/cases"))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_BAD_GATEWAY)
-        )
+      stubFor(
+        post(urlEqualTo("/cases"))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+          )
       )
 
-      intercept[Upstream5xxResponse] {
+      intercept[UpstreamErrorResponse] {
         await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", appConfig.apiToken)))
       }
 
@@ -96,15 +103,17 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "Create valid case without x-api-token" in {
-      val response = oCase.btiCaseExample
+      val response     = oCase.btiCaseExample
       val responseJSON = Json.toJson(response).toString()
 
-      stubFor(post(urlEqualTo("/cases"))
-        .withRequestBody(equalToJson(requestJSON))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_OK)
-          .withBody(responseJSON)
-        )
+      stubFor(
+        post(urlEqualTo("/cases"))
+          .withRequestBody(equalToJson(requestJSON))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_OK)
+              .withBody(responseJSON)
+          )
       )
 
       await(connector.createCase(request)(hc)) shouldBe response
@@ -118,11 +127,13 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     "Find valid case without x-api-token" in {
       val responseJSON = Json.toJson(oCase.btiCaseExample).toString()
 
-      stubFor(get(urlEqualTo("/cases/id"))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_OK)
-          .withBody(responseJSON)
-        )
+      stubFor(
+        get(urlEqualTo("/cases/id"))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_OK)
+              .withBody(responseJSON)
+          )
       )
 
       await(connector.findCase("id")(hc)) shouldBe Some(oCase.btiCaseExample)
@@ -134,13 +145,15 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "propagate errors without x-api-token" in {
-      stubFor(post(urlEqualTo("/cases"))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_BAD_GATEWAY)
-        )
+      stubFor(
+        post(urlEqualTo("/cases"))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+          )
       )
 
-      intercept[Upstream5xxResponse] {
+      intercept[UpstreamErrorResponse] {
         await(connector.createCase(request)(hc))
       }
 
@@ -151,23 +164,239 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
   }
 
+  "Connector 'Put Case'" should {
+    "Execute update for existing case" in {
+      val caseExample = oCase.btiCaseExample
+      val url         = s"/cases/${caseExample.reference}"
+
+      stubFor(
+        put(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_OK)
+              .withBody(CasePayloads.jsonOf(Some(caseExample)))
+          )
+      )
+
+      await(
+        connector.putCase(caseExample)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+      ) shouldBe caseExample
+
+      verify(
+        putRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+    "Return error for missing case" in {
+      val caseExample = oCase.btiCaseExample
+      val url         = s"/cases/${caseExample.reference}"
+
+      stubFor(
+        put(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_NOT_FOUND)
+          )
+      )
+
+      intercept[NotFoundException] {
+        await(
+          connector.putCase(caseExample)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        )
+      }
+
+      verify(
+        putRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+    "Propagate errors" in {
+      val caseExample = oCase.btiCaseExample
+      val url         = s"/cases/${caseExample.reference}"
+
+      stubFor(
+        put(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+          )
+      )
+
+      intercept[UpstreamErrorResponse] {
+        await(
+          connector.putCase(caseExample)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        )
+      }
+
+      verify(
+        putRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+  }
+
+  "Connector 'Update Case'" should {
+    "Execute update for existing case" in {
+      val caseRef = oCase.btiCaseExample.reference
+      val url     = s"/cases/$caseRef"
+
+      stubFor(
+        post(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_OK)
+              .withBody(CasePayloads.jsonOf(Some(oCase.btiCaseExample)))
+          )
+      )
+
+      await(
+        connector.updateCase(caseRef, CaseUpdate())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+      ) shouldBe Some(oCase.btiCaseExample)
+
+      verify(
+        postRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+    "Return empty response for missing case" in {
+      val url = s"/cases/foo"
+
+      stubFor(
+        post(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_NOT_FOUND)
+          )
+      )
+
+      await(
+        connector.updateCase("foo", CaseUpdate())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+      ) shouldBe None
+
+      verify(
+        postRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+    "Propagate errors" in {
+      val url = "/cases/foo"
+
+      stubFor(
+        post(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+          )
+      )
+
+      intercept[UpstreamErrorResponse] {
+        await(
+          connector.updateCase("foo", CaseUpdate())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        )
+      }
+
+      verify(
+        postRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+  }
+
+  "Connector 'All Cases'" should {
+    "Find empty paged case" in {
+      val url =
+        "/cases?sort_by=created-date&sort_direction=desc&page=2&page_size=50&application_type=BTI&migrated=false"
+
+      stubFor(
+        get(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_OK)
+              .withBody(CasePayloads.pagedEmpty)
+          )
+      )
+
+      await(
+        connector.allCases(SearchPagination(2, 50), Sort())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+      ) shouldBe Paged.empty[Case]
+
+      verify(
+        getRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+    "Find valid paged case" in {
+      val url =
+        "/cases?sort_by=created-date&sort_direction=desc&page=2&page_size=50&application_type=BTI&migrated=false"
+
+      stubFor(
+        get(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_OK)
+              .withBody(CasePayloads.pagedGatewayCases)
+          )
+      )
+
+      await(
+        connector.allCases(SearchPagination(2, 50), Sort())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+      ) shouldBe Paged(Seq(oCase.btiCaseExample))
+
+      verify(
+        getRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+
+    "propagate errors" in {
+      val url =
+        "/cases?sort_by=created-date&sort_direction=desc&page=1&page_size=50&application_type=BTI&migrated=false"
+
+      stubFor(
+        get(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+          )
+      )
+
+      intercept[UpstreamErrorResponse] {
+        await(
+          connector.allCases(SearchPagination(1, 50), Sort())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        )
+      }
+
+      verify(
+        getRequestedFor(urlEqualTo(url))
+          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+      )
+    }
+  }
+
   "Connector 'Find Cases By'" should {
 
     "Find empty paged case" in {
-      val url = "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50&migrated=false"
+      val url =
+        "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50&migrated=false"
 
-      stubFor(get(urlEqualTo(url))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_OK)
-          .withBody(CasePayloads.pagedEmpty)
-        )
+      stubFor(
+        get(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_OK)
+              .withBody(CasePayloads.pagedEmpty)
+          )
       )
 
       await(
         connector.findCasesBy(
           "eori1234567",
-          Set(CaseStatus.NEW,
-            CaseStatus.OPEN),
+          Set(CaseStatus.NEW, CaseStatus.OPEN),
           SearchPagination(2),
           Sort()
         )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
@@ -180,20 +409,22 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "Find valid paged case" in {
-      val url = "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50&migrated=false"
+      val url =
+        "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50&migrated=false"
 
-      stubFor(get(urlEqualTo(url))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_OK)
-          .withBody(CasePayloads.pagedGatewayCases)
-        )
+      stubFor(
+        get(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_OK)
+              .withBody(CasePayloads.pagedGatewayCases)
+          )
       )
 
       await(
         connector.findCasesBy(
           "eori1234567",
-          Set(CaseStatus.NEW,
-            CaseStatus.OPEN),
+          Set(CaseStatus.NEW, CaseStatus.OPEN),
           SearchPagination(2),
           Sort()
         )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
@@ -206,22 +437,26 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "propagate errors" in {
-      val url = "/cases?eori=eori1234567&status=NEW&sort_by=created-date&sort_direction=desc&page=1&page_size=2147483647&migrated=false"
+      val url =
+        "/cases?eori=eori1234567&status=NEW&sort_by=created-date&sort_direction=desc&page=1&page_size=2147483647&migrated=false"
 
-      stubFor(get(urlEqualTo(url))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_BAD_GATEWAY)
-        )
+      stubFor(
+        get(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+          )
       )
 
-      intercept[Upstream5xxResponse] {
+      intercept[UpstreamErrorResponse] {
         await(
           connector.findCasesBy(
             "eori1234567",
             Set(CaseStatus.NEW),
             NoPagination(),
             Sort()
-          )(withHeaderCarrier("X-Api-Token", appConfig.apiToken)))
+          )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        )
       }
 
       verify(
@@ -241,19 +476,21 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     val events: Seq[Event] = Seq(event)
 
     "create event" in {
-      val ref = "case-reference"
-      val validCase = oCase.btiCaseExample.copy(reference = ref)
+      val ref               = "case-reference"
+      val validCase         = oCase.btiCaseExample.copy(reference = ref)
       val validEventRequest = eventRequest
-      val validEvent = event.copy(caseReference = ref)
-      val requestJson = Json.toJson(validEventRequest).toString()
-      val responseJson = Json.toJson(validEvent).toString()
+      val validEvent        = event.copy(caseReference = ref)
+      val requestJson       = Json.toJson(validEventRequest).toString()
+      val responseJson      = Json.toJson(validEvent).toString()
 
-      stubFor(post(urlEqualTo(s"/cases/$ref/events"))
-        .withRequestBody(equalToJson(requestJson))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_OK)
-          .withBody(responseJson)
-        )
+      stubFor(
+        post(urlEqualTo(s"/cases/$ref/events"))
+          .withRequestBody(equalToJson(requestJson))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_OK)
+              .withBody(responseJson)
+          )
       )
 
       await(connector.createEvent(validCase, validEventRequest)) shouldBe validEvent
@@ -265,16 +502,18 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "create event with an unknown case reference" in {
-      val ref = "unknown-reference"
-      val validCase = oCase.btiCaseExample.copy(reference = ref)
+      val ref               = "unknown-reference"
+      val validCase         = oCase.btiCaseExample.copy(reference = ref)
       val validEventRequest = eventRequest
-      val requestJson = Json.toJson(validEventRequest).toString()
+      val requestJson       = Json.toJson(validEventRequest).toString()
 
-      stubFor(post(urlEqualTo(s"/cases/$ref/events"))
-        .withRequestBody(equalToJson(requestJson))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_NOT_FOUND)
-        )
+      stubFor(
+        post(urlEqualTo(s"/cases/$ref/events"))
+          .withRequestBody(equalToJson(requestJson))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_NOT_FOUND)
+          )
       )
 
       intercept[NotFoundException] {
