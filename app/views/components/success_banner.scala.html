@@ -16,8 +16,7 @@
 
 @(heading: String, message: String)
 
-<div class="mt-30 mb-30 govuk-notification-banner-width">
-    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div tabindex="0" class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
         <div class="govuk-notification-banner__header">
             <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
                 @heading
@@ -27,4 +26,3 @@
             <p class="govuk-notification-banner__heading heading-margin-bottom">@message</p>
         </div>
     </div>
-</div>
