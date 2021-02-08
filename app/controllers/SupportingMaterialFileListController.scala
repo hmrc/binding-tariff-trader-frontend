@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SupportingMaterialFileListFormProvider
+
 import javax.inject.Inject
 import models.requests.DataRequest
 import models.{FileAttachment, Mode, UserAnswers}
@@ -33,6 +34,8 @@ import viewmodels.FileView
 import views.html.supportingMaterialFileList
 import play.twirl.api.HtmlFormat
 import play.api.data.FormError
+import utils.Notification.success
+import utils.Notification._
 
 class SupportingMaterialFileListController @Inject()(
   appConfig: FrontendAppConfig,
@@ -94,7 +97,7 @@ class SupportingMaterialFileListController @Inject()(
 
     dataCacheConnector
       .save(updatedAnswers.cacheMap)
-      .map { _ => Redirect(onwardRoute) }
+      .map { _ => Redirect(onwardRoute).flashing(success("supportingMaterialFile.remove.file.success.text")) }
   }
 
   def onClear(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>

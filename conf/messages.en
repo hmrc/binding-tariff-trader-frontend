@@ -91,6 +91,7 @@ site.agree_and_continue = Agree and continue
 site.keep_confidential = Keep confidential
 site.save_your_application = Save application as a PDF
 site.print_your_application = Print your application
+site.notification.success = Success
 
 unauthorised.title = Not registered for CDS
 unauthorised.heading = To apply for an Advance Tariff Ruling (ATaR) you need to get access to CDS
@@ -263,6 +264,7 @@ supportingMaterialFileList.error.numberFiles = Reduce the number of files to a m
 supportingMaterialFileList.clearFiles = Clear uploaded files
 supportingMaterialFile.remove.file.text = Remove
 supportingMaterialFile.remove.file.hidden.text = Remove file {0}
+supportingMaterialFile.remove.file.success.text = The file has been removed from this application
 
 uploadSupportingMaterialMultiple.title = Upload supporting documents for the goods - Manage your Advance Tariff Rulings - GOV.UK
 uploadSupportingMaterialMultiple.heading = Upload supporting documents for the {0}
