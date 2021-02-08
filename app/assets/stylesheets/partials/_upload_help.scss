@@ -168,6 +168,13 @@ details summary {
     border-color: #00703c;
     background-color: #00703c;
 }
+.govuk-notification-banner--success:focus {
+    border-color: #0b0c0c;
+    outline: 3px solid #fd0;
+    outline-offset: 0;
+    -webkit-box-shadow: inset 0 0 0 2px;
+    box-shadow: inset 0 0 0 2px;
+}
 .govuk-notification-banner {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
