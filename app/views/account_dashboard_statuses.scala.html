@@ -56,10 +56,10 @@ captionMsg = Some(messages("application.dashboard.status.title")))
  <table id="applications-rulings-list-table">
   <thead>
   <tr>
-   @sortableColumnHeading("case.tabs.applications.table.reference", SortField.REFERENCE.toString)
-   @sortableColumnHeading("case.tabs.applications.table.goodsName", SortField.GOODS_NAME.toString)
-   @sortableColumnHeading("case.tabs.applications.table.dateSubmitted", SortField.CREATED_DATE.toString)
-   @sortableColumnHeading("case.tabs.applications.table.status", SortField.STATUS.toString)
+   <th scope="col"><span aria-hidden="true">@messages("case.tabs.applications.table.reference")</span></th>
+   <th scope="col"><span aria-hidden="true">@messages("case.tabs.applications.table.goodsName")</span></th>
+   <th scope="col"><span aria-hidden="true">@messages("case.tabs.applications.table.dateSubmitted")</span></th>
+   <th scope="col"><span aria-hidden="true">@messages("case.tabs.applications.table.status")</span></th>
    <th scope="col"><span class="visuallyhidden">@messages("case.application.ruling.table.download")</span></th>
   </tr>
   </thead>
@@ -98,12 +98,4 @@ captionMsg = Some(messages("application.dashboard.status.title")))
  @paginate("mt-2", "bottom")
 </div>
 }
-}
-
-@sortableColumnHeading(columnNameKey: String, fieldToOrderBy: String, cssClass: String = "", hidden: Boolean = false) = {
- <th class="govuk-table__header @cssClass" scope="col">
-  <a href='@{dashboard.columnSortUrlFor(fieldToOrderBy)}' class="govuk-link--no-visited-state" type="button">
-   @messages(columnNameKey)
-  </a>
- </th>
 }
