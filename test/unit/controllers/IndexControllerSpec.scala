@@ -319,24 +319,5 @@ class IndexControllerSpec extends ControllerSpecBase {
 
       actualLinkText should startWith(expectedLinkTextView)
     }
-
-
-    "return the correct view with Renew ruling link for CANCELLED cases" in {
-      val testCase = btiCaseWithDecision.copy(status = CaseStatus.CANCELLED)
-
-      given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
-        .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
-
-      val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
-
-      status(result) shouldBe OK
-
-      val doc = Jsoup.parse(contentAsString(result))
-      val actualLinkText = doc.getElementById("applications-rulings-list-row-0-renew-link").text().trim
-
-      val expectedLinkTextView = messages("case.application.ruling.renewRuling")
-
-      actualLinkText shouldBe expectedLinkTextView
-    }
   }
 }

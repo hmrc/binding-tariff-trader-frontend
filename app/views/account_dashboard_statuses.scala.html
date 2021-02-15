@@ -76,22 +76,14 @@
                                     <span aria-hidden="true">@messages("case.application.viewApplication")</span>
                                     <span class="visually-hidden">@messages("case.application.viewApplication.hidden", c.reference)</span>
                                 </a>
-                                <p>
-                                    @if(Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED).contains(c.status)) {
+                                @if(Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED).contains(c.status)) {
+                                    <p>
                                         <a class="font-18px-only-mobile" id="applications-rulings-list-row-@{index}-view-rulings-link" href="@routes.RulingController.viewRuling(c.reference)">
                                             <span aria-hidden="true">@messages("case.application.ruling.viewRuling")</span>
                                             <span class="visually-hidden">@messages("case.application.ruling.viewRuling.hidden", c.reference)</span>
                                         </a>
-                                    }
-                                </p>
-                                <p>
-                                    @if((c.hasExpiringRuling) | (Set(CaseStatus.COMPLETED).contains(c.status) && c.hasExpiredDecision) | (Set(CaseStatus.CANCELLED).contains(c.status))) {
-                                        <a id="applications-rulings-list-row-@{index}-renew-link" href="#">
-                                            <span aria-hidden="true">@messages("case.application.ruling.renewRuling")</span>
-                                            <span class="visually-hidden">@messages("case.application.ruling.renewRuling.hidden", c.reference)</span>
-                                        </a>
-                                    }
-                                </p>
+                                    </p>
+                                }
                             </td>
                         </tr>
                     }
