@@ -98,12 +98,6 @@ class MigrationWorker @Inject() (
   private def getCountryName(code: String): Option[String] =
     countriesService.getAllCountriesById.get(code).map(_.countryName)
 
-  private def createApplicationPdf(reference: String, pdf: PdfFile): TemporaryFile = {
-    val tempFile = tempFileCreator.create(reference, "pdf")
-    Files.write(tempFile.path, pdf.content, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)
-    tempFile
-  }
-
   def regeneratePdf(cse: Case): Future[Unit] =
     for {
       meta <- fileService.getAttachmentMetadata(cse)
@@ -121,7 +115,7 @@ class MigrationWorker @Inject() (
 
       pdfFile <- pdfService.generatePdf(view_application_pdf(appConfig, pdfModel, getCountryName))
 
-      pdfStored <- fileService.uploadApplicationPdf(cse.reference, createApplicationPdf(cse.reference, pdfFile))
+      pdfStored <- fileService.uploadApplicationPdf(cse.reference, pdfFile.content)
 
       creationTime = ZonedDateTime.ofInstant(clock.instant(), clock.getZone())
 
