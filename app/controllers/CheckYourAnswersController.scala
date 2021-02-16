@@ -136,7 +136,7 @@ class CheckYourAnswersController @Inject()(
 
       pdf = PdfViewModel(atar, fileView)
       pdfFile <- pdfService.generatePdf(views.html.components.view_application_pdf(appConfig, pdf, getCountryName))
-      pdfStored <- fileService.uploadApplicationPdf(atar.reference, createApplicationPdf(atar.reference, pdfFile))
+      pdfStored <- fileService.uploadApplicationPdf(atar.reference, pdfFile.content)
       pdfAttachment = Attachment(pdfStored.id, false)
       caseUpdate = CaseUpdate(Some(ApplicationUpdate(
         applicationPdf = SetValue(Some(pdfAttachment))
@@ -155,12 +155,6 @@ class CheckYourAnswersController @Inject()(
     attachments: Seq[Attachment]
   )(implicit headerCarrier: HeaderCarrier): Future[Case] = {
     caseService.create(newCaseRequest.copy(attachments = attachments))
-  }
-
-  def createApplicationPdf(reference: String, pdf: PdfFile): TemporaryFile = {
-    val tempFile = tempFileCreator.create(reference, "pdf")
-    Files.write(tempFile.path, pdf.content, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)
-    tempFile
   }
 
   private def getCountryName(code: String): Option[String] =

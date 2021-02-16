@@ -83,12 +83,10 @@ class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   "Upload" should {
     val filestoreResponse = FilestoreResponse("id", "some.pdf", "application/pdf")
-    val tempFile = SingletonTemporaryFileCreator.create("foo", "pdf")
-
     "Delegate to connector" in {
-      given(connector.uploadApplicationPdf(any[String], any[TemporaryFile])(any[HeaderCarrier])).willReturn(successful(filestoreResponse))
+      given(connector.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier])).willReturn(successful(filestoreResponse))
 
-      await(service.uploadApplicationPdf("foo", tempFile)) shouldBe FileAttachment("id", "some.pdf", "application/pdf", 0L, false)
+      await(service.uploadApplicationPdf("foo", Array.empty[Byte])) shouldBe FileAttachment("id", "some.pdf", "application/pdf", 0L, false)
     }
   }
 

@@ -50,8 +50,8 @@ class FileService @Inject()(
     connector.initiate(request)
   }
 
-  def uploadApplicationPdf(reference: String, f: TemporaryFile)(implicit hc: HeaderCarrier): Future[FileAttachment] = {
-    connector.uploadApplicationPdf(reference, f).map(toFileAttachment(f.path.toFile.length))
+  def uploadApplicationPdf(reference: String, content: Array[Byte])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
+    connector.uploadApplicationPdf(reference, content).map(toFileAttachment(content.length.toLong))
   }
 
   def downloadFile(url: String)(implicit hc: HeaderCarrier): Future[Option[Source[ByteString, _]]] =
