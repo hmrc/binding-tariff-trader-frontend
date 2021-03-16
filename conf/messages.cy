@@ -48,9 +48,10 @@ site.service_name = Rheoli’ch Dyfarniadau Tariffau Uwch
 site.save_and_continue = Cadw ac yn eich blaen
 site.cancel_application = Canslo’r cais
 site.agree_and_continue = Cytuno ac yn eich blaen
-site.keep_confidential = Cadwch yn gyfrinachol
-site.save_your_application = Cadwch eich cais
+site.keep_confidential = Cadw’n gyfrinachol
+site.save_your_application = Cadw cais fel PDF
 site.print_your_application = Argraffwch eich cais
+site.notification.success = Wedi llwyddo
 
 beforeYouStart.title = Gwybodaeth sydd ei hangen arnoch i lenwi cais - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
 beforeYouStart.heading = Gwybodaeth sydd ei hangen arnoch i lenwi cais
@@ -158,11 +159,13 @@ returnSamples.checkYourAnswersLabel = Dychwelyd y samplau?
 returnSamples.error.required = Dewiswch Iawn os hoffech i’r sampl gael ei dychwelyd atoch
 returnSamples.caption = Ynglŷn â’r nwyddau
 
-supportingMaterialFileList.title = A ydych eisiau uwchlwytho unrhyw ddogfennau ategol? - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
+supportingMaterialFileList.title.singular = Rydych wedi uwchlwytho 1 ddogfen ategol ar gyfer {0} – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+supportingMaterialFileList.title.plural =  Rydych wedi uwchlwytho {0} o ddogfennau ategol ar gyfer {1} – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+
 supportingMaterialFileList.heading = A ydych eisiau uwchlwytho unrhyw ddogfennau ategol?
 supportingMaterialFileList.caption = Ynglŷn â’r nwyddau
-supportingMaterialFileList.uploadFileCounter.singular = Rydych wedi uwchlwytho 1 ddogfen ategol ar gyfer y(r) {0}
-supportingMaterialFileList.uploadFileCounter.plural = Rydych wedi uwchlwytho {0} o ddogfennau ategol ar gyfer y(r) {1}
+supportingMaterialFileList.uploadFileCounter.singular = Rydych wedi uwchlwytho 1 ddogfen ategol ar gyfer {0}
+supportingMaterialFileList.uploadFileCounter.plural = Rydych wedi uwchlwytho {0} o ddogfennau ategol ar gyfer {1}
 supportingMaterialFileList.choice.checkYourAnswersLabel = Uwchlwytho dogfennau ategol?
 supportingMaterialFileList.checkYourAnswersLabel = Dogfennau wedi’u huwchlwytho
 supportingMaterialFileList.label.anotherFile =  A ydych eisiau uwchlwytho dogfen ategol arall?
@@ -172,11 +175,12 @@ supportingMaterialFileList.indications.bullet2 = manylebau technegol
 supportingMaterialFileList.indications.bullet3 = rhestri o ddeunyddiau
 supportingMaterialFileList.indications.bullet4 = delweddau o’r nwyddau
 supportingMaterialFileList.indications.bullet5 = delweddau o becynnau
-supportingMaterialFileList.error.required = Dewiswch Iawn os oes gennych ffeiliau i’w huwchlwytho
+supportingMaterialFileList.error.required = Dewiswch ‘Iawn’ os ydych eisiau uwchlwytho dogfen ategol arall
 supportingMaterialFileList.error.numberFiles = Gostyngwch nifer y ffeiliau i {0} ar y mwyaf
 supportingMaterialFileList.clearFiles = Clirio ffeiliau wedi’u huwchlwytho
 supportingMaterialFile.remove.file.text = Dileu
 supportingMaterialFile.remove.file.hidden.text = Dileu ffeil {0}
+supportingMaterialFile.remove.file.success.text = Mae’r ffeil wedi’i thynnu o’r cais hwn
 
 uploadSupportingMaterialMultiple.title = Uwchlwytho dogfennau ategol ar gyfer y nwyddau - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
 uploadSupportingMaterialMultiple.heading = Uwchlwytho dogfennau ategol ar gyfer {0}
@@ -190,7 +194,7 @@ uploadSupportingMaterialMultiple.upload.typeOfFiles = ffeiliau pdf, doc, docx, x
 uploadSupportingMaterialMultiple.error.uploadError = Nid oedd modd uwchlwytho’r ffeil dan sylw – rhowch gynnig arall arni
 uploadSupportingMaterialMultiple.error.fileTooSmall = Mae’n rhaid i’r ffeil dan sylw fod yn fwy nag 1 beit
 uploadSupportingMaterialMultiple.error.fileTooLarge = Mae’n rhaid i’r ffeil dan sylw fod yn llai na 10MB
-uploadSupportingMaterialMultiple.error.noFileSelected = Dewis ffeil sy’n fwy nag 1 beit
+uploadSupportingMaterialMultiple.error.noFileSelected = Mae’n rhaid i’r ffeil dan sylw fod yn fwy nag 1 beit
 
 makeFileConfidential.title = A ydych am nodi’r ffeil yn gyfrinachol? - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
 makeFileConfidential.heading = A ydych am nodi’r ffeil yn gyfrinachol?
@@ -270,7 +274,7 @@ commodityCodeRulingReference.error.required =  Nodwch gyfeirnod dyfarniad
 
 enterContactDetails.title = Rhowch y manylion cyswllt ar gyfer y cais hwn – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 enterContactDetails.heading = Rhowch y manylion cyswllt ar gyfer y cais hwn
-enterContactDetails.bodyText = Dim ond er mwyn cysylltu â chi i ofyn cwestiynau yn ymwneud â’r cais hwn y caiff y manylion hyn eu defnyddio.
+enterContactDetails.bodyText = <span style="font-weight:bold;">Dim ond</span> er mwyn cysylltu â chi i ofyn cwestiynau yn ymwneud â’r cais hwn y caiff y manylion hyn eu defnyddio.
 enterContactDetails.caption = Ynglŷn â’r ymgeisydd
 enterContactDetails.name = Enw llawn
 enterContactDetails.email = Cyfeiriad e-bost
@@ -285,6 +289,7 @@ enterContactDetails.error.email.invalid = Nodwch gyfeiriad e-bost yn y fformat c
 enterContactDetails.error.name.length = Mae’n rhaid i’r enw llawn fod yn 100 o gymeriadau neu lai
 enterContactDetails.error.email.length = Mae’n rhaid i’r cyfeiriad e-bost fod yn 100 o gymeriadau neu lai
 enterContactDetails.error.phoneNumber.length = Mae’n rhaid i’r rhif ffôn fod yn 20 o gymeriadau neu lai
+enterContactDetails.error.phoneNumber.minLength = Mae’n rhaid i’r rhif ffôn fod yn 10 rif neu fwy
 enterContactDetails.error.phoneNumber.invalid = Nodwch rif ffôn, fel 01632 960000, 07700 900000 neu +44 0808 157 0192
 
 registeredAddressForEori.title = Rhowch yr enw a’r cyfeiriad ar gyfer y rhif EORI hwn – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
@@ -354,7 +359,7 @@ view.application.contact.date = Dyddiad cyflwyno
 view.application.ref.text = Cyfeirnod eich cais yw
 view.application.goods.details = Manylion y nwyddau
 view.application.sending.sample.paragraph1 = Mae’n rhaid i chi labeli eich samplau gyda chyfeirnod eich cais
-view.application.paragraph.whatNext = Rydym yn ceisio anfon penderfyniadau o ran Dyfarniadau Tariffau Uwch (ATaR) cyn pen 30 diwrnod i ddyddiad derbyn y cais. Fodd bynnag, mae’n gallu cymryd hyd at 120 diwrnod, yn unol â chyfraith y DU. Gallwch fewngofnodi i’ch cyfrif Dyfarniadau Tariffau Uwch i wirio statws eich cais.
+view.application.paragraph.whatNext = Rydym yn ceisio anfon penderfyniadau o ran Dyfarniadau Tariffau Uwch (ATaR) cyn pen 30 diwrnod i ddyddiad derbyn y cais. Fodd bynnag, mae’n gallu cymryd hyd at 120 diwrnod, yn unol â chyfraith y DU. Gallwch fewngofnodi i wirio statws eich cais.
 view.application.paragraph.do.not.send.sample = Peidiwch ag anfon sampl oni bai bod y Tîm Dosbarthu Tariffau wedi gofyn am un.
 
 view.applicationPdf.foundCommodityCode = A ydych wedi dod o hyd i god nwyddau ar gyfer y nwyddau?
@@ -423,6 +428,13 @@ case.ruling.status.active = Ar waith
 case.ruling.status.in.progress = Ar y gweill
 
 rulingInformation.startDate = Dyddiad dechrau
+
+documentNotFound.title = Heb ddod o hyd i’r dudalen - Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+documentNotFound.heading = Heb ddod o hyd i’r dudalen
+documentNotFound.message = Nid oedd modd dod o hyd {0} ar gyfer cyfeirnod y cais, sef {1}.
+documentNotFound.email = Gallwch e-bostio tariff.classification@hmrc.gov.uk i ofyn am gopi o’r ddogfen hon.
+documentNotFound.application = i’r ddogfen gais
+documentNotFound.rulingCertificate = i dystysgrif y dyfarniad
 
 title.abu_dhabi=Abu Dhabi
 title.afghanistan=Afghanistan
@@ -702,3 +714,11 @@ title.yemen=Yemen
 title.yugoslavia=Yugoslavia
 title.zambia=Zambia
 title.zimbabwe=Zimbabwe
+
+global.error.badRequest400.message=Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
+global.error.pageNotFound404.title=Heb ddod o hyd i’r dudalen – 404
+global.error.pageNotFound404.heading=Ni ellir dod o hyd i’r dudalen hon
+global.error.pageNotFound404.message=Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
+global.error.InternalServerError500.title=Mae’n ddrwg gennym, rydym yn profi anawsterau technegol - 500
+global.error.InternalServerError500.heading=Mae’n ddrwg gennym, rydym yn profi anawsterau technegol
+global.error.InternalServerError500.message=Rhowch gynnig arall arni mewn ychydig o funudau.
