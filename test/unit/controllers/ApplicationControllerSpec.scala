@@ -290,7 +290,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller().viewRulingCertificate(caseRef, Some(token))(request)
 
       status(result)          shouldBe OK
-      contentAsString(result) should include("Binding Tariff Information ruling")
+      contentAsString(result) should include("Advance Tariff Ruling certificate")
       contentAsString(result) should include("rulingInformation.certificateLink")
       contentType(result)     shouldBe Some("text/html")
     }
