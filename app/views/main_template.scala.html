@@ -32,8 +32,6 @@
 
 @import uk.gov.hmrc.play.views.html.layouts
 
-@serviceInfoContent = {}
-
 @sidebar = {
     @if(sidebarLinks.isDefined) {
         @layouts.sidebar(sidebarLinks.get, Some("sidebar"))
@@ -71,7 +69,6 @@
                bodyClasses = bodyClasses,
                sidebar = sidebar,
                mainContent = content,
-               serviceInfoContent = serviceInfoContent,
                scriptElem = Some(scriptElement),
                linkElem = inlineLinkElem,
                signOutLink = signOutLink,
