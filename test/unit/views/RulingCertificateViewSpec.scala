@@ -24,11 +24,11 @@ import views.html.templates.rulingCertificateTemplate
 class RulingCertificateViewSpec extends ViewSpecBase {
 
   private def createPdfView(c: Case): HtmlFormat.Appendable = {
-    rulingCertificateTemplate(frontendAppConfig, c, c.decision.get, s => Some("dummy country name"))(fakeRequest, messages)
+    rulingCertificateTemplate(frontendAppConfig, c, c.decision.get, s => Some("dummy country name"))(messages)
   }
 
   private def createHtmlView(c: Case): HtmlFormat.Appendable = {
-    rulingCertificateTemplate(frontendAppConfig, c, c.decision.get, s => Some("dummy country name"), compositeMode = true)(fakeRequest, messages)
+    rulingCertificateTemplate(frontendAppConfig, c, c.decision.get, s => Some("dummy country name"), compositeMode = true)(messages)
   }
 
   private val rulingCase = oCase.btiCaseWithDecision
@@ -37,16 +37,8 @@ class RulingCertificateViewSpec extends ViewSpecBase {
   private val doc = asDocument(createPdfView(rulingCase))
 
   "Ruling pdf view" must {
-    "contain the optional hmrc logo" in {
+    "contain the hmrc logo" in {
       assertRenderedById(doc,"pdf.ruling.header.logo")
-    }
-  }
-
-  "Ruling html view" must {
-    "not contain the optional hmrc logo" in {
-      val doc = asDocument(createHtmlView(rulingCase))
-
-      assertNotRenderedById(doc,"pdf.ruling.header.logo")
     }
   }
 
