@@ -29,7 +29,8 @@ case class Decision
   methodCommercialDenomination: Option[String] = None,
   methodExclusion: Option[String] = None,
   explanation: Option[String] = None,
-  decisionPdf: Option[Attachment] = None
+  decisionPdf: Option[Attachment] = None,
+  letterPdf: Option[Attachment]                = None
 )
 
 

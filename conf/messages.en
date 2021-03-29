@@ -91,6 +91,10 @@ site.agree_and_continue = Agree and continue
 site.keep_confidential = Keep confidential
 site.save_your_application = Save application as a PDF
 site.print_your_application = Print your application
+site.save_your_ruling_certificate = Save ruling certificate as a PDF
+site.print_your_ruling_certificate = Print your ruling certificate
+site.save_your_cover_letter = Save cover letter as a PDF
+site.print_your_cover_letter = Print your cover letter
 site.notification.success = Success
 
 unauthorised.title = Not registered for CDS
@@ -400,6 +404,7 @@ view.applicationPdf.foundCommodityCode = Have you found a commodity code for the
 view.applicationPdf.legalProblemQuestion = Have there been any legal challenges relating to the goods?
 view.applicationPdf.legalProblem = Legal challenges
 
+view.rulingPdf.header = Your ruling documents for
 confirmation.yourRefNumber = Your application reference
 confirmation.paragraph.confirmationEmail = We have sent your confirmation email to {0}.
 

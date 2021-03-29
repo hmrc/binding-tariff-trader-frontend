@@ -58,6 +58,10 @@ class ApplicationController @Inject() (
     implicit request => getPdfOrHtml(request.eoriNumber, reference, token, getRulingPDF)
   }
 
+  def coverLetterPdf(reference: String, token: Option[String]): Action[AnyContent] = identify.async {
+    implicit request => getPdfOrHtml(request.eoriNumber, reference, token, getLetterPDF)
+  }
+
   def viewRulingCertificate(reference: String, token: Option[String]): Action[AnyContent] = identify.async {
     implicit request => getPdfOrHtml(request.eoriNumber, reference, token, rulingCertificateHtmlView)
   }
@@ -163,6 +167,29 @@ class ApplicationController @Inject() (
         case NonFatal(_) => BadGateway
       }
     }
+
+  private def getLetterPDF(eori: Eori, reference: CaseReference)(
+    implicit request: Request[AnyContent]
+  ): Future[Result] =
+    caseService.getCaseWithRulingForUser(eori, reference).flatMap { c: Case =>
+      val rulingResponse = for {
+        decision <- OptionT.fromOption[Future].apply(c.decision)
+        pdf      <- OptionT.fromOption[Future](decision.letterPdf)
+        meta     <- OptionT(fileService.getAttachmentMetadata(pdf))
+        url      <- OptionT.fromOption[Future](meta.url)
+        result   <- OptionT(fileService.downloadFile(url))
+      } yield Ok
+        .streamed(result, None, Some(meta.mimeType))
+        .withHeaders("Content-Disposition" -> s"attachment; filename=${meta.fileName}")
+
+      val messages     = request.messages
+      val documentType = messages("documentNotFound.rulingCertificate")
+
+      rulingResponse.getOrElse(NotFound(views.html.documentNotFound(appConfig, documentType, reference))).recover {
+        case NonFatal(_) => BadGateway
+      }
+    }
+
 
   def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)(
     implicit request: Request[AnyContent]
