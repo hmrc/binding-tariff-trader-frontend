@@ -56,7 +56,8 @@ object oCase {
       goodsDescription = "goodsDescription-content",
       methodCommercialDenomination = Some("commercial-denomination-content"),
       explanation = exp,
-      decisionPdf = Some(Attachment("id", false))
+      decisionPdf = Some(Attachment("id", false)),
+      letterPdf = Some(Attachment("id", false))
     )
   }
 
