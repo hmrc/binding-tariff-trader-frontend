@@ -36,12 +36,6 @@ class RulingCertificateViewSpec extends ViewSpecBase {
   private val ruling = rulingCase.decision.getOrElse(throw new Exception("Bad test data"))
   private val doc = asDocument(createPdfView(rulingCase))
 
-  "Ruling pdf view" must {
-    "contain the hmrc logo" in {
-      assertRenderedById(doc,"pdf.ruling.header.logo")
-    }
-  }
-
   "Ruling pdf holder section" must {
 
     val section = "section-holder"

@@ -291,7 +291,6 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       status(result)          shouldBe OK
       contentAsString(result) should include("Advance Tariff Ruling certificate")
-      contentAsString(result) should include("rulingInformation.certificateLink")
       contentType(result)     shouldBe Some("text/html")
     }
 
