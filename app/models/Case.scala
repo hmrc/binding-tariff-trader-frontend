@@ -35,7 +35,10 @@ case class Case
   application: Application,
   decision: Option[Decision] = None,
   attachments: Seq[Attachment] = Seq.empty,
-  dateOfExtract: Option[Instant] = None
+  dateOfExtract: Option[Instant] = None,
+  keywords: Set[String]             = Set.empty,
+  assignee: Option[Operator] = None
+
 ) {
 
   def hasEoriNumber(eoriNumber: String): Boolean = application.holder.eori == eoriNumber || application.agent.exists(_.eoriDetails.eori == eoriNumber)

@@ -281,6 +281,73 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
   }
 
+  "Cover Letter Pdf" must {
+
+    "return 200 when a PDF can be found" in {
+      givenThePdfServiceDecodesTheTokenWith("eori")
+      givenTheCaseWithRulingFindsTheCaseWithRuling()
+      givenTheFileServiceFindsThePdf()
+
+      val result = controller().coverLetterPdf(caseRef, Some(token))(request)
+
+      status(result)                        shouldBe OK
+      contentType(result)                   shouldBe Some("application/pdf")
+      header("Content-Disposition", result) shouldBe (Some("attachment; filename=some.pdf"))
+    }
+
+    "return 404 when there is no PDF" in {
+      givenThePdfServiceDecodesTheTokenWith("eori")
+      givenTheCaseWithRulingFindsTheCaseWithRuling()
+      givenTheFileServiceFindsNoPdf()
+
+      val result = controller().coverLetterPdf(caseRef, Some(token))(request)
+
+      status(result)          shouldBe NOT_FOUND
+      contentAsString(result) should include(messages("documentNotFound.rulingCertificate"))
+      contentType(result)     shouldBe Some("text/html")
+    }
+
+    "return 502 when the filestore cannot be reached" in {
+      givenThePdfServiceDecodesTheTokenWith("eori")
+      givenTheCaseWithRulingFindsTheCaseWithRuling()
+      givenTheFileServiceCannotBeReached()
+
+      val result = controller().coverLetterPdf(caseRef, Some(token))(request)
+
+      status(result) shouldBe BAD_GATEWAY
+    }
+
+    "return 404 when no case is found" in {
+      givenThePdfServiceDecodesTheTokenWith("eori")
+      givenTheCaseServiceDoesNotFindTheCase()
+
+      val caught: Exception = intercept[Exception] {
+        await(controller().coverLetterPdf(caseRef, Some(token))(request))
+      }
+      caught.getMessage shouldBe "Case not found"
+    }
+
+    "redirect to session expired when the token is invalid" in {
+      givenThePdfServiceFailsToDecodeTheToken()
+
+      val result = controller(FakeIdentifierAction(None)).coverLetterPdf(caseRef, Some(token))(request)
+
+      status(result)           shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+    }
+
+    "redirect to unauthorized when the token is empty and session EORI is not present" in {
+      givenThePdfServiceFailsToDecodeTheToken()
+
+      val result = controller(FakeIdentifierAction(None)).coverLetterPdf(caseRef, None)(request)
+
+      status(result)           shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad().url)
+    }
+
+  }
+
+
   "Ruling View" must {
 
     "return ruling view result" in {
@@ -290,8 +357,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller().viewRulingCertificate(caseRef, Some(token))(request)
 
       status(result)          shouldBe OK
-      contentAsString(result) should include("Binding Tariff Information ruling")
-      contentAsString(result) should include("rulingInformation.certificateLink")
+      contentAsString(result) should include("Advance Tariff Ruling certificate")
       contentType(result)     shouldBe Some("text/html")
     }
 

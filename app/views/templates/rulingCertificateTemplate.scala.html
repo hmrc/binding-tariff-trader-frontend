@@ -17,182 +17,108 @@
 @import config.FrontendAppConfig
 @import utils.Dates
 
-@(appConfig: FrontendAppConfig, c: Case, d: Decision, getCountryName: String => Option[String], compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
-
+@(appConfig: FrontendAppConfig, c: Case, d: Decision, getCountryName: String => Option[String],
+compositeMode: Boolean = false)(implicit messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
-    val protocol = if(req.secure) "https" else "http"
-    s"$protocol://${req.host}${routes.Assets.versioned(path)}"
+val protocol = if(req.secure) "https" else "http"
+s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 }
 
-<html>
-    <head>
-        <style>
-                body {
-                    font-size: 21px;
-                    font-family: "nta", Arial, sans-serif;
-                }
-
-                table {
-                    width: 100%;
-                    font-size: 21px;
-                    line-height: 1.31579;
-                    border-collapse: collapse;
-                }
-
-                td {
-                    padding: 8px 0px 8px 0px;
-                    /*border-bottom: 1px solid #bfc1c3;*/
-                    vertical-align: top;
-                }
-
-                td:nth-child(n) {
-                    width: 35%;
-                }
-
-                table.header td {
-                    border-bottom: 0px
-                }
-
-                .box {
-                    border: 1px solid #000000;
-                    padding: 0px 10px 0px 10px;
-                }
-
-                .section-label {
-                    font-weight: bold;
-                }
-
-                .timestamp {
-                    font-size: 10px;
-                    text-align: right;
-                }
-                .pre-wrap {
-                    white-space: pre-wrap;
-                }
-        </style>
-        <title>@messages("pdf.ruling.tab.title")</title>
-    </head>
-    <body>
-        <div>
-
-            @if(!compositeMode) {
-                <span id="pdf.ruling.header.logo">
-                    <img src="@createLink("images/hmrc-logo.jpg")">
-                    <h1>@messages("pdf.ruling.title")</h1>
-                </span>
-            }
-
-            <div class="box">
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.issuedBy.label"):
-                    </span> @messages("pdf.ruling.issuedBy.text")
-                </p>
+<div class="grid-row hidden-print">
+    <div class="column-two-thirds"></div>
+</div>
+<div id="print-pages" class="print-pages">
+    <div id="ruling-certificate" class="print-document" id="print-document">
+        <div class="grid-row print-header">
+            <div class="column-one-third">
+                <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
             </div>
-
-            <div id="section-holder" class="box">
-                <h2>@messages("pdf.ruling.section.holder.heading")</h2>
-
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.section.holder.note.label")</span>
-                    @messages("pdf.ruling.section.holder.note.text")
-                </p>
-
-                <table>
-                    <tr>
-                        <td class="section-label">@messages("pdf.ruling.section.holder.name.label")</td>
-                        <td id="ruling.holder.businessName">@c.application.holder.businessName</td>
-                    </tr>
-                    <tr>
-                        <td class="section-label">@messages("pdf.ruling.section.holder.address.label")</td>
-                        <td id="ruling.holder.address">
-                            @c.application.holder.addressLine1 <br/>
-                            @c.application.holder.addressLine2 <br/>
-                            @c.application.holder.addressLine3 <br/>
-                            @c.application.holder.postcode <br/>
-                            @messages(getCountryName(c.application.holder.country).mkString)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="section-label">@messages("pdf.ruling.section.holder.eori.label")</td>
-                        <td id="ruling.holder.eori">@c.application.holder.eori</td>
-                    </tr>
-
-                </table>
-
+            <div>
+                <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
+                    @messages("pdf.ruling.certificate.title")
+                </h2>
             </div>
-            <div id="section-ruling" class="box">
-                <h2>@messages("pdf.ruling.section.ruling.heading")</h2>
-
-                <table>
-                    <tr>
-                        <td class="section-label">@messages("pdf.ruling.section.ruling.commodityCode.label")</td>
-                        <td id="ruling.details.commodityCode">@d.bindingCommodityCode</td>
-                    </tr>
-                    <tr>
-                        <td class="section-label">@messages("pdf.ruling.section.ruling.rulingReference.label")</td>
-                        <td id="ruling.details.rulingReference">@messages("caseReference.format", c.reference)</td>
-                    </tr>
-                    <tr>
-                        <td class="section-label">@messages("pdf.ruling.section.ruling.validFrom.label")</td>
-                        <td id="ruling.details.startDate">@Dates.format(d.effectiveStartDate)</td>
-                    </tr>
-                    <tr>
-                        <td class="section-label">@messages("pdf.ruling.section.ruling.validTo.label")</td>
-                        <td id="ruling.details.endDate">@Dates.format(d.effectiveEndDate)</td>
-                    </tr>
-                </table>
-
-            </div>
-
-            <div id="section-goods" class="box">
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.section.ruling.description.label")</span>
-                </p>
-                <p>
-                    <span id="ruling.goodsDescription"><span class="pre-wrap">@d.goodsDescription</span></span>
-                </p>
-            </div>
-
-            <div id="section-commercial" class="box">
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.section.ruling.commercialDenomination.label")</span>
-                    <span>@messages("pdf.ruling.section.ruling.commercialDenomination.sublabel")</span>
-                </p>
-                <p id="ruling.methodCommercialDenomination"><span class="pre-wrap">@d.methodCommercialDenomination.getOrElse("")</span></p>
-            </div>
-
-            <div id="section-justification" class="box">
-                <p>
-                    <span class="section-label">@messages("pdf.ruling.section.ruling.justification.label")</span>
-                </p>
-                <p>
-                    <span id="ruling.justification"><span class="pre-wrap">@d.justification</span></span>
-                </p>
-            </div>
-
-            <div id="section-legal" class="box">
-                <h3 class="heading-medium">@messages("pdf.ruling.section.ruling.legalInformation.section1.label")</h3>
-
-                <p>@messages("pdf.ruling.section.ruling.legalInformation.section1.paragraph1")</p>
-                <p>@messages("pdf.ruling.section.ruling.legalInformation.section1.paragraph2")</p>
-
-                <h4 class="heading-small">@messages("pdf.ruling.section.ruling.legalInformation.section2.label")</h4>
-
-                <p">@messages("pdf.ruling.section.ruling.legalInformation.section2.paragraph1")</p>
-
-                <ul class="list list-bullet">
-                    <li>@messages("pdf.ruling.section.ruling.legalInformation.section2.paragraph1.listitem1")</li>
-                    <li>@messages("pdf.ruling.section.ruling.legalInformation.section2.paragraph1.listitem2")</li>
-                </ul>
-                <p>@messages("pdf.ruling.section.ruling.legalInformation.section2.paragraph2")</p>
-                <ul class="list list-bullet">
-                    <li>@messages("pdf.ruling.section.ruling.legalInformation.section2.paragraph2.listitem1")</li>
-                </ul>
-            </div>
-
         </div>
+        <div class="grid-row mt-40">
+            <div class="column-full">
+                <span class="govuk-caption-xl">Advance Tariff Ruling (ATaR) for @{c.reference}</span>
+                <h1 class="heading-xlarge">@c.application.goodName</h1>
+                <p>Issued by: HMRC Tariff Classification Team</p>
+            </div>
+        </div>
+        <div class="grid-row main-content">
+            <div class="column-one-half" id="section-holder">
+                <h4 class="heading-small">@messages("pdf.ruling.section.holder.heading")</h4>
+                <p class="govuk-body-s" id="ruling.holder.businessName">
+                    <strong>@messages("pdf.ruling.section.holder.name.label")</strong><br>
+                    @c.application.holder.businessName
+                </p>
+                <p class="govuk-body-s" id="ruling.holder.address">
+                    <strong>@messages("pdf.ruling.section.holder.address.label")</strong><br>
+                    @c.application.holder.addressLine1 <br/>
+                    @c.application.holder.addressLine2 <br/>
+                    @c.application.holder.addressLine3 <br/>
+                    @c.application.holder.postcode <br/>
+                    @messages(getCountryName(c.application.holder.country).mkString)
+                </p>
+                <p class="govuk-body-s" id="ruling.holder.eori">
+                    <strong>@messages("pdf.ruling.section.holder.eori.label")</strong><br>
+                    @c.application.holder.eori
+                </p>
+            </div>
+            <div class="column-one-half" id="section-ruling">
+                <h4 class="heading-small">@messages("pdf.ruling.section.ruling.heading")</h4>
+                <p class="govuk-body-s">
+                    <strong>@messages("pdf.ruling.section.ruling.commodityCode.label")</strong><br>
+                    @d.bindingCommodityCode
+                </p>
+                <p class="govuk-body-s">
+                    <strong>@messages("pdf.ruling.section.ruling.rulingReference.label")</strong><br>
+                    @c.reference
+                </p>
+                <p class="govuk-body-s">
+                    <strong>@messages("pdf.ruling.section.ruling.validFrom.label")</strong><br>
+                    @Dates.format(d.effectiveStartDate)
+                </p>
+                <p class="govuk-body-s">
+                    <strong>@messages("pdf.ruling.section.ruling.validTo.label")</strong><br>
+                    @Dates.format(d.effectiveEndDate)
+                </p>
+            </div>
+        </div>
+            <div class="grid-row">
+                <div class="column-full" id="section-goods-info">
+                    <h3 class="heading-medium">@c.application.goodName details</h3>
+                    <dl class="govuk-check-your-answers cya-questions-short">
+                        <div id="section-goods">
+                            <dt class="cya-question">@messages("pdf.ruling.section.ruling.description.label")</dt>
+                            <dd class="cya-answer" id="ruling.goodsDescription">@d.goodsDescription</dd>
+                        </div>
+                        <div id="section-commercial">
+                            <dt class="cya-question">@messages("pdf.ruling.section.ruling.commercialDenomination.label")</dt>
+                            <dd class="cya-answer" id="ruling.methodCommercialDenomination">@d.methodCommercialDenomination.getOrElse("")</dd>
+                        </div>
+                        <div id="section-justification">
+                            <dt class="cya-question">@messages("pdf.ruling.section.ruling.justification.label")</dt>
+                            <dd class="cya-answer" id="ruling.justification">@d.justification</dd>
+                        </div>
+                        <div id="section-keywords">
+                            <dt class="cya-question">@messages("pdf.ruling.section.ruling.keywords.label")</dt>
+                            <dd class="cya-answer">
+                                @for(keyword <- c.keywords){
+                                <strong class="govuk-tag govuk-tag--grey">@keyword</strong>
+                                }
+                            </dd>
+                        </div>
 
-    </body>
+                    </dl>
+                    <h3 class="heading-small">@messages("pdf.ruling.section.ruling.legalInformation.section1.label")</h3>
+                    <p class="govuk-body">@messages("pdf.ruling.section.ruling.legalInformation.paragraph", Dates.format(d.effectiveStartDate), Dates.format(d.effectiveEndDate))</p>
+                </div>
+            </div>
 
-</html>
+
+    </div>
+</div>
+
