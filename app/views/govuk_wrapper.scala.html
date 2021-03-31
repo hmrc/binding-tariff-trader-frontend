@@ -27,7 +27,6 @@
   sidebar: Html = empty,
   contentHeader: Option[Html] = None,
   mainContent: Html = empty,
-  serviceInfoContent: Html = empty,
   scriptElem: Option[Html] = None,
   backLink: Boolean = true,
   signOutLink: String)(implicit request: Request[_], messages: Messages)
@@ -51,7 +50,6 @@
     <script type="text/javascript" src="@routes.Assets.versioned("javascripts/file-input-handler.js")"></script>
 }
 
-
 @insideHeader = {
     @uiLayouts.header_nav(
       navTitle = Some(messages("site.service_name")),
@@ -71,11 +69,6 @@
 @afterHeader = {
 <div class="main-wrapper govuk-width-container">
     <div class="centered-content">
-    @uiLayouts.serviceInfo(
-    betaBanner = phaseBanner,
-    includeHMRCBranding = false,
-    includeGridWrapper = false,
-    serviceInfoContent = Some(serviceInfoContent))
 
     @contentHeaderWithLanguageSelection
 
@@ -110,24 +103,6 @@
 }
 
 @footerTop = {}
-
-
-@phaseBanner = {
-    @uiLayouts.betaBanner(
-        userLoggedIn = false,
-        betaFeedbackUrl = appConfig.betaFeedbackUrl,
-        betaFeedbackUnauthenticatedUrl = appConfig.betaFeedbackUnauthenticatedUrl,
-        showFeedbackLinkInBetaBanner = true
-    )
-}
-
-@serviceInfo = {
-    @uiLayouts.serviceInfo(
-      betaBanner = phaseBanner,
-      includeHMRCBranding = false,
-      includeGridWrapper = false,
-      serviceInfoContent = Some(serviceInfoContent))
-}
 
 @mainContentHeader = {
 

@@ -247,5 +247,10 @@ $(document).ready(function () {
     window.onafterprint = function () {
         afterPrintCall();
     }
+
+    if(document.getElementById("govuk-notification-banner--success")) {
+         document.getElementById("govuk-notification-banner--success").focus()
+    }
+
 });
 

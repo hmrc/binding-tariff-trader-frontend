@@ -14,13 +14,15 @@
  * limitations under the License.
  *@
 
-@()(implicit messages: Messages)
+@import utils.NotificationType
 
-<div class="js-visible">
-  <p>
-   <a id="cancel-application-link" class="govuk-link" href="@routes.SignOutController.cancelApplication">
-    @messages("site.cancel_application")
-    <span class="visually-hidden"> and return to your applications and rulings page.</span>
-   </a>
-  </p>
-</div>
+@()(implicit flash: Flash, messages: Messages)
+
+@renderSuccess(message: String) = {
+@success_banner(
+    heading = messages("site.notification.success"),
+    message = message
+    )
+}
+
+@flash.get(NotificationType.Success.key).map(renderSuccess(_))

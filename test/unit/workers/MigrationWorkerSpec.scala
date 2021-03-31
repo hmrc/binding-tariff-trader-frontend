@@ -112,11 +112,11 @@ class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       .willReturn(Future.successful(Seq.empty))
     given(pdfService.generatePdf(any[Html]))
       .willReturn(Future.successful(PdfFile(Array.empty, "application/pdf")))
-    given(fileService.uploadApplicationPdf(refEq("ref1"), any[Files.TemporaryFile])(any[HeaderCarrier]))
+    given(fileService.uploadApplicationPdf(refEq("ref1"), any[Array[Byte]])(any[HeaderCarrier]))
       .willReturn(Future.successful(FileAttachment("id1", "some.pdf", "application/pdf", 0L, true)))
-    given(fileService.uploadApplicationPdf(refEq("ref2"), any[Files.TemporaryFile])(any[HeaderCarrier]))
+    given(fileService.uploadApplicationPdf(refEq("ref2"), any[Array[Byte]])(any[HeaderCarrier]))
       .willReturn(Future.successful(FileAttachment("id2", "some.pdf", "application/pdf", 0L, true)))
-    given(fileService.uploadApplicationPdf(refEq("ref3"), any[Files.TemporaryFile])(any[HeaderCarrier]))
+    given(fileService.uploadApplicationPdf(refEq("ref3"), any[Array[Byte]])(any[HeaderCarrier]))
       .willReturn(Future.successful(FileAttachment("id3", "some.pdf", "application/pdf", 0L, true)))
   }
 

@@ -95,6 +95,13 @@ trait Constraints {
     }
   }
 
+  protected def minNumberLength(minimum: Int, errorKey: String): Constraint[String] = {
+    Constraint {
+      case str: String if str.replaceAll("[^0-9]", "").length >= minimum => Valid
+      case _ => Invalid(errorKey, minimum)
+    }
+  }
+
   protected def optionalPostCodeMaxLength(errorKey: String): Constraint[Option[String]] = {
     optionalMaxLength(postCodeMaxLength, errorKey)
   }

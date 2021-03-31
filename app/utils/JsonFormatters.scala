@@ -31,10 +31,10 @@ object JsonFormatters {
   implicit val agentDetailsFormat: OFormat[AgentDetails] = Json.format[AgentDetails]
   implicit val applicationFormat: OFormat[Application] = Json.format[Application]
   implicit val decisionFormat: OFormat[Decision] = Json.format[Decision]
+  implicit val operator: Format[Operator] = Json.using[Json.WithDefaultValues].format[Operator]
   implicit val caseFormat: OFormat[Case] = Json.format[Case]
   implicit val newCaseRequestFormat: OFormat[NewCaseRequest] = Json.format[NewCaseRequest]
   implicit val caseAuditPayloadFormat: OFormat[CaseAuditPayload] = Json.format[CaseAuditPayload]
-  implicit val operator: Format[Operator] = Json.using[Json.WithDefaultValues].format[Operator]
   implicit val fileViewFormat: OFormat[FileView] = Json.format[FileView]
   implicit val pdfFormat: OFormat[PdfViewModel] = Json.format[PdfViewModel]
 

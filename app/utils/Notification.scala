@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@()(implicit messages: Messages)
+package utils
 
-<div class="js-visible">
-  <p>
-   <a id="cancel-application-link" class="govuk-link" href="@routes.SignOutController.cancelApplication">
-    @messages("site.cancel_application")
-    <span class="visually-hidden"> and return to your applications and rulings page.</span>
-   </a>
-  </p>
-</div>
+import play.api.i18n.Messages
+
+import scala.language.implicitConversions
+
+sealed abstract class NotificationType(val key: String)
+
+object NotificationType extends Enumeration {
+  object Success extends NotificationType("success")
+}
+
+object Notification {
+  def success(key: String, args: Any*)(implicit messages: Messages): (NotificationType, String) =
+    NotificationType.Success -> messages(key, args: _*)
+
+  implicit def toFlash(value: (NotificationType, String)): (String, String) = (value._1.key, value._2)
+
+}

@@ -21,15 +21,15 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.EnterContactDetailsFormProvider
 import javax.inject.Inject
-import models.{ EnterContactDetails,  Mode }
+import models.{EnterContactDetails, Mode, RegisteredAddressForEori, UserAnswers}
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.EnterContactDetailsPage
+import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
 import play.api.data.Form
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import views.html.enterContactDetails
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class EnterContactDetailsController @Inject()(
   appConfig: FrontendAppConfig,
@@ -40,10 +40,36 @@ class EnterContactDetailsController @Inject()(
   val requireData: DataRequiredAction,
   formProvider: EnterContactDetailsFormProvider,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[EnterContactDetails](cc) {
-  lazy val form = formProvider()
+)(implicit ec: ExecutionContext)
+    extends AnswerCachingController[EnterContactDetails](cc) {
+
+  lazy val form                  = formProvider()
+  lazy val formWithTelValidation = formProvider.formWithMinTelNumber
+
   val questionPage = EnterContactDetailsPage
+
+  override def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+    implicit request: DataRequest[_] =>
+      val preparedForm = request.userAnswers.get(questionPage) match {
+        case Some(value) => enterContactDetailsForm(request.userAnswers).fill(value)
+        case _           => enterContactDetailsForm(request.userAnswers)
+      }
+      Ok(renderView(preparedForm, mode))
+  }
+
+  override def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+    implicit request: DataRequest[_] =>
+      val badRequest = (formWithErrors: Form[EnterContactDetails]) =>
+        Future.successful(Results.BadRequest(renderView(formWithErrors, mode)))
+      enterContactDetailsForm(request.userAnswers).bindFromRequest().fold(badRequest, submitAnswer(_, mode))
+  }
 
   def renderView(preparedForm: Form[EnterContactDetails], mode: Mode)(implicit request: DataRequest[_]) =
     enterContactDetails(appConfig, preparedForm, mode)
+
+  def enterContactDetailsForm(userAnswers: UserAnswers): Form[EnterContactDetails] =
+    if (userAnswers.get(RegisteredAddressForEoriPage).exists(_.country == "GB"))
+      formWithTelValidation
+    else
+      form
 }

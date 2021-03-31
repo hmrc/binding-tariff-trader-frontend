@@ -112,6 +112,7 @@ GET         /applications/:reference                                   controlle
 GET         /applications/:reference/pdf                               controllers.ApplicationController.applicationPdf(reference: String, token: Option[String] ?= None)
 GET         /applications/:reference/ruling                            controllers.ApplicationController.viewRulingCertificate(reference: String, token: Option[String] ?= None)
 GET         /applications/:reference/ruling/pdf                        controllers.ApplicationController.rulingCertificatePdf(reference: String, token: Option[String] ?= None)
+GET         /applications/:reference/cover-letter/pdf                  controllers.ApplicationController.coverLetterPdf(reference: String, token: Option[String] ?= None)
 
 GET         /rulings/:reference                                        controllers.RulingController.viewRuling(reference: String)
 

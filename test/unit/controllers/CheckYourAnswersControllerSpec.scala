@@ -237,7 +237,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   }
 
   private def givenTheApplicationPdfIsUploaded(): Unit = {
-    when(fileService.uploadApplicationPdf(any[String], any[TemporaryFile])(any[HeaderCarrier])).thenReturn(successful(applicationPdf))
+    when(fileService.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier])).thenReturn(successful(applicationPdf))
   }
 
   private def givenTheCaseIsUpdatedWithPdf(): Unit = {

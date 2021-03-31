@@ -1,76 +1,77 @@
 
-# Binding Tariff Trader Front End
+# binding-tariff-trader-frontend
 
-The Front-end microrservice for the BTI Application journey on GOV.UK
-
+The public frontend for the Manage your Advance Tariff Rulings service, used to apply for Advance Tariff Rulings (ATaRs).
 
 ### Running
 
 ##### To run this Service you will need:
 
-1) [Service Manager](https://github.com/hmrc/service-manager) Installed
-2) [SBT](https://www.scala-sbt.org) Version `>0.13.13` Installed
+1) [Service Manager](https://github.com/hmrc/service-manager) installed
+2) [SBT](https://www.scala-sbt.org) Version `>=1.x` installed
+3) [MongoDB](https://www.mongodb.com/) version `>=3.6` installed and running on port 27017
+4) [Localstack](https://github.com/localstack/localstack) installed and running on port 4572
+5) Create an S3 bucket in localstack by using `awslocal s3 mb s3://digital-tariffs-local` within the localstack container
 
-##### Starting dependencies:
+The easiest way to run MongoDB and Localstack for local development is to use [Docker](https://docs.docker.com/get-docker/).
 
-1) Start Mongo `sm --start MONGO`
-2) Start Assets Frontend Using `sm --start ASSETS_FRONTEND -r 3.2.2`
-3) Start [Binding Tariff Classification](https://github.com/hmrc/binding-tariff-classification) Using `sm --start BINDING_TARIFF_CLASSIFICATION -r`
-4) Start Auth Using `sm --start AUTH -r`
-5) Start Auth Login Stub `sm --start AUTH_LOGIN_STUB -r`
-6) Start Auth Login API `sm --start AUTH_LOGIN_API -r`
-7) Start Auth Identity verification `sm --start IDENTITY_VERIFICATION -r`
-8) Start User Details `sm --start USER_DETAILS -r`
-9) Start Pdf Generator Service `sm --start PDF_GENERATOR_SERVICE -r` (Requires first installing dependencies - see [below](#pdf-generator-service))
-10) Start Feedback Frontend `sm --start FEEDBACK_FRONTEND -r`
-11) Start Frontend Template Provider `sm --start FRONTEND_TEMPLATE_PROVIDER -r`
-12) Start EMAIL Service `sm --start EMAIL -r && sm --start HMRC_TEMPLATE_RENDERER -r && sm --start MAILGUN_STUB -r`
+##### To run MongoDB
 
+```
+> docker run --restart unless-stopped -d -p 27017-27019:27017-27019 --name mongodb mongo:3.6.13
+```
 
+##### To run Localstack and create the S3 bucket
 
-##### Running With SBT
+```
+> docker run -d --restart unless-stopped --name localstack -e SERVICES=s3 -p4572:4566 -p8080:8080 localstack/localstack
+> docker exec -it localstack bash
+> awslocal s3 mb s3://digital-tariffs-local
+> exit
+```
 
-Run `sbt run` to boot the app
+#### Starting the application:
+ 
+1) Launch dependencies using `sm --start DIGITAL_TARIFF_DEPS -r`
+2) Start the backend service [binding-tariff-classification](https://github.com/hmrc/binding-tariff-classification) using `sm --start BINDING_TARIFF_CLASSIFICATION -r`
+3) Start the filestore service [binding-tariff-filestore](https://github.com/hmrc/binding-tariff-filestore) using `sm --start BINDING_TARIFF_FILESTORE -r`
+5) On Mac OS you must start an older version of the [pdf-generator-service](https://github.com/hmrc/pdf-generator-service):
+```
+sm --stop PDF_GENERATOR_SERVICE
+sm --start PDF_GENERATOR_SERVICE -r 1.20.0
+```
 
-Go to http://localhost:9000/advance-tariff-application/
+Use `sbt run` to boot the app or run it with Service Manager using `sm --start BINDING_TARIFF_TRADER_FRONTEND -r`.
 
-You will be redirected to the Auth Stub.
+This application runs on port 9582.
 
-##### Running with Service Manager
+Open `http://localhost:9582/advance-tariff-application`.
 
-This application runs on port 9582
+You can also run the `DIGITAL_TARIFFS` profile using `sm --start DIGITAL_TARIFFS -r` and then stop the Service Manager instance of this service using `sm --stop BINDING_TARIFF_TRADER_FRONTEND` before running with sbt.
 
-Run `sm --start BINDING_TARIFF_TRADER_FRONTEND -r`
+### Authentication
 
-Go to http://localhost:9582/advance-tariff-application/
+The service uses the HMRC [auth-client](https://github.com/hmrc/auth-client) for authentication with Government Gateway as the authentication provider. In non production environments you will be redirected to the auth-login-stub. You can log in using the following enrolment information:
 
-You will be redirected to the Auth Stub.
+Enrolment Key: `HMRC-ATAR-ORG`
 
-##### Authentication
+Identifier Name: `EORINumber`
 
-The service uses the [HMRC Auth Client](https://github.com/hmrc/auth-client) for authentication with Gov Gateway as the provider. In non production environments you will be redirected to the Auth Stub, to authenticate you need an enrolment with properties:
-
-Key: `HMRC-ATAR-ORG`
-
-Identifier name: `EORINumber`
-
-Identifier value: any string or eori
+Identifier Value: `<any string>`
 
 ### PDF Generator Service
-This service requires the installation of some dependencies before it can be run using Service Manager.  See [Pdf Generator Service](https://github.com/hmrc/pdf-generator-service).
 
-Running PDF Generator Service locally on Mac OSX (currently) requires running an older version.  
+This service requires the installation of some dependencies before it can be run using Service Manager. See [pdf-generator-service](https://github.com/hmrc/pdf-generator-service).
+
+Running the pdf-generator-service locally on Mac OSX (currently) requires running an older version.  
 
 Run `sm --start PDF_GENERATOR_SERVICE -r 1.20.0`
 
 ### Testing
 
-Run `./run_all_tests.sh`
-or `sbt test it:test`
+Run `./run_all_tests.sh`. This also runs Scalastyle and does coverage testing.
 
-### Changes
-
-This project uses [Scaffold](https://github.com/hmrc/hmrc-frontend-scaffold.g8) to create its pages.
+or `sbt test it:test` to run the tests only.
 
 ### License
 

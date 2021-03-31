@@ -21,89 +21,75 @@
 @(appConfig: FrontendAppConfig, dashboard: Dashboard)(implicit request: Request[_], messages: Messages)
 
 @paginate(containerClass: String, idPrefix: String) = {
-@pagination(
-id = s"$idPrefix-applications-pagination",
-singularName = messages("case.applications.pagination.singular"),
-pluralName = messages("case.applications.pagination.plural"),
-pager = dashboard.pageData,
-containerClass = Some(containerClass),
-onChange = page => controllers.routes.IndexController.getApplicationsAndRulings(page, Dashboard.getSortBy, Dashboard.getSortDirection)
-)
+  @pagination(
+    id = s"$idPrefix-applications-pagination",
+    singularName = messages("case.applications.pagination.singular"),
+    pluralName = messages("case.applications.pagination.plural"),
+    pager = dashboard.pageData,
+    containerClass = Some(containerClass),
+    onChange = page => controllers.routes.IndexController.getApplicationsAndRulings(page, Dashboard.getSortBy, Dashboard.getSortDirection)
+  )
 }
 
 @main_template(
-title = messages("index.title"),
-appConfig = appConfig,
-contentClass = Some("column-full grid-row"),
-backLink = false,
-bodyClasses = None) {
+  title = messages("index.title"),
+  appConfig = appConfig,
+  contentClass = Some("column-full grid-row"),
+  backLink = false,
+  bodyClasses = None
+) {
+    @components.heading(
+        messages("index.heading"),
+        captionMsg = Some(messages("application.dashboard.status.title"))
+    )
 
-
-@components.heading(messages("index.heading"),
-captionMsg = Some(messages("application.dashboard.status.title")))
-
-@if(dashboard.pageData.isEmpty) {
-<div>
- <h2 class="sub-header">@messages("index.noapplications")</h2>
-</div>
-}
-
-@components.button_link(messages("site.start"), routes.BeforeYouStartController.onPageLoad.url, id = Some("start-application"))
-
-@if(dashboard.pageData.nonEmpty){
-<div id="applications-rulings-list">
-
- <table id="applications-rulings-list-table">
-  <thead>
-  <tr>
-   @sortableColumnHeading("case.tabs.applications.table.reference", SortField.REFERENCE.toString)
-   @sortableColumnHeading("case.tabs.applications.table.goodsName", SortField.GOODS_NAME.toString)
-   @sortableColumnHeading("case.tabs.applications.table.dateSubmitted", SortField.CREATED_DATE.toString)
-   @sortableColumnHeading("case.tabs.applications.table.status", SortField.STATUS.toString)
-   <th scope="col"><span class="visuallyhidden">@messages("case.application.ruling.table.download")</span></th>
-  </tr>
-  </thead>
-  <tbody id="applications-rulings-list-body">
-  @for((c: Case, index: Int) <- dashboard.pageData.results.zipWithIndex) {
-  <tr id="applications-rulings-list-row-@{index}">
-   <td id="applications-rulings-list-row-@{index}-reference">@c.reference</td>
-   <td id="applications-rulings-list-row-@{index}-item_name">@c.application.goodName</td>
-   <td id="applications-rulings-list-row-@{index}-date_submitted">@Dates.format(c.createdDate)</td>
-   <td id="applications-rulings-list-row-@{index}-status">@components.case_status_tags(c)</td>
-   <td id="applications-rulings-list-row-@{index}-download">
-    <a id="applications-rulings-list-row-@{index}-view-application-link" href="@routes.ApplicationController.viewApplication(c.reference)">
-     <span aria-hidden="true">@messages("case.application.viewApplication")</span>
-     <span class="visually-hidden">@messages("case.application.viewApplication.hidden", c.reference)</span>
-    </a>
-    <p>
-    @if(Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED).contains(c.status)) {
-    <a id="applications-rulings-list-row-@{index}-view-rulings-link" href="@routes.RulingController.viewRuling(c.reference)">
-     <span aria-hidden="true">@messages("case.application.ruling.viewRuling")</span>
-     <span class="visually-hidden">@messages("case.application.ruling.viewRuling.hidden", c.reference)</span>
-    </a>
+    @if(dashboard.pageData.isEmpty) {
+        <div>
+            <h2 class="sub-header">@messages("index.noapplications")</h2>
+        </div>
     }
-    </p>
-    <p>
-     @if((c.hasExpiringRuling) | (Set(CaseStatus.COMPLETED).contains(c.status) && c.hasExpiredDecision) | (Set(CaseStatus.CANCELLED).contains(c.status))) {
-     <a id="applications-rulings-list-row-@{index}-renew-link" href="#">
-      @messages("case.application.ruling.renewRuling")
-     </a>
-     }
-    </p>
-   </td>
-  </tr>
-  }
-  </tbody>
- </table>
- @paginate("mt-2", "bottom")
-</div>
-}
-}
 
-@sortableColumnHeading(columnNameKey: String, fieldToOrderBy: String, cssClass: String = "", hidden: Boolean = false) = {
- <th class="govuk-table__header @cssClass" scope="col">
-  <a href='@{dashboard.columnSortUrlFor(fieldToOrderBy)}' class="govuk-link--no-visited-state" type="button">
-   @messages(columnNameKey)
-  </a>
- </th>
+    @components.button_link(messages("site.start"), routes.BeforeYouStartController.onPageLoad.url, id = Some("start-application"))
+
+    @if(dashboard.pageData.nonEmpty){
+        <div id="applications-rulings-list">
+
+            <table id="applications-rulings-list-table" aria-label="your applications and rulings">
+                <thead>
+                    <tr>
+                       <th scope="col">@messages("case.tabs.applications.table.reference")</th>
+                       <th scope="col">@messages("case.tabs.applications.table.goodsName")</th>
+                       <th scope="col">@messages("case.tabs.applications.table.dateSubmitted")</th>
+                       <th scope="col">@messages("case.tabs.applications.table.status")</th>
+                       <th scope="col"><span class="visuallyhidden">@messages("case.application.ruling.table.download")</span></th>
+                    </tr>
+                </thead>
+                <tbody id="applications-rulings-list-body">
+                    @for((c: Case, index: Int) <- dashboard.pageData.results.zipWithIndex) {
+                        <tr id="applications-rulings-list-row-@{index}">
+                            <td id="applications-rulings-list-row-@{index}-reference">@c.reference</td>
+                            <td id="applications-rulings-list-row-@{index}-item_name">@c.application.goodName</td>
+                            <td id="applications-rulings-list-row-@{index}-date_submitted">@Dates.format(c.createdDate)</td>
+                            <td id="applications-rulings-list-row-@{index}-status">@components.case_status_tags(c)</td>
+                            <td id="applications-rulings-list-row-@{index}-download">
+                                <a class="font-18px-only-mobile" id="applications-rulings-list-row-@{index}-view-application-link" href="@routes.ApplicationController.viewApplication(c.reference)">
+                                    <span aria-hidden="true">@messages("case.application.viewApplication")</span>
+                                    <span class="visually-hidden">@messages("case.application.viewApplication.hidden", c.reference)</span>
+                                </a>
+                                @if(Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED).contains(c.status)) {
+                                    <p>
+                                        <a class="font-18px-only-mobile" id="applications-rulings-list-row-@{index}-view-rulings-link" href="@routes.RulingController.viewRuling(c.reference)">
+                                            <span aria-hidden="true">@messages("case.application.ruling.viewRuling")</span>
+                                            <span class="visually-hidden">@messages("case.application.ruling.viewRuling.hidden", c.reference)</span>
+                                        </a>
+                                    </p>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @paginate("mt-2", "bottom")
+        </div>
+    }
 }

@@ -72,3 +72,39 @@ p.font-xsmall{
     line-height: 1.04167;
     font-weight: 700;
 }
+/* added correct link colour */
+a:hover{
+  color: #003078;
+}
+a:active {
+  color: #0b0c0c;
+}
+
+@media screen and (max-width: 767px) {
+    .font-18px-only-mobile {
+        font-size : 18px;
+    }
+}
+/* added GDS styles for 'Sign out’ link on service time out dialog */
+#timeout-sign-out-btn {
+     background-color: transparent;
+     box-shadow: unset;
+     text-decoration: underline;
+     color: #1d70b8;
+     padding-bottom: 0px;
+     vertical-align: bottom;
+     display: inline-block;
+     margin-left: 5px;
+     margin-top: .136316em;
+     margin-bottom: 1.25263em;
+ }
+#timeout-sign-out-btn:hover {
+    color: #003078;
+ }
+#timeout-sign-out-btn:focus {
+    color: #0b0c0c;
+    outline: 3px solid transparent;
+    background-color: #fd0;
+    box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+    text-decoration: none;
+ }

@@ -32,8 +32,6 @@
 
 @import uk.gov.hmrc.play.views.html.layouts
 
-@serviceInfoContent = {}
-
 @sidebar = {
     @if(sidebarLinks.isDefined) {
         @layouts.sidebar(sidebarLinks.get, Some("sidebar"))
@@ -53,7 +51,6 @@
             timeout: @appConfig.timeOutSeconds,
             countdown: @appConfig.timeOutCountDownSeconds,
             keep_alive_url: '@controllers.routes.SignOutController.keepAlive()',
-            title: "@Messages("timeoutDialog.title")",
             messageSeconds: "@Messages("timeoutDialog.seconds")",
             messageMinutes: "@Messages("timeoutDialog.minutes")",
             messageMinute: "@Messages("timeoutDialog.minute")",
@@ -72,7 +69,6 @@
                bodyClasses = bodyClasses,
                sidebar = sidebar,
                mainContent = content,
-               serviceInfoContent = serviceInfoContent,
                scriptElem = Some(scriptElement),
                linkElem = inlineLinkElem,
                signOutLink = signOutLink,

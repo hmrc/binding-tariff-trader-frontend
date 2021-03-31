@@ -35,6 +35,20 @@ trait StringFieldBehaviours extends FieldBehaviours {
     }
   }
 
+  def fieldWithMinLength(form: Form[_],
+                         fieldName: String,
+                         minLength: Int,
+                         lengthError: FormError): Unit = {
+
+    s"not bind strings shorter than $minLength characters" in {
+
+      forAll(stringsShorterThan(minLength) -> "shortString") { str: String =>
+        val result = form.bind(Map(fieldName -> str)).apply(fieldName)
+        result.errors should contain(lengthError)
+      }
+    }
+  }
+
   def fieldWithRegex(form: Form[_],
                      fieldName: String,
                      invalidString: String,
@@ -51,6 +65,30 @@ trait StringFieldBehaviours extends FieldBehaviours {
       val gen = RegexpGen.from(regex)
       forAll(gen, minSuccessful(100)){str: String =>
         whenever(str.length <= maxLength) {
+          val result = form.bind(Map(fieldName -> str)).apply(fieldName)
+          result.errors should be (empty)
+        }
+      }
+    }
+  }
+
+  def fieldWithRegexAndMinTelLength(form: Form[_],
+                     fieldName: String,
+                     invalidString: String,
+                     minLength: Int,
+                     maxLength: Int,
+                     error: FormError,
+                     regex : String): Unit = {
+
+    "not bind strings invalidated by regex" in {
+      val result = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+      result.errors should contain(error)
+    }
+
+    "bind strings that pass regex" in {
+      val gen = RegexpGen.from(regex)
+      forAll(gen, minSuccessful(100)){str: String =>
+        whenever(str.length <= maxLength && str.replaceAll("[^0-9]", "").length >= minLength) {
           val result = form.bind(Map(fieldName -> str)).apply(fieldName)
           result.errors should be (empty)
         }
