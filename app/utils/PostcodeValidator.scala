@@ -16,8 +16,6 @@
 
 package utils
 
-import play.api.Logger
-
 object PostcodeValidator {
   val regexString =
     "(GIR 0AA)|((([A-Z-[QVX]][0-9][0-9]?)|(([A-Z-[QVX]][A-Z-[IJZ]][0-9][0-9]?)|(([A-Z-[QVX]][0-9][A-HJKPSTUW])|([A-Z-[QVX]][A-Z-[IJZ]][0-9][ABEHMNPRVWXY])))) *[0-9][A-Z-[CIKMOV]]{2})"
@@ -27,8 +25,8 @@ object PostcodeValidator {
     val postcode = candidate.trim.toUpperCase
 
     val result = postcode match {
-      case postcodeRegex(_ *) => true
-      case _                  => false
+      case postcodeRegex(_*) => true
+      case _                 => false
     }
 
     result
