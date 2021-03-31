@@ -16,30 +16,32 @@
 
 package service
 
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
 import config.FrontendAppConfig
 import connectors.BindingTariffFilestoreConnector
+import javax.inject.{Inject, Singleton}
 import models._
-import models.requests.FileStoreInitiateRequest
-import models.response.{FileStoreInitiateResponse, FilestoreResponse}
-import play.api.Logging
+import models.response.FilestoreResponse
+import play.api.Logger
 import play.api.i18n.Lang
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.{MessagesControllerComponents, MultipartFormData}
 import uk.gov.hmrc.http.HeaderCarrier
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.{sequence, successful}
+import models.requests.FileStoreInitiateRequest
+import models.response.FileStoreInitiateResponse
+import play.api.libs.json.JsValue
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
 
 @Singleton
 class FileService @Inject()(
                              connector: BindingTariffFilestoreConnector,
                              cc: MessagesControllerComponents,
                              appConfig: FrontendAppConfig
-                           ) extends Logging {
+                           ) {
 
   private val messagesApi = cc.messagesApi
   private implicit val lang = Lang.defaultLang
@@ -83,7 +85,7 @@ class FileService @Inject()(
       files.map { f: FileAttachment =>
         publish(f).map(Option(_)).recover {
           case t: Throwable =>
-            logger.error(s"Failed to publish file [${f.id}].", t)
+            Logger.error(s"Failed to publish file [${f.id}].", t)
             None
         }
       }

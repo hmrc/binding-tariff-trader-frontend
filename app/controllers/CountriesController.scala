@@ -17,19 +17,17 @@
 package controllers
 
 import config.FrontendAppConfig
+import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.CountriesService
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import javax.inject.Inject
-
-class CountriesController @Inject() (
-  val appConfig: FrontendAppConfig,
-  countriesService: CountriesService,
-  cc: MessagesControllerComponents
-) extends FrontendController(cc)
-    with I18nSupport {
+class CountriesController @Inject()(
+                                          val appConfig: FrontendAppConfig,
+                                          countriesService: CountriesService,
+                                          cc: MessagesControllerComponents
+                                        ) extends FrontendController(cc) with I18nSupport {
 
   def getCountriesJson: Action[AnyContent] = Action { implicit request =>
     Ok(countriesService.autoCompleteSynonymCountries)
