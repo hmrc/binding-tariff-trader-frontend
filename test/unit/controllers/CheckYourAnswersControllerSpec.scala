@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.Instant
-
 import audit.AuditService
 import connectors.FakeDataCacheConnector
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeDataRetrievalAction, FakeIdentifierAction}
@@ -25,12 +23,11 @@ import mapper.CaseRequestMapper
 import models._
 import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers.{any, refEq}
-import org.mockito.Mockito.{never, reset, times, verify, verifyNoMoreInteractions, when}
+import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import pages.{CheckYourAnswersPage, MakeFileConfidentialPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
 import play.api.libs.json._
-import play.api.libs.Files.{SingletonTemporaryFileCreator, TemporaryFile}
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -40,8 +37,9 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 import viewmodels.{AnswerSection, PdfViewModel}
 import views.html.check_your_answers
 
-import scala.concurrent.Future.{failed, successful}
+import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future.{failed, successful}
 
 class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
@@ -107,7 +105,6 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       pdfService,
       fileService,
       mapper,
-      SingletonTemporaryFileCreator,
       cc
     )
 
@@ -132,7 +129,6 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
-
   }
 
   "return OK and the correct view for a POST" in {
@@ -141,7 +137,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
     givenTheApplicationPdfGenerates()
     givenTheApplicationPdfIsUploaded()
     givenTheCaseIsUpdatedWithPdf()
-    givenTheCaseCreatedEventIsSuccessful
+    givenTheCaseCreatedEventIsSuccessful()
 
     val result = await(controller(extractDataFromCache).onSubmit()(fakeRequest))
 
@@ -188,7 +184,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
     givenTheApplicationPdfGenerates()
     givenTheApplicationPdfIsUploaded()
     givenTheCaseIsUpdatedWithPdf()
-    givenTheCaseCreatedEventIsSuccessful
+    givenTheCaseCreatedEventIsSuccessful()
 
     val c = controller(extractDataFromCache)
     val req = fakeRequest

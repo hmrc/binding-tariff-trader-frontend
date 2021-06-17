@@ -48,7 +48,7 @@ class PdfGeneratorServiceConnector @Inject()(
             Future.failed(new RuntimeException(s"Error calling pdf-generator-service - ${response.body}"))
         }
       }
-      pdfResult.onFailure {
+      pdfResult.failed.foreach {
         case NonFatal(e) =>
           logger.error(s"pdf generator failed after ${timer.completeWithFailure()}", e)
       }

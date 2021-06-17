@@ -16,16 +16,15 @@
 
 package connectors
 
-import java.time.Instant
-
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models._
 import models.requests.NewEventRequest
 import org.apache.http.HttpStatus
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream4xxResponse, UpstreamErrorResponse}
 import utils.JsonFormatters._
 
+import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class BindingTariffClassificationConnectorSpec extends ConnectorTest {
@@ -36,11 +35,11 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
   private def withHeaderCarrier(key: String, value: String) = HeaderCarrier(extraHeaders = Seq(key -> value))
 
   "Connector 'Create Case'" should {
-    val request     = oCase.newBtiCaseExample
+    val request = oCase.newBtiCaseExample
     val requestJSON = Json.toJson(request).toString()
 
     "Create valid case with x-api-token" in {
-      val response     = oCase.btiCaseExample
+      val response = oCase.btiCaseExample
       val responseJSON = Json.toJson(response).toString()
 
       stubFor(
@@ -103,7 +102,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "Create valid case without x-api-token" in {
-      val response     = oCase.btiCaseExample
+      val response = oCase.btiCaseExample
       val responseJSON = Json.toJson(response).toString()
 
       stubFor(
@@ -167,7 +166,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
   "Connector 'Put Case'" should {
     "Execute update for existing case" in {
       val caseExample = oCase.btiCaseExample
-      val url         = s"/cases/${caseExample.reference}"
+      val url = s"/cases/${caseExample.reference}"
 
       stubFor(
         put(urlEqualTo(url))
@@ -190,7 +189,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
     "Return error for missing case" in {
       val caseExample = oCase.btiCaseExample
-      val url         = s"/cases/${caseExample.reference}"
+      val url = s"/cases/${caseExample.reference}"
 
       stubFor(
         put(urlEqualTo(url))
@@ -200,7 +199,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           )
       )
 
-      intercept[NotFoundException] {
+      intercept[Upstream4xxResponse] {
         await(
           connector.putCase(caseExample)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
         )
@@ -214,7 +213,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
     "Propagate errors" in {
       val caseExample = oCase.btiCaseExample
-      val url         = s"/cases/${caseExample.reference}"
+      val url = s"/cases/${caseExample.reference}"
 
       stubFor(
         put(urlEqualTo(url))
@@ -240,7 +239,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
   "Connector 'Update Case'" should {
     "Execute update for existing case" in {
       val caseRef = oCase.btiCaseExample.reference
-      val url     = s"/cases/$caseRef"
+      val url = s"/cases/$caseRef"
 
       stubFor(
         post(urlEqualTo(url))
@@ -464,7 +463,6 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
-
   }
 
   "Connector 'Create Event'" should {
@@ -476,12 +474,12 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     val events: Seq[Event] = Seq(event)
 
     "create event" in {
-      val ref               = "case-reference"
-      val validCase         = oCase.btiCaseExample.copy(reference = ref)
+      val ref = "case-reference"
+      val validCase = oCase.btiCaseExample.copy(reference = ref)
       val validEventRequest = eventRequest
-      val validEvent        = event.copy(caseReference = ref)
-      val requestJson       = Json.toJson(validEventRequest).toString()
-      val responseJson      = Json.toJson(validEvent).toString()
+      val validEvent = event.copy(caseReference = ref)
+      val requestJson = Json.toJson(validEventRequest).toString()
+      val responseJson = Json.toJson(validEvent).toString()
 
       stubFor(
         post(urlEqualTo(s"/cases/$ref/events"))
@@ -502,10 +500,10 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "create event with an unknown case reference" in {
-      val ref               = "unknown-reference"
-      val validCase         = oCase.btiCaseExample.copy(reference = ref)
+      val ref = "unknown-reference"
+      val validCase = oCase.btiCaseExample.copy(reference = ref)
       val validEventRequest = eventRequest
-      val requestJson       = Json.toJson(validEventRequest).toString()
+      val requestJson = Json.toJson(validEventRequest).toString()
 
       stubFor(
         post(urlEqualTo(s"/cases/$ref/events"))
@@ -516,7 +514,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           )
       )
 
-      intercept[NotFoundException] {
+      intercept[Upstream4xxResponse] {
         await(connector.createEvent(validCase, validEventRequest))
       }
 

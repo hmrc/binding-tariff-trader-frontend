@@ -20,39 +20,40 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.EnterContactDetailsFormProvider
-import javax.inject.Inject
-import models.{EnterContactDetails, Mode, RegisteredAddressForEori, UserAnswers}
 import models.requests.DataRequest
+import models.{EnterContactDetails, Mode, UserAnswers}
 import navigation.Navigator
 import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.twirl.api.HtmlFormat
 import views.html.enterContactDetails
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class EnterContactDetailsController @Inject()(
-  appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
-  formProvider: EnterContactDetailsFormProvider,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext)
-    extends AnswerCachingController[EnterContactDetails](cc) {
+                                               appConfig: FrontendAppConfig,
+                                               val dataCacheConnector: DataCacheConnector,
+                                               val navigator: Navigator,
+                                               val identify: IdentifierAction,
+                                               val getData: DataRetrievalAction,
+                                               val requireData: DataRequiredAction,
+                                               formProvider: EnterContactDetailsFormProvider,
+                                               cc: MessagesControllerComponents
+                                             )(implicit ec: ExecutionContext)
+  extends AnswerCachingController[EnterContactDetails](cc) {
 
-  lazy val form                  = formProvider()
-  lazy val formWithTelValidation = formProvider.formWithMinTelNumber
+  lazy val form: Form[EnterContactDetails] = formProvider()
+  lazy val formWithTelValidation: Form[EnterContactDetails] = formProvider.formWithMinTelNumber
 
-  val questionPage = EnterContactDetailsPage
+  val questionPage: EnterContactDetailsPage.type = EnterContactDetailsPage
 
   override def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request: DataRequest[_] =>
       val preparedForm = request.userAnswers.get(questionPage) match {
         case Some(value) => enterContactDetailsForm(request.userAnswers).fill(value)
-        case _           => enterContactDetailsForm(request.userAnswers)
+        case _ => enterContactDetailsForm(request.userAnswers)
       }
       Ok(renderView(preparedForm, mode))
   }
@@ -64,12 +65,13 @@ class EnterContactDetailsController @Inject()(
       enterContactDetailsForm(request.userAnswers).bindFromRequest().fold(badRequest, submitAnswer(_, mode))
   }
 
-  def renderView(preparedForm: Form[EnterContactDetails], mode: Mode)(implicit request: DataRequest[_]) =
+  def renderView(preparedForm: Form[EnterContactDetails], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
     enterContactDetails(appConfig, preparedForm, mode)
 
   def enterContactDetailsForm(userAnswers: UserAnswers): Form[EnterContactDetails] =
-    if (userAnswers.get(RegisteredAddressForEoriPage).exists(_.country == "GB"))
+    if (userAnswers.get(RegisteredAddressForEoriPage).exists(_.country == "GB")) {
       formWithTelValidation
-    else
+    } else {
       form
+    }
 }

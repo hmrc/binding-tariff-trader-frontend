@@ -20,22 +20,19 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SupportingMaterialFileListFormProvider
-
-import javax.inject.Inject
 import models.requests.DataRequest
 import models.{FileAttachment, Mode, UserAnswers}
 import navigation.Navigator
 import pages._
-import play.api.data.Form
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
-
-import scala.concurrent.{ExecutionContext, Future}
+import play.api.data.{Form, FormError}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.twirl.api.HtmlFormat
+import utils.Notification.{success, _}
 import viewmodels.FileView
 import views.html.supportingMaterialFileList
-import play.twirl.api.HtmlFormat
-import play.api.data.FormError
-import utils.Notification.success
-import utils.Notification._
+
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class SupportingMaterialFileListController @Inject()(
   appConfig: FrontendAppConfig,
@@ -47,8 +44,8 @@ class SupportingMaterialFileListController @Inject()(
   formProvider: SupportingMaterialFileListFormProvider,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
-  lazy val form = formProvider()
-  val questionPage = SupportingMaterialFileListPage
+  lazy val form: Form[Boolean] = formProvider()
+  val questionPage: SupportingMaterialFileListPage.type = SupportingMaterialFileListPage
 
   val FormInputField = "add-file-choice"
   val MaxFilesMessage = "supportingMaterialFileList.error.numberFiles"
