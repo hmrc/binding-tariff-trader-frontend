@@ -19,70 +19,72 @@ package connectors
 import com.google.inject.Inject
 import com.kenshoo.play.metrics.Metrics
 import config.FrontendAppConfig
-import javax.inject.Singleton
 import metrics.HasMetrics
 import models.CaseStatus.CaseStatus
 import models._
 import models.requests.NewEventRequest
-import scala.concurrent.{ ExecutionContext, Future }
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.JsonFormatters._
 
+import javax.inject.Singleton
+import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.http.HttpReads.Implicits._
+
 @Singleton
 class BindingTariffClassificationConnector @Inject()(
-  client: AuthenticatedHttpClient,
-  val metrics: Metrics
-)(implicit configuration: FrontendAppConfig, ec: ExecutionContext) extends InjectAuthHeader with HasMetrics {
+                                                      client: AuthenticatedHttpClient,
+                                                      val metrics: Metrics
+                                                    )(implicit appConfig: FrontendAppConfig, ec: ExecutionContext) extends InjectAuthHeader with HasMetrics {
 
   def createCase(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] =
     withMetricsTimerAsync("create-case") { _ =>
-      val url = s"${configuration.bindingTariffClassificationUrl}/cases"
-      client.POST[NewCaseRequest, Case](url = url, body = c)(implicitly, implicitly, addAuth, implicitly)
+      val url = s"${appConfig.bindingTariffClassificationUrl}/cases"
+      client.POST[NewCaseRequest, Case](url = url, body = c, headers = addAuth(appConfig))
     }
 
   def putCase(c: Case)(implicit hc: HeaderCarrier): Future[Case] =
     withMetricsTimerAsync("put-case") { _ =>
-      val url = s"${configuration.bindingTariffClassificationUrl}/cases/${c.reference}"
-      client.PUT[Case, Case](url = url, body = c)(implicitly, implicitly, addAuth, implicitly)
+      val url = s"${appConfig.bindingTariffClassificationUrl}/cases/${c.reference}"
+      client.PUT[Case, Case](url = url, body = c, headers = addAuth(appConfig))
     }
 
   def updateCase(reference: String, update: CaseUpdate)(implicit hc: HeaderCarrier): Future[Option[Case]] =
     withMetricsTimerAsync("update-case") { _ =>
-      val url = s"${configuration.bindingTariffClassificationUrl}/cases/${reference}"
-      client.POST[CaseUpdate, Option[Case]](url, update)(implicitly, implicitly, addAuth, implicitly)
+      val url = s"${appConfig.bindingTariffClassificationUrl}/cases/$reference"
+      client.POST[CaseUpdate, Option[Case]](url, update, headers = addAuth(appConfig))
     }
 
   def findCase(reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] =
     withMetricsTimerAsync("get-case-by-reference") { _ =>
-      val url = s"${configuration.bindingTariffClassificationUrl}/cases/$reference"
-      client.GET[Option[Case]](url)(implicitly, addAuth, implicitly)
+      val url = s"${appConfig.bindingTariffClassificationUrl}/cases/$reference"
+      client.GET[Option[Case]](url, headers = addAuth(appConfig))
     }
 
   def allCases(pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] =
     withMetricsTimerAsync("all-cases") { _ =>
-      val url = s"${configuration.bindingTariffClassificationUrl}/cases" +
+      val url = s"${appConfig.bindingTariffClassificationUrl}/cases" +
         s"?sort_by=${sort.field}&sort_direction=${sort.direction}" +
         s"&page=${pagination.page}&page_size=${pagination.pageSize}" +
         "&application_type=BTI&migrated=false"
 
-      client.GET[Paged[Case]](url)(implicitly, addAuth, implicitly)
+      client.GET[Paged[Case]](url, headers = addAuth(appConfig))
     }
 
   def findCasesBy(eori: String, status: Set[CaseStatus], pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] =
     withMetricsTimerAsync("search-cases") { _ =>
-      val url = s"${configuration.bindingTariffClassificationUrl}/cases" +
+      val url = s"${appConfig.bindingTariffClassificationUrl}/cases" +
         s"?eori=$eori&status=${status.mkString(",")}" +
         s"&sort_by=${sort.field}&sort_direction=${sort.direction}" +
         s"&page=${pagination.page}&page_size=${pagination.pageSize}" +
         "&migrated=false"
 
-      client.GET[Paged[Case]](url)(implicitly, addAuth, implicitly)
+      client.GET[Paged[Case]](url, headers = addAuth(appConfig))
     }
 
   def createEvent(c: Case, e: NewEventRequest)(implicit hc: HeaderCarrier): Future[Event] =
     withMetricsTimerAsync("create-event") { _ =>
-      val url = s"${configuration.bindingTariffClassificationUrl}/cases/${c.reference}/events"
-      client.POST[NewEventRequest, Event](url = url, body = e)(implicitly, implicitly, addAuth, implicitly)
+      val url = s"${appConfig.bindingTariffClassificationUrl}/cases/${c.reference}/events"
+      client.POST[NewEventRequest, Event](url = url, body = e, headers = addAuth(appConfig))
     }
 
 }

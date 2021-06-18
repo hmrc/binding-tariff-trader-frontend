@@ -17,51 +17,48 @@
 package workers
 
 import akka.actor.ActorSystem
-import akka.stream.{ActorAttributes, Supervision}
 import akka.stream.scaladsl.{Sink, Source}
-import connectors.InjectAuthHeader
+import akka.stream.{ActorAttributes, Supervision}
 import config.FrontendAppConfig
-import java.nio.file.{Files, StandardOpenOption}
-import java.time.{Clock, ZonedDateTime}
-import javax.inject.{Inject, Singleton}
+import connectors.InjectAuthHeader
 import models._
 import org.joda.time.Duration
 import play.api.Logging
 import play.api.i18n.{Lang, Messages, MessagesApi}
-import play.api.libs.Files.{TemporaryFile, TemporaryFileCreator}
 import repositories.LockRepoProvider
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.lock.ExclusiveTimePeriodLock
+import uk.gov.hmrc.lock.{ExclusiveTimePeriodLock, LockRepository}
 import viewmodels.{FileView, PdfViewModel}
 import views.html.components.view_application_pdf
 
+import java.time.{Clock, ZonedDateTime}
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class MigrationWorker @Inject() (
-  appConfig: FrontendAppConfig,
-  lockRepo: LockRepoProvider,
-  casesService: CasesService,
-  countriesService: CountriesService,
-  fileService: FileService,
-  pdfService: PdfService,
-  messagesApi: MessagesApi,
-  tempFileCreator: TemporaryFileCreator,
-  clock: Clock
-)(implicit system: ActorSystem)
-    extends ExclusiveTimePeriodLock
+class MigrationWorker @Inject()(
+                                 appConfig: FrontendAppConfig,
+                                 lockRepo: LockRepoProvider,
+                                 casesService: CasesService,
+                                 countriesService: CountriesService,
+                                 fileService: FileService,
+                                 pdfService: PdfService,
+                                 messagesApi: MessagesApi,
+                                 clock: Clock
+                               )(implicit system: ActorSystem)
+  extends ExclusiveTimePeriodLock
     with InjectAuthHeader
     with Logging {
 
   implicit val ec: ExecutionContext = system.dispatchers.lookup("migration-dispatcher")
-  implicit val hc: HeaderCarrier    = addAuth(appConfig, HeaderCarrier())
-  implicit val messages: Messages   = messagesApi.preferred(Seq(Lang.defaultLang))
+  implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = addAuth(appConfig)(HeaderCarrier()))
+  implicit val messages: Messages = messagesApi.preferred(Seq(Lang.defaultLang))
 
-  val repo        = lockRepo.repo()
-  val lockId      = "migration-lock"
-  val holdLockFor = Duration.standardMinutes(2)
+  val repo: LockRepository = lockRepo.repo()
+  val lockId = "migration-lock"
+  val holdLockFor: Duration = Duration.standardMinutes(2)
 
   val decider: Supervision.Decider = {
     case NonFatal(e) =>
@@ -83,10 +80,10 @@ class MigrationWorker @Inject() (
       }
     }
     .flatMapConcat(cases => Source(cases.filter(_.application.applicationPdf.isEmpty)))
-    .mapAsync(Runtime.getRuntime().availableProcessors())(regeneratePdf)
+    .mapAsync(Runtime.getRuntime.availableProcessors())(regeneratePdf)
     .withAttributes(ActorAttributes.supervisionStrategy(decider))
 
-  val runMigration =
+  val runMigration: Future[Any] =
     if (appConfig.migrationWorkerEnabled)
       migrationSource.runWith(Sink.ignore)
     else
@@ -117,7 +114,7 @@ class MigrationWorker @Inject() (
 
       pdfStored <- fileService.uploadApplicationPdf(cse.reference, pdfFile.content)
 
-      creationTime = ZonedDateTime.ofInstant(clock.instant(), clock.getZone())
+      creationTime = ZonedDateTime.ofInstant(clock.instant(), clock.getZone)
 
       pdfAttachment = Attachment(pdfStored.id, false, creationTime)
 

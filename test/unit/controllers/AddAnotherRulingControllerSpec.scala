@@ -21,16 +21,15 @@ import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeDat
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import controllers.{AddAnotherRulingController, ControllerSpecBase, routes}
 import forms.AddAnotherRulingFormProvider
-import models.{FileAttachment, NormalMode}
+import models.NormalMode
 import navigation.FakeNavigator
-import pages.{AddSupportingDocumentsPage, CommodityCodeRulingReferencePage, ProvideGoodsNamePage, SimilarItemCommodityCodePage, UploadSupportingMaterialMultiplePage}
+import pages.{CommodityCodeRulingReferencePage, SimilarItemCommodityCodePage}
 import play.api.data.Form
-import play.api.libs.json.{JsArray, JsBoolean, JsString, Json}
+import play.api.libs.json.{JsArray, JsBoolean, JsString}
 import play.api.mvc.{Call, Request}
-import play.api.test.Helpers.redirectLocation
+import play.api.test.Helpers.{redirectLocation, _}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.addAnotherRuling
-import play.api.test.Helpers._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

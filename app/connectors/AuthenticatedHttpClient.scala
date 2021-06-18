@@ -35,17 +35,14 @@ class AuthenticatedHttpClient @Inject()(
 
 trait InjectAuthHeader {
 
-  private val headerName: String = "X-Api-Token"
+  def addAuth(config: FrontendAppConfig) (implicit hc: HeaderCarrier): Seq[(String, String)] = {
 
-  def addAuth(implicit config: FrontendAppConfig, hc: HeaderCarrier): HeaderCarrier = {
-    hc.headers.toMap.get(headerName) match {
-      case Some(_) => hc
-      case _ => hc.withExtraHeaders(authHeaders(config.apiToken))
+    val headerName: String = "X-Api-Token"
+
+    hc.headers(Seq(headerName)) match {
+      case header @ Seq(_) => header
+      case _ => Seq(headerName -> config.apiToken)
     }
-  }
-
-  def authHeaders(apiToken: String): (String, String) = {
-    headerName -> apiToken
   }
 
 }

@@ -21,42 +21,39 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import java.nio.file.{Files, StandardOpenOption}
 import mapper.CaseRequestMapper
 import models._
 import models.requests.DataRequest
 import navigation.Navigator
 import pages._
-import play.api.i18n.{I18nSupport, Lang}
-import play.api.libs.Files.{TemporaryFileCreator, TemporaryFile}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MultipartFormData, Result}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.CheckYourAnswersHelper
+import utils.JsonFormatters._
 import viewmodels.{AnswerSection, FileView, PdfViewModel}
 import views.html.check_your_answers
-import utils.JsonFormatters._
 
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.successful
+import scala.concurrent.{ExecutionContext, Future}
 
 class CheckYourAnswersController @Inject()(
-  appConfig: FrontendAppConfig,
-  dataCacheConnector: DataCacheConnector,
-  auditService: AuditService,
-  navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  countriesService: CountriesService,
-  caseService: CasesService,
-  pdfService: PdfService,
-  fileService: FileService,
-  mapper: CaseRequestMapper,
-  tempFileCreator: TemporaryFileCreator,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+                                            appConfig: FrontendAppConfig,
+                                            dataCacheConnector: DataCacheConnector,
+                                            auditService: AuditService,
+                                            navigator: Navigator,
+                                            identify: IdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            countriesService: CountriesService,
+                                            caseService: CasesService,
+                                            pdfService: PdfService,
+                                            fileService: FileService,
+                                            mapper: CaseRequestMapper,
+                                            cc: MessagesControllerComponents
+                                          )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
 
@@ -129,10 +126,10 @@ class CheckYourAnswersController @Inject()(
       .map(att => Attachment(att.id, public = !keepConfidential(att.id)))
 
     for {
-      published   <- fileService.publish(fileAttachments)
-      publishIds  = published.map(_.id)
+      published <- fileService.publish(fileAttachments)
+      publishIds = published.map(_.id)
       attachments = withStatus.filter(att => publishIds.contains(att.id))
-      atar        <- createCase(newCaseRequest, attachments)
+      atar <- createCase(newCaseRequest, attachments)
 
       pdf = PdfViewModel(atar, fileView)
       pdfFile <- pdfService.generatePdf(views.html.components.view_application_pdf(appConfig, pdf, getCountryName))
@@ -141,19 +138,19 @@ class CheckYourAnswersController @Inject()(
       caseUpdate = CaseUpdate(Some(ApplicationUpdate(
         applicationPdf = SetValue(Some(pdfAttachment))
       )))
-      _           <- caseService.update(atar.reference, caseUpdate)
-      _           <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
-      _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
+      _ <- caseService.update(atar.reference, caseUpdate)
+      _ <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
+      _ = auditService.auditBTIApplicationSubmissionSuccessful(atar)
       userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, pdf)
-      _           <- dataCacheConnector.save(userAnswers.cacheMap)
+      _ <- dataCacheConnector.save(userAnswers.cacheMap)
       res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
     } yield res
   }
 
   private def createCase(
-    newCaseRequest: NewCaseRequest,
-    attachments: Seq[Attachment]
-  )(implicit headerCarrier: HeaderCarrier): Future[Case] = {
+                          newCaseRequest: NewCaseRequest,
+                          attachments: Seq[Attachment]
+                        )(implicit headerCarrier: HeaderCarrier): Future[Case] = {
     caseService.create(newCaseRequest.copy(attachments = attachments))
   }
 

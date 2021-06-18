@@ -18,7 +18,6 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
-import javax.inject.Inject
 import models.SortDirection.SortDirection
 import models.SortField.SortField
 import models._
@@ -33,6 +32,7 @@ import views.CaseDetailTab
 import views.html.components.{table_applications, table_rulings}
 import views.html.{account_dashboard_statuses, index}
 
+import javax.inject.Inject
 import scala.concurrent.Future.successful
 import scala.concurrent.{ExecutionContext, Future}
 
