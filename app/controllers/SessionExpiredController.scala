@@ -26,9 +26,10 @@ import javax.inject.Inject
 
 class SessionExpiredController @Inject() (
   val appConfig: FrontendAppConfig,
-  cc: MessagesControllerComponents
+  cc: MessagesControllerComponents,
+  sessionExpiredView: session_expired
 ) extends FrontendController(cc)
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action(implicit request => Ok(session_expired(appConfig)))
+  def onPageLoad: Action[AnyContent] = Action(implicit request => Ok(sessionExpiredView(appConfig)))
 }

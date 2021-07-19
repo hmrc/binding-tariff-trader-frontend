@@ -20,6 +20,7 @@ import cats.data.OptionT
 import config.FrontendAppConfig
 import connectors.InjectAuthHeader
 import controllers.actions._
+
 import javax.inject.Inject
 import models.Case
 import play.api.Logging
@@ -28,6 +29,7 @@ import play.api.mvc._
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.{FileView, PdfViewModel}
+import views.html.documentNotFound
 import views.html.templates._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,7 +42,10 @@ class ApplicationController @Inject() (
   caseService: CasesService,
   fileService: FileService,
   countriesService: CountriesService,
-  cc: MessagesControllerComponents
+  cc: MessagesControllerComponents,
+  applicationView: applicationView,
+  rulingCertificateView: rulingCertificateView,
+  documentNotFoundView: documentNotFound
 )(implicit ec: ExecutionContext)
     extends FrontendController(cc)
     with I18nSupport
@@ -99,7 +104,7 @@ class ApplicationController @Inject() (
   ): Future[Result] =
     getApplicationPDForHtml(eori, reference, pdf = false)
 
-  def fetchApplicationPdf(cse: Case)(implicit request: Request[AnyContent]) = {
+  def fetchApplicationPdf(cse: Case)(implicit request: Request[AnyContent]): Future[Result] = {
     val applicationResponse = for {
       pdf    <- OptionT.fromOption[Future](cse.application.applicationPdf)
       meta   <- OptionT(fileService.getAttachmentMetadata(pdf))
@@ -113,13 +118,13 @@ class ApplicationController @Inject() (
     val documentType = messages("documentNotFound.application")
 
     applicationResponse
-      .getOrElse(NotFound(views.html.documentNotFound(appConfig, documentType, cse.reference)))
+      .getOrElse(NotFound(documentNotFoundView(appConfig, documentType, cse.reference)))
       .recover {
         case NonFatal(_) => BadGateway
       }
   }
 
-  def renderApplicationHtml(cse: Case)(implicit request: Request[AnyContent]) =
+  def renderApplicationHtml(cse: Case)(implicit request: Request[AnyContent]): Future[Result] =
     for {
       attachments <- fileService.getAttachmentMetadata(cse)
       attachmentFileView = attachments.map { attachment =>
@@ -163,7 +168,7 @@ class ApplicationController @Inject() (
       val messages     = request.messages
       val documentType = messages("documentNotFound.rulingCertificate")
 
-      rulingResponse.getOrElse(NotFound(views.html.documentNotFound(appConfig, documentType, reference))).recover {
+      rulingResponse.getOrElse(NotFound(documentNotFoundView(appConfig, documentType, reference))).recover {
         case NonFatal(_) => BadGateway
       }
     }
@@ -185,7 +190,7 @@ class ApplicationController @Inject() (
       val messages     = request.messages
       val documentType = messages("documentNotFound.rulingCertificate")
 
-      rulingResponse.getOrElse(NotFound(views.html.documentNotFound(appConfig, documentType, reference))).recover {
+      rulingResponse.getOrElse(NotFound(documentNotFoundView(appConfig, documentType, reference))).recover {
         case NonFatal(_) => BadGateway
       }
     }
@@ -198,7 +203,7 @@ class ApplicationController @Inject() (
       Future.successful(Ok(rulingCertificateView(appConfig, c, getCountryName)))
     }
 
-  def getCountryName(code: String) =
+  def getCountryName(code: String): Option[String] =
     countriesService.getAllCountries
       .find(_.code == code)
       .map(_.countryName)

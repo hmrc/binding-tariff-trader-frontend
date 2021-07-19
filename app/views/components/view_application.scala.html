@@ -1,18 +1,18 @@
 @*
- * Copyright 2021 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *@
+* Copyright 2021 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
 
 @import config.FrontendAppConfig
 @import viewmodels.PdfViewModel
@@ -30,279 +30,283 @@
         <title>@messages("application.title.pdf")</title>
     </head>
     <body>
-        <div class="grid-row hidden-print">
-            <div class="column-two-thirds"></div>
+        <div class="govuk-grid-row hidden-print">
+            <div class="govuk-grid-column-two-thirds"></div>
         </div>
-        <div id="print-pages" class="print-pages">
+        <div id="print-pages">
             <div id="your-records" class="print-document">
-                <div class="grid-row print-header">
-                    <div class="column-one-third">
+                <div class="govuk-grid-row print-header">
+                    <div class="govuk-grid-column-one-third">
                         <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink(messages("logo.file.name"))"/>
                     </div>
-                    <div>
-                        <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
-                        @messages("view.application.title.text")
+                    <div class="govuk-grid-column-two-thirds">
+                        <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-!-margin-bottom-0 print-header__heading">
+                            @messages("view.application.title.text")
                         </h2>
                     </div>
                 </div>
-
-        <div class="grid-row">
-            <div class="column-full">
-                <h3>@messages("view.application.your.record.text")</h3>
-            </div>
-            <div class="column-half column-one-half">
-                <dl class="body-text">
-                    <dt class="bold">@messages("view.application.eori")</dt>
-                    <dd>@pdf.eori</dd>
-                </dl>
-                <dl class="body-text">
-                    <dt class="bold">@messages("view.application.account.name")</dt>
-                    <dd>@pdf.accountDetails.businessName</dd>
-                </dl>
-                <dl class="body-text">
-                    <dt class="bold">@messages("view.application.account.address")</dt>
-                    <dd>@pdf.accountDetails.addressLine1</dd>
-                    <dd>@pdf.accountDetails.addressLine2</dd>
-                    <dd>@pdf.accountDetails.addressLine3</dd>
-                    <dd>@pdf.accountDetails.postcode</dd>
-                    <dd>@messages(getCountryName(pdf.accountDetails.country).mkString)</dd>
-
-                </dl>
-            </div>
-            <div class="column-half column-one-half">
-                <dl class="body-text">
-                    <dt class="bold">@messages("view.application.contact.name")</dt>
-                    <dd>@pdf.contact.name</dd>
-                </dl>
-                <dl class="body-text">
-                    <dt class="bold">@messages("view.application.contact.email")</dt>
-                    <dd>@pdf.contact.email</dd>
-                </dl>
-                <dl class="body-text">
-                    <dt class="bold">@messages("view.application.contact.phone")</dt>
-                    <dd>@pdf.contact.phone</dd>
-                </dl>
-                <dl class="body-text">
-                    <dt class="bold">@messages("view.application.contact.date")</dt>
-                    <dd>@Dates.format(pdf.dateSubmitted)</dd>
-                </dl>
-            </div>
-        </div>
-
-        <div class="grid-row main-content">
-            <div class="column-full">
-
-                <div class="information-box">
-                    <p class="hero-text">@messages("view.application.ref.text")<br>
-                        <span class="reference-number">@pdf.reference</span>
-                    </p>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+                        <h3 class="govuk-heading-m">@messages("view.application.your.record.text")</h3>
+                    </div>
+                </div>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-one-half">
+                        <dl class="govuk-summary-list govuk-summary-list--no-border">
+                            <dt class="govuk-!-font-weight-bold">@messages("view.application.eori")</dt>
+                            <dd class="stack">@pdf.eori</dd>
+                        </dl>
+                        <dl class="govuk-summary-list govuk-summary-list--no-border">
+                            <dt class="govuk-!-font-weight-bold">@messages("view.application.account.name")</dt>
+                            <dd class="stack">@pdf.accountDetails.businessName</dd>
+                        </dl>
+                        <dl class="govuk-summary-list govuk-summary-list--no-border">
+                            <dt class="govuk-!-font-weight-bold">@messages("view.application.account.address")</dt>
+                            <dd class="stack">@pdf.accountDetails.addressLine1</dd>
+                            <dd class="stack">@pdf.accountDetails.addressLine2</dd>
+                            <dd class="stack">@pdf.accountDetails.addressLine3</dd>
+                            <dd class="stack">@pdf.accountDetails.postcode</dd>
+                            <dd class="stack">@messages(getCountryName(pdf.accountDetails.country).mkString)</dd>
+                        </dl>
+                    </div>
+                    <div class="govuk-grid-column-one-half">
+                        <dl class="govuk-summary-list govuk-summary-list--no-border">
+                            <dt class="govuk-!-font-weight-bold">@messages("view.application.contact.name")</dt>
+                            <dd class="stack">@pdf.contact.name</dd>
+                        </dl>
+                        <dl class="govuk-summary-list govuk-summary-list--no-border">
+                            <dt class="govuk-!-font-weight-bold">@messages("view.application.contact.email")</dt>
+                            <dd class="stack">@pdf.contact.email</dd>
+                        </dl>
+                        <dl class="govuk-summary-list govuk-summary-list--no-border">
+                            <dt class="govuk-!-font-weight-bold">@messages("view.application.contact.phone")</dt>
+                            <dd class="stack">@pdf.contact.phone</dd>
+                        </dl>
+                        <dl class="govuk-summary-list govuk-summary-list--no-border">
+                            <dt class="govuk-!-font-weight-bold">@messages("view.application.contact.date")</dt>
+                            <dd class="stack">@Dates.format(pdf.dateSubmitted)</dd>
+                        </dl>
+                    </div>
                 </div>
 
-                <div class="grid-row">
-                    <div class="column-two-thirds">
-                        <h3>@messages("confirmation.heading2.whatNext")</h3>
+                <div class="govuk-grid-row main-content">
+                    <div class="govuk-grid-column-full">
 
-                        @if(appConfig.samplesToggle){
-                            <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+                        <div class="information-box">
+                            <p class="govuk-body hero-text">@messages("view.application.ref.text")<br>
+                                <span class="reference-number">@pdf.reference</span>
+                            </p>
+                        </div>
 
-                        } else {
-                            <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
-                            @if(pdf.sendingSample) {
-                                @if(pdf.hazardousSample){
-                                    <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
-                                }else{
-                                    <div class="notice">
-                                        <i class="icon icon-important_">
-                                            <span class="visually-hidden">Warning</span>
-                                            <img src="@createLink("images/icon-important.png")"/>
-                                        </i>
-                                        <strong class="bold-small">
-                                        @messages("confirmation.sendingSamples.important")
-                                        </strong>
-                                    </div>
-                                    @if(pdf.returnSample) {
-                                        <div class="panel panel-border-wide mt-2">@messages("confirmation.paragraph.sample.return")</div>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-two-thirds">
+                                <h3 class="govuk-heading-m">@messages("confirmation.heading2.whatNext")</h3>
+                                @if(appConfig.samplesToggle){
+                                    <div class="govuk-inset-text">@messages("view.application.paragraph.do.not.send.sample")</div>
+                                } else {
+                                    <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
+                                    @if(pdf.sendingSample) {
+                                        @if(pdf.hazardousSample){
+                                            <div class="govuk-inset-text">@messages("view.application.paragraph.do.not.send.sample")</div>
+                                        }else{
+                                            <div class="govuk-warning-text">
+                                                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                                                <strong class="govuk-warning-text__text">
+                                                    <span class="govuk-warning-text__assistive">@messages("site.warning")</span>
+                                                    @messages("confirmation.sendingSamples.important")
+                                                </strong>
+                                            </div>
+                                            @if(pdf.returnSample) {
+                                                <div class="govuk-inset-text">@messages("confirmation.paragraph.sample.return")</div>
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        }
-                    </div>
-
-
-                    @if(appConfig.samplesToggle){
-                    <div class="column-one-third">
-
-                        <div class="about-this-result-box-do-not-send about-this-result-box">
-                            <div id="aboutThisResult" class="about-this-result">
-                                <div class="date-of-result">
-                                    <h2>@messages("application.footer.sendingSamples.heading")</h2>
-                                </div>
-                                <div>
-                                    <div>@messages("view.application.paragraph.do.not.send.sample")</div>
-                                </div>
                             </div>
-                        </div>
-                    </div>
-                            } else {
 
-                        @if(pdf.sendingSample) {
-                            <div class="column-one-third">
-                                <div class=@if(pdf.hazardousSample){"about-this-result-box-do-not-send about-this-result-box"} else {"about-this-result-box"}>
-                                <div id="aboutThisResult" class="about-this-result">
-                                    <div class="date-of-result">
-                                        <h2>@messages("application.footer.sendingSamples.heading")</h2>
+                            @if(appConfig.samplesToggle){
+                                <div class="govuk-grid-column-one-third">
+
+                                    <div class="about-this-result-box-do-not-send about-this-result-box">
+                                        <div id="aboutThisResult" class="about-this-result">
+                                            <div class="date-of-result">
+                                                <h2 class="govuk-heading-m">@messages("application.footer.sendingSamples.heading")</h2>
+                                            </div>
+                                            <div>
+                                                <p class="govuk-body">@messages("view.application.paragraph.do.not.send.sample")</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    @if(pdf.hazardousSample) {
-                                        <div>@messages("view.application.paragraph.do.not.send.sample")</div>
-                                    } else {
-                                        <div class="date-of-result decision-service-version">
-                                            <div>@messages("view.application.sending.sample.paragraph1")</div>
-                                            <div class="bold mb-2">@pdf.reference</div>
-                                        </div>
-                                        <div>
-                                            <dl>
-                                                <dt><p><span class="bold">@messages("application.footer.sendingSamplesTo.heading")</span></p>
-                                                </dt>
-                                                <address>
-                                                @Html(messages("confirmation.sendingSamples.address"))
-                                                </address>
-                                            </dl>
-                                        </div>
-                                    }
                                 </div>
+                            } else {
+                                @if(pdf.sendingSample) {
+                                    <div class="govuk-grid-column-one-third">
+                                        <div class=@if(pdf.hazardousSample){"about-this-result-box-do-not-send about-this-result-box"} else {"about-this-result-box"}>
+                                        <div id="aboutThisResult" class="about-this-result">
+                                            <div class="date-of-result">
+                                                <h2 class="govuk-heading-m">@messages("application.footer.sendingSamples.heading")</h2>
+                                            </div>
+                                            @if(pdf.hazardousSample) {
+                                                <p class="govuk-body">@messages("view.application.paragraph.do.not.send.sample")</p>
+                                            } else {
+                                                <div class="date-of-result decision-service-version">
+                                                    <div>
+                                                        <p class="govuk-body">@messages("view.application.sending.sample.paragraph1")</p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="govuk-body govuk-!-font-weight-bold mb-2">@pdf.reference</p>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <dl>
+                                                        <dt>
+                                                            <p class="govuk-body">
+                                                                <span class="govuk-!-font-weight-bold">@messages("application.footer.sendingSamplesTo.heading")
+                                                                </span>
+                                                            </p>
+                                                        </dt>
+                                                        <dd class="govuk-!-margin-left-0">
+                                                            <p class="govuk-body">
+                                                            @Html(messages("confirmation.sendingSamples.address"))
+                                                            </p>
+                                                        </dd>
+                                                    </dl>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         }
                     </div>
-                    }
-                </div>
                 </div>
             </div>
         </div>
 
-    <div class="print-document" id="print-document">
-    <div class="grid-row print-header">
-        <div class="column-one-third">
-            <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink(messages("logo.file.name"))" />
-        </div>
-        <div>
-            <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
-                @messages("view.application.title.text")
-            </h2>
-        </div>
-    </div>
+        <div class="print-document" id="print-document">
+            <div class="govuk-grid-row print-header">
+                <div class="govuk-grid-column-one-third">
+                    <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink(messages("logo.file.name"))" />
+                </div>
+                <div>
+                    <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-!-margin-bottom-0 print-header__heading">
+                        @messages("view.application.title.text")
+                    </h2>
+                </div>
+            </div>
 
-    <div class="grid-row main-content">
-        <div class="column-full">
+            <div class="govuk-grid-row main-content">
+                <div class="govuk-grid-column-full">
 
-            <h3 class="heading-medium">@messages("beforeYouStart.subheading1")</h3>
-            <dl class="govuk-check-your-answers cya-questions-short">
-                <div>
-                    <dt class="cya-question">@messages("provideGoodsName.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@pdf.goodsName</dd>
-                </div>
-                <div>
-                    <dt class="cya-question">@messages("view.application.goods.details")</dt>
-                    <dd class="cya-answer">@pdf.goodsDetails</dd>
-                </div>
-                @if(pdf.confidentialInformation.isDefined) {
-                <div>
-                    <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@pdf.confidentialInformation</dd>
-                </div>
-                } else {
-                <div>
-                    <dt class="cya-question">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@messages("site.no")</dd>
-                </div>
-                }
-                @if(pdf.attachments.isEmpty) {
-                <div>
-                    <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@messages("site.no")</dd>
-                </div>
-                } else {
-                 <div>
-                    <dt class="cya-question">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer"><div class="pre-wrap">@{pdf.supportingMaterialFileList}</div></dd>
-                  </div>
-                }
-
-                    @if(!appConfig.samplesToggle){
-                        @if(pdf.sendingSample) {
-                            <div>
-                                <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
-                                <dd class="cya-answer">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                            </div>
-                            <div>
-                                <dt class="cya-question">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
-                                <dd class="cya-answer">@{if(pdf.hazardousSample) {messages("site.yes")} else {messages("site.no")}}</dd>
-                            </div>
-                            <div>
-                                <dt class="cya-question">@messages("returnSamples.checkYourAnswersLabel")</dt>
-                                <dd class="cya-answer">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                    <h3 class="govuk-heading-m">@messages("beforeYouStart.subheading1")</h3>
+                    <dl class="govuk-summary-list">
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">@messages("provideGoodsName.checkYourAnswersLabel")</dt>
+                            <dd class="govuk-summary-list__value">@pdf.goodsName</dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">@messages("view.application.goods.details")</dt>
+                            <dd class="govuk-summary-list__value">@pdf.goodsDetails</dd>
+                        </div>
+                        @if(pdf.confidentialInformation.isDefined) {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
+                                <dd class="govuk-summary-list__value">@pdf.confidentialInformation</dd>
                             </div>
                         } else {
-                            <div>
-                                <dt class="cya-question">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
-                                <dd class="cya-answer">@messages("site.no")</dd>
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("provideConfidentialInformation.checkYourAnswersLabel")</dt>
+                                <dd class="govuk-summary-list__value">@messages("site.no")</dd>
                             </div>
                         }
-                    }
+                        @if(pdf.attachments.isEmpty) {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
+                                <dd class="govuk-summary-list__value">@messages("site.no")</dd>
+                            </div>
+                        } else {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
+                                <dd class="govuk-summary-list__value"><div class="pre-wrap">@{pdf.supportingMaterialFileList}</div></dd>
+                            </div>
+                        }
 
-                @if(pdf.foundCommodityCode.isDefined) {
-                <div>
-                    <dt class="cya-question">@messages("application.section.aboutItem.envisagedCommodityCode")</dt>
-                    <dd class="cya-answer">@pdf.foundCommodityCode</dd>
-                </div>
-                } else {
-                <div>
-                    <dt class="cya-question">@messages("view.applicationPdf.foundCommodityCode")</dt>
-                    <dd class="cya-answer">@messages("site.no")</dd>
-                </div>
-                }
+                        @if(!appConfig.samplesToggle){
+                            @if(pdf.sendingSample) {
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
+                                    <dd class="govuk-summary-list__value">@{if(pdf.sendingSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                                </div>
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">@messages("isSampleHazardous.checkYourAnswersLabel")</dt>
+                                    <dd class="govuk-summary-list__value">@{if(pdf.hazardousSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                                </div>
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">@messages("returnSamples.checkYourAnswersLabel")</dt>
+                                    <dd class="govuk-summary-list__value">@{if(pdf.returnSample) {messages("site.yes")} else {messages("site.no")}}</dd>
+                                </div>
+                            } else {
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">@messages("areYouSendingSamples.checkYourAnswersLabel")</dt>
+                                    <dd class="govuk-summary-list__value">@messages("site.no")</dd>
+                                </div>
+                            }
+                        }
 
-                @if(pdf.legalProblems.isDefined) {
-                <div>
-                    <dt class="cya-question">@messages("view.applicationPdf.legalProblem")</dt>
-                    <dd class="cya-answer">@pdf.legalProblems</dd>
-                </div>
-                } else {
-                <div>
-                    <dt class="cya-question">@messages("view.applicationPdf.legalProblemQuestion")</dt>
-                    <dd class="cya-answer">@messages("site.no")</dd>
-                </div>
-                }
+                        @if(pdf.foundCommodityCode.isDefined) {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("application.section.aboutItem.envisagedCommodityCode")</dt>
+                                <dd class="govuk-summary-list__value">@pdf.foundCommodityCode</dd>
+                            </div>
+                        } else {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("view.applicationPdf.foundCommodityCode")</dt>
+                                <dd class="govuk-summary-list__value">@messages("site.no")</dd>
+                            </div>
+                        }
 
-            </dl>
-            <h3 class="heading-medium">@messages("beforeYouStart.subheading2")</h3>
-            <dl class="govuk-check-your-answers cya-questions-short section">
-                @if(pdf.reissuedBTIReference.isEmpty) {
-                    <div>
-                        <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@messages("site.no")</dd>
-                    </div>
-                } else {
-                    <div>
-                        <dt class="cya-question">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
-                        <dd class="cya-answer">@pdf.reissuedBTIReference</dd>
-                    </div>
-                }
+                        @if(pdf.legalProblems.isDefined) {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("view.applicationPdf.legalProblem")</dt>
+                                <dd class="govuk-summary-list__value">@pdf.legalProblems</dd>
+                            </div>
+                        } else {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("view.applicationPdf.legalProblemQuestion")</dt>
+                                <dd class="govuk-summary-list__value">@messages("site.no")</dd>
+                            </div>
+                        }
 
-                @if(pdf.similarAtarReferences.isEmpty) {
-                <div>
-                    <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer">@messages("site.no")</dd>
+                    </dl>
+                    <h3 class="govuk-heading-m">@messages("beforeYouStart.subheading2")</h3>
+                    <dl class="govuk-summary-list">
+                        @if(pdf.reissuedBTIReference.isEmpty) {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
+                                <dd class="govuk-summary-list__value">@messages("site.no")</dd>
+                            </div>
+                        } else {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("provideBTIReference.checkYourAnswersLabel")</dt>
+                                <dd class="govuk-summary-list__value">@pdf.reissuedBTIReference</dd>
+                            </div>
+                        }
+
+                        @if(pdf.similarAtarReferences.isEmpty) {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
+                                <dd class="govuk-summary-list__value">@messages("site.no")</dd>
+                            </div>
+                        } else {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
+                                <dd class="govuk-summary-list__value"><div class="pre-wrap">@{pdf.similarAtarCodes}</div></dd>
+                            </div>
+                        }
+                    </dl>
                 </div>
-                } else {
-                <div>
-                    <dt class="cya-question">@messages("commodityCodeRulingReference.checkYourAnswersLabel")</dt>
-                    <dd class="cya-answer"><div class="pre-wrap">@{pdf.similarAtarCodes}</div></dd>
-                </div>
-                }
-            </dl>
+            </div>
         </div>
-    </div>
-</div>
     </body>
 
 </html>

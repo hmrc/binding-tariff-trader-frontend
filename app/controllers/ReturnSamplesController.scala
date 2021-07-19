@@ -40,11 +40,12 @@ class ReturnSamplesController @Inject()(
   val getData: DataRetrievalAction,
   val requireData: DataRequiredAction,
   formProvider: ReturnSamplesFormProvider,
-  cc: MessagesControllerComponents
+  cc: MessagesControllerComponents,
+  returnsSamplesView: returnSamples
 )(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
-  lazy val form = formProvider()
-  val questionPage = ReturnSamplesPage
+  lazy val form: Form[Boolean] = formProvider()
+  val questionPage: ReturnSamplesPage.type = ReturnSamplesPage
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
-    returnSamples(appConfig, preparedForm, mode)
+    returnsSamplesView(appConfig, preparedForm, mode)
 }

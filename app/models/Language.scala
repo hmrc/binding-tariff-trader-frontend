@@ -45,4 +45,3 @@ object Languages {
       value.toString
   }
 }
-

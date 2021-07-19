@@ -33,8 +33,10 @@ import play.api.mvc.Request
 
 class AreYouSendingSamplesControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
-  private val formProvider = new AreYouSendingSamplesFormProvider()
-  private val goodsName = "some-goods-name"
+  private val formProvider: AreYouSendingSamplesFormProvider = new AreYouSendingSamplesFormProvider()
+  private val goodsName: String = "some-goods-name"
+
+  val areYouSendingSamplesView: areYouSendingSamples = app.injector.instanceOf(classOf[areYouSendingSamples])
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new AreYouSendingSamplesController(
@@ -45,13 +47,14 @@ class AreYouSendingSamplesControllerSpec extends ControllerSpecBase with YesNoCa
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      areYouSendingSamplesView
     )
 
   private def onwardRoute: Call = Call("GET", "/foo")
 
   private def viewAsString(form: Form[Boolean], request: Request[_]): String =
-    areYouSendingSamples(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
+    areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
   "AreYouSendingSamplesController" must {
     behave like yesNoCachingController(

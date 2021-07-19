@@ -29,10 +29,11 @@ class AcceptItemInformationListController @Inject()(
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  cc: MessagesControllerComponents
+  cc: MessagesControllerComponents,
+  acceptItemInformationListView: acceptItemInformationList
 ) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    Ok(acceptItemInformationList(appConfig))
+    Ok(acceptItemInformationListView(appConfig))
   }
 }

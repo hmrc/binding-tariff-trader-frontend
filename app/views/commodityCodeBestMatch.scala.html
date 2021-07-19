@@ -17,32 +17,36 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-    <div class="form-group">
-        <p>@messages("commodityCodeBestMatch.paragraph")</p>
+    <div class="govuk-form-group">
+        <p class="govuk-body">@messages("commodityCodeBestMatch.paragraph")</p>
     </div>
 }
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("commodityCodeBestMatch.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("commodityCodeBestMatch.title")}"
+) {
 
-    @helpers.form(action = CommodityCodeBestMatchController.onSubmit(mode)) {
-
+    @formWithCSRF(action = CommodityCodeBestMatchController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 
         @components.input_yes_no(
             field = form("value"),
             label = Some(messages("commodityCodeBestMatch.heading", goodsName)),
-            labelClass = Some("visually-hidden"),
+            labelClass = Some("govuk-visually-hidden"),
             captionMsg=Some(messages("commodityCodeBestMatch.caption")),
-            contentHtml = Some(contents)
+            contentHtml = Some(contents),
+            labelIsHeading = true
         )
 
         @components.submit_button(Some(messages("site.continue")))

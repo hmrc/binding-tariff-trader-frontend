@@ -41,7 +41,9 @@ class IndexController @Inject()(
   identify: IdentifierAction,
   navigator: Navigator,
   service: CasesService,
-  cc: MessagesControllerComponents
+  cc: MessagesControllerComponents,
+  accountDashboardStatusesView: account_dashboard_statuses,
+  indexView: index
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   private val applicationStatuses = Set(
@@ -58,7 +60,7 @@ class IndexController @Inject()(
     request.eoriNumber match {
       case Some(eori: String) =>
         service.getCases(eori, applicationStatuses, SearchPagination(page), Sort()).map { pagedResult =>
-          Ok(index(appConfig, CaseDetailTab.APPLICATION, table_applications(pagedResult)))
+          Ok(indexView(appConfig, CaseDetailTab.APPLICATION, table_applications(pagedResult)))
         }
 
       case None =>
@@ -71,7 +73,7 @@ class IndexController @Inject()(
     request.eoriNumber match {
       case Some(eori: String) =>
         service.getCases(eori, rulingStatuses, SearchPagination(page), Sort(SortField.DECISION_START_DATE)).map { pagedResult =>
-          Ok(index(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult)))
+          Ok(indexView(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult)))
         }
 
       case None =>
@@ -80,12 +82,12 @@ class IndexController @Inject()(
     }
   }
 
-  def getApplicationsAndRulings(page: Int, sortBy: Option[SortField], order: Option[SortDirection], enableTrackingConsent: Boolean = false): Action[AnyContent] = identify.async { implicit request =>
+  def getApplicationsAndRulings(page: Int, sortBy: Option[SortField], order: Option[SortDirection]): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
         val sort = Sort(sortBy.getOrElse(Dashboard.defaultSortField), order)
         service.getCases(eori, applicationStatuses, SearchPagination(page), sort) flatMap { pagedResult =>
-          successful(Ok(account_dashboard_statuses(appConfig, Dashboard(pagedResult, sort))))
+          successful(Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort))))
         }
 
       case None =>

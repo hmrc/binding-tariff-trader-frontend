@@ -32,11 +32,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
-  val formProvider = new CommodityCodeBestMatchFormProvider()
-  val goodsName = "some-goods-name"
+  val formProvider: CommodityCodeBestMatchFormProvider = new CommodityCodeBestMatchFormProvider()
+  val goodsName: String = "some-goods-name"
+
+  val commodityCodeBestMatchView: commodityCodeBestMatch = app.injector.instanceOf(classOf[commodityCodeBestMatch])
 
   def viewAsString(form: Form[_], request: Request[_]): String =
-    commodityCodeBestMatch(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
+    commodityCodeBestMatchView(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new CommodityCodeBestMatchController(
@@ -47,7 +49,8 @@ class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase with YesNo
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      commodityCodeBestMatchView
     )
 
   private def onwardRoute = Call("GET", "/foo")

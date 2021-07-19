@@ -15,10 +15,10 @@
  *@
 
 @(
-legendHtml: Option[Html] = None
+    legendHtml: Option[Html] = None
 )(content: Html)
 
-<fieldset class="fieldset">
+<fieldset class="govuk-fieldset">
     <legend>
         @legendHtml.map { legend => @legend }
     </legend>

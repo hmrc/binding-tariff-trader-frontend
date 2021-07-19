@@ -53,6 +53,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
   def onwardRoute = Call("GET", "/foo")
 
+  val uploadSupportingMaterialMultipleView: uploadSupportingMaterialMultiple = app.injector.instanceOf(classOf[uploadSupportingMaterialMultiple])
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new UploadSupportingMaterialMultipleController(
@@ -64,7 +65,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       new DataRequiredActionImpl,
       formProvider,
       fileService,
-      cc
+      cc,
+      uploadSupportingMaterialMultipleView
     )
 
   override protected def beforeEach(): Unit = {
@@ -81,7 +83,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     )
   )
 
-  private def viewAsString(form: Form[_] = form): String = uploadSupportingMaterialMultiple(
+  private def viewAsString(form: Form[_] = form): String = uploadSupportingMaterialMultipleView(
     frontendAppConfig,
     initiateResponse,
     form,

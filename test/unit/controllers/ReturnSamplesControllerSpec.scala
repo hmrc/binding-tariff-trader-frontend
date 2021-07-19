@@ -34,6 +34,8 @@ class ReturnSamplesControllerSpec extends ControllerSpecBase with YesNoCachingCo
 
   private val formProvider = new ReturnSamplesFormProvider()
 
+  val returnSamplesView: returnSamples = app.injector.instanceOf(classOf[returnSamples])
+
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new ReturnSamplesController(
       frontendAppConfig,
@@ -43,11 +45,12 @@ class ReturnSamplesControllerSpec extends ControllerSpecBase with YesNoCachingCo
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      returnSamplesView
     )
 
   def viewAsString(form: Form[_], request: Request[_]): String =
-    returnSamples(frontendAppConfig, form, NormalMode)(request, messages).toString
+    returnSamplesView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   "ReturnSamples Controller" must {
     behave like yesNoCachingController(

@@ -42,7 +42,8 @@ class SupportingMaterialFileListController @Inject()(
   val getData: DataRetrievalAction,
   val requireData: DataRequiredAction,
   formProvider: SupportingMaterialFileListFormProvider,
-  cc: MessagesControllerComponents
+  cc: MessagesControllerComponents,
+  supportingMaterialFileListView: supportingMaterialFileList
 )(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
   lazy val form: Form[Boolean] = formProvider()
   val questionPage: SupportingMaterialFileListPage.type = SupportingMaterialFileListPage
@@ -78,19 +79,21 @@ class SupportingMaterialFileListController @Inject()(
       .set(UploadSupportingMaterialMultiplePage, remainingFiles)
       .set(MakeFileConfidentialPage, remainingStatuses)
 
-    if (remainingFiles.isEmpty)
+    if (remainingFiles.isEmpty) {
       updatedAnswers.remove(AddSupportingDocumentsPage)
-    else
+    } else {
       updatedAnswers
+    }
   }
 
   def onRemove(fileId: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val updatedAnswers = removeFile(fileId, request.userAnswers)
 
-    val onwardRoute = if (updatedAnswers.get(AddSupportingDocumentsPage).isEmpty)
+    val onwardRoute = if (updatedAnswers.get(AddSupportingDocumentsPage).isEmpty) {
       routes.AddSupportingDocumentsController.onPageLoad(mode)
-    else
+    } else {
       routes.SupportingMaterialFileListController.onPageLoad(mode)
+    }
 
     dataCacheConnector
       .save(updatedAnswers.cacheMap)
@@ -116,7 +119,7 @@ class SupportingMaterialFileListController @Inject()(
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     // We will not use the prepared form here because we don't want to prepopulate the choice; we will only ensure existing errors are populated
-    supportingMaterialFileList(appConfig, form.copy(errors = preparedForm.errors), goodsName, getFileViews(request.userAnswers), mode)
+    supportingMaterialFileListView(appConfig, form.copy(errors = preparedForm.errors), goodsName, getFileViews(request.userAnswers), mode)
   }
 
   override def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>
@@ -124,17 +127,19 @@ class SupportingMaterialFileListController @Inject()(
     val badRequest = (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(renderView(formWithErrors, mode)))
 
     form.bindFromRequest().fold({ form =>
-      if (exceedsMaxFiles(request.userAnswers))
+      if (exceedsMaxFiles(request.userAnswers)) {
         badRequest(form.withError(maxFilesError))
-      else
+      } else {
         badRequest(form)
+      }
     }, { choice =>
-      if (choice && hasMaxFiles(request.userAnswers))
+      if (choice && hasMaxFiles(request.userAnswers)) {
         badRequest(form.withError(maxFilesError))
-      else if (exceedsMaxFiles(request.userAnswers))
+      } else if (exceedsMaxFiles(request.userAnswers)) {
         badRequest(form.withError(maxFilesError))
-      else
+      } else {
         submitAnswer(choice, mode)
+      }
     })
   }
 }

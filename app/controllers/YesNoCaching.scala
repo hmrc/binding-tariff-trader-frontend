@@ -18,14 +18,14 @@ package controllers
 
 import connectors.DataCacheConnector
 import models.requests.DataRequest
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
 import play.api.libs.json.Writes
 import play.api.mvc.{Result, Results}
 
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.{ Success, Failure }
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 import scala.util.control.NonFatal
 
 trait YesNoCaching extends AnswerCaching[Boolean] {
@@ -35,15 +35,16 @@ trait YesNoCaching extends AnswerCaching[Boolean] {
 
   override def submitAnswer(answer: Boolean, mode: Mode)(implicit request: DataRequest[_], writes: Writes[Boolean], ec: ExecutionContext): Future[Result] = {
     // Set the yes/no question into the user answers
-    val questionPageAnswers = request.userAnswers.set(questionPage, answer)
+    val questionPageAnswers: UserAnswers = request.userAnswers.set(questionPage, answer)
 
     // If they have selected 'no' clear the subsequent details pages
-    val updatedAnswers = if (answer)
+    val updatedAnswers: UserAnswers = if (answer) {
       questionPageAnswers
-    else
+    } else {
       detailPages.foldLeft(questionPageAnswers) {
         case (userAnswers, detailPage) => userAnswers.remove(detailPage)
       }
+    }
 
     dataCacheConnector.save(updatedAnswers.cacheMap).transformWith {
       case Failure(NonFatal(_)) =>

@@ -33,18 +33,19 @@ import views.html.provideBTIReference
 import scala.concurrent.ExecutionContext
 
 class ProvideBTIReferenceController @Inject()(
-  appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
-  formProvider: ProvideBTIReferenceFormProvider,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[BTIReference](cc) {
-  lazy val form = formProvider()
-  val questionPage = ProvideBTIReferencePage
+                                               appConfig: FrontendAppConfig,
+                                               val dataCacheConnector: DataCacheConnector,
+                                               val navigator: Navigator,
+                                               val identify: IdentifierAction,
+                                               val getData: DataRetrievalAction,
+                                               val requireData: DataRequiredAction,
+                                               formProvider: ProvideBTIReferenceFormProvider,
+                                               cc: MessagesControllerComponents,
+                                               provideBTIReferenceView: provideBTIReference
+                                             )(implicit ec: ExecutionContext) extends AnswerCachingController[BTIReference](cc) {
+  lazy val form: Form[BTIReference] = formProvider()
+  val questionPage: ProvideBTIReferencePage.type = ProvideBTIReferencePage
 
   def renderView(preparedForm: Form[BTIReference], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
-    provideBTIReference(appConfig, preparedForm, mode)
+    provideBTIReferenceView(appConfig, preparedForm, mode)
 }

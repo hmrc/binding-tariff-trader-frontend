@@ -16,40 +16,43 @@
 
 @import config.FrontendAppConfig
 @import models.requests.OptionalDataRequest
+
+@this(
+    govukLayoutWrapper: GovukLayoutWrapper
+)
+
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("beforeYouStart.title"),
-    appConfig = appConfig,
-    bodyClasses = None) {
-
+@govukLayoutWrapper(
+    pageTitle = messages("beforeYouStart.title"),
+) {
 
     @components.heading(messages("beforeYouStart.heading"))
 
-    <h2>@messages("beforeYouStart.subheading1")</h2>
+    <h2 class="govuk-heading-m">@messages("beforeYouStart.subheading1")</h2>
 
-    <p>@messages("beforeYouStart.subheading1.paragraph1")</p>
+    <p class="govuk-body">@messages("beforeYouStart.subheading1.paragraph1")</p>
 
-    <ul class="list list-bullet">
+    <ul class="govuk-list govuk-list--bullet">
         <li>@messages("beforeYouStart.subheading1.paragraph1.item1")</li>
         <li>@messages("beforeYouStart.subheading1.paragraph1.item2")</li>
         <li>@messages("beforeYouStart.subheading1.paragraph1.item3")</li>
     </ul>
 
-    <p>@messages("beforeYouStart.subheading1.paragraph2")</p>
+    <p class="govuk-body">@messages("beforeYouStart.subheading1.paragraph2")</p>
 
-    <ul class="list list-bullet">
+    <ul class="govuk-list govuk-list--bullet">
         <li>@messages("beforeYouStart.subheading1.paragraph2.item1")</li>
         <li>@messages("beforeYouStart.subheading1.paragraph2.item2")</li>
     </ul>
 
-    <h2>@messages("beforeYouStart.subheading2")</h2>
+    <h2 class="govuk-heading-m">@messages("beforeYouStart.subheading2")</h2>
 
-    <p>@messages("beforeYouStart.subheading2.paragraph1")</p>
+    <p class="govuk-body">@messages("beforeYouStart.subheading2.paragraph1")</p>
 
-    <h2>@messages("beforeYouStart.subheading3")</h2>
+    <h2 class="govuk-heading-m">@messages("beforeYouStart.subheading3")</h2>
 
-    <p>@messages("beforeYouStart.subheading3.paragraph1")</p>
+    <p class="govuk-body">@messages("beforeYouStart.subheading3.paragraph1")</p>
 
     @components.button_link(messages("site.continue"), routes.InformationPublicController.onPageLoad().url)
 

@@ -17,21 +17,25 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, makeFileConfidentialForm: Form[_], submitAction: Call, mode: Mode, fileId: String)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-<p>@messages("makeFileConfidential.infoText")</p>
+<p class="govuk-body">@messages("makeFileConfidential.infoText")</p>
 }
 
-@main_template(
-    title = s"${errorPrefix(makeFileConfidentialForm)} ${messages("makeFileConfidential.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(makeFileConfidentialForm)} ${messages("makeFileConfidential.title")}",
+) {
 
-    @helpers.form(action = submitAction) {
+    @formWithCSRF(action = submitAction) {
 
 
         @components.error_summary(makeFileConfidentialForm.errors)
@@ -47,7 +51,8 @@
             label = Some(messages("makeFileConfidential.heading")),
             labelClass = Some("visually-hidden"),
             captionMsg = Some(messages("makeFileConfidential.caption")),
-            contentHtml = Some(contents)
+            contentHtml = Some(contents),
+            labelIsHeading = true
         )
 
         @components.submit_button(Some(messages("site.continue")))

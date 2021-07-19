@@ -18,22 +18,17 @@
         field: Field,
         label: String,
         inputClass: Option[String] = None,
-        hint: Option[String] = None,
-        labelClass: Option[String] = None,
         accept: Option[String] = None,
         multiple: Boolean = false
 )(implicit messages: Messages)
 
-<div class="form-group @if(field.hasErrors){form-group-error}">
-    <label class="form-label" for="@{field.id}">
-        <span class="@if(labelClass.nonEmpty){@labelClass}">@label</span>
-        @if(hint.nonEmpty){
-            <span class="form-hint">@hint</span>
-        }
-        @field.errors.map { error =>
-            <span class="error-message" id="error-message-@{field.id}-input"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
-        }
+<div class="govuk-form-group @if(field.hasErrors){govuk-form-group--error}">
+    <label class="govuk-label" for="@{field.id}">
+        @label
     </label>
+    @field.errors.map { error =>
+        <span class="govuk-error-message" id="error-message-@{field.id}-input"><span class="govuk-visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
+    }
     <div class="form-control-wrapper">
         <input
         class="@inputClass"

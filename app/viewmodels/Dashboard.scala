@@ -17,7 +17,6 @@
 package viewmodels
 
 import java.net.URLEncoder.encode
-
 import controllers.routes
 import models.SortDirection.SortDirection
 import models.SortField.{CREATED_DATE, SortField}
@@ -40,7 +39,7 @@ case class Dashboard(pageData: Paged[Case], sort: Sort) {
       encode(k, ENCODING) + "=" + encode(v, ENCODING)
     }.mkString("&")
 
-    if(query.length > 0) "?" + query else ""
+    if(query.nonEmpty) "?" + query else ""
   }
 
   private def toMap: Map[String, String] = {
@@ -55,24 +54,25 @@ case class Dashboard(pageData: Paged[Case], sort: Sort) {
     def currentColumn: Boolean =
       sort.field.toString == columnName
 
-    if (currentColumn)
+    if (currentColumn) {
       SortDirection.reverse(sort.direction)
-    else
+    } else {
       SortField.defaultDirections(SortField.withName(columnName))
+    }
   }
 }
 
 object Dashboard {
 
-  val defaultSortField = CREATED_DATE
+  val defaultSortField: models.SortField.Value = CREATED_DATE
 
-  private val baseUrl = routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url
+  private val baseUrl: String = routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url
 
-  private val pageParam = "page"
-  private val sortFieldParam = "sortBy"
-  private val orderParam = "order"
+  private val pageParam: String = "page"
+  private val sortFieldParam: String = "sortBy"
+  private val orderParam: String = "order"
 
-  private val ENCODING = "UTF-8"
+  private val ENCODING: String = "UTF-8"
 
   def getSortBy(implicit request: Request[_]): Option[SortField] =
     request.getQueryString(sortFieldParam).map(s => SortField.withName(s))
@@ -81,9 +81,3 @@ object Dashboard {
     request.getQueryString(orderParam).map(s => SortDirection.withName(s))
 
 }
-
-
-
-
-
-

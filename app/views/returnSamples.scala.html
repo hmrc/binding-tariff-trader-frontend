@@ -17,33 +17,36 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-<div role="note" class="mb-4">
-    <p> @messages("returnSamples.first.paragraph")</p>
+<div role="note" class="govuk-form-group">
+    <p class="govuk-body"> @messages("returnSamples.first.paragraph")</p>
 </div>
 }
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("returnSamples.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("returnSamples.title")}",
+) {
 
-    @helpers.form(action = ReturnSamplesController.onSubmit(mode)) {
-
+    @formWithCSRF(action = ReturnSamplesController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
-
 
         @components.input_yes_no(
             field = form("value"),
             label = Some(messages("returnSamples.heading")),
-            labelClass = Some("visually-hidden"),
+            labelClass = Some("govuk-visually-hidden"),
             captionMsg = Some(messages("returnSamples.caption")),
-            contentHtml = Some(contents)
+            contentHtml = Some(contents),
+            labelIsHeading = true
         )
 
         @components.submit_button(Some(messages("site.continue")))

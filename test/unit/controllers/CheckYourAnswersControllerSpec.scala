@@ -91,6 +91,8 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
     reset(casesService, auditService)
   }
 
+  val checkYourAnswersView: check_your_answers = app.injector.instanceOf(classOf[check_your_answers])
+
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CheckYourAnswersController(
       frontendAppConfig,
@@ -105,7 +107,8 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       pdfService,
       fileService,
       mapper,
-      cc
+      cc,
+      checkYourAnswersView
     )
 
   "Check Your Answers Controller" must {
@@ -120,7 +123,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
         AnswerSection(Some("checkYourAnswers.informationAboutYourItemSection"), Seq.empty),
         AnswerSection(Some("checkYourAnswers.otherInformation"), Seq.empty)
       )
-      contentAsString(result) shouldBe check_your_answers(frontendAppConfig, expectedSections, false)(fakeRequest, messages).toString
+      contentAsString(result) shouldBe checkYourAnswersView(frontendAppConfig, expectedSections, false)(fakeRequest, messages).toString
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

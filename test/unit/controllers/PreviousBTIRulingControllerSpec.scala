@@ -35,6 +35,8 @@ class PreviousBTIRulingControllerSpec extends ControllerSpecBase with YesNoCachi
   private val formProvider = new PreviousBTIRulingFormProvider()
   private val goodsName = "some-goods-name"
 
+  val previousBTIRulingView: previousBTIRuling = app.injector.instanceOf(classOf[previousBTIRuling])
+
   private def controller(dataRetrievalAction: DataRetrievalAction): PreviousBTIRulingController = {
     new PreviousBTIRulingController(
       frontendAppConfig,
@@ -44,14 +46,15 @@ class PreviousBTIRulingControllerSpec extends ControllerSpecBase with YesNoCachi
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      previousBTIRulingView
     )
   }
 
   private def onwardRoute = Call("GET", "/foo")
 
   private def viewAsString(form: Form[_], request: Request[_]): String =
-    previousBTIRuling(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
+    previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
   val backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
 

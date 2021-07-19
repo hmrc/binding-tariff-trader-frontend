@@ -23,6 +23,7 @@ import org.mockito.BDDMockito.given
 import play.api.test.Helpers.{redirectLocation, _}
 import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.ruling_information
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -32,12 +33,15 @@ class RulingControllerSpec extends ControllerSpecBase {
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
   private val casesService = mock[CasesService]
 
+  val rulingInformationView: ruling_information = app.injector.instanceOf(classOf[views.html.ruling_information])
+  
   private def controller(identifier: IdentifierAction = FakeIdentifierAction) =
     new RulingController(
       frontendAppConfig,
       identifier,
       casesService,
-      cc
+      cc,
+      rulingInformationView
     )
 
 

@@ -20,17 +20,17 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.AddConfidentialInformationFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
-import navigation.Navigator
+import navigation.{Journey, Navigator, YesNoJourney}
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import play.twirl.api.HtmlFormat
 
 import scala.concurrent.ExecutionContext
-import navigation.Journey
 
 class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
@@ -43,7 +43,7 @@ class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfi
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
   lazy val form: Form[Boolean] = formProvider()
-  val journey = Journey.confidentialInformation
+  val journey: YesNoJourney = Journey.confidentialInformation
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")

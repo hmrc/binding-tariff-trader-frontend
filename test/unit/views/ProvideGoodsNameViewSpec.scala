@@ -20,24 +20,26 @@ import controllers.routes
 import forms.ProvideGoodsNameFormProvider
 import models.NormalMode
 import play.api.data.Form
-import play.twirl.api.HtmlFormat
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
+import play.twirl.api.{Html, HtmlFormat}
 import views.behaviours.StringViewBehaviours
 import views.html.provideGoodsName
 
 class ProvideGoodsNameViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "provideGoodsName"
+  val messageKeyPrefix: String = "provideGoodsName"
 
-  val form = new ProvideGoodsNameFormProvider()()
+  val form: Form[String] = new ProvideGoodsNameFormProvider()()
 
-  val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
   def provideGoodsNameView: provideGoodsName = injector.instanceOf[provideGoodsName]
 
   def createView: () => HtmlFormat.Appendable = () => provideGoodsNameView(
     frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm= (form: Form[String]) => provideGoodsNameView(
+  def createViewUsingForm: Form[String] => Html = (form: Form[String]) => provideGoodsNameView(
     frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
   "ProvideGoodsName view" must {

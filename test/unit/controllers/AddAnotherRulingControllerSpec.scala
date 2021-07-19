@@ -29,13 +29,14 @@ import play.api.libs.json.{JsArray, JsBoolean, JsString}
 import play.api.mvc.{Call, Request}
 import play.api.test.Helpers.{redirectLocation, _}
 import uk.gov.hmrc.http.cache.client.CacheMap
-import views.html.addAnotherRuling
+import views.html.{acceptItemInformationList, addAnotherRuling}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
   private val formProvider = new AddAnotherRulingFormProvider()
+  val addAnotherRulingView: addAnotherRuling = app.injector.instanceOf(classOf[addAnotherRuling])
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new AddAnotherRulingController(
@@ -46,7 +47,8 @@ class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachin
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      addAnotherRulingView
     )
 
   private def onwardRoute = Call("GET", "/foo")
@@ -54,7 +56,7 @@ class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachin
   private val rulings = List.empty[String]
 
   def viewAsString(form: Form[_], request: Request[_]): String =
-    addAnotherRuling(frontendAppConfig, formProvider().copy(errors = form.errors), NormalMode, rulings)(request, messages).toString
+    addAnotherRulingView(frontendAppConfig, formProvider().copy(errors = form.errors), NormalMode, rulings)(request, messages).toString
 
   "AddAnotherRulingController" must {
     behave like yesNoCachingController(

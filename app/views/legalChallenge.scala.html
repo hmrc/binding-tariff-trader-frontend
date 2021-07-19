@@ -17,33 +17,34 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-    <div class="form-group">
-        <p>@messages("legalChallenge.paragraph0", goodsName)</p>
-    </div>
+    <p class="govuk-body">@messages("legalChallenge.paragraph0", goodsName)</p>
 }
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("legalChallenge.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("legalChallenge.title")}",
+) {
 
-    @helpers.form(action = LegalChallengeController.onSubmit(mode)) {
-
+    @formWithCSRF(action = LegalChallengeController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
-
 
         @components.input_yes_no(
             field = form("value"),
             label = Some(messages("legalChallenge.heading", goodsName)),
-            labelClass = Some("visually-hidden"),
+            labelClass = Some("govuk-visually-hidden"),
             captionMsg=Some(messages("legalChallenge.caption")),
-            contentHtml = Some(contents)
+            contentHtml = Some(contents),
+            labelIsHeading = true
         )
 
         @components.submit_button(Some(messages("site.continue")))

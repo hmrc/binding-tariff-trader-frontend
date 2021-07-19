@@ -17,28 +17,30 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
 
-@this()
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, isSampleHazardousForm: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(isSampleHazardousForm)} ${messages("isSampleHazardous.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(isSampleHazardousForm)} ${messages("isSampleHazardous.title")}"
+) {
 
-    @helpers.form(action = IsSampleHazardousController.onSubmit(mode), 'autoComplete -> "off") {
+    @formWithCSRF(action = IsSampleHazardousController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.error_summary(isSampleHazardousForm.errors)
-
 
         @components.input_yes_no(
             field = isSampleHazardousForm("isSampleHazardous"),
             label = Some(messages("isSampleHazardous.heading")),
             captionMsg = Some(messages("isSampleHazardous.caption")),
-            labelClass = Some("visually-hidden")
+            labelClass = Some("visually-hidden"),
+            labelIsHeading = true
         )
 
         @components.submit_button(Some(messages("site.continue")))

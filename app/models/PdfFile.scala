@@ -17,5 +17,3 @@
 package models
 
 case class PdfFile(content: Array[Byte], contentType: String = "application/pdf")
-
-

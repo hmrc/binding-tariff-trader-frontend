@@ -30,9 +30,8 @@ trait ViewBehaviours extends ViewSpecBase {
       "rendered" must {
         "have the correct banner title" in {
           val doc = asDocument(view())
-          val nav = doc.getElementById("proposition-menu")
-          val span = nav.children.first
-          span.text shouldBe messages("site.service_name")
+          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          bannerTitle.text shouldBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -49,13 +48,12 @@ trait ViewBehaviours extends ViewSpecBase {
           val doc = asDocument(view())
           for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
         }
-
         "contain a timeout dialog" in {
-          val doc = asDocument(view())
+          val timeoutElm = asDocument(view()).select("meta[name=\"hmrc-timeout-dialog\"]")
           if(expectTimeoutDialog) {
-            assertRenderedById(doc, "timeoutDialog")
+            assert(timeoutElm.size == 1)
           } else {
-            assertNotRenderedById(doc, "timeoutDialog")
+            assert(timeoutElm.size == 0)
           }
         }
       }

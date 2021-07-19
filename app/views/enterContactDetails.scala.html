@@ -17,30 +17,34 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @heading = {
     @components.heading(
-    messages("enterContactDetails.heading"),
-    captionMsg = Some(messages("enterContactDetails.caption")))
+        messages("enterContactDetails.heading"),
+        captionMsg = Some(messages("enterContactDetails.caption"))
+    )
 }
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("enterContactDetails.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("enterContactDetails.title")}",
+) {
 
-    @helpers.form(action = EnterContactDetailsController.onSubmit(mode)) {
-
+    @formWithCSRF(action = EnterContactDetailsController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 
         @components.fieldset_wrapper(legendHtml = Some(heading)) {
 
-            <p>@Html(messages("enterContactDetails.bodyText"))</p>
+            <p class="govuk-body">@Html(messages("enterContactDetails.bodyText"))</p>
 
             @components.input_text(
                 field = form("name"),

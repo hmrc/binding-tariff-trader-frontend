@@ -18,88 +18,94 @@
 
 @(
         id: String = "pagination",
-        singularName: String = "result",
-        pluralName: String = "results",
+        singularNameKey: String = "pagination.results",
+        pluralNameKey: String = "pagination.results",
         pager: Paged[_],
         onChange: Int => Call,
         containerClass: Option[String] = None,
         counterClass: Option[String] = None,
         linksClass: Option[String] = None
-)
+)(implicit messages: Messages)
 
-<div id="@id" class="grid-row @containerClass.getOrElse("")">
-
-    <div class="column-one-half">
-    @if(pager.nonEmpty) {
-        @if(pager.pageCount == 1) {
-            <div id="@id-one" class="@counterClass.getOrElse("")">
-                <span>Showing</span>
-                <span id="@id-total" class="bold">@{
-                    pager.resultCount
-                }</span>
-                <span>
-                @if(pager.resultCount == 1) {
-                    @singularName
-                } else {
-                    @pluralName
-                }
-                </span>
-            </div>
-        } else {
-            <div id="@id-some" class="@counterClass.getOrElse("")">
-                <span>Showing</span>
-                <span id="@id-start">@{
-                    (pager.pageIndex - 1) * pager.pageSize + 1
-                }</span>
-                <span>to</span>
-                <span id="@id-end">@{
-                    (pager.pageIndex - 1) * pager.pageSize + pager.size
-                }</span>
-                <span>of</span>
-                <span id="@id-total" class="bold">@{
-                    pager.resultCount
-                }</span>
-                <span>
-                @if(pager.resultCount == 1) {
-                    @singularName
-                } else {
-                    @pluralName
-                }
-                </span>
-            </div>
-        }
-    } else {
-        <div id="@id-none">
-            <span>Showing</span>
-            <span>No @{
-                pluralName
-            }</span>
-        </div>
-    }
-
-    </div>
+<div id="@id" class="govuk-grid-row @containerClass.getOrElse("")">
 
     @if(pager.pageCount > 1) {
-        <div id="@id-links" class="column-one-half align-right @linksClass.getOrElse("")">
+        <div id="@id-links" class="govuk-grid-column-one-half @linksClass.getOrElse("")">
         @defining(pager.pageCount) { pageCount: Int =>
-            @* Previous Page *@
-            @if(pager.pageIndex > 1) {
-                <a id="@id-page_back" class="mr-5" href="@onChange(pager.pageIndex - 1)">Previous</a>
-            }
-            @* Surrounding 5 Pages *@
-            @for(pageIndex <- PaginationUtil.surroundingPages(pager.pageIndex, pager.pageCount, 5)) {
-                @if(pageIndex == pager.pageIndex) {
-                    <span id="@id-page_current" class="mx-5">@pageIndex</span>
-                } else {
-                    <a id="@id-page_@pageIndex" class="mx-5" href="@onChange(pageIndex)">@pageIndex</a>
+            <p class="govuk-body">
+                @* Previous Page *@
+                @if(pager.pageIndex > 1) {
+                    <a class="govuk-link govuk-!-margin-right-1" id="@id-page_back" href="@onChange(pager.pageIndex - 1)">@messages("pagination.previous")</a>
                 }
-            }
-            @* Next Page *@
-            @if(pager.pageIndex < pageCount) {
-                <a id="@id-page_next" class="ml-5" href="@onChange(pager.pageIndex + 1)">Next</a>
-            }
-
+                @* Surrounding 5 Pages *@
+                @for(pageIndex <- PaginationUtil.surroundingPages(pager.pageIndex, pager.pageCount, 5)) {
+                    @if(pageIndex == pager.pageIndex) {
+                        <span id="@id-page_current" class="govuk-!-margin-left-1 govuk-!-margin-right-1">@pageIndex</span>
+                    } else {
+                        <a id="@id-page_@pageIndex" class="govuk-link govuk-!-margin-left-1 govuk-!-margin-right-1" href="@onChange(pageIndex)">@pageIndex</a>
+                    }
+                }
+                @* Next Page *@
+                @if(pager.pageIndex < pageCount) {
+                    <a class="govuk-link govuk-!-margin-left-1" id="@id-page_next" href="@onChange(pager.pageIndex + 1)">@messages("pagination.next")</a>
+                }
+            </p>
         }
         </div>
     }
+
+    <div class="@if(pager.pageCount > 1){govuk-grid-column-one-half}else{govuk-grid-column-full} align-right">
+        @if(pager.nonEmpty) {
+            @if(pager.pageCount == 1) {
+                <div id="@id-one" class="@counterClass.getOrElse("")">
+                    <p class="govuk-body">
+                        <span>@messages("pagination.showing")</span>
+                        <span id="@id-total" class="govuk-!-font-weight-bold">
+                            @{pager.resultCount}
+                        </span>
+                        <span>
+                            @if(pager.resultCount == 1) {
+                                @messages(singularNameKey)
+                            } else {
+                                @messages(pluralNameKey)
+                            }
+                        </span>
+                    </p>
+                </div>
+            } else {
+                <div id="@id-some" class="@counterClass.getOrElse("")">
+                    <p class="govuk-body">
+                        <span>@messages("pagination.showing")</span>
+                        <span id="@id-start">
+                            @{(pager.pageIndex - 1) * pager.pageSize + 1}
+                        </span>
+                        <span>@messages("pagination.to")</span>
+                        <span id="@id-end">
+                            @{(pager.pageIndex - 1) * pager.pageSize + pager.size}
+                        </span>
+                        <span>@messages("pagination.of")</span>
+                        <span id="@id-total" class="bold">
+                            @{pager.resultCount}
+                        </span>
+                        <span>
+                            @if(pager.resultCount == 1) {
+                                @messages(singularNameKey)
+                            } else {
+                                @messages(pluralNameKey)
+                            }
+                        </span>
+                    </p>
+                </div>
+            }
+        } else {
+            <div id="@id-none">
+                <p class="govuk-body">
+                    <span>@messages("pagination.showing")</span>
+                    <span>
+                        @messages("pagination.noResults")
+                    </span>
+                </p>
+            </div>
+        }
+    </div>
 </div>

@@ -27,7 +27,6 @@ import views.html.components.view_application
 
 class ApplicationSubmittedViewSpec extends ViewBehaviours {
 
-  private val messageKeyPrefix = "view.application"
   private val pdfView = oCase.pdf
 
   private def createView(pdfViewModel: PdfViewModel = pdfView): Html =

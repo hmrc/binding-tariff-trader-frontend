@@ -24,15 +24,17 @@ import views.html.commodityCodeDigits
 
 class CommodityCodeDigitsViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "commodityCodeDigits"
+  val messageKeyPrefix: String = "commodityCodeDigits"
 
-  val form = new CommodityCodeDigitsFormProvider()()
+  val form: Form[String] = new CommodityCodeDigitsFormProvider()()
 
-  val goodsName = "some goods"
+  val goodsName: String = "some goods"
 
-  def createView = () => commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  val commodityCodeView: commodityCodeDigits = app.injector.instanceOf[commodityCodeDigits]
 
-  def createViewUsingForm = (form: Form[String]) => commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createView = () => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+
+  def createViewUsingForm = (form: Form[String]) => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "CommodityCodeDigits view" must {
     behave like normalPage(createView, messageKeyPrefix, "some goods")()

@@ -24,7 +24,10 @@ class ContactCustomsDutyLiabilityTeamViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "contactCustomsDutyLiabilityTeam"
 
-  private def createView() = () => contactCustomsDutyLiabilityTeam(frontendAppConfig, NormalMode)(fakeRequest, messages)
+  val contactCustomsDutyLiabilityTeamView: contactCustomsDutyLiabilityTeam = app.injector.instanceOf[contactCustomsDutyLiabilityTeam]
+
+  private def createView() =
+    () => contactCustomsDutyLiabilityTeamView(frontendAppConfig, NormalMode)(fakeRequest, messages)
 
   "BeforeYouStart view" must {
     behave like normalPage(createView(), messageKeyPrefix)()

@@ -38,6 +38,8 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
   private lazy val form: Form[RegisteredAddressForEori] = formProvider()
   private val countriesService = new CountriesService()
 
+  val registeredAddressForEoriView: registeredAddressForEori = app.injector.instanceOf(classOf[registeredAddressForEori])
+
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) = {
     new RegisteredAddressForEoriController(
       frontendAppConfig,
@@ -48,14 +50,15 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
       new DataRequiredActionImpl,
       formProvider,
       countriesService,
-      cc
+      cc,
+      registeredAddressForEoriView
     )
   }
 
   private def onwardRoute = Call("GET", "/foo")
 
   private def viewAsString(form: Form[RegisteredAddressForEori] = form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get))): String = {
-    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithEori, messages).toString
+    registeredAddressForEoriView(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithEori, messages).toString
   }
 
   "RegisteredAddressForEori Controller" must {

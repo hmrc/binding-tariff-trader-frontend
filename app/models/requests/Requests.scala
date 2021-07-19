@@ -32,5 +32,3 @@ case class DataRequest[A] (request: Request[A],
                            internalId: String,
                            eoriNumber: Option[String],
                            userAnswers: UserAnswers) extends WrappedRequest[A](request)
-
-

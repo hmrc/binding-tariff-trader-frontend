@@ -16,12 +16,15 @@
 
 package views
 
+import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.session_expired
 
 class SessionExpiredViewSpec extends ViewBehaviours {
 
-  def view = () => session_expired(frontendAppConfig)(fakeRequest, messages)
+  val sessionExpiredView: session_expired = app.injector.instanceOf[session_expired]
+
+  def view: () => Html = () => sessionExpiredView(frontendAppConfig)(fakeRequest, messages)
 
   override val expectTimeoutDialog: Boolean = false
 

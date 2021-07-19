@@ -17,7 +17,6 @@
 package models
 
 import java.time.Instant
-
 import models.EventType.EventType
 
 case class Event
@@ -33,15 +32,11 @@ sealed trait Details {
   val `type`: EventType
 }
 
-case class CaseCreated
-(
-  comment: String
-) extends Details {
+case class CaseCreated(comment: String) extends Details {
   override val `type`: EventType = EventType.CASE_CREATED
 }
 
 object EventType extends Enumeration {
   type EventType = Value
-  val CASE_CREATED = Value
-
+  val CASE_CREATED: models.EventType.Value = Value
 }

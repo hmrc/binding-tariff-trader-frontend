@@ -17,35 +17,33 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import viewmodels.FileView
 @import views.ViewUtils._
 @import components.notification_banner
 
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
+
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, files: Seq[FileView], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${if(files.size == 1) {messages("supportingMaterialFileList.title.singular", goodsName)} else {messages("supportingMaterialFileList.title.plural", files.size, goodsName)}}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@headingMessage = @{if(files.size == 1){messages("supportingMaterialFileList.uploadFileCounter.singular", goodsName)} else {messages("supportingMaterialFileList.uploadFileCounter.plural", files.size, goodsName)}}
 
-    @helpers.form(action = SupportingMaterialFileListController.onSubmit(mode)) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${if(files.size == 1) {messages("supportingMaterialFileList.title.singular", goodsName)} else {messages("supportingMaterialFileList.title.plural", files.size, goodsName)}}"
+) {
 
+    @formWithCSRF(action = SupportingMaterialFileListController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 
         @notification_banner()(request.flash, messages)
 
         @if(files.nonEmpty) {
-            @if(files.size == 1) {
-                @components.heading(
-                    messages("supportingMaterialFileList.uploadFileCounter.singular", goodsName),
-                    captionMsg = Some(messages("supportingMaterialFileList.caption")))
-            } else {
-                @components.heading(
-                    messages("supportingMaterialFileList.uploadFileCounter.plural", files.size, goodsName),
-                    captionMsg = Some(messages("supportingMaterialFileList.caption")))
-            }
+
+            @components.heading(headingMessage, captionMsg = Some(messages("supportingMaterialFileList.caption")))
 
             <div class="js-visible">
                 @components.show_file_table(files, mode)
@@ -78,15 +76,14 @@
 }
 
 @addAnotherFile = {
-    <h2 class="heading-large mb-2">
         @messages("supportingMaterialFileList.label.anotherFile")
-    </h2>
+
 }
 
 @indicationsContent = {
-    <div class="form-group">
-        <p>@messages("supportingMaterialFileList.indications")</p>
-        <ul class="list list-bullet">
+    <div class="govuk-form-group govuk-!-margin-bottom-9">
+        <p class="govuk-body">@messages("supportingMaterialFileList.indications")</p>
+        <ul class="govuk-list govuk-list--bullet">
             <li>@messages("supportingMaterialFileList.indications.bullet1")</li>
             <li>@messages("supportingMaterialFileList.indications.bullet2")</li>
             <li>@messages("supportingMaterialFileList.indications.bullet3")</li>

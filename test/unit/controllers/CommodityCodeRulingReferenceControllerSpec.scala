@@ -55,6 +55,8 @@ class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase with
     await(fakeCacheConnector.save(CacheMap(cacheMapId, backgroundData)))
   }
 
+  val commodityCodeRulingReferenceView: commodityCodeRulingReference = app.injector.instanceOf(classOf[commodityCodeRulingReference])
+
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new CommodityCodeRulingReferenceController(
       frontendAppConfig,
@@ -64,11 +66,12 @@ class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase with
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      commodityCodeRulingReferenceView
     )
 
   def viewAsString(form: Form[_], submitAction: Call, request: Request[_]): String =
-    commodityCodeRulingReference(frontendAppConfig, form, submitAction, NormalMode)(request, messages).toString
+    commodityCodeRulingReferenceView(frontendAppConfig, form, submitAction, NormalMode)(request, messages).toString
 
   private val invalidFormData = Map("value" -> "")
 

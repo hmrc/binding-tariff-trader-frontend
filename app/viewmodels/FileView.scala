@@ -21,7 +21,7 @@ import models.Attachment
 case class FileView(id: String, name: String, confidential: Boolean)
 
 object FileView {
-  def fromAttachment(att: Attachment, name: String) =
+  def fromAttachment(att: Attachment, name: String): FileView =
     FileView(
       id           = att.id,
       name         = name,

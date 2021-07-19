@@ -29,9 +29,11 @@ class ProvideBTIReferenceViewSpec extends QuestionViewBehaviours[BTIReference] {
 
   override protected val form = new ProvideBTIReferenceFormProvider()()
 
-  def createView = () => provideBTIReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val previousBTIReferenceView: provideBTIReference = app.injector.instanceOf[provideBTIReference]
 
-  def createViewUsingForm = (form: Form[_]) => provideBTIReference(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => previousBTIReferenceView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+
+  def createViewUsingForm = (form: Form[_]) => previousBTIReferenceView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
 
   "ProvideBTIReference view" must {

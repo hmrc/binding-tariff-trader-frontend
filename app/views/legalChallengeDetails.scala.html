@@ -17,26 +17,29 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, legalChallengeForm: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-    <p>@messages("legalChallengeDetails.second.paragraph")</p>
-    <ul class="list list-bullet">
+    <p class="govuk-body">@messages("legalChallengeDetails.second.paragraph")</p>
+    <ul class="govuk-list govuk-list--bullet">
         <li>@messages("legalChallengeDetails.item1")</li>
         <li>@messages("legalChallengeDetails.item2")</li>
     </ul>
 }
 
-@main_template(
-    title = s"${errorPrefix(legalChallengeForm)} ${messages("legalChallengeDetails.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(legalChallengeForm)} ${messages("legalChallengeDetails.title")}"
+) {
 
-    @helpers.form(action = LegalChallengeDetailsController.onSubmit(mode)) {
-
+    @formWithCSRF(action = LegalChallengeDetailsController.onSubmit(mode)) {
 
         @components.error_summary(legalChallengeForm.errors)
 

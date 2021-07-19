@@ -21,7 +21,7 @@ import com.kenshoo.play.metrics.Metrics
 import config.FrontendAppConfig
 import metrics.HasMetrics
 import models.Email
-import play.api.libs.json.{Reads, Writes}
+import play.api.libs.json.Writes
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import javax.inject.Singleton
@@ -34,7 +34,7 @@ class EmailConnector @Inject()(
                                 val metrics: Metrics
                               )(implicit ec: ExecutionContext) extends HasMetrics {
 
-  def send[E >: Email[_]](e: E)(implicit hc: HeaderCarrier, writes: Writes[E], rds: Reads[E]): Future[Unit] =
+  def send[E >: Email[_]](e: E)(implicit hc: HeaderCarrier, writes: Writes[E]): Future[Unit] =
     withMetricsTimerAsync("send-email") { _ =>
       val url = s"${configuration.emailUrl}/hmrc/email"
       client.POST(url = url, body = e).map(_ => ())

@@ -33,6 +33,8 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase with AnswerCa
 
   private val formProvider = new EnterContactDetailsFormProvider
 
+  val enterContactDetailsView: enterContactDetails = app.injector.instanceOf(classOf[enterContactDetails])
+
   private def controller(dataRetrievalAction: DataRetrievalAction): EnterContactDetailsController = {
     new EnterContactDetailsController(
       frontendAppConfig,
@@ -42,14 +44,15 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase with AnswerCa
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      enterContactDetailsView
     )
   }
 
   private def onwardRoute = Call("GET", "/foo")
 
   private def viewAsString(form: Form[_], request: Request[_]): String =
-    enterContactDetails(frontendAppConfig, form, NormalMode)(request, messages).toString
+    enterContactDetailsView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   val validFormData = Map("name" -> "value 1", "email" -> "value2@me.com", "phoneNumber" -> "+44 (0)800-443-123")
   val invalidFormData = Map("value" -> "invalid data")

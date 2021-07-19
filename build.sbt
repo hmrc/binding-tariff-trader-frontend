@@ -12,7 +12,6 @@ resolvers += "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactor
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
-  .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
@@ -52,6 +51,13 @@ lazy val root = (project in file("."))
   .settings(
     resourceDirectory in Test := baseDirectory.value / "test" / "resources",
     addTestReportOption(Test, "test-reports")
+  ).settings(
+    TwirlKeys.templateImports ++= Seq(
+      "uk.gov.hmrc.govukfrontend.views.html.components._",
+      "uk.gov.hmrc.govukfrontend.views.html.helpers._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.components._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.helpers._"
+    )
   )
 
 // Coverage configuration

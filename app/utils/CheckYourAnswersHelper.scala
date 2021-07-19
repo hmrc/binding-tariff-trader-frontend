@@ -27,85 +27,149 @@ import models.FileAttachment
 class CheckYourAnswersHelper(
                               userAnswers: UserAnswers,
                               countries: Map[String, Country]
-                            )
-                            (
-                              implicit messages: Messages
-                            ) {
+                            )(implicit messages: Messages) {
 
   def provideGoodsName: Option[AnswerRow] = userAnswers.get(ProvideGoodsNamePage) map {
-    x => AnswerRow("provideGoodsName.checkYourAnswersLabel", s"$x", false, routes.ProvideGoodsNameController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "provideGoodsName.checkYourAnswersLabel",
+      answer = s"$x",
+      answerIsMessageKey = false,
+      changeUrl = routes.ProvideGoodsNameController.onPageLoad(CheckMode).url
+    )
   }
 
   def provideGoodsDescription: Option[AnswerRow] = userAnswers.get(ProvideGoodsDescriptionPage) map {
-    x => AnswerRow("provideGoodsDescription.checkYourAnswersLabel", s"$x", false, routes.ProvideGoodsDescriptionController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "provideGoodsDescription.checkYourAnswersLabel",
+      answer = s"$x",
+      answerIsMessageKey = false,
+      changeUrl = routes.ProvideGoodsDescriptionController.onPageLoad(CheckMode).url
+    )
   }
 
   def addConfidentialInformation: Option[AnswerRow] = userAnswers.get(AddConfidentialInformationPage) map {
-    x => AnswerRow("addConfidentialInformation.checkYourAnswersLabel", yesNoAnswer(x), true, routes.AddConfidentialInformationController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "addConfidentialInformation.checkYourAnswersLabel",
+      answer = yesNoAnswer(x),
+      answerIsMessageKey = true,
+      changeUrl = routes.AddConfidentialInformationController.onPageLoad(CheckMode).url
+    )
   }
 
   def provideConfidentialInformation: Option[AnswerRow] = userAnswers.get(ProvideConfidentialInformationPage) map {
-    x => AnswerRow("provideConfidentialInformation.checkYourAnswersLabel", s"$x", false, routes.ProvideConfidentialInformationController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "provideConfidentialInformation.checkYourAnswersLabel",
+      answer = s"$x",
+      answerIsMessageKey = false,
+      changeUrl = routes.ProvideConfidentialInformationController.onPageLoad(CheckMode).url
+    )
   }
 
   def legalChallengeDetails: Option[AnswerRow] = userAnswers.get(LegalChallengeDetailsPage) map {
-    x => AnswerRow("legalChallengeDetails.checkYourAnswersLabel", s"$x", false, routes.LegalChallengeDetailsController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "legalChallengeDetails.checkYourAnswersLabel",
+      answer = s"$x",
+      answerIsMessageKey = false,
+      changeUrl = routes.LegalChallengeDetailsController.onPageLoad(CheckMode).url
+    )
   }
 
   def legalChallenge: Option[AnswerRow] = userAnswers.get(LegalChallengePage) map {
-    x => AnswerRow("legalChallenge.checkYourAnswersLabel", yesNoAnswer(x), true, routes.LegalChallengeController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "legalChallenge.checkYourAnswersLabel",
+      answer = yesNoAnswer(x),
+      answerIsMessageKey = true,
+      changeUrl = routes.LegalChallengeController.onPageLoad(CheckMode).url
+    )
   }
 
   def commodityCodeRulingReference: Option[AnswerRow] = userAnswers.get(CommodityCodeRulingReferencePage) map {
-    x => AnswerRow("commodityCodeRulingReference.checkYourAnswersLabel", x.mkString("\n"), false, routes.AddAnotherRulingController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "commodityCodeRulingReference.checkYourAnswersLabel",
+      answer = x.mkString("\n"),
+      answerIsMessageKey = false,
+      changeUrl = routes.AddAnotherRulingController.onPageLoad(CheckMode).url
+    )
   }
 
   def similarItemCommodityCode: Option[AnswerRow] = userAnswers.get(SimilarItemCommodityCodePage) map {
-    x => AnswerRow("similarItemCommodityCode.checkYourAnswersLabel", yesNoAnswer(x), true, routes.SimilarItemCommodityCodeController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "similarItemCommodityCode.checkYourAnswersLabel",
+      answer = yesNoAnswer(x),
+      answerIsMessageKey = true,
+      changeUrl = routes.SimilarItemCommodityCodeController.onPageLoad(CheckMode).url
+    )
   }
 
   def returnSamples: Option[AnswerRow] = userAnswers.get(ReturnSamplesPage) map {
-    x => AnswerRow("returnSamples.checkYourAnswersLabel", yesNoAnswer(x), true, routes.ReturnSamplesController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "returnSamples.checkYourAnswersLabel",
+      answer = yesNoAnswer(x),
+      answerIsMessageKey = true,
+      changeUrl = routes.ReturnSamplesController.onPageLoad(CheckMode).url
+    )
   }
 
   def isSampleHazardous: Option[AnswerRow] = userAnswers.get(IsSampleHazardousPage) map {
-    x => AnswerRow("isSampleHazardous.checkYourAnswersLabel", yesNoAnswer(x), true, routes.IsSampleHazardousController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "isSampleHazardous.checkYourAnswersLabel",
+      answer = yesNoAnswer(x),
+      answerIsMessageKey = true,
+      changeUrl = routes.IsSampleHazardousController.onPageLoad(CheckMode).url
+    )
   }
 
   def areYouSendingSamples: Option[AnswerRow] = userAnswers.get(AreYouSendingSamplesPage) map {
-    x => AnswerRow("areYouSendingSamples.checkYourAnswersLabel", yesNoAnswer(x), true, routes.AreYouSendingSamplesController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "areYouSendingSamples.checkYourAnswersLabel",
+      answer = yesNoAnswer(x),
+      answerIsMessageKey = true,
+      changeUrl = routes.AreYouSendingSamplesController.onPageLoad(CheckMode).url
+    )
   }
 
   def commodityCodeDigits: Option[AnswerRow] = userAnswers.get(CommodityCodeDigitsPage) map {
-    x => AnswerRow("commodityCodeDigits.checkYourAnswersLabel", s"$x", false, routes.CommodityCodeDigitsController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "commodityCodeDigits.checkYourAnswersLabel",
+      answer = s"$x",
+      answerIsMessageKey = false,
+      changeUrl = routes.CommodityCodeDigitsController.onPageLoad(CheckMode).url
+    )
   }
 
   def commodityCodeBestMatch: Option[AnswerRow] = userAnswers.get(CommodityCodeBestMatchPage) map {
-    x => AnswerRow("commodityCodeBestMatch.checkYourAnswersLabel", yesNoAnswer(x), true, routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "commodityCodeBestMatch.checkYourAnswersLabel",
+      answer = yesNoAnswer(x),
+      answerIsMessageKey = true,
+      changeUrl = routes.CommodityCodeBestMatchController.onPageLoad(CheckMode).url
+    )
   }
 
   def supportingMaterialFileListChoice: Option[AnswerRow] = {
     userAnswers.get(AddSupportingDocumentsPage).map { addDocuments =>
       AnswerRow(
-        "supportingMaterialFileList.choice.checkYourAnswersLabel",
-        yesNoAnswer(addDocuments), true,
-        routes.AddSupportingDocumentsController.onPageLoad(CheckMode).url
+        label = "supportingMaterialFileList.choice.checkYourAnswersLabel",
+        answer = yesNoAnswer(addDocuments),
+        answerIsMessageKey = true,
+        changeUrl = routes.AddSupportingDocumentsController.onPageLoad(CheckMode).url
       )
     }
   }
 
   def supportingMaterialFileList: Option[AnswerRow] = {
     def filesRow(files: Seq[String]): AnswerRow = AnswerRow(
-      "supportingMaterialFileList.checkYourAnswersLabel",
-      files, false,
-      routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
+      label = "supportingMaterialFileList.checkYourAnswersLabel",
+      answer = files,
+      answerIsMessageKey = false,
+      changeUrl = routes.SupportingMaterialFileListController.onPageLoad(CheckMode).url
     )
 
     val keepConfidential = userAnswers
       .get(MakeFileConfidentialPage)
       .getOrElse(Map.empty)
 
-    def confidentialLabel(attachment: FileAttachment)(implicit messages: Messages) =
+    def confidentialLabel(attachment: FileAttachment)(implicit messages: Messages): String =
       if (keepConfidential(attachment.id)) "- " + messages("site.keep_confidential") else ""
 
     userAnswers.get(UploadSupportingMaterialMultiplePage).collect {
@@ -118,13 +182,20 @@ class CheckYourAnswersHelper(
   }
 
   def provideBTIReference: Option[AnswerRow] = userAnswers.get(ProvideBTIReferencePage) map {
-    x => AnswerRow("provideBTIReference.checkYourAnswersLabel", s"${x.reference}", false, routes.ProvideBTIReferenceController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "provideBTIReference.checkYourAnswersLabel",
+      answer = s"${x.reference}",
+      answerIsMessageKey = false,
+      changeUrl = routes.ProvideBTIReferenceController.onPageLoad(CheckMode).url
+    )
   }
 
   def registeredName: Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage).map { regAddress =>
     AnswerRow(
-      "registeredAddressForEori.registeredName.checkYourAnswersLabel", s"${regAddress.businessName}", false,
-      routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url
+      label = "registeredAddressForEori.registeredName.checkYourAnswersLabel",
+      answer = s"${regAddress.businessName}",
+      answerIsMessageKey = false,
+      changeUrl = routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url
     )
   }
 
@@ -137,35 +208,50 @@ class CheckYourAnswersHelper(
     ).filterNot(_.isEmpty).mkString("\n")
 
     AnswerRow(
-      "registeredAddressForEori.registeredAddress.checkYourAnswersLabel", formattedAddress, false,
-      routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url
+      label = "registeredAddressForEori.registeredAddress.checkYourAnswersLabel",
+      answer = formattedAddress,
+      answerIsMessageKey = false,
+      changeUrl = routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url
     )
   }
 
   def enterContactDetailsName: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-      x => AnswerRow("enterContactDetails.checkYourAnswersLabel.name", s"${x.name}", false,
-        routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+      x => AnswerRow(
+        label = "enterContactDetails.checkYourAnswersLabel.name",
+        answer = s"${x.name}",
+        answerIsMessageKey = false,
+        changeUrl = routes.EnterContactDetailsController.onPageLoad(CheckMode).url
+      )
   }
 
   def enterContactDetailsEmail: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.email", s"${x.email}", false,
-      routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "enterContactDetails.checkYourAnswersLabel.email",
+      answer = s"${x.email}",
+      answerIsMessageKey = false,
+      changeUrl = routes.EnterContactDetailsController.onPageLoad(CheckMode).url
+    )
   }
 
   def enterContactDetailsPhone: Option[AnswerRow] = userAnswers.get(EnterContactDetailsPage) map {
-    x => AnswerRow("enterContactDetails.checkYourAnswersLabel.phone", s"${x.phoneNumber}", false,
-      routes.EnterContactDetailsController.onPageLoad(CheckMode).url)
+    x => AnswerRow(
+      label = "enterContactDetails.checkYourAnswersLabel.phone",
+      answer = s"${x.phoneNumber}",
+      answerIsMessageKey = false,
+      changeUrl = routes.EnterContactDetailsController.onPageLoad(CheckMode).url
+    )
   }
 
   def previousBTIRuling: Option[AnswerRow] = userAnswers.get(PreviousBTIRulingPage) map { x =>
-    AnswerRow("previousBTIRuling.checkYourAnswersLabel", yesNoAnswer(x), true, routes.PreviousBTIRulingController.onPageLoad(CheckMode).url)
+    AnswerRow(
+      label = "previousBTIRuling.checkYourAnswersLabel",
+      answer = yesNoAnswer(x),
+      answerIsMessageKey = true,
+      changeUrl = routes.PreviousBTIRulingController.onPageLoad(CheckMode).url
+    )
   }
 
   def whichBestDescribesYou: Option[AnswerRow] = None
-
-  //    userAnswers.get(WhichBestDescribesYouPage) map {
-  //    x => AnswerRow("whichBestDescribesYou.checkYourAnswersLabel", s"whichBestDescribesYou.$x", true, routes.WhichBestDescribesYouController.onPageLoad(CheckMode).url)
-  //  }
 
   def registeredAddressForEori(implicit request: DataRequest[_]): Option[AnswerRow] = userAnswers.get(RegisteredAddressForEoriPage) map { x =>
 
@@ -174,11 +260,15 @@ class CheckYourAnswersHelper(
     } else {
       Seq(x.eori, x.businessName, x.addressLine1, x.townOrCity, x.postcode.getOrElse(""), messages(getCountryName(x.country).mkString))
     }
-    AnswerRow("registeredAddressForEori.checkYourAnswersLabel", fields, false, routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url)
+    AnswerRow(
+      label = "registeredAddressForEori.checkYourAnswersLabel",
+      answer = fields,
+      answerIsMessageKey = false,
+      changeUrl = routes.RegisteredAddressForEoriController.onPageLoad(CheckMode).url
+    )
   }
 
-  private def yesNoAnswer(x: Boolean) = if (x) "site.yes" else "site.no"
+  private def yesNoAnswer(x: Boolean): String = if (x) "site.yes" else "site.no"
 
-  def getCountryName(code: String): Option[String] =
-    countries.get(code).map(_.countryName)
+  def getCountryName(code: String): Option[String] = countries.get(code).map(_.countryName)
 }

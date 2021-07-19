@@ -17,17 +17,21 @@
 @import config.FrontendAppConfig
 @import models.Mode
 
+@this(
+    govukLayoutWrapper: GovukLayoutWrapper
+)
+
+
 @(appConfig: FrontendAppConfig, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${messages("contactCustomsDutyLiabilityTeam.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${messages("contactCustomsDutyLiabilityTeam.title")}",
+) {
 
 
     @components.heading(messages("contactCustomsDutyLiabilityTeam.heading"))
 
-    <p>@Html(messages("contactCustomsDutyLiabilityTeam.forGeneralAdvice"))</p>
+    <p class="govuk-body">@Html(messages("contactCustomsDutyLiabilityTeam.forGeneralAdvice"))</p>
 
-    <p>@messages("contactCustomsDutyLiabilityTeam.onlyUseTheApply")</p>
+    <p class="govuk-body">@messages("contactCustomsDutyLiabilityTeam.onlyUseTheApply")</p>
 }

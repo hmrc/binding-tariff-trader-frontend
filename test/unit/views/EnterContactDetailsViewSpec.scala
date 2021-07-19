@@ -29,9 +29,11 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
 
   override protected val form = new EnterContactDetailsFormProvider()()
 
-  def createView = () => enterContactDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val enterContactDetailsView: enterContactDetails = app.injector.instanceOf[enterContactDetails]
 
-  def createViewUsingForm = (form: Form[_]) => enterContactDetails(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView = () => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+
+  def createViewUsingForm = (form: Form[_]) => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
 
   "EnterContactDetails view" must {

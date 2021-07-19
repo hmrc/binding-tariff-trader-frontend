@@ -29,10 +29,11 @@ class InformationPublicController @Inject()(
                                              appConfig: FrontendAppConfig,
                                              identify: IdentifierAction,
                                              getData: DataRetrievalAction,
-                                             cc: MessagesControllerComponents
+                                             cc: MessagesControllerComponents,
+                                             informationPublicView: informationPublic
                                            ) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData) { implicit request =>
-    Ok(informationPublic(appConfig))
+    Ok(informationPublicView(appConfig))
   }
 }

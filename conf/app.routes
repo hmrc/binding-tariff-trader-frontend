@@ -8,10 +8,10 @@ GET         /this-service-has-been-reset                               controlle
 
 GET         /countries-json                                            controllers.CountriesController.getCountriesJson
 
-GET         /                                                          controllers.Default.redirect(to = controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None, enableTrackingConsent = true).url)
+GET         /                                                          controllers.Default.redirect(to = controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url)
 GET         /applications                                              controllers.IndexController.getApplications(page: Int ?= 1)
 GET         /rulings                                                   controllers.IndexController.getRulings(page: Int ?= 1)
-GET         /applications-and-rulings                                  controllers.IndexController.getApplicationsAndRulings(page: Int ?= 1, sortBy: Option[SortField], order: Option[SortDirection], enableTrackingConsent: Boolean ?= false)
+GET         /applications-and-rulings                                  controllers.IndexController.getApplicationsAndRulings(page: Int ?= 1, sortBy: Option[SortField], order: Option[SortDirection])
 
 GET         /sign-out                                                  controllers.SignOutController.startFeedbackSurvey
 GET         /force-sign-out                                            controllers.SignOutController.forceSignOut

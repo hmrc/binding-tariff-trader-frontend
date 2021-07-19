@@ -30,37 +30,39 @@ captionMsg: Option[String] = None
 
 @ariaDescribeElements={@hint.map{_ =>@{field.id}-hint}@field.error.map{_ =>error-message-@{field.id}-input}}
 
-<div class="form-group @if(field.hasErrors){form-group-error}">
+<div class="govuk-form-group @if(field.hasErrors){govuk-form-group--error}">
 
     @if(headingIsLabel){
-    <div class="heading-xlarge ">
-        @captionMsg.map{caption => <span class="heading-secondary"><span class="visuallyhidden">This section is </span>@caption</span>}
-        <h1 class="mt-0"><label class="heading-xlarge-label" for="@{field.id}">@label</label></h1>
-    </div>
+        <h1 class="govuk-heading-xl">
+            @captionMsg.map{caption =>
+                <span class="govuk-caption-xl">
+                    <span class="govuk-visually-hidden">@messages("site.sectionIs") </span>@caption
+                </span>
+            }
+            <label class="govuk-label govuk-label--xl" for="@{field.id}">@label</label>
+        </h1>
     } else {
-    <label class="form-label @if(labelClass.nonEmpty){@labelClass}" for="@{field.id}">
-        @label
-    </label>
+        <label class="govuk-label" for="@{field.id}">
+            @label
+        </label>
     }
 
     @contentHtml.map {content => @content}
 
     @hint.map { hint =>
-        <span id="@{field.id}-hint" class="form-hint">@hint</span>
+        <span id="@{field.id}-hint" class="govuk-form-hint">@hint</span>
     }
     @field.errors.map { error =>
-        <span class="error-message" id="error-message-@{field.id}-input"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
+        <span class="govuk-error-message" id="error-message-@{field.id}-input"><span class="govuk-visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
     }
     <div class="form-control-wrapper char-counter" data-char-counter>
-        <textarea
-            class="form-control @inputFormControl @inputClass"
+        <textarea class="govuk-textarea @if(field.hasErrors){govuk-textarea--error}"
             id="@{field.id}"
             name="@{field.id}"
-            @if(field.hasErrors || hint.isDefined){aria-describedby="@if(hint.isDefined){@{field.id}-hint}@if(field.hasErrors && hint.isDefined){ }@if(field.hasErrors){error-message-@{field.id}-input}"}
+            @if(field.hasErrors || hint.isDefined){aria-describedby="@if(hint.isDefined){hint-@{field.id}}@if(field.hasErrors && hint.isDefined){ }@if(field.hasErrors){error-message-@{field.id}-input}"}
             rows=@numRows
             maxlength=@maxlength
         >@{field.value}</textarea>
     </div>
-
 </div>
 

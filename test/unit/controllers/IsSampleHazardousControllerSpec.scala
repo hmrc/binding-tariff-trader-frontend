@@ -23,7 +23,8 @@ import forms.IsSampleHazardousFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
 import play.api.data.Form
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
+import views.html.isSampleHazardous
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -33,7 +34,7 @@ class IsSampleHazardousControllerSpec extends ControllerSpecBase with YesNoCachi
 
   val formProvider = new IsSampleHazardousFormProvider()
 
-  val isSampleHazardousView = injector.instanceOf[views.html.isSampleHazardous]
+  val isSampleHazardousView: isSampleHazardous = injector.instanceOf[views.html.isSampleHazardous]
 
   def controller(dataRetrievalAction: DataRetrievalAction) =
     new IsSampleHazardousController(
@@ -47,7 +48,7 @@ class IsSampleHazardousControllerSpec extends ControllerSpecBase with YesNoCachi
       isSampleHazardousView,
       cc)
 
-  def viewAsString(form: Form[_], request: Request[_]) =
+  def viewAsString(form: Form[_], request: Request[_]): String =
     isSampleHazardousView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   "IsSampleHazardousController" must {

@@ -26,20 +26,22 @@ import views.html.registeredAddressForEori
 
 class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[RegisteredAddressForEori] {
 
-  private val messageKeyPrefix = "registeredAddressForEori"
+  private val messageKeyPrefix: String = "registeredAddressForEori"
 
-  private val countriesService = new CountriesService()
+  private val countriesService: CountriesService = new CountriesService()
 
-  override protected val form = new RegisteredAddressForEoriFormProvider()()
+  override protected val form: Form[RegisteredAddressForEori] = new RegisteredAddressForEoriFormProvider()()
+
+  val registeredAddressForEoriView: registeredAddressForEori = app.injector.instanceOf[registeredAddressForEori]
 
   private def createView = { () =>
     val request = fakeRequestWithEori
     val preparedForm = form.fill(RegisteredAddressForEori(request.userEoriNumber.get))
-    registeredAddressForEori(frontendAppConfig, preparedForm, NormalMode, countriesService.getAllCountries)(request, messages)
+    registeredAddressForEoriView(frontendAppConfig, preparedForm, NormalMode, countriesService.getAllCountries)(request, messages)
   }
 
   private def createViewUsingForm = { form: Form[_] =>
-    registeredAddressForEori(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithEori, messages)
+    registeredAddressForEoriView(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithEori, messages)
   }
 
   "RegisteredAddressForEori view" must {

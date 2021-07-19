@@ -31,9 +31,10 @@ import views.html.addSupportingDocuments
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class AddSupportingDocumentsControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
-  def onwardRoute = Call("GET", "/foo")
-  val formProvider = new AddSupportingDocumentsFormProvider()
-  val goodsName = "Hen's teeth"
+  def onwardRoute: Call = Call("GET", "/foo")
+  val formProvider: AddSupportingDocumentsFormProvider = new AddSupportingDocumentsFormProvider()
+  val goodsName: String = "Hen's teeth"
+  val addSupportingDocumentsView: addSupportingDocuments = injector.instanceOf[views.html.addSupportingDocuments]
 
   def controller(dataRetrievalAction: DataRetrievalAction) =
     new AddSupportingDocumentsController(
@@ -44,11 +45,12 @@ class AddSupportingDocumentsControllerSpec extends ControllerSpecBase with YesNo
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      addSupportingDocumentsView
     )
 
-  def viewAsString(form: Form[_], request: Request[_]) =
-    addSupportingDocuments(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
+  def viewAsString(form: Form[_], request: Request[_]): String =
+    addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
   "AddSupportingDocumentsController" must {
     behave like yesNoCachingController(

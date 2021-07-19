@@ -25,31 +25,28 @@ val protocol = if(req.secure) "https" else "http"
 s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 }
 
-<div class="grid-row hidden-print">
-    <div class="column-two-thirds"></div>
-</div>
 <div id="print-pages" class="print-pages">
     <div id="ruling-certificate" class="print-document" id="print-document">
-        <div class="grid-row print-header">
-            <div class="column-one-third">
+        <div class="govuk-grid-row print-header">
+            <div class="govuk-grid-column-one-third">
                 <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
             </div>
             <div>
-                <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
+                <h2 class="govuk-heading-m margin-top-small no-margin-bottom print-header__heading">
                     @messages("pdf.ruling.certificate.title")
                 </h2>
             </div>
         </div>
-        <div class="grid-row mt-40">
-            <div class="column-full">
-                <span class="govuk-caption-xl">Advance Tariff Ruling (ATaR) for @{c.reference}</span>
-                <h1 class="heading-xlarge">@c.application.goodName</h1>
-                <p>Issued by: HMRC Tariff Classification Team</p>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full mt-1">
+                <span class="govuk-caption-xl">@messages("pdf.ruling.certificate.rulingFor", c.reference)</span>
+                <h1 class="govuk-heading-xl">@c.application.goodName</h1>
+                <p class="govuk-body">@messages("pdf.ruling.certificate.issuedBy")</p>
             </div>
         </div>
-        <div class="grid-row main-content">
-            <div class="column-one-half" id="section-holder">
-                <h4 class="heading-small">@messages("pdf.ruling.section.holder.heading")</h4>
+        <div class="govuk-grid-row main-content">
+            <div class="govuk-grid-column-one-half" id="section-holder">
+                <h4 class="govuk-heading-s">@messages("pdf.ruling.section.holder.heading")</h4>
                 <p class="govuk-body-s" id="ruling.holder.businessName">
                     <strong>@messages("pdf.ruling.section.holder.name.label")</strong><br>
                     @c.application.holder.businessName
@@ -67,8 +64,8 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     @c.application.holder.eori
                 </p>
             </div>
-            <div class="column-one-half" id="section-ruling">
-                <h4 class="heading-small">@messages("pdf.ruling.section.ruling.heading")</h4>
+            <div class="govuk-grid-column-one-half" id="section-ruling">
+                <h4 class="govuk-heading-s">@messages("pdf.ruling.section.ruling.heading")</h4>
                 <p class="govuk-body-s">
                     <strong>@messages("pdf.ruling.section.ruling.commodityCode.label")</strong><br>
                     @d.bindingCommodityCode
@@ -87,33 +84,48 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 </p>
             </div>
         </div>
-            <div class="grid-row">
-                <div class="column-full" id="section-goods-info">
-                    <h3 class="heading-medium">@c.application.goodName details</h3>
-                    <dl class="govuk-check-your-answers cya-questions-short">
-                        <div id="section-goods">
-                            <dt class="cya-question">@messages("pdf.ruling.section.ruling.description.label")</dt>
-                            <dd class="cya-answer" id="ruling.goodsDescription">@d.goodsDescription</dd>
-                        </div>
-                        <div id="section-commercial">
-                            <dt class="cya-question">@messages("pdf.ruling.section.ruling.commercialDenomination.label")</dt>
-                            <dd class="cya-answer" id="ruling.methodCommercialDenomination">@d.methodCommercialDenomination.getOrElse("")</dd>
-                        </div>
-                        <div id="section-justification">
-                            <dt class="cya-question">@messages("pdf.ruling.section.ruling.justification.label")</dt>
-                            <dd class="cya-answer" id="ruling.justification">@d.justification</dd>
-                        </div>
-                        <div id="section-keywords">
-                            <dt class="cya-question">@messages("pdf.ruling.section.ruling.keywords.label")</dt>
-                            <dd class="cya-answer">
-                                @for(keyword <- c.keywords){
-                                <strong class="govuk-tag govuk-tag--grey">@keyword</strong>
-                                }
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full" id="section-goods-info">
+                    <h3 class="govuk-heading-m">@messages("pdf.ruling.section.ruling.details", c.application.goodName)</h3>
+                    <dl class="govuk-summary-list" >
+                        <div class="govuk-summary-list__row" id="section-goods">
+                            <dt class="govuk-summary-list__key">
+                                @messages("pdf.ruling.section.ruling.description.label")
+                            </dt>
+                            <dd class="govuk-summary-list__value" id="ruling.goodsDescription">
+                                @d.goodsDescription
                             </dd>
                         </div>
-
+                        <div class="govuk-summary-list__row" id="section-commercial">
+                            <dt class="govuk-summary-list__key">
+                                @messages("pdf.ruling.section.ruling.commercialDenomination.label")
+                            </dt>
+                            <dd class="govuk-summary-list__value" id="ruling.methodCommercialDenomination">
+                                @d.methodCommercialDenomination.getOrElse("")
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row" id="section-justification">
+                            <dt class="govuk-summary-list__key">
+                                @messages("pdf.ruling.section.ruling.justification.label")
+                            </dt>
+                            <dd class="govuk-summary-list__value" id="ruling.justification">
+                                @d.justification
+                            </dd>
+                        </div>
+                        <div class="govuk-summary-list__row" id="section-keywords">
+                            <dt class="govuk-summary-list__key">
+                                @messages("pdf.ruling.section.ruling.keywords.label")
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                                @for(keyword <- c.keywords){
+                                    <strong class="govuk-tag govuk-tag--grey">@keyword</strong>
+                                }
+                                &nbsp;
+                            </dd>
+                        </div>
                     </dl>
-                    <h3 class="heading-small">@messages("pdf.ruling.section.ruling.legalInformation.section1.label")</h3>
+
+                    <h3 class="govuk-heading-s">@messages("pdf.ruling.section.ruling.legalInformation.section1.label")</h3>
                     <p class="govuk-body">@messages("pdf.ruling.section.ruling.legalInformation.paragraph", Dates.format(d.effectiveStartDate), Dates.format(d.effectiveEndDate))</p>
                 </div>
             </div>

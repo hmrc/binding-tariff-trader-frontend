@@ -1,26 +1,88 @@
-@import 'partials/_variables';
-@import 'partials/_base';
-@import 'partials/_govuk_widths';
-@import 'partials/_govuk_padding_margin';
-@import 'partials/_forms';
-@import 'partials/_typography';
-@import 'partials/_utilities';
-@import 'partials/_shame';
-@import 'partials/_upload_help';
-@import 'partials/_registerBusinessRepresenting';
-@import 'partials/_tabs';
 @import 'partials/_view_application';
-@import 'partials/_check-your-answers';
-// WCAG 4.11.0 Updates
-@import 'partials/_header';
 
-// https://github.com/alphagov/govuk-country-and-territory-autocomplete
-@import 'partials/_autocomplete';
-// modifications to above
-@import 'partials/_autocomplete_modifications';
+$spacer: 4.0rem;
 
-// WCAG 2.1 Updates
-@import 'partials/_palette';
-@import 'partials/_focus';
-// include tags styles for new account dashboard
-@import 'partials/_tags';
+.align-right {
+  text-align: right;
+}
+
+// Margin Top
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.mt-1 {
+  margin-top: ($spacer * .25) !important;
+}
+
+.mt-2 {
+  margin-top: ($spacer * .5) !important;
+}
+
+.mt-3 {
+  margin-top: ($spacer * .75) !important;
+}
+
+.mt-4 {
+  margin-top: ($spacer * 1) !important;
+}
+
+.mt-5 {
+  margin-top: ($spacer * 1.25) !important;
+}
+
+// Margin Bottom
+
+.mb-2 {
+  margin-bottom: ($spacer * 0.5) !important;
+}
+
+.mb-3 {
+  margin-bottom: ($spacer * 0.75) !important;
+}
+
+.mb-4 {
+  margin-bottom: ($spacer * 1) !important;
+}
+
+.mb-5 {
+  margin-bottom: ($spacer * 1.25) !important;
+}
+
+// Margin Y
+.my-0 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.my-1 {
+  margin-top: ($spacer * .25) !important;
+  margin-bottom: ($spacer * .25) !important;
+}
+
+.my-2 {
+  margin-top: ($spacer * .5) !important;
+  margin-bottom: ($spacer * .5) !important;
+}
+
+.my-3 {
+  margin-top: ($spacer * .75) !important;
+  margin-bottom: ($spacer * .75) !important;
+}
+
+// Padding Left
+
+.pl-1 {
+  padding-left: 1em
+}
+.pl-0 {
+  padding-left: 0px
+}
+
+.mx-5 {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.p-0 {
+  padding: 0px;
+}

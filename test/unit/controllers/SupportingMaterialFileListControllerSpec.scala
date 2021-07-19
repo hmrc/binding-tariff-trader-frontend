@@ -43,6 +43,8 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
   private val formProvider = new SupportingMaterialFileListFormProvider()
   private val goodsName = "some-goods-name"
 
+  val supportingMaterialFileListView: supportingMaterialFileList = app.injector.instanceOf(classOf[supportingMaterialFileList])
+
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new SupportingMaterialFileListController(
       frontendAppConfig,
@@ -52,12 +54,13 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      supportingMaterialFileListView
     )
 
   // We will not use the provided form here - errors aside, the controller does not prepopulate the view
   private def viewAsString(form: Form[_], request: Request[_]): String =
-    supportingMaterialFileList(frontendAppConfig, formProvider().copy(errors = form.errors), goodsName, Seq.empty, NormalMode)(request, messages).toString
+    supportingMaterialFileListView(frontendAppConfig, formProvider().copy(errors = form.errors), goodsName, Seq.empty, NormalMode)(request, messages).toString
 
   "SupportingMaterialFileListController" must {
     behave like yesNoCachingController(

@@ -52,7 +52,8 @@ class CheckYourAnswersController @Inject()(
                                             pdfService: PdfService,
                                             fileService: FileService,
                                             mapper: CaseRequestMapper,
-                                            cc: MessagesControllerComponents
+                                            cc: MessagesControllerComponents,
+                                            checkYourAnswersView: check_your_answers
                                           )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
@@ -101,7 +102,7 @@ class CheckYourAnswersController @Inject()(
       )
     )
 
-    Ok(check_your_answers(appConfig, sections, sendingSamplesAnswer))
+    Ok(checkYourAnswersView(appConfig, sections, sendingSamplesAnswer))
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>

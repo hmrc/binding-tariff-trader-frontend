@@ -16,11 +16,11 @@
 
 @()(implicit messages: Messages)
 
-<div class="js-visible">
-  <p>
-   <a id="cancel-application-link" class="govuk-link" href="@routes.SignOutController.cancelApplication">
-    @messages("site.cancel_application")
-    <span class="visually-hidden"> and return to your applications and rulings page.</span>
-   </a>
-  </p>
+<div class="govuk-form-group js-visible">
+ <p class="govuk-body">
+  <a id="cancel-application-link" class="govuk-link" href="@routes.SignOutController.cancelApplication">
+   @messages("site.cancel_application")
+   <span class="govuk-visually-hidden"> @messages("site.cancel_application.hiddenText")</span>
+  </a>
+ </p>
 </div>

@@ -15,25 +15,27 @@
  *@
 
 @import config.FrontendAppConfig
+
+@this(govukLayoutWrapper: GovukLayoutWrapper)
+
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("informationPublic.title"),
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = messages("informationPublic.title"),
+) {
 
     @components.heading(messages("informationPublic.heading"))
 
-    <p>@messages("informationPublic.paragraph1.part1")
+    <p class="govuk-body">@messages("informationPublic.paragraph1.part1")
        <span>
-         <a href="@appConfig.bindingTariffRulingsHomeUrl" target="_blank">
+         <a href="@appConfig.bindingTariffRulingsHomeUrl" target="_blank" class="govuk-link">
          @messages("informationPublic.paragraph1.linkText")</a>
        </span>
        @messages("informationPublic.paragraph1.part2")
     </p>
 
-    <p>@messages("informationPublic.paragraph2")</p>
-    <p>@messages("informationPublic.paragraph3")</p>
+    <p class="govuk-body">@messages("informationPublic.paragraph2")</p>
+    <p class="govuk-body">@messages("informationPublic.paragraph3")</p>
 
     @components.button_link(messages("site.agree_and_continue"), routes.ProvideGoodsNameController.onPageLoad(NormalMode).url)
 

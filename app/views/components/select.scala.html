@@ -24,27 +24,20 @@
 @value = @{ field.value match { case Some(x) => x case None => "" case x => x }}
 
 
-<div class="form-group @if(elements.hasErrors){ form-group-error }">
+<div class="govuk-form-group @if(elements.hasErrors){ govuk-form-group--error }">
 
-    <label for="@elements.field.name" class="@elements.args.get('_labelClass) @elements.args.get('_groupClass)">
+    <label for="@elements.field.name" class="govuk-label">
         <span class="label__text">
             @elements.label
         </span>
     </label>
 
-    @if(elements.args.contains('_inputHint) ){
-        <span id="hint-@elements.field.name" class="form-hint">
-            @elements.args.get('_inputHint)
-        </span>
-    }
-
-    @if(elements.args.contains('_additionalTitleText)){<p>@elements.args.get('_additionalTitleText)</p>}
     @if(elements.hasErrors){
         @elements.errors.map { error =>
-            <div id="error-message-@{field.id}-input" class="error-message"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@error</div>
+            <div id="error-message-@{field.id}-input" class="govuk-error-message"><span class="govuk-visually-hidden">@messages("error.browser.title.prefix")</span>@error</div>
         }
     }
-    <select @if(elements.hasErrors || elements.args.contains('_inputHint)){aria-describedby="@if(elements.args.contains('_inputHint) ){hint-@elements.field.name} @if(elements.hasErrors){error-message-@{field.id}-input}"} id="@elements.field.name" name="@elements.field.name" class="@elements.args.get('_selectClass) form-control">
+    <select @if(elements.hasErrors){aria-describedby="error-message-@{field.id}-input"} id="@elements.field.name" name="@elements.field.name" class="@elements.args.get('_selectClass) govuk-select">
         @if(displayEmptyValue) {
             <option value="">@elements.args.get('_emptyValueText)</option>
         }

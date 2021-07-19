@@ -37,35 +37,9 @@ case object NoChange extends Update[Nothing]
 
 case class ApplicationUpdate(
   `type`: String = "BTI",
-  // holder: Update[EORIDetails]                     = NoChange,
-  // contact: Update[Contact]                        = NoChange,
-  // agent: Update[Option[AgentDetails]]             = NoChange,
-  // offline: Update[Boolean]                        = NoChange,
-  // goodName: Update[String]                        = NoChange,
-  // goodDescription: Update[String]                 = NoChange,
-  // confidentialInformation: Update[Option[String]] = NoChange,
-  // otherInformation: Update[Option[String]]        = NoChange,
-  // reissuedBTIReference: Update[Option[String]]    = NoChange,
-  // relatedBTIReferences: Update[List[String]]      = NoChange,
-  // knownLegalProceedings: Update[Option[String]]   = NoChange,
-  // envisagedCommodityCode: Update[Option[String]]  = NoChange,
-  // sampleToBeProvided: Update[Boolean]             = NoChange,
-  // sampleIsHazardous: Update[Option[Boolean]]      = NoChange,
-  // sampleToBeReturned: Update[Boolean]             = NoChange,
   applicationPdf: Update[Option[Attachment]] = NoChange
 )
 
 case class CaseUpdate(
-  // status: Update[CaseStatus.Value]             = NoChange,
-  // createdDate: Update[Instant]                 = NoChange,
-  // caseBoardsFileNumber: Update[Option[String]] = NoChange,
-  // assignee: Update[Option[Operator]]           = NoChange,
-  // queueId: Update[Option[String]]              = NoChange,
   application: Option[ApplicationUpdate] = None
-  // decision: Update[Option[DecisionUpdate]]     = NoChange,
-  // attachments: Update[Seq[Attachment]]         = NoChange,
-  // keywords: Update[Set[String]]                = NoChange,
-  // sample: Update[Sample]                       = NoChange,
-  // dateOfExtract: Update[Option[Instant]]       = NoChange,
-  // migratedDaysElapsed: Update[Option[Long]]    = NoChange
 )

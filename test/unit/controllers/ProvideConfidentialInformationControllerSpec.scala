@@ -34,7 +34,7 @@ class ProvideConfidentialInformationControllerSpec extends ControllerSpecBase wi
 
   def onwardRoute = Call("GET", "/foo")
 
-  val provideConfidentialInformation = injector.instanceOf[provideConfidentialInformation]
+  val provideConfidentialInformationView: provideConfidentialInformation = injector.instanceOf[provideConfidentialInformation]
 
   val formProvider = new ProvideConfidentialInformationFormProvider()
   val goodsName = "shoos"
@@ -48,11 +48,11 @@ class ProvideConfidentialInformationControllerSpec extends ControllerSpecBase wi
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      provideConfidentialInformation,
+      provideConfidentialInformationView,
       cc)
 
   def viewAsString(form: Form[_], request: Request[_]) =
-    provideConfidentialInformation(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
+    provideConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
   val testAnswer = "answer"
   val validFormData = Map("confidentialInformation" -> testAnswer)

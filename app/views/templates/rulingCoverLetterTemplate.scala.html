@@ -31,34 +31,27 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 </div>
 <div id="print-pages" class="print-pages">
     <div id="cover-letter1" class="print-document">
-        <div class="grid-row print-header">
-            <div class="column-one-third">
+        <div class="govuk-grid-row print-header">
+            <div class="govuk-grid-column-one-third">
                 <img class="crown-logo-atar" id="pdf.ruling.header.logo" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
             </div>
-            <div class="column-two-thirds">
-                <h2 class="margin-top-small no-margin-bottom print-header__heading">
+            <div>
+                <h2 class="margin-top-small no-margin-bottom print-header__heading govuk-heading-m">
                     @messages("pdf.ruling.title")
                 </h2>
             </div>
         </div>
 
-        <div class="grid-row mt-40">
-            <div class="column-two-thirds"><p></p></div>
-            <div class="column-one-third align-right">
+        <div class="govuk-grid-row mt-4">
+            <div class="govuk-grid-column-two-thirds"><p></p></div>
+            <div class="govuk-grid-column-one-third align-right">
                 <p class="govuk-body-s">
-                    HM Revenue and Customs<br/>
-                    Tariff Classification Service<br/>
-                    Alexander House<br/>
-                    21 Victoria Avenue<br/>
-                    Southend-on-Sea<br/>
-                    Essex<br/>
-                    SS99 1AA
+                    @Html(messages("confirmation.sendingSamples.address"))
                 </p>
                 <p class="govuk-body-s">@Dates.format(d.effectiveStartDate)</p>
             </div>
-        </div>
-        <div class="grid-row">
-            <div class="column-two-thirds">
+        <div>
+            <div class="govuk-grid-column-two-thirds">
                 <p class="govuk-body-s">
                     @c.application.contact.name<br/>
                     @c.application.holder.addressLine1 <br/>
@@ -69,120 +62,119 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 </p>
             </div>
         </div>
-
-        <div class="grid-row main-content">
-            <div class="column-full">
+        </div>
+        <div class="govuk-grid-row main-content">
+            <div class="govuk-grid-column-full">
                 <p class="govuk-body-s">
-                    Dear @c.application.contact.name
+                    @messages("pdf.ruling.dear") @c.application.contact.name
                 </p>
                 <p class="govuk-body-s">
-                    Thank you for your Advance Tariff Ruling (ATaR) application dated @Dates.format(c.createdDate)
+                    @messages("pdf.ruling.thankYou") @Dates.format(c.createdDate)
                 </p>
                 <p class="govuk-body-s">
-                    You asked for an Advance Tariff Ruling for <strong>@c.application.goodName</strong>. This ruling certificate is for you to keep for your records. This tells you the commodity code I have decided is appropriate for your goods and the reasons for the decision.
+                    @Html(messages("pdf.ruling.askedFor", c.application.goodName))
                 </p>
                 <p class="govuk-body-s">
-                    Information that has not been marked as confidential will be visible on the <a href="https://www.tax.service.gov.uk/search-for-advance-tariff-rulings">Search for Advance Tariff Rulings</a> website.
+                    @Html(messages("pdf.ruling.markedConfidential"))
                 </p>
             </div>
 
             @if(c.application.sampleToBeProvided){
-            <div class="column-two-thirds">
+            <div class="govuk-grid-column-two-thirds">
 
-                <h3 class="heading-medium">About this decision</h3>
+                <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
                 <p class="govuk-body-s">
-                    I have made this decision under section 24 of The Taxation (Cross-border Trade) Act 2018 by HM Revenue &amp; Customs.
+                    @messages("pdf.ruling.aboutDecision.text")
                 </p>
                 <p class="govuk-body-s">
                     @d.explanation
                 </p>
             </div>
-            <div class="column-one-third">
+            <div class="govuk-grid-column-one-third">
                 <div class="information-box" id="samples-section">
-                    <h3 class="heading-medium">Samples</h3>
+                    <h3 class="govuk-heading-m">@messages("pdf.ruling.samples")</h3>
                     <hr class="green-hr"/>
                     <p class="govuk-body-s">
-                        Your samples have been kept by this office.
+                        @messages("pdf.ruling.keepSamples")
                     </p>
                     <p class="govuk-body-s">
-                        Samples that are not collected or that do not have return postage will be destroyed after 60 days from the date of your ruling email. If you would like to collect your samples (or arrange for courier collection) then email <strong>@messages("pdf.ruling.email")</strong> giving 48 hours notice.
+                        @Html(messages("pdf.ruling.collectSamples", messages("pdf.ruling.email")))
                     </p>
                     <p class="govuk-body-s">
-                        You must quote the ATaR reference number <strong>@c.reference</strong> and give the time that the samples are being collected.
+                        @Html(messages("pdf.ruling.collectSamples", c.reference))
                     </p>
                 </div>
             </div>
             }else{
-            <div class="column-full">
+            <div class="govuk-grid-column-full">
 
-                <h3 class="heading-medium">About this decision</h3>
+                <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
                 <p class="govuk-body-s">
-                    I have made this decision under section 24 of The Taxation (Cross-border Trade) Act 2018 by HM Revenue &amp; Customs.
+                    @messages("pdf.ruling.aboutDecision.text")
                 </p>
                 <p class="govuk-body-s">
                     @d.explanation
                 </p>
             </div>
             }
-
-
         </div>
     </div>
+
     <div id="cover-letter2" class="print-document">
-        <div class="grid-row print-header">
-            <div class="column-one-third">
+        <div class="govuk-grid-row print-header">
+            <div class="govuk-grid-column-one-third">
                 <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
             </div>
             <div>
-                <h2 class="heading-medium margin-top-small no-margin-bottom print-header__heading">
+                <h2 class="govuk-heading-m margin-top-small no-margin-bottom print-header__heading">
                     @messages("pdf.ruling.coverLetter.title")
                 </h2>
             </div>
         </div>
-        <div class="grid-row mt-40 main-content">
-        <div class="column-full">
-            <h3 class="heading-medium">@messages("pdf.ruling.section.ifYouDisagree.title")</h3>
+        <div class="govuk-grid-row mt-2 main-content">
+        <div class="govuk-grid-column-full">
+            <h3 class="govuk-heading-m">@messages("pdf.ruling.section.ifYouDisagree.title")</h3>
             <p class="govuk-body-s">
-                If you disagree with this decision, you can either:
+                @messages("pdf.ruling.section.ifYouDisagree")
             </p>
-            <ul class="list list-bullet">
-                <li>ask for a review with HMRC</li>
-                <li>appeal to an independent tribunal</li>
+            <ul class="govuk-list govuk-list--bullet govuk-body-s">
+                <li>@messages("pdf.ruling.section.ifYouDisagree.1")</li>
+                <li>@messages("pdf.ruling.section.ifYouDisagree.2")</li>
             </ul>
             <p class="govuk-body-s">
-                You cannot ask for a review with HMRC and an appeal with an independent tribunal at the same time. However, you can appeal to an independent tribunal if you disagree with the outcome of your review.
+                @messages("pdf.ruling.section.ifYouDisagree.cannot")
             </p>
             <p class="govuk-body-s">
-                Due to coronavirus (COVID-19), you will be able to ask for an extra 3 months for your appeals. This is for both an HMRC review and the independent tribunal.
+                @messages("pdf.ruling.section.ifYouDisagree.covid")
             </p>
             <p class="govuk-body-s">
-                To find more information about reviews and appeals you can <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/877291/HMRC1.pdf">read the HMRC1 document</a> or phone 0300 200 3700.
+                @messages("pdf.ruling.section.ifYouDisagree.moreInfo") <a class="govuk-link" href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/877291/HMRC1.pdf">@messages("pdf.ruling.section.ifYouDisagree.read")</a>
             </p>
-            <h4 class="heading-small">Asking for a review with HMRC</h4>
+            <h4 class="govuk-heading-s">@messages("pdf.ruling.section.askForReview.title")</h4>
             <p class="govuk-body-s">
-                Email <strong>@messages("pdf.ruling.email")</strong> asking for a review and give your reasons within 30 days of receiving your ruling email.
-            </p>
-            <p class="govuk-body-s">
-                However, if you need more time due to coronavirus, you can be given an extra 3 months if the extension is asked for within this 30 day period.
+                @Html(messages("pdf.ruling.section.askForReview.email", messages("pdf.ruling.email")))
             </p>
             <p class="govuk-body-s">
-                If you accept an offer for a review of the ruling decision, it will be carried out by an HMRC officer who has not been involved in your case. You will be able to give any evidence and further information and the review officer will email you to tell you the outcome of the review.
-            </p>
-            <h4 class="heading-small">Appealing to an independent tribunal</h4>
-            <p class="govuk-body-s">
-                You must contact the tribunal within 30 days of your ruling email to discuss your case. If you disagree with your review from HMRC, then you must contact the tribunal within 30 days of that outcome.
+                @messages("pdf.ruling.section.askForReview.covid")
             </p>
             <p class="govuk-body-s">
-                HMRC is not able to give a 3 month extension for this appeal, it can only be given by the independent tribunal.
+                @messages("pdf.ruling.section.askForReview.acceptedReview")
             </p>
-            <p class="govuk-body-s mt-40">
-                Yours sincerely,
+            <h4 class="govuk-heading-s">@messages("pdf.ruling.section.appealing.title")</h4>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.appealing.mustContact")
+            </p>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.appealing.mustContact")
+            </p>
+            <p class="govuk-body-s mt-2">
+                @messages("pdf.ruling.section.yours")
             </p>
             <p class="govuk-body-s">
                 @c.assignee.map(_.name).getOrElse("")
             </p>
             <p class="govuk-body-s">
-                HMRC Tariff Classification Service
+                @messages("pdf.ruling.section.hmrctcs")
             </p>
         </div>
         </div>

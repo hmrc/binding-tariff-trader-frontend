@@ -17,53 +17,40 @@
 @import config.FrontendAppConfig
 @import controllers.routes
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
 
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, rulings: List[String])(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("addAnotherRuling.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@headingMessage = @{if(rulings.size == 1){messages("addAnotherRuling.addRulingCounter.singular", rulings.length)} else {messages("addAnotherRuling.addRulingCounter.plural", rulings.length)}}
 
-    @helpers.form(action = routes.AddAnotherRulingController.onSubmit(mode)) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("addAnotherRuling.title")}"
+) {
+
+    @formWithCSRF(action = routes.AddAnotherRulingController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 
-
         @if(rulings.nonEmpty) {
-            @if(rulings.size == 1) {
-
-                @components.input_yes_no(
+            @components.input_yes_no(
                 field = form("add-another-ruling-choice"),
-                label = Some(messages("addAnotherRuling.addRulingCounter.singular", rulings.length)),
+                label = Some(headingMessage),
                 captionMsg = Some(messages("addAnotherRuling.caption")),
-                contentHtml = Some(addAdditionalRuling)
-
-                )
-
-            } else {
-
-                @components.input_yes_no(
-                field = form("add-another-ruling-choice"),
-                label = Some(messages("addAnotherRuling.addRulingCounter.plural", rulings.length)),
-                captionMsg = Some(messages("addAnotherRuling.caption")),
-                contentHtml = Some(addAdditionalRuling)
-                )
-
-            }
-
-
-
-
+                contentHtml = Some(addAdditionalRuling),
+                labelIsHeading = true
+            )
         } else {
-
             @components.input_yes_no(
                 field = form("add-another-ruling-choice"),
                 label = Some(messages("addAnotherRuling.heading")),
-                captionMsg = Some(messages("addAnotherRuling.caption"))
+                captionMsg = Some(messages("addAnotherRuling.caption")),
+                labelIsHeading = true
             )
         }
 
@@ -74,11 +61,11 @@
 }
 
 @addAdditionalRuling = {
-
-    @components.show_rulings_table(rulings, mode)
-
-    <div class="heading-large mb-2">
-        @messages("addAnotherRuling.label.anotherRuling")
+    <div class="govuk-form-group govuk-!-margin-bottom-9">
+        @components.show_rulings_table(rulings, mode)
     </div>
 
-    }
+    <h2 class="govuk-heading-m">
+        @messages("addAnotherRuling.label.anotherRuling")
+    </h2>
+}

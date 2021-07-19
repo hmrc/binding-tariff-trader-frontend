@@ -17,39 +17,42 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-    <div class="form-group">
-        <p>@messages("areYouSendingSamples.second.paragraph")</p>
-        <p>@messages("areYouSendingSamples.first.paragraph")</p>
-        <ul class="list list-bullet">
+    <div class="govuk-form-group">
+        <p class="govuk-body">@messages("areYouSendingSamples.second.paragraph")</p>
+        <p class="govuk-body">@messages("areYouSendingSamples.first.paragraph")</p>
+        <ul class="govuk-list govuk-list--bullet">
             <li>@messages("areYouSendingSamples.listItem1")</li>
             <li>@messages("areYouSendingSamples.listItem2")</li>
             <li>@messages("areYouSendingSamples.listItem3")</li>
         </ul>
     </div>
 }
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("areYouSendingSamples.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("areYouSendingSamples.title")}"
+) {
 
-    @helpers.form(action = AreYouSendingSamplesController.onSubmit(mode)) {
-
+    @formWithCSRF(action = AreYouSendingSamplesController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
-
 
         @components.input_yes_no(
             field = form("value"),
             label = Some(messages("areYouSendingSamples.heading", goodsName)),
             captionMsg=Some(messages("areYouSendingSamples.caption")),
             contentHtml = Some(contents),
-            labelClass = Some("visually-hidden")
+            labelClass = Some("visually-hidden"),
+            labelIsHeading = true
         )
 
         @components.submit_button(label = Some(messages("site.continue")))

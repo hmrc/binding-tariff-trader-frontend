@@ -1,18 +1,18 @@
 @*
- * Copyright 2021 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *@
+* Copyright 2021 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
 
 @(
         field: Field,
@@ -29,40 +29,41 @@
         contentHtml : Option[Html] = None
 )(implicit messages: Messages)
 
-<div class="form-group @if(field.hasErrors){form-group-error}">
+<div class="govuk-form-group @if(field.hasErrors){govuk-form-group--error}">
     @if(headingIsLabel){
-    <div class="heading-xlarge ">
-        @captionMsg.map{caption => <span class="heading-secondary"><span class="visuallyhidden">This section is </span>@caption</span>}
-        <h1 class="mt-0"><label class="heading-xlarge-label" for="@{field.id}">@label</label></h1>
-    </div>
+        <h1 class="govuk-heading-xl">
+            @captionMsg.map{caption =>
+                <span class="govuk-caption-xl">
+                    <span class="govuk-visually-hidden">@messages("site.sectionIs") </span>@caption
+                </span>
+            }
+            <label class="govuk-label govuk-label--xl" for="@{field.id}">@label</label>
+        </h1>
     } else {
-        <label class="form-label @if(labelClass.nonEmpty){@labelClass}" for="@{field.id}">
+        <label class="govuk-label" for="@{field.id}">
             @label
         </label>
     }
 
-        @labelHtml.map { lb => @lb }
+    @labelHtml.map { lb => @lb }
 
-        @contentHtml.map {content => @content}
+    @contentHtml.map {content => @content}
 
-        @if(hint.isDefined){
-            <div class="form-hint" id="hint-@{field.id}">@hint</div>
-        }
-        @field.errors.map { error =>
-            <span class="error-message" id="error-message-@{field.id}-input"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
-        }
-
-    <div class="form-control-wrapper">
-        <input
-        class="form-control @inputClass"
+    @if(hint.isDefined){
+        <div class="govuk-hint" id="hint-@{field.id}">@hint</div>
+    }
+    @field.errors.map { error =>
+        <span class="govuk-error-message" id="error-message-@{field.id}-input"><span class="govuk-visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
+    }
+    <input
+        class="govuk-input @if(field.hasErrors){govuk-input--error}"
         type=@inputType
         maxlength=@maxlength
-        id="@{field.id}"
-        name="@{field.name}"
-        value="@{field.value}"
+            id="@{field.id}"
+            name="@{field.name}"
+            value="@{field.value}"
         @if(field.hasErrors || hint.isDefined){aria-describedby="@if(hint.isDefined){hint-@{field.id}}@if(field.hasErrors && hint.isDefined){ }@if(field.hasErrors){error-message-@{field.id}-input}"}
         @if(inputPurpose.isDefined) {autocomplete="@inputPurpose"}
-        />
-    </div>
+    />
 </div>
 

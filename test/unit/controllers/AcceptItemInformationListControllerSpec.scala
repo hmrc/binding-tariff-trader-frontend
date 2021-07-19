@@ -22,16 +22,18 @@ import views.html.acceptItemInformationList
 
 class AcceptItemInformationListControllerSpec extends ControllerSpecBase {
 
+  val acceptItemInformationListView: acceptItemInformationList = app.injector.instanceOf(classOf[acceptItemInformationList])
+
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new AcceptItemInformationListController(
       frontendAppConfig,
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
-      cc
+      cc,
+      acceptItemInformationListView
     )
-
-  def viewAsString(): String = acceptItemInformationList(frontendAppConfig)(fakeRequest, messages).toString
+  def viewAsString(): String = acceptItemInformationListView(frontendAppConfig)(fakeRequest, messages).toString
 
   "AcceptItemInformationList Controller" must {
 

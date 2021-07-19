@@ -31,9 +31,11 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
   val form = new LegalChallengeDetailsFormProvider()()
   val formElementId = "legalChallengeDetails"
 
-  def createView = () => legalChallengeDetails(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
+  val legalChallengeDetailsView: legalChallengeDetails = app.injector.instanceOf[legalChallengeDetails]
 
-  def createViewUsingForm = (form: Form[String]) => legalChallengeDetails(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
+  def createView = () => legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
+
+  def createViewUsingForm = (form: Form[String]) => legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
 
   "LegalChallengeDetails view" must {
     behave like normalPage(createView, messageKeyPrefix, messageHeadingArgs = "goodsName")()
@@ -50,7 +52,7 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
 
     "not allow unescaped HTML" in {
       val xss = "<script>alert('foo');</script>"
-      val doc = asDocument(legalChallengeDetails(frontendAppConfig, form, NormalMode, xss)(fakeRequest, messages))
+      val doc = asDocument(legalChallengeDetailsView(frontendAppConfig, form, NormalMode, xss)(fakeRequest, messages))
       val scriptTag = doc.getElementsByAttributeValue("for", formElementId).select("script").first
       Option(scriptTag) shouldBe None
     }

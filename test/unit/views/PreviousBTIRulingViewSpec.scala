@@ -31,9 +31,11 @@ class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
 
   val form = new PreviousBTIRulingFormProvider()()
 
-  def createView = () => previousBTIRuling(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  val previousBTIRulingView: previousBTIRuling = app.injector.instanceOf[previousBTIRuling]
 
-  def createViewUsingForm = (form: Form[_]) => previousBTIRuling(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  def createView = () => previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+
+  def createViewUsingForm = (form: Form[_]) => previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   override protected def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)

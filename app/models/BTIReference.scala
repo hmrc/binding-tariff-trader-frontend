@@ -21,5 +21,5 @@ import play.api.libs.json._
 case class BTIReference (reference: String)
 
 object BTIReference {
-  implicit val format = Json.format[BTIReference]
+  implicit val format: OFormat[BTIReference] = Json.format[BTIReference]
 }

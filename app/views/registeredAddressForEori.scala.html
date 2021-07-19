@@ -18,29 +18,47 @@
 @import controllers.routes._
 @import models.Mode
 @import play.api.libs.json.Json
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, countries: List[Country])(implicit request: Request[_], messages: Messages)
 
 @heading = {
     @if(form("eori").value.isDefined) {
         @components.heading(
-        messages("registeredAddressForEori.heading", form("eori").value.get),
-        captionMsg=Some(messages("registeredAddressForEori.caption"))
+            messages("registeredAddressForEori.heading", form("eori").value.get),
+            captionMsg=Some(messages("registeredAddressForEori.caption"))
         )
     } else {
         @components.heading(messages("registeredAddressForEori.headingNoEORI"))
     }
 }
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("registeredAddressForEori.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@additionalCSS = @{
+    Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/accessible-autocomplete.min.css")}'/>""")
+}
 
-    @helpers.form(action = RegisteredAddressForEoriController.onSubmit(mode)) {
+@additionalJS = @{
+    Html(s"""<script type="text/javascript" src="${routes.Assets.versioned("javascripts/accessible-autocomplete.min.js")}"></script>""")
+}
 
+@endOfBodyJS = @{
+    Html("""<script>accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#country')})</script>""")
+}
+
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("registeredAddressForEori.title")}",
+    additionalCSS = Some(additionalCSS),
+    additionalJS = Some(additionalJS),
+    endOfBodyJS = Some(endOfBodyJS)
+) {
+
+    @formWithCSRF(action = RegisteredAddressForEoriController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 
@@ -49,13 +67,13 @@
             @if(form("eori").value.isDefined) {
                 @components.warning_text(messages("registeredAddressForEori.note"))
 
-            @components.input_hidden(field = form("eori"))
+                @components.input_hidden(field = form("eori"))
             } else {
                 @components.input_text(
-                field = form("eori"),
-                hint  = Some(messages("registeredAddressForEori.eori.hint")),
-                label = Some(messages("registeredAddressForEori.eori"))
-            )
+                    field = form("eori"),
+                    hint  = Some(messages("registeredAddressForEori.eori.hint")),
+                    label = Some(messages("registeredAddressForEori.eori"))
+                )
             }
 
             @components.input_text(
@@ -81,18 +99,20 @@
                 label = Some(messages("registeredAddressForEori.postcode")),
                 inputPurpose=Some("section-registered postal-code")
             )
-            <div class="govuk-!-width-one-half">
+
+            <div class="govuk-!-width-one-half govuk-body">
                 @components.select(
-                field = form("country"),
-                elementOptions = ("","") :: countries.map(c => (c.code,messages(c.countryName))),
-                displayEmptyValue = true,
-                '_label -> messages("registeredAddressForEori.country"),
-                '_selectClass -> "js-autocomplete"
+                    field = form("country"),
+                    elementOptions = ("","") :: countries.map(c => (c.code,messages(c.countryName))),
+                    displayEmptyValue = true,
+                    '_label -> messages("registeredAddressForEori.country"),
+                    '_selectClass -> "js-autocomplete"
                 )
             </div>
         }
-            @components.submit_button(Some(messages("site.continue")))
 
-            @components.cancel_application_link()
+        @components.submit_button(Some(messages("site.continue")))
+
+        @components.cancel_application_link()
     }
 }

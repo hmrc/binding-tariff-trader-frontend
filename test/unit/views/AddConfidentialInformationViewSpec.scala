@@ -20,6 +20,8 @@ import controllers.routes
 import forms.AddConfidentialInformationFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
 import views.behaviours.YesNoViewBehaviours
 import views.html.addConfidentialInformation
 
@@ -29,11 +31,11 @@ class AddConfidentialInformationViewSpec extends YesNoViewBehaviours {
 
   val form = new AddConfidentialInformationFormProvider()()
 
-  def addConfidentialInformationView: addConfidentialInformation = injector.instanceOf[addConfidentialInformation]
+  val addConfidentialInformationView: addConfidentialInformation = injector.instanceOf[addConfidentialInformation]
 
-  val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  val goodsName = "goods name"
+  val goodsName: String = "goods name"
 
   def createView = () =>
     addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)

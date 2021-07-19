@@ -17,24 +17,25 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-    <div class="mb-2">
-        <p>@messages("provideBTIReference.paragraph")</p>
-    </div>
+    <p class="govuk-body">@messages("provideBTIReference.paragraph")</p>
 }
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("provideBTIReference.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("provideBTIReference.title")}"
+) {
 
-    @helpers.form(action = ProvideBTIReferenceController.onSubmit(mode)) {
-
+    @formWithCSRF(action = ProvideBTIReferenceController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

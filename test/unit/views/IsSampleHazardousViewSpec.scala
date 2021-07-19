@@ -20,6 +20,9 @@ import controllers.routes
 import forms.IsSampleHazardousFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
+import play.twirl.api.Html
 import views.behaviours.YesNoViewBehaviours
 import views.html.isSampleHazardous
 
@@ -29,14 +32,14 @@ class IsSampleHazardousViewSpec extends YesNoViewBehaviours {
 
   val form = new IsSampleHazardousFormProvider()()
 
-  def isSampleHazardousView: isSampleHazardous = injector.instanceOf[isSampleHazardous]
+  val isSampleHazardousView: isSampleHazardous = app.injector.instanceOf[isSampleHazardous]
 
-  val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  def createView = () =>
+  def createView: () => Html = () =>
     isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) =>
+  def createViewUsingForm: Form[_] => Html = (form: Form[_]) =>
     isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
   "IsSampleHazardous view" must {

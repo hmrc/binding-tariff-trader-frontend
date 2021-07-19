@@ -33,8 +33,13 @@ class ConfirmationViewSpec extends ViewBehaviours {
   private val noHazardousNoReturnSamplesPdf = pdfViewModel.copy(hazardousSample = false, returnSample = false)
   private val noHazardousReturnSamplesPdf = pdfViewModel.copy(hazardousSample = false, returnSample = true)
 
-  private def createView: () => Html = () => confirmation(frontendAppConfig, confirm, "token", pdfViewModel, s => Some("example country name"))(fakeRequest, messages)
-  private def createView(pdf: PdfViewModel) = confirmation(frontendAppConfig, confirm, "token", pdf, s => Some("example country name"))(fakeRequest, messages)
+  val confirmationView: confirmation = app.injector.instanceOf[confirmation]
+
+  private def createView: () => Html =
+    () => confirmationView(frontendAppConfig, confirm, "token", pdfViewModel, s => Some("example country name"))(fakeRequest, messages)
+
+  private def createView(pdf: PdfViewModel) =
+    confirmationView(frontendAppConfig, confirm, "token", pdf, s => Some("example country name"))(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)()
@@ -70,7 +75,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       "display correct messages when samples are not hazardous and samples not returned" in {
         val text = asDocument(createView(noHazardousNoReturnSamplesPdf)).getElementById("sampleInformation").text()
-        val address = asDocument(createView(noHazardousReturnSamplesPdf)).getElementById("sampleInformation").getElementsByTag("address").first().text()
+        val address = asDocument(createView(noHazardousReturnSamplesPdf)).getElementById("sampleAddress").text()
 
         address should include(messages("confirmation.sendingSamples.address").split("<")(0))
         text should not include (messages("confirmation.paragraph.sample.return"))
@@ -80,7 +85,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       "display correct messages when samples are not hazardous and samples returned" in {
         val text = asDocument(createView(noHazardousReturnSamplesPdf)).getElementById("sampleInformation").text()
-        val address = asDocument(createView(noHazardousReturnSamplesPdf)).getElementById("sampleInformation").getElementsByTag("address").first().text()
+        val address = asDocument(createView(noHazardousReturnSamplesPdf)).getElementById("sampleAddress").text()
 
         text should include(messages("confirmation.paragraph.sample.return"))
         address should include(messages("confirmation.sendingSamples.address").split("<")(0))
@@ -107,7 +112,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       "display correct messages when samples are not hazardous and samples not returned" in {
         val text = asDocument(createView(noHazardousNoReturnSamplesPdf)).getElementById("pdfView").text()
-        val address = asDocument(createView(noHazardousReturnSamplesPdf)).getElementById("pdfView").getElementsByTag("address").first().text()
+        val address = asDocument(createView(noHazardousReturnSamplesPdf)).getElementById("sampleAddress").text()
 
         address should include(messages("confirmation.sendingSamples.address").split("<")(0))
         text should not include (messages("confirmation.paragraph.sample.return"))
@@ -117,7 +122,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       "display correct messages when samples are not hazardous and samples returned" in {
         val text = asDocument(createView(noHazardousReturnSamplesPdf)).getElementById("pdfView").text()
-        val address = asDocument(createView(noHazardousReturnSamplesPdf)).getElementById("pdfView").getElementsByTag("address").first().text()
+        val address = asDocument(createView(noHazardousReturnSamplesPdf)).getElementById("sampleAddress").text()
 
         text should include(messages("confirmation.paragraph.sample.return"))
         address should include(messages("confirmation.sendingSamples.address").split("<")(0))

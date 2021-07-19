@@ -17,22 +17,26 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
 
-@this()
+@this(
+    govukLayoutWrapper: GovukLayoutWrapper,
+    formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, goodsDescriptionForm: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-    <p>@messages("provideGoodsDescription.p2")</p>
+    <p class="govuk-body">@messages("provideGoodsDescription.p2")</p>
 
     @components.inset_text(Html(messages("provideGoodsDescription.confidential_info")))
 
-    <p>@messages("provideGoodsDescription.p1")</p>
+    <p class="govuk-body">@messages("provideGoodsDescription.p1")</p>
 
-    <p>@messages("provideGoodsDescription.paragraph.includes")</p>
-    <ul class="list list-bullet">
+    <p class="govuk-body">@messages("provideGoodsDescription.paragraph.includes")</p>
+
+    <ul class="govuk-list govuk-list--bullet">
         <li>@messages("provideGoodsDescription.listItem1")</li>
         <li>@messages("provideGoodsDescription.listItem2")</li>
         <li>@messages("provideGoodsDescription.listItem3")</li>
@@ -41,12 +45,11 @@
     </ul>
 }
 
-@main_template(
-    title = s"${errorPrefix(goodsDescriptionForm)} ${messages("provideGoodsDescription.title", goodsName)}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(goodsDescriptionForm)} ${messages("provideGoodsDescription.title", goodsName)}",
+) {
 
-    @helpers.form(action = ProvideGoodsDescriptionController.onSubmit(mode), 'autoComplete -> "off") {
+    @formWithCSRF(action = ProvideGoodsDescriptionController.onSubmit(mode), 'autoComplete -> "off") {
 
 
         @components.error_summary(goodsDescriptionForm.errors)

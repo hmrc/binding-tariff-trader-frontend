@@ -18,8 +18,7 @@ package models
 
 import java.time.Instant
 
-case class Decision
-(
+case class Decision(
   bindingCommodityCode: String,
   effectiveStartDate: Option[Instant] = None,
   effectiveEndDate: Option[Instant] = None,
@@ -32,5 +31,3 @@ case class Decision
   decisionPdf: Option[Attachment] = None,
   letterPdf: Option[Attachment]                = None
 )
-
-

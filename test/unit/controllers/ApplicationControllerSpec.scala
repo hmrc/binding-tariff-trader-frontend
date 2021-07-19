@@ -33,6 +33,8 @@ import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import models.Attachment
 import models.response.FilestoreResponse
+import views.html.documentNotFound
+import views.html.templates.{applicationView, rulingCertificateView}
 
 class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
@@ -57,6 +59,10 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     )
   }
 
+  val applicationView: applicationView = app.injector.instanceOf(classOf[views.html.templates.applicationView])
+  val rulingCertificateView: rulingCertificateView = app.injector.instanceOf(classOf[views.html.templates.rulingCertificateView])
+  val documentNotFoundView: documentNotFound = app.injector.instanceOf(classOf[views.html.documentNotFound])
+
   private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): ApplicationController =
     new ApplicationController(
       frontendAppConfig,
@@ -65,7 +71,10 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       caseService,
       fileService,
       countriesService,
-      cc
+      cc,
+      applicationView,
+      rulingCertificateView,
+      documentNotFoundView
     )
 
   private def givenTheCaseServiceFindsTheCase(): Unit =

@@ -31,10 +31,12 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
   override protected val form = new SupportingMaterialFileListFormProvider()()
 
+  val supportingMaterialFileListView: supportingMaterialFileList = app.injector.instanceOf[supportingMaterialFileList]
+
   private def createView: () => HtmlFormat.Appendable = { () => createViewWithForm(form) }
 
   private def createViewWithForm(f: Form[Boolean], files: Seq[FileView] = Seq.empty): HtmlFormat.Appendable =
-    supportingMaterialFileList(frontendAppConfig, f, goodsName, files, NormalMode)(fakeRequest, messages)
+    supportingMaterialFileListView(frontendAppConfig, f, goodsName, files, NormalMode)(fakeRequest, messages)
 
   "SupportingMaterialFileList view" must {
 
