@@ -20,10 +20,11 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.LegalChallengeFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
-import navigation.Navigator
+import navigation.{Journey, Navigator, YesNoJourney}
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
@@ -31,23 +32,23 @@ import play.twirl.api.HtmlFormat
 import views.html.legalChallenge
 
 import scala.concurrent.ExecutionContext
-import navigation.Journey
 
 class LegalChallengeController @Inject()(
-  appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
-  formProvider: LegalChallengeFormProvider,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
-  lazy val form = formProvider()
-  val journey = Journey.legalProblems
+                                          appConfig: FrontendAppConfig,
+                                          val dataCacheConnector: DataCacheConnector,
+                                          val navigator: Navigator,
+                                          val identify: IdentifierAction,
+                                          val getData: DataRetrievalAction,
+                                          val requireData: DataRequiredAction,
+                                          formProvider: LegalChallengeFormProvider,
+                                          cc: MessagesControllerComponents,
+                                          legalChallengeView: legalChallenge
+                                        )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+  lazy val form: Form[Boolean] = formProvider()
+  val journey: YesNoJourney = Journey.legalProblems
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
-    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    legalChallenge(appConfig, preparedForm, goodsName, mode)
+    val goodsName: String = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+    legalChallengeView(appConfig, preparedForm, goodsName, mode)
   }
 }

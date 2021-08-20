@@ -18,7 +18,7 @@ package repositories
 
 import javax.inject.{Inject, Singleton}
 import org.joda.time.{DateTime, DateTimeZone}
-import play.api.libs.json.{Format, JsValue, Json, OFormat}
+import play.api.libs.json.{Format, JsObject, JsValue, Json, OFormat}
 import play.api.Configuration
 import reactivemongo.api.DefaultDB
 import reactivemongo.api.indexes.{Index, IndexType}
@@ -88,7 +88,7 @@ class ReactiveMongoRepository(config: Configuration, mongo: () => DefaultDB)
     collection.delete().one(byId(cm.id)).map(_.ok)
   }
 
-  private def byId(value: String) = {
+  private def byId(value: String): JsObject = {
     Json.obj("id" -> value)
   }
 }

@@ -40,7 +40,8 @@ class EnterContactDetailsController @Inject()(
                                                val getData: DataRetrievalAction,
                                                val requireData: DataRequiredAction,
                                                formProvider: EnterContactDetailsFormProvider,
-                                               cc: MessagesControllerComponents
+                                               cc: MessagesControllerComponents,
+                                               enterContactDetailsView: enterContactDetails
                                              )(implicit ec: ExecutionContext)
   extends AnswerCachingController[EnterContactDetails](cc) {
 
@@ -66,7 +67,7 @@ class EnterContactDetailsController @Inject()(
   }
 
   def renderView(preparedForm: Form[EnterContactDetails], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
-    enterContactDetails(appConfig, preparedForm, mode)
+    enterContactDetailsView(appConfig, preparedForm, mode)
 
   def enterContactDetailsForm(userAnswers: UserAnswers): Form[EnterContactDetails] =
     if (userAnswers.get(RegisteredAddressForEoriPage).exists(_.country == "GB")) {

@@ -1,0 +1,107 @@
+@*
+* Copyright 2021 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
+
+@import config.FrontendAppConfig
+
+@this(
+        config: FrontendAppConfig,
+        govukLayout: GovukLayout,
+        govukBackLink: GovukBackLink,
+        hmrcHead: HmrcHead,
+        hmrcStandardHeader: HmrcStandardHeader,
+        hmrcStandardFooter: HmrcStandardFooter,
+        hmrcScripts: HmrcScripts,
+        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
+        hmrcLanguageSelect: HmrcLanguageSelect,
+        hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
+        twoThirdsMainContent: TwoThirdsMainContent
+)
+
+@(
+        pageTitle: String,
+        signOut: Option[String] = Some(routes.SignOutController.startFeedbackSurvey.url),
+        timeoutActive: Boolean = true,
+        showBackLink: Boolean = true,
+        optCustomLayout: Option[Html => Html] = None,
+        additionalJS: Option[Html] = None,
+        additionalCSS: Option[Html] = None,
+        endOfBodyJS: Option[Html] = None
+)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
+
+@head = {
+    @if(timeoutActive) {
+        @hmrcTimeoutDialogHelper(
+            controllers.routes.SignOutController.forceSignOut().url,
+            Some(controllers.routes.SignOutController.keepAlive().url),
+            Some(controllers.routes.SignOutController.forceSignOut().url),
+            Some(config.timeOutSeconds),
+            Some(config.timeOutCountDownSeconds),
+            None,
+            Some(messages("timeoutDialog.p1")),
+            keepAliveButtonText = Some(messages("timeoutDialog.button")),
+            signOutButtonText = None
+        )
+    }
+    @additionalJS.getOrElse({})
+    @additionalCSS.getOrElse({})
+}
+
+@beforeContentBlock = {
+    <div>
+        @hmrcLanguageSelect(LanguageSelect(
+            if (messages.lang.code == "cy") Cy else En,
+            (En, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.English)}"),
+            (Cy, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.Cymraeg)}")
+        ))
+        @if(showBackLink) {
+            @govukBackLink(BackLink(
+                href="javascript: window.history.go(-1)",
+                content = Text(messages("site.back")),
+                attributes = Map("class" -> "govuk-back-link", "id" -> "back-link")
+            ))
+        }
+    </div>
+}
+
+@content = {
+    <div id="content">
+        <div class="content__body">
+            @contentBlock
+        </div>
+        <div class="govuk-!-margin-top-5" id="report-technical-issue">
+            @hmrcReportTechnicalIssueHelper()
+        </div>
+    </div>
+
+    @endOfBodyJS.getOrElse({})
+}
+
+@govukLayout(
+    pageTitle = Some(pageTitle),
+    headBlock = Some(hmrcHead(headBlock = Some(head))),
+    headerBlock = Some(hmrcStandardHeader(
+        serviceUrl = None,
+        serviceName = Some(messages("service.name")),
+        signOutUrl = signOut,
+        userResearchBanner = None,
+        phaseBanner = None,
+        displayHmrcBanner = false
+    )),
+    beforeContentBlock = Some(beforeContentBlock),
+    scriptsBlock = Some(hmrcScripts()),
+    footerBlock = Some(hmrcStandardFooter()),
+    mainContentLayout = Some(optCustomLayout.getOrElse(twoThirdsMainContent(_)))
+)(content)

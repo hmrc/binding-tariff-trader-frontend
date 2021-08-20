@@ -29,13 +29,14 @@ import play.api.mvc.Call
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.mvc.Request
+import views.html.addConfidentialInformation
 
 class AddConfidentialInformationControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
-  def onwardRoute = Call("GET", "/foo")
-  val formProvider = new AddConfidentialInformationFormProvider()
-  val addConfidentialInformationView = injector.instanceOf[views.html.addConfidentialInformation]
-  val goodsName = "Mushrooms"
+  def onwardRoute: Call = Call("GET", "/foo")
+  val formProvider: AddConfidentialInformationFormProvider = new AddConfidentialInformationFormProvider()
+  val addConfidentialInformationView: addConfidentialInformation = injector.instanceOf[views.html.addConfidentialInformation]
+  val goodsName: String = "Mushrooms"
 
   def controller(dataRetrievalAction: DataRetrievalAction) =
     new AddConfidentialInformationController(
@@ -50,7 +51,7 @@ class AddConfidentialInformationControllerSpec extends ControllerSpecBase with Y
       cc
     )
 
-  def viewAsString(form: Form[_], request: Request[_]) = addConfidentialInformationView(
+  def viewAsString(form: Form[_], request: Request[_]): String = addConfidentialInformationView(
     frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
   "AddConfidentialInformationController" must {

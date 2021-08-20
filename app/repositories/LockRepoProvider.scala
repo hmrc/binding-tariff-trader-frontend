@@ -28,5 +28,5 @@ trait LockRepoProvider {
 
 @Singleton
 class LockRepo @Inject() (mongodb: MongoDbProvider) extends LockRepoProvider {
-  def repo = () => LockMongoRepository(mongodb.mongo)
+  def repo: () => LockRepository = () => LockMongoRepository(mongodb.mongo)
 }

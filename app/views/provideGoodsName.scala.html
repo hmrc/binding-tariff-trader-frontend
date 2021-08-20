@@ -17,23 +17,25 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
 
-@this()
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, goodsNameForm: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-    <p>@messages("provideGoodsName.paragraph")</p>
+    <p class="govuk-body">@messages("provideGoodsName.paragraph")</p>
 }
 
-@main_template(
-    title = s"${errorPrefix(goodsNameForm)} ${messages("provideGoodsName.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(goodsNameForm)} ${messages("provideGoodsName.title")}"
+) {
 
-    @helpers.form(action = ProvideGoodsNameController.onSubmit(mode), 'autoComplete -> "off") {
+    @formWithCSRF(action = ProvideGoodsNameController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.error_summary(goodsNameForm.errors)
 
@@ -45,7 +47,6 @@
             contentHtml = Some(contents),
             headingIsLabel = true
         )
-
 
         @components.submit_button(Some(messages("site.continue")))
 

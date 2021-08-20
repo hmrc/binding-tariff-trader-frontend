@@ -15,23 +15,22 @@
  *@
 
 @import config.FrontendAppConfig
-@import controllers.routes._
-@import models.Mode
-@import uk.gov.hmrc.play.views.html._
-@import views.ViewUtils._
+
+@this(
+    govukLayoutWrapper: GovukLayoutWrapper
+)
 
 @(appConfig: FrontendAppConfig, documentType: String, reference: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("documentNotFound.title"),
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = messages("documentNotFound.title")
+) {
 
     <div id="case-not-found-section">
-        <h2 class="heading-large">
+        <h2 class="govuk-heading-l">
             @messages("documentNotFound.heading")
         </h2>
-        <p>@messages("documentNotFound.message", documentType, reference)</p>
-        <p>@messages("documentNotFound.email")</p>
+        <p class="govuk-body">@messages("documentNotFound.message", documentType, reference)</p>
+        <p class="govuk-body">@messages("documentNotFound.email")</p>
     </div>
 }

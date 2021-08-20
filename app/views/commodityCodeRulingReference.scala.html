@@ -17,21 +17,25 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], submitAction: Call, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-    <p>@messages("commodityCodeRulingReference.paragraph0")</p>
+    <p class="govuk-body">@messages("commodityCodeRulingReference.paragraph0")</p>
 }
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("commodityCodeRulingReference.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("commodityCodeRulingReference.title")}"
+) {
 
-    @helpers.form(action = submitAction) {
+    @formWithCSRF(action = submitAction) {
 
         @components.error_summary(form.errors)
 

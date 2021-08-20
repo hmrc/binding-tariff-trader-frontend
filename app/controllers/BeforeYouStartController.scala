@@ -31,18 +31,19 @@ import scala.util.{ Success, Failure }
 import scala.util.control.NonFatal
 
 class BeforeYouStartController @Inject()(
-  appConfig: FrontendAppConfig,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  dataCacheConnector: DataCacheConnector,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+                                          appConfig: FrontendAppConfig,
+                                          identify: IdentifierAction,
+                                          getData: DataRetrievalAction,
+                                          dataCacheConnector: DataCacheConnector,
+                                          cc: MessagesControllerComponents,
+                                          beforeYouStartPageView: beforeYouStart
+                                        )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     val initialAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId))
     dataCacheConnector.save(initialAnswers.cacheMap).transformWith {
       case Success(_) =>
-        Future.successful(Ok(beforeYouStart(appConfig)))
+        Future.successful(Ok(beforeYouStartPageView(appConfig)))
       case Failure(NonFatal(_)) =>
         Future.successful(Results.BadGateway)
     }

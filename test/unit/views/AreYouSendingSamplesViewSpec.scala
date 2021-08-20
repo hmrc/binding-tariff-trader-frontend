@@ -31,9 +31,11 @@ class AreYouSendingSamplesViewSpec extends YesNoViewBehaviours {
 
   val form = new AreYouSendingSamplesFormProvider()()
 
-  def createView = () => areYouSendingSamples(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  val areYouSendingSamplesView: areYouSendingSamples = app.injector.instanceOf[areYouSendingSamples]
 
-  def createViewUsingForm = (form: Form[_]) => areYouSendingSamples(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createView = () => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+
+  def createViewUsingForm = (form: Form[_]) => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "AreYouSendingSamples view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()

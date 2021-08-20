@@ -17,23 +17,26 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
+
 @import views.ViewUtils._
 
-@this()
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCsrf: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, addConfidentialInformationForm: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-<p class="mt-0">@messages("addConfidentialInformation.p1")</p>
+    <p class="govuk-body">@messages("addConfidentialInformation.p1")</p>
 }
-@main_template(
-    title = s"${errorPrefix(addConfidentialInformationForm)} ${messages("addConfidentialInformation.title", goodsName)}",
-    appConfig = appConfig,
-    bodyClasses = None) {
 
-    @helpers.form(action = AddConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(addConfidentialInformationForm)} ${messages("addConfidentialInformation.title", goodsName)}"
+) {
 
+    @formWithCsrf(action = AddConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.error_summary(addConfidentialInformationForm.errors)
 
@@ -41,7 +44,8 @@
             field = addConfidentialInformationForm("value"),
             label = Some(messages("addConfidentialInformation.heading", goodsName)),
             captionMsg = Some(messages("addConfidentialInformation.caption")),
-            contentHtml = Some(contents)
+            contentHtml = Some(contents),
+            labelIsHeading = true
         )
 
         @components.submit_button(Some(messages("site.continue")))

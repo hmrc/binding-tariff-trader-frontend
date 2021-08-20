@@ -34,9 +34,11 @@ class LegalChallengeViewSpec extends YesNoViewBehaviours {
   override protected def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)
 
-  def createView = () => legalChallenge(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  val legalChallengeView: legalChallenge = app.injector.instanceOf[legalChallenge]
 
-  def createViewUsingForm = (form: Form[_]) => legalChallenge(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  def createView = () => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+
+  def createViewUsingForm = (form: Form[_]) => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   "LegalChallenge view" must {
 

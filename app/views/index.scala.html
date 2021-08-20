@@ -16,22 +16,33 @@
 
 @import config.FrontendAppConfig
 @import views.CaseDetailTab.CaseDetailTab
+@import views.html.layouts.FullLayoutMainContent
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        fullLayoutMainContent: FullLayoutMainContent
+)
 
 @(appConfig: FrontendAppConfig, activeTab : CaseDetailTab, viewTable : Html)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("index.title"),
-    appConfig = appConfig,
-    contentClass = Some("column-full"),
-    bodyClasses = None) {
+@additionalCSS = @{
+    Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")}'/>""")
+}
+
+@govukLayoutWrapper(
+    pageTitle = messages("index.title"),
+    showBackLink = false,
+    optCustomLayout = Some(fullLayoutMainContent(_)),
+    additionalCSS = Some(additionalCSS)
+) {
 
     @components.heading(messages("index.heading"))
 
     @components.button_link(messages("site.start"), routes.BeforeYouStartController.onPageLoad.url, id = Some("start-application"))
 
-    <div class="tabs mb-5">
+    <div class="govuk-tabs">
         @components.case_tabs(activeTab)
-        <div class="content">
+        <div class="govuk-tabs__panel">
             @viewTable
         </div>
     </div>

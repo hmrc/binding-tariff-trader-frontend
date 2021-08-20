@@ -16,6 +16,7 @@
 
 package views
 
+import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.unauthorised
 
@@ -23,7 +24,9 @@ class UnauthorisedViewSpec extends ViewBehaviours {
 
   override val expectTimeoutDialog: Boolean = false
 
-  def view = () => unauthorised(frontendAppConfig)(fakeRequest, messages)
+  val unauthorisedView: unauthorised = app.injector.instanceOf[unauthorised]
+
+  def view: () => Html = () => unauthorisedView(frontendAppConfig)(fakeRequest, messages)
 
   "Unauthorised view" must {
 

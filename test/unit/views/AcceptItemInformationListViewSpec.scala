@@ -23,7 +23,9 @@ class AcceptItemInformationListViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "acceptItemInformationList"
 
-  def createView = () => acceptItemInformationList(frontendAppConfig)(fakeRequest, messages)
+  def acceptItemInformationListView: acceptItemInformationList = app.injector.instanceOf[acceptItemInformationList]
+
+  def createView = () => acceptItemInformationListView(frontendAppConfig)(fakeRequest, messages)
 
   "AcceptItemInformationList view" must {
     behave like normalPage(createView, messageKeyPrefix)()

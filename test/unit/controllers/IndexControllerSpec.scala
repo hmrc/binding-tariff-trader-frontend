@@ -28,6 +28,7 @@ import play.api.mvc.Call
 import play.api.test.Helpers._
 import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.{account_dashboard_statuses, index}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -38,6 +39,8 @@ class IndexControllerSpec extends ControllerSpecBase {
   private val casesService = mock[CasesService]
   def nextPageRoute = Call("GET", "/advance-tariff-application/information-you-need")
 
+  val accountDashboardStatusesView: account_dashboard_statuses = app.injector.instanceOf(classOf[views.html.account_dashboard_statuses])
+  val indexView: index = app.injector.instanceOf(classOf[views.html.index])
 
   private def controller(identifier: IdentifierAction = FakeIdentifierAction): IndexController =
     new IndexController(
@@ -45,7 +48,9 @@ class IndexControllerSpec extends ControllerSpecBase {
       identifier,
       new FakeNavigator(nextPageRoute),
       casesService,
-      cc
+      cc,
+      accountDashboardStatusesView,
+      indexView
     )
 
   "Index Controller - Get Applications" must {

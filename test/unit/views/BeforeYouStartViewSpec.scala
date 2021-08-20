@@ -24,7 +24,10 @@ class BeforeYouStartViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "beforeYouStart"
 
-  private def createView(eori: Option[String] = Some("eori")) = () => beforeYouStart(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages)
+  val beforeYouStartView: beforeYouStart = app.injector.instanceOf[beforeYouStart]
+
+  private def createView(eori: Option[String] = Some("eori")) =
+    () => beforeYouStartView(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages)
 
   "BeforeYouStart view" must {
     behave like normalPage(createView(), messageKeyPrefix)()

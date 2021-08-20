@@ -17,33 +17,35 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-    <div class="form-group">
-        <p>@messages("previousBTIRuling.bodyText")</p>
-    </div>
+    <p class="govuk-body">@messages("previousBTIRuling.bodyText")</p>
 }
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("previousBTIRuling.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("previousBTIRuling.title")}"
+) {
 
-    @helpers.form(action = PreviousBTIRulingController.onSubmit(mode)) {
-
+    @formWithCSRF(action = PreviousBTIRulingController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 
         @components.input_yes_no(
             field = form("value"),
-            labelClass = Some("visually-hidden"),
+            labelClass = Some("govuk-visually-hidden"),
             label = Some(messages("previousBTIRuling.heading", goodsName)),
             captionMsg=Some(messages("previousBTIRuling.caption")),
-            contentHtml = Some(contents)
+            contentHtml = Some(contents),
+            labelIsHeading = true
         )
 
         @components.submit_button(Some(messages("site.continue")))

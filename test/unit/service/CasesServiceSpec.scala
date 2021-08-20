@@ -55,7 +55,7 @@ class CasesServiceSpec extends SpecBase {
 
     "delegate to connector" in {
       given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
-      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]], any[Reads[Email[_]]])).willReturn(Future.successful(()))
+      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]])).willReturn(Future.successful(()))
 
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
 
@@ -70,7 +70,7 @@ class CasesServiceSpec extends SpecBase {
 
     "handle error with email silently" in {
       given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
-      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]], any[Reads[Email[_]]])).willReturn(Future.failed(new RuntimeException("Error")))
+      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]])).willReturn(Future.failed(new RuntimeException("Error")))
 
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
     }
@@ -87,7 +87,7 @@ class CasesServiceSpec extends SpecBase {
 
     def theEmailSent: ApplicationSubmittedEmail = {
       val captor: ArgumentCaptor[ApplicationSubmittedEmail] = ArgumentCaptor.forClass(classOf[ApplicationSubmittedEmail])
-      verify(emailConnector).send(captor.capture())(any[HeaderCarrier], any[Writes[Email[_]]], any[Reads[Email[_]]])
+      verify(emailConnector).send(captor.capture())(any[HeaderCarrier], any[Writes[Email[_]]])
       captor.getValue
     }
   }

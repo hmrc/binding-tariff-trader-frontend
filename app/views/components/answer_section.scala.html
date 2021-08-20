@@ -20,10 +20,10 @@
 @(answerSection: AnswerSection)(implicit messages: Messages)
 
 @if(answerSection.headingKey.isDefined) {
-    <h2 class="heading-large" id="@answerSection.headingKey.get">@messages(answerSection.headingKey.get)</h2>
+    <h2 class="govuk-heading-l" id="@answerSection.headingKey.get">@messages(answerSection.headingKey.get)</h2>
 }
 
-<dl class="govuk-check-your-answers cya-questions-long section">
+<dl class="govuk-summary-list">
   @for(row <- answerSection.rows) {
       @components.answer_row(row)
   }

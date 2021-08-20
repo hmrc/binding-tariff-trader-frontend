@@ -40,6 +40,8 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
   private val pdfViewModel = oCase.pdf
   private val countriesService = new CountriesService
 
+  val confirmationView: confirmation = app.injector.instanceOf(classOf[confirmation])
+
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
     new ConfirmationController(
       frontendAppConfig,
@@ -49,12 +51,13 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
       cache,
       countriesService,
       pdfService,
-      cc
+      cc,
+      confirmationView
     )
   }
 
   private def viewAsString: String = {
-    confirmation(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test"), "token", pdfViewModel, s => Some(""))(fakeRequest, messages).toString
+    confirmationView(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test"), "token", pdfViewModel, s => Some(""))(fakeRequest, messages).toString
   }
 
   "Confirmation Controller" must {

@@ -42,7 +42,9 @@ trait ViewSpecBase extends SpecBase {
     val headers = doc.getElementsByTag("h1")
     headers.size() match {
       case 0 => ()
-      case 1 => headers.first.text().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
+      case 1 if headers.select("label").isEmpty =>
+        headers.first.ownText().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
+      case 1 => headers.select("label").text().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
       case _ => throw new RuntimeException(s"Pages should only have (at most) one h1 element. Found ${headers.size}")
     }
   }
@@ -84,7 +86,7 @@ trait ViewSpecBase extends SpecBase {
 
     expectedHintText match {
       case Some(hint) => {
-        assert(doc.getElementsByClass("form-hint").first.text == hint,
+        assert(doc.getElementsByClass("govuk-hint").first.text == hint,
           s"\n\nLabel for $forElement did not contain hint text $hint")
         assertLabel(label, expectedText, forElement)
       }

@@ -25,7 +25,9 @@ import views.html.ruling_information
 
 class RulingInformationViewSpec extends ViewBehaviours {
 
-  private def createView(c: Case): () => HtmlFormat.Appendable = () => ruling_information(frontendAppConfig, c)(fakeRequest, messages)
+  val rulingCertificateView: ruling_information = app.injector.instanceOf[ruling_information]
+
+  private def createView(c: Case): () => HtmlFormat.Appendable = () => rulingCertificateView(frontendAppConfig, c)(fakeRequest, messages)
   private def getElementText(doc: Document, id: String): String = doc.getElementById(id).text().trim
 
   private val rulingCaseWithDecision = oCase.btiCaseWithDecision
@@ -42,8 +44,8 @@ class RulingInformationViewSpec extends ViewBehaviours {
       assertContainsText(doc,rulingCaseWithDecision.reference)
       assertContainsText(doc,rulingCaseWithDecision.application.holder.businessName)
       assertContainsText(doc,rulingCaseWithDecision.application.holder.businessName)
-      assertContainsText(doc,Dates.format(ruling.effectiveStartDate))
-      assertContainsText(doc,Dates.format(ruling.effectiveEndDate))
+      assertContainsText(doc,Dates.format(ruling.effectiveStartDate)(messages))
+      assertContainsText(doc,Dates.format(ruling.effectiveEndDate)(messages))
 
       assertContainsText(doc,messages("rulingInformation.commodityIntro"))
       assertContainsText(doc, ruling.bindingCommodityCode)
@@ -65,7 +67,7 @@ class RulingInformationViewSpec extends ViewBehaviours {
 
     "show start date when there is decision" in {
       val doc = asDocument(createView(rulingCaseWithDecision).apply())
-      val expected = Dates.format(rulingCaseWithDecision.decision.get.effectiveStartDate)
+      val expected = Dates.format(rulingCaseWithDecision.decision.get.effectiveStartDate)(messages)
 
       getElementText(doc, "rulingInformation.startDate") shouldBe expected
     }
@@ -79,7 +81,7 @@ class RulingInformationViewSpec extends ViewBehaviours {
 
     "show expiry date when there is decision" in {
       val doc = asDocument(createView(rulingCaseWithDecision).apply())
-      val expected = Dates.format(rulingCaseWithDecision.decision.get.effectiveEndDate)
+      val expected = Dates.format(rulingCaseWithDecision.decision.get.effectiveEndDate)(messages)
 
       getElementText(doc, "rulingInformation.expiryDate") shouldBe expected
     }

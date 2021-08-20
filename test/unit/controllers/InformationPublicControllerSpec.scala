@@ -17,22 +17,27 @@
 package controllers
 
 import controllers.actions.{FakeDataRetrievalAction, FakeIdentifierAction, IdentifierAction}
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, _}
 import views.html.informationPublic
 
 class InformationPublicControllerSpec extends ControllerSpecBase {
+
+  val informationPublicView: informationPublic = app.injector.instanceOf(classOf[informationPublic])
 
   private def controller(identifier: IdentifierAction) =
     new InformationPublicController(
       frontendAppConfig,
       identifier,
       new FakeDataRetrievalAction(None),
-      cc
+      cc,
+      informationPublicView
     )
 
-  val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  private def viewAsString() = informationPublic(frontendAppConfig)(fakeGETRequest, messages).toString
+  private def viewAsString() = informationPublicView(frontendAppConfig)(fakeGETRequest, messages).toString
 
   "InformationPublic Controller" must {
 

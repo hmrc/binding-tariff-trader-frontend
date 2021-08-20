@@ -20,31 +20,32 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SimilarItemCommodityCodeFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
-import navigation.Navigator
+import navigation.{Journey, LoopingJourney, Navigator}
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import play.twirl.api.HtmlFormat
 import views.html.similarItemCommodityCode
 
 import scala.concurrent.ExecutionContext
-import navigation.Journey
 
 class SimilarItemCommodityCodeController @Inject()(
-  appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
-  formProvider: SimilarItemCommodityCodeFormProvider,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
-  lazy val form = formProvider()
-  val journey = Journey.similarItem
+                                                    appConfig: FrontendAppConfig,
+                                                    val dataCacheConnector: DataCacheConnector,
+                                                    val navigator: Navigator,
+                                                    val identify: IdentifierAction,
+                                                    val getData: DataRetrievalAction,
+                                                    val requireData: DataRequiredAction,
+                                                    formProvider: SimilarItemCommodityCodeFormProvider,
+                                                    cc: MessagesControllerComponents,
+                                                    similarItemCommodityCodeView: similarItemCommodityCode
+                                                  )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+  lazy val form: Form[Boolean] = formProvider()
+  val journey: LoopingJourney = Journey.similarItem
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
-    similarItemCommodityCode(appConfig, preparedForm, mode)
+    similarItemCommodityCodeView(appConfig, preparedForm, mode)
 }

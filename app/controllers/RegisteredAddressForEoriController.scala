@@ -35,24 +35,25 @@ import views.html.registeredAddressForEori
 import scala.concurrent.ExecutionContext
 
 class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
-  formProvider: RegisteredAddressForEoriFormProvider,
-  countriesService: CountriesService,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[RegisteredAddressForEori](cc) with I18nSupport {
+                                                   val dataCacheConnector: DataCacheConnector,
+                                                   val navigator: Navigator,
+                                                   val identify: IdentifierAction,
+                                                   val getData: DataRetrievalAction,
+                                                   val requireData: DataRequiredAction,
+                                                   formProvider: RegisteredAddressForEoriFormProvider,
+                                                   countriesService: CountriesService,
+                                                   cc: MessagesControllerComponents,
+                                                   registeredAddressForEoriView: registeredAddressForEori
+                                                  )(implicit ec: ExecutionContext) extends AnswerCachingController[RegisteredAddressForEori](cc) with I18nSupport {
 
   lazy val form: Form[RegisteredAddressForEori] = formProvider()
-  val questionPage = RegisteredAddressForEoriPage
+  val questionPage: RegisteredAddressForEoriPage.type = RegisteredAddressForEoriPage
 
   def renderView(preparedForm: Form[RegisteredAddressForEori], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
-    registeredAddressForEori(appConfig, preparedForm, mode, countriesService.getAllCountries)
+    registeredAddressForEoriView(appConfig, preparedForm, mode, countriesService.getAllCountries)
 
   override def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = (request.userAnswers.get(RegisteredAddressForEoriPage), request.eoriNumber) match {
+    val preparedForm: Form[RegisteredAddressForEori] = (request.userAnswers.get(RegisteredAddressForEoriPage), request.eoriNumber) match {
       case (Some(value), Some(eoriNumber)) => form.fill(value.copy(eori = eoriNumber))
       case (None,        Some(eoriNumber)) => form.fill(RegisteredAddressForEori(eoriNumber))
       case (Some(value), _               ) => form.fill(value)

@@ -35,6 +35,8 @@ class LegalChallengeControllerSpec extends ControllerSpecBase with YesNoCachingC
   private val formProvider = new LegalChallengeFormProvider()
   private val goodsName = "wine"
 
+  val legalChallengeView: legalChallenge = app.injector.instanceOf(classOf[legalChallenge])
+
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new LegalChallengeController(
       frontendAppConfig,
@@ -44,13 +46,14 @@ class LegalChallengeControllerSpec extends ControllerSpecBase with YesNoCachingC
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      legalChallengeView
     )
 
   private def onwardRoute = Call("GET", "/foo")
 
   def viewAsString(form: Form[_], request: Request[_]): String =
-    legalChallenge(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
+    legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
   val backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
 

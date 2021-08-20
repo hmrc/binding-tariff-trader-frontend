@@ -42,8 +42,8 @@ class ProvideConfidentialInformationController @Inject()(
   val provide_confidential_information: views.html.provideConfidentialInformation,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
-  lazy val form = formProvider()
-  val questionPage = ProvideConfidentialInformationPage
+  lazy val form: Form[String] = formProvider()
+  val questionPage: ProvideConfidentialInformationPage.type = ProvideConfidentialInformationPage
 
   def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")

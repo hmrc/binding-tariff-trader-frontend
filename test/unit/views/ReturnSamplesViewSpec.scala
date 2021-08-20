@@ -20,6 +20,7 @@ import controllers.routes
 import play.api.data.Form
 import forms.ReturnSamplesFormProvider
 import models.NormalMode
+import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.returnSamples
 import views.behaviours.YesNoViewBehaviours
@@ -30,9 +31,11 @@ class ReturnSamplesViewSpec extends YesNoViewBehaviours {
 
   val form = new ReturnSamplesFormProvider()()
 
-  def createView = () => returnSamples(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val returnSamplesView: returnSamples = app.injector.instanceOf[returnSamples]
 
-  def createViewUsingForm = (form: Form[_]) => returnSamples(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView: () => Html = () => returnSamplesView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+
+  def createViewUsingForm: Form[_] => Html = (form: Form[_]) => returnSamplesView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "ReturnSamples view" must {
     behave like normalPage(createView, messageKeyPrefix)()

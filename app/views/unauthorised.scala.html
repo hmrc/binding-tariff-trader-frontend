@@ -16,46 +16,48 @@
 
 @import config.FrontendAppConfig
 
+@this(
+    govukLayoutWrapper: GovukLayoutWrapper
+)
+
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("unauthorised.title"),
-    appConfig = appConfig,
-    bodyClasses = None,
-    hasTimeOut = false,
-    signOutLink=routes.SignOutController.unauthorisedSignOut.url) {
+@govukLayoutWrapper(
+    pageTitle = messages("unauthorised.title"),
+    timeoutActive = false,
+    signOut = Some(routes.SignOutController.unauthorisedSignOut.url)
+) {
 
     @components.heading(messages("unauthorised.heading"))
 
-    <p>@messages("unauthorised.intro1")</p>
-    <p>@messages("unauthorised.intro2")</p>
+    <p class="govuk-body">@messages("unauthorised.intro1")</p>
+    <p class="govuk-body">@messages("unauthorised.intro2")</p>
 
-    <br/>
-    <p class="notice">
-        <i class="icon icon-important">
-            <span class="visually-hidden">Warning</span>
-        </i>
-        <strong class="bold-small">
+    <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+            <span class="govuk-warning-text__assistive">@messages("site.warning")</span>
             @messages("unauthorised.warn_p1")
-            <a href="@controllers.routes.IndexController.getApplications()">@messages("unauthorised.warn_link")</a>
+            <a class="govuk-link" href="@controllers.routes.IndexController.getApplications()">@messages("unauthorised.warn_link")</a>
             @messages("unauthorised.warn_p2")
         </strong>
-    </p>
-    <br/>
+    </div>
 
-    <p>
+    <p class="govuk-body">
         @messages("unauthorised.get.eori_p1")
-        <a target="_blank" href="@appConfig.cdsRegisterUrl">@messages("unauthorised.get.eori_link")</a>
+        <a class="govuk-link" target="_blank" href="@appConfig.cdsRegisterUrl">@messages("unauthorised.get.eori_link")</a>
     </p>
 
-    <p>
+    <p class="govuk-body">
         @messages("unauthorised.have.eori_p1")
-        <a target="_blank" href="@appConfig.cdsSubscribeUrl">@messages("unauthorised.have.eori_link")</a>
+        <a class="govuk-link" target="_blank" href="@appConfig.cdsSubscribeUrl">@messages("unauthorised.have.eori_link")</a>
     </p>
 
-    <h2>@messages("unauthorised.help.title")</h2>
-    <p>
-        @messages("unauthorised.help_p1")<br/>
+    <h2 class="govuk-heading-m">@messages("unauthorised.help.title")</h2>
+    <p class="govuk-body">
+        @messages("unauthorised.help_p1")
+    </p>
+    <p class="govuk-body">
         @messages("unauthorised.help_p2")
     </p>
 

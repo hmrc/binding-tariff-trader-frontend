@@ -21,14 +21,20 @@ import models.NormalMode
 import play.api.test.Helpers._
 import views.html.contactCustomsDutyLiabilityTeam
 
+
+
 class ContactCustomsDutyLiabilityTeamControllerSpec extends ControllerSpecBase {
+
+  val contactCustomsDutyLiabilityTeamView: contactCustomsDutyLiabilityTeam = app.injector.instanceOf(classOf[contactCustomsDutyLiabilityTeam])
+
   def controller() = new ContactCustomsDutyLiabilityTeamController(
     frontendAppConfig,
     FakeIdentifierAction,
-    cc
+    cc,
+    contactCustomsDutyLiabilityTeamView
   )
 
-  def viewAsString(): String = contactCustomsDutyLiabilityTeam(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(): String = contactCustomsDutyLiabilityTeamView(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
 
   "ContactCustomsDutyLiabilityTeamControllerSpec" must {
 

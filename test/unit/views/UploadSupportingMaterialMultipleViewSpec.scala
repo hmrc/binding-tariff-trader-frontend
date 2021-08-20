@@ -28,15 +28,15 @@ import models.response.UpscanFormTemplate
 
 class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours {
 
-  val messageKeyPrefix = "uploadSupportingMaterialMultiple"
+  val messageKeyPrefix: String = "uploadSupportingMaterialMultiple"
 
-  val form = new UploadSupportingMaterialMultipleFormProvider()()
+  val form: Form[String] = new UploadSupportingMaterialMultipleFormProvider()()
 
-  val goodsName = "goose"
+  val goodsName: String = "goose"
 
   val request = fakeGETRequestWithCSRF
 
-  val initiateResponse = FileStoreInitiateResponse(
+  val initiateResponse: FileStoreInitiateResponse = FileStoreInitiateResponse(
     id = "id",
     upscanReference = "ref",
     uploadRequest = UpscanFormTemplate(
@@ -45,11 +45,13 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
     )
   )
 
+  val uploadSupportingMaterialMultipleView: uploadSupportingMaterialMultiple = app.injector.instanceOf[uploadSupportingMaterialMultiple]
+
   def createView: () => HtmlFormat.Appendable = () =>
-    uploadSupportingMaterialMultiple(frontendAppConfig, initiateResponse, form, goodsName, NormalMode)(request, messages)
+    uploadSupportingMaterialMultipleView(frontendAppConfig, initiateResponse, form, goodsName, NormalMode)(request, messages)
 
   def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
-    (form: Form[String]) => uploadSupportingMaterialMultiple(
+    (form: Form[String]) => uploadSupportingMaterialMultipleView(
       frontendAppConfig,
       initiateResponse,
       form,

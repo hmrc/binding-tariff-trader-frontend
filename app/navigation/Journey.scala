@@ -28,24 +28,24 @@ case class YesNoJourney(questionPage: QuestionPage[Boolean], detailPages: List[Q
 case class LoopingJourney(questionPage: QuestionPage[Boolean], detailPages: List[QuestionPage[_]], continuePage: QuestionPage[Boolean]) extends Journey
 
 object Journey {
-  val confidentialInformation =
+  val confidentialInformation: YesNoJourney =
     YesNoJourney(AddConfidentialInformationPage, List(ProvideConfidentialInformationPage))
 
-  val samples =
+  val samples: YesNoJourney =
     YesNoJourney(AreYouSendingSamplesPage, List(IsSampleHazardousPage, ReturnSamplesPage))
 
-  val supportingDocuments =
+  val supportingDocuments: LoopingJourney =
     LoopingJourney(AddSupportingDocumentsPage, List(UploadSupportingMaterialMultiplePage, MakeFileConfidentialPage), SupportingMaterialFileListPage)
 
-  val commodityCode =
+  val commodityCode: YesNoJourney =
     YesNoJourney(CommodityCodeBestMatchPage, List(CommodityCodeDigitsPage))
 
-  val legalProblems =
+  val legalProblems: YesNoJourney =
     YesNoJourney(LegalChallengePage, List(LegalChallengeDetailsPage))
   
-  val previousBTI =
+  val previousBTI: YesNoJourney =
     YesNoJourney(PreviousBTIRulingPage, List(ProvideBTIReferencePage))
   
-  val similarItem =
+  val similarItem: LoopingJourney =
     LoopingJourney(SimilarItemCommodityCodePage, List(CommodityCodeRulingReferencePage), AddAnotherRulingPage)
 }

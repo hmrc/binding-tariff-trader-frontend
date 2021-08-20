@@ -20,7 +20,6 @@ import com.google.inject.{Inject, Singleton}
 import models.Languages.English
 import play.api.Configuration
 import play.api.i18n.Lang
-import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
@@ -36,8 +35,6 @@ class FrontendAppConfig @Inject()(
   private lazy val contactHost = runModeConfiguration.getOptional[String]("contact-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "AdvanceTariffApplication"
 
-  lazy val analyticsToken: String = loadConfig("google-analytics.token")
-  lazy val analyticsHost: String = loadConfig("google-analytics.host")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   lazy val betaFeedbackUrl = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
@@ -50,12 +47,6 @@ class FrontendAppConfig @Inject()(
   lazy val bindingTariffFileStoreUrl: String = serviceConfig.baseUrl("binding-tariff-filestore")
   lazy val emailUrl: String = serviceConfig.baseUrl("email")
   lazy val pdfGeneratorUrl: String = serviceConfig.baseUrl("pdf-generator-service")
-
-  lazy val accessibilityBaseUrl: String = loadConfig(s"accessibility-statement.baseUrl")
-  lazy private val accessibilityRedirectUrl: String = loadConfig(s"accessibility-statement.redirectUrl")
-  def accessibilityStatementUrl(referrer: String) =
-    s"$accessibilityBaseUrl/accessibility-statement$accessibilityRedirectUrl?referrerUrl=${SafeRedirectUrl(
-      accessibilityBaseUrl + referrer).encodedUrl}"
 
   lazy val fileUploadMaxFiles: Int = loadConfig("fileupload.maxFiles").toInt
   lazy val fileUploadMaxSize: Int = loadConfig("fileupload.maxSize").toInt
@@ -89,10 +80,7 @@ class FrontendAppConfig @Inject()(
 
   lazy val host: String = loadConfig("host")
 
-  lazy val assetsPrefix = runModeConfiguration.get[String](s"assets.url") + runModeConfiguration
-    .get[String](s"assets.version") + '/'
+  lazy val samplesToggle: Boolean = runModeConfiguration.getOptional[Boolean]("toggle.samplesNotAccepted").getOrElse(false)
 
-  lazy val samplesToggle = runModeConfiguration.getOptional[Boolean]("toggle.samplesNotAccepted").getOrElse(false)
-
-  lazy val migrationWorkerEnabled = runModeConfiguration.getOptional[Boolean]("migration-worker.enabled").getOrElse(false)
+  lazy val migrationWorkerEnabled: Boolean = runModeConfiguration.getOptional[Boolean]("migration-worker.enabled").getOrElse(false)
 }

@@ -55,6 +55,8 @@ class MakeFileConfidentialControllerSpec extends ControllerSpecBase with Accumul
     await(fakeCacheConnector.save(CacheMap(cacheMapId, backgroundData)))
   }
 
+  val makeFileConfidentialView: makeFileConfidential = app.injector.instanceOf(classOf[makeFileConfidential])
+
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new MakeFileConfidentialController(
       frontendAppConfig,
@@ -64,11 +66,12 @@ class MakeFileConfidentialControllerSpec extends ControllerSpecBase with Accumul
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      makeFileConfidentialView
     )
 
   private def viewAsString(form: Form[_], submitAction: Call, request: Request[_]): String =
-    makeFileConfidential(frontendAppConfig, form, submitAction, NormalMode, lastFileUploadedId)(request, messages).toString
+    makeFileConfidentialView(frontendAppConfig, form, submitAction, NormalMode, lastFileUploadedId)(request, messages).toString
 
   val invalidFormData = Map("file-id-1" -> "", "confidential" -> "")
 

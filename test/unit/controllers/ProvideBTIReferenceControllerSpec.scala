@@ -33,8 +33,10 @@ class ProvideBTIReferenceControllerSpec extends ControllerSpecBase with AnswerCa
 
   private val formProvider = new ProvideBTIReferenceFormProvider()
 
+  val provideBTIReferenceView: provideBTIReference = app.injector.instanceOf(classOf[provideBTIReference])
+
   def viewAsString(form: Form[_], request: Request[_]): String =
-    provideBTIReference(frontendAppConfig, form, NormalMode)(request, messages).toString
+    provideBTIReferenceView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new ProvideBTIReferenceController(
@@ -45,7 +47,8 @@ class ProvideBTIReferenceControllerSpec extends ControllerSpecBase with AnswerCa
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      provideBTIReferenceView
     )
 
   private def onwardRoute = Call("GET", "/foo")

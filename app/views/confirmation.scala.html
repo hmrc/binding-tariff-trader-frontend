@@ -18,6 +18,12 @@
 @import components.view_application
 @import viewmodels.AnswerSection
 @import viewmodels.PdfViewModel
+@import views.html.layouts.FullLayoutMainContent
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        fullLayoutMainContent: FullLayoutMainContent
+)
 
 @(appConfig: FrontendAppConfig, confirmation: Confirmation, pdfToken: String, pdf: PdfViewModel,
         getCountryName: String => Option[String], compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
@@ -26,74 +32,82 @@
     s"${appConfig.host}${routes.Assets.versioned(path)}"
 }
 
-@main_template(
-    title = messages("confirmation.title"),
-    appConfig = appConfig,
-    contentClass = Some("column-full pl-0 application-confirmation"),
-    bodyClasses = None,
-    backLink = false){
+@additionalCSS = @{
+    Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/print_pdf.css")}'/>""")
+    Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")}'/>""")
+}
 
-<div class="column-two-thirds p-0 hidden-print">
-    <div class="govuk-box-highlight govuk-panel--confirmation">
-        @components.heading(messages("confirmation.heading"))
-        <span class="font-large">
+@govukLayoutWrapper(
+    pageTitle = messages("confirmation.title"),
+    showBackLink = false,
+    optCustomLayout = Some(fullLayoutMainContent(_)),
+    additionalCSS = Some(additionalCSS)
+){
+
+<div class="govuk-grid-column-two-thirds p-0 hidden-print">
+    <div class="govuk-panel govuk-panel--confirmation">
+        <h1 class="govuk-panel__title"> @messages("confirmation.heading") </h1>
+        <div class="govuk-panel__body">
             @messages("confirmation.yourRefNumber") <br>
-            <span id="confirmation-reference" class="font-large bold">@messages("caseReference.format", confirmation.reference)</span>
-        </span>
+            <strong id="confirmation-reference" class="bold">@messages("caseReference.format", confirmation.reference)</strong>
+        </div>
     </div>
 
-    <h2 class="heading-large">@messages("confirmation.heading2.whatNext")</h2>
+    <h2 class="govuk-heading-l">@messages("confirmation.heading2.whatNext")</h2>
 
-    <p id="confirmation-email-message">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
+    <p id="confirmation-email-message" class="govuk-body">@messages("confirmation.paragraph.confirmationEmail", confirmation.emailAddress)</p>
 
-    <p>
+    <p class="govuk-body">
         @messages("confirmation.important")
         @messages("confirmation.paragraph.signup")
         <span>
-            <a href="@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url">@messages("confirmation.check.status.linkText")</a>
+            <a href="@routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url" class="govuk-link">@messages("confirmation.check.status.linkText")</a>
         </span>
     </p>
 
     <!--Samples toggle logic start-->
 
-    @if(appConfig.samplesToggle){
-        <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+    @if(true == false){
+        <div class="govuk-inset-text">@messages("view.application.paragraph.do.not.send.sample")</div>
     } else {
-        <div id = "sampleInformation">
+        <div id="sampleInformation">
             @if(pdf.sendingSample) {
                 @if(pdf.hazardousSample){
-                @components.icon_important("view.application.paragraph.do.not.send.sample")
+                    @components.icon_important("view.application.paragraph.do.not.send.sample")
                 } else if (!pdf.hazardousSample && pdf.returnSample) {
-                        <p>@components.icon_important("confirmation.sendingSamples.important")</p>
-                        <div class="panel panel-border-wide">@messages("confirmation.paragraph.sample.return")</div>
+                    <p class="govuk-body">@components.icon_important("confirmation.sendingSamples.important")</p>
+                    <div class="govuk-inset-text">@messages("confirmation.paragraph.sample.return")</div>
 
-                        <p>@messages("confirmation.paragraph1.sendingSamples")
-                            <span class="bold"> @messages("caseReference.format", confirmation.reference)</span>
-                            @messages("confirmation.paragraph2.sendingSamples")
-                        </p>
+                    <p class="govuk-body">@messages("confirmation.paragraph1.sendingSamples")
+                        <span class="bold"> @messages("caseReference.format", confirmation.reference)</span>
+                        @messages("confirmation.paragraph2.sendingSamples")
+                    </p>
 
-                        <address>
+                    <p id="sampleAddress" class="govuk-body">
                         @Html(messages("confirmation.sendingSamples.address"))
-                        </address>
-                        <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
-                        @messages("confirmation.get.moreInformation")</a>
-                        </p>
-                    } else {
+                    </p>
+                    <p class="govuk-body">
+                        <a class="govuk-link" href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
+                            @messages("confirmation.get.moreInformation")
+                        </a>
+                    </p>
+                } else {
+                    @components.icon_important("confirmation.sendingSamples.important")
 
-                        @components.icon_important("confirmation.sendingSamples.important")
+                    <p class="govuk-body">@messages("confirmation.paragraph1.sendingSamples")
+                        <span class="bold"> @messages("caseReference.format", confirmation.reference)</span>
+                        @messages("confirmation.paragraph2.sendingSamples")
+                    </p>
 
-                        <p>@messages("confirmation.paragraph1.sendingSamples")
-                            <span class="bold"> @messages("caseReference.format", confirmation.reference)</span>
-                            @messages("confirmation.paragraph2.sendingSamples")
-                        </p>
-
-                        <address>
+                    <p id="sampleAddress" class="govuk-body">
                         @Html(messages("confirmation.sendingSamples.address"))
-                        </address>
-                        <p><a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank">
-                            @messages("confirmation.get.moreInformation")</a>
-                        </p>
-                    }
+                    </p>
+                    <p class="govuk-body">
+                        <a href="https://www.gov.uk/guidance/apply-for-a-binding-tariff-information-decision-notice-600" target="_blank" class="govuk-link">
+                            @messages("confirmation.get.moreInformation")
+                        </a>
+                    </p>
+                }
             }
         </div>
     }
@@ -104,25 +118,27 @@
     </div>
 
     <div>
-        <h2 class="heading-large">@messages("view.application.header")</h2>
+        <h2 class="govuk-heading-l">@messages("view.application.header")</h2>
 
         <div class="print-save-application hidden-print">
         @if(!compositeMode) {
-            <span id="">
+            <span class="govuk-body">
                 <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
                 <a class="print-this__link" href="javascript:window.print()" data-journey-click="print - click:Your application:Print your application">@messages("site.print_your_application")</a>
             </span>
         }
         </div>
         <div class="print-save-application hidden-print">
-            <a class="save-this__link" id="save-pdf" href="@controllers.routes.ApplicationController.applicationPdf(pdf.reference).url"
-            data-journey-click="save - click:Your application:Save your application">@messages("site.save_your_application")</a>
+            <span class="govuk-body">
+                <a class="save-this__link" id="save-pdf" href="@controllers.routes.ApplicationController.applicationPdf(pdf.reference).url"
+                data-journey-click="save - click:Your application:Save your application">@messages("site.save_your_application")</a>
+            </span>
         </div>
     </div>
 
 </div>
 
-        <div id = "pdfView">
+        <div id="pdfView">
             @components.view_application(appConfig, pdf, getCountryName, compositeMode)
         </div>
 

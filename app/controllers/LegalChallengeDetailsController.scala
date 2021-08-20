@@ -33,20 +33,21 @@ import views.html.legalChallengeDetails
 import scala.concurrent.ExecutionContext
 
 class LegalChallengeDetailsController @Inject()(
-  appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
-  formProvider: LegalChallengeDetailsFormProvider,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
-  lazy val form = formProvider()
-  val questionPage = LegalChallengeDetailsPage
+                                                 appConfig: FrontendAppConfig,
+                                                 val dataCacheConnector: DataCacheConnector,
+                                                 val navigator: Navigator,
+                                                 val identify: IdentifierAction,
+                                                 val getData: DataRetrievalAction,
+                                                 val requireData: DataRequiredAction,
+                                                 formProvider: LegalChallengeDetailsFormProvider,
+                                                 cc: MessagesControllerComponents,
+                                                 legalChallengeDetailsView: legalChallengeDetails
+                                               )(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
+  lazy val form: Form[String] = formProvider()
+  val questionPage: LegalChallengeDetailsPage.type = LegalChallengeDetailsPage
 
   def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
-    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    legalChallengeDetails(appConfig, preparedForm, mode, goodsName)
+    val goodsName: String = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+    legalChallengeDetailsView(appConfig, preparedForm, mode, goodsName)
   }
 }

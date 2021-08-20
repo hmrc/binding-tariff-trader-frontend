@@ -16,15 +16,20 @@
 
 @import config.FrontendAppConfig
 
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper
+)
+
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("session_expired.title"),
-    appConfig = appConfig,
-    bodyClasses = None,
-    hasTimeOut = false) {
+@govukLayoutWrapper(
+    pageTitle = messages("session_expired.title"),
+    timeoutActive = false,
+    signOut = None,
+    showBackLink = false
+) {
 
     @components.heading(messages("session_expired.heading"))
 
-    <p>@messages("session_expired.guidance")</p>
+    <p class="govuk-body">@messages("session_expired.guidance")</p>
 }

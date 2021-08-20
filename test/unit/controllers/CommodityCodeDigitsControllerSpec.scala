@@ -37,6 +37,8 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase with AnswerCa
   val formProvider = new CommodityCodeDigitsFormProvider()
   val goodsName = "some goods"
 
+  val commodityCodeDigitsView: commodityCodeDigits = app.injector.instanceOf(classOf[commodityCodeDigits])
+
   def controller(dataRetrievalAction: DataRetrievalAction) =
     new CommodityCodeDigitsController(
       frontendAppConfig,
@@ -46,11 +48,12 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase with AnswerCa
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      commodityCodeDigitsView
     )
 
   def viewAsString(form: Form[_], request: Request[_]): String =
-    commodityCodeDigits(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
+    commodityCodeDigitsView(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
   val testAnswer = "1234"
   val validFormData = Map("value" -> testAnswer)

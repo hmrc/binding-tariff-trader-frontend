@@ -17,24 +17,27 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-    <p>@messages("commodityCodeDigits.bodyText")</p>
+    <p class="govuk-body">@messages("commodityCodeDigits.bodyText")</p>
 }
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("commodityCodeDigits.title", goodsName)}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("commodityCodeDigits.title", goodsName)}"
+) {
 
-    @helpers.form(action = CommodityCodeDigitsController.onSubmit(mode)) {
+    @formWithCSRF(action = CommodityCodeDigitsController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
-
 
         @components.input_number(
             field = form("value"),

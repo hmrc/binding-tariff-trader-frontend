@@ -32,6 +32,8 @@ class SimilarItemCommodityCodeControllerSpec extends ControllerSpecBase with Yes
 
   private val formProvider = new SimilarItemCommodityCodeFormProvider()
 
+  val similarItemCommodityCodeView: similarItemCommodityCode = app.injector.instanceOf(classOf[similarItemCommodityCode])
+
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new SimilarItemCommodityCodeController(
       frontendAppConfig,
@@ -41,13 +43,14 @@ class SimilarItemCommodityCodeControllerSpec extends ControllerSpecBase with Yes
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      similarItemCommodityCodeView
     )
 
   private def onwardRoute: Call = Call("GET", "/foo")
 
   private def viewAsString(form: Form[_], request: Request[_]): String =
-    similarItemCommodityCode(frontendAppConfig, form, NormalMode)(request, messages).toString
+    similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   "SimilarItemCommodityCodeController" must {
 

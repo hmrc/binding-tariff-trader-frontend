@@ -18,13 +18,16 @@
 @import viewmodels.AnswerSection
 @import controllers.routes._
 
-@import uk.gov.hmrc.play.views.html.helpers
+@this(
+        govukLayoutWrapper: GovukLayoutWrapper,
+        formWithCSRF: FormWithCSRF
+)
+
 @(appConfig: FrontendAppConfig, answerSections: Seq[AnswerSection], sendingSamples: Boolean)(implicit request: Request[_], messages: Messages)
 
-    @main_template(
-        title = messages("checkYourAnswers.title"),
-        appConfig = appConfig,
-        bodyClasses = None) {
+    @govukLayoutWrapper(
+        pageTitle = messages("checkYourAnswers.title")
+    ) {
 
         @components.heading(messages("checkYourAnswers.heading"))
 
@@ -32,21 +35,20 @@
             @components.answer_section(section)
         }
 
-        @helpers.form(action = CheckYourAnswersController.onSubmit()) {
+        @formWithCSRF(action = CheckYourAnswersController.onSubmit()) {
 
+            <h2 class="govuk-heading-l">@messages("checkYourAnswers.declaration.subheading")</h2>
 
-            <h2 class="heading-large">@messages("checkYourAnswers.declaration.subheading")</h2>
+            <p class="govuk-body">@messages("checkYourAnswers.declaration.paragraph0")</p>
+            <p class="govuk-body">@messages("checkYourAnswers.declaration.paragraph1")</p>
 
-            <p>@messages("checkYourAnswers.declaration.paragraph0")</p>
-            <p>@messages("checkYourAnswers.declaration.paragraph1")</p>
-
-            <ul class="list list-bullet">
+            <ul class="govuk-list govuk-list--bullet">
                 <li>@messages("checkYourAnswers.declaration.listItem1")</li>
                 <li>@messages("checkYourAnswers.declaration.listItem2")</li>
             </ul>
 
             @if(sendingSamples) {
-                <p>@messages("checkYourAnswers.declaration.paragraph2")</p>
+                <p class="govuk-body">@messages("checkYourAnswers.declaration.paragraph2")</p>
             }
 
             @components.submit_button(Some(messages("checkYourAnswers.declaration.submit")))

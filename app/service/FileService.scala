@@ -24,7 +24,7 @@ import models._
 import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, FilestoreResponse}
 import play.api.Logging
-import play.api.i18n.Lang
+import play.api.i18n.{Lang, MessagesApi}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.{MessagesControllerComponents, MultipartFormData}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -41,8 +41,8 @@ class FileService @Inject()(
                              appConfig: FrontendAppConfig
                            ) extends Logging {
 
-  private val messagesApi = cc.messagesApi
-  private implicit val lang = Lang.defaultLang
+  private val messagesApi: MessagesApi = cc.messagesApi
+  private implicit val lang: Lang = Lang.defaultLang
 
   def initiate(request: FileStoreInitiateRequest)(implicit hc: HeaderCarrier): Future[FileStoreInitiateResponse] = {
     connector.initiate(request)
@@ -118,5 +118,4 @@ class FileService @Inject()(
       case _ => true
     }
   }
-
 }

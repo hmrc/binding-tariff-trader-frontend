@@ -20,27 +20,29 @@ import controllers.routes
 import forms.ProvideGoodsDescriptionFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
+import play.twirl.api.Html
 import views.behaviours.StringViewBehaviours
 import views.html.provideGoodsDescription
 
 class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "provideGoodsDescription"
+  val messageKeyPrefix: String = "provideGoodsDescription"
 
-  val goodsName = "goods Name"
-  val form = new ProvideGoodsDescriptionFormProvider()()
+  val goodsName: String = "goods Name"
+  val form: Form[String] = new ProvideGoodsDescriptionFormProvider()()
 
-  val formElementId = "goodsDescription"
+  val formElementId: String = "goodsDescription"
 
-  val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  def provideGoodsDescriptionView: provideGoodsDescription = injector.instanceOf[provideGoodsDescription]
+  val provideGoodsDescriptionView: provideGoodsDescription = app.injector.instanceOf[provideGoodsDescription]
 
-
-  def createView = () =>
+  def createView: () => Html = () =>
     provideGoodsDescriptionView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) =>
+  def createViewUsingForm: Form[String] => Html = (form: Form[String]) =>
     provideGoodsDescriptionView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   "ProvideGoodsDescription view" must {

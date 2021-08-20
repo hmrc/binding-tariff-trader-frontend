@@ -205,7 +205,7 @@
                     color: #005EA5;
                     margin-top: 1em;
                 }
-                .answer--container {
+                .govuk-summary-list {
                     display: table;
                     margin-top: 1em;
                     page-break-inside: avoid !important;
@@ -415,11 +415,11 @@
                                     <p class="govuk-body">@messages("view.application.paragraph.whatNext")</p>
                                     @if(pdf.sendingSample) {
                                         @if(pdf.hazardousSample){
-                                            <div class="panel panel-border-wide">@messages("view.application.paragraph.do.not.send.sample")</div>
+                                            <div class="govuk-inset-text">@messages("view.application.paragraph.do.not.send.sample")</div>
                                         }else{
                                             <div class="notice">
                                                 <i class="icon icon-important_">
-                                                    <span class="visually-hidden">Warning</span>
+                                                    <span class="visually-hidden">@messages("site.warning")</span>
                                                     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAQAAAC00HvSAAABZklEQVR4Aa3WsWoTUBTG8V9v4yQElywRAlYzJVCQdMrgmKVDce3m3mfI0ofoY7QQfAOngmQIOGgzOGRpQYhLUynHZjb3JtL7/+8f53DhfmfPZlqGjvR1tTUtLXw3c+2LWzsycG4qNjp1bmArHWM3ouiNsY4CIxOxkxMjGU7NxM7OnG4OmYv/cv5v0KgwSWmiEdAAHWd6NvLeHsJXG+g5881PgLHI+RBrHkLOMcCg9MS/Y82y9PwDEk4cyHIPVrIcOCFpOVZgtS2GY61k6PCZMYeGyRFsW+pekaOkzzOnoZ90K8R0k3aFpdpJs8I0zWRZIWaZLCosteBKlNyPF0/uh5JXyUyRR3+efFRk1nCtyBufrFy4U+CalqnI+Tp+xZof8TLknGoltyayfPQKvPVBlonbhEtzGe4A8kvNXW79/RrxOdZc7PD70cn301704l2przoVm6FCT1VozQodXuuiqH/fVLq2/gLNMwwtCpJpLgAAAABJRU5ErkJggg==" />
                                                 </i>
                                                 <strong class="bold-small">
@@ -444,7 +444,7 @@
                                                 <h2>@messages("application.footer.sendingSamples.heading")</h2>
                                             </div>
                                             <div>
-                                                <div>@messages("view.application.paragraph.do.not.send.sample")</div>
+                                                <p class="govk-body">@messages("view.application.paragraph.do.not.send.sample")</p>
                                             </div>
                                         </div>
                                     </div>
@@ -459,7 +459,7 @@
                                                 <h2>@messages("application.footer.sendingSamples.heading")</h2>
                                             </div>
                                             @if(pdf.hazardousSample) {
-                                                <div>@messages("view.application.paragraph.do.not.send.sample")</div>
+                                                <p class="govuk-body">@messages("view.application.paragraph.do.not.send.sample")</p>
                                             } else {
                                                 <div class="date-of-result decision-service-version">
                                                     <div>@messages("view.application.sending.sample.paragraph1")</div>

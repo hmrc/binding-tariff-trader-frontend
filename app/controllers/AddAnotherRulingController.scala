@@ -33,23 +33,24 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class AddAnotherRulingController @Inject() (
-  appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
-  formProvider: AddAnotherRulingFormProvider,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext)
-    extends AnswerCachingController[Boolean](cc) {
+                                             appConfig: FrontendAppConfig,
+                                             val dataCacheConnector: DataCacheConnector,
+                                             val navigator: Navigator,
+                                             val identify: IdentifierAction,
+                                             val getData: DataRetrievalAction,
+                                             val requireData: DataRequiredAction,
+                                             formProvider: AddAnotherRulingFormProvider,
+                                             cc: MessagesControllerComponents,
+                                             addAnotherRulingView: addAnotherRuling
+                                           )(implicit ec: ExecutionContext)
+  extends AnswerCachingController[Boolean](cc) {
 
   lazy val form: Form[Boolean]            = formProvider()
   val questionPage: QuestionPage[Boolean] = AddAnotherRulingPage
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val rulings = request.userAnswers.get(CommodityCodeRulingReferencePage).getOrElse(List.empty)
-    addAnotherRuling(appConfig, form.copy(errors = preparedForm.errors), mode, rulings)
+    addAnotherRulingView(appConfig, form.copy(errors = preparedForm.errors), mode, rulings)
   }
 
   def removeRuling(index: Int, userAnswers: UserAnswers): UserAnswers = {
@@ -58,10 +59,11 @@ class AddAnotherRulingController @Inject() (
 
     val updatedAnswers = userAnswers.set(CommodityCodeRulingReferencePage, remainingRulings)
 
-    if (remainingRulings.isEmpty)
+    if (remainingRulings.isEmpty) {
       updatedAnswers.remove(SimilarItemCommodityCodePage)
-    else
+    } else {
       updatedAnswers
+    }
   }
 
   def onRemove(index: Int, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -69,10 +71,11 @@ class AddAnotherRulingController @Inject() (
       val updatedAnswers = removeRuling(index, request.userAnswers)
 
       val onwardRoute =
-        if (updatedAnswers.get(SimilarItemCommodityCodePage).isEmpty)
+        if (updatedAnswers.get(SimilarItemCommodityCodePage).isEmpty) {
           routes.SimilarItemCommodityCodeController.onPageLoad(mode)
-        else
+        } else {
           routes.AddAnotherRulingController.onPageLoad(mode)
+        }
 
       dataCacheConnector
         .save(updatedAnswers.cacheMap)

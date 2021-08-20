@@ -17,30 +17,34 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
+
+@this(
+    govukLayoutWrapper: GovukLayoutWrapper,
+    formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-<div class="form-group">
-    <p>@messages("addSupportingDocuments.indications")</p>
-    <ul class="list list-bullet">
-        <li>@messages("addSupportingDocuments.indications.bullet1")</li>
-        <li>@messages("addSupportingDocuments.indications.bullet2")</li>
-        <li>@messages("addSupportingDocuments.indications.bullet3")</li>
-        <li>@messages("addSupportingDocuments.indications.bullet4")</li>
-        <li>@messages("addSupportingDocuments.indications.bullet5")</li>
-    </ul>
-</div>
+    <div class="govuk-form-group">
+        <p class="govuk-body">@messages("addSupportingDocuments.indications")</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@messages("addSupportingDocuments.indications.bullet1")</li>
+            <li>@messages("addSupportingDocuments.indications.bullet2")</li>
+            <li>@messages("addSupportingDocuments.indications.bullet3")</li>
+            <li>@messages("addSupportingDocuments.indications.bullet4")</li>
+            <li>@messages("addSupportingDocuments.indications.bullet5")</li>
+        </ul>
+    </div>
 }
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("addSupportingDocuments.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
 
-    @helpers.form(action = AddSupportingDocumentsController.onSubmit(mode)) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("addSupportingDocuments.title")}",
+) {
 
+    @formWithCSRF(action = AddSupportingDocumentsController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 
@@ -48,8 +52,9 @@
             field = form("value"),
             label = Some(messages("addSupportingDocuments.heading")),
             captionMsg = Some(messages("addSupportingDocuments.caption")),
-            labelClass = Some("visually-hidden"),
-            contentHtml = Some(contents)
+            labelClass = Some("govuk-visually-hidden"),
+            contentHtml = Some(contents),
+            labelIsHeading = true
         )
 
         @components.submit_button(Some(messages("site.continue")))

@@ -17,32 +17,34 @@
 @import config.FrontendAppConfig
 @import controllers.routes._
 @import models.Mode
-@import uk.gov.hmrc.play.views.html._
+
 @import views.ViewUtils._
 
-@this()
+@this(
+    govukLayoutWrapper: GovukLayoutWrapper,
+    formWithCSRF: FormWithCSRF
+)
 
 @(appConfig: FrontendAppConfig, provideConfidentialInformationForm: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @contents = {
-    <p>@messages("provideConfidentialInformation.description")</p>
+    <p class="govuk-body">@messages("provideConfidentialInformation.description")</p>
 
     @components.inset_text(Html(messages("provideConfidentialInformation.inset")))
 
-    <p>@messages("provideConfidentialInformation.thismayinclude")</p>
+    <p class="govuk-body">@messages("provideConfidentialInformation.thismayinclude")</p>
 
-    <ul class="list list-bullet">
+    <ul class="govuk-list govuk-list--bullet">
         <li>@messages("provideConfidentialInformation.modelnumbers")</li>
         <li>@messages("provideConfidentialInformation.patentinfo")</li>
     </ul>
 }
 
-@main_template(
-    title = s"${errorPrefix(provideConfidentialInformationForm)} ${messages("provideConfidentialInformation.title", goodsName)}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(provideConfidentialInformationForm)} ${messages("provideConfidentialInformation.title", goodsName)}",
+) {
 
-    @helpers.form(action = ProvideConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
+    @formWithCSRF(action = ProvideConfidentialInformationController.onSubmit(mode), 'autoComplete -> "off") {
 
 
         @components.error_summary(provideConfidentialInformationForm.errors)

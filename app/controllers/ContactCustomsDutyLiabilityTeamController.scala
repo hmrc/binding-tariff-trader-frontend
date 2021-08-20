@@ -28,10 +28,11 @@ import views.html.contactCustomsDutyLiabilityTeam
 class ContactCustomsDutyLiabilityTeamController @Inject()(
                                                            appConfig: FrontendAppConfig,
                                                            identify: IdentifierAction,
-                                                           cc: MessagesControllerComponents
+                                                           cc: MessagesControllerComponents,
+                                                           contactCustomsDutyLiabilityTeamView: contactCustomsDutyLiabilityTeam
                                                          ) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = identify { implicit request =>
-    Ok(contactCustomsDutyLiabilityTeam(appConfig, mode))
+    Ok(contactCustomsDutyLiabilityTeamView(appConfig, mode))
   }
 }

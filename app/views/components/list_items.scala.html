@@ -16,8 +16,8 @@
 
 @(items: String*)(implicit messages: Messages)
 
-<ul class="list list-bullet">
+<ul class="govuk-list govuk-list--bullet">
     @items.map{ item =>
-    <li class="acceList_item">@item</li>
+     <li class="acceList_item">@item</li>
     }
 </ul>

@@ -22,6 +22,8 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.beforeYouStart
 
@@ -30,7 +32,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
-  val mockDataCacheConnector = mock[DataCacheConnector]
+  val mockDataCacheConnector: DataCacheConnector = mock[DataCacheConnector]
+
+  val beforeYouStartView: beforeYouStart = app.injector.instanceOf(classOf[beforeYouStart])
 
   private def controller(identifier: IdentifierAction) =
     new BeforeYouStartController(
@@ -38,12 +42,13 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
       identifier,
       new FakeDataRetrievalAction(None),
       mockDataCacheConnector,
-      cc
+      cc,
+      beforeYouStartView
     )
 
-  val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  private def viewAsString(eori: Option[String]) = beforeYouStart(frontendAppConfig)(fakeGETRequest, messages).toString
+  private def viewAsString(eori: Option[String]) = beforeYouStartView(frontendAppConfig)(fakeGETRequest, messages).toString
 
   override protected def beforeEach(): Unit = {
     reset(mockDataCacheConnector)

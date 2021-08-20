@@ -21,18 +21,23 @@
 @import views.html.helper.{form, CSRF}
 @import views.ViewUtils._
 
+@this(govukLayoutWrapper: GovukLayoutWrapper)
+
 @(appConfig: FrontendAppConfig, initiateResponse: FileStoreInitiateResponse, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("uploadSupportingMaterialMultiple.title")}",
-    appConfig = appConfig,
-    bodyClasses = None) {
+@additionalJS = @{
+        Html(s"""<script type="text/javascript" src="${routes.Assets.versioned("javascripts/file-input-handler.js")}"></script>""")
+}
+
+@govukLayoutWrapper(
+    pageTitle = s"${errorPrefix(form)} ${messages("uploadSupportingMaterialMultiple.title")}",
+    additionalJS = Some(additionalJS)
+) {
 
     @helper.form(
         action = Call("POST", initiateResponse.uploadRequest.href),
         'enctype -> "multipart/form-data",
         'id -> "upload-files-form") {
-
 
         @components.error_summary(form.errors)
 
@@ -41,8 +46,8 @@
             captionMsg = Some(messages("uploadSupportingMaterialMultiple.caption"))
         )
 
-        <p>@messages("uploadSupportingMaterialMultiple.upload.title")</p>
-        <ul class="bullets">
+        <p class="govuk-body">@messages("uploadSupportingMaterialMultiple.upload.title")</p>
+        <ul class="govuk-list govuk-list--bullet">
             <li>@messages("uploadSupportingMaterialMultiple.upload.restrictionFiles")</li>
             <li>@messages("uploadSupportingMaterialMultiple.upload.exampleFiles")</li>
             <li>@messages("uploadSupportingMaterialMultiple.upload.restrictionSize")</li>

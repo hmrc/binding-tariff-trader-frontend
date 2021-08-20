@@ -25,18 +25,22 @@ import views.html.commodityCodeBestMatch
 
 class CommodityCodeBestMatchViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "commodityCodeBestMatch"
+  val messageKeyPrefix: String = "commodityCodeBestMatch"
 
-  val form = new CommodityCodeBestMatchFormProvider()()
+  val form: Form[Boolean] = new CommodityCodeBestMatchFormProvider()()
 
-  val goodsName = "some-goods-name"
+  val goodsName: String = "some-goods-name"
+
+  val commodityCodeBestMatchView: commodityCodeBestMatch = app.injector.instanceOf[commodityCodeBestMatch]
 
   override protected def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)
 
-  def createView = () => commodityCodeBestMatch(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createView =
+    () => commodityCodeBestMatchView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => commodityCodeBestMatch(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createViewUsingForm =
+    (form: Form[_]) => commodityCodeBestMatchView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "CommodityCodeBestMatch view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()

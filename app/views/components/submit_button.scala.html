@@ -16,12 +16,10 @@
 
 @(label: Option[String] = None)(implicit messages: Messages)
 
-<div class="section">
-    <button id="submit" class="button">
-        @if(label.nonEmpty) {
-            @label
-        } else {
-            @messages("site.continue")
-        }
-    </button>
-</div>
+<button id="submit" class="govuk-button">
+    @if(label.nonEmpty) {
+        @label
+    } else {
+        @messages("site.continue")
+    }
+</button>

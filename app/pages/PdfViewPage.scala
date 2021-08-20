@@ -27,5 +27,4 @@ case object PdfViewPage extends DataPage[PdfViewModel] {
 
   override def route(mode: Mode): Call =
     routes.ConfirmationController.onPageLoad()
-
 }

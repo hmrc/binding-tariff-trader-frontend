@@ -25,7 +25,8 @@ import navigation.FakeNavigator
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
+import views.html.provideGoodsDescription
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -33,7 +34,7 @@ class ProvideGoodsDescriptionControllerSpec extends ControllerSpecBase with Answ
 
   def onwardRoute = Call("GET", "/foo")
   val formProvider = new ProvideGoodsDescriptionFormProvider()
-  val provideGoodsDescriptionView = injector.instanceOf[views.html.provideGoodsDescription]
+  val provideGoodsDescriptionView: provideGoodsDescription = injector.instanceOf[views.html.provideGoodsDescription]
 
   def controller(dataRetrievalAction: DataRetrievalAction) =
     new ProvideGoodsDescriptionController(

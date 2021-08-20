@@ -40,13 +40,14 @@ class CommodityCodeDigitsController @Inject()(
   val getData: DataRetrievalAction,
   val requireData: DataRequiredAction,
   formProvider: CommodityCodeDigitsFormProvider,
-  cc: MessagesControllerComponents
+  cc: MessagesControllerComponents,
+  commodityCodeDigitsView: commodityCodeDigits
 )(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
-  lazy val form = formProvider()
-  val questionPage = CommodityCodeDigitsPage
+  lazy val form: Form[String] = formProvider()
+  val questionPage: CommodityCodeDigitsPage.type = CommodityCodeDigitsPage
 
   def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    commodityCodeDigits(appConfig, preparedForm, mode, goodsName)
+    commodityCodeDigitsView(appConfig, preparedForm, mode, goodsName)
   }
 }

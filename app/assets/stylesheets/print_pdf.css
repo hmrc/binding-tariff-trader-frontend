@@ -1,9 +1,10 @@
+
 body {
     width: auto;
     height: auto;
     margin: 0;
 }
-.heading-xlarge {
+.govuk-heading-xl {
     display: none;
 }
 .print-document {
@@ -29,6 +30,11 @@ body {
    margin-top: .26316em;
    margin-bottom: 1.05263em;
 }
+
+.stack {
+    margin-inline-start: 0;
+}
+
 .print-document table td {
     border: none;
     padding: 0;
@@ -152,22 +158,6 @@ body {
 .bold {
     font-weight: 700;
 }
-.column-full {
-    float: left;
-    width: 100%;
-}
-.column-one-half {
-    width: 50%;
-    float: left;
-}
-.column-one-third {
-    width: 36%;
-    float: left;
-}
-.column-two-thirds {
-    width: 64%;
-    float: left;
-}
 .print-pages {
     -webkit-transform-origin:  top left;
     -moz-transform-origin:  top left;
@@ -179,87 +169,87 @@ body {
     color: #005EA5;
     margin-top: 1em;
 }
-.answer--container {
+.govuk-summary-list {
     display: table;
     margin-top: 1em;
     page-break-inside: avoid !important;
     width: 100%;
 }
-.answer--question {
+.govuk-summary-list__key {
     float: left;
     width: 50%;
 }
-.answer--question p {
+.govuk-summary-list__key p {
     margin-top: 0.5em;
 }
-.answer--question p strong {
+.govuk-summary-list__key p strong {
     font-weight: 700;
 }
-.answer--answer {
+.govuk-summary-list__value {
     float: left;
     width: 50%;
 }
-.answer--answer p {
+.govuk-summary-list__value p {
     margin-top: 0.5em;
-    margin-left: 1em;
+    padding-left: 1em;
 }
 .print-header, .header-space,
 .print-footer, .footer-space {
     height: 25mm;
 }
-.govuk-check-your-answers.cya-questions-short, .govuk-check-your-answers.cya-questions-long {
+.govuk-summary-list.govuk-summary-list__key {
     width: 100%;
 }
-.govuk-check-your-answers {
+.govuk-summary-list {
     display: table;
 }
-.govuk-check-your-answers > * {
+.govuk-summary-list > * {
     display: table-row;
     border-bottom-width: 0;
 }
-.govuk-check-your-answers > * {
+.govuk-summary-list > * {
     position: relative;
     border-bottom: 1px solid #bfc1c3;
 }
-.govuk-check-your-answers.cya-questions-short .cya-question {
+.govuk-summary-list.govuk-summary-list__key .govuk-summary-list__key {
     width: 30%;
 }
-.govuk-check-your-answers > *:first-child .cya-question {
+.govuk-summary-list > *:first-child .govuk-summary-list__key {
     margin-top: 0;
 }
-.govuk-check-your-answers .cya-question {
+.govuk-summary-list .govuk-summary-list__key {
     font-weight: bold;
     margin: 0.63158em 4em 0.21053em 0;
 }
-.govuk-check-your-answers .cya-answer {
+.govuk-summary-list .govuk-summary-list__value {
     padding-bottom: 0.47368em;
 }
-.govuk-check-your-answers > *:first-child > * {
+.govuk-summary-list > *:first-child > * {
     padding-top: 0;
 }
-.cya-answer {
+.govuk-summary-list__value {
   word-wrap: break-word;
   word-break: break-word;
   overflow-wrap: break-word;
 }
-.cya-question {
+.govuk-summary-list__key {
     font-weight: bold;
     margin: .63158em 4em .21053em 0;
     width: 50%;
   }
-.cya-answer {
+.govuk-summary-list__value {
     padding-bottom: .47368em;
     word-break: break-word;
     overflow-wrap: break-word;
     width: 50%;
 }
-.govuk-check-your-answers>*>* {
+.govuk-summary-list>*>* {
     display: table-cell;
     border-bottom: 1px solid #bfc1c3;
     padding: .63158em 1.05263em .47368em 0;
     margin: 0;
 }
-  > *:first-child .cya-question {
+  > *:first-child .govuk-summary-list__key {
     margin-top: 0;
   }
   .notice .icon {
@@ -276,9 +266,6 @@ body {
 .icon-important_ {
     width: 35px;
     height: 35px;
-}
-.visually-hidden {
-    display:none;
 }
 .panel {
     -webkit-box-sizing: border-box;

@@ -84,10 +84,11 @@ class MigrationWorker @Inject()(
     .withAttributes(ActorAttributes.supervisionStrategy(decider))
 
   val runMigration: Future[Any] =
-    if (appConfig.migrationWorkerEnabled)
+    if (appConfig.migrationWorkerEnabled) {
       migrationSource.runWith(Sink.ignore)
-    else
+    } else {
       Future.successful(())
+    }
 
   private def noFileMetadata(cse: Case, att: Attachment) =
     new NoSuchElementException(s"Unable to find file metadata for attachment ${att.id} of case ${cse.reference}")
@@ -102,7 +103,7 @@ class MigrationWorker @Inject()(
       metaById = meta.map(m => (m.id, m)).toMap
 
       fileViews = cse.attachments.map { att =>
-        val fileMeta = metaById.get(att.id).getOrElse(throw noFileMetadata(cse, att))
+        val fileMeta = metaById.getOrElse(att.id, throw noFileMetadata(cse, att))
         FileView(att.id, fileMeta.fileName, !att.public)
       }
 
@@ -116,7 +117,7 @@ class MigrationWorker @Inject()(
 
       creationTime = ZonedDateTime.ofInstant(clock.instant(), clock.getZone)
 
-      pdfAttachment = Attachment(pdfStored.id, false, creationTime)
+      pdfAttachment = Attachment(pdfStored.id, public = false, timestamp = creationTime)
 
       caseUpdate = CaseUpdate(
         Some(

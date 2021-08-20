@@ -20,6 +20,8 @@ import controllers.routes
 import forms.AddSupportingDocumentsFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
 import views.behaviours.YesNoViewBehaviours
 import views.html.isSampleHazardous
 import views.html.addSupportingDocuments
@@ -30,15 +32,17 @@ class AddSupportingDocumentsViewSpec extends YesNoViewBehaviours {
 
   val form = new AddSupportingDocumentsFormProvider()()
 
-  val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  val goodsName = "Pork futures"
+  val goodsName: String = "Pork futures"
+
+  val addSupportingDocumentsView: addSupportingDocuments = app.injector.instanceOf[addSupportingDocuments]
 
   def createView = () =>
-    addSupportingDocuments(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+    addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   def createViewUsingForm = (form: Form[_]) =>
-    addSupportingDocuments(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+    addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   "AddSupportingDocuments view" must {
 

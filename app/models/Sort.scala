@@ -39,8 +39,8 @@ object SortDirection extends Enumeration {
 
   type SortDirection = Value
 
-  val DESCENDING = Value("desc")
-  val ASCENDING = Value("asc")
+  val DESCENDING: models.SortDirection.Value = Value("desc")
+  val ASCENDING: models.SortDirection.Value = Value("asc")
 
   def reverse(order: SortDirection): SortDirection =
     order match {
@@ -49,7 +49,8 @@ object SortDirection extends Enumeration {
       case o          => throw new IllegalArgumentException(s"Unrecognised SortDirection: $o")
     }
 
-  implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String]) = new QueryStringBindable[SortDirection] {
+  implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String])
+  : QueryStringBindable[SortDirection] = new QueryStringBindable[SortDirection] {
     override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortDirection]] = {
       stringBinder.bind("order", params).map {
         case Right(sortDirection) =>
@@ -70,11 +71,11 @@ object SortDirection extends Enumeration {
 object SortField extends Enumeration {
 
   type SortField = Value
-  val REFERENCE = Value("reference")
-  val CREATED_DATE = Value("created-date")
-  val DECISION_START_DATE = Value("decision-start-date")
-  val STATUS = Value("status")
-  val GOODS_NAME = Value("application.goodName")
+  val REFERENCE: models.SortField.Value = Value("reference")
+  val CREATED_DATE: models.SortField.Value = Value("created-date")
+  val DECISION_START_DATE: models.SortField.Value = Value("decision-start-date")
+  val STATUS: models.SortField.Value = Value("status")
+  val GOODS_NAME: models.SortField.Value = Value("application.goodName")
 
   val defaultDirections = Map(
     REFERENCE -> ASCENDING,
@@ -84,7 +85,8 @@ object SortField extends Enumeration {
     GOODS_NAME -> ASCENDING
   )
 
-  implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String]) = new QueryStringBindable[SortField] {
+  implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String])
+  : QueryStringBindable[SortField] = new QueryStringBindable[SortField] {
     override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortField]] = {
       stringBinder.bind("sortBy", params).map {
         case Right(sortByField) =>

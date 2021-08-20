@@ -16,11 +16,12 @@
 
 package models
 
+import play.api.libs.json.Format
 import utils.EnumJson
 
 object ScanStatus extends Enumeration {
   type ScanStatus = Value
   val READY, FAILED = Value
 
-  implicit val format = EnumJson.format(ScanStatus)
+  implicit val format: Format[models.ScanStatus.Value] = EnumJson.format(ScanStatus)
 }

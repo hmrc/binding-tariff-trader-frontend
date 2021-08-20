@@ -42,8 +42,8 @@ class ProvideGoodsNameController @Inject()(
   val provide_goods_name_view: views.html.provideGoodsName,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
-  lazy val form = provideGoodsNameFormProvider()
-  val questionPage = ProvideGoodsNamePage
+  lazy val form: Form[String] = provideGoodsNameFormProvider()
+  val questionPage: ProvideGoodsNamePage.type = ProvideGoodsNamePage
 
   def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
     provide_goods_name_view(appConfig, preparedForm, mode)

@@ -30,11 +30,17 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class ListCachingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A]) extends AccumulatingCachingController[List[A], A](cc) with ListAnswerCaching[A]
+abstract class ListCachingController[A](cc: MessagesControllerComponents)
+                                       (implicit ec: ExecutionContext, format: Format[A])
+  extends AccumulatingCachingController[List[A], A](cc) with ListAnswerCaching[A]
 
-abstract class MapCachingController[V](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[V]) extends AccumulatingCachingController[Map[String, V], (String, V)](cc) with MapAnswerCaching[String, V]
+abstract class MapCachingController[V](cc: MessagesControllerComponents)
+                                      (implicit ec: ExecutionContext, format: Format[V])
+  extends AccumulatingCachingController[Map[String, V], (String, V)](cc) with MapAnswerCaching[String, V]
 
-abstract class AccumulatingCachingController[F <: TraversableOnce[A], A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[F]) extends FrontendController(cc) with I18nSupport with AccumulatingAnswerCaching[F, A] {
+abstract class AccumulatingCachingController[F <: TraversableOnce[A], A](cc: MessagesControllerComponents)
+                                                                        (implicit ec: ExecutionContext, format: Format[F])
+  extends FrontendController(cc) with I18nSupport with AccumulatingAnswerCaching[F, A] {
   def identify: IdentifierAction
   def getData: DataRetrievalAction
   def requireData: DataRequiredAction
@@ -56,13 +62,17 @@ abstract class AccumulatingCachingController[F <: TraversableOnce[A], A](cc: Mes
   }
 }
 
-abstract class YesNoCachingController(cc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) with YesNoCaching {
+abstract class YesNoCachingController(cc: MessagesControllerComponents)
+                                     (implicit ec: ExecutionContext)
+  extends AnswerCachingController[Boolean](cc) with YesNoCaching {
   def journey: Journey
   override def questionPage: QuestionPage[Boolean] = journey.questionPage
   override def detailPages: List[QuestionPage[_]] = journey.detailPages
 }
 
-abstract class AnswerCachingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A]) extends FrontendController(cc) with I18nSupport with AnswerCaching[A] {
+abstract class AnswerCachingController[A](cc: MessagesControllerComponents)
+                                         (implicit ec: ExecutionContext, format: Format[A])
+  extends FrontendController(cc) with I18nSupport with AnswerCaching[A] {
   def identify: IdentifierAction
   def getData: DataRetrievalAction
   def requireData: DataRequiredAction

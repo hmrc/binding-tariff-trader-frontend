@@ -24,20 +24,23 @@
         hint: Option[String] = None,
         yesAssoc: Option[String] = None,
         noAssoc: Option[String] = None,
-        captionMsg: Option[String] = None
+        captionMsg: Option[String] = None,
+        labelIsHeading: Boolean = false
 )(implicit messages: Messages)
 
 
-<div class="form-group @if(field.hasErrors){form-group-error}">
-    <fieldset id="@{field.id}" @if(field.hasErrors || hint.isDefined){ aria-describedby="@if(hint.isDefined){hint-@{field.id}-input}@if(field.hasErrors && hint.isDefined){ }@if(field.hasErrors){error-message-@{field.id}-input}"}>
-        <legend>
+<div class="govuk-form-group @if(field.hasErrors){govuk-form-group--error}">
+    <fieldset class="govuk-fieldset" id="@{field.id}" @if(field.hasErrors || hint.isDefined){ aria-describedby="@if(hint.isDefined){hint-@{field.id}-input}@if(field.hasErrors && hint.isDefined){ }@if(field.hasErrors){error-message-@{field.id}-input}"}>
+        <legend class="govuk-fieldset__legend @if(labelIsHeading){govuk-fieldset__legend--xl}else{govuk-fieldset__legend--m}">
             @if(label.isDefined){
-            <div class="heading-xlarge ">
-                @captionMsg.map{caption => <span class="heading-secondary"><span class="visuallyhidden">This section is </span>@caption</span>}
-                <h1 class="mt-0 heading-xlarge-label">
-                   @label
+                <h1 class="govuk-fieldset__heading">
+                    @captionMsg.map{ caption =>
+                        <span class="@if(labelIsHeading){govuk-caption-xl}else{govuk-caption-m}">
+                            <span class="govuk-visually-hidden">@messages("site.sectionIs") </span>@caption
+                        </span>
+                    }
+                    @label
                 </h1>
-            </div>
             }
             @labelHtml.map {lb => @lb}
         </legend>
@@ -45,25 +48,27 @@
         @contentHtml.map {content => @content}
 
         @if(hint.isDefined){
-            <div class="form-hint mb-2" id="hint-@{field.id}-input">@hint</div>
+            <div class="govuk-form-hint" id="hint-@{field.id}-input">@hint</div>
         }
 
         @field.errors.map { error =>
-            <span class="error-message" id="error-message-@{field.id}-input"><span class="visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
+            <span class="govuk-error-message" id="error-message-@{field.id}-input"><span class="govuk-visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
         }
 
-        <div class="multiple-choice">
-            <input id="@{field.id}-yes" type="radio" name="@{field.id}" value="true" @if(field.value.contains("true")){checked="checked"} />
-            <label class="block-label selection-button-radio" for="@{field.id}-yes" data-target="@if(yesAssoc.nonEmpty){@yesAssoc}">
-                @messages("site.yes")
-            </label>
-        </div>
+        <div class="govuk-radios">
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="@{field.id}-yes" type="radio" name="@{field.id}" value="true" @if(field.value.contains("true")){checked="checked"}/>
+                <label class="govuk-label govuk-radios__label" for="@{field.id}-yes" data-target="@if(yesAssoc.nonEmpty){@yesAssoc}">
+                    @messages("site.yes")
+                </label>
+            </div>
 
-        <div class="multiple-choice">
-            <input id="@{field.id}-no" type="radio" name="@{field.id}" value="false" @if(field.value.contains("false")){checked="checked"} />
-            <label class="block-label selection-button-radio" for="@{field.id}-no" data-target="@if(noAssoc.nonEmpty){@noAssoc}">
-                @messages("site.no")
-            </label>
+            <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="@{field.id}-no" type="radio" name="@{field.id}" value="false" @if(field.value.contains("false")){checked="checked"}/>
+                <label class="govuk-label govuk-radios__label" for="@{field.id}-no" data-target="@if(noAssoc.nonEmpty){@noAssoc}">
+                    @messages("site.no")
+                </label>
+            </div>
         </div>
     </fieldset>
 </div>

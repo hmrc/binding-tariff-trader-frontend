@@ -19,12 +19,12 @@ package controllers
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.AddSupportingDocumentsFormProvider
-import navigation.Navigator
+import navigation.{Journey, LoopingJourney, Navigator}
+
 import javax.inject.Inject
 import play.api.mvc.MessagesControllerComponents
 
 import scala.concurrent.ExecutionContext
-import navigation.Journey
 import models.Mode
 import models.requests.DataRequest
 import play.api.data.Form
@@ -34,20 +34,21 @@ import config.FrontendAppConfig
 import pages.ProvideGoodsNamePage
 
 class AddSupportingDocumentsController @Inject() (
-  appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
-  val navigator: Navigator,
-  val identify: IdentifierAction,
-  val getData: DataRetrievalAction,
-  val requireData: DataRequiredAction,
-  formProvider: AddSupportingDocumentsFormProvider,
-  cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
-  lazy val form = formProvider()
-  val journey = Journey.supportingDocuments
+                                                   appConfig: FrontendAppConfig,
+                                                   val dataCacheConnector: DataCacheConnector,
+                                                   val navigator: Navigator,
+                                                   val identify: IdentifierAction,
+                                                   val getData: DataRetrievalAction,
+                                                   val requireData: DataRequiredAction,
+                                                   formProvider: AddSupportingDocumentsFormProvider,
+                                                   cc: MessagesControllerComponents,
+                                                   addSupportingDocumentsView: addSupportingDocuments
+                                                 )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+  lazy val form: Form[Boolean] = formProvider()
+  val journey: LoopingJourney = Journey.supportingDocuments
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    addSupportingDocuments(appConfig, preparedForm, goodsName, mode)
+    addSupportingDocumentsView(appConfig, preparedForm, goodsName, mode)
   }
 }

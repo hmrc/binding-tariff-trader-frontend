@@ -23,8 +23,10 @@ import forms.ProvideGoodsNameFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
 import play.api.data.Form
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{AnyContentAsEmpty, Call, Request}
 import play.api.libs.json.JsValue
+import play.api.test.FakeRequest
+import views.html.provideGoodsName
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -35,9 +37,9 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase with AnswerCachi
   val formProvider = new ProvideGoodsNameFormProvider()
   val form: Form[String] = formProvider()
 
-  val provideGoodsNameView = injector.instanceOf[views.html.provideGoodsName]
+  val provideGoodsNameView: provideGoodsName = injector.instanceOf[views.html.provideGoodsName]
 
-  val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
   def viewAsString(form: Form[_], request: Request[_]): String =
     provideGoodsNameView(frontendAppConfig, form, NormalMode)(request, messages).toString

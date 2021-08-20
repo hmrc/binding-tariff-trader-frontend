@@ -20,10 +20,11 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.PreviousBTIRulingFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
-import navigation.Navigator
+import navigation.{Journey, Navigator, YesNoJourney}
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
@@ -31,7 +32,6 @@ import views.html.previousBTIRuling
 
 import scala.concurrent.ExecutionContext
 import play.twirl.api.HtmlFormat
-import navigation.Journey
 
 class PreviousBTIRulingController @Inject()(
   appConfig: FrontendAppConfig,
@@ -41,13 +41,14 @@ class PreviousBTIRulingController @Inject()(
   val getData: DataRetrievalAction,
   val requireData: DataRequiredAction,
   formProvider: PreviousBTIRulingFormProvider,
-  cc: MessagesControllerComponents
+  cc: MessagesControllerComponents,
+  previousBTIRulingView: previousBTIRuling
 )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
-  lazy val form = formProvider()
-  val journey = Journey.previousBTI
+  lazy val form: Form[Boolean] = formProvider()
+  val journey: YesNoJourney = Journey.previousBTI
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
-    val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-    previousBTIRuling(appConfig, preparedForm, goodsName, mode)
+    val goodsName: String = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+    previousBTIRulingView(appConfig, preparedForm, goodsName, mode)
   }
 }

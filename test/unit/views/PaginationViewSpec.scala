@@ -24,14 +24,12 @@ import org.mockito.BDDMockito._
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
 import org.scalatest.BeforeAndAfterEach
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Call
 import play.twirl.api.Html
-import unit.utils.UnitSpec
 import views.ViewMatchers._
 import views.html.components.pagination
 
-class PaginationViewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
 
   private val goToPage: Int => Call = mock[Int => Call]
 
@@ -58,7 +56,7 @@ class PaginationViewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
         id = "ID",
         pager = Paged(Seq.empty[String], pageIndex = 1, pageSize = 1, resultCount = 0),
         onChange = goToPage
-      ))
+      )(messages))
 
       // Then
       doc should containElementWithID("ID-none")
@@ -71,7 +69,7 @@ class PaginationViewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
         id = "ID",
         pager = Paged(Seq("", ""), pageIndex = 1, pageSize = 2, resultCount = 2),
         onChange = goToPage
-      ))
+      )(messages))
 
       // Then
       doc should containElementWithID("ID-one")
@@ -99,7 +97,7 @@ class PaginationViewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
         id = "ID",
         pager = Paged(Seq(""), pageIndex = 1, pageSize = 2, resultCount = 1),
         onChange = goToPage
-      ))
+      )(messages))
 
       // Then
       doc should containElementWithID("ID-one")
@@ -127,7 +125,7 @@ class PaginationViewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
         id = "ID",
         pager = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 2),
         onChange = goToPage
-      ))
+      )(messages))
 
       // Then
       doc should containElementWithID("ID-some")
@@ -158,7 +156,7 @@ class PaginationViewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
         id = "ID",
         pager = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 3),
         onChange = goToPage
-      ))
+      )(messages))
 
       // Then
       doc should containElementWithID("ID-some")
@@ -190,7 +188,7 @@ class PaginationViewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
         id = "ID",
         pager = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 4),
         onChange = goToPage
-      ))
+      )(messages))
 
       // Then
       doc should containElementWithID("ID-some")
@@ -223,7 +221,7 @@ class PaginationViewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
         id = "ID",
         pager = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 5),
         onChange = goToPage
-      ))
+      )(messages))
 
       // Then
       doc should containElementWithID("ID-some")
@@ -257,7 +255,7 @@ class PaginationViewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
         id = "ID",
         pager = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 100),
         onChange = goToPage
-      ))
+      )(messages))
 
       // Then
       doc should containElementWithID("ID-some")
@@ -292,7 +290,7 @@ class PaginationViewSpec extends UnitSpec with MockitoSugar with BeforeAndAfterE
         id = "ID",
         pager = Paged(Seq(""), pageIndex = 2, pageSize = 1, resultCount = 2),
         onChange = goToPage
-      ))
+      )(messages))
 
       // Then
       doc should containElementWithID("ID-some")

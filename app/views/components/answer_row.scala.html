@@ -18,19 +18,19 @@
 
 @(row: AnswerRow)(implicit messages: Messages)
 
-<div>
-    <dt id="question.@row.label" class="cya-question">@messages(row.label)</dt>
-    <dd id="answer.@row.label" class="cya-answer">
-    @if(row.answerIsMessageKey) {
-        @messages(row.answer)
-    } else {
-        <div class="pre-wrap">@row.answer</div>
-    }
+<div class="govuk-summary-list__row">
+    <dt id="question.@row.label" class="govuk-summary-list__key">@messages(row.label)</dt>
+    <dd id="answer.@row.label" class="govuk-summary-list__value">
+        @if(row.answerIsMessageKey) {
+            @messages(row.answer)
+        } else {
+            @Html(row.answer.replaceAll("\\n", "<br>"))
+        }
     </dd>
-    <dd class="cya-change">
-        <a href='@row.changeUrl' id="change.button.@row.label">
+    <dd class="govuk-summary-list__actions">
+        <a href='@row.changeUrl' id="change.button.@row.label" class="govuk-link">
             <span aria-hidden="true">@messages("site.edit")</span>
-            <span class="visually-hidden">@messages("site.hidden-edit", messages(row.label))</span>
+            <span class="govuk-visually-hidden">@messages("site.hidden-edit", messages(row.label))</span>
         </a>
     </dd>
 </div>

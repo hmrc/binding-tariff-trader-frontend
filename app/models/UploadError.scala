@@ -19,10 +19,7 @@ package models
 sealed abstract class UploadError(
                                    val errorCode: String,
                                    val errorMessageKey: String
-                                 ) extends Product with Serializable {
-
-
-}
+                                 ) extends Product with Serializable
 
 case object FileTooSmall extends UploadError("EntityTooSmall", "uploadSupportingMaterialMultiple.error.fileTooSmall")
 

@@ -31,8 +31,13 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq.empty)
   )
 
-  private def createTraderView: () => Html = () => check_your_answers(frontendAppConfig, traderAnswers, sendingSamples = true)(fakeRequest, messages)
-  private def createTraderViewNoSamples: () => Html = () => check_your_answers(frontendAppConfig, traderAnswers, sendingSamples = false)(fakeRequest, messages)
+  val checkYourAnswersView: check_your_answers = app.injector.instanceOf[check_your_answers]
+
+  private def createTraderView: () => Html =
+    () => checkYourAnswersView(frontendAppConfig, traderAnswers, sendingSamples = true)(fakeRequest, messages)
+
+  private def createTraderViewNoSamples: () => Html =
+    () => checkYourAnswersView(frontendAppConfig, traderAnswers, sendingSamples = false)(fakeRequest, messages)
 
   "Check Your Answers view" must {
     behave like normalPage(createTraderView, messageKeyPrefix)()

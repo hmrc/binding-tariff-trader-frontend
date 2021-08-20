@@ -70,11 +70,11 @@ class RulingCertificateViewSpec extends ViewSpecBase {
     }
 
     "contain the ruling start data" in {
-      assertSectionContains(section, format(ruling.effectiveStartDate))
+      assertSectionContains(section, format(ruling.effectiveStartDate)(messages))
     }
 
     "contain the ruling end data" in {
-      assertSectionContains(section, format(ruling.effectiveEndDate))
+      assertSectionContains(section, format(ruling.effectiveEndDate)(messages))
     }
   }
 

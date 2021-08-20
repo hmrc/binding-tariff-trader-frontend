@@ -24,10 +24,12 @@ import views.html.account_dashboard_statuses
 
 class AccountDashboardStatusesViewSpec extends ViewBehaviours {
 
-  val emptyPaged = Paged.empty[Case]
-  val paged = Paged(Seq(oCase.btiCaseExample))
+  val emptyPaged: Paged[Case] = Paged.empty[Case]
+  val paged: Paged[Case] = Paged(Seq(oCase.btiCaseExample))
 
-  def applicationView(dashboard: Dashboard): () => HtmlFormat.Appendable = () => account_dashboard_statuses(frontendAppConfig, dashboard)(fakeRequest, messages)
+  def accountDashboardStatusesView: account_dashboard_statuses = app.injector.instanceOf[account_dashboard_statuses]
+
+  def applicationView(dashboard: Dashboard): () => HtmlFormat.Appendable = () => accountDashboardStatusesView(frontendAppConfig, dashboard)(fakeRequest, messages)
 
   "no previous applications view" must {
     behave like normalPage(applicationView(Dashboard(emptyPaged, Sort())), "index")()

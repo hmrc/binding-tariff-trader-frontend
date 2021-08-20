@@ -17,93 +17,100 @@
 @import config.FrontendAppConfig
 @import utils.Dates
 
+@this(
+    govukLayoutWrapper: GovukLayoutWrapper,
+
+)
+
 @(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
 
-    @main_template(
-        title = s"${messages("rulingInformation.title")}",
-        appConfig = appConfig,
-        bodyClasses = None)  {
+    @govukLayoutWrapper(
+        pageTitle = s"${messages("rulingInformation.title")}"
+)  {
 
         @components.heading(s"${messages("rulingInformation.heading")} ${c.reference}")
 
         @components.subheading(messages("rulingInformation.summary"))
 
-
-        <div class="grid-row">
-            <div class="grid-full-width">
-                <div class="column-one-third">@messages("rulingInformation.holder")</div>
-                <div id="rulingInformation.holder" class="column-two-thirds">@c.application.holder.businessName</div>
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @messages("rulingInformation.holder")
+                </dt>
+                <dd class="govuk-summary-list__value" id="rulingInformation.holder">
+                    @c.application.holder.businessName
+                </dd>
             </div>
-        </div>
-        </br>
-        <div class="grid-row">
-            <div class="grid-full-width">
-                <div class="column-one-third">@messages("rulingInformation.ruling")</div>
-                <div id="rulingInformation.ruling" class="column-two-thirds">@c.reference</div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @messages("rulingInformation.ruling")
+                </dt>
+                <dd class="govuk-summary-list__value" id="rulingInformation.ruling">
+                    @c.reference
+                </dd>
             </div>
-        </div>
-        </br>
-        <div class="grid-row">
-            <div class="grid-full-width">
-                <div class="column-one-third">@messages("rulingInformation.startDate")</div>
-                <div id="rulingInformation.startDate" class="column-two-thirds">@c.decision.fold("")(decision => Dates.format(decision.effectiveStartDate))</div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @messages("rulingInformation.startDate")
+                </dt>
+                <dd class="govuk-summary-list__value"  id="rulingInformation.startDate">
+                    @c.decision.fold("")(decision => Dates.format(decision.effectiveStartDate))
+                </dd>
             </div>
-        </div>
-        </br>
-        <div class="grid-row">
-            <div class="grid-full-width">
-                <div class="column-one-third">@messages("rulingInformation.expiryDate")</div>
-                <div id="rulingInformation.expiryDate" class="column-two-thirds">@c.decision.fold("")(decision => Dates.format(decision.effectiveEndDate))</div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @messages("rulingInformation.expiryDate")
+                </dt>
+                <dd class="govuk-summary-list__value" id="rulingInformation.expiryDate">
+                    @c.decision.fold("")(decision => Dates.format(decision.effectiveEndDate))
+                </dd>
             </div>
-        </div>
+        </dl>
 
         @components.subheading(messages("rulingInformation.commoditySubheading"))
 
-        <p>@messages("rulingInformation.commodityIntro") <span id="rulingInformation.commodityCode">@c.decision.fold("")(decision => decision.bindingCommodityCode)</span>. </p>
-
+        <p class="govuk-body">@messages("rulingInformation.commodityIntro") <span id="rulingInformation.commodityCode">@c.decision.fold("")(decision => decision.bindingCommodityCode)</span>. </p>
 
         @if(c.decision.isDefined && c.decision.get.explanation.isDefined) {
-            <p id="rulingInformation.explanation" style="white-space: pre-wrap">@c.decision.get.explanation</p>
+            <p id="rulingInformation.explanation" style="white-space: pre-wrap" class="govuk-body">@c.decision.get.explanation</p>
         }
 
-        <p id="rulingInformation.commoditySuffix">
+        <p id="rulingInformation.commoditySuffix" class="govuk-body">
             @messages("rulingInformation.commoditySuffix")
         </p>
 
-        <p id="rulingInformation.commodityGuide">
+        <p id="rulingInformation.commodityGuide" class="govuk-body">
             @messages("rulingInformation.commodityGuideText")
-            <a href="https://www.gov.uk/guidance/apply-for-an-advance-tariff-ruling-that-can-be-used-from-1-january-2021" target="_blank">
+            <a href="https://www.gov.uk/guidance/apply-for-an-advance-tariff-ruling-that-can-be-used-from-1-january-2021" target="_blank" class="govuk-link">
                 @messages("rulingInformation.commodityGuideLink")
             </a>
         </p>
 
         @components.subheading(messages("rulingInformation.certificateSubheading"))
 
-        <p>@messages("rulingInformation.certificateText")</p>
+        <p class="govuk-body">@messages("rulingInformation.certificateText")</p>
 
-        <p>
-            <a id="rulingInformation.certificateLink" href="@routes.ApplicationController.viewRulingCertificate(c.reference)">
-            @messages("rulingInformation.certificateLink")
+        <p class="govuk-body">
+            <a id="rulingInformation.certificateLink" href="@routes.ApplicationController.viewRulingCertificate(c.reference)" class="govuk-link">
+                @messages("rulingInformation.certificateLink")
             </a>
         </p>
 
         @components.subheading(messages("rulingInformation.samplesSubheading"))
 
-        <p>
+        <p class="govuk-body">
             @messages("rulingInformation.samplesText")
-            <a href="https://www.gov.uk/guidance/apply-for-an-advance-tariff-ruling-that-can-be-used-from-1-january-2021#before-you-start" target="_blank">
-            @messages("rulingInformation.samplesLink")
+            <a href="https://www.gov.uk/guidance/apply-for-an-advance-tariff-ruling-that-can-be-used-from-1-january-2021#before-you-start" target="_blank" class="govuk-link">
+                @messages("rulingInformation.samplesLink")
             </a>
         </p>
 
         @components.subheading(messages("rulingInformation.appealsSubheading"))
 
-        <p>
+        <p class="govuk-body">
             @messages("rulingInformation.appealsText")
-            <a href="https://www.gov.uk/guidance/apply-for-an-advance-tariff-ruling-that-can-be-used-from-1-january-2021#appeal-a-ruling-decision" target="_blank">
-            @messages("rulingInformation.appealsLink")
+            <a href="https://www.gov.uk/guidance/apply-for-an-advance-tariff-ruling-that-can-be-used-from-1-january-2021#appeal-a-ruling-decision" target="_blank" class="govuk-link">
+                @messages("rulingInformation.appealsLink")
             </a>
         </p>
-
-
 }

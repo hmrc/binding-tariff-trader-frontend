@@ -21,8 +21,8 @@
 @paginate(containerClass : String, idPrefix: String) = {
     @pagination(
         id = s"$idPrefix-rulings-pagination",
-        singularName =  messages("case.rulings.pagination.singular"),
-        pluralName = messages("case.rulings.pagination.plural"),
+        singularNameKey =  "case.rulings.pagination.singular",
+        pluralNameKey = "case.rulings.pagination.plural",
         pager = cases,
         containerClass = Some(containerClass),
         onChange = page => controllers.routes.IndexController.getRulings(page)
@@ -31,7 +31,7 @@
 
 @if(cases.isEmpty){
     <div id="ruling-list-empty" class="tabs__panel">
-        <div class="bold-small my-3 pl-1">
+        <div class="govuk-body">
             @messages("case.rulings.noRulings")
         </div>
     </div>
@@ -39,29 +39,29 @@
     <div class="tabs__panel">
         <div class="tabs__panel__content">
 
-            @paginate("mb-2", "top")
+            @paginate("govuk-!-margin-bottom-2", "top")
 
-            <table id="rulings-list-table">
-                <thead>
-                    <tr>
-                        <th scope="col">@messages("case.rulings.table.reference")</th>
-                        <th scope="col">@messages("case.rulings.table.itemName")</th>
-                        <th scope="col">@messages("case.rulings.table.commodityCode")</th>
-                        <th scope="col">@messages("case.rulings.table.startDate")</th>
-                        <th scope="col">@messages("case.rulings.table.endDate")</th>
-                        <th scope="col">@messages("case.rulings.table.status")</th>
-                        <th scope="col">@messages("case.rulings.table.downloadBTI")</th>
+            <table id="rulings-list-table" class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">@messages("case.rulings.table.reference")</th>
+                        <th scope="col" class="govuk-table__header">@messages("case.rulings.table.itemName")</th>
+                        <th scope="col" class="govuk-table__header">@messages("case.rulings.table.commodityCode")</th>
+                        <th scope="col" class="govuk-table__header">@messages("case.rulings.table.startDate")</th>
+                        <th scope="col" class="govuk-table__header">@messages("case.rulings.table.endDate")</th>
+                        <th scope="col" class="govuk-table__header">@messages("case.rulings.table.status")</th>
+                        <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">@messages("case.application.ruling.table.download")</span></th>
                     </tr>
                 </thead>
-                <tbody id="rulings-list-body">
+                <tbody id="rulings-list-body" class="govuk-table__body">
                     @for((c: Case, index: Int) <- cases.results.zipWithIndex) {
-                        <tr id="rulings-list-row-@{index}">
-                            <td id="rulings-list-row-@{index}-reference">@c.reference</td>
-                            <td id="rulings-list-row-@{index}-item_name">@c.application.goodName</td>
-                            <td id="rulings-list-row-@{index}-commodity_code">@if(c.decision.isDefined){ @c.decision.get.bindingCommodityCode }</td>
-                            <td id="rulings-list-row-@{index}-start_date">@if(c.decision.isDefined){ @Dates.format(c.decision.get.effectiveStartDate) }</td>
-                            <td id="rulings-list-row-@{index}-end_date">@if(c.decision.isDefined){ @Dates.format(c.decision.get.effectiveEndDate) }</td>
-                            <td id="rulings-list-row-@{index}-status">
+                        <tr id="rulings-list-row-@{index}" class="govuk-table__row">
+                            <td id="rulings-list-row-@{index}-reference" class="govuk-table__cell">@c.reference</td>
+                            <td id="rulings-list-row-@{index}-item_name" class="govuk-table__cell">@c.application.goodName</td>
+                            <td id="rulings-list-row-@{index}-commodity_code" class="govuk-table__cell">@if(c.decision.isDefined){ @c.decision.get.bindingCommodityCode }</td>
+                            <td id="rulings-list-row-@{index}-start_date" class="govuk-table__cell">@if(c.decision.isDefined){ @Dates.format(c.decision.get.effectiveStartDate) }</td>
+                            <td id="rulings-list-row-@{index}-end_date" class="govuk-table__cell">@if(c.decision.isDefined){ @Dates.format(c.decision.get.effectiveEndDate) }</td>
+                            <td id="rulings-list-row-@{index}-status" class="govuk-table__cell">
                                 @c.status match {
                                     case CaseStatus.CANCELLED => { <span class="color-red"> @messages("case.ruling.status.cancelled") </span> }
                                     case CaseStatus.COMPLETED if c.hasActiveDecision => { <span class="color-green"> @messages("case.ruling.status.active") </span> }
@@ -72,11 +72,11 @@
                                     case _ => { @c.status.toString.toLowerCase.capitalize }
                                 }
                             </td>
-                            <td id="rulings-list-row-@{index}-view">
+                            <td id="rulings-list-row-@{index}-view" class="govuk-table__cell">
                             @if(!Set(CaseStatus.REJECTED, CaseStatus.SUSPENDED, CaseStatus.NEW, CaseStatus.OPEN, CaseStatus.REFERRED).contains(c.status)) {
-                                <a id="rulings-list-row-@{index}-view-link" href="@routes.RulingController.viewRuling(c.reference)">
+                                <a id="rulings-list-row-@{index}-view-link" href="@routes.RulingController.viewRuling(c.reference)" class="govuk-link">
                                     <span aria-hidden="true">@messages("case.ruling.viewRuling")</span>
-                                    <span class="visually-hidden">@messages("case.application.ruling.viewRuling.hidden", c.reference)</span>
+                                    <span class="govuk-visually-hidden">@messages("case.application.ruling.viewRuling.hidden", c.reference)</span>
                                 </a>
                             }
                             </td>
@@ -85,7 +85,7 @@
                 </tbody>
             </table>
 
-            @paginate("mt-2", "bottom")
+            @paginate("govuk-!-margin-top-2", "bottom")
 
         </div>
     </div>

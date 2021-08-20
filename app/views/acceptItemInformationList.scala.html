@@ -16,25 +16,27 @@
 
 @import config.FrontendAppConfig
 
+@this(
+    govukLayoutWrapper: GovukLayoutWrapper
+)
+
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("acceptItemInformationList.title"),
-    appConfig = appConfig,
-    bodyClasses = None) {
-
+@govukLayoutWrapper(
+    pageTitle = messages("acceptItemInformationList.title")
+) {
 
         @components.heading(messages("acceptItemInformationList.heading"))
 
-        <div class="notice application-notice info-notice">
-            <p> @messages("acceptItemInformationList.important") </p>
+        <div class="govuk-inset-text">
+            @messages("acceptItemInformationList.important")
         </div>
 
-        <p>@messages("acceptItemInformationList.askfor.paragraph0")</p>
-        <p>@messages("acceptItemInformationList.askfor.paragraph1")</p>
-        <p>@messages("acceptItemInformationList.askfor.paragraph2")</p>
+        <p class="govuk-body">@messages("acceptItemInformationList.askfor.paragraph0")</p>
+        <p class="govuk-body">@messages("acceptItemInformationList.askfor.paragraph1")</p>
+        <p class="govuk-body">@messages("acceptItemInformationList.askfor.paragraph2")</p>
 
-        <ul class="list list-bullet">
+        <ul class="govuk-list govuk-list--bullet">
             <li>@messages("acceptItemInformationList.askfor.item1")</li>
             <li>@messages("acceptItemInformationList.askfor.item2")</li>
         </ul>

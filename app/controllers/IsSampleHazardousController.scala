@@ -42,8 +42,8 @@ class IsSampleHazardousController @Inject()(
   val is_sample_hazardous: views.html.isSampleHazardous,
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
-  lazy val form = formProvider()
-  val questionPage = IsSampleHazardousPage
+  lazy val form: Form[Boolean] = formProvider()
+  val questionPage: IsSampleHazardousPage.type = IsSampleHazardousPage
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
     is_sample_hazardous(appConfig, preparedForm, mode)

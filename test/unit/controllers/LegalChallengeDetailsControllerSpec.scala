@@ -36,6 +36,8 @@ class LegalChallengeDetailsControllerSpec extends ControllerSpecBase with Answer
 
   private val formProvider = new LegalChallengeDetailsFormProvider()
 
+  val legalChallengeDetailsView: legalChallengeDetails = app.injector.instanceOf(classOf[legalChallengeDetails])
+
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new LegalChallengeDetailsController(
       frontendAppConfig,
@@ -45,11 +47,12 @@ class LegalChallengeDetailsControllerSpec extends ControllerSpecBase with Answer
       dataRetrievalAction,
       new DataRequiredActionImpl,
       formProvider,
-      cc
+      cc,
+      legalChallengeDetailsView
     )
 
   def viewAsString(form: Form[_], request: Request[_]): String =
-    legalChallengeDetails(frontendAppConfig, form, NormalMode, "goodsName")(request, messages).toString
+    legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(request, messages).toString
 
   val testAnswer = "answer"
   val validFormData = Map("legalChallengeDetails" -> testAnswer)

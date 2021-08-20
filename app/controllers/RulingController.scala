@@ -32,7 +32,8 @@ class RulingController @Inject()(
   val appConfig: FrontendAppConfig,
   identify: IdentifierAction,
   service: CasesService,
-  cc: MessagesControllerComponents
+  cc: MessagesControllerComponents,
+  rulingInformationView: ruling_information
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   def viewRuling(reference: String): Action[AnyContent] = identify.async { implicit request =>
@@ -40,7 +41,7 @@ class RulingController @Inject()(
     request.eoriNumber match {
       case Some(eori: String) =>
         service.getCaseForUser(eori, reference) flatMap { c: Case =>
-          Future.successful(Ok(ruling_information(appConfig, c)))
+          Future.successful(Ok(rulingInformationView(appConfig, c)))
         }
 
       case None =>

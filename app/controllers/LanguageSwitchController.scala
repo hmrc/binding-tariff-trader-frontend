@@ -35,11 +35,12 @@ class LanguageSwitchController @Inject() (
   }
 
   private def determineLanguageToUse(language: Language): Language = {
-    if (appConfig.languageTranslationEnabled)
+    if (appConfig.languageTranslationEnabled) {
       language
-    else
+    } else {
       English
+    }
   }
 
-  private def fallbackURL = routes.IndexController.getApplications().url
+   def fallbackURL: String = routes.IndexController.getApplications().url
 }

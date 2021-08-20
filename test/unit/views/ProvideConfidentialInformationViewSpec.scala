@@ -20,28 +20,31 @@ import controllers.routes
 import forms.ProvideConfidentialInformationFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
+import play.twirl.api.Html
 import views.behaviours.StringViewBehaviours
 import views.html.provideConfidentialInformation
 
 class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
 
-  val provideConfidentialInformation = injector.instanceOf[provideConfidentialInformation]
+  val provideConfidentialInformationView: provideConfidentialInformation = injector.instanceOf[provideConfidentialInformation]
 
-  val messageKeyPrefix = "provideConfidentialInformation"
+  val messageKeyPrefix: String = "provideConfidentialInformation"
 
-  val form = new ProvideConfidentialInformationFormProvider()()
+  val form: Form[String] = new ProvideConfidentialInformationFormProvider()()
 
-  val formElementId = "confidentialInformation"
+  val formElementId: String = "confidentialInformation"
 
-  val fakeGETRequest = fakeGETRequestWithCSRF
+  val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
   val goodsName = "shoos"
 
-  def createView = () => provideConfidentialInformation(
+  def createView: () => Html = () => provideConfidentialInformationView(
     frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) =>
-    provideConfidentialInformation(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  def createViewUsingForm: Form[String] => Html = (form: Form[String]) =>
+    provideConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   "ProvideConfidentialInformation view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()
@@ -58,7 +61,7 @@ class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
 
     "not allow unescaped HTML" in {
       val xss = "<script>alert('foo');</script>"
-      val doc = asDocument(provideConfidentialInformation(frontendAppConfig, form, xss, NormalMode)(fakeGETRequest, messages))
+      val doc = asDocument(provideConfidentialInformationView(frontendAppConfig, form, xss, NormalMode)(fakeGETRequest, messages))
       val scriptTag = doc.getElementsByAttributeValue("for", formElementId).select("script").first
       Option(scriptTag) shouldBe None
     }

@@ -14,19 +14,13 @@
  * limitations under the License.
  *@
 
-@(headingMsg: String, headingSize: String = "heading-xlarge", headingClass: Option[String] = None,
-         captionMsg: Option[String] = None, labelId: Option[String] = None)
+@(headingMsg: String, captionMsg: Option[String] = None)
 
-<div class="@headingSize @headingClass.map{classes => classes}">
-  @captionMsg.map{caption => <span class="heading-secondary"><span class="visuallyhidden">This section is </span>@caption</span>}
-  <h1 class="mt-0 heading-xlarge-label">
-      @if(labelId.nonEmpty){
-        <label for="@labelId">@headingMsg</label>
-      } else {
-        @headingMsg
+  <h1 class="govuk-heading-xl">
+      @if(captionMsg.isDefined){
+          <span class="govuk-caption-xl">
+              <span class="govuk-visually-hidden">messages("site.sectionIs") </span>@captionMsg
+          </span>
       }
-
+      @headingMsg
   </h1>
-</div>
-
-

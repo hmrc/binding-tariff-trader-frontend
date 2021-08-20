@@ -28,8 +28,7 @@ object FileAttachment {
   implicit val format: OFormat[FileAttachment] = Json.using[Json.WithDefaultValues].format[FileAttachment]
 }
 
-case class PublishedFileAttachment
-(
+case class PublishedFileAttachment(
   id: String,
   name: String,
   mimeType: String,

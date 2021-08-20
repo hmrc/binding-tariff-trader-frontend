@@ -31,8 +31,10 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
 
   private def createView: () => HtmlFormat.Appendable = { () => createViewWithForm(form) }
 
+  val addAnotherRulingView: addAnotherRuling = app.injector.instanceOf[addAnotherRuling]
+
   private def createViewWithForm(f: Form[Boolean], rulings: List[String] = List.empty): HtmlFormat.Appendable =
-    addAnotherRuling(frontendAppConfig, form, NormalMode, rulings)(fakeRequest, messages)
+    addAnotherRulingView(frontendAppConfig, form, NormalMode, rulings)(fakeRequest, messages)
 
   "AddAnotherRuling view" must {
 

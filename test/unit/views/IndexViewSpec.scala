@@ -23,10 +23,12 @@ import views.html.index
 
 class IndexViewSpec extends ViewBehaviours {
 
-  def applicationView: () => HtmlFormat.Appendable = () => index(frontendAppConfig, CaseDetailTab.APPLICATION,
+  val indexView: index = app.injector.instanceOf[index]
+
+  def applicationView: () => HtmlFormat.Appendable = () => indexView(frontendAppConfig, CaseDetailTab.APPLICATION,
     Html.apply("expected-content"))(fakeRequest, messages)
 
-  def rulingView: () => HtmlFormat.Appendable = () => index(frontendAppConfig, CaseDetailTab.RULING, Html.apply("expected-content"))(fakeRequest, messages)
+  def rulingView: () => HtmlFormat.Appendable = () => indexView(frontendAppConfig, CaseDetailTab.RULING, Html.apply("expected-content"))(fakeRequest, messages)
 
   "Load application view" must {
 

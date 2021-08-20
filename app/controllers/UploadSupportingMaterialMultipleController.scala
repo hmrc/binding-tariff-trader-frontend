@@ -47,7 +47,8 @@ class UploadSupportingMaterialMultipleController @Inject()(
   requireData: DataRequiredAction,
   formProvider: UploadSupportingMaterialMultipleFormProvider,
   fileService: FileService,
-  cc: MessagesControllerComponents
+  cc: MessagesControllerComponents,
+  uploadSupportingMaterialMultipleView: uploadSupportingMaterialMultiple
 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
   private lazy val form = formProvider()
 
@@ -85,7 +86,8 @@ class UploadSupportingMaterialMultipleController @Inject()(
     updatedAnswers.getOrElse(userAnswers)
   }
 
-  def onFileUploadSuccess(id: String, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
+  def onFileUploadSuccess(id: String, mode: Mode): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
     val updatedAnswers = for {
       files <- request.userAnswers.get(UploadSupportingMaterialMultiplePage)
       file <- files.find(_.id == id)
@@ -107,7 +109,6 @@ class UploadSupportingMaterialMultipleController @Inject()(
   def onFileSelected(): Action[FileAttachment] =
     (identify andThen getData andThen requireData).async[FileAttachment](parse.json[FileAttachment]) { implicit request: DataRequest[FileAttachment] =>
       val updatedAnswers = upsertFile(request.body, request.userAnswers)
-
       dataCacheConnector
         .save(updatedAnswers.cacheMap)
         .map(_ => Ok)
@@ -121,7 +122,7 @@ class UploadSupportingMaterialMultipleController @Inject()(
       maxFileSize = appConfig.fileUploadMaxSize
     )).map { response =>
       val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-      uploadSupportingMaterialMultiple(appConfig, response, form, goodsName, mode)
+      uploadSupportingMaterialMultipleView(appConfig, response, form, goodsName, mode)
     }
   }
 
