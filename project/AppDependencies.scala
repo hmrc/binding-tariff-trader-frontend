@@ -6,7 +6,6 @@ object AppDependencies {
 
   val compile = Seq(
     "commons-validator" % "commons-validator" % "1.7",
-    play.sbt.PlayImport.ws,
     "uk.gov.hmrc"   %% "auth-client"                % "5.6.0-play-27",
     "uk.gov.hmrc"   %% "play-frontend-hmrc"         % "0.79.0-play-27",
     "uk.gov.hmrc"   %% "bootstrap-frontend-play-27" % "5.3.0",
@@ -15,7 +14,6 @@ object AppDependencies {
     "uk.gov.hmrc"   %% "mongo-lock"                 % "7.0.0-play-27",
     "uk.gov.hmrc"   %% "play-health"                % "3.16.0-play-27",
     "uk.gov.hmrc"   %% "play-language"              % "5.1.0-play-27",
-    //"uk.gov.hmrc"   %% "play-ui"                    % "9.5.0-play-27",
     "uk.gov.hmrc"   %% "simple-reactivemongo"       % "8.0.0-play-27",
     "uk.gov.hmrc"   %% "play-allowlist-filter"      % "1.0.0-play-27",
     "uk.gov.hmrc"   %% "play-json-union-formatter"  % "1.13.0-play-27",
