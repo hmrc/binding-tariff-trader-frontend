@@ -18,14 +18,16 @@ package unit.controllers
 
 import controllers.routes
 import models.Languages._
-import org.scalatest.{Matchers, OptionValues, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.OptionValues
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class LanguageSwitchControllerSpec extends WordSpec with Matchers with OptionValues with GuiceOneAppPerSuite with MockitoSugar  {
+class LanguageSwitchControllerSpec extends AnyWordSpec with Matchers with OptionValues with GuiceOneAppPerSuite with MockitoSugar  {
 
   "when translation is enabled switching language" should {
     "set the language to Cymraeg" in {

@@ -20,7 +20,7 @@ import audit.AuditPayloadType._
 import javax.inject.{Inject, Singleton}
 import models.{Application, Case}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
+import uk.gov.hmrc.play.audit.DefaultAuditConnector
 import utils.JsonFormatters.caseAuditPayloadFormat
 
 import scala.concurrent.ExecutionContext.Implicits.global

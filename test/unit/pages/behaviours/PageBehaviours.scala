@@ -19,14 +19,16 @@ package pages.behaviours
 import generators.Generators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.{MustMatchers, OptionValues, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.OptionValues
+import org.scalatest.wordspec.AnyWordSpec
 import pages.QuestionPage
 import play.api.libs.json._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import models.UserAnswers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-trait PageBehaviours extends WordSpec with MustMatchers with ScalaCheckDrivenPropertyChecks with Generators with OptionValues {
+trait PageBehaviours extends AnyWordSpec with Matchers with ScalaCheckDrivenPropertyChecks with Generators with OptionValues {
 
   class BeRetrievable[A] {
     def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit = {

@@ -135,7 +135,7 @@ class CheckYourAnswersController @Inject()(
       pdf = PdfViewModel(atar, fileView)
       pdfFile <- pdfService.generatePdf(views.html.components.view_application_pdf(appConfig, pdf, getCountryName))
       pdfStored <- fileService.uploadApplicationPdf(atar.reference, pdfFile.content)
-      pdfAttachment = Attachment(pdfStored.id, false)
+      pdfAttachment = Attachment(pdfStored.id, public = false)
       caseUpdate = CaseUpdate(Some(ApplicationUpdate(
         applicationPdf = SetValue(Some(pdfAttachment))
       )))

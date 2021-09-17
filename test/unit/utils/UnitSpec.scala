@@ -17,17 +17,17 @@
 package unit.utils
 
 import java.nio.charset.Charset
-
 import akka.stream.Materializer
 import akka.util.ByteString
-import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.OptionValues
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.implicitConversions
 
-trait UnitSpec extends WordSpecLike with Matchers with OptionValues {
+trait UnitSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   import scala.concurrent.duration._
   import scala.concurrent.{Await, Future}
