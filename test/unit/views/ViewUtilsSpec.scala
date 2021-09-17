@@ -16,10 +16,10 @@
 
 package views
 
-import org.scalatest.WordSpec
+import org.scalatest.wordspec.AnyWordSpec
 import unit.utils.UnitSpec
 
-class ViewUtilsSpec extends WordSpec with UnitSpec {
+class ViewUtilsSpec extends AnyWordSpec with UnitSpec {
 
   "HumanReadableSize" must {
 

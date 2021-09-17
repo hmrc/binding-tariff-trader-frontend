@@ -21,7 +21,9 @@ import com.kenshoo.play.metrics.Metrics
 import org.mockito.Mockito
 import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers._
-import org.scalatest.{ AsyncWordSpecLike, BeforeAndAfterAll, Matchers, OptionValues }
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AsyncWordSpecLike
+import org.scalatest.{ BeforeAndAfterAll, OptionValues }
 import org.scalatest.compatible.Assertion
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{ MessagesAbstractController, Results }
@@ -31,8 +33,8 @@ import scala.concurrent.Future
 class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues with MockitoSugar with BeforeAndAfterAll {
 
   trait MockHasMetrics { self: HasMetrics =>
-    val timer = mock[Timer.Context]
-    val metrics = mock[Metrics]
+    val timer: Timer.Context = mock[Timer.Context]
+    val metrics: Metrics = mock[Metrics]
     override val localMetrics: LocalMetrics = mock[LocalMetrics]
     when(localMetrics.startTimer(anyString())) thenReturn timer
   }
