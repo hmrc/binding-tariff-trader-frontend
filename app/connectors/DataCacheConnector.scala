@@ -31,12 +31,12 @@ class MongoCacheConnector @Inject()(
 
   def save[A](cacheMap: CacheMap): Future[CacheMap] =
     withMetricsTimerAsync("mongo-cache-save") { _ =>
-      sessionRepository().upsert(cacheMap).map { _ => cacheMap }
+      sessionRepository.upsert(cacheMap).map { _ => cacheMap }
     }
 
   def fetch(cacheId: String): Future[Option[CacheMap]] =
     withMetricsTimerAsync("mongo-cache-fetch") { _ =>
-      sessionRepository().get(cacheId)
+      sessionRepository.get(cacheId)
     }
 
   def getEntry[A](cacheId: String, key: String)(implicit fmt: Format[A]): Future[Option[A]] =
@@ -48,7 +48,7 @@ class MongoCacheConnector @Inject()(
 
   def remove(cacheMap: CacheMap): Future[Boolean] =
     withMetricsTimerAsync("mongo-cache-remove") { _ =>
-      sessionRepository().remove(cacheMap)
+      sessionRepository.remove(cacheMap)
     }
 }
 

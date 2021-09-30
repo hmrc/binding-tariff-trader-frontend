@@ -40,4 +40,4 @@ project/metals.sbt
 .bloop/
 .metals/
 .vscode/
-.bsp
+.bsp/

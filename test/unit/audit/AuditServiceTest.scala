@@ -21,7 +21,7 @@ import base.SpecBase
 import models._
 import org.mockito.Mockito.verify
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector
+import uk.gov.hmrc.play.audit.DefaultAuditConnector
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

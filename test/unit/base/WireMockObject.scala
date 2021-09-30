@@ -20,6 +20,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.configureFor
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
+//scalastyle:off magic.number
 object WireMockObject {
 
   lazy val wireMockUrl = s"http://$wireHost:$wirePort"
