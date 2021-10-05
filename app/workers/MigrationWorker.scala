@@ -22,43 +22,38 @@ import akka.stream.{ActorAttributes, Supervision}
 import config.FrontendAppConfig
 import connectors.InjectAuthHeader
 import models._
-import org.joda.time.Duration
 import play.api.Logging
 import play.api.i18n.{Lang, Messages, MessagesApi}
-import repositories.LockRepoProvider
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.lock.{ExclusiveTimePeriodLock, LockRepository}
+import uk.gov.hmrc.mongo.lock.{MongoLockRepository, TimePeriodLockService}
 import viewmodels.{FileView, PdfViewModel}
 import views.html.components.view_application_pdf
 
 import java.time.{Clock, ZonedDateTime}
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
 class MigrationWorker @Inject()(
                                  appConfig: FrontendAppConfig,
-                                 lockRepo: LockRepoProvider,
                                  casesService: CasesService,
                                  countriesService: CountriesService,
                                  fileService: FileService,
                                  pdfService: PdfService,
                                  messagesApi: MessagesApi,
-                                 clock: Clock
-                               )(implicit system: ActorSystem)
-  extends ExclusiveTimePeriodLock
-    with InjectAuthHeader
+                                 clock: Clock,
+                                 mongoLockRepository: MongoLockRepository)(implicit system: ActorSystem)
+  extends InjectAuthHeader
     with Logging {
 
   implicit val ec: ExecutionContext = system.dispatchers.lookup("migration-dispatcher")
   implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = addAuth(appConfig)(HeaderCarrier()))
   implicit val messages: Messages = messagesApi.preferred(Seq(Lang.defaultLang))
 
-  val repo: LockRepository = lockRepo.repo()
-  val lockId = "migration-lock"
-  val holdLockFor: Duration = Duration.standardMinutes(2)
+  val myLock: TimePeriodLockService = TimePeriodLockService(mongoLockRepository, lockId = "migration-lock", ttl = 2.minutes)
 
   val decider: Supervision.Decider = {
     case NonFatal(e) =>
@@ -70,7 +65,7 @@ class MigrationWorker @Inject()(
 
   private val migrationSource = Source
     .unfoldAsync(SearchPagination()) { pagination =>
-      tryToAcquireOrRenewLock {
+      myLock.withRenewedLock {
         casesService.allCases(pagination, Sort())
       }.map { maybeCases =>
         logger.info("Acquired migration lock")

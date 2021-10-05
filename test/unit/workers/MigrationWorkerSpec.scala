@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package workers
+package unit.workers
 
 import com.kenshoo.play.metrics.Metrics
-import java.time.{Clock, Instant, ZoneOffset, ZonedDateTime}
 import models._
-import org.joda.time.Duration
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito._
 import org.mockito.Mockito.verify
@@ -27,29 +25,33 @@ import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.Files
 import play.api.test.Helpers
 import play.twirl.api.Html
-import repositories.LockRepoProvider
-import scala.concurrent.Future
-import scala.collection.immutable.ListMap
 import service.{CasesService, FileService, PdfService}
-import uk.gov.hmrc.mongo.MongoSpecSupport
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.lock.LockRepository
+import uk.gov.hmrc.mongo.lock.MongoLockRepository
+import uk.gov.hmrc.mongo.test.MongoSupport
 import unit.utils.{TestMetrics, UnitSpec}
+import workers.MigrationWorker
 
-class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfterAll with MongoSpecSupport { self =>
+import java.time.{Clock, Instant, ZoneOffset, ZonedDateTime}
+import scala.collection.immutable.ListMap
+import scala.concurrent.Future
+import scala.concurrent.duration.{Duration, DurationInt}
 
-  val now = Instant.now()
-  val clock = Clock.fixed(now, ZoneOffset.UTC)
-  val caseService = mock[CasesService]
-  val fileService = mock[FileService]
-  val pdfService = mock[PdfService]
-  val lockRepo = mock[LockRepository]
-  val lockRepoProvider = new LockRepoProvider {
-    def repo = () => lockRepo
-  }
+class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfterAll with MongoSupport { self =>
+
+  val lockId        = "lockId"
+  val ttl: Duration = 1000.millis
+  val repository: MongoLockRepository = mock[MongoLockRepository]
+
+  //val lockRepoProvider = new LockRepoProvider(repository)
+
+  val now: Instant = Instant.now()
+  val clock: Clock = Clock.fixed(now, ZoneOffset.UTC)
+  val caseService: CasesService = mock[CasesService]
+  val fileService: FileService = mock[FileService]
+  val pdfService: PdfService = mock[PdfService]
 
   val configuredApp: GuiceApplicationBuilder => GuiceApplicationBuilder =
     _.configure(
@@ -57,16 +59,16 @@ class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       "metrics.enabled" -> false
     ).overrides(
       bind[Metrics].to(new TestMetrics),
-      bind[LockRepoProvider].to(lockRepoProvider),
       bind[CasesService].to(caseService),
       bind[FileService].to(fileService),
       bind[PdfService].to(pdfService),
-      bind[Clock].to(clock)
+      bind[Clock].to(clock),
+      bind[MongoLockRepository].to(repository)
     )
 
-  val pagination = SearchPagination(1, 50)
+  val pagination: SearchPagination = SearchPagination()
 
-  def caseWithoutPdf(reference: String, cse: Case) =
+  def caseWithoutPdf(reference: String, cse: Case): Case =
     cse.copy(
       reference = reference,
       application = cse.application.copy(
@@ -74,7 +76,7 @@ class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
       )
     )
 
-  def attachmentUpdate(id: String) = CaseUpdate(
+  def attachmentUpdate(id: String): CaseUpdate = CaseUpdate(
     application = Some(ApplicationUpdate(
       applicationPdf = SetValue(Some(Attachment(
         id = id,
@@ -84,21 +86,25 @@ class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
     ))
   )
 
-  val exampleCases = ListMap(
+  val exampleCases: ListMap[String, Case] = ListMap(
     "ref1" -> caseWithoutPdf("ref1", oCase.btiCaseExample),
     "ref2" -> caseWithoutPdf("ref2", oCase.btiCaseWithDecision),
     "ref3" -> caseWithoutPdf("ref3", oCase.btiCaseWithDecisionNoExplanation)
   )
 
-  val pagedCases = Paged(
+  val pagedCases: Paged[Case] = Paged(
     results     = exampleCases.values.toList,
     pagination  = pagination,
     resultCount = 3
   )
 
   override protected def beforeAll(): Unit = {
-    given(lockRepo.renew(any[String], any[String], any[Duration]))
+    given(repository.refreshExpiry(any[String], any[String], any[Duration]))
       .willReturn(Future.successful(true))
+    given(repository.takeLock(any[String], any[String], any[Duration]))
+      .willReturn(Future.successful(true))
+    given(repository.releaseLock(any[String], any[String]))
+      .willReturn(Future.successful(()))
     given(caseService.allCases(any[Pagination], any[Sort])(any[HeaderCarrier]))
       .willReturn(Future.successful(pagedCases))
       .willReturn(Future.successful(Paged.empty[Case](pagination)))
@@ -111,13 +117,13 @@ class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
     given(fileService.getAttachmentMetadata(any[Case])(any[HeaderCarrier]))
       .willReturn(Future.successful(Seq.empty))
     given(pdfService.generatePdf(any[Html]))
-      .willReturn(Future.successful(PdfFile(Array.empty, "application/pdf")))
+      .willReturn(Future.successful(PdfFile(Array.empty)))
     given(fileService.uploadApplicationPdf(refEq("ref1"), any[Array[Byte]])(any[HeaderCarrier]))
-      .willReturn(Future.successful(FileAttachment("id1", "some.pdf", "application/pdf", 0L, true)))
+      .willReturn(Future.successful(FileAttachment("id1", "some.pdf", "application/pdf", 0L, uploaded = true)))
     given(fileService.uploadApplicationPdf(refEq("ref2"), any[Array[Byte]])(any[HeaderCarrier]))
-      .willReturn(Future.successful(FileAttachment("id2", "some.pdf", "application/pdf", 0L, true)))
+      .willReturn(Future.successful(FileAttachment("id2", "some.pdf", "application/pdf", 0L, uploaded = true)))
     given(fileService.uploadApplicationPdf(refEq("ref3"), any[Array[Byte]])(any[HeaderCarrier]))
-      .willReturn(Future.successful(FileAttachment("id3", "some.pdf", "application/pdf", 0L, true)))
+      .willReturn(Future.successful(FileAttachment("id3", "some.pdf", "application/pdf", 0L, uploaded = true)))
   }
 
   "MigrationWorker" should {

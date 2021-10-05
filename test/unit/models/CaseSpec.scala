@@ -16,10 +16,10 @@
 
 package models
 
+import base.SpecBase
+
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-
-import base.SpecBase
 
 class CaseSpec extends SpecBase {
 

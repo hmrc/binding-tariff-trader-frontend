@@ -16,13 +16,14 @@
 
 package base
 
+import akka.stream.Materializer
 import config.FrontendAppConfig
 import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
-import play.api.i18n.{Lang, Messages, MessagesApi}
+import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.Files.TemporaryFileCreator
@@ -32,7 +33,6 @@ import play.api.test.{FakeHeaders, FakeRequest}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import unit.base.WireMockObject
 import unit.utils.UnitSpec
-import akka.stream.Materializer
 
 trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
 

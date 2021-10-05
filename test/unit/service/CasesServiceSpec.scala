@@ -25,7 +25,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
-import play.api.libs.json.{Reads, Writes}
+import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
