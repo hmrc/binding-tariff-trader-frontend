@@ -107,6 +107,17 @@ informationPublic.paragraph1.part2 = Mae’r wybodaeth hon ar gael i fasnachwyr 
 informationPublic.paragraph2 = Wrth i chi wneud y cais, cewch wybod ba wybodaeth a allai ymddangos ar wefan y Dyfarniadau Tariffau Uwch.
 informationPublic.paragraph3 = Byddwch yn gallu marcio bod gwybodaeth a ffeiliau’n gyfrinachol yn eich cais. Ni fyddwn yn cyhoeddi gwybodaeth gyfrinachol na ffeiliau cyfrinachol ar wefan y Dyfarniadau Tariffau Uwch
 
+howWeContactYou.title = Sut y byddwn yn cysylltu â chi ynghylch eich cais - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
+howWeContactYou.heading = Sut y byddwn yn cysylltu â chi ynghylch eich cais
+howWeContactYou.paragraph1.part1 = Efallai y bydd angen i ni gysylltu â chi i ofyn am fanylion pellach neu i roi gwybod i chi am statws eich cais.
+howWeContactYou.paragraph1.part2 = Hoffem gysylltu â chi dros e-bost. Fodd bynnag, mae rhai risgiau yn gysylltiedig ag e-byst gan gynnwys y canlynol:
+howWeContactYou.paragraph1.listItem1 = nid ydynt yn ddiogel
+howWeContactYou.paragraph1.listItem2 = mae modd i rywun arall eu newid neu eu darllen cyn iddynt eich cyrraedd
+howWeContactYou.paragraph2.part1 = Os nad ydych am i ni gysylltu â chi dros e-bost, rhowch wybod i ni sut y dylem gysylltu â chi drwy e-bostio <a class="govuk-link" href="mailto:{0}">{1}</a>
+howWeContactYou.paragraph2.email = tariff.classification@hmrc.gov.uk
+howWeContactYou.paragraph2.part2 = Os ydych yn dewis optio allan o dderbyn e-byst, dim ond e-byst awtomataidd y byddwn yn eu hanfon atoch. Er enghraifft, pan fyddwch wedi cwblhau’r cais hwn, byddwn yn anfon e-bost cadarnhau awtomataidd.
+howWeContactYou.paragraph2.part3 = Os na fyddwn yn clywed oddi wrthych, byddwn yn cymryd eich bod wedi derbyn y risgiau.
+
 provideGoodsName.title = Rhoi enw ar gyfer y nwyddau – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 provideGoodsName.heading = Rhoi enw ar gyfer y nwyddau
 provideGoodsName.hint = Dylai hwn fod yn ddisgrifiad byr, er enghraifft ‘cas Ffôn Clyfar Silicôn’.
@@ -374,8 +385,10 @@ checkYourAnswers.aboutTheApplicantSection = Ynglŷn â’r ymgeisydd
 checkYourAnswers.declaration.subheading = Eich datganiad
 checkYourAnswers.declaration.paragraph0 = Drwy wneud cais am Ddyfarniad Tariffau Uwch, rydych yn cadarnhau bod yr wybodaeth a roddwyd gennych yn gywir ac yn gyflawn hyd eithaf eich gwybodaeth.
 checkYourAnswers.declaration.paragraph1 = Rydych yn cytuno y gall CThEM wneud y canlynol:
-checkYourAnswers.declaration.listItem1 = cadw’r wybodaeth a roddwyd gennych, neu a roddir gennych, o bosibl, ar ôl i chi anfon eich cais
+checkYourAnswers.declaration.listItem1 = storio’r wybodaeth a roddwyd gennych, neu y gallech ei roi, ar ôl i chi anfon eich cais
 checkYourAnswers.declaration.listItem2 = cyhoeddi gwybodaeth nad yw’n gyfrinachol ar wefan y Dyfarniadau Tariffau Uwch
+checkYourAnswers.declaration.email = tariff.classification@hmrc.gov.uk
+checkYourAnswers.declaration.listItem3 = cysylltu â chi dros e-bost, neu drwy’r dull a nodwyd gennych mewn e-bost at <a class="govuk-link" href="mailto:{0}">{1}</a>
 checkYourAnswers.declaration.paragraph2 = Rydych yn deall y gall eich samplau gael eu difrodi wrth eu profi.
 checkYourAnswers.declaration.submit = Derbyn a gwneud cais am ddyfarniad
 

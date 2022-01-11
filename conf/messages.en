@@ -15,6 +15,8 @@ checkYourAnswers.declaration.paragraph0 = By applying for an Advance Tariff Ruli
 checkYourAnswers.declaration.paragraph1 = You agree that HMRC can:
 checkYourAnswers.declaration.listItem1 = store the information you provided or may provide after you send your application
 checkYourAnswers.declaration.listItem2 = publish information that is not confidential on the Advance Tariff Ruling website
+checkYourAnswers.declaration.email = tariff.classification@hmrc.gov.uk
+checkYourAnswers.declaration.listItem3 = contact you by email, or by the way you have specified in an email to us at <a class="govuk-link" href="mailto:{0}">{1}</a>
 checkYourAnswers.declaration.paragraph2 = You understand that your samples may be damaged during testing.
 checkYourAnswers.declaration.submit = Accept and apply for a ruling
 
@@ -75,6 +77,17 @@ informationPublic.paragraph1.linkText = Search for Advance Tariff Rulings websit
 informationPublic.paragraph1.part2 = This information is available for other traders to view so that they can find a ruling if they are trading with similar goods.
 informationPublic.paragraph2 = You will be told throughout the application which information may appear on the Advance Tariff Rulings website.
 informationPublic.paragraph3 = You will be able to mark information and files as confidential in your application. We will not publish confidential information or files on the Advance Tariff Rulings website
+
+howWeContactYou.title = How we contact you about your application - Manage your Advance Tariff Rulings - GOV.UK
+howWeContactYou.heading = How we contact you about your application
+howWeContactYou.paragraph1.part1 = We may need to contact you to ask for further information or to let you know the status of your application.
+howWeContactYou.paragraph1.part2 = We would like to contact you by email. However there are some risks with emails including that they:
+howWeContactYou.paragraph1.listItem1 = are not secure
+howWeContactYou.paragraph1.listItem2 = could be changed or read by someone else before they reach you
+howWeContactYou.paragraph2.part1 = If you do not want us to contact you by email, tell us how we should contact you by emailing us at <a class="govuk-link" href="mailto:{0}">{1}</a>
+howWeContactYou.paragraph2.email = tariff.classification@hmrc.gov.uk
+howWeContactYou.paragraph2.part2 = If you choose to opt out of emails, we will only send automated emails. For example, when you complete this application we will send you an automated confirmation email.
+howWeContactYou.paragraph2.part3 = If we do not hear from you, we will assume you have accepted the risks.
 
 session_expired.title = For your security, we deleted your answers
 session_expired.heading = For your security, we deleted your answers
