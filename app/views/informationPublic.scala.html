@@ -37,7 +37,7 @@
     <p class="govuk-body">@messages("informationPublic.paragraph2")</p>
     <p class="govuk-body">@messages("informationPublic.paragraph3")</p>
 
-    @components.button_link(messages("site.agree_and_continue"), routes.ProvideGoodsNameController.onPageLoad(NormalMode).url)
+    @components.button_link(messages("site.agree_and_continue"), routes.HowWeContactYouController.onPageLoad().url)
 
     @components.cancel_application_link()
 
