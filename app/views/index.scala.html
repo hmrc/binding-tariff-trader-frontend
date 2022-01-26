@@ -26,7 +26,8 @@
 @(appConfig: FrontendAppConfig, activeTab : CaseDetailTab, viewTable : Html)(implicit request: Request[_], messages: Messages)
 
 @additionalCSS = @{
-    Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")}'/>""")
+    Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")}'/>
+             <link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/partials/pagination.css")}'/>""")
 }
 
 @govukLayoutWrapper(

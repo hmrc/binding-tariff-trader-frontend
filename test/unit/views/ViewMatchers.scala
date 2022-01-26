@@ -40,6 +40,16 @@ object ViewMatchers {
     }
   }
 
+  class ContainElementWithClassMatcher(className: String) extends Matcher[Element] {
+    override def apply(left: Element): MatchResult = {
+      MatchResult(
+        !left.getElementsByClass(className).isEmpty,
+        s"Document did not contain element with Class {$className}\n${actualContentWas(left)}",
+        s"Document contained an element with Class {$className}"
+      )
+    }
+  }
+
   class ContainElementWithAttribute(key: String, value: String) extends Matcher[Element] {
     override def apply(left: Element): MatchResult = {
       MatchResult(
@@ -156,6 +166,7 @@ object ViewMatchers {
     def withAttribute(key: String, value: String)  = new ElementContainsChildWithAttributeMatcher(tag, key, value)
   }
 
+  def containElementWithClass(className: String) = new ContainElementWithClassMatcher(className)
   def containElementWithID(id: String) = new ContainElementWithIDMatcher(id)
   def containElementWithAttribute(key: String, value: String) = new ContainElementWithAttribute(key, value)
   def containElementWithTag(tag: String) = new ContainElementWithTagMatcher(tag)

@@ -18,14 +18,18 @@ package unit.views
 
 import models.{Case, Paged, Sort, oCase}
 import play.twirl.api.HtmlFormat
+import unit.views.behaviours.PaginationViewBehaviours
 import viewmodels.Dashboard
 import views.behaviours.ViewBehaviours
 import views.html.account_dashboard_statuses
 
-class AccountDashboardStatusesViewSpec extends ViewBehaviours {
+class AccountDashboardStatusesViewSpec extends ViewBehaviours with PaginationViewBehaviours {
 
   val emptyPaged: Paged[Case] = Paged.empty[Case]
-  val paged: Paged[Case] = Paged(Seq(oCase.btiCaseExample))
+  val pagedNoPagination: Paged[Case] = Paged(Seq(oCase.btiCaseExample))
+  val paginationIdOneResult = "bottom-applications-pagination-one-result"
+  val paginationIdMultipleResult = "bottom-applications-pagination-some-result"
+
 
   def accountDashboardStatusesView: account_dashboard_statuses = app.injector.instanceOf[account_dashboard_statuses]
 
@@ -36,10 +40,15 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours {
   }
 
   "has previous applications view" must {
-    behave like normalPage(applicationView(Dashboard(paged, Sort())), "index")()
+    behave like normalPage(applicationView(Dashboard(pagedNoPagination, Sort())), "index")()
   }
 
   "Applications and ruling view" must {
+    behave like pageWithPaginationAndResults(paginationIdMultipleResult, applicationView(Dashboard(Paged(Seq(oCase.btiCaseExample,
+      oCase.btiCaseExample), pageIndex = 1, pageSize = 1, resultCount = 2), Sort())))
+
+    behave like pageWithNoPaginationAndResults(applicationView(Dashboard(emptyPaged, Sort())))
+    behave like pageWithResultsAndNoPagination(paginationIdOneResult, applicationView(Dashboard(Paged(Seq(oCase.btiCaseExample)), Sort())))
 
     "show message to say no previous applications when there are none supplied" in {
       val doc = asDocument(applicationView(Dashboard(emptyPaged, Sort()))())
@@ -47,10 +56,9 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours {
     }
 
     "show table containing previous applications when there are some" in {
-      val doc = asDocument(applicationView(Dashboard(paged, Sort()))())
+      val doc = asDocument(applicationView(Dashboard(pagedNoPagination, Sort()))())
       assert(!doc.html().contains(messages("index.noapplications")))
       assertRenderedById(doc,"applications-rulings-list")
     }
   }
-
 }
