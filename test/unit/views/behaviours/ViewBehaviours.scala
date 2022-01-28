@@ -99,5 +99,4 @@ trait ViewBehaviours extends ViewSpecBase {
       }
     }
   }
-
 }
