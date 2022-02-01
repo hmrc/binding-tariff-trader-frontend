@@ -14,12 +14,12 @@
  * limitations under the License.
  *@
 
-@(headingMsg: String, captionMsg: Option[String] = None)
+@(headingMsg: String, captionMsg: Option[String] = None)(implicit messages: Messages)
 
   <h1 class="govuk-heading-xl">
       @if(captionMsg.isDefined){
           <span class="govuk-caption-xl">
-              <span class="govuk-visually-hidden">messages("site.sectionIs") </span>@captionMsg
+              <span class="govuk-visually-hidden">@messages("site.sectionIs") </span>@captionMsg
           </span>
       }
       @headingMsg
