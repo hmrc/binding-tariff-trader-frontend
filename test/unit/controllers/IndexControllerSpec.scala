@@ -24,23 +24,29 @@ import navigation.FakeNavigator
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito.reset
 import play.api.mvc.Call
 import play.api.test.Helpers._
-import service.CasesService
+import service.{CasesService, URLCacheService}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.{account_dashboard_statuses, index}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class IndexControllerSpec extends ControllerSpecBase {
 
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
   private val casesService = mock[CasesService]
+  private val urlCacheService = mock[URLCacheService]
   def nextPageRoute = Call("GET", "/advance-tariff-application/information-you-need")
 
   val accountDashboardStatusesView: account_dashboard_statuses = app.injector.instanceOf(classOf[views.html.account_dashboard_statuses])
   val indexView: index = app.injector.instanceOf(classOf[views.html.index])
+
+  override def beforeEach(): Unit = {
+    reset(casesService, urlCacheService)
+  }
 
   private def controller(identifier: IdentifierAction = FakeIdentifierAction): IndexController =
     new IndexController(
@@ -49,6 +55,7 @@ class IndexControllerSpec extends ControllerSpecBase {
       new FakeNavigator(nextPageRoute),
       casesService,
       cc,
+      urlCacheService,
       accountDashboardStatusesView,
       indexView
     )
@@ -243,14 +250,30 @@ class IndexControllerSpec extends ControllerSpecBase {
   "Index Controller - Get Applications and Rulings" should {
 
     "return the correct view for a load applications and rulings" in {
+      val request = fakeRequestWithIdentifier()
 
       given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
         .willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
+      given(urlCacheService.fetchBTACallbackURL(request.identifier)).willReturn(Future.successful(None))
 
-      val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
+      val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
 
       status(result) shouldBe OK
       contentAsString(result) should include("applications-rulings-list-table")
+    }
+
+    "return a BadGateway result" when {
+      "there is an issue fetching from the cache " in {
+        val request = fakeRequestWithIdentifier()
+
+        given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
+          .willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
+        given(urlCacheService.fetchBTACallbackURL(request.identifier)).willReturn(Future.failed(new RuntimeException("error")))
+
+        val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
+
+        status(result) shouldBe BAD_GATEWAY
+      }
     }
 
 
@@ -264,9 +287,12 @@ class IndexControllerSpec extends ControllerSpecBase {
 
     for(caseStatus <- CaseStatus.values.toSeq) {
       s"return the correct view with correct applications and rulings status in table for case status '$caseStatus'" in {
+        val request = fakeRequestWithIdentifier()
         val testCase = btiCaseWithDecision.copy(status = caseStatus)
+
         given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
           .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+        given(urlCacheService.fetchBTACallbackURL(request.identifier)).willReturn(Future.successful(None))
 
         val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
 
@@ -308,12 +334,14 @@ class IndexControllerSpec extends ControllerSpecBase {
     }
 
     "return the correct view with View ruling link for COMPLETED cases" in {
+      val request = fakeRequestWithIdentifier()
       val testCase = btiCaseWithDecision.copy(status = CaseStatus.COMPLETED)
 
       given(casesService.getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier]))
         .willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+      given(urlCacheService.fetchBTACallbackURL(request.identifier)).willReturn(Future.successful(None))
 
-      val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
+      val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
 
       status(result) shouldBe OK
 

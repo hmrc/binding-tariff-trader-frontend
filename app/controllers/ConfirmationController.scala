@@ -19,19 +19,20 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import javax.inject.Inject
 import models.Confirmation
 import pages.{ConfirmationPage, PdfViewPage}
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import service.{CountriesService, PdfService}
+import service.{CountriesService, PdfService, URLCacheService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.JsonFormatters._
-import viewmodels.PdfViewModel
+import viewmodels.{ConfirmationUrlViewModel, PdfViewModel}
 import views.html.confirmation
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 
 class ConfirmationController @Inject()(
                                         appConfig: FrontendAppConfig,
@@ -41,6 +42,7 @@ class ConfirmationController @Inject()(
                                         dataCacheConnector: DataCacheConnector,
                                         countriesService: CountriesService,
                                         pdfService: PdfService,
+                                        urlCacheService: URLCacheService,
                                         cc: MessagesControllerComponents,
                                         confirmationView: confirmation
                                       )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
@@ -48,10 +50,11 @@ class ConfirmationController @Inject()(
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     def show(c: Confirmation, pdf: PdfViewModel): Future[Result] = for {
+      backUrl <- getBackUrlWithRemoval(request.internalId)
       removed <- dataCacheConnector.remove(request.userAnswers.cacheMap)
       _ = if (!removed) logger.warn("Session entry failed to be removed from the cache")
       token: String = pdfService.encodeToken(c.eori)
-    } yield Ok(confirmationView(appConfig, c, token, pdf, getCountryName))
+    } yield Ok(confirmationView(appConfig, c, token, pdf, getCountryName, urlViewModel = ConfirmationUrlViewModel(appConfig.businessTaxAccountUrl, backUrl)))
 
     (request.userAnswers.get(ConfirmationPage), request.userAnswers.get(PdfViewPage)) match {
       case (Some(c: Confirmation), Some(pdf: PdfViewModel)) => show(c, pdf)
@@ -64,4 +67,12 @@ class ConfirmationController @Inject()(
       .getAllCountriesById
       .get(code)
       .map(_.countryName)
+
+  def getBackUrlWithRemoval(requestId: String): Future[Option[String]] = {
+    urlCacheService.fetchBTACallbackURLWithDelete(requestId).recover {
+      case NonFatal(error) =>
+        logger.error("Error occurred whilst fetching BTA callback URL, with deletion, from the cache")
+        throw error
+    }
+  }
 }

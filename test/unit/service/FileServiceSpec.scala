@@ -41,7 +41,7 @@ import play.api.libs.Files.SingletonTemporaryFileCreator
 import akka.util.ByteString
 import akka.stream.scaladsl.Source
 
-class FileServiceSpec extends SpecBase with BeforeAndAfterEach {
+class FileServiceSpec extends SpecBase {
 
   private val connector = mock[BindingTariffFilestoreConnector]
   private val configuration = mock[FrontendAppConfig]

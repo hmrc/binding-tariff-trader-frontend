@@ -25,13 +25,12 @@
         fullMainContent: FullLayoutMainContent
 )
 
-@(appConfig: FrontendAppConfig, dashboard: Dashboard)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, dashboard: Dashboard, btaUrl: Option[String] = None)(implicit request: Request[_], messages: Messages)
 
 @additionalCSS = @{
     Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")}'/>
              <link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/partials/pagination.css")}'/>""")
 }
-
 
 @paginate(containerClass: String, idPrefix: String) = {
   @pagination(
@@ -50,6 +49,10 @@
     optCustomLayout = Some(fullMainContent(_)),
     additionalCSS = Some(additionalCSS)
 ) {
+   @if(btaUrl.isDefined){
+        <a id="bta-return-link" href="@appConfig.businessTaxAccountUrl@btaUrl" class="govuk-back-link">@messages("index.bta.link")</a>
+   }
+
     @components.heading(
         messages("index.heading"),
         captionMsg = Some(messages("application.dashboard.status.title"))

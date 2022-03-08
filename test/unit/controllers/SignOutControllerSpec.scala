@@ -20,26 +20,30 @@ import connectors.DataCacheConnector
 import controllers.actions.FakeIdentifierAction
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.{verify, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
+import service.URLCacheService
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
   private val dataCache: DataCacheConnector = mock[DataCacheConnector]
+  private val urlCacheService: URLCacheService = mock[URLCacheService]
+  private implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    Mockito.reset(dataCache)
+    Mockito.reset(dataCache, urlCacheService)
   }
 
   private def controller = new SignOutController(
     frontendAppConfig,
     dataCache,
+    urlCacheService,
     FakeIdentifierAction,
     getEmptyCacheMap,
     cc
@@ -63,14 +67,21 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
   "Force sign out controller" must {
 
     "return 200 for a start feedback survey" in {
-      val result: Future[Result] = controller.forceSignOut(fakeRequestWithEori)
+      val request = fakeRequestWithEori
+      when(urlCacheService.removeBTACallbackURL(request.internalId)).thenReturn(Future.successful(true))
+
+      val result: Future[Result] = controller.forceSignOut(request)
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).get should endWith("/this-service-has-been-reset")
     }
 
     "clear user cache when present" in {
-      await(controller.forceSignOut(fakeRequestWithEoriAndCache))
+      val request = fakeRequestWithEori
+      when(urlCacheService.removeBTACallbackURL(request.internalId)).thenReturn(Future.successful(true))
+
+      await(controller.forceSignOut(request))
       verify(dataCache).remove(any())
+      verify(urlCacheService).removeBTACallbackURL(request.internalId)
     }
   }
 

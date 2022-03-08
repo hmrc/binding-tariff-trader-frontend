@@ -23,9 +23,10 @@ import models.SortField.SortField
 import models._
 import navigation.Navigator
 import pages.IndexPage
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import service.CasesService
+import service.{CasesService, URLCacheService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.Dashboard
 import views.CaseDetailTab
@@ -35,6 +36,7 @@ import views.html.{account_dashboard_statuses, index}
 import javax.inject.Inject
 import scala.concurrent.Future.successful
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 
 class IndexController @Inject()(
   val appConfig: FrontendAppConfig,
@@ -42,9 +44,10 @@ class IndexController @Inject()(
   navigator: Navigator,
   service: CasesService,
   cc: MessagesControllerComponents,
+  urlCacheService: URLCacheService,
   accountDashboardStatusesView: account_dashboard_statuses,
   indexView: index
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
 
   private val applicationStatuses = Set(
     CaseStatus.DRAFT, CaseStatus.NEW, CaseStatus.OPEN,
@@ -87,13 +90,18 @@ class IndexController @Inject()(
       case Some(eori: String) =>
         val sort = Sort(sortBy.getOrElse(Dashboard.defaultSortField), order)
         service.getCases(eori, applicationStatuses, SearchPagination(page), sort) flatMap { pagedResult =>
-          successful(Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort))))
+          (urlCacheService.fetchBTACallbackURL(request.identifier) flatMap { url =>
+            successful(Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort), url)))
+          }).recover{
+            case NonFatal(_) =>
+              logger.error("Error occurred whilst fetching BTA callback URL from the cache")
+              BadGateway
+          }
         }
 
       case None =>
         val initialAnswers = UserAnswers(request.identifier)
         successful(Redirect(navigator.nextPage(IndexPage, NormalMode)(initialAnswers)))
     }
-
   }
 }

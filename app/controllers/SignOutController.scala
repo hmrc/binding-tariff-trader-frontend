@@ -22,19 +22,21 @@ import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.requests.OptionalDataRequest
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import service.URLCacheService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.successful
 
 class SignOutController @Inject()(
                                    val appConfig: FrontendAppConfig,
                                    dataCacheConnector: DataCacheConnector,
+                                   urlCacheService: URLCacheService,
                                    identify: IdentifierAction,
                                    getData: DataRetrievalAction,
                                    cc: MessagesControllerComponents
-                                 ) extends FrontendController(cc) with I18nSupport {
+                                 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   def startFeedbackSurvey: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     clearDataCache(request)
@@ -43,7 +45,9 @@ class SignOutController @Inject()(
 
   def forceSignOut: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     clearDataCache(request)
-    successful(Results.Redirect(routes.SessionExpiredController.onPageLoad()).withNewSession)
+    urlCacheService.removeBTACallbackURL(request.internalId).flatMap{ _ =>
+      successful(Results.Redirect(routes.SessionExpiredController.onPageLoad()).withNewSession)
+    }
   }
 
   def unauthorisedSignOut: Action[AnyContent] = Action {
