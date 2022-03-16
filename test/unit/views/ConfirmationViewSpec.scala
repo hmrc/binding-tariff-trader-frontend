@@ -18,7 +18,7 @@ package views
 
 import models.{Confirmation, oCase}
 import play.twirl.api.Html
-import viewmodels.PdfViewModel
+import viewmodels.{ConfirmationBTAUrlViewModel, ConfirmationHomeUrlViewModel, ConfirmationUrlViewModel, PdfViewModel}
 import views.behaviours.ViewBehaviours
 import views.html.confirmation
 
@@ -36,15 +36,36 @@ class ConfirmationViewSpec extends ViewBehaviours {
   val confirmationView: confirmation = app.injector.instanceOf[confirmation]
 
   private def createView: () => Html =
-    () => confirmationView(frontendAppConfig, confirm, "token", pdfViewModel, s => Some("example country name"))(fakeRequest, messages)
+    () => confirmationView(frontendAppConfig, confirm, "token", pdfViewModel, _ => Some("example country name"),
+      urlViewModel = ConfirmationHomeUrlViewModel)(fakeRequest, messages)
 
   private def createView(pdf: PdfViewModel) =
-    confirmationView(frontendAppConfig, confirm, "token", pdf, s => Some("example country name"))(fakeRequest, messages)
+    confirmationView(frontendAppConfig, confirm, "token", pdf, _ => Some("example country name"),
+      urlViewModel = ConfirmationHomeUrlViewModel)(fakeRequest, messages)
+
+  private def createView(confViewModel: ConfirmationUrlViewModel) =
+    confirmationView(frontendAppConfig, confirm, "token", pdfViewModel, _ => Some("example country name"),
+      urlViewModel = confViewModel)(fakeRequest, messages)
 
   "Confirmation view" must {
     behave like normalPage(createView, messageKeyPrefix)()
     behave like pageWithoutBackLink(createView)
 
+    "display a return to BTA button link" when {
+      "a user has arrived from BTA" in {
+        val btaConfViewModel = ConfirmationBTAUrlViewModel("testUrl")
+        val doc = asDocument(createView(btaConfViewModel))
+        assertLinkContainsHref(doc, "returnButtonLink", "testUrl")
+      }
+    }
+
+    "display a return to Applications and Rulings button link" when {
+      "a user has not arrived from BTA" in {
+        val doc = asDocument(createView())
+        assertLinkContainsHref(doc, "returnButtonLink",
+          controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url)
+      }
+    }
 
     "with reference" in {
       val text = asDocument(createView(pdfViewModel)).text()
@@ -92,6 +113,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
         text should include(messages("confirmation.paragraph1.sendingSamples"))
         text should not include (messages("view.application.paragraph.do.not.send.sample"))
       }
+
     }
 
     "Main PDF view" must {

@@ -23,9 +23,10 @@ import models.SortField.SortField
 import models._
 import navigation.Navigator
 import pages.IndexPage
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import service.CasesService
+import service.{BTAUserService, CasesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.Dashboard
 import views.CaseDetailTab
@@ -35,16 +36,18 @@ import views.html.{account_dashboard_statuses, index}
 import javax.inject.Inject
 import scala.concurrent.Future.successful
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 
 class IndexController @Inject()(
-  val appConfig: FrontendAppConfig,
-  identify: IdentifierAction,
-  navigator: Navigator,
-  service: CasesService,
-  cc: MessagesControllerComponents,
-  accountDashboardStatusesView: account_dashboard_statuses,
-  indexView: index
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+                                 val appConfig: FrontendAppConfig,
+                                 identify: IdentifierAction,
+                                 navigator: Navigator,
+                                 service: CasesService,
+                                 cc: MessagesControllerComponents,
+                                 btaUserService: BTAUserService,
+                                 accountDashboardStatusesView: account_dashboard_statuses,
+                                 indexView: index
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
 
   private val applicationStatuses = Set(
     CaseStatus.DRAFT, CaseStatus.NEW, CaseStatus.OPEN,
@@ -82,18 +85,24 @@ class IndexController @Inject()(
     }
   }
 
-  def getApplicationsAndRulings(page: Int, sortBy: Option[SortField], order: Option[SortDirection]): Action[AnyContent] = identify.async { implicit request =>
+  def getApplicationsAndRulings(page: Int, sortBy: Option[SortField], order: Option[SortDirection]):
+  Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
         val sort = Sort(sortBy.getOrElse(Dashboard.defaultSortField), order)
-        service.getCases(eori, applicationStatuses, SearchPagination(page), sort) flatMap { pagedResult =>
-          successful(Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort))))
+        (for {
+          pagedResult <- service.getCases(eori, applicationStatuses, SearchPagination(page), sort)
+          isBTAUser <-  btaUserService.isBTAUser(request.identifier)
+        } yield {
+            Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort), isBTAUser))
+        }) recover {
+          case NonFatal(error) =>
+            logger.error("An error occurred whilst fetching data for dashboard view", error)
+            Redirect(routes.ErrorController.onPageLoad())
         }
-
       case None =>
         val initialAnswers = UserAnswers(request.identifier)
         successful(Redirect(navigator.nextPage(IndexPage, NormalMode)(initialAnswers)))
     }
-
   }
 }

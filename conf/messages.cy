@@ -24,6 +24,7 @@ index.title = Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 index.heading = Eich ceisiadau a’ch dyfarniadau
 index.noapplications = Nid ydych wedi dechrau unrhyw geisiadau.
 index.home = Hafan
+index.bta.link = Yn ôl i’ch cyfrif treth busnes
 
 global.link.signout = Allgofnodi
 
@@ -404,6 +405,8 @@ confirmation.paragraph.signup =  Gallwch fewngofnodi i
 confirmation.check.status.linkText = wirio statws eich cais.
 confirmation.get.moreInformation = Rhagor o wybodaeth am samplau (yn agor ffenestr neu dab newydd)
 confirmation.paragraph.sample.return = Caiff samplau eu dychwelyd pan fo hynny’n bosibl. Mewn rhai achosion, efallai y caiff samplau eu difrodi wrth eu profi. Os hoffech i ni anfon y samplau yn ôl atoch, mae’n rhaid i chi gynnwys cost y stampiau post. Fel arall, gallwch gasglu’ch samplau o’n swyddfa yn Southend.
+
+view.bta.home.link = Ewch i’ch cyfrif treth busnes
 
 view.application.home.Link = Ewch i’ch ceisiadau a’ch dyfarniadau
 view.application.header = Eich cais

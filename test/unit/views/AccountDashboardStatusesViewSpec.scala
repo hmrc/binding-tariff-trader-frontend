@@ -17,6 +17,8 @@
 package unit.views
 
 import models.{Case, Paged, Sort, oCase}
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.twirl.api.HtmlFormat
 import unit.views.behaviours.PaginationViewBehaviours
 import viewmodels.Dashboard
@@ -29,11 +31,20 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours with PaginationVie
   val pagedNoPagination: Paged[Case] = Paged(Seq(oCase.btiCaseExample))
   val paginationIdOneResult = "bottom-applications-pagination-one-result"
   val paginationIdMultipleResult = "bottom-applications-pagination-some-result"
+  lazy val btaHost = "btaHost"
 
+  override implicit lazy val app: Application = GuiceApplicationBuilder()
+    .configure(
+      "metrics.jvm" -> false,
+      "metrics.enabled" -> false,
+      "toggle.samplesNotAccepted" -> false,
+      "business-tax-account.host" -> btaHost
+    ).build()
 
   def accountDashboardStatusesView: account_dashboard_statuses = app.injector.instanceOf[account_dashboard_statuses]
 
-  def applicationView(dashboard: Dashboard): () => HtmlFormat.Appendable = () => accountDashboardStatusesView(frontendAppConfig, dashboard)(fakeRequest, messages)
+  def applicationView(dashboard: Dashboard, isBTAUser: Boolean = false): () => HtmlFormat.Appendable =
+    () => accountDashboardStatusesView(frontendAppConfig, dashboard, isBTAUser)(fakeRequest, messages)
 
   "no previous applications view" must {
     behave like normalPage(applicationView(Dashboard(emptyPaged, Sort())), "index")()
@@ -49,6 +60,21 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours with PaginationVie
 
     behave like pageWithNoPaginationAndResults(applicationView(Dashboard(emptyPaged, Sort())))
     behave like pageWithResultsAndNoPagination(paginationIdOneResult, applicationView(Dashboard(Paged(Seq(oCase.btiCaseExample)), Sort())))
+
+    "display a return to BTA link" when {
+      "a user has arrived from BTA" in {
+        val isBTAUser = true
+        val doc = asDocument(applicationView(Dashboard(emptyPaged, Sort()), isBTAUser)())
+        assertLinkContainsHref(doc, "bta-return-link", btaHost)
+      }
+    }
+
+    "not display a return to BTA link" when {
+      "a user has not arrived from BTA" in {
+        val doc = asDocument(applicationView(Dashboard(emptyPaged, Sort()))())
+        assertNotRenderedById(doc, "bta-return-link")
+      }
+    }
 
     "show message to say no previous applications when there are none supplied" in {
       val doc = asDocument(applicationView(Dashboard(emptyPaged, Sort()))())

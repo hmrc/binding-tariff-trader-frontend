@@ -41,6 +41,7 @@ index.title = Manage your Advance Tariff Rulings - GOV.UK
 index.heading = Your applications and rulings
 index.noapplications = You have not started any applications.
 index.home = Home
+index.bta.link = Return to your business tax account
 
 global.link.signout = Sign out
 
@@ -404,6 +405,8 @@ confirmation.paragraph.signup = You can sign in to
 confirmation.check.status.linkText = check the status of your application.
 confirmation.get.moreInformation = Get more information about samples (opens in a new window or tab)
 confirmation.paragraph.sample.return = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
+
+view.bta.home.link = Go to your business tax account
 
 view.application.home.Link = Go to your applications and rulings
 view.application.header = Your application

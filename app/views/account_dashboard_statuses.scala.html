@@ -22,16 +22,28 @@
 
 @this(
         govukLayoutWrapper: GovukLayoutWrapper,
-        fullMainContent: FullLayoutMainContent
+        fullMainContent: FullLayoutMainContent,
+        govukBackLink: GovukBackLink
 )
 
-@(appConfig: FrontendAppConfig, dashboard: Dashboard)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, dashboard: Dashboard, isBTAUser: Boolean)(implicit request: Request[_], messages: Messages)
+
+@btaHomeLink = @{
+      if(isBTAUser){
+        Some(govukBackLink(BackLink(
+            href = appConfig.businessTaxAccountUrl,
+            content = Text(messages("index.bta.link")),
+            attributes = Map("class" -> "govuk-back-link", "id" -> "bta-return-link")
+        )))
+      }else{
+        None
+      }
+}
 
 @additionalCSS = @{
     Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")}'/>
              <link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/partials/pagination.css")}'/>""")
 }
-
 
 @paginate(containerClass: String, idPrefix: String) = {
   @pagination(
@@ -44,12 +56,15 @@
   )
 }
 
+
 @govukLayoutWrapper(
     pageTitle = messages("index.title"),
     showBackLink = false,
+    customBackLink = btaHomeLink,
     optCustomLayout = Some(fullMainContent(_)),
     additionalCSS = Some(additionalCSS)
 ) {
+
     @components.heading(
         messages("index.heading"),
         captionMsg = Some(messages("application.dashboard.status.title"))

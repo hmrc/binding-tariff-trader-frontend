@@ -19,7 +19,8 @@ package base
 import akka.stream.Materializer
 import config.FrontendAppConfig
 import models.UserAnswers
-import models.requests.{DataRequest, OptionalDataRequest}
+import models.requests.{DataRequest, IdentifierRequest, OptionalDataRequest}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -27,14 +28,14 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.Files.TemporaryFileCreator
-import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents}
+import play.api.mvc.{AnyContent, AnyContentAsEmpty, MessagesControllerComponents, Request}
 import play.api.test.CSRFTokenHelper.CSRFFRequestHeader
 import play.api.test.{FakeHeaders, FakeRequest}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import unit.base.WireMockObject
 import unit.utils.UnitSpec
 
-trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
+trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar with BeforeAndAfterEach {
 
   override implicit lazy val app: Application = GuiceApplicationBuilder()
     .configure(
@@ -57,6 +58,9 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar {
 
   implicit val cc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
   implicit val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+
+  def fakeRequestWithIdentifier[A](request: Request[AnyContent] = FakeRequest()): IdentifierRequest[AnyContent] =
+    IdentifierRequest(request, "id", Some("eori-789012"))
 
   def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
 
