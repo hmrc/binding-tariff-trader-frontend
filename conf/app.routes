@@ -15,6 +15,7 @@ GET         /applications                                              controlle
 GET         /rulings                                                   controllers.IndexController.getRulings(page: Int ?= 1)
 GET         /applications-and-rulings                                  controllers.IndexController.getApplicationsAndRulings(page: Int ?= 1, sortBy: Option[SortField], order: Option[SortDirection])
 GET         /bta                                                       controllers.BTARedirectController.bta
+GET         /btaRedirect                                               controllers.BTARedirectController.btaRedirect
 
 GET         /sign-out                                                  controllers.SignOutController.startFeedbackSurvey
 GET         /force-sign-out                                            controllers.SignOutController.forceSignOut

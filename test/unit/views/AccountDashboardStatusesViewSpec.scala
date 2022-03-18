@@ -31,14 +31,12 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours with PaginationVie
   val pagedNoPagination: Paged[Case] = Paged(Seq(oCase.btiCaseExample))
   val paginationIdOneResult = "bottom-applications-pagination-one-result"
   val paginationIdMultipleResult = "bottom-applications-pagination-some-result"
-  lazy val btaHost = "btaHost"
 
   override implicit lazy val app: Application = GuiceApplicationBuilder()
     .configure(
       "metrics.jvm" -> false,
       "metrics.enabled" -> false,
-      "toggle.samplesNotAccepted" -> false,
-      "business-tax-account.host" -> btaHost
+      "toggle.samplesNotAccepted" -> false
     ).build()
 
   def accountDashboardStatusesView: account_dashboard_statuses = app.injector.instanceOf[account_dashboard_statuses]
@@ -65,7 +63,9 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours with PaginationVie
       "a user has arrived from BTA" in {
         val isBTAUser = true
         val doc = asDocument(applicationView(Dashboard(emptyPaged, Sort()), isBTAUser)())
-        assertLinkContainsHref(doc, "bta-return-link", btaHost)
+
+        assertLinkContainsHrefAndText(doc, "bta-return-link",
+          controllers.routes.BTARedirectController.btaRedirect().url, messages("index.bta.link"))
       }
     }
 

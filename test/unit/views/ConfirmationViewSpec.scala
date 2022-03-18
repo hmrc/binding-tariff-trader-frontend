@@ -53,17 +53,19 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
     "display a return to BTA button link" when {
       "a user has arrived from BTA" in {
-        val btaConfViewModel = ConfirmationBTAUrlViewModel("testUrl")
+        val btaConfViewModel = ConfirmationBTAUrlViewModel
         val doc = asDocument(createView(btaConfViewModel))
-        assertLinkContainsHref(doc, "returnButtonLink", "testUrl")
+        assertLinkContainsHrefAndText(doc, "returnButtonLink",
+          controllers.routes.BTARedirectController.btaRedirect().url, messages("view.bta.home.link"))
       }
     }
 
     "display a return to Applications and Rulings button link" when {
       "a user has not arrived from BTA" in {
         val doc = asDocument(createView())
-        assertLinkContainsHref(doc, "returnButtonLink",
-          controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url)
+        assertLinkContainsHrefAndText(doc, "returnButtonLink",
+          controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url,
+          messages("view.application.home.Link"))
       }
     }
 

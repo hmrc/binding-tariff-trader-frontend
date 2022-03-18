@@ -44,7 +44,6 @@ class BTAUserService @Inject()(dataCacheConnector: DataCacheConnector)(implicit 
   }
 
   def remove(requestId: String): Future[Boolean] = {
-    dataCacheConnector.fetch(requestId)
     for{
       maybeCacheMap <- dataCacheConnector.fetch(cacheMapId(requestId))
       cacheMapRemoved <- maybeCacheMap.fold(Future.successful(false))(dataCacheConnector.remove)

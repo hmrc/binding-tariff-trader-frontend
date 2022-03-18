@@ -88,7 +88,7 @@ class BTAUserServiceSpec extends SpecBase {
       val result = await(btaUserService.remove(requestId))
 
       result shouldBe true
-      verify(dataCacheConnector).remove(cacheMap)
+      verify(dataCacheConnector, times(1)).remove(cacheMap)
     }
 
     "not remove a cacheMap containing a boolean value if one does not exist" in {
@@ -97,7 +97,7 @@ class BTAUserServiceSpec extends SpecBase {
       val result = await(btaUserService.remove(requestId))
 
       result shouldBe false
-      verify(dataCacheConnector,times(0)).remove(cacheMap)
+      verify(dataCacheConnector, times(0)).remove(cacheMap)
     }
   }
 }

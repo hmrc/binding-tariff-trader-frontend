@@ -21,8 +21,9 @@ sealed trait ConfirmationUrlViewModel {
   val url: String
 }
 
-case class ConfirmationBTAUrlViewModel(url: String) extends ConfirmationUrlViewModel {
+case object ConfirmationBTAUrlViewModel extends ConfirmationUrlViewModel {
   override val messageKey = "view.bta.home.link"
+  override val url: String = controllers.routes.BTARedirectController.btaRedirect().url
 }
 
 case object ConfirmationHomeUrlViewModel extends ConfirmationUrlViewModel {
@@ -31,7 +32,7 @@ case object ConfirmationHomeUrlViewModel extends ConfirmationUrlViewModel {
 }
 
 object ConfirmationUrlViewModel {
-  def apply(btaHomeUrl: String, isBTAUser: Boolean): ConfirmationUrlViewModel = {
-    if(isBTAUser) ConfirmationBTAUrlViewModel(btaHomeUrl) else ConfirmationHomeUrlViewModel
+  def apply(isBTAUser: Boolean): ConfirmationUrlViewModel = {
+    if(isBTAUser) ConfirmationBTAUrlViewModel else ConfirmationHomeUrlViewModel
   }
 }

@@ -24,7 +24,7 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import pages.{ConfirmationPage, PdfViewPage}
 import play.api.test.Helpers._
-import service.{CountriesService, PdfService, BTAUserService}
+import service.{BTAUserService, CountriesService, PdfService}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import utils.JsonFormatters._
 import viewmodels.{ConfirmationHomeUrlViewModel, PdfViewModel}
@@ -79,7 +79,6 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
       given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdfViewModel))
       given(pdfService.encodeToken("eori")).willReturn("token")
       given(btaUserService.isBTAUser(fakeRequest.internalId)).willReturn(false)
-      given(btaUserService.remove(fakeRequest.internalId)).willReturn(false)
       given(applicationConfig.businessTaxAccountUrl).willReturn("testBtaHostUrl")
 
       val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
@@ -99,8 +98,8 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
     }
 
     val errorScenarios = List(
-        ("isBTAUser", () => Future.failed(new RuntimeException(" Fetch Error")), () => Future.successful(true)),
-        ("remove", () => Future.successful(true), () => Future.failed(new RuntimeException("Remove Error")))
+        ("isBTAUser", () => Future.failed(new RuntimeException(" Fetch Error"))),
+        ("remove", () => Future.successful(true))
     )
 
     "redirect to an error page" when {
@@ -112,7 +111,6 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
           given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
           given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdfViewModel))
           given(btaUserService.isBTAUser(fakeRequest.internalId)).willReturn(data._2())
-          given(btaUserService.remove(fakeRequest.internalId)).willReturn(data._3())
 
           val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
 

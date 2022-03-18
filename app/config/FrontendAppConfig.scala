@@ -64,7 +64,7 @@ class FrontendAppConfig @Inject()(
   private lazy val bindingTariffRulingsUrl = loadConfig("binding-tariff-ruling-frontend.host")
   lazy val bindingTariffRulingsHomeUrl: String = s"$bindingTariffRulingsUrl/search-for-advance-tariff-rulings"
 
-  lazy val businessTaxAccountHost: String = loadConfig("business-tax-account.host")
+  private lazy val businessTaxAccountHost: String = loadConfig("business-tax-account.host")
   lazy val businessTaxAccountUrl: String = s"$businessTaxAccountHost/business-account"
 
   private lazy val feedbackUrl: String = loadConfig("feedback-frontend.host")

@@ -52,13 +52,12 @@ class ConfirmationController @Inject()(
     def show(c: Confirmation, pdf: PdfViewModel): Future[Result] =
       (for {
       isBTAUser <- btaUserService.isBTAUser(request.internalId)
-      _ <- if(isBTAUser) btaUserService.remove(request.internalId) else Future.successful(false)
       removed <- dataCacheConnector.remove(request.userAnswers.cacheMap)
       _ = if (!removed) logger.warn("Session entry failed to be removed from the cache")
       token: String = pdfService.encodeToken(c.eori)
     } yield {
         Ok(confirmationView(appConfig, c, token, pdf, getCountryName, urlViewModel =
-        ConfirmationUrlViewModel(appConfig.businessTaxAccountUrl, isBTAUser)))
+        ConfirmationUrlViewModel(isBTAUser)))
     }) recover {
         case NonFatal(error) =>
           logger.error("An error occurred whilst processing data for the confirmation view", error)

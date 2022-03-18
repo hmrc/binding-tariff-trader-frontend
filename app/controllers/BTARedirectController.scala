@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
 import play.api.Logging
 import play.api.mvc._
@@ -30,7 +31,8 @@ import scala.util.{Failure, Success}
 class BTARedirectController @Inject()(
                                        identify: IdentifierAction,
                                        cc: MessagesControllerComponents,
-                                       btaUserService: BTAUserService)(implicit ec: ExecutionContext) extends FrontendController(cc) with Logging {
+                                       btaUserService: BTAUserService,
+                                       appConfig: FrontendAppConfig)(implicit ec: ExecutionContext) extends FrontendController(cc) with Logging {
 
   def bta: Action[AnyContent] = identify.async { implicit request =>
     btaUserService.save(request.identifier) transformWith {
@@ -38,6 +40,15 @@ class BTARedirectController @Inject()(
         case Failure(NonFatal(error)) =>
           logger.error("An error occurred whilst saving BTA User", error)
           Future.successful(Redirect(routes.ErrorController.onPageLoad()))
+    }
+  }
+
+  def btaRedirect: Action[AnyContent] = identify.async { implicit request =>
+    btaUserService.remove(request.identifier) transformWith {
+      case Success(_) => Future.successful(Redirect(appConfig.businessTaxAccountUrl))
+      case Failure(NonFatal(error)) =>
+        logger.error("An error occurred whilst removing the BTA User", error)
+        Future.successful(Redirect(appConfig.businessTaxAccountUrl))
     }
   }
 }

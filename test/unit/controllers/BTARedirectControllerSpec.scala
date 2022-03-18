@@ -16,6 +16,7 @@
 
 package unit.controllers
 
+import config.FrontendAppConfig
 import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import controllers.{BTARedirectController, ControllerSpecBase, routes}
 import org.mockito.Mockito.{reset, when}
@@ -33,12 +34,15 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
 
   val btaUserService: BTAUserService = mock[BTAUserService]
   val cacheMap = new CacheMap("testId", Map.empty)
+  val testHost = "testHost"
+  val testUrl = s"$testHost/business-account"
 
   lazy val btaApp: Application = GuiceApplicationBuilder()
     .configure(
       "metrics.jvm" -> false,
       "metrics.enabled" -> false,
-      "toggle.samplesNotAccepted" -> false)
+      "toggle.samplesNotAccepted" -> false,
+      "business-tax-account.host" -> testHost)
     .overrides(
       bind[IdentifierAction].toInstance(FakeIdentifierAction),
       bind[BTAUserService].toInstance(btaUserService)
@@ -50,7 +54,7 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
 
   val controller: BTARedirectController = btaApp.injector.instanceOf[BTARedirectController]
 
-  "btaRedirect" should {
+  "bta" should {
     "redirect to Applications And Rulings" when {
       "a bta user flag has been successfully saved" in {
         val request = fakeRequestWithIdentifier()
@@ -70,6 +74,26 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
 
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad().url)
+      }
+    }
+  }
+
+  val redirectScenarios = List(
+    ("been successfully removed", () => Future.successful(true)),
+    ("not been successfully removed", () => Future.failed(new RuntimeException("Remove Error")))
+  )
+
+  "btaRedirect" should {
+    "redirect to BTA" when {
+      redirectScenarios foreach { data =>
+        s"a btaUser has ${data._1}" in {
+          val request = fakeRequestWithIdentifier()
+          when(btaUserService.remove(request.identifier)).thenReturn(data._2())
+          val result = controller.btaRedirect(request)
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(testUrl)
+        }
       }
     }
   }
