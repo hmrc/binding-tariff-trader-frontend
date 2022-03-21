@@ -19,6 +19,7 @@
 @import viewmodels.AnswerSection
 @import viewmodels.PdfViewModel
 @import views.html.layouts.FullLayoutMainContent
+@import viewmodels.ConfirmationUrlViewModel
 
 @this(
         govukLayoutWrapper: GovukLayoutWrapper,
@@ -26,7 +27,7 @@
 )
 
 @(appConfig: FrontendAppConfig, confirmation: Confirmation, pdfToken: String, pdf: PdfViewModel,
-        getCountryName: String => Option[String], compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+        getCountryName: String => Option[String], compositeMode: Boolean = false, urlViewModel: ConfirmationUrlViewModel)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"
@@ -114,7 +115,7 @@
     <!--Samples toggle logic end-->
 
     <div class="mt-2 footer-page-break">
-        @components.button_link(messages("view.application.home.Link"), routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url)
+        @components.button_link(messages(urlViewModel.messageKey), urlViewModel.url, Some("returnButtonLink"))
     </div>
 
     <div>

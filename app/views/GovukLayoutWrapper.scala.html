@@ -35,6 +35,7 @@
         signOut: Option[String] = Some(routes.SignOutController.startFeedbackSurvey.url),
         timeoutActive: Boolean = true,
         showBackLink: Boolean = true,
+        customBackLink: Option[Html] = None,
         optCustomLayout: Option[Html => Html] = None,
         additionalJS: Option[Html] = None,
         additionalCSS: Option[Html] = None,
@@ -73,6 +74,8 @@
                 attributes = Map("class" -> "govuk-back-link", "id" -> "back-link")
             ))
         }
+
+        @if(customBackLink.isDefined){ @customBackLink.get }
     </div>
 }
 

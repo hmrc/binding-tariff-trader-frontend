@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import models.{Confirmation, oCase}
@@ -23,10 +24,10 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
 import pages.{ConfirmationPage, PdfViewPage}
 import play.api.test.Helpers._
-import service.{CountriesService, PdfService}
+import service.{BTAUserService, CountriesService, PdfService}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import utils.JsonFormatters._
-import viewmodels.PdfViewModel
+import viewmodels.{ConfirmationHomeUrlViewModel, PdfViewModel}
 import views.html.confirmation
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -39,34 +40,46 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
   private val pdfService = mock[PdfService]
   private val pdfViewModel = oCase.pdf
   private val countriesService = new CountriesService
+  private val btaUserService = mock[BTAUserService]
+  private val applicationConfig = mock[FrontendAppConfig]
+
+  override def beforeEach(): Unit = {
+    reset(cache, cacheMap, pdfService, btaUserService, applicationConfig)
+  }
 
   val confirmationView: confirmation = app.injector.instanceOf(classOf[confirmation])
 
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
     new ConfirmationController(
-      frontendAppConfig,
+      applicationConfig,
       FakeIdentifierAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
       cache,
       countriesService,
       pdfService,
+      btaUserService,
       cc,
       confirmationView
     )
   }
 
   private def viewAsString: String = {
-    confirmationView(frontendAppConfig, Confirmation("ref", "eori", "marisa@example.test"), "token", pdfViewModel, s => Some(""))(fakeRequest, messages).toString
+    confirmationView(applicationConfig, Confirmation("ref", "eori", "marisa@example.test"), "token", pdfViewModel, _ => Some(""),
+      urlViewModel = ConfirmationHomeUrlViewModel)(fakeRequest, messages).toString
   }
 
   "Confirmation Controller" must {
 
     "return OK and the correct view for a GET" in {
+      val fakeRequest = fakeRequestWithNotOptionalEoriAndCache
+
       given(cache.remove(cacheMap)).willReturn(Future.successful(true))
       given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
       given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdfViewModel))
       given(pdfService.encodeToken("eori")).willReturn("token")
+      given(btaUserService.isBTAUser(fakeRequest.internalId)).willReturn(false)
+      given(applicationConfig.businessTaxAccountUrl).willReturn("testBtaHostUrl")
 
       val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
 
@@ -84,6 +97,27 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
-  }
+    val errorScenarios = List(
+        ("isBTAUser", () => Future.failed(new RuntimeException(" Fetch Error"))),
+        ("remove", () => Future.successful(true))
+    )
 
+    "redirect to an error page" when {
+      errorScenarios foreach { data =>
+        s"there is an issue calling ${data._1}" in {
+          val fakeRequest = fakeRequestWithNotOptionalEoriAndCache
+
+          given(cache.remove(cacheMap)).willReturn(Future.successful(true))
+          given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
+          given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdfViewModel))
+          given(btaUserService.isBTAUser(fakeRequest.internalId)).willReturn(data._2())
+
+          val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad().url)
+        }
+      }
+    }
+  }
 }
