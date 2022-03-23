@@ -34,21 +34,29 @@ class BTARedirectController @Inject()(
                                        btaUserService: BTAUserService,
                                        appConfig: FrontendAppConfig)(implicit ec: ExecutionContext) extends FrontendController(cc) with Logging {
 
-  def bta: Action[AnyContent] = identify.async { implicit request =>
-    btaUserService.save(request.identifier) transformWith {
-        case Success(_) => Future.successful(Redirect(controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None)))
-        case Failure(NonFatal(error)) =>
-          logger.error("An error occurred whilst saving BTA User", error)
-          Future.successful(Redirect(routes.ErrorController.onPageLoad()))
-    }
+  def applicationsAndRulings: Action[AnyContent] = identify.async { implicit request =>
+    performInternalRedirect(request.identifier, controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None))
   }
 
-  def btaRedirect: Action[AnyContent] = identify.async { implicit request =>
+  def informationYouNeed: Action[AnyContent] = identify.async { implicit request =>
+    performInternalRedirect(request.identifier, controllers.routes.BeforeYouStartController.onPageLoad())
+  }
+
+  def redirectToBTA: Action[AnyContent] = identify.async { implicit request =>
     btaUserService.remove(request.identifier) transformWith {
       case Success(_) => Future.successful(Redirect(appConfig.businessTaxAccountUrl))
       case Failure(NonFatal(error)) =>
         logger.error("An error occurred whilst removing the BTA User", error)
         Future.successful(Redirect(appConfig.businessTaxAccountUrl))
+    }
+  }
+
+  private def performInternalRedirect(requestIdentifier: String, call: Call): Future[Result] = {
+    btaUserService.save(requestIdentifier) transformWith {
+      case Success(_) => Future.successful(Redirect(call))
+      case Failure(NonFatal(error)) =>
+        logger.error("An error occurred whilst saving BTA User", error)
+        Future.successful(Redirect(routes.ErrorController.onPageLoad()))
     }
   }
 }

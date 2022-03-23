@@ -16,7 +16,6 @@
 
 package unit.controllers
 
-import config.FrontendAppConfig
 import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import controllers.{BTARedirectController, ControllerSpecBase, routes}
 import org.mockito.Mockito.{reset, when}
@@ -54,12 +53,12 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
 
   val controller: BTARedirectController = btaApp.injector.instanceOf[BTARedirectController]
 
-  "bta" should {
+  "applicationsAndRulings" should {
     "redirect to Applications And Rulings" when {
       "a bta user flag has been successfully saved" in {
         val request = fakeRequestWithIdentifier()
         when(btaUserService.save(request.identifier)).thenReturn(Future.successful(cacheMap))
-        val result = controller.bta(request)
+        val result = controller.applicationsAndRulings(request)
 
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some(routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url)
@@ -70,7 +69,7 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
       "an error occurs whilst saving" in {
         val request = fakeRequestWithIdentifier()
         when(btaUserService.save(request.identifier)).thenReturn(Future.failed(new RuntimeException))
-        val result = controller.bta(request)
+        val result = controller.applicationsAndRulings(request)
 
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad().url)
@@ -78,18 +77,43 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
     }
   }
 
+  "informationYouNeed" should {
+    "redirect to Before You Start view" when {
+      "a bta user flag has been successfully saved" in {
+        val request = fakeRequestWithIdentifier()
+        when(btaUserService.save(request.identifier)).thenReturn(Future.successful(cacheMap))
+        val result = controller.informationYouNeed(request)
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
+      }
+    }
+
+    "redirect to an Error Page" when {
+      "an error occurs whilst saving" in {
+        val request = fakeRequestWithIdentifier()
+        when(btaUserService.save(request.identifier)).thenReturn(Future.failed(new RuntimeException))
+        val result = controller.informationYouNeed(request)
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad().url)
+      }
+    }
+
+  }
+
   val redirectScenarios = List(
     ("been successfully removed", () => Future.successful(true)),
     ("not been successfully removed", () => Future.failed(new RuntimeException("Remove Error")))
   )
 
-  "btaRedirect" should {
+  "redirectToBTA" should {
     "redirect to BTA" when {
       redirectScenarios foreach { data =>
         s"a btaUser has ${data._1}" in {
           val request = fakeRequestWithIdentifier()
           when(btaUserService.remove(request.identifier)).thenReturn(data._2())
-          val result = controller.btaRedirect(request)
+          val result = controller.redirectToBTA(request)
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(testUrl)

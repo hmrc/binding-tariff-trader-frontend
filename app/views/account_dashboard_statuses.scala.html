@@ -31,7 +31,7 @@
 @btaHomeLink = @{
       if(isBTAUser){
         Some(govukBackLink(BackLink(
-            href = routes.BTARedirectController.btaRedirect().url,
+            href = routes.BTARedirectController.redirectToBTA().url,
             content = Text(messages("index.bta.link")),
             attributes = Map("class" -> "govuk-back-link", "id" -> "bta-return-link")
         )))
