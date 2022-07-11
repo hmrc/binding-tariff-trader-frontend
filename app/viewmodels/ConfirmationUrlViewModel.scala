@@ -23,7 +23,7 @@ sealed trait ConfirmationUrlViewModel {
 
 case object ConfirmationBTAUrlViewModel extends ConfirmationUrlViewModel {
   override val messageKey = "view.bta.home.link"
-  override val url: String = controllers.routes.BTARedirectController.redirectToBTA().url
+  override val url: String = controllers.routes.BTARedirectController.redirectToBTA.url
 }
 
 case object ConfirmationHomeUrlViewModel extends ConfirmationUrlViewModel {

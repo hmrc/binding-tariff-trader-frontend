@@ -76,7 +76,7 @@ class AuthenticatedIdentifierAction @Inject()(
     Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
 
   def redirectToUnauthorised: Result =
-    Redirect(routes.UnauthorisedController.onPageLoad())
+    Redirect(routes.UnauthorisedController.onPageLoad)
 
   def redirectToEoriComponent: Result =
     Redirect(config.atarSubscribeUrl)

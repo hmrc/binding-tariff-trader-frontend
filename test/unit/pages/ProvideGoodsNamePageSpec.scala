@@ -16,6 +16,8 @@
 
 package unit.pages
 
+import controllers.routes
+import models.NormalMode
 import pages.ProvideGoodsNamePage
 import pages.behaviours.PageBehaviours
 
@@ -29,5 +31,9 @@ class ProvideGoodsNamePageSpec extends PageBehaviours {
     beSettable[String](ProvideGoodsNamePage)
 
     beRemovable[String](ProvideGoodsNamePage)
+
+    "route to appropriate controller route in normal mode" in {
+      ProvideGoodsNamePage.route(NormalMode) mustBe routes.ProvideGoodsNameController.onPageLoad(NormalMode)
+    }
   }
 }

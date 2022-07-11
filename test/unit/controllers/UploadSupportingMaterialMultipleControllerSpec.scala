@@ -304,7 +304,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val result = controller(dontGetAnyData).onPageLoad(None, NormalMode)(request)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
   }
 

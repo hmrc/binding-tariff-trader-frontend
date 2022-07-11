@@ -61,12 +61,12 @@ class ConfirmationController @Inject()(
     }) recover {
         case NonFatal(error) =>
           logger.error("An error occurred whilst processing data for the confirmation view", error)
-          Redirect(routes.ErrorController.onPageLoad())
+          Redirect(routes.ErrorController.onPageLoad)
     }
 
     (request.userAnswers.get(ConfirmationPage), request.userAnswers.get(PdfViewPage)) match {
       case (Some(c: Confirmation), Some(pdf: PdfViewModel)) => show(c, pdf)
-      case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+      case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
     }
   }
 

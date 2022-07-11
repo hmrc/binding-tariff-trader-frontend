@@ -16,10 +16,10 @@
 
 package views
 
+import base.SpecBase
 import org.scalatest.wordspec.AnyWordSpec
-import unit.utils.UnitSpec
 
-class ViewUtilsSpec extends AnyWordSpec with UnitSpec {
+class ViewUtilsSpec extends AnyWordSpec with SpecBase {
 
   "HumanReadableSize" must {
 
@@ -41,6 +41,13 @@ class ViewUtilsSpec extends AnyWordSpec with UnitSpec {
 
     }
 
+  }
+
+  "confidentialityStatusLabel" must {
+
+    "return expected string" in {
+      ViewUtils.confidentialityStatusLabel(true)(messages) shouldBe "Keep confidential"
+    }
   }
 
 }

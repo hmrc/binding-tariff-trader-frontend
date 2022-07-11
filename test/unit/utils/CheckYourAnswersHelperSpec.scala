@@ -35,7 +35,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
     userAnswers,
     countriesService.getAllCountriesById
   ) (messages)
-  private val fileAttachment = FileAttachment("id", "fileName", "mime", 1)
 
   "CheckYourAnswersHelper" when {
 
@@ -74,6 +73,16 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       "return a row with the correct answer for PreviousBTIRulingPage" in {
         given(userAnswers.get(PreviousBTIRulingPage)).willReturn(Option(true))
         checkHelper.previousBTIRuling.get.answer shouldBe "site.yes"
+      }
+
+      "return a row with the correct answer for AddConfidentialInformationPage" in {
+        given(userAnswers.get(AddConfidentialInformationPage)).willReturn(Option(true))
+        checkHelper.addConfidentialInformation.get.answer shouldBe "site.yes"
+      }
+
+      "return a row with the correct answer for AddSupportingDocumentsPage" in {
+        given(userAnswers.get(AddSupportingDocumentsPage)).willReturn(Option(true))
+        checkHelper.supportingMaterialFileListChoice.get.answer shouldBe "site.yes"
       }
     }
 
@@ -134,6 +143,21 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       "return a row with the correct answer for registered address" in {
         given(userAnswers.get(RegisteredAddressForEoriPage)).willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
         checkHelper.registeredAddress.get.answer shouldBe "f2\nf3\nf4\nIreland"
+      }
+
+      "return a row with the correct answer for ProvideGoodsNamePage" in {
+        given(userAnswers.get(ProvideGoodsNamePage)).willReturn(Option("Goods Name"))
+        checkHelper.provideGoodsName.get.answer shouldBe "Goods Name"
+      }
+
+      "return a row with the correct answer for ProvideGoodsDescriptionPage" in {
+        given(userAnswers.get(ProvideGoodsDescriptionPage)).willReturn(Option("Goods Description"))
+        checkHelper.provideGoodsDescription.get.answer shouldBe "Goods Description"
+      }
+
+      "return a row with the correct answer for ProvideConfidentialInformationPage" in {
+        given(userAnswers.get(ProvideConfidentialInformationPage)).willReturn(Option("Confidential info"))
+        checkHelper.provideConfidentialInformation.get.answer shouldBe "Confidential info"
       }
     }
   }

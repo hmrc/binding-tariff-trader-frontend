@@ -56,7 +56,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
         val btaConfViewModel = ConfirmationBTAUrlViewModel
         val doc = asDocument(createView(btaConfViewModel))
         assertLinkContainsHrefAndText(doc, "returnButtonLink",
-          controllers.routes.BTARedirectController.redirectToBTA().url, messages("view.bta.home.link"))
+          controllers.routes.BTARedirectController.redirectToBTA.url, messages("view.bta.home.link"))
       }
     }
 

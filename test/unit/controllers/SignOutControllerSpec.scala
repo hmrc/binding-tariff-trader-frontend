@@ -25,6 +25,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import service.BTAUserService
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -59,7 +60,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
     "clear user cache when present" in {
       await(controller.startFeedbackSurvey(fakeRequestWithEoriAndCache))
-      verify(dataCache).remove(any())
+      verify(dataCache).remove(any[CacheMap])
     }
   }
 
@@ -80,7 +81,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
       when(btaUserService.remove(request.internalId)).thenReturn(Future.successful(true))
 
       await(controller.forceSignOut(request))
-      verify(dataCache).remove(any())
+      verify(dataCache).remove(any[CacheMap])
       verify(btaUserService).remove(request.internalId)
     }
   }

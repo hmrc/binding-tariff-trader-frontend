@@ -22,6 +22,7 @@ import models._
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import pages._
+import play.api.libs.json.Reads
 import play.api.mvc.Call
 
 class NavigatorSpec extends SpecBase {
@@ -302,7 +303,7 @@ class NavigatorSpec extends SpecBase {
       "redirect to self if no answers were entered" in {
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.get(any())(any())).thenReturn(None)
+        when(mockUserAnswers.get(any[DataPage[String]])(any[Reads[String]])).thenReturn(None)
 
         navigator.nextPage(AddConfidentialInformationPage, NormalMode)(mockUserAnswers) shouldBe
           routes.AddConfidentialInformationController.onPageLoad(NormalMode)

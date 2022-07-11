@@ -34,7 +34,7 @@ import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.cache.client.CacheMap
-import viewmodels.{AnswerSection, PdfViewModel}
+import viewmodels.AnswerSection
 import views.html.check_your_answers
 
 import java.time.Instant
@@ -57,8 +57,6 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private val pdfService = mock[PdfService]
   private val fileService = mock[FileService]
   private val btiApp = mock[Application]
-  private val contact = mock[Contact]
-  private val pdf = mock[PdfViewModel]
 
   private val countriesService = new CountriesService
 
@@ -130,7 +128,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       val result = controller(dontGetAnyData).onPageLoad()(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
   }
 

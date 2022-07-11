@@ -65,7 +65,7 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours with PaginationVie
         val doc = asDocument(applicationView(Dashboard(emptyPaged, Sort()), isBTAUser)())
 
         assertLinkContainsHrefAndText(doc, "bta-return-link",
-          controllers.routes.BTARedirectController.redirectToBTA().url, messages("index.bta.link"))
+          controllers.routes.BTARedirectController.redirectToBTA.url, messages("index.bta.link"))
       }
     }
 

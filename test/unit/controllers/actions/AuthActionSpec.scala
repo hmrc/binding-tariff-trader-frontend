@@ -122,7 +122,7 @@ class AuthActionSpec extends SpecBase {
   }
 
   private def unauthorisedLocation = {
-    Some(routes.UnauthorisedController.onPageLoad().url)
+    Some(routes.UnauthorisedController.onPageLoad.url)
   }
 
   private def atarSubscribeLocation = {

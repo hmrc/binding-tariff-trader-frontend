@@ -130,6 +130,16 @@ class MappingsSpec extends AnyWordSpec with Matchers with OptionValues with Mapp
       result.errors must contain(FormError("value", "error.required"))
     }
 
+    "not bind a decimal" in {
+      val result = testForm.bind(Map("value" -> "1.0"))
+      result.errors must contain(FormError("value", "error.wholeNumber"))
+    }
+
+    "not bind a non numeric value" in {
+      val result = testForm.bind(Map("value" -> "a"))
+      result.errors must contain(FormError("value", "error.nonNumeric"))
+    }
+
     "not bind an empty map" in {
       val result = testForm.bind(Map.empty[String, String])
       result.errors must contain(FormError("value", "error.required"))
@@ -160,6 +170,11 @@ class MappingsSpec extends AnyWordSpec with Matchers with OptionValues with Mapp
     "not bind an empty map" in {
       val result = testForm.bind(Map.empty[String, String])
       result.errors must contain(FormError("value", "error.required"))
+    }
+
+    "unbind" in {
+      val result = testForm.fill(Baz)
+      result.apply("value").value.value mustEqual "Baz"
     }
   }
 }

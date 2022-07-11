@@ -30,7 +30,7 @@ trait ViewBehaviours extends ViewSpecBase {
       "rendered" must {
         "have the correct banner title" in {
           val doc = asDocument(view())
-          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          val bannerTitle = doc.getElementsByClass("hmrc-header__service-name")
           bannerTitle.text shouldBe messages("service.name")
         }
 

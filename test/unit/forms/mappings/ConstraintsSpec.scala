@@ -82,6 +82,29 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with Constraints {
     }
   }
 
+  "inRange" must {
+
+    "return Valid for a number that is in the range" in {
+      val result = inRange(1, 5,  "error.range").apply(2)
+      result mustEqual Valid
+    }
+
+    "return Valid for a number is equal to the min range" in {
+      val result = inRange(1, 5,  "error.range").apply(1)
+      result mustEqual Valid
+    }
+
+    "return Valid for a number is equal to the max range" in {
+      val result = inRange(1, 5,  "error.range").apply(5)
+      result mustEqual Valid
+    }
+
+    "return Invalid for a number out of range" in {
+      val result = inRange(1, 5,  "error.range").apply(6)
+      result mustEqual Invalid("error.range", 1, 5)
+    }
+  }
+
   "regexp" must {
 
     "return Valid for an input that matches the expression" in {
@@ -138,6 +161,14 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with Constraints {
     "return Invalid for a string longer than the allowed length" in {
       val result = maxLength(10, "error.length")("a" * 11)
       result mustEqual Invalid("error.length", 10)
+    }
+  }
+
+  "optionalMaxLength" must {
+
+    "return Valid for no input string" in {
+      val result = optionalMaxLength(10, "error.length")(None)
+      result mustEqual Valid
     }
   }
 }

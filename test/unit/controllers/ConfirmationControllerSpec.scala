@@ -94,7 +94,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
       val result = controller().onPageLoad(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
 
     val errorScenarios = List(
@@ -115,7 +115,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
           val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
 
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad().url)
+          redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
         }
       }
     }

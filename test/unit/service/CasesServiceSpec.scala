@@ -115,6 +115,30 @@ class CasesServiceSpec extends SpecBase {
     }
   }
 
+  "Service put" should {
+
+    "return appropriate case result" in {
+
+      val caseResult = oCase.btiCaseExample
+
+      given(caseConnector.putCase(refEq(existingCase))(any[HeaderCarrier])).willReturn(Future.successful(caseResult))
+
+      await(service.put(existingCase)(HeaderCarrier())) shouldBe caseResult
+    }
+  }
+
+  "Service update" should {
+
+    "return appropriate case result" in {
+
+      val caseResult = Some(oCase.btiCaseExample)
+
+      given(caseConnector.updateCase(refEq(caseRef), refEq(CaseUpdate(None)))(any[HeaderCarrier])).willReturn(Future.successful(caseResult))
+
+      await(service.update(caseRef, CaseUpdate(None))(HeaderCarrier())) shouldBe caseResult
+    }
+  }
+
   "addCaseCreatedEvent" should {
     val atar = oCase.btiCaseExample
     val operator = Operator("", Some(""))

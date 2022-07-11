@@ -21,7 +21,7 @@ import models._
 import models.requests.NewEventRequest
 import org.apache.http.HttpStatus
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream4xxResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import utils.JsonFormatters._
 
 import java.time.Instant
@@ -199,7 +199,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           )
       )
 
-      intercept[Upstream4xxResponse] {
+      intercept[UpstreamErrorResponse] {
         await(
           connector.putCase(caseExample)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
         )
@@ -471,7 +471,6 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       Event("id", CaseCreated("Case created"), Operator("", Some("user name")), "case-ref", Instant.now())
     val eventRequest: NewEventRequest =
       NewEventRequest(CaseCreated("comment"), Operator("", Some("user name")), Instant.now())
-    val events: Seq[Event] = Seq(event)
 
     "create event" in {
       val ref = "case-reference"
@@ -514,7 +513,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           )
       )
 
-      intercept[Upstream4xxResponse] {
+      intercept[UpstreamErrorResponse] {
         await(connector.createEvent(validCase, validEventRequest))
       }
 

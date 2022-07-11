@@ -30,8 +30,9 @@ import play.twirl.api.HtmlFormat
 import utils.Notification.{success, _}
 import viewmodels.FileView
 import views.html.supportingMaterialFileList
-
 import javax.inject.Inject
+import uk.gov.hmrc.play.bootstrap.controller.WithDefaultFormBinding
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class SupportingMaterialFileListController @Inject()(
@@ -44,7 +45,7 @@ class SupportingMaterialFileListController @Inject()(
   formProvider: SupportingMaterialFileListFormProvider,
   cc: MessagesControllerComponents,
   supportingMaterialFileListView: supportingMaterialFileList
-)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
+)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) with WithDefaultFormBinding {
   lazy val form: Form[Boolean] = formProvider()
   val questionPage: SupportingMaterialFileListPage.type = SupportingMaterialFileListPage
 

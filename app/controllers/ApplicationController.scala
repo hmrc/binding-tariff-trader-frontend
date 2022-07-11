@@ -88,10 +88,10 @@ class ApplicationController @Inject() (
           case Some(eori) =>
             toView(eori, reference)
           case None =>
-            Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+            Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad))
         }
       case _ =>
-        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
+        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad))
     }
 
   private def getApplicationPDF(eori: Eori, reference: CaseReference)(

@@ -98,7 +98,7 @@ class IndexController @Inject()(
         }) recover {
           case NonFatal(error) =>
             logger.error("An error occurred whilst fetching data for dashboard view", error)
-            Redirect(routes.ErrorController.onPageLoad())
+            Redirect(routes.ErrorController.onPageLoad)
         }
       case None =>
         val initialAnswers = UserAnswers(request.identifier)
