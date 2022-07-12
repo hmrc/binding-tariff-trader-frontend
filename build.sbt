@@ -25,7 +25,6 @@ lazy val root = (project in file("."))
     scalacOptions ~= { opts => opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard")) },
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    Test / parallelExecution := false,
     concurrentRestrictions in Global += Tags.limit(Tags.Test, 1),
     Test / fork := true,
     resolvers += Resolver.jcenterRepo,

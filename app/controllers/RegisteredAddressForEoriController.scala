@@ -45,7 +45,8 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                                    countriesService: CountriesService,
                                                    cc: MessagesControllerComponents,
                                                    registeredAddressForEoriView: registeredAddressForEori
-                                                  )(implicit ec: ExecutionContext) extends AnswerCachingController[RegisteredAddressForEori](cc) with I18nSupport with WithDefaultFormBinding {
+                                                  )(implicit ec: ExecutionContext)
+  extends AnswerCachingController[RegisteredAddressForEori](cc) with I18nSupport with WithDefaultFormBinding {
 
   lazy val form: Form[RegisteredAddressForEori] = formProvider()
   val questionPage: RegisteredAddressForEoriPage.type = RegisteredAddressForEoriPage

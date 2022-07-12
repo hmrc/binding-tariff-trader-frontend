@@ -117,16 +117,16 @@ trait HasMetrics {
 
   /**
     * Execute a block of code with a metrics timer.
-    * 
+    *
     * Intended for use in connectors that call other microservices.
-    * 
+    *
     * It's expected that the user of this method might want to handle
     * connector failures gracefully and therefore they are given a [[MetricsTimer]]
     * to optionally record whether the call was a success or a failure.
-    * 
+    *
     * If the user does not specify otherwise the status of the result Future is
     * used to determine whether the block was successful or not.
-    * 
+    *
     * @param metric The id of the metric to be collected
     * @param block The block of code to execute asynchronously
     * @param ec The [[scala.concurrent.ExecutionContext]] on which the block of code should run

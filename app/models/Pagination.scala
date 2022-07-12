@@ -25,11 +25,13 @@ object Pagination {
   val unlimited: Int = Integer.MAX_VALUE
 }
 
+// scalastyle:off magic.number
 case class SearchPagination
 (
   override val page: Int = 1,
   override val pageSize: Int = 50
 ) extends Pagination
+// scalastyle:on magic.number
 
 case class NoPagination
 (

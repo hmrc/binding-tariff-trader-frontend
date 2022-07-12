@@ -24,6 +24,7 @@ import play.api.data.Forms._
 
 class RegisteredAddressForEoriFormProvider @Inject() extends Mappings {
 
+  // scalastyle:off magic.number
    def apply(): Form[RegisteredAddressForEori] = Form(
      mapping(
       "eori" -> text("registeredAddressForEori.error.eori.required")
@@ -40,5 +41,6 @@ class RegisteredAddressForEoriFormProvider @Inject() extends Mappings {
       "country" -> text("registeredAddressForEori.error.country.required")
      )(RegisteredAddressForEori.apply)(RegisteredAddressForEori.unapply)
    )
+  // scalastyle:on magic.number
 
 }

@@ -24,9 +24,11 @@ import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Res
 
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class ListEditingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A]) extends AccumulatingEditingController[List[A], A, Int](cc) with ListAnswerEditing[A]
+abstract class ListEditingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A])
+  extends AccumulatingEditingController[List[A], A, Int](cc) with ListAnswerEditing[A]
 
-abstract class MapEditingController[V](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[V]) extends AccumulatingEditingController[Map[String, V], (String, V), String](cc) with MapAnswerEditing[String, V]
+abstract class MapEditingController[V](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[V])
+  extends AccumulatingEditingController[Map[String, V], (String, V), String](cc) with MapAnswerEditing[String, V]
 
 abstract class AccumulatingEditingController[F <: TraversableOnce[A], A, I](
   cc: MessagesControllerComponents

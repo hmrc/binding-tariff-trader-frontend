@@ -22,9 +22,11 @@ import play.api.data.Form
 
 class ProvideGoodsNameFormProvider @Inject() extends Mappings {
 
+  // scalastyle:off magic.number
   def apply(): Form[String] =
     Form(
       "goodsName" -> text("provideGoodsName.error.required")
         .verifying(maxLength(100, "provideGoodsName.error.length"))
     )
+  // scalastyle:on magic.number
 }

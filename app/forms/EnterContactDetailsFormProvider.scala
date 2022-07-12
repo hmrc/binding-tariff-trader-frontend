@@ -26,6 +26,7 @@ class EnterContactDetailsFormProvider @Inject() extends Mappings with Constraint
 
   val telephoneRegex = """^\+?[-0-9\s\(\)./]{1,20}$"""
 
+  // scalastyle:off magic.number
    def apply(): Form[EnterContactDetails] = Form(
      mapping(
        "name" -> text("enterContactDetails.error.name.required")
@@ -52,5 +53,6 @@ class EnterContactDetailsFormProvider @Inject() extends Mappings with Constraint
          .verifying(regexp(telephoneRegex, "enterContactDetails.error.phoneNumber.invalid"))
      )(EnterContactDetails.apply)(EnterContactDetails.unapply)
    )
+  // scalastyle:on magic.number
 
 }

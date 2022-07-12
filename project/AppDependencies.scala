@@ -5,13 +5,13 @@ object AppDependencies {
   import play.core.PlayVersion
 
   private val silencerVersion = "1.7.9"
-  private val bootstrapPlayVersion = "6.2.0"
-  private val hmrcMongoPlayVersion = "0.66.0"
+  private val bootstrapPlayVersion = "6.3.0"
+  private val hmrcMongoPlayVersion = "0.67.0"
 
   val compile = Seq(
     "commons-validator"            % "commons-validator"              % "1.7",
     "uk.gov.hmrc"                  %% "play-frontend-hmrc"            % "3.22.0-play-28",
-    "uk.gov.hmrc"                  %% "bootstrap-frontend-play-28"    % "6.2.0",
+    "uk.gov.hmrc"                  %% "bootstrap-frontend-play-28"    % bootstrapPlayVersion,
     "uk.gov.hmrc"                  %% "http-caching-client"           % "9.6.0-play-28",
     "uk.gov.hmrc"                  %% "play-language"                 % "5.3.0-play-28",
     "uk.gov.hmrc.mongo"            %% "hmrc-mongo-play-28"            % hmrcMongoPlayVersion,
@@ -30,7 +30,7 @@ object AppDependencies {
     "com.github.tomakehurst"  %  "wiremock-jre8"           % "2.33.2"             % scope,
     "com.typesafe.play"       %% "play-test"               % PlayVersion.current  % scope,
     "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-28" % hmrcMongoPlayVersion % scope,
-    "uk.gov.hmrc"            %% "bootstrap-test-play-28"   % bootstrapPlayVersion % scope,
+    "uk.gov.hmrc"             %% "bootstrap-test-play-28"  % bootstrapPlayVersion % scope,
     "org.scalatest"           %% "scalatest"               % "3.2.12"             % scope,
     "org.scalatestplus"       %% "mockito-4-5"             % "3.2.12.0"           % scope,
     "org.scalatestplus"       %% "scalacheck-1-16"         % "3.2.12.0"           % scope,

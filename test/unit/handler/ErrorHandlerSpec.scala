@@ -31,7 +31,7 @@ class ErrorHandlerSpec extends SpecBase {
 
     "return an error page" in {
       val result = errorHandler.standardErrorTemplate(
-        pageTitle= "pageTitle",
+        pageTitle = "pageTitle",
         heading = "heading",
         message = "message"
       )(fakeRequest)

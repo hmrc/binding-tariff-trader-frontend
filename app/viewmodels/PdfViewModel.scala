@@ -47,7 +47,7 @@ case class PdfViewModel(
   }
 
   def similarAtarCodes: String = similarAtarReferences.mkString("\n")
-  
+
 }
 
 object PdfViewModel {
