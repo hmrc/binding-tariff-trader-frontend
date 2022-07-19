@@ -58,6 +58,13 @@ class PdfServiceSpec extends SpecBase {
   "Service" should {
     val key = "9368B45C6E87AB6C45839EB23A123763"
 
+    "return None when decoding a bad token with no aesKey specified" in {
+
+      val token = service.decodeToken("token")
+
+      token shouldBe None
+    }
+
     "Decode BadToken" in {
       given(config.aesKey).willReturn(key)
 

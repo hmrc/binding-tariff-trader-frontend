@@ -24,7 +24,6 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.isSampleHazardous
 import views.html.addSupportingDocuments
 
 class AddSupportingDocumentsViewSpec extends YesNoViewBehaviours {

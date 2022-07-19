@@ -175,7 +175,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, Some(token))(request)
 
       status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
 
     "redirect to unauthorized when the token is empty and session EORI is not present" in {
@@ -184,7 +184,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, None)(request)
 
       status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad.url)
     }
 
   }
@@ -220,7 +220,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller(FakeIdentifierAction(None)).viewApplication(caseRef, Some(token))(request)
 
       status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
   }
 
@@ -276,7 +276,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller(FakeIdentifierAction(None)).rulingCertificatePdf(caseRef, Some(token))(request)
 
       status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
 
     "redirect to unauthorized when the token is empty and session EORI is not present" in {
@@ -285,7 +285,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller(FakeIdentifierAction(None)).rulingCertificatePdf(caseRef, None)(request)
 
       status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad.url)
     }
 
   }
@@ -342,7 +342,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller(FakeIdentifierAction(None)).coverLetterPdf(caseRef, Some(token))(request)
 
       status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
 
     "redirect to unauthorized when the token is empty and session EORI is not present" in {
@@ -351,7 +351,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller(FakeIdentifierAction(None)).coverLetterPdf(caseRef, None)(request)
 
       status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad.url)
     }
 
   }
@@ -386,7 +386,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller(FakeIdentifierAction(None)).viewRulingCertificate(caseRef, Some(token))(request)
 
       status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad().url)
+      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
 
   }

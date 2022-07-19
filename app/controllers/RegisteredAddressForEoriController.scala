@@ -21,15 +21,16 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisteredAddressForEoriFormProvider
 import javax.inject.Inject
-import models.{ Mode, RegisteredAddressForEori }
+import models.{Mode, RegisteredAddressForEori}
 import models.requests.DataRequest
 import navigation.Navigator
 import pages.RegisteredAddressForEoriPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
 import service.CountriesService
+import uk.gov.hmrc.play.bootstrap.controller.WithDefaultFormBinding
 import views.html.registeredAddressForEori
 
 import scala.concurrent.ExecutionContext
@@ -44,7 +45,8 @@ class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
                                                    countriesService: CountriesService,
                                                    cc: MessagesControllerComponents,
                                                    registeredAddressForEoriView: registeredAddressForEori
-                                                  )(implicit ec: ExecutionContext) extends AnswerCachingController[RegisteredAddressForEori](cc) with I18nSupport {
+                                                  )(implicit ec: ExecutionContext)
+  extends AnswerCachingController[RegisteredAddressForEori](cc) with I18nSupport with WithDefaultFormBinding {
 
   lazy val form: Form[RegisteredAddressForEori] = formProvider()
   val questionPage: RegisteredAddressForEoriPage.type = RegisteredAddressForEoriPage

@@ -16,23 +16,58 @@
 
 package mapper
 
-import controllers.actions.FakeIdentifierAction.frontendAppConfig
+import base.SpecBase
 import models._
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import pages._
 import play.api.libs.json.{JsValue, Json, Writes}
 import uk.gov.hmrc.http.cache.client.CacheMap
-import unit.utils.UnitSpec
 
-class CaseRequestMapperTest extends UnitSpec with GuiceOneAppPerSuite {
+class CaseRequestMapperTest extends SpecBase {
 
   private val mapper = new CaseRequestMapper(frontendAppConfig)
 
   "Mapper" should {
 
-    "Fail when mandatory fields are missing" in {
-      intercept[IllegalStateException] {
-        mapper.map(missingGoodDetails())
+    "Fail" when {
+      "mandatory field goodDescription is missing" in {
+        intercept[IllegalStateException] {
+          mapper.map(mandatoryAnswers().remove(ProvideGoodsDescriptionPage))
+        }.getMessage shouldBe "Missing User Session Data: goods description"
+      }
+
+      "mandatory field goodName is missing" in {
+        intercept[IllegalStateException] {
+          mapper.map(mandatoryAnswers().remove(ProvideGoodsNamePage))
+        }.getMessage shouldBe "Missing User Session Data: goods name"
+      }
+
+      "mandatory field contact is missing" in {
+        intercept[IllegalStateException] {
+          mapper.map(mandatoryAnswers().remove(EnterContactDetailsPage))
+        }.getMessage shouldBe "Missing User Session Data: contact details"
+      }
+
+      "mandatory field holder is missing" in {
+        intercept[IllegalStateException] {
+          mapper.map(mandatoryAnswers().remove(RegisteredAddressForEoriPage))
+        }.getMessage shouldBe "Missing User Session Data: holder EORI details"
+      }
+
+      "mandatory field sampleToBeProvided is missing" in {
+        intercept[IllegalStateException] {
+          mapper.map(mandatoryAnswers().remove(AreYouSendingSamplesPage))
+        }.getMessage shouldBe "Missing User Session Data: when to send a sample"
+      }
+    }
+
+    "not fail but set sampleToBeProvided to false" when {
+      "the toggle.samplesNotAccepted is set to true and AreYouSendingSamplesPage is removed" in {
+        val mapperWithToggle = new CaseRequestMapper(frontendAppConfigWithToggle)
+        val response = mapperWithToggle.map(mandatoryAnswers().remove(AreYouSendingSamplesPage))
+
+        val application = response.application
+
+        application.sampleToBeProvided shouldBe false
       }
     }
 
@@ -73,6 +108,21 @@ class CaseRequestMapperTest extends UnitSpec with GuiceOneAppPerSuite {
       application.knownLegalProceedings shouldBe None
       application.envisagedCommodityCode shouldBe None
     }
+
+    "Map optional fields" in {
+      val response = mapper.map(
+        mandatoryAnswers()
+          .remove(AddConfidentialInformationPage)
+          .set(AddConfidentialInformationPage, true)
+          .set(ProvideConfidentialInformationPage, "confidential info")
+          .set(ProvideBTIReferencePage, BTIReference("ref"))
+      )
+
+      val application = response.application
+
+      application.confidentialInformation shouldBe Some("confidential info")
+      application.reissuedBTIReference shouldBe Some("ref")
+    }
   }
 
   // trader filling the form
@@ -106,34 +156,6 @@ class CaseRequestMapperTest extends UnitSpec with GuiceOneAppPerSuite {
           ),
           AddConfidentialInformationPage.toString -> js(
             false
-          ),
-          AreYouSendingSamplesPage.toString -> js(true)
-        )
-      )
-    )
-  }
-
-  def missingGoodDetails(): UserAnswers = {
-    UserAnswers(
-      CacheMap(
-        "id",
-        Map(
-          RegisteredAddressForEoriPage.toString -> js(
-            RegisteredAddressForEori(
-              "Trader EORI",
-              "Trader Business Name",
-              "Trader Address Line 1",
-              "Trader Town",
-              Some("Trader Post Code"),
-              "Trader Country"
-            )
-          ),
-          EnterContactDetailsPage.toString -> js(
-            EnterContactDetails(
-              "Name",
-              "Email",
-              "Phone"
-            )
           ),
           AreYouSendingSamplesPage.toString -> js(true)
         )

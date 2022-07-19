@@ -74,8 +74,13 @@ class FrontendAppConfig @Inject()(
   lazy val apiToken: String = loadConfig("auth.api-token")
   lazy val aesKey: String = loadConfig("auth.aes-key")
 
-  lazy val timeOutSeconds: Int = runModeConfiguration.getOptional[Int]("timeoutDialog.timeoutSeconds").getOrElse(780)
-  lazy val timeOutCountDownSeconds: Int = runModeConfiguration.getOptional[Int]("timeoutDialog.time-out-countdown-seconds").getOrElse(120)
+  private val timeOutSecondsAlternative = 780
+  private val timeOutCountDownSecondsAlternative = 120
+
+  lazy val timeOutSeconds: Int = runModeConfiguration.getOptional[Int]("timeoutDialog.timeoutSeconds").getOrElse(timeOutSecondsAlternative)
+  lazy val timeOutCountDownSeconds: Int = runModeConfiguration.getOptional[Int](
+    "timeoutDialog.time-out-countdown-seconds").getOrElse(timeOutCountDownSecondsAlternative)
+
   lazy val refreshInterval: Int = timeOutSeconds + 10
   lazy val enableRefresh: Boolean = runModeConfiguration.getOptional[Boolean]("timeoutDialog.enableRefresh").getOrElse(true)
 

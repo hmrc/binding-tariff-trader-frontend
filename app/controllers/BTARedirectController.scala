@@ -56,7 +56,7 @@ class BTARedirectController @Inject()(
       case Success(_) => Future.successful(Redirect(call))
       case Failure(NonFatal(error)) =>
         logger.error("An error occurred whilst saving BTA User", error)
-        Future.successful(Redirect(routes.ErrorController.onPageLoad()))
+        Future.successful(Redirect(routes.ErrorController.onPageLoad))
     }
   }
 }

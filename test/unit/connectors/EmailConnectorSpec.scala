@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.matching.EqualToJsonPattern
 import models.{ApplicationSubmittedEmail, ApplicationSubmittedParameters}
 import org.apache.http.HttpStatus
-import uk.gov.hmrc.http.Upstream5xxResponse
+import uk.gov.hmrc.http.UpstreamErrorResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -54,7 +54,7 @@ class EmailConnectorSpec extends ConnectorTest {
         )
       )
 
-      intercept[Upstream5xxResponse] {
+      intercept[UpstreamErrorResponse] {
         await(connector.send(email))
       }
 

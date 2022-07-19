@@ -25,6 +25,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.beforeYouStart
 
 import scala.concurrent.Future
@@ -48,7 +49,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
 
   val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  private def viewAsString(eori: Option[String]) = beforeYouStartView(frontendAppConfig)(fakeGETRequest, messages).toString
+  private val viewAsString = beforeYouStartView(frontendAppConfig)(fakeGETRequest, messages).toString
 
   override protected def beforeEach(): Unit = {
     reset(mockDataCacheConnector)
@@ -58,26 +59,26 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
 
     "return OK and the correct view for a GET - with EORI" in {
       val cacheMap = emptyCacheMap
-      given(mockDataCacheConnector.save(any())).willReturn(Future.successful(emptyCacheMap))
+      given(mockDataCacheConnector.save(any[CacheMap])).willReturn(Future.successful(emptyCacheMap))
       val result = controller(identifier = FakeIdentifierAction(Some("eori"))).onPageLoad(fakeRequest)
 
       status(result) shouldBe OK
-      contentAsString(result) shouldBe viewAsString(Some("eori"))
+      contentAsString(result) shouldBe viewAsString
       verify(mockDataCacheConnector).save(refEq(cacheMap))
     }
 
     "return OK and the correct view for a GET - without EORI" in {
       val cacheMap = emptyCacheMap
-      given(mockDataCacheConnector.save(any())).willReturn(Future.successful(emptyCacheMap))
+      given(mockDataCacheConnector.save(any[CacheMap])).willReturn(Future.successful(emptyCacheMap))
       val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
 
       status(result) shouldBe OK
-      contentAsString(result) shouldBe viewAsString(None)
+      contentAsString(result) shouldBe viewAsString
       verify(mockDataCacheConnector).save(refEq(cacheMap))
     }
 
     "return bad gateway when the data cache connector fails" in {
-      given(mockDataCacheConnector.save(any())).willReturn(Future.failed(new Exception))
+      given(mockDataCacheConnector.save(any[CacheMap])).willReturn(Future.failed(new Exception))
       val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
 
       status(result) shouldBe BAD_GATEWAY

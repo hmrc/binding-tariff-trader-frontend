@@ -46,7 +46,7 @@ class SignOutController @Inject()(
   def forceSignOut: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     clearDataCache(request)
     urlCacheService.remove(request.internalId).flatMap { _ =>
-      successful(Results.Redirect(routes.SessionExpiredController.onPageLoad()).withNewSession)
+      successful(Results.Redirect(routes.SessionExpiredController.onPageLoad).withNewSession)
     }
   }
 

@@ -59,6 +59,16 @@ class EnumerableSpec extends AnyWordSpec with Matchers with EitherValues with Op
     "fail to bind for invalid values" in {
       Json.fromJson[Foo](JsString("invalid")).asEither.left.value must contain(JsPath -> Seq(JsonValidationError("error.invalid")))
     }
+
+    "detects badly formatted values" in {
+      val badJson = Json.parse(s"""
+                                  |{
+                                  | "someField": "unknown"
+                                  |}
+                                  |""".stripMargin)
+
+      badJson.validate[Foo].asEither.left.value must contain(JsPath -> Seq(JsonValidationError("error.invalid")))
+    }
   }
 
   ".writes" must {

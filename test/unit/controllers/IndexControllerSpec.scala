@@ -273,7 +273,7 @@ class IndexControllerSpec extends ControllerSpecBase {
         val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad().url)
+        redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
       }
     }
 

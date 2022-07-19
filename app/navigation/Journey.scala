@@ -42,10 +42,10 @@ object Journey {
 
   val legalProblems: YesNoJourney =
     YesNoJourney(LegalChallengePage, List(LegalChallengeDetailsPage))
-  
+
   val previousBTI: YesNoJourney =
     YesNoJourney(PreviousBTIRulingPage, List(ProvideBTIReferencePage))
-  
+
   val similarItem: LoopingJourney =
     LoopingJourney(SimilarItemCommodityCodePage, List(CommodityCodeRulingReferencePage), AddAnotherRulingPage)
 }

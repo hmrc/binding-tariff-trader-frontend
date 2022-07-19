@@ -27,7 +27,6 @@ import models.response.FilestoreResponse
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.reset
-import org.scalatest.BeforeAndAfterEach
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
@@ -37,7 +36,6 @@ import scala.concurrent.Future.{failed, successful}
 import models.requests.FileStoreInitiateRequest
 import models.response.FileStoreInitiateResponse
 import models.response.UpscanFormTemplate
-import play.api.libs.Files.SingletonTemporaryFileCreator
 import akka.util.ByteString
 import akka.stream.scaladsl.Source
 

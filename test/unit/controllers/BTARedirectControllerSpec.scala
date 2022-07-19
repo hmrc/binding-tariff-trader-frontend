@@ -72,7 +72,7 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
         val result = controller.applicationsAndRulings(request)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad().url)
+        redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
       }
     }
   }
@@ -96,7 +96,7 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
         val result = controller.informationYouNeed(request)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad().url)
+        redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
       }
     }
 

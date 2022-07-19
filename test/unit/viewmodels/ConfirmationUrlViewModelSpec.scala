@@ -31,7 +31,7 @@ class ConfirmationUrlViewModelSpec extends UnitSpec {
 
         ConfirmationUrlViewModel(isBTAUser) shouldBe expectedViewModel
         expectedViewModel.messageKey shouldBe "view.bta.home.link"
-        expectedViewModel.url shouldBe controllers.routes.BTARedirectController.redirectToBTA().url
+        expectedViewModel.url shouldBe controllers.routes.BTARedirectController.redirectToBTA.url
       }
     }
 
