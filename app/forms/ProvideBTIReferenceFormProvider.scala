@@ -25,12 +25,12 @@ import models.BTIReference
 
 class ProvideBTIReferenceFormProvider @Inject() extends Mappings {
 
-  // scalastyle:off magic.number
+  private val maximumValue = 100
+
    def apply(): Form[BTIReference] = Form(
      mapping(
       "btiReference" -> text("provideBTIReference.error.required")
-        .verifying(maxLength(100, "provideBTIReference.error.length"))
+        .verifying(maxLength(maximumValue, "provideBTIReference.error.length"))
      )(BTIReference.apply)(BTIReference.unapply)
    )
-  // scalastyle:on magic.number
 }

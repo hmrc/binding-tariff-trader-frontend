@@ -23,14 +23,14 @@ import play.api.data.Form
 
 class CommodityCodeDigitsFormProvider @Inject() extends Mappings {
 
-  // scalastyle:off magic.number
+  private val maximumValue = 25
+  private val minimumValue = 2
+
   def apply(): Form[String] =
     Form(
       "value" -> text("commodityCodeDigits.error.required")
-        .verifying(maxLength(25, "commodityCodeDigits.error.maxLength"))
-        .verifying(minLength(2, "commodityCodeDigits.error.minLength"))
+        .verifying(maxLength(maximumValue, "commodityCodeDigits.error.maxLength"))
+        .verifying(minLength(minimumValue, "commodityCodeDigits.error.minLength"))
         .verifying(regexp("^\\d+$", "commodityCodeDigits.error.type"))
     )
-  // scalastyle:on magic.number
-
 }

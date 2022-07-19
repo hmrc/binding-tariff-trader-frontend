@@ -24,16 +24,18 @@ import play.api.data.Forms._
 
 class RegisteredAddressForEoriFormProvider @Inject() extends Mappings {
 
-  // scalastyle:off magic.number
+  private val maximumValueForAddress = 70
+  private val maximumValueForTownOrCity = 35
+
    def apply(): Form[RegisteredAddressForEori] = Form(
      mapping(
       "eori" -> text("registeredAddressForEori.error.eori.required")
         .verifying(FormConstraints.eoriCodeConstraint),
       "businessName" -> text("registeredAddressForEori.error.businessName.required"),
       "addressLine1" -> text("registeredAddressForEori.error.addressLine1.required")
-        .verifying(maxLength(70, "registeredAddressForEori.error.addressLine1.length")),
+        .verifying(maxLength(maximumValueForAddress, "registeredAddressForEori.error.addressLine1.length")),
       "townOrCity" -> text("registeredAddressForEori.error.townOrCity.required")
-        .verifying(maxLength(35, "registeredAddressForEori.error.townOrCity.length")),
+        .verifying(maxLength(maximumValueForTownOrCity, "registeredAddressForEori.error.townOrCity.length")),
       "postcode" -> postcodeText(
         "registeredAddressForEori.error.postcode.required",
         "registeredAddressForEori.error.postcode.gb"
@@ -41,6 +43,5 @@ class RegisteredAddressForEoriFormProvider @Inject() extends Mappings {
       "country" -> text("registeredAddressForEori.error.country.required")
      )(RegisteredAddressForEori.apply)(RegisteredAddressForEori.unapply)
    )
-  // scalastyle:on magic.number
 
 }
