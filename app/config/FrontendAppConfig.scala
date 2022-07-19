@@ -74,7 +74,7 @@ class FrontendAppConfig @Inject()(
   lazy val apiToken: String = loadConfig("auth.api-token")
   lazy val aesKey: String = loadConfig("auth.aes-key")
 
-  private val timeOutSecondAlternative = 780
+  private val timeOutSecondsAlternative = 780
   private val timeOutCountDownSecondsAlternative = 120
 
   lazy val timeOutSeconds: Int = runModeConfiguration.getOptional[Int]("timeoutDialog.timeoutSeconds").getOrElse(timeOutSecondAlternative)
