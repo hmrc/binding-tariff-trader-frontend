@@ -6,9 +6,9 @@ object AppDependencies {
 
   private val silencerVersion = "1.7.9"
   private val bootstrapPlayVersion = "6.3.0"
-  private val hmrcMongoPlayVersion = "0.67.0"
+  private val hmrcMongoPlayVersion = "0.68.0"
 
-  val compile = Seq(
+  private lazy val compile: Seq[ModuleID] = Seq(
     "commons-validator"            % "commons-validator"              % "1.7",
     "uk.gov.hmrc"                  %% "play-frontend-hmrc"            % "3.22.0-play-28",
     "uk.gov.hmrc"                  %% "bootstrap-frontend-play-28"    % bootstrapPlayVersion,
@@ -24,9 +24,9 @@ object AppDependencies {
     "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
   )
 
-  private lazy val scope: String = "test"
+  private lazy val scope: Configuration = Test
 
-  val test = Seq(
+  private lazy val test: Seq[ModuleID] = Seq(
     "com.github.tomakehurst"  %  "wiremock-jre8"           % "2.33.2"             % scope,
     "com.typesafe.play"       %% "play-test"               % PlayVersion.current  % scope,
     "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-28" % hmrcMongoPlayVersion % scope,
