@@ -23,17 +23,17 @@ import scala.collection.mutable
 
 class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with EmailFieldBehaviours {
 
-  val formProvider = new EnterContactDetailsFormProvider()
-  val form = formProvider()
+  val formProvider          = new EnterContactDetailsFormProvider()
+  val form                  = formProvider()
   val formWithTelValidation = formProvider.formWithMinTelNumber
 
   // name
   ".name" must {
 
-    val fieldName = "name"
+    val fieldName   = "name"
     val requiredKey = "enterContactDetails.error.name.required"
-    val lengthKey = "enterContactDetails.error.name.length"
-    val maxLength = 100
+    val lengthKey   = "enterContactDetails.error.name.length"
+    val maxLength   = 100
 
     behave like fieldThatBindsValidData(
       form,
@@ -44,7 +44,7 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength = maxLength,
+      maxLength   = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
@@ -58,11 +58,11 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
   // email address
   ".email" must {
 
-    val fieldName = "email"
+    val fieldName   = "email"
     val requiredKey = "enterContactDetails.error.email.required"
-    val validKey = "enterContactDetails.error.email.invalid"
-    val lengthKey = "enterContactDetails.error.email.length"
-    val maxLength = 100
+    val validKey    = "enterContactDetails.error.email.invalid"
+    val lengthKey   = "enterContactDetails.error.email.length"
+    val maxLength   = 100
 
     behave like fieldThatBindsValidData(
       form,
@@ -73,8 +73,8 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
     behave like validEmailFieldWithMaxLength(
       form,
       fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength)),
+      maxLength         = maxLength,
+      lengthError       = FormError(fieldName, lengthKey, Seq(maxLength)),
       invalidEmailError = FormError(fieldName, validKey)
     )
 
@@ -88,11 +88,10 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
   // phone number
   ".phoneNumber in rest of the world" must {
 
-    val fieldName = "phoneNumber"
-    val lengthKey = "enterContactDetails.error.phoneNumber.length"
-    val maxLength = 20
+    val fieldName      = "phoneNumber"
+    val lengthKey      = "enterContactDetails.error.phoneNumber.length"
+    val maxLength      = 20
     val phoneFormatKey = "enterContactDetails.error.phoneNumber.invalid"
-
 
     behave like fieldThatBindsValidData(
       form,
@@ -103,7 +102,7 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength = maxLength,
+      maxLength   = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
@@ -112,38 +111,37 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
       fieldName,
       "432jfsdfs453fcs",
       maxLength = maxLength,
-      regex = formProvider.telephoneRegex,
-      error = FormError(fieldName, phoneFormatKey, mutable.WrappedArray.empty)
+      regex     = formProvider.telephoneRegex,
+      error     = FormError(fieldName, phoneFormatKey, mutable.WrappedArray.empty)
     )
   }
 
   ".phoneNumber in UK" must {
 
-    val fieldName = "phoneNumber"
-    val lengthKey = "enterContactDetails.error.phoneNumber.length"
-    val minLengthKey = "enterContactDetails.error.phoneNumber.minLength"
-    val minLength = 10
-    val maxLength = 20
+    val fieldName      = "phoneNumber"
+    val lengthKey      = "enterContactDetails.error.phoneNumber.length"
+    val minLengthKey   = "enterContactDetails.error.phoneNumber.minLength"
+    val minLength      = 10
+    val maxLength      = 20
     val phoneFormatKey = "enterContactDetails.error.phoneNumber.invalid"
-
 
     behave like fieldThatBindsValidData(
       formWithTelValidation,
       fieldName,
-      stringsWithMaxLength(maxLength),
+      stringsWithMaxLength(maxLength)
     )
 
     behave like fieldWithMaxLength(
       formWithTelValidation,
       fieldName,
-      maxLength = maxLength,
+      maxLength   = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
     behave like fieldWithMinLength(
       formWithTelValidation,
       fieldName,
-      minLength = minLength,
+      minLength   = minLength,
       lengthError = FormError(fieldName, minLengthKey, Seq(minLength))
     )
 
@@ -153,8 +151,8 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
       "432jfsdfs453fcs",
       minLength = minLength,
       maxLength = maxLength,
-      regex = """[0-9]{1,20}$""",
-      error = FormError(fieldName, phoneFormatKey, mutable.WrappedArray.empty)
+      regex     = """[0-9]{1,20}$""",
+      error     = FormError(fieldName, phoneFormatKey, mutable.WrappedArray.empty)
     )
   }
 }

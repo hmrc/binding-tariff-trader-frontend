@@ -17,7 +17,7 @@
 package pages
 
 import controllers.routes
-import models.{ Mode, BTIReference }
+import models.{BTIReference, Mode}
 import play.api.mvc.Call
 
 case object ProvideBTIReferencePage extends QuestionPage[BTIReference] {

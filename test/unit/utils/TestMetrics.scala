@@ -21,5 +21,5 @@ import com.codahale.metrics.MetricRegistry
 
 class TestMetrics extends Metrics {
   override def defaultRegistry: MetricRegistry = new MetricRegistry
-  override def toJson: String = ""
+  override def toJson: String                  = ""
 }

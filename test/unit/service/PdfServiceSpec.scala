@@ -28,9 +28,9 @@ import scala.concurrent.Future._
 
 class PdfServiceSpec extends SpecBase {
 
-  private val pdfHtml = mock[Html]
-  private val config = mock[FrontendAppConfig]
-  private val connector = mock[PdfGeneratorServiceConnector]
+  private val pdfHtml           = mock[Html]
+  private val config            = mock[FrontendAppConfig]
+  private val connector         = mock[PdfGeneratorServiceConnector]
   private val connectorResponse = PdfFile("Some content".getBytes)
 
   private def service = new PdfService(connector, new Crypto(config))

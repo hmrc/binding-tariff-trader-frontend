@@ -30,11 +30,13 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class PdfGeneratorServiceConnector @Inject()(
+class PdfGeneratorServiceConnector @Inject() (
   configuration: FrontendAppConfig,
   ws: WSClient,
   val metrics: Metrics
-)(implicit ec: ExecutionContext) extends HasMetrics with Logging {
+)(implicit ec: ExecutionContext)
+    extends HasMetrics
+    with Logging {
 
   private lazy val url = s"${configuration.pdfGeneratorUrl}/pdf-generator-service/generate"
 

@@ -23,13 +23,13 @@ trait ViewBehaviours extends ViewSpecBase {
 
   val expectTimeoutDialog: Boolean = true
 
-  protected def normalPage(view: () => HtmlFormat.Appendable, messageKeyPrefix: String, messageHeadingArgs: Any*)
-                          (expectedGuidanceKeys: String*): Unit = {
-
+  protected def normalPage(view: () => HtmlFormat.Appendable, messageKeyPrefix: String, messageHeadingArgs: Any*)(
+    expectedGuidanceKeys: String*
+  ): Unit =
     "behave like a normal page" when {
       "rendered" must {
         "have the correct banner title" in {
-          val doc = asDocument(view())
+          val doc         = asDocument(view())
           val bannerTitle = doc.getElementsByClass("hmrc-header__service-name")
           bannerTitle.text shouldBe messages("service.name")
         }
@@ -50,7 +50,7 @@ trait ViewBehaviours extends ViewSpecBase {
         }
         "contain a timeout dialog" in {
           val timeoutElm = asDocument(view()).select("meta[name=\"hmrc-timeout-dialog\"]")
-          if(expectTimeoutDialog) {
+          if (expectTimeoutDialog) {
             assert(timeoutElm.size == 1)
           } else {
             assert(timeoutElm.size == 0)
@@ -58,45 +58,36 @@ trait ViewBehaviours extends ViewSpecBase {
         }
       }
     }
-  }
 
-  protected def pageWithBackLink(view: () => HtmlFormat.Appendable): Unit = {
-
+  protected def pageWithBackLink(view: () => HtmlFormat.Appendable): Unit =
     "behave like a page with a back link" must {
       "have a back link" in {
         val doc = asDocument(view())
         assertRenderedById(doc, "back-link")
       }
     }
-  }
 
-  protected def pageWithoutBackLink(view: () => HtmlFormat.Appendable): Unit = {
-
+  protected def pageWithoutBackLink(view: () => HtmlFormat.Appendable): Unit =
     "behave like a page without a back link" must {
       "not have a back link" in {
         val doc = asDocument(view())
         assertNotRenderedById(doc, "back-link")
       }
     }
-  }
 
-  protected def pageWithCancelApplicationLink(view: () => HtmlFormat.Appendable): Unit = {
-
+  protected def pageWithCancelApplicationLink(view: () => HtmlFormat.Appendable): Unit =
     "behave like a page with a cancel application link" must {
       "have a cancel application link" in {
         val doc = asDocument(view())
         assertRenderedById(doc, "cancel-application-link")
       }
     }
-  }
 
-  protected def pageWithoutCancelApplicationLink(view: () => HtmlFormat.Appendable): Unit = {
-
+  protected def pageWithoutCancelApplicationLink(view: () => HtmlFormat.Appendable): Unit =
     "behave like a page without a cancel application link" must {
       "not have a cancel application link" in {
         val doc = asDocument(view())
         assertNotRenderedById(doc, "cancel-application-link")
       }
     }
-  }
 }

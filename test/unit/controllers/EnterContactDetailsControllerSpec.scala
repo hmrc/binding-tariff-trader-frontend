@@ -23,7 +23,7 @@ import forms.EnterContactDetailsFormProvider
 import models.{EnterContactDetails, NormalMode}
 import navigation.FakeNavigator
 import play.api.data.Form
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import play.api.libs.json.JsValue
 import views.html.enterContactDetails
 
@@ -35,7 +35,7 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase with AnswerCa
 
   val enterContactDetailsView: enterContactDetails = app.injector.instanceOf(classOf[enterContactDetails])
 
-  private def controller(dataRetrievalAction: DataRetrievalAction): EnterContactDetailsController = {
+  private def controller(dataRetrievalAction: DataRetrievalAction): EnterContactDetailsController =
     new EnterContactDetailsController(
       frontendAppConfig,
       FakeDataCacheConnector,
@@ -47,16 +47,15 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase with AnswerCa
       cc,
       enterContactDetailsView
     )
-  }
 
   private def onwardRoute = Call("GET", "/foo")
 
   private def viewAsString(form: Form[_], request: Request[_]): String =
     enterContactDetailsView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
-  val validFormData = Map("name" -> "value 1", "email" -> "value2@me.com", "phoneNumber" -> "+44 (0)800-443-123")
+  val validFormData   = Map("name" -> "value 1", "email" -> "value2@me.com", "phoneNumber" -> "+44 (0)800-443-123")
   val invalidFormData = Map("value" -> "invalid data")
-  val backgroundData = Map.empty[String, JsValue]
+  val backgroundData  = Map.empty[String, JsValue]
 
   "EnterContactDetailsController" must {
     val validAnswers = List(

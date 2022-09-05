@@ -21,11 +21,7 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 trait StringFieldBehaviours extends FieldBehaviours {
 
-    def fieldWithMaxLength(form: Form[_],
-                           fieldName: String,
-                           maxLength: Int,
-                           lengthError: FormError): Unit = {
-
+  def fieldWithMaxLength(form: Form[_], fieldName: String, maxLength: Int, lengthError: FormError): Unit =
     s"not bind strings longer than $maxLength characters" in {
 
       forAll(stringsLongerThan(maxLength) -> "longString") { str: String =>
@@ -33,13 +29,8 @@ trait StringFieldBehaviours extends FieldBehaviours {
         result.errors should contain(lengthError)
       }
     }
-  }
 
-  def fieldWithMinLength(form: Form[_],
-                         fieldName: String,
-                         minLength: Int,
-                         lengthError: FormError): Unit = {
-
+  def fieldWithMinLength(form: Form[_], fieldName: String, minLength: Int, lengthError: FormError): Unit =
     s"not bind strings shorter than $minLength characters" in {
 
       forAll(stringsShorterThan(minLength) -> "shortString") { str: String =>
@@ -47,14 +38,15 @@ trait StringFieldBehaviours extends FieldBehaviours {
         result.errors should contain(lengthError)
       }
     }
-  }
 
-  def fieldWithRegex(form: Form[_],
-                     fieldName: String,
-                     invalidString: String,
-                     maxLength: Int,
-                     error: FormError,
-                     regex : String): Unit = {
+  def fieldWithRegex(
+    form: Form[_],
+    fieldName: String,
+    invalidString: String,
+    maxLength: Int,
+    error: FormError,
+    regex: String
+  ): Unit = {
 
     "not bind strings invalidated by regex" in {
       val result = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
@@ -63,22 +55,24 @@ trait StringFieldBehaviours extends FieldBehaviours {
 
     "bind strings that pass regex" in {
       val gen = RegexpGen.from(regex)
-      forAll(gen, minSuccessful(100)){str: String =>
+      forAll(gen, minSuccessful(100)) { str: String =>
         whenever(str.length <= maxLength) {
           val result = form.bind(Map(fieldName -> str)).apply(fieldName)
-          result.errors should be (empty)
+          result.errors should be(empty)
         }
       }
     }
   }
 
-  def fieldWithRegexAndMinTelLength(form: Form[_],
-                     fieldName: String,
-                     invalidString: String,
-                     minLength: Int,
-                     maxLength: Int,
-                     error: FormError,
-                     regex : String): Unit = {
+  def fieldWithRegexAndMinTelLength(
+    form: Form[_],
+    fieldName: String,
+    invalidString: String,
+    minLength: Int,
+    maxLength: Int,
+    error: FormError,
+    regex: String
+  ): Unit = {
 
     "not bind strings invalidated by regex" in {
       val result = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
@@ -87,10 +81,10 @@ trait StringFieldBehaviours extends FieldBehaviours {
 
     "bind strings that pass regex" in {
       val gen = RegexpGen.from(regex)
-      forAll(gen, minSuccessful(100)){str: String =>
+      forAll(gen, minSuccessful(100)) { str: String =>
         whenever(str.length <= maxLength && str.replaceAll("[^0-9]", "").length >= minLength) {
           val result = form.bind(Map(fieldName -> str)).apply(fieldName)
-          result.errors should be (empty)
+          result.errors should be(empty)
         }
       }
     }

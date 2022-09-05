@@ -37,15 +37,15 @@ class AddConfidentialInformationViewSpec extends YesNoViewBehaviours {
 
   val goodsName: String = "goods name"
 
-  def createView = () =>
-    addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  def createView =
+    () => addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) =>
-    addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  def createViewUsingForm =
+    (form: Form[_]) =>
+      addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  override def expectedLegend(messageKeyPrefix: String): String = {
+  override def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)
-  }
 
   "AddConfidentialInformation view" must {
 
@@ -56,6 +56,7 @@ class AddConfidentialInformationViewSpec extends YesNoViewBehaviours {
     behave like yesNoPage(
       createViewUsingForm,
       messageKeyPrefix,
-      routes.AddConfidentialInformationController.onSubmit(NormalMode).url)
+      routes.AddConfidentialInformationController.onSubmit(NormalMode).url
+    )
   }
 }

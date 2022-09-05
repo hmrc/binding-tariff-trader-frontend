@@ -21,9 +21,9 @@ import play.api.data.FormError
 
 class CommodityCodeBestMatchFormProviderSpec extends BooleanFieldBehaviours {
 
-  val form = new CommodityCodeBestMatchFormProvider()()
+  val form        = new CommodityCodeBestMatchFormProvider()()
   val requiredKey = "commodityCodeBestMatch.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   ".value" must {
 

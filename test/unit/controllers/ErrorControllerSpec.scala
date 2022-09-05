@@ -23,18 +23,21 @@ import views.html.error_template
 
 class ErrorControllerSpec extends ControllerSpecBase {
 
-  lazy val errorView: error_template = app.injector.instanceOf[error_template]
+  lazy val errorView: error_template   = app.injector.instanceOf[error_template]
   lazy val controller: ErrorController = app.injector.instanceOf[ErrorController]
 
   "onPageLoad" should {
     "display the standard error template page" in {
-      val expectedTitle = messages("global.error.InternalServerError500.title")
+      val expectedTitle   = messages("global.error.InternalServerError500.title")
       val expectedHeading = messages("global.error.InternalServerError500.heading")
       val expectedMessage = messages("global.error.InternalServerError500.message")
 
       val result = controller.onPageLoad(fakeRequest)
       status(result) shouldBe INTERNAL_SERVER_ERROR
-      contentAsString(result) shouldBe errorView(expectedTitle, expectedHeading, expectedMessage, appConfig)(fakeRequest, messages).toString()
+      contentAsString(result) shouldBe errorView(expectedTitle, expectedHeading, expectedMessage, appConfig)(
+        fakeRequest,
+        messages
+      ).toString()
     }
   }
 }

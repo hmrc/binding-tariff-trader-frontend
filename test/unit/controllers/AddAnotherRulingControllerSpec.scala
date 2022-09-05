@@ -35,7 +35,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
-  private val formProvider = new AddAnotherRulingFormProvider()
+  private val formProvider                   = new AddAnotherRulingFormProvider()
   val addAnotherRulingView: addAnotherRuling = app.injector.instanceOf(classOf[addAnotherRuling])
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
@@ -56,7 +56,10 @@ class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachin
   private val rulings = List.empty[String]
 
   def viewAsString(form: Form[_], request: Request[_]): String =
-    addAnotherRulingView(frontendAppConfig, formProvider().copy(errors = form.errors), NormalMode, rulings)(request, messages).toString
+    addAnotherRulingView(frontendAppConfig, formProvider().copy(errors = form.errors), NormalMode, rulings)(
+      request,
+      messages
+    ).toString
 
   "AddAnotherRulingController" must {
     behave like yesNoCachingController(
@@ -64,7 +67,7 @@ class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachin
       onwardRoute,
       viewAsString,
       backgroundData = Map.empty,
-      formField = "add-another-ruling-choice"
+      formField      = "add-another-ruling-choice"
     )
 
     "redirect to the same page when deleting a file" in {
@@ -72,16 +75,18 @@ class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachin
 
       val backgroundData = Map(
         SimilarItemCommodityCodePage.toString -> JsBoolean(true),
-        CommodityCodeRulingReferencePage.toString -> JsArray(Seq(
-          JsString("12345678"),
-          JsString("87654321")
-        ))
+        CommodityCodeRulingReferencePage.toString -> JsArray(
+          Seq(
+            JsString("12345678"),
+            JsString("87654321")
+          )
+        )
       )
 
       val getData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
-      val result = controller(getData).onRemove(0, NormalMode)(deleteRequest)
+      val result  = controller(getData).onRemove(0, NormalMode)(deleteRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.AddAnotherRulingController.onPageLoad(NormalMode).url)
     }
 
@@ -90,15 +95,17 @@ class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachin
 
       val backgroundData = Map(
         SimilarItemCommodityCodePage.toString -> JsBoolean(true),
-        CommodityCodeRulingReferencePage.toString -> JsArray(Seq(
-          JsString("12345678")
-        ))
+        CommodityCodeRulingReferencePage.toString -> JsArray(
+          Seq(
+            JsString("12345678")
+          )
+        )
       )
 
       val getData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
-      val result = controller(getData).onRemove(0, NormalMode)(deleteRequest)
+      val result  = controller(getData).onRemove(0, NormalMode)(deleteRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode).url)
     }
   }

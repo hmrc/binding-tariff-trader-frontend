@@ -19,13 +19,11 @@ package models
 import play.api.libs.json.{Json, Writes}
 import utils.JsonFormatters._
 
-
 object CasePayloads {
 
   val pagedGatewayCases: String = jsonOf(Paged(Seq(oCase.btiCaseExample), NoPagination(), 1))
-  val pagedEmpty: String = jsonOf(Paged.empty[Case])
+  val pagedEmpty: String        = jsonOf(Paged.empty[Case])
 
-  def jsonOf[A: Writes](a: A) = {
+  def jsonOf[A: Writes](a: A) =
     Json.toJson(a).toString()
-  }
 }

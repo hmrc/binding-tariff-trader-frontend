@@ -25,35 +25,38 @@ import viewmodels.{FileView, PdfViewModel}
 
 object JsonFormatters {
 
-  implicit val caseStatusFormat: Format[CaseStatus.Value] = EnumJson.format(CaseStatus)
-  implicit val contactFormat: OFormat[Contact] = Json.format[Contact]
-  implicit val eoriDetailsFormat: OFormat[EORIDetails] = Json.format[EORIDetails]
-  implicit val agentDetailsFormat: OFormat[AgentDetails] = Json.format[AgentDetails]
-  implicit val applicationFormat: OFormat[Application] = Json.format[Application]
-  implicit val decisionFormat: OFormat[Decision] = Json.format[Decision]
-  implicit val operator: Format[Operator] = Json.using[Json.WithDefaultValues].format[Operator]
-  implicit val caseFormat: OFormat[Case] = Json.format[Case]
-  implicit val newCaseRequestFormat: OFormat[NewCaseRequest] = Json.format[NewCaseRequest]
+  implicit val caseStatusFormat: Format[CaseStatus.Value]        = EnumJson.format(CaseStatus)
+  implicit val contactFormat: OFormat[Contact]                   = Json.format[Contact]
+  implicit val eoriDetailsFormat: OFormat[EORIDetails]           = Json.format[EORIDetails]
+  implicit val agentDetailsFormat: OFormat[AgentDetails]         = Json.format[AgentDetails]
+  implicit val applicationFormat: OFormat[Application]           = Json.format[Application]
+  implicit val decisionFormat: OFormat[Decision]                 = Json.format[Decision]
+  implicit val operator: Format[Operator]                        = Json.using[Json.WithDefaultValues].format[Operator]
+  implicit val caseFormat: OFormat[Case]                         = Json.format[Case]
+  implicit val newCaseRequestFormat: OFormat[NewCaseRequest]     = Json.format[NewCaseRequest]
   implicit val caseAuditPayloadFormat: OFormat[CaseAuditPayload] = Json.format[CaseAuditPayload]
-  implicit val fileViewFormat: OFormat[FileView] = Json.format[FileView]
-  implicit val pdfFormat: OFormat[PdfViewModel] = Json.format[PdfViewModel]
+  implicit val fileViewFormat: OFormat[FileView]                 = Json.format[FileView]
+  implicit val pdfFormat: OFormat[PdfViewModel]                  = Json.format[PdfViewModel]
 
   implicit val formatCaseCreated: OFormat[CaseCreated] = Json.using[Json.WithDefaultValues].format[CaseCreated]
-  implicit val formatEventDetail: Format[Details] = Union.from[Details]("type")
+  implicit val formatEventDetail: Format[Details] = Union
+    .from[Details]("type")
     .and[CaseCreated](EventType.CASE_CREATED.toString)
     .format
 
   implicit val eventFormat: OFormat[Event] = Json.format[Event]
-  implicit val newEventRequestFormat: OFormat[NewEventRequest] = Json.using[Json.WithDefaultValues].format[NewEventRequest]
+  implicit val newEventRequestFormat: OFormat[NewEventRequest] =
+    Json.using[Json.WithDefaultValues].format[NewEventRequest]
 
   implicit def formatSetValue[A: Format]: OFormat[SetValue[A]] = Json.format[SetValue[A]]
-  implicit val formatNoChange: OFormat[NoChange.type] = Json.format[NoChange.type]
+  implicit val formatNoChange: OFormat[NoChange.type]          = Json.format[NoChange.type]
 
-  implicit def formatUpdate[A: Format]: Format[Update[A]] = Union
-    .from[Update[A]]("type")
-    .and[SetValue[A]](UpdateType.SetValue.name)
-    .and[NoChange.type](UpdateType.NoChange.name)
-    .format
+  implicit def formatUpdate[A: Format]: Format[Update[A]] =
+    Union
+      .from[Update[A]]("type")
+      .and[SetValue[A]](UpdateType.SetValue.name)
+      .and[NoChange.type](UpdateType.NoChange.name)
+      .format
 
   implicit def formatApplicationUpdate: OFormat[ApplicationUpdate] = {
     implicit def optFormat[A: Format]: Format[Option[A]] = Format(
@@ -67,8 +70,7 @@ object JsonFormatters {
 
 object EnumJson {
 
-  def format[E <: Enumeration](enum: E): Format[E#Value] = {
+  def format[E <: Enumeration](enum: E): Format[E#Value] =
     Format(Reads.enumNameReads(enum), Writes.enumNameWrites)
-  }
 
 }

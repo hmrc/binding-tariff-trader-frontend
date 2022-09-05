@@ -38,7 +38,8 @@ class LegalChallengeViewSpec extends YesNoViewBehaviours {
 
   def createView = () => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm =
+    (form: Form[_]) => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   "LegalChallenge view" must {
 
@@ -46,6 +47,10 @@ class LegalChallengeViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.LegalChallengeController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      createViewUsingForm,
+      messageKeyPrefix,
+      routes.LegalChallengeController.onSubmit(NormalMode).url
+    )
   }
 }

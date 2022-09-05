@@ -17,7 +17,7 @@
 package pages
 
 import controllers.routes
-import models.{ Confirmation, Mode }
+import models.{Confirmation, Mode}
 import play.api.mvc.Call
 
 case object ConfirmationPage extends DataPage[Confirmation] {

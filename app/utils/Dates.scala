@@ -27,23 +27,20 @@ object Dates {
 
   val pdfDateformatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
-  def format(instant: Instant)(implicit messages: Messages) : String = {
-    if(messages.lang.language == "cy") {
-      val date = LocalDateTime.ofInstant(instant, ZoneOffset.UTC)
-      val monthNum = date.getMonthValue
+  def format(instant: Instant)(implicit messages: Messages): String =
+    if (messages.lang.language == "cy") {
+      val date           = LocalDateTime.ofInstant(instant, ZoneOffset.UTC)
+      val monthNum       = date.getMonthValue
       val welshFormatter = DateTimeFormatter.ofPattern(s"""dd '${messages(s"site.month.$monthNum")}' YYYY""")
       date.format(welshFormatter)
     } else {
       formatter.format(LocalDateTime.ofInstant(instant, ZoneOffset.UTC))
     }
-  }
 
-  def format(instant: Option[Instant])(implicit messages: Messages) : String = {
+  def format(instant: Option[Instant])(implicit messages: Messages): String =
     instant.map(format).getOrElse("None")
-  }
 
-  def formatForPdf(instant: Instant) : String = {
-      pdfDateformatter.format(LocalDateTime.ofInstant(instant, ZoneOffset.UTC))
-  }
+  def formatForPdf(instant: Instant): String =
+    pdfDateformatter.format(LocalDateTime.ofInstant(instant, ZoneOffset.UTC))
 
 }

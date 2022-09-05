@@ -48,8 +48,9 @@ class PagedSpec extends AnyWordSpec with Matchers {
 
     "read from valid JSON" should {
       "produce the expected Paged object" in {
-        Json.parse(
-          """
+        Json
+          .parse(
+            """
             |{
             |  "results": ["run", "walk"],
             |  "pageIndex": 1,
@@ -57,14 +58,16 @@ class PagedSpec extends AnyWordSpec with Matchers {
             |  "resultCount": 3
             |}
           """.stripMargin
-        ).as[Paged[String]] shouldBe Paged(Seq("run", "walk"), 1, 2, 3)
+          )
+          .as[Paged[String]] shouldBe Paged(Seq("run", "walk"), 1, 2, 3)
       }
     }
 
     "read from invalid JSON" should {
       "produce a JsError" in {
-        Json.parse(
-          """
+        Json
+          .parse(
+            """
             |{
             |  "result": "run",
             |  "pageIndex": 1,
@@ -72,7 +75,8 @@ class PagedSpec extends AnyWordSpec with Matchers {
             |  "resultCount": 3
             |}
           """.stripMargin
-        ).validate[Paged[String]] shouldBe a[JsError]
+          )
+          .validate[Paged[String]] shouldBe a[JsError]
       }
     }
   }

@@ -21,7 +21,6 @@ import models.Mode
 import play.api.mvc.Call
 import viewmodels.PdfViewModel
 
-
 case object PdfViewPage extends DataPage[PdfViewModel] {
   override def toString: String = "pdfViewPage"
 

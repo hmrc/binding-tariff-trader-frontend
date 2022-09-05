@@ -43,70 +43,78 @@ trait ViewSpecBase extends SpecBase {
     headers.size() match {
       case 0 => ()
       case 1 if headers.select("label").isEmpty =>
-        headers.first.ownText().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
-      case 1 => headers.select("label").text().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
+        headers.first.ownText().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*)
+          .replaceAll("&nbsp;", " ")
+      case 1 =>
+        headers.select("label").text().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*)
+          .replaceAll("&nbsp;", " ")
       case _ => throw new RuntimeException(s"Pages should only have (at most) one h1 element. Found ${headers.size}")
     }
   }
 
-  def assertContainsText(doc: Document, text: String): Assertion = assert(doc.toString.contains(text),
-    "\n\ntext " + text + " was not rendered on the page.\n")
+  def assertContainsText(doc: Document, text: String): Assertion =
+    assert(doc.toString.contains(text), "\n\ntext " + text + " was not rendered on the page.\n")
 
-  def assertElementHasText(element: Element, text: String): Assertion = assert(element.text.contains(text),
-    "\n\ntext " + text + " was not rendered in the element.\n")
+  def assertElementHasText(element: Element, text: String): Assertion =
+    assert(element.text.contains(text), "\n\ntext " + text + " was not rendered in the element.\n")
 
-  def assertContainsMessages(doc: Document, expectedMessageKeys: String*): Unit = {
+  def assertContainsMessages(doc: Document, expectedMessageKeys: String*): Unit =
     for (key <- expectedMessageKeys) assertContainsText(doc, messages(key))
-  }
 
-  def assertRenderedById(doc: Document, id: String): Assertion = {
+  def assertRenderedById(doc: Document, id: String): Assertion =
     assert(doc.getElementById(id) != null, "\n\nElement " + id + " was not rendered on the page.\n")
-  }
 
-  def assertNotRenderedById(doc: Document, id: String): Assertion = {
+  def assertNotRenderedById(doc: Document, id: String): Assertion =
     assert(doc.getElementById(id) == null, "\n\nElement " + id + " was rendered on the page.\n")
-  }
 
-  def assertRenderedByCssSelector(doc: Document, cssSelector: String): Assertion = {
+  def assertRenderedByCssSelector(doc: Document, cssSelector: String): Assertion =
     assert(!doc.select(cssSelector).isEmpty, "Element " + cssSelector + " was not rendered on the page.")
-  }
 
-  def assertNotRenderedByCssSelector(doc: Document, cssSelector: String): Assertion = {
+  def assertNotRenderedByCssSelector(doc: Document, cssSelector: String): Assertion =
     assert(doc.select(cssSelector).isEmpty, "\n\nElement " + cssSelector + " was rendered on the page.\n")
-  }
 
-  def assertContainsLabel(doc: Document, forElement: String, expectedText: String, expectedHintText: Option[String] = None): Assertion = {
+  def assertContainsLabel(
+    doc: Document,
+    forElement: String,
+    expectedText: String,
+    expectedHintText: Option[String] = None
+  ): Assertion = {
     val labels = doc.getElementsByAttributeValue("for", forElement)
     assert(labels.size == 1, s"\n\nLabel for $forElement was not rendered on the page.")
     val label = labels.first
 
-    def assertLabel(label: Element, expectedText: String, forElement: String) = {
+    def assertLabel(label: Element, expectedText: String, forElement: String) =
       assert(label.text() == expectedText, s"\n\nLabel for $forElement was not $expectedText")
-    }
 
     expectedHintText match {
       case Some(hint) => {
-        assert(doc.getElementsByClass("govuk-hint").first.text == hint,
-          s"\n\nLabel for $forElement did not contain hint text $hint")
+        assert(
+          doc.getElementsByClass("govuk-hint").first.text == hint,
+          s"\n\nLabel for $forElement did not contain hint text $hint"
+        )
         assertLabel(label, expectedText, forElement)
       }
       case _ => assertLabel(label, expectedText, forElement)
     }
   }
 
-  def assertElementHasClass(doc: Document, id: String, expectedClass: String): Assertion = {
+  def assertElementHasClass(doc: Document, id: String, expectedClass: String): Assertion =
     assert(doc.getElementById(id).hasClass(expectedClass), s"\n\nElement $id does not have class $expectedClass")
-  }
 
-  def assertContainsRadioButton(doc: Document, id: String, name: String, value: String, isChecked: Boolean): Assertion = {
+  def assertContainsRadioButton(
+    doc: Document,
+    id: String,
+    name: String,
+    value: String,
+    isChecked: Boolean
+  ): Assertion = {
     assertRenderedById(doc, id)
     val radio = doc.getElementById(id)
     assert(radio.attr("name") == name, s"\n\nElement $id does not have name $name")
     assert(radio.attr("value") == value, s"\n\nElement $id does not have value $value")
     if (isChecked) {
       assert(radio.attr("checked") == "checked", s"\n\nElement $id is not checked")
-    }
-    else {
+    } else {
       assert(!radio.hasAttr("checked") && radio.attr("checked") != "checked", s"\n\nElement $id is checked")
     }
   }

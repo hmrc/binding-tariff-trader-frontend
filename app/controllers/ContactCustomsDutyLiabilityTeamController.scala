@@ -25,12 +25,13 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.contactCustomsDutyLiabilityTeam
 
-class ContactCustomsDutyLiabilityTeamController @Inject()(
-                                                           appConfig: FrontendAppConfig,
-                                                           identify: IdentifierAction,
-                                                           cc: MessagesControllerComponents,
-                                                           contactCustomsDutyLiabilityTeamView: contactCustomsDutyLiabilityTeam
-                                                         ) extends FrontendController(cc) with I18nSupport {
+class ContactCustomsDutyLiabilityTeamController @Inject() (
+  appConfig: FrontendAppConfig,
+  identify: IdentifierAction,
+  cc: MessagesControllerComponents,
+  contactCustomsDutyLiabilityTeamView: contactCustomsDutyLiabilityTeam
+) extends FrontendController(cc)
+    with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = identify { implicit request =>
     Ok(contactCustomsDutyLiabilityTeamView(appConfig, mode))

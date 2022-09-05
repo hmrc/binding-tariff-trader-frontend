@@ -31,7 +31,7 @@ import play.twirl.api.HtmlFormat
 
 import scala.concurrent.ExecutionContext
 
-class ProvideGoodsNameController @Inject()(
+class ProvideGoodsNameController @Inject() (
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
@@ -41,8 +41,9 @@ class ProvideGoodsNameController @Inject()(
   provideGoodsNameFormProvider: ProvideGoodsNameFormProvider,
   val provide_goods_name_view: views.html.provideGoodsName,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
-  lazy val form: Form[String] = provideGoodsNameFormProvider()
+)(implicit ec: ExecutionContext)
+    extends AnswerCachingController[String](cc) {
+  lazy val form: Form[String]                 = provideGoodsNameFormProvider()
   val questionPage: ProvideGoodsNamePage.type = ProvideGoodsNamePage
 
   def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =

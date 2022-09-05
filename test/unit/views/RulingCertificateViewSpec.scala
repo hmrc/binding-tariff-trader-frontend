@@ -23,18 +23,22 @@ import views.html.templates.rulingCertificateTemplate
 
 class RulingCertificateViewSpec extends ViewSpecBase {
 
-  private def createPdfView(c: Case): HtmlFormat.Appendable = {
+  private def createPdfView(c: Case): HtmlFormat.Appendable =
     rulingCertificateTemplate(frontendAppConfig, c, c.decision.get, s => Some("dummy country name"))(messages)
-  }
 
-  private def createHtmlView(c: Case): HtmlFormat.Appendable = {
-    rulingCertificateTemplate(frontendAppConfig, c, c.decision.get, s => Some("dummy country name"), compositeMode = true)(messages)
-  }
+  private def createHtmlView(c: Case): HtmlFormat.Appendable =
+    rulingCertificateTemplate(
+      frontendAppConfig,
+      c,
+      c.decision.get,
+      s => Some("dummy country name"),
+      compositeMode = true
+    )(messages)
 
   private val rulingCase = oCase.btiCaseWithDecision
-  private val holder = rulingCase.application.holder
-  private val ruling = rulingCase.decision.getOrElse(throw new Exception("Bad test data"))
-  private val doc = asDocument(createPdfView(rulingCase))
+  private val holder     = rulingCase.application.holder
+  private val ruling     = rulingCase.decision.getOrElse(throw new Exception("Bad test data"))
+  private val doc        = asDocument(createPdfView(rulingCase))
 
   "Ruling pdf holder section" must {
 
@@ -62,11 +66,11 @@ class RulingCertificateViewSpec extends ViewSpecBase {
     val section = "section-ruling"
 
     "contain the binding commodity code" in {
-      assertSectionContains(section, ruling.bindingCommodityCode )
+      assertSectionContains(section, ruling.bindingCommodityCode)
     }
 
     "contain the case reference" in {
-      assertSectionContains(section, rulingCase.reference )
+      assertSectionContains(section, rulingCase.reference)
     }
 
     "contain the ruling start data" in {
@@ -92,7 +96,10 @@ class RulingCertificateViewSpec extends ViewSpecBase {
     val section = "section-commercial"
 
     "contain the good description" in {
-      assertSectionContains(section, ruling.methodCommercialDenomination.getOrElse(throw new Exception("Bad test data")))
+      assertSectionContains(
+        section,
+        ruling.methodCommercialDenomination.getOrElse(throw new Exception("Bad test data"))
+      )
     }
   }
 
@@ -105,8 +112,7 @@ class RulingCertificateViewSpec extends ViewSpecBase {
     }
   }
 
-  private def assertSectionContains(sectionId: String, text: String) = {
+  private def assertSectionContains(sectionId: String, text: String) =
     assertElementHasText(doc.getElementById(sectionId), text)
-  }
 
 }

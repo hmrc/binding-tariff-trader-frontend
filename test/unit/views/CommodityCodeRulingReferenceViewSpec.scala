@@ -27,17 +27,20 @@ import views.html.commodityCodeRulingReference
 
 class CommodityCodeRulingReferenceViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "commodityCodeRulingReference"
+  val messageKeyPrefix    = "commodityCodeRulingReference"
   private def onwardRoute = Call("GET", "/foo")
 
   val form = new CommodityCodeRulingReferenceFormProvider()()
 
-  val commodityCodeRulingReferenceView: commodityCodeRulingReference = app.injector.instanceOf[commodityCodeRulingReference]
+  val commodityCodeRulingReferenceView: commodityCodeRulingReference =
+    app.injector.instanceOf[commodityCodeRulingReference]
 
-  def createView: () => HtmlFormat.Appendable = () => commodityCodeRulingReferenceView(frontendAppConfig, form, onwardRoute, NormalMode)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable =
+    () => commodityCodeRulingReferenceView(frontendAppConfig, form, onwardRoute, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[String] => HtmlFormat.Appendable = (form: Form[String]) =>
-    commodityCodeRulingReferenceView(frontendAppConfig, form, onwardRoute, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
+    (form: Form[String]) =>
+      commodityCodeRulingReferenceView(frontendAppConfig, form, onwardRoute, NormalMode)(fakeRequest, messages)
 
   "CommodityCodeRulingReference view" must {
     behave like normalPage(createView, messageKeyPrefix)()

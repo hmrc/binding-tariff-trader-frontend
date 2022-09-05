@@ -35,14 +35,19 @@ class AreYouSendingSamplesViewSpec extends YesNoViewBehaviours {
 
   def createView = () => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createViewUsingForm =
+    (form: Form[_]) => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "AreYouSendingSamples view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.AreYouSendingSamplesController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      createViewUsingForm,
+      messageKeyPrefix,
+      routes.AreYouSendingSamplesController.onSubmit(NormalMode).url
+    )
 
   }
 

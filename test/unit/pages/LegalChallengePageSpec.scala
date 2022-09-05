@@ -29,5 +29,4 @@ class LegalChallengePageSpec extends PageBehaviours {
     beRemovable[Boolean](LegalChallengePage)
   }
 
-
 }

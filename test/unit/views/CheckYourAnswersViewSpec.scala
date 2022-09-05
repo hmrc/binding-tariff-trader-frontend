@@ -24,10 +24,13 @@ import views.html.check_your_answers
 class CheckYourAnswersViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "checkYourAnswers"
-  private val traderAnswer = "Answer by the trader"
+  private val traderAnswer     = "Answer by the trader"
 
   private val traderAnswers = Seq(
-    AnswerSection(Some("checkYourAnswers.aboutTheApplicantSection"), Seq(AnswerRow("label", traderAnswer, answerIsMessageKey = false, "url"))),
+    AnswerSection(
+      Some("checkYourAnswers.aboutTheApplicantSection"),
+      Seq(AnswerRow("label", traderAnswer, answerIsMessageKey = false, "url"))
+    ),
     AnswerSection(Some("checkYourAnswers.applicantOtherBusiness"), Seq.empty)
   )
 
@@ -42,7 +45,6 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
   "Check Your Answers view" must {
     behave like normalPage(createTraderView, messageKeyPrefix)()
 
-
     "contain the answers for a trader" in {
       val text = asDocument(createTraderView()).text()
 
@@ -53,7 +55,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     "samples may be damaged statement is visible when sending samples is true" in {
       val text = asDocument(createTraderView()).text()
 
-      text should include (messages("checkYourAnswers.declaration.paragraph2"))
+      text should include(messages("checkYourAnswers.declaration.paragraph2"))
     }
 
     "samples may be damaged statement is not visible when sending samples is false" in {

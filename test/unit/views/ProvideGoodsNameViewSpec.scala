@@ -36,11 +36,11 @@ class ProvideGoodsNameViewSpec extends StringViewBehaviours {
 
   def provideGoodsNameView: provideGoodsName = injector.instanceOf[provideGoodsName]
 
-  def createView: () => HtmlFormat.Appendable = () => provideGoodsNameView(
-    frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+  def createView: () => HtmlFormat.Appendable =
+    () => provideGoodsNameView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm: Form[String] => Html = (form: Form[String]) => provideGoodsNameView(
-    frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+  def createViewUsingForm: Form[String] => Html =
+    (form: Form[String]) => provideGoodsNameView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
   "ProvideGoodsName view" must {
 
@@ -48,6 +48,11 @@ class ProvideGoodsNameViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.ProvideGoodsNameController.onSubmit(NormalMode).url, forElement = "goodsName")
+    behave like stringPage(
+      createViewUsingForm,
+      messageKeyPrefix,
+      routes.ProvideGoodsNameController.onSubmit(NormalMode).url,
+      forElement = "goodsName"
+    )
   }
 }

@@ -24,7 +24,7 @@ import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.{ LegalChallengeDetailsPage, ProvideGoodsNamePage }
+import pages.{LegalChallengeDetailsPage, ProvideGoodsNamePage}
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import play.twirl.api.HtmlFormat
@@ -32,18 +32,19 @@ import views.html.legalChallengeDetails
 
 import scala.concurrent.ExecutionContext
 
-class LegalChallengeDetailsController @Inject()(
-                                                 appConfig: FrontendAppConfig,
-                                                 val dataCacheConnector: DataCacheConnector,
-                                                 val navigator: Navigator,
-                                                 val identify: IdentifierAction,
-                                                 val getData: DataRetrievalAction,
-                                                 val requireData: DataRequiredAction,
-                                                 formProvider: LegalChallengeDetailsFormProvider,
-                                                 cc: MessagesControllerComponents,
-                                                 legalChallengeDetailsView: legalChallengeDetails
-                                               )(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
-  lazy val form: Form[String] = formProvider()
+class LegalChallengeDetailsController @Inject() (
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: LegalChallengeDetailsFormProvider,
+  cc: MessagesControllerComponents,
+  legalChallengeDetailsView: legalChallengeDetails
+)(implicit ec: ExecutionContext)
+    extends AnswerCachingController[String](cc) {
+  lazy val form: Form[String]                      = formProvider()
   val questionPage: LegalChallengeDetailsPage.type = LegalChallengeDetailsPage
 
   def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {

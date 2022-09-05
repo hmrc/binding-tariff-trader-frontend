@@ -26,22 +26,26 @@ import views.html.index
 
 class IndexViewSpec extends ViewBehaviours with PaginationViewBehaviours {
 
-  val indexView: index = app.injector.instanceOf[index]
+  val indexView: index      = app.injector.instanceOf[index]
   val expectedContent: Html = Html.apply("expected-content")
 
-  def applicationView(viewTable: Html = expectedContent):
-    () => HtmlFormat.Appendable = () => indexView(frontendAppConfig, CaseDetailTab.APPLICATION, viewTable)(fakeRequest, messages)
+  def applicationView(viewTable: Html = expectedContent): () => HtmlFormat.Appendable =
+    () => indexView(frontendAppConfig, CaseDetailTab.APPLICATION, viewTable)(fakeRequest, messages)
 
   def rulingView(viewTable: Html = expectedContent): () => HtmlFormat.Appendable =
     () => indexView(frontendAppConfig, CaseDetailTab.RULING, viewTable)(fakeRequest, messages)
 
   "Load application view" must {
-    val paginationAppIdOneResult = "bottom-applications-pagination-one-result"
+    val paginationAppIdOneResult      = "bottom-applications-pagination-one-result"
     val paginationAppIdMultipleResult = "bottom-applications-pagination-some-result"
 
-    val appWithResultsOnly: () => HtmlFormat.Appendable = applicationView(table_applications(Paged(Seq(oCase.btiCaseExample)))(messages))
-    val appWithPaginationAndResults: () => HtmlFormat.Appendable = applicationView(table_applications(Paged(Seq(oCase.btiCaseExample,
-      oCase.btiCaseExample), pageIndex = 1, pageSize = 1, resultCount = 2))(messages))
+    val appWithResultsOnly: () => HtmlFormat.Appendable =
+      applicationView(table_applications(Paged(Seq(oCase.btiCaseExample)))(messages))
+    val appWithPaginationAndResults: () => HtmlFormat.Appendable = applicationView(
+      table_applications(
+        Paged(Seq(oCase.btiCaseExample, oCase.btiCaseExample), pageIndex = 1, pageSize = 1, resultCount = 2)
+      )(messages)
+    )
 
     behave like normalPage(applicationView(), "index")()
     behave like pageWithNoPaginationAndResults(applicationView())
@@ -50,12 +54,16 @@ class IndexViewSpec extends ViewBehaviours with PaginationViewBehaviours {
   }
 
   "Load rulings view" must {
-    val paginationRulingIdOneResult = "bottom-rulings-pagination-one-result"
+    val paginationRulingIdOneResult      = "bottom-rulings-pagination-one-result"
     val paginationRulingIdMultipleResult = "bottom-rulings-pagination-some-result"
 
-    val rulingsWithResultsOnly: () => HtmlFormat.Appendable = rulingView(table_rulings(Paged(Seq(oCase.btiCaseExample)))(messages))
-    val rulingsWithPaginationAndResults: () => HtmlFormat.Appendable = rulingView(table_rulings(Paged(Seq(oCase.btiCaseExample,
-      oCase.btiCaseExample), pageIndex = 1, pageSize = 1, resultCount = 2))(messages))
+    val rulingsWithResultsOnly: () => HtmlFormat.Appendable =
+      rulingView(table_rulings(Paged(Seq(oCase.btiCaseExample)))(messages))
+    val rulingsWithPaginationAndResults: () => HtmlFormat.Appendable = rulingView(
+      table_rulings(
+        Paged(Seq(oCase.btiCaseExample, oCase.btiCaseExample), pageIndex = 1, pageSize = 1, resultCount = 2)
+      )(messages)
+    )
 
     behave like normalPage(rulingView(), "index")()
     behave like pageWithNoPaginationAndResults(applicationView())

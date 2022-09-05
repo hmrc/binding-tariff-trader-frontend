@@ -38,25 +38,39 @@ import scala.concurrent.Future.successful
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-class IndexController @Inject()(
-                                 val appConfig: FrontendAppConfig,
-                                 identify: IdentifierAction,
-                                 navigator: Navigator,
-                                 service: CasesService,
-                                 cc: MessagesControllerComponents,
-                                 btaUserService: BTAUserService,
-                                 accountDashboardStatusesView: account_dashboard_statuses,
-                                 indexView: index
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
+class IndexController @Inject() (
+  val appConfig: FrontendAppConfig,
+  identify: IdentifierAction,
+  navigator: Navigator,
+  service: CasesService,
+  cc: MessagesControllerComponents,
+  btaUserService: BTAUserService,
+  accountDashboardStatusesView: account_dashboard_statuses,
+  indexView: index
+)(implicit ec: ExecutionContext)
+    extends FrontendController(cc)
+    with I18nSupport
+    with Logging {
 
   private val applicationStatuses = Set(
-    CaseStatus.DRAFT, CaseStatus.NEW, CaseStatus.OPEN,
-    CaseStatus.SUPPRESSED, CaseStatus.REFERRED, CaseStatus.REJECTED,
-    CaseStatus.CANCELLED, CaseStatus.SUSPENDED, CaseStatus.COMPLETED
+    CaseStatus.DRAFT,
+    CaseStatus.NEW,
+    CaseStatus.OPEN,
+    CaseStatus.SUPPRESSED,
+    CaseStatus.REFERRED,
+    CaseStatus.REJECTED,
+    CaseStatus.CANCELLED,
+    CaseStatus.SUSPENDED,
+    CaseStatus.COMPLETED
   )
   private val rulingStatuses = Set(
-    CaseStatus.REJECTED, CaseStatus.SUSPENDED, CaseStatus.CANCELLED,
-    CaseStatus.COMPLETED, CaseStatus.NEW, CaseStatus.OPEN, CaseStatus.REFERRED
+    CaseStatus.REJECTED,
+    CaseStatus.SUSPENDED,
+    CaseStatus.CANCELLED,
+    CaseStatus.COMPLETED,
+    CaseStatus.NEW,
+    CaseStatus.OPEN,
+    CaseStatus.REFERRED
   )
 
   def getApplications(page: Int): Action[AnyContent] = identify.async { implicit request =>
@@ -75,8 +89,8 @@ class IndexController @Inject()(
   def getRulings(page: Int): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
-        service.getCases(eori, rulingStatuses, SearchPagination(page), Sort(SortField.DECISION_START_DATE)).map { pagedResult =>
-          Ok(indexView(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult)))
+        service.getCases(eori, rulingStatuses, SearchPagination(page), Sort(SortField.DECISION_START_DATE)).map {
+          pagedResult => Ok(indexView(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult)))
         }
 
       case None =>
@@ -85,16 +99,19 @@ class IndexController @Inject()(
     }
   }
 
-  def getApplicationsAndRulings(page: Int, sortBy: Option[SortField], order: Option[SortDirection]):
-  Action[AnyContent] = identify.async { implicit request =>
+  def getApplicationsAndRulings(
+    page: Int,
+    sortBy: Option[SortField],
+    order: Option[SortDirection]
+  ): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
         val sort = Sort(sortBy.getOrElse(Dashboard.defaultSortField), order)
         (for {
           pagedResult <- service.getCases(eori, applicationStatuses, SearchPagination(page), sort)
-          isBTAUser <-  btaUserService.isBTAUser(request.identifier)
+          isBTAUser   <- btaUserService.isBTAUser(request.identifier)
         } yield {
-            Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort), isBTAUser))
+          Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort), isBTAUser))
         }) recover {
           case NonFatal(error) =>
             logger.error("An error occurred whilst fetching data for dashboard view", error)

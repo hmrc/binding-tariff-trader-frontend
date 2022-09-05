@@ -45,7 +45,7 @@ class InformationPublicControllerSpec extends ControllerSpecBase {
 
       val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 

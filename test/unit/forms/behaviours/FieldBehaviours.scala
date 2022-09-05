@@ -24,10 +24,7 @@ import play.api.data.{Form, FormError}
 
 trait FieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks with Generators {
 
-  def fieldThatBindsValidData(form: Form[_],
-                              fieldName: String,
-                              validDataGenerator: Gen[String]): Unit = {
-
+  def fieldThatBindsValidData(form: Form[_], fieldName: String, validDataGenerator: Gen[String]): Unit =
     "bind valid data" in {
 
       forAll(validDataGenerator -> "validDataItem") { dataItem: String =>
@@ -35,11 +32,8 @@ trait FieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks with 
         result.value.value shouldBe dataItem
       }
     }
-  }
 
-  def mandatoryField(form: Form[_],
-                     fieldName: String,
-                     requiredError: FormError): Unit = {
+  def mandatoryField(form: Form[_], fieldName: String, requiredError: FormError): Unit = {
 
     "not bind when key is not present at all" in {
       val result = form.bind(emptyForm).apply(fieldName)
@@ -53,12 +47,12 @@ trait FieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks with 
   }
 
   def postcodeField(
-                     form: Form[_],
-                     fieldName: String,
-                     emptyPostcodeErrorKey: Seq[FormError],
-                     notValidPostcodeErrorKey: Seq[FormError],
-                     tooLongPostcodeErrorKey: Seq[FormError]
-                   ): Unit = {
+    form: Form[_],
+    fieldName: String,
+    emptyPostcodeErrorKey: Seq[FormError],
+    notValidPostcodeErrorKey: Seq[FormError],
+    tooLongPostcodeErrorKey: Seq[FormError]
+  ): Unit = {
 
     "bind when key is not present at all and country is not GB" in {
       val result = form.bind(emptyForm).apply(fieldName)
@@ -97,14 +91,14 @@ trait FieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks with 
     }
   }
 
-  def commodityCodeField (
-                        form: Form[_],
-                        fieldName: String,
-                        requiredErrorKey: FormError,
-                        notNumericTypeErrorKey: FormError,
-                        maxLengthErrorKey: FormError,
-                        minLengthErrorKey: FormError
-                        ): Unit = {
+  def commodityCodeField(
+    form: Form[_],
+    fieldName: String,
+    requiredErrorKey: FormError,
+    notNumericTypeErrorKey: FormError,
+    maxLengthErrorKey: FormError,
+    minLengthErrorKey: FormError
+  ): Unit = {
     "not bind when commodity code field not present" in {
       val result = form.bind(emptyForm).apply(fieldName)
       result.errors shouldEqual Seq(requiredErrorKey)
@@ -117,17 +111,17 @@ trait FieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks with 
 
     "not bind min length not met" in {
       val result = form.bind(Map(fieldName -> "1")).apply(fieldName)
-      result.errors shouldEqual(Seq(minLengthErrorKey))
+      result.errors shouldEqual (Seq(minLengthErrorKey))
     }
 
     "not bind non-numeric values" in {
       val result = form.bind(Map(fieldName -> "122jh12")).apply(fieldName)
-      result.errors.map(_.message) shouldEqual(Seq(notNumericTypeErrorKey.message))
+      result.errors.map(_.message) shouldEqual (Seq(notNumericTypeErrorKey.message))
     }
 
     "not bind max length exceeded" in {
-      val result = form.bind(Map(fieldName -> "1"*26)).apply(fieldName)
-      result.errors shouldEqual(Seq(maxLengthErrorKey))
+      val result = form.bind(Map(fieldName -> "1" * 26)).apply(fieldName)
+      result.errors shouldEqual (Seq(maxLengthErrorKey))
     }
   }
 

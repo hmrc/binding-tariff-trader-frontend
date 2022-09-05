@@ -18,7 +18,6 @@ package pages
 
 import pages.behaviours.PageBehaviours
 
-
 class CommodityCodeDigitsPageSpec extends PageBehaviours {
 
   "CommodityCodeDigitsPage" must {

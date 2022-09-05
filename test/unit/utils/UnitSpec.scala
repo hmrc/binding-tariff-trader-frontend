@@ -45,13 +45,11 @@ trait UnitSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   def status(of: Future[Result])(implicit timeout: Duration): Int = status(Await.result(of, timeout))
 
-  def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue = {
+  def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue =
     Json.parse(bodyOf(result))
-  }
 
-  def jsonBodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[JsValue] = {
+  def jsonBodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[JsValue] =
     resultF.map(jsonBodyOf)
-  }
 
   def bodyOf(result: Result)(implicit mat: Materializer): String = {
     val bodyBytes: ByteString = await(result.body.consumeData)
@@ -63,7 +61,6 @@ trait UnitSpec extends AnyWordSpecLike with Matchers with OptionValues {
     bodyBytes.decodeString(Charset.defaultCharset().name)
   }
 
-  def bodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[String] = {
+  def bodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[String] =
     resultF.map(bodyOf)
-  }
 }

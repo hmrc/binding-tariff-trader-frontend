@@ -17,7 +17,7 @@
 package pages
 
 import controllers.routes
-import models.{ FileAttachment, Mode }
+import models.{FileAttachment, Mode}
 import play.api.mvc.Call
 
 case object UploadSupportingMaterialMultiplePage extends QuestionPage[Seq[FileAttachment]] {

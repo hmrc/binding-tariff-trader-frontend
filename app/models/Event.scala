@@ -19,8 +19,7 @@ package models
 import java.time.Instant
 import models.EventType.EventType
 
-case class Event
-(
+case class Event(
   id: String,
   details: Details,
   operator: Operator,

@@ -32,19 +32,24 @@ import views.html.commodityCodeRulingReference
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase with AccumulatingEditingControllerBehaviours with BeforeAndAfterEach {
+class CommodityCodeRulingReferenceControllerSpec
+    extends ControllerSpecBase
+    with AccumulatingEditingControllerBehaviours
+    with BeforeAndAfterEach {
 
   private def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new CommodityCodeRulingReferenceFormProvider()
-  private val goodsName = "some-goods-name"
+  private val goodsName    = "some-goods-name"
 
   val backgroundData = Map(
     ProvideGoodsNamePage.toString -> JsString(goodsName),
-    CommodityCodeRulingReferencePage.toString -> JsArray(Seq(
-      Json.toJson("01234567890"),
-      Json.toJson("09876543210")
-    ))
+    CommodityCodeRulingReferencePage.toString -> JsArray(
+      Seq(
+        Json.toJson("01234567890"),
+        Json.toJson("09876543210")
+      )
+    )
   )
 
   val fakeCacheConnector =
@@ -55,7 +60,8 @@ class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase with
     await(fakeCacheConnector.save(CacheMap(cacheMapId, backgroundData)))
   }
 
-  val commodityCodeRulingReferenceView: commodityCodeRulingReference = app.injector.instanceOf(classOf[commodityCodeRulingReference])
+  val commodityCodeRulingReferenceView: commodityCodeRulingReference =
+    app.injector.instanceOf(classOf[commodityCodeRulingReference])
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new CommodityCodeRulingReferenceController(
@@ -82,15 +88,26 @@ class CommodityCodeRulingReferenceControllerSpec extends ControllerSpecBase with
     Map("value" -> "44444444444")
   )
 
-  def userAnswersFor[A: Format](backgroundData: Map[String, JsValue], questionPage: QuestionPage[A], answer: A) = {
+  def userAnswersFor[A: Format](backgroundData: Map[String, JsValue], questionPage: QuestionPage[A], answer: A) =
     UserAnswers(CacheMap(cacheMapId, backgroundData ++ Map(questionPage.toString -> Json.toJson(answer))))
-  }
 
   val expectedUserAnswers = List(
     userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("01234567890", "09876543210", "11111111111")),
-    userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("01234567890", "09876543210", "11111111111", "22222222222")),
-    userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("01234567890", "09876543210", "11111111111", "22222222222", "33333333333")),
-    userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("01234567890", "09876543210", "11111111111", "22222222222", "33333333333", "44444444444"))
+    userAnswersFor(
+      backgroundData,
+      CommodityCodeRulingReferencePage,
+      List("01234567890", "09876543210", "11111111111", "22222222222")
+    ),
+    userAnswersFor(
+      backgroundData,
+      CommodityCodeRulingReferencePage,
+      List("01234567890", "09876543210", "11111111111", "22222222222", "33333333333")
+    ),
+    userAnswersFor(
+      backgroundData,
+      CommodityCodeRulingReferencePage,
+      List("01234567890", "09876543210", "11111111111", "22222222222", "33333333333", "44444444444")
+    )
   )
 
   val validEditFormData = List(

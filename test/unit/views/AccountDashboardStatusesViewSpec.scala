@@ -27,17 +27,18 @@ import views.html.account_dashboard_statuses
 
 class AccountDashboardStatusesViewSpec extends ViewBehaviours with PaginationViewBehaviours {
 
-  val emptyPaged: Paged[Case] = Paged.empty[Case]
+  val emptyPaged: Paged[Case]        = Paged.empty[Case]
   val pagedNoPagination: Paged[Case] = Paged(Seq(oCase.btiCaseExample))
-  val paginationIdOneResult = "bottom-applications-pagination-one-result"
-  val paginationIdMultipleResult = "bottom-applications-pagination-some-result"
+  val paginationIdOneResult          = "bottom-applications-pagination-one-result"
+  val paginationIdMultipleResult     = "bottom-applications-pagination-some-result"
 
   override implicit lazy val app: Application = GuiceApplicationBuilder()
     .configure(
-      "metrics.jvm" -> false,
-      "metrics.enabled" -> false,
+      "metrics.jvm"               -> false,
+      "metrics.enabled"           -> false,
       "toggle.samplesNotAccepted" -> false
-    ).build()
+    )
+    .build()
 
   def accountDashboardStatusesView: account_dashboard_statuses = app.injector.instanceOf[account_dashboard_statuses]
 
@@ -53,19 +54,33 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours with PaginationVie
   }
 
   "Applications and ruling view" must {
-    behave like pageWithPaginationAndResults(paginationIdMultipleResult, applicationView(Dashboard(Paged(Seq(oCase.btiCaseExample,
-      oCase.btiCaseExample), pageIndex = 1, pageSize = 1, resultCount = 2), Sort())))
+    behave like pageWithPaginationAndResults(
+      paginationIdMultipleResult,
+      applicationView(
+        Dashboard(
+          Paged(Seq(oCase.btiCaseExample, oCase.btiCaseExample), pageIndex = 1, pageSize = 1, resultCount = 2),
+          Sort()
+        )
+      )
+    )
 
     behave like pageWithNoPaginationAndResults(applicationView(Dashboard(emptyPaged, Sort())))
-    behave like pageWithResultsAndNoPagination(paginationIdOneResult, applicationView(Dashboard(Paged(Seq(oCase.btiCaseExample)), Sort())))
+    behave like pageWithResultsAndNoPagination(
+      paginationIdOneResult,
+      applicationView(Dashboard(Paged(Seq(oCase.btiCaseExample)), Sort()))
+    )
 
     "display a return to BTA link" when {
       "a user has arrived from BTA" in {
         val isBTAUser = true
-        val doc = asDocument(applicationView(Dashboard(emptyPaged, Sort()), isBTAUser)())
+        val doc       = asDocument(applicationView(Dashboard(emptyPaged, Sort()), isBTAUser)())
 
-        assertLinkContainsHrefAndText(doc, "bta-return-link",
-          controllers.routes.BTARedirectController.redirectToBTA.url, messages("index.bta.link"))
+        assertLinkContainsHrefAndText(
+          doc,
+          "bta-return-link",
+          controllers.routes.BTARedirectController.redirectToBTA.url,
+          messages("index.bta.link")
+        )
       }
     }
 
@@ -84,7 +99,7 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours with PaginationVie
     "show table containing previous applications when there are some" in {
       val doc = asDocument(applicationView(Dashboard(pagedNoPagination, Sort()))())
       assert(!doc.html().contains(messages("index.noapplications")))
-      assertRenderedById(doc,"applications-rulings-list")
+      assertRenderedById(doc, "applications-rulings-list")
     }
   }
 }

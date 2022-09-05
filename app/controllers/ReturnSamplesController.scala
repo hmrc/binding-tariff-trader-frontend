@@ -32,7 +32,7 @@ import views.html.returnSamples
 
 import scala.concurrent.ExecutionContext
 
-class ReturnSamplesController @Inject()(
+class ReturnSamplesController @Inject() (
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
@@ -42,8 +42,9 @@ class ReturnSamplesController @Inject()(
   formProvider: ReturnSamplesFormProvider,
   cc: MessagesControllerComponents,
   returnsSamplesView: returnSamples
-)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
-  lazy val form: Form[Boolean] = formProvider()
+)(implicit ec: ExecutionContext)
+    extends AnswerCachingController[Boolean](cc) {
+  lazy val form: Form[Boolean]             = formProvider()
   val questionPage: ReturnSamplesPage.type = ReturnSamplesPage
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =

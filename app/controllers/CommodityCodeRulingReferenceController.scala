@@ -32,25 +32,29 @@ import views.html.commodityCodeRulingReference
 
 import scala.concurrent.ExecutionContext
 
-class CommodityCodeRulingReferenceController @Inject()(
-                                                        appConfig: FrontendAppConfig,
-                                                        val dataCacheConnector: DataCacheConnector,
-                                                        val navigator: Navigator,
-                                                        val identify: IdentifierAction,
-                                                        val getData: DataRetrievalAction,
-                                                        val requireData: DataRequiredAction,
-                                                        formProvider: CommodityCodeRulingReferenceFormProvider,
-                                                        cc: MessagesControllerComponents,
-                                                        commodityCodeRulingReferenceView: commodityCodeRulingReference
-                                                      )(implicit ec: ExecutionContext) extends ListEditingController[String](cc) {
-  lazy val form: Form[String] = formProvider()
+class CommodityCodeRulingReferenceController @Inject() (
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: CommodityCodeRulingReferenceFormProvider,
+  cc: MessagesControllerComponents,
+  commodityCodeRulingReferenceView: commodityCodeRulingReference
+)(implicit ec: ExecutionContext)
+    extends ListEditingController[String](cc) {
+  lazy val form: Form[String]                             = formProvider()
   val questionPage: CommodityCodeRulingReferencePage.type = CommodityCodeRulingReferencePage
 
   def submitAction(mode: Mode): Call = routes.CommodityCodeRulingReferenceController.onSubmit(mode)
 
-  def editSubmitAction(index: Int, mode: Mode): Call = routes.CommodityCodeRulingReferenceController.onEditSubmit(index, mode)
+  def editSubmitAction(index: Int, mode: Mode): Call =
+    routes.CommodityCodeRulingReferenceController.onEditSubmit(index, mode)
 
-  def renderView(preparedForm: Form[String], submitAction: Call, mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
+  def renderView(preparedForm: Form[String], submitAction: Call, mode: Mode)(
+    implicit request: DataRequest[_]
+  ): HtmlFormat.Appendable =
     commodityCodeRulingReferenceView(appConfig, preparedForm, submitAction, mode)
 
 }

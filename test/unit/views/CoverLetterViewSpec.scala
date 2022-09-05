@@ -25,21 +25,25 @@ import views.html.templates.rulingCoverLetterTemplate
 
 class CoverLetterViewSpec extends ViewSpecBase {
 
-  private def createPdfView(c: Case): HtmlFormat.Appendable = {
+  private def createPdfView(c: Case): HtmlFormat.Appendable =
     rulingCoverLetterTemplate(frontendAppConfig, c, c.decision.get, s => Some("dummy country name"))(messages)
-  }
 
-  private def createHtmlView(c: Case): HtmlFormat.Appendable = {
-    rulingCoverLetterTemplate(frontendAppConfig, c, c.decision.get, s => Some("dummy country name"), compositeMode = true)(messages)
-  }
+  private def createHtmlView(c: Case): HtmlFormat.Appendable =
+    rulingCoverLetterTemplate(
+      frontendAppConfig,
+      c,
+      c.decision.get,
+      s => Some("dummy country name"),
+      compositeMode = true
+    )(messages)
 
-  private val rulingCase = oCase.btiCaseWithDecision
-  private val applicationSamples = oCase.btiCaseWithDecision.application.copy(sampleToBeProvided=true)
+  private val rulingCase            = oCase.btiCaseWithDecision
+  private val applicationSamples    = oCase.btiCaseWithDecision.application.copy(sampleToBeProvided = true)
   private val rulingCaseWithSamples = oCase.btiCaseWithDecision.copy(application = applicationSamples)
-  private val holder = rulingCase.application.holder
-  private val ruling = rulingCase.decision.getOrElse(throw new Exception("Bad test data"))
-  private val doc = asDocument(createPdfView(rulingCase))
-  private val docWithSamples = asDocument(createPdfView(rulingCaseWithSamples))
+  private val holder                = rulingCase.application.holder
+  private val ruling                = rulingCase.decision.getOrElse(throw new Exception("Bad test data"))
+  private val doc                   = asDocument(createPdfView(rulingCase))
+  private val docWithSamples        = asDocument(createPdfView(rulingCaseWithSamples))
 
   "Ruling pdf samples" must {
 
@@ -54,8 +58,7 @@ class CoverLetterViewSpec extends ViewSpecBase {
     }
   }
 
-  private def assertSectionContains(sectionId: String, text: String) = {
+  private def assertSectionContains(sectionId: String, text: String) =
     assertElementHasText(doc.getElementById(sectionId), text)
-  }
 
 }

@@ -25,7 +25,7 @@ import navigation.FakeNavigator
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import views.html.areYouSendingSamples
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,7 +34,7 @@ import play.api.mvc.Request
 class AreYouSendingSamplesControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
   private val formProvider: AreYouSendingSamplesFormProvider = new AreYouSendingSamplesFormProvider()
-  private val goodsName: String = "some-goods-name"
+  private val goodsName: String                              = "some-goods-name"
 
   val areYouSendingSamplesView: areYouSendingSamples = app.injector.instanceOf(classOf[areYouSendingSamples])
 

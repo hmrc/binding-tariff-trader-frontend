@@ -24,8 +24,10 @@ import play.api.data.Forms.tuple
 class MakeFileConfidentialFormProvider @Inject() extends Mappings {
 
   def apply(): Form[(String, Boolean)] =
-    Form(tuple(
-      "fileId" -> text(),
-      "confidential" -> boolean("makeFileConfidential.error.required")
-    ))
+    Form(
+      tuple(
+        "fileId"       -> text(),
+        "confidential" -> boolean("makeFileConfidential.error.required")
+      )
+    )
 }

@@ -47,7 +47,11 @@ class CommodityCodeBestMatchViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.CommodityCodeBestMatchController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      createViewUsingForm,
+      messageKeyPrefix,
+      routes.CommodityCodeBestMatchController.onSubmit(NormalMode).url
+    )
   }
 
 }

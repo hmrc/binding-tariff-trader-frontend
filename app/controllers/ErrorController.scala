@@ -25,9 +25,12 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 import scala.concurrent.Future
 
-class ErrorController @Inject()(errorTemplateView: views.html.error_template,
-                                cc: MessagesControllerComponents,
-                                appConfig: FrontendAppConfig) extends FrontendController(cc) with I18nSupport {
+class ErrorController @Inject() (
+  errorTemplateView: views.html.error_template,
+  cc: MessagesControllerComponents,
+  appConfig: FrontendAppConfig
+) extends FrontendController(cc)
+    with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action.async { implicit request =>
     Future.successful(InternalServerError(internalServerErrorTemplate).withHeaders(CACHE_CONTROL -> "no-cache"))

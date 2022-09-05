@@ -36,11 +36,11 @@ class IsSampleHazardousViewSpec extends YesNoViewBehaviours {
 
   val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  def createView: () => Html = () =>
-    isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+  def createView: () => Html =
+    () => isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm: Form[_] => Html = (form: Form[_]) =>
-    isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+  def createViewUsingForm: Form[_] => Html =
+    (form: Form[_]) => isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
   "IsSampleHazardous view" must {
 
@@ -48,9 +48,11 @@ class IsSampleHazardousViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm,
+    behave like yesNoPage(
+      createViewUsingForm,
       messageKeyPrefix,
       routes.IsSampleHazardousController.onSubmit(NormalMode).url,
-      "isSampleHazardous")
+      "isSampleHazardous"
+    )
   }
 }

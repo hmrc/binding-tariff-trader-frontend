@@ -22,7 +22,8 @@ import views.html.acceptItemInformationList
 
 class AcceptItemInformationListControllerSpec extends ControllerSpecBase {
 
-  val acceptItemInformationListView: acceptItemInformationList = app.injector.instanceOf(classOf[acceptItemInformationList])
+  val acceptItemInformationListView: acceptItemInformationList =
+    app.injector.instanceOf(classOf[acceptItemInformationList])
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new AcceptItemInformationListController(
@@ -40,7 +41,7 @@ class AcceptItemInformationListControllerSpec extends ControllerSpecBase {
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(fakeRequest)
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
   }

@@ -31,9 +31,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
-  private val dataCache: DataCacheConnector = mock[DataCacheConnector]
+  private val dataCache: DataCacheConnector  = mock[DataCacheConnector]
   private val btaUserService: BTAUserService = mock[BTAUserService]
-  private implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+  private implicit val ec: ExecutionContext  = app.injector.instanceOf[ExecutionContext]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -54,7 +54,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
     "return 200 for a start feedback survey" in {
       val result: Future[Result] = controller.startFeedbackSurvey(fakeRequestWithEori)
-      status(result) shouldBe SEE_OTHER
+      status(result)               shouldBe SEE_OTHER
       redirectLocation(result).get should endWith("/feedback/ABTIR")
     }
 
@@ -64,7 +64,6 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
     }
   }
 
-
   "Force sign out controller" must {
 
     "return 200 for a start feedback survey" in {
@@ -72,7 +71,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
       when(btaUserService.remove(request.internalId)).thenReturn(Future.successful(true))
 
       val result: Future[Result] = controller.forceSignOut(request)
-      status(result) shouldBe SEE_OTHER
+      status(result)               shouldBe SEE_OTHER
       redirectLocation(result).get should endWith("/this-service-has-been-reset")
     }
 
@@ -90,18 +89,18 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
     "return a redirect and clear session" in {
       val result: Future[Result] = controller.unauthorisedSignOut(fakeRequest)
-      status(result) shouldBe SEE_OTHER
+      status(result)               shouldBe SEE_OTHER
       redirectLocation(result).get should endWith("/applications")
-      cookies(result).size shouldBe 0
+      cookies(result).size         shouldBe 0
     }
   }
 
   "Cancel application controller" must {
     "return a redirect and clear session" in {
       val result: Future[Result] = controller.cancelApplication(fakeRequest)
-      status(result) shouldBe SEE_OTHER
+      status(result)               shouldBe SEE_OTHER
       redirectLocation(result).get should endWith("/applications-and-rulings")
-      cookies(result).size shouldBe 0
+      cookies(result).size         shouldBe 0
     }
   }
 }

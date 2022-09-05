@@ -35,50 +35,46 @@ import scala.concurrent.Future
 import scala.concurrent.Future.{sequence, successful}
 
 @Singleton
-class FileService @Inject()(
-                             connector: BindingTariffFilestoreConnector,
-                             cc: MessagesControllerComponents,
-                             appConfig: FrontendAppConfig
-                           ) extends Logging {
+class FileService @Inject() (
+  connector: BindingTariffFilestoreConnector,
+  cc: MessagesControllerComponents,
+  appConfig: FrontendAppConfig
+) extends Logging {
 
   private val messagesApi: MessagesApi = cc.messagesApi
-  private implicit val lang: Lang = Lang.defaultLang
+  private implicit val lang: Lang      = Lang.defaultLang
 
-  def initiate(request: FileStoreInitiateRequest)(implicit hc: HeaderCarrier): Future[FileStoreInitiateResponse] = {
+  def initiate(request: FileStoreInitiateRequest)(implicit hc: HeaderCarrier): Future[FileStoreInitiateResponse] =
     connector.initiate(request)
-  }
 
-  def uploadApplicationPdf(reference: String, content: Array[Byte])(implicit hc: HeaderCarrier): Future[FileAttachment] = {
+  def uploadApplicationPdf(reference: String, content: Array[Byte])(
+    implicit hc: HeaderCarrier
+  ): Future[FileAttachment] =
     connector.uploadApplicationPdf(reference, content).map(toFileAttachment(content.length.toLong))
-  }
 
   def downloadFile(url: String)(implicit hc: HeaderCarrier): Future[Option[Source[ByteString, _]]] =
     connector.downloadFile(url)
 
-  def refresh(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FileAttachment] = {
+  def refresh(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FileAttachment] =
     connector.get(file).map(toFileAttachment(file.size))
+
+  private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = { r =>
+    FileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
-  private def toFileAttachment(size: Long): FilestoreResponse => FileAttachment = {
-    r => FileAttachment(r.id, r.fileName, r.mimeType, size)
-  }
-
-  def getAttachmentMetadata(att: Attachment)(implicit hc: HeaderCarrier): Future[Option[FilestoreResponse]] = {
+  def getAttachmentMetadata(att: Attachment)(implicit hc: HeaderCarrier): Future[Option[FilestoreResponse]] =
     connector.getFileMetadata(Seq(att)).map(_.headOption)
-  }
 
-  def getAttachmentMetadata(c: Case)(implicit hc: HeaderCarrier): Future[Seq[FilestoreResponse]] = {
+  def getAttachmentMetadata(c: Case)(implicit hc: HeaderCarrier): Future[Seq[FilestoreResponse]] =
     connector.getFileMetadata(c.attachments)
-  }
 
-  def getLetterOfAuthority(c: Case)(implicit hc: HeaderCarrier): Future[Option[FilestoreResponse]] = {
+  def getLetterOfAuthority(c: Case)(implicit hc: HeaderCarrier): Future[Option[FilestoreResponse]] =
     c.application.agent.flatMap(_.letterOfAuthorisation) match {
       case Some(attachment: Attachment) => connector.get(attachment)
-      case _ => successful(None)
+      case _                            => successful(None)
     }
-  }
 
-  def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[PublishedFileAttachment]] = {
+  def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[PublishedFileAttachment]] =
     sequence(
       files.map { f: FileAttachment =>
         publish(f).map(Option(_)).recover {
@@ -88,17 +84,17 @@ class FileService @Inject()(
         }
       }
     ).map(_.filter(_.isDefined).map(_.get))
-  }
 
-  def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[PublishedFileAttachment] = {
+  def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[PublishedFileAttachment] =
     connector.publish(file).map(toPublishedAttachment(file.size))
+
+  private def toPublishedAttachment(size: Long): FilestoreResponse => PublishedFileAttachment = { r =>
+    PublishedFileAttachment(r.id, r.fileName, r.mimeType, size)
   }
 
-  private def toPublishedAttachment(size: Long): FilestoreResponse => PublishedFileAttachment = {
-    r => PublishedFileAttachment(r.id, r.fileName, r.mimeType, size)
-  }
-
-  def validate(file: MultipartFormData.FilePart[TemporaryFile]): Either[String, MultipartFormData.FilePart[TemporaryFile]] = {
+  def validate(
+    file: MultipartFormData.FilePart[TemporaryFile]
+  ): Either[String, MultipartFormData.FilePart[TemporaryFile]] =
     if (hasInvalidSize(file)) {
       Left(messagesApi("uploadWrittenAuthorisation.error.size"))
     } else if (hasInvalidContentType(file)) {
@@ -106,16 +102,14 @@ class FileService @Inject()(
     } else {
       Right(file)
     }
-  }
 
-  private def hasInvalidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean = {
+  private def hasInvalidSize: MultipartFormData.FilePart[TemporaryFile] => Boolean =
     _.ref.path.toFile.length > appConfig.fileUploadMaxSize
-  }
 
   private def hasInvalidContentType: MultipartFormData.FilePart[TemporaryFile] => Boolean = { f =>
     f.contentType match {
       case Some(c: String) if appConfig.fileUploadMimeTypes.contains(c) => false
-      case _ => true
+      case _                                                            => true
     }
   }
 }

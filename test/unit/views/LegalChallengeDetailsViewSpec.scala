@@ -28,14 +28,17 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "legalChallengeDetails"
 
-  val form = new LegalChallengeDetailsFormProvider()()
+  val form          = new LegalChallengeDetailsFormProvider()()
   val formElementId = "legalChallengeDetails"
 
   val legalChallengeDetailsView: legalChallengeDetails = app.injector.instanceOf[legalChallengeDetails]
 
-  def createView = () => legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
+  def createView =
+    () => legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[String]) => legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
+  def createViewUsingForm =
+    (form: Form[String]) =>
+      legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
 
   "LegalChallengeDetails view" must {
     behave like normalPage(createView, messageKeyPrefix, messageHeadingArgs = "goodsName")()
@@ -43,16 +46,16 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
     behave like pageWithBackLink(createView)
 
     behave like textareaPage(
-      createView = createViewUsingForm,
-      messageKeyPrefix = messageKeyPrefix,
-      expectedFormAction = routes.LegalChallengeDetailsController.onSubmit(NormalMode).url,
+      createView            = createViewUsingForm,
+      messageKeyPrefix      = messageKeyPrefix,
+      expectedFormAction    = routes.LegalChallengeDetailsController.onSubmit(NormalMode).url,
       expectedFormElementId = formElementId,
-      messageArgs = Seq("goodsName")
+      messageArgs           = Seq("goodsName")
     )
 
     "not allow unescaped HTML" in {
-      val xss = "<script>alert('foo');</script>"
-      val doc = asDocument(legalChallengeDetailsView(frontendAppConfig, form, NormalMode, xss)(fakeRequest, messages))
+      val xss       = "<script>alert('foo');</script>"
+      val doc       = asDocument(legalChallengeDetailsView(frontendAppConfig, form, NormalMode, xss)(fakeRequest, messages))
       val scriptTag = doc.getElementsByAttributeValue("for", formElementId).select("script").first
       Option(scriptTag) shouldBe None
     }

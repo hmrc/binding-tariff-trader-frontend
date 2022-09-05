@@ -27,10 +27,10 @@ class ProvideBTIReferenceFormProvider @Inject() extends Mappings {
 
   private val maximumValue = 100
 
-   def apply(): Form[BTIReference] = Form(
-     mapping(
+  def apply(): Form[BTIReference] = Form(
+    mapping(
       "btiReference" -> text("provideBTIReference.error.required")
         .verifying(maxLength(maximumValue, "provideBTIReference.error.length"))
-     )(BTIReference.apply)(BTIReference.unapply)
-   )
+    )(BTIReference.apply)(BTIReference.unapply)
+  )
 }

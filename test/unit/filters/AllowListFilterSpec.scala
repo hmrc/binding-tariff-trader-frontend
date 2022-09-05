@@ -45,14 +45,12 @@ class AllowListFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks w
       "when the underlying config value is not there" in {
 
         forAll(otherConfigGen, arbitrary[String], arbitrary[String]) { (otherConfig, destination, excluded) =>
-
           whenever(!otherConfig.contains("filters.allowlist.ips")) {
 
             val config = Configuration(
               (otherConfig +
                 ("filters.allowlist.destination" -> destination) +
-                ("filters.allowlist.excluded"    -> excluded)
-              ).toSeq: _*
+                ("filters.allowlist.excluded"    -> excluded)).toSeq: _*
             )
 
             assertThrows[ConfigException] {
@@ -72,8 +70,7 @@ class AllowListFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks w
             (otherConfig +
               ("filters.allowlist.destination" -> destination) +
               ("filters.allowlist.excluded"    -> excluded) +
-              ("filters.allowlist.ips"         -> "")
-            ).toSeq: _*
+              ("filters.allowlist.ips"         -> "")).toSeq: _*
           )
 
           val allowedlistFilter = new AllowListFilter(config, mockMaterializer)
@@ -89,15 +86,13 @@ class AllowListFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks w
         val gen = Gen.nonEmptyListOf(Gen.alphaNumStr suchThat (_.nonEmpty))
 
         forAll(gen, otherConfigGen, arbitrary[String], arbitrary[String]) { (ips, otherConfig, destination, excluded) =>
-
           val ipString = ips.mkString(",")
 
           val config = Configuration(
             (otherConfig +
               ("filters.allowlist.destination" -> destination) +
               ("filters.allowlist.excluded"    -> excluded) +
-              ("filters.allowlist.ips"         -> ipString)
-            ).toSeq: _*
+              ("filters.allowlist.ips"         -> ipString)).toSeq: _*
           )
 
           val allowedlistFilter = new AllowListFilter(config, mockMaterializer)
@@ -114,14 +109,12 @@ class AllowListFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks w
       "when the underlying config value is not there" in {
 
         forAll(otherConfigGen, arbitrary[String], arbitrary[String]) { (otherConfig, ips, excluded) =>
-
           whenever(!otherConfig.contains("filters.allowlist.destination")) {
 
             val config = Configuration(
               (otherConfig +
                 ("filters.allowlist.ips"      -> ips) +
-                ("filters.allowlist.excluded" -> excluded)
-                ).toSeq: _*
+                ("filters.allowlist.excluded" -> excluded)).toSeq: _*
             )
 
             assertThrows[ConfigException] {
@@ -134,18 +127,17 @@ class AllowListFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks w
 
     "must return a Call to the destination" in {
 
-      forAll(otherConfigGen, arbitrary[String], arbitrary[String], arbitrary[String]) { (otherConfig, ips, destination, excluded) =>
+      forAll(otherConfigGen, arbitrary[String], arbitrary[String], arbitrary[String]) {
+        (otherConfig, ips, destination, excluded) =>
+          val config = Configuration(
+            (otherConfig +
+              ("filters.allowlist.ips"         -> ips) +
+              ("filters.allowlist.excluded"    -> excluded) +
+              ("filters.allowlist.destination" -> destination)).toSeq: _*
+          )
 
-        val config = Configuration(
-          (otherConfig +
-            ("filters.allowlist.ips"         -> ips) +
-            ("filters.allowlist.excluded"    -> excluded) +
-            ("filters.allowlist.destination" -> destination)
-            ).toSeq: _*
-        )
-
-        val allowedlistFilter = new AllowListFilter(config, mockMaterializer)
-        allowedlistFilter.destination shouldBe Call("GET", destination)
+          val allowedlistFilter = new AllowListFilter(config, mockMaterializer)
+          allowedlistFilter.destination shouldBe Call("GET", destination)
       }
     }
   }
@@ -157,14 +149,12 @@ class AllowListFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks w
       "when the underlying config value is not there" in {
 
         forAll(otherConfigGen, arbitrary[String], arbitrary[String]) { (otherConfig, destination, ips) =>
-
           whenever(!otherConfig.contains("filters.allowlist.excluded")) {
 
             val config = Configuration(
               (otherConfig +
                 ("filters.allowlist.destination" -> destination) +
-                ("filters.allowlist.ips"         -> ips)
-                ).toSeq: _*
+                ("filters.allowlist.ips"         -> ips)).toSeq: _*
             )
 
             assertThrows[ConfigException] {
@@ -181,22 +171,21 @@ class AllowListFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks w
 
         val gen = Gen.nonEmptyListOf(Gen.alphaNumStr suchThat (_.nonEmpty))
 
-        forAll(gen, otherConfigGen, arbitrary[String], arbitrary[String]) { (excludedPaths, otherConfig, destination, ips) =>
+        forAll(gen, otherConfigGen, arbitrary[String], arbitrary[String]) {
+          (excludedPaths, otherConfig, destination, ips) =>
+            val excludedPathString = excludedPaths.mkString(",")
 
-          val excludedPathString = excludedPaths.mkString(",")
+            val config = Configuration(
+              (otherConfig +
+                ("filters.allowlist.destination" -> destination) +
+                ("filters.allowlist.excluded"    -> excludedPathString) +
+                ("filters.allowlist.ips"         -> ips)).toSeq: _*
+            )
 
-          val config = Configuration(
-            (otherConfig +
-              ("filters.allowlist.destination" -> destination) +
-              ("filters.allowlist.excluded"    -> excludedPathString) +
-              ("filters.allowlist.ips"         -> ips)
-              ).toSeq: _*
-          )
+            val expectedCalls = excludedPaths.map(Call("GET", _))
 
-          val expectedCalls = excludedPaths.map(Call("GET", _))
-
-          val allowedlistFilter = new AllowListFilter(config, mockMaterializer)
-          allowedlistFilter.excludedPaths should contain theSameElementsAs expectedCalls
+            val allowedlistFilter = new AllowListFilter(config, mockMaterializer)
+            allowedlistFilter.excludedPaths should contain theSameElementsAs expectedCalls
         }
       }
     }

@@ -20,10 +20,10 @@ import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.AnswerCachingControllerBehaviours
 import forms.ProvideBTIReferenceFormProvider
-import models.{NormalMode, BTIReference}
+import models.{BTIReference, NormalMode}
 import navigation.FakeNavigator
 import play.api.data.Form
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import play.api.libs.json.JsValue
 import views.html.provideBTIReference
 
@@ -53,9 +53,9 @@ class ProvideBTIReferenceControllerSpec extends ControllerSpecBase with AnswerCa
 
   private def onwardRoute = Call("GET", "/foo")
 
-  val validFormData = Map("btiReference" -> "value 1")
+  val validFormData   = Map("btiReference" -> "value 1")
   val invalidFormData = Map("value" -> "invalid value")
-  val backgroundData = Map.empty[String, JsValue]
+  val backgroundData  = Map.empty[String, JsValue]
 
   "ProvideBTIReferenceController" must {
     behave like answerCachingController(

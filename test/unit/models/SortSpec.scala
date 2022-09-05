@@ -24,7 +24,7 @@ import org.scalatest.wordspec.AnyWordSpec
 class SortSpec extends AnyWordSpec with Matchers {
 
   private val SortDirectionBinder = SortDirection.queryStringBindable
-  private val sortFieldBinder = SortField.queryStringBindable
+  private val sortFieldBinder     = SortField.queryStringBindable
 
   "SortDirection" when {
     "queryStringBindable" must {
@@ -37,7 +37,9 @@ class SortSpec extends AnyWordSpec with Matchers {
       }
 
       "fail to bind when input is invalid" in {
-        SortDirectionBinder.bind("order", Map("order" -> Seq("invalid"))) mustBe Some(Left("Unable to bind a SortDirection"))
+        SortDirectionBinder.bind("order", Map("order" -> Seq("invalid"))) mustBe Some(
+          Left("Unable to bind a SortDirection")
+        )
       }
 
       "unbind ASCENDING" in {

@@ -26,7 +26,7 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
 
   ".eori" must {
 
-    val fieldName = "eori"
+    val fieldName   = "eori"
     val requiredKey = "registeredAddressForEori.error.eori.required"
 
     behave like fieldThatBindsValidData(
@@ -44,7 +44,7 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
 
   ".businessName" must {
 
-    val fieldName = "businessName"
+    val fieldName   = "businessName"
     val requiredKey = "registeredAddressForEori.error.businessName.required"
 
     behave like fieldThatBindsValidData(
@@ -62,10 +62,10 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
 
   ".addressLine1" must {
 
-    val fieldName = "addressLine1"
+    val fieldName   = "addressLine1"
     val requiredKey = "registeredAddressForEori.error.addressLine1.required"
-    val lengthKey = "registeredAddressForEori.error.addressLine1.length"
-    val maxLength = 70
+    val lengthKey   = "registeredAddressForEori.error.addressLine1.length"
+    val maxLength   = 70
 
     behave like fieldThatBindsValidData(
       form,
@@ -76,7 +76,7 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength = maxLength,
+      maxLength   = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
@@ -89,10 +89,10 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
 
   ".townOrCity" must {
 
-    val fieldName = "townOrCity"
+    val fieldName   = "townOrCity"
     val requiredKey = "registeredAddressForEori.error.townOrCity.required"
-    val lengthKey = "registeredAddressForEori.error.townOrCity.length"
-    val maxLength = 35
+    val lengthKey   = "registeredAddressForEori.error.townOrCity.length"
+    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
@@ -103,7 +103,7 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength = maxLength,
+      maxLength   = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
@@ -116,11 +116,11 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
 
   ".postcode" must {
 
-    val fieldName = "postcode"
-    val lengthKey = "registeredAddressForEori.error.postcode.length"
+    val fieldName          = "postcode"
+    val lengthKey          = "registeredAddressForEori.error.postcode.length"
     val requirePostcodeKey = "registeredAddressForEori.error.postcode.required"
     val invalidPostcodeKey = "registeredAddressForEori.error.postcode.gb"
-    val maxLength = 19
+    val maxLength          = 19
 
     behave like fieldThatBindsValidData(
       form,
@@ -131,7 +131,7 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength = maxLength,
+      maxLength   = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
@@ -146,7 +146,7 @@ class RegisteredAddressForEoriFormProviderSpec extends StringFieldBehaviours {
 
   ".country" must {
 
-    val fieldName = "country"
+    val fieldName   = "country"
     val requiredKey = "registeredAddressForEori.error.country.required"
 
     behave like fieldThatBindsValidData(

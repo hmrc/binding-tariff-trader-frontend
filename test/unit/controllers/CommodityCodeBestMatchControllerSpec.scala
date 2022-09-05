@@ -25,7 +25,7 @@ import navigation.FakeNavigator
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import views.html.commodityCodeBestMatch
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -33,7 +33,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
   val formProvider: CommodityCodeBestMatchFormProvider = new CommodityCodeBestMatchFormProvider()
-  val goodsName: String = "some-goods-name"
+  val goodsName: String                                = "some-goods-name"
 
   val commodityCodeBestMatchView: commodityCodeBestMatch = app.injector.instanceOf(classOf[commodityCodeBestMatch])
 

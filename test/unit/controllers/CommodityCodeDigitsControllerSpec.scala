@@ -25,7 +25,7 @@ import models.NormalMode
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import views.html.commodityCodeDigits
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,7 +35,7 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase with AnswerCa
   private def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CommodityCodeDigitsFormProvider()
-  val goodsName = "some goods"
+  val goodsName    = "some goods"
 
   val commodityCodeDigitsView: commodityCodeDigits = app.injector.instanceOf(classOf[commodityCodeDigits])
 
@@ -55,10 +55,10 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase with AnswerCa
   def viewAsString(form: Form[_], request: Request[_]): String =
     commodityCodeDigitsView(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
-  val testAnswer = "1234"
-  val validFormData = Map("value" -> testAnswer)
+  val testAnswer      = "1234"
+  val validFormData   = Map("value" -> testAnswer)
   val invalidFormData = Map("value" -> "")
-  val backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+  val backgroundData  = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
 
   "CommodityCodeDigitsController" must {
     behave like answerCachingController(

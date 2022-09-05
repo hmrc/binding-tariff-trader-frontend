@@ -31,15 +31,13 @@ import unit.utils.TestMetrics
 
 import scala.io.Source
 
-trait ConnectorTest
-  extends SpecBase
-    with BeforeAndAfterAll {
+trait ConnectorTest extends SpecBase with BeforeAndAfterAll {
 
   protected lazy val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
-  protected lazy val fakeAuthToken = "AUTH_TOKEN"
+  protected lazy val fakeAuthToken      = "AUTH_TOKEN"
   protected lazy val wsClient: WSClient = injector.instanceOf[WSClient]
-  protected lazy val metrics: Metrics = new TestMetrics
+  protected lazy val metrics: Metrics   = new TestMetrics
   protected lazy val authenticatedHttpClient = new AuthenticatedHttpClient(
     auditing,
     wsClient,
@@ -54,8 +52,8 @@ trait ConnectorTest
   )
 
   protected implicit val hc: HeaderCarrier = HeaderCarrier()
-  private lazy val actorSystem = ActorSystem.create("testActorSystem")
-  private lazy val auditing = injector.instanceOf[HttpAuditing]
+  private lazy val actorSystem             = ActorSystem.create("testActorSystem")
+  private lazy val auditing                = injector.instanceOf[HttpAuditing]
 
   override def beforeAll(): Unit = {
     super.beforeAll()

@@ -23,19 +23,16 @@ trait Constraints {
 
   private val postCodeMaxLength = 19
 
-  protected def firstError[A](constraints: Constraint[A]*): Constraint[A] = {
+  protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
     Constraint { input: A =>
       constraints
         .map(_.apply(input))
         .find(_ != Valid)
         .getOrElse(Valid)
     }
-  }
 
-  protected def minimumValue[A](minimum: A, errorKey: String)
-                               (implicit ev: Ordering[A]): Constraint[A] = {
+  protected def minimumValue[A](minimum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
     Constraint { input: A =>
-
       import ev._
 
       if (input >= minimum) {
@@ -44,12 +41,9 @@ trait Constraints {
         Invalid(errorKey, minimum)
       }
     }
-  }
 
-  protected def maximumValue[A](maximum: A, errorKey: String)
-                               (implicit ev: Ordering[A]): Constraint[A] = {
+  protected def maximumValue[A](maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
     Constraint { input: A =>
-
       import ev._
 
       if (input <= maximum) {
@@ -58,12 +52,9 @@ trait Constraints {
         Invalid(errorKey, maximum)
       }
     }
-  }
 
-  protected def inRange[A](minimum: A, maximum: A, errorKey: String)
-                          (implicit ev: Ordering[A]): Constraint[A] = {
+  protected def inRange[A](minimum: A, maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
     Constraint { input: A =>
-
       import ev._
 
       if (input >= minimum && input <= maximum) {
@@ -72,53 +63,45 @@ trait Constraints {
         Invalid(errorKey, minimum, maximum)
       }
     }
-  }
 
-  protected def regexp(regex: String, errorKey: String): Constraint[String] = {
+  protected def regexp(regex: String, errorKey: String): Constraint[String] =
     Constraint {
       case str: String if str.matches(regex) => Valid
-      case _ => Invalid(errorKey)
+      case _                                 => Invalid(errorKey)
     }
-  }
 
-  protected def maxLength(maximum: Int, errorKey: String): Constraint[String] = {
+  protected def maxLength(maximum: Int, errorKey: String): Constraint[String] =
     Constraint {
       case str: String if str.length <= maximum => Valid
-      case _ => Invalid(errorKey, maximum)
+      case _                                    => Invalid(errorKey, maximum)
     }
-  }
 
-  protected def minLength(minimum: Int, errorKey: String): Constraint[String] = {
+  protected def minLength(minimum: Int, errorKey: String): Constraint[String] =
     Constraint {
       case str: String if str.length >= minimum => Valid
-      case _ => Invalid(errorKey, minimum)
+      case _                                    => Invalid(errorKey, minimum)
     }
-  }
 
-  protected def minNumberLength(minimum: Int, errorKey: String): Constraint[String] = {
+  protected def minNumberLength(minimum: Int, errorKey: String): Constraint[String] =
     Constraint {
       case str: String if str.replaceAll("[^0-9]", "").length >= minimum => Valid
-      case _ => Invalid(errorKey, minimum)
+      case _                                                             => Invalid(errorKey, minimum)
     }
-  }
 
-  protected def optionalPostCodeMaxLength(errorKey: String): Constraint[Option[String]] = {
+  protected def optionalPostCodeMaxLength(errorKey: String): Constraint[Option[String]] =
     optionalMaxLength(postCodeMaxLength, errorKey)
-  }
 
-  protected def optionalMaxLength(maximum: Int, errorKey: String): Constraint[Option[String]] = {
+  protected def optionalMaxLength(maximum: Int, errorKey: String): Constraint[Option[String]] =
     Constraint {
-      case None => Valid
+      case None                                       => Valid
       case Some(str: String) if str.length <= maximum => Valid
-      case _ => Invalid(errorKey, maximum)
+      case _                                          => Invalid(errorKey, maximum)
     }
-  }
 
-  protected def validEmailAddress(errorKey: String): Constraint[String] = {
+  protected def validEmailAddress(errorKey: String): Constraint[String] =
     Constraint {
       case str: String if EmailValidator.getInstance().isValid(str) => Valid
-      case _ => Invalid(errorKey)
+      case _                                                        => Invalid(errorKey)
     }
-  }
 
 }

@@ -39,44 +39,48 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar with 
 
   override implicit lazy val app: Application = GuiceApplicationBuilder()
     .configure(
-      "metrics.jvm" -> false,
-      "metrics.enabled" -> false,
+      "metrics.jvm"               -> false,
+      "metrics.enabled"           -> false,
       "toggle.samplesNotAccepted" -> false
-    ).build()
+    )
+    .build()
 
   implicit lazy val appWithSamplesToggleOn: Application = GuiceApplicationBuilder()
     .configure(
-      "metrics.jvm" -> false,
-      "metrics.enabled" -> false,
+      "metrics.jvm"               -> false,
+      "metrics.enabled"           -> false,
       "toggle.samplesNotAccepted" -> true
-    ).build()
+    )
+    .build()
 
   protected lazy val injector: Injector = app.injector
 
-  def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+  def frontendAppConfig: FrontendAppConfig           = injector.instanceOf[FrontendAppConfig]
   def frontendAppConfigWithToggle: FrontendAppConfig = appWithSamplesToggleOn.injector.instanceOf[FrontendAppConfig]
 
   implicit val cc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
-  implicit val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+  implicit val appConfig: FrontendAppConfig     = injector.instanceOf[FrontendAppConfig]
 
   def fakeRequestWithIdentifier[A](request: Request[AnyContent] = FakeRequest()): IdentifierRequest[AnyContent] =
     IdentifierRequest(request, "id", Some("eori-789012"))
 
   def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
 
-  def fakeRequestWithNotOptionalEoriAndCache = DataRequest(fakeRequest, "id", Some("eori-789012"), UserAnswers(CacheMap("id", Map.empty)))
+  def fakeRequestWithNotOptionalEoriAndCache =
+    DataRequest(fakeRequest, "id", Some("eori-789012"), UserAnswers(CacheMap("id", Map.empty)))
 
   def fakeRequest = FakeRequest()
 
-  def fakeRequestWithEoriAndCache = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), Some(UserAnswers(CacheMap("id", Map.empty))))
+  def fakeRequestWithEoriAndCache =
+    OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), Some(UserAnswers(CacheMap("id", Map.empty))))
 
-  def fakeGETRequestWithCSRF: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
-    "GET", "/", FakeHeaders(Seq("csrfToken"->"csrfToken")), AnyContentAsEmpty)
-    .withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
+  def fakeGETRequestWithCSRF: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest("GET", "/", FakeHeaders(Seq("csrfToken" -> "csrfToken")), AnyContentAsEmpty).withCSRFToken
+      .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-  def fakePOSTRequestWithCSRF: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
-    "POST", "/", FakeHeaders(Seq("csrfToken"->"csrfToken")), AnyContentAsEmpty)
-    .withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
+  def fakePOSTRequestWithCSRF: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest("POST", "/", FakeHeaders(Seq("csrfToken" -> "csrfToken")), AnyContentAsEmpty).withCSRFToken
+      .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
   def messages: Messages = messagesApi.preferred(fakeRequest)
 

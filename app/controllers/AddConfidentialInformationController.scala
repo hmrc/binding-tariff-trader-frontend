@@ -32,7 +32,8 @@ import play.twirl.api.HtmlFormat
 
 import scala.concurrent.ExecutionContext
 
-class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfig,
+class AddConfidentialInformationController @Inject() (
+  appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
   val identify: IdentifierAction,
@@ -41,9 +42,10 @@ class AddConfidentialInformationController @Inject()(appConfig: FrontendAppConfi
   formProvider: AddConfidentialInformationFormProvider,
   val add_confidential_information: views.html.addConfidentialInformation,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+)(implicit ec: ExecutionContext)
+    extends YesNoCachingController(cc) {
   lazy val form: Form[Boolean] = formProvider()
-  val journey: YesNoJourney = Journey.confidentialInformation
+  val journey: YesNoJourney    = Journey.confidentialInformation
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")

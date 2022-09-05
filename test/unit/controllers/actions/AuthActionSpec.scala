@@ -31,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuthActionSpec extends SpecBase {
 
   private class Harness(authAction: IdentifierAction) extends BaseController {
-    def onPageLoad(): Action[AnyContent] = authAction { _ => Ok }
+    def onPageLoad(): Action[AnyContent] = authAction(_ => Ok)
 
     override protected def controllerComponents: ControllerComponents = cc
   }
@@ -42,7 +42,7 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to log in " in {
         val result: Future[Result] = handleAuthError(MissingBearerToken())
 
-        status(result) shouldBe SEE_OTHER
+        status(result)               shouldBe SEE_OTHER
         redirectLocation(result).get should beTheLoginPage
       }
     }
@@ -51,7 +51,7 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to log in " in {
         val result: Future[Result] = handleAuthError(BearerTokenExpired())
 
-        status(result) shouldBe SEE_OTHER
+        status(result)               shouldBe SEE_OTHER
         redirectLocation(result).get should beTheLoginPage
       }
     }
@@ -60,7 +60,7 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to log in " in {
         val result: Future[Result] = handleAuthError(InvalidBearerToken())
 
-        status(result) shouldBe SEE_OTHER
+        status(result)               shouldBe SEE_OTHER
         redirectLocation(result).get should beTheLoginPage
       }
     }
@@ -69,7 +69,7 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to log in " in {
         val result: Future[Result] = handleAuthError(SessionRecordNotFound())
 
-        status(result) shouldBe SEE_OTHER
+        status(result)               shouldBe SEE_OTHER
         redirectLocation(result).get should beTheLoginPage
       }
     }
@@ -78,7 +78,7 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to the unauthorised page" in {
         val result: Future[Result] = handleAuthError(InsufficientEnrolments())
 
-        status(result) shouldBe SEE_OTHER
+        status(result)           shouldBe SEE_OTHER
         redirectLocation(result) shouldBe atarSubscribeLocation
       }
     }
@@ -87,7 +87,7 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to the unauthorised page" in {
         val result: Future[Result] = handleAuthError(InsufficientConfidenceLevel())
 
-        status(result) shouldBe SEE_OTHER
+        status(result)           shouldBe SEE_OTHER
         redirectLocation(result) shouldBe unauthorisedLocation
       }
     }
@@ -96,7 +96,7 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to the unauthorised page" in {
         val result: Future[Result] = handleAuthError(UnsupportedAuthProvider())
 
-        status(result) shouldBe SEE_OTHER
+        status(result)           shouldBe SEE_OTHER
         redirectLocation(result) shouldBe unauthorisedLocation
       }
     }
@@ -105,7 +105,7 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to the unauthorised page" in {
         val result: Future[Result] = handleAuthError(UnsupportedAffinityGroup())
 
-        status(result) shouldBe SEE_OTHER
+        status(result)           shouldBe SEE_OTHER
         redirectLocation(result) shouldBe unauthorisedLocation
       }
     }
@@ -114,24 +114,21 @@ class AuthActionSpec extends SpecBase {
       "redirect the user to the unauthorised page" in {
         val result: Future[Result] = handleAuthError(UnsupportedCredentialRole())
 
-        status(result) shouldBe SEE_OTHER
+        status(result)           shouldBe SEE_OTHER
         redirectLocation(result) shouldBe unauthorisedLocation
       }
     }
 
   }
 
-  private def unauthorisedLocation = {
+  private def unauthorisedLocation =
     Some(routes.UnauthorisedController.onPageLoad.url)
-  }
 
-  private def atarSubscribeLocation = {
+  private def atarSubscribeLocation =
     Some(frontendAppConfig.atarSubscribeUrl)
-  }
 
-  private def beTheLoginPage = {
+  private def beTheLoginPage =
     startWith(frontendAppConfig.loginUrl)
-  }
 
   private def handleAuthError(exc: AuthorisationException): Future[Result] = {
     val authAction = new AuthenticatedIdentifierAction(
@@ -147,9 +144,10 @@ class AuthActionSpec extends SpecBase {
 
 class FakeFailingAuthConnector(exceptionToReturn: Throwable) extends AuthConnector {
 
-  override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])
-                           (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] = {
+  override def authorise[A](
+    predicate: Predicate,
+    retrieval: Retrieval[A]
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
     Future.failed(exceptionToReturn)
-  }
 
 }

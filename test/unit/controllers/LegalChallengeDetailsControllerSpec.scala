@@ -25,7 +25,7 @@ import navigation.FakeNavigator
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import views.html.legalChallengeDetails
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -54,10 +54,10 @@ class LegalChallengeDetailsControllerSpec extends ControllerSpecBase with Answer
   def viewAsString(form: Form[_], request: Request[_]): String =
     legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(request, messages).toString
 
-  val testAnswer = "answer"
-  val validFormData = Map("legalChallengeDetails" -> testAnswer)
+  val testAnswer      = "answer"
+  val validFormData   = Map("legalChallengeDetails" -> testAnswer)
   val invalidFormData = Map("legalChallengeDetails" -> "")
-  val backgroundData = Map(ProvideGoodsNamePage.toString -> JsString("goodsName"))
+  val backgroundData  = Map(ProvideGoodsNamePage.toString -> JsString("goodsName"))
 
   "LegalChallengeDetailsController" must {
     behave like answerCachingController(

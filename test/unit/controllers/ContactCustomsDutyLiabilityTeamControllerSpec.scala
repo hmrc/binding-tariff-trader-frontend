@@ -21,11 +21,10 @@ import models.NormalMode
 import play.api.test.Helpers._
 import views.html.contactCustomsDutyLiabilityTeam
 
-
-
 class ContactCustomsDutyLiabilityTeamControllerSpec extends ControllerSpecBase {
 
-  val contactCustomsDutyLiabilityTeamView: contactCustomsDutyLiabilityTeam = app.injector.instanceOf(classOf[contactCustomsDutyLiabilityTeam])
+  val contactCustomsDutyLiabilityTeamView: contactCustomsDutyLiabilityTeam =
+    app.injector.instanceOf(classOf[contactCustomsDutyLiabilityTeam])
 
   def controller() = new ContactCustomsDutyLiabilityTeamController(
     frontendAppConfig,
@@ -34,14 +33,15 @@ class ContactCustomsDutyLiabilityTeamControllerSpec extends ControllerSpecBase {
     contactCustomsDutyLiabilityTeamView
   )
 
-  def viewAsString(): String = contactCustomsDutyLiabilityTeamView(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
+  def viewAsString(): String =
+    contactCustomsDutyLiabilityTeamView(frontendAppConfig, NormalMode)(fakeRequest, messages).toString
 
   "ContactCustomsDutyLiabilityTeamControllerSpec" must {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
   }

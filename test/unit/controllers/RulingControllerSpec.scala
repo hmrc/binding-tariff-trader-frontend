@@ -31,10 +31,10 @@ import scala.concurrent.Future
 class RulingControllerSpec extends ControllerSpecBase {
 
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
-  private val casesService = mock[CasesService]
+  private val casesService                   = mock[CasesService]
 
   val rulingInformationView: ruling_information = app.injector.instanceOf(classOf[views.html.ruling_information])
-  
+
   private def controller(identifier: IdentifierAction = FakeIdentifierAction) =
     new RulingController(
       frontendAppConfig,
@@ -44,7 +44,6 @@ class RulingControllerSpec extends ControllerSpecBase {
       rulingInformationView
     )
 
-
   "Ruling Controller" must {
 
     "return OK and the correct view for a GET" in {
@@ -52,7 +51,7 @@ class RulingControllerSpec extends ControllerSpecBase {
         .willReturn(Future.successful(oCase.btiCaseWithDecision))
       val result = controller().viewRuling("a-ruling")(fakeRequest)
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) should include(oCase.btiCaseWithDecision.reference)
       contentAsString(result) should include(oCase.btiCaseWithDecision.decision.get.bindingCommodityCode)
     }
@@ -61,7 +60,7 @@ class RulingControllerSpec extends ControllerSpecBase {
 
       val result = controller(givenUserDoesntHaveAnEORI).viewRuling("aruling")(fakeRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
     }
   }

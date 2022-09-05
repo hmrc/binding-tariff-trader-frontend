@@ -26,18 +26,20 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.beforeYouStart
 
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.{ Success, Failure }
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 import scala.util.control.NonFatal
 
-class BeforeYouStartController @Inject()(
-                                          appConfig: FrontendAppConfig,
-                                          identify: IdentifierAction,
-                                          getData: DataRetrievalAction,
-                                          dataCacheConnector: DataCacheConnector,
-                                          cc: MessagesControllerComponents,
-                                          beforeYouStartPageView: beforeYouStart
-                                        )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+class BeforeYouStartController @Inject() (
+  appConfig: FrontendAppConfig,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  dataCacheConnector: DataCacheConnector,
+  cc: MessagesControllerComponents,
+  beforeYouStartPageView: beforeYouStart
+)(implicit ec: ExecutionContext)
+    extends FrontendController(cc)
+    with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     val initialAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId))

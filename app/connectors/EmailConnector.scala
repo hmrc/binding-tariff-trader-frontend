@@ -27,11 +27,12 @@ import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EmailConnector @Inject()(
-                                configuration: FrontendAppConfig,
-                                client: HttpClient,
-                                val metrics: Metrics
-                              )(implicit ec: ExecutionContext) extends HasMetrics {
+class EmailConnector @Inject() (
+  configuration: FrontendAppConfig,
+  client: HttpClient,
+  val metrics: Metrics
+)(implicit ec: ExecutionContext)
+    extends HasMetrics {
 
   def send[E >: Email[_]](e: E)(implicit hc: HeaderCarrier, writes: Writes[E]): Future[Unit] =
     withMetricsTimerAsync("send-email") { _ =>

@@ -44,7 +44,7 @@ trait PaginationViewBehaviours {
     }
   }
 
-  protected def pageWithNoPaginationAndResults(view: () => HtmlFormat.Appendable): Unit = {
+  protected def pageWithNoPaginationAndResults(view: () => HtmlFormat.Appendable): Unit =
     "not display a page results section and navigation section" when {
       "there are no applications" in {
         val docWithNoApps: Document = asDocument(view())
@@ -52,9 +52,8 @@ trait PaginationViewBehaviours {
         docWithNoApps shouldNot containElementWithClass("hmrc-pagination")
       }
     }
-  }
 
-  protected def pageWithResultsAndNoPagination(paginationId: String, view: () => HtmlFormat.Appendable): Unit = {
+  protected def pageWithResultsAndNoPagination(paginationId: String, view: () => HtmlFormat.Appendable): Unit =
     "display a page result section without navigation" when {
       "there is only one application" in {
         val docOneAppNoPagination: Document = asDocument(view())
@@ -63,5 +62,4 @@ trait PaginationViewBehaviours {
         docOneAppNoPagination shouldNot containElementWithClass("hmrc-pagination")
       }
     }
-  }
 }

@@ -51,9 +51,8 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
 
   private val viewAsString = beforeYouStartView(frontendAppConfig)(fakeGETRequest, messages).toString
 
-  override protected def beforeEach(): Unit = {
+  override protected def beforeEach(): Unit =
     reset(mockDataCacheConnector)
-  }
 
   "BeforeYouStart Controller" must {
 
@@ -62,7 +61,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
       given(mockDataCacheConnector.save(any[CacheMap])).willReturn(Future.successful(emptyCacheMap))
       val result = controller(identifier = FakeIdentifierAction(Some("eori"))).onPageLoad(fakeRequest)
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) shouldBe viewAsString
       verify(mockDataCacheConnector).save(refEq(cacheMap))
     }
@@ -72,7 +71,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
       given(mockDataCacheConnector.save(any[CacheMap])).willReturn(Future.successful(emptyCacheMap))
       val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) shouldBe viewAsString
       verify(mockDataCacheConnector).save(refEq(cacheMap))
     }
@@ -85,7 +84,3 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
     }
   }
 }
-
-
-
-

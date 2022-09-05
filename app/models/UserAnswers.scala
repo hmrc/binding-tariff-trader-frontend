@@ -25,17 +25,14 @@ case class UserAnswers(cacheMap: CacheMap) extends Enumerable.Implicits {
   def get[A](page: DataPage[A])(implicit rds: Reads[A]): Option[A] =
     cacheMap.getEntry[A](page.toString)
 
-  def set[A](page: QuestionPage[A], value: A)(implicit writes: Writes[A]): UserAnswers = {
+  def set[A](page: QuestionPage[A], value: A)(implicit writes: Writes[A]): UserAnswers =
     UserAnswers(cacheMap copy (data = cacheMap.data + (page.toString -> Json.toJson(value))))
-  }
 
-  def set[A](page: DataPage[A], value: A)(implicit writes: Writes[A]): UserAnswers = {
+  def set[A](page: DataPage[A], value: A)(implicit writes: Writes[A]): UserAnswers =
     UserAnswers(cacheMap copy (data = cacheMap.data + (page.toString -> Json.toJson(value))))
-  }
 
-  def remove[A](page: QuestionPage[A]): UserAnswers = {
+  def remove[A](page: QuestionPage[A]): UserAnswers =
     UserAnswers(cacheMap copy (data = cacheMap.data - page.toString))
-  }
 }
 
 object UserAnswers {

@@ -27,7 +27,12 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class LanguageSwitchControllerSpec extends AnyWordSpec with Matchers with OptionValues with GuiceOneAppPerSuite with MockitoSugar  {
+class LanguageSwitchControllerSpec
+    extends AnyWordSpec
+    with Matchers
+    with OptionValues
+    with GuiceOneAppPerSuite
+    with MockitoSugar {
 
   "when translation is enabled switching language" should {
     "set the language to Cymraeg" in {
@@ -38,7 +43,7 @@ class LanguageSwitchControllerSpec extends AnyWordSpec with Matchers with Option
 
         val result = route(application, request).value
 
-        status(result) shouldBe SEE_OTHER
+        status(result)                               shouldBe SEE_OTHER
         cookies(result).get("PLAY_LANG").value.value shouldBe "cy"
       }
     }
@@ -51,7 +56,7 @@ class LanguageSwitchControllerSpec extends AnyWordSpec with Matchers with Option
 
         val result = route(application, request).value
 
-        status(result) shouldBe SEE_OTHER
+        status(result)                               shouldBe SEE_OTHER
         cookies(result).get("PLAY_LANG").value.value shouldBe "en"
       }
     }
@@ -69,22 +74,21 @@ class LanguageSwitchControllerSpec extends AnyWordSpec with Matchers with Option
         val cymraegResult = route(application, cymraegRequest).value
         val englishResult = route(application, englishRequest).value
 
-        status(cymraegResult) shouldBe SEE_OTHER
+        status(cymraegResult)                               shouldBe SEE_OTHER
         cookies(cymraegResult).get("PLAY_LANG").value.value shouldBe "en"
 
-        status(englishResult) shouldBe SEE_OTHER
+        status(englishResult)                               shouldBe SEE_OTHER
         cookies(englishResult).get("PLAY_LANG").value.value shouldBe "en"
       }
     }
   }
 
-  private def applicationBuilder(enableWelshTranslation: Boolean) = {
+  private def applicationBuilder(enableWelshTranslation: Boolean) =
     new GuiceApplicationBuilder()
       .configure(
-        "metrics.jvm" -> false,
-        "metrics.enabled" -> false,
+        "metrics.jvm"                                      -> false,
+        "metrics.enabled"                                  -> false,
         "microservice.services.features.welsh-translation" -> enableWelshTranslation
       )
       .build()
-  }
 }

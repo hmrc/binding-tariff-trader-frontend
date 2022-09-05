@@ -27,5 +27,4 @@ class LegalChallengeFormProvider @Inject() extends Mappings {
       "value" -> boolean("legalChallenge.error.required")
     )
 
-
 }

@@ -23,14 +23,13 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.howWeContactYou
 import javax.inject.Inject
 
-class HowWeContactYouController @Inject()(
-                                                 identify: IdentifierAction,
-                                                 getData: DataRetrievalAction,
-                                                 cc: MessagesControllerComponents,
-                                                 howWeContactYouView: howWeContactYou
-                                               ) extends FrontendController(cc) with I18nSupport {
+class HowWeContactYouController @Inject() (
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  cc: MessagesControllerComponents,
+  howWeContactYouView: howWeContactYou
+) extends FrontendController(cc)
+    with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData) { implicit request =>
-    Ok(howWeContactYouView())
-  }
+  def onPageLoad: Action[AnyContent] = (identify andThen getData)(implicit request => Ok(howWeContactYouView()))
 }

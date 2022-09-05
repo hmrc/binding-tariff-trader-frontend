@@ -41,14 +41,14 @@ import akka.stream.scaladsl.Source
 
 class FileServiceSpec extends SpecBase {
 
-  private val connector = mock[BindingTariffFilestoreConnector]
+  private val connector     = mock[BindingTariffFilestoreConnector]
   private val configuration = mock[FrontendAppConfig]
 
   private val fileSizeSmall = 10
-  private val fileSizeMax = 1000
+  private val fileSizeMax   = 1000
   private val fileSizeLarge = 1100
 
-  private val service = new FileService(connector, cc, configuration)
+  private val service                         = new FileService(connector, cc, configuration)
   private implicit val headers: HeaderCarrier = HeaderCarrier()
 
   override protected def beforeEach(): Unit = {
@@ -56,15 +56,14 @@ class FileServiceSpec extends SpecBase {
     reset(connector)
   }
 
-  private def createFileOfType(extension: String, mimeType: String) = {
+  private def createFileOfType(extension: String, mimeType: String) =
     createFile(extension, mimeType, fileSizeSmall)
-  }
 
   "Initiate" should {
     val initiateRequest = FileStoreInitiateRequest(maxFileSize = 0)
 
     val initiateResponse = FileStoreInitiateResponse(
-      id = "id",
+      id              = "id",
       upscanReference = "ref",
       uploadRequest = UpscanFormTemplate(
         "http://localhost:20001/upscan/upload",
@@ -82,9 +81,16 @@ class FileServiceSpec extends SpecBase {
   "Upload" should {
     val filestoreResponse = FilestoreResponse("id", "some.pdf", "application/pdf")
     "Delegate to connector" in {
-      given(connector.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier])).willReturn(successful(filestoreResponse))
+      given(connector.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier]))
+        .willReturn(successful(filestoreResponse))
 
-      await(service.uploadApplicationPdf("foo", Array.empty[Byte])) shouldBe FileAttachment("id", "some.pdf", "application/pdf", 0L, false)
+      await(service.uploadApplicationPdf("foo", Array.empty[Byte])) shouldBe FileAttachment(
+        "id",
+        "some.pdf",
+        "application/pdf",
+        0L,
+        false
+      )
     }
   }
 
@@ -99,9 +105,9 @@ class FileServiceSpec extends SpecBase {
   }
 
   "Refresh" should {
-    val outdatedFile = FileAttachment("id", "filename", "type", 0)
+    val outdatedFile      = FileAttachment("id", "filename", "type", 0)
     val connectorResponse = FilestoreResponse("id", "filename-updated", "type")
-    val fileUpdated = FileAttachment("id", "filename-updated", "type", 0)
+    val fileUpdated       = FileAttachment("id", "filename-updated", "type", 0)
 
     "Delegate to connector" in {
       given(connector.get(refEq(outdatedFile))(any[HeaderCarrier])).willReturn(successful(connectorResponse))
@@ -114,7 +120,8 @@ class FileServiceSpec extends SpecBase {
     val filePublishing = FileAttachment("id", "filename", "type", 0)
 
     "Delegate to connector and return Published" in {
-      val connectorResponse = FilestoreResponse("id", "filename-updated", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
+      val connectorResponse =
+        FilestoreResponse("id", "filename-updated", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
       given(connector.get(filePublishing)).willReturn(connectorResponse)
       given(connector.publish(refEq(filePublishing))(any[HeaderCarrier])).willReturn(successful(connectorResponse))
 
@@ -125,7 +132,7 @@ class FileServiceSpec extends SpecBase {
   "Service 'getLetterOfAuthority'" should {
 
     "Return Stored Attachment" in {
-      val c = aCase(withLetterOfAuthWithId("1"))
+      val c           = aCase(withLetterOfAuthWithId("1"))
       val expectedAtt = Some(someMetadataWithId("1"))
 
       given(connector.get(any[Attachment])(any[HeaderCarrier])) willReturn successful(expectedAtt)
@@ -147,9 +154,11 @@ class FileServiceSpec extends SpecBase {
     val filePublishing2 = FileAttachment("id2", "filename2", "type", 0)
 
     "Handle Exceptions from Publish" in {
-      val connectorResponse2 = FilestoreResponse("id2", "filename2", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
+      val connectorResponse2 =
+        FilestoreResponse("id2", "filename2", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
 
-      given(connector.publish(refEq(filePublishing1))(any[HeaderCarrier])).willReturn(failed(new RuntimeException("Some Error")))
+      given(connector.publish(refEq(filePublishing1))(any[HeaderCarrier]))
+        .willReturn(failed(new RuntimeException("Some Error")))
       given(connector.publish(refEq(filePublishing2))(any[HeaderCarrier])).willReturn(successful(connectorResponse2))
 
       await(service.publish(Seq(filePublishing1, filePublishing2))) shouldBe Seq(
@@ -158,13 +167,14 @@ class FileServiceSpec extends SpecBase {
     }
 
     "Handle Exceptions from Publish where all fail" in {
-      given(connector.publish(refEq(filePublishing1))(any[HeaderCarrier])).willReturn(failed(new RuntimeException("Some Error")))
-      given(connector.publish(refEq(filePublishing2))(any[HeaderCarrier])).willReturn(failed(new RuntimeException("Some Error")))
+      given(connector.publish(refEq(filePublishing1))(any[HeaderCarrier]))
+        .willReturn(failed(new RuntimeException("Some Error")))
+      given(connector.publish(refEq(filePublishing2))(any[HeaderCarrier]))
+        .willReturn(failed(new RuntimeException("Some Error")))
 
       await(service.publish(Seq(filePublishing1, filePublishing2))) shouldBe Seq.empty
     }
   }
-
 
   "Validate file type" should {
 
@@ -208,26 +218,26 @@ class FileServiceSpec extends SpecBase {
   }
 
   "GetAttachmentMetadata" should {
-    val c: Case = mock[Case]
+    val c: Case           = mock[Case]
     val connectorResponse = Seq(FilestoreResponse("id", "filename-updated", "type"))
 
     "Delegate to connector" in {
-      given(connector.getFileMetadata(any[Seq[Attachment]])(any[HeaderCarrier])).willReturn(successful(connectorResponse))
+      given(connector.getFileMetadata(any[Seq[Attachment]])(any[HeaderCarrier]))
+        .willReturn(successful(connectorResponse))
 
       await(service.getAttachmentMetadata(c)) shouldBe connectorResponse
     }
   }
 
-  private def createFileOfSize(numBytes: Int) = {
+  private def createFileOfSize(numBytes: Int) =
     createFile("txt", "text/plain", numBytes)
-  }
 
   private def createFile(extension: String, mimeType: String, numBytes: Int) = {
     val filename = "example." + extension
     val tempFile = createTemporaryFile(numBytes).toPath
-    val file = tempFileCreator.create(tempFile)
+    val file     = tempFileCreator.create(tempFile)
     val filePart = FilePart[TemporaryFile](key = "file-key", filename, contentType = Some(mimeType), ref = file)
-    val form = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
+    val form     = MultipartFormData[TemporaryFile](dataParts = Map(), files = Seq(filePart), badParts = Seq.empty)
     form.file("file-key").get
   }
 
@@ -246,7 +256,7 @@ class FileServiceSpec extends SpecBase {
 
   private def withAgentDetails(): Case => Case = c => {
     val details = AgentDetails(mock[EORIDetails], None)
-    val app = c.application.copy(agent = Some(details))
+    val app     = c.application.copy(agent = Some(details))
     c.copy(application = app)
   }
 
@@ -257,25 +267,23 @@ class FileServiceSpec extends SpecBase {
 
   private def withLetterOfAuthWithId(id: String): Case => Case = c => {
     val details = AgentDetails(mock[EORIDetails], Some(anAttachmentWithId(id)))
-    val app = c.application.copy(agent = Some(details))
+    val app     = c.application.copy(agent = Some(details))
     c.copy(application = app)
   }
 
-  private def anAttachmentWithId(id: String): Attachment = {
+  private def anAttachmentWithId(id: String): Attachment =
     Attachment(
-      id = id,
+      id     = id,
       public = true
     )
-  }
 
-  private def someMetadataWithId(id: String): FilestoreResponse = {
+  private def someMetadataWithId(id: String): FilestoreResponse =
     FilestoreResponse(
-      id = id,
-      fileName = s"name-$id",
-      mimeType = s"type-$id",
-      url = Some(s"url-$id"),
+      id         = id,
+      fileName   = s"name-$id",
+      mimeType   = s"type-$id",
+      url        = Some(s"url-$id"),
       scanStatus = Some(ScanStatus.READY)
     )
-  }
 
 }

@@ -42,7 +42,8 @@ class NavigatorSpec extends SpecBase {
 
       "Go to Before you start from index when required" in {
 
-        navigator.nextPage(IndexPage, NormalMode)(mock[UserAnswers]) shouldBe routes.BeforeYouStartController.onPageLoad()
+        navigator.nextPage(IndexPage, NormalMode)(mock[UserAnswers]) shouldBe routes.BeforeYouStartController
+          .onPageLoad()
 
       }
 
@@ -51,7 +52,8 @@ class NavigatorSpec extends SpecBase {
 
         when(mockUserAnswers.get(ProvideGoodsNamePage)).thenReturn(Some("goods name"))
 
-        navigator.nextPage(ProvideGoodsNamePage, NormalMode)(mockUserAnswers) shouldBe routes.ProvideGoodsDescriptionController.onPageLoad(NormalMode)
+        navigator.nextPage(ProvideGoodsNamePage, NormalMode)(mockUserAnswers) shouldBe routes.ProvideGoodsDescriptionController
+          .onPageLoad(NormalMode)
       }
 
       "go to AddConfidentialInformationPage after ProvideGoodsDescriptionPage" in {
@@ -59,7 +61,8 @@ class NavigatorSpec extends SpecBase {
 
         when(mockUserAnswers.get(ProvideGoodsDescriptionPage)).thenReturn(Some("goods description"))
 
-        navigator.nextPage(ProvideGoodsDescriptionPage, NormalMode)(mockUserAnswers) shouldBe routes.AddConfidentialInformationController.onPageLoad(NormalMode)
+        navigator.nextPage(ProvideGoodsDescriptionPage, NormalMode)(mockUserAnswers) shouldBe routes.AddConfidentialInformationController
+          .onPageLoad(NormalMode)
       }
 
       "go to AddSupportingDocumentsPage when no is selected in AddConfidentialInformation page" in {
@@ -119,7 +122,8 @@ class NavigatorSpec extends SpecBase {
       "go to MakeFileConfidentialPage after uploading a file on UploadSupportingMaterialMultiplePage" in {
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.get(UploadSupportingMaterialMultiplePage)).thenReturn(Some(Seq(FileAttachment("id", "foo.jpg", "image/jpeg", 1L))))
+        when(mockUserAnswers.get(UploadSupportingMaterialMultiplePage))
+          .thenReturn(Some(Seq(FileAttachment("id", "foo.jpg", "image/jpeg", 1L))))
 
         navigator.nextPage(UploadSupportingMaterialMultiplePage, NormalMode)(mockUserAnswers) shouldBe
           routes.MakeFileConfidentialController.onPageLoad(NormalMode)
@@ -331,7 +335,8 @@ class NavigatorSpec extends SpecBase {
         case object UnknownPage extends Page {
           def route(mode: Mode) = Call("GET", "/unknown")
         }
-        navigator.nextPage(UnknownPage, CheckMode)(mock[UserAnswers]) shouldBe routes.CheckYourAnswersController.onPageLoad()
+        navigator.nextPage(UnknownPage, CheckMode)(mock[UserAnswers]) shouldBe routes.CheckYourAnswersController
+          .onPageLoad()
       }
 
       "go to ProvideConfidentialInformationPage when yes is selected in AddConfidentialInformationPage" in {
@@ -382,7 +387,8 @@ class NavigatorSpec extends SpecBase {
       "go to MakeFileConfidentialPage after uploading a file on UploadSupportingMaterialMultiplePage" in {
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.get(UploadSupportingMaterialMultiplePage)).thenReturn(Some(Seq(FileAttachment("id", "foo.jpg", "image/jpeg", 1L))))
+        when(mockUserAnswers.get(UploadSupportingMaterialMultiplePage))
+          .thenReturn(Some(Seq(FileAttachment("id", "foo.jpg", "image/jpeg", 1L))))
 
         navigator.nextPage(UploadSupportingMaterialMultiplePage, CheckMode)(mockUserAnswers) shouldBe
           routes.MakeFileConfidentialController.onPageLoad(CheckMode)

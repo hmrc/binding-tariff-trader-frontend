@@ -28,9 +28,7 @@ class FakeDataCacheConnector(initialData: Map[String, CacheMap]) extends DataCac
   val cache = new AtomicReference(initialData)
 
   override def save[A](cacheMap: CacheMap): Future[CacheMap] = Future.successful {
-    cache.updateAndGet { current =>
-      current.updated(cacheMap.id, cacheMap)
-    }
+    cache.updateAndGet(current => current.updated(cacheMap.id, cacheMap))
 
     cacheMap
   }
@@ -42,9 +40,7 @@ class FakeDataCacheConnector(initialData: Map[String, CacheMap]) extends DataCac
     Future.successful(cache.get().get(cacheId).flatMap(_.getEntry(key)))
 
   override def remove(cacheMap: CacheMap): Future[Boolean] = Future.successful {
-    cache.updateAndGet { current =>
-      current - cacheMap.id
-    }
+    cache.updateAndGet(current => current - cacheMap.id)
 
     true
   }

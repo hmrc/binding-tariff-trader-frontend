@@ -37,23 +37,25 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 @Singleton
-class MigrationWorker @Inject()(
-                                 appConfig: FrontendAppConfig,
-                                 casesService: CasesService,
-                                 countriesService: CountriesService,
-                                 fileService: FileService,
-                                 pdfService: PdfService,
-                                 messagesApi: MessagesApi,
-                                 clock: Clock,
-                                 mongoLockRepository: MongoLockRepository)(implicit system: ActorSystem)
-  extends InjectAuthHeader
+class MigrationWorker @Inject() (
+  appConfig: FrontendAppConfig,
+  casesService: CasesService,
+  countriesService: CountriesService,
+  fileService: FileService,
+  pdfService: PdfService,
+  messagesApi: MessagesApi,
+  clock: Clock,
+  mongoLockRepository: MongoLockRepository
+)(implicit system: ActorSystem)
+    extends InjectAuthHeader
     with Logging {
 
   implicit val ec: ExecutionContext = system.dispatchers.lookup("migration-dispatcher")
-  implicit val hc: HeaderCarrier = HeaderCarrier(extraHeaders = addAuth(appConfig)(HeaderCarrier()))
-  implicit val messages: Messages = messagesApi.preferred(Seq(Lang.defaultLang))
+  implicit val hc: HeaderCarrier    = HeaderCarrier(extraHeaders = addAuth(appConfig)(HeaderCarrier()))
+  implicit val messages: Messages   = messagesApi.preferred(Seq(Lang.defaultLang))
 
-  val myLock: TimePeriodLockService = TimePeriodLockService(mongoLockRepository, lockId = "migration-lock", ttl = 2.minutes)
+  val myLock: TimePeriodLockService =
+    TimePeriodLockService(mongoLockRepository, lockId = "migration-lock", ttl = 2.minutes)
 
   val decider: Supervision.Decider = {
     case NonFatal(e) =>
@@ -65,14 +67,16 @@ class MigrationWorker @Inject()(
 
   private val migrationSource = Source
     .unfoldAsync(SearchPagination()) { pagination =>
-      myLock.withRenewedLock {
-        casesService.allCases(pagination, Sort())
-      }.map { maybeCases =>
-        logger.info("Acquired migration lock")
-        maybeCases
-          .filter(_.nonEmpty)
-          .map(cases => (pagination.copy(page = pagination.page + 1), cases.results.toList))
-      }
+      myLock
+        .withRenewedLock {
+          casesService.allCases(pagination, Sort())
+        }
+        .map { maybeCases =>
+          logger.info("Acquired migration lock")
+          maybeCases
+            .filter(_.nonEmpty)
+            .map(cases => (pagination.copy(page = pagination.page + 1), cases.results.toList))
+        }
     }
     .flatMapConcat(cases => Source(cases.filter(_.application.applicationPdf.isEmpty)))
     .mapAsync(Runtime.getRuntime.availableProcessors())(regeneratePdf)

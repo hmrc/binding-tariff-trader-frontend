@@ -31,10 +31,12 @@ import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 
 @Singleton
-class BindingTariffClassificationConnector @Inject()(
-                                                      client: AuthenticatedHttpClient,
-                                                      val metrics: Metrics
-                                                    )(implicit appConfig: FrontendAppConfig, ec: ExecutionContext) extends InjectAuthHeader with HasMetrics {
+class BindingTariffClassificationConnector @Inject() (
+  client: AuthenticatedHttpClient,
+  val metrics: Metrics
+)(implicit appConfig: FrontendAppConfig, ec: ExecutionContext)
+    extends InjectAuthHeader
+    with HasMetrics {
 
   def createCase(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] =
     withMetricsTimerAsync("create-case") { _ =>
@@ -70,7 +72,9 @@ class BindingTariffClassificationConnector @Inject()(
       client.GET[Paged[Case]](url, headers = addAuth(appConfig))
     }
 
-  def findCasesBy(eori: String, status: Set[CaseStatus], pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] =
+  def findCasesBy(eori: String, status: Set[CaseStatus], pagination: Pagination, sort: Sort)(
+    implicit hc: HeaderCarrier
+  ): Future[Paged[Case]] =
     withMetricsTimerAsync("search-cases") { _ =>
       val url = s"${appConfig.bindingTariffClassificationUrl}/cases" +
         s"?eori=$eori&status=${status.mkString(",")}" +

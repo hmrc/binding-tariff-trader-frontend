@@ -33,7 +33,10 @@ trait YesNoCaching extends AnswerCaching[Boolean] {
   def navigator: Navigator
   def detailPages: List[QuestionPage[_]]
 
-  override def submitAnswer(answer: Boolean, mode: Mode)(implicit request: DataRequest[_], writes: Writes[Boolean], ec: ExecutionContext): Future[Result] = {
+  override def submitAnswer(
+    answer: Boolean,
+    mode: Mode
+  )(implicit request: DataRequest[_], writes: Writes[Boolean], ec: ExecutionContext): Future[Result] = {
     // Set the yes/no question into the user answers
     val questionPageAnswers: UserAnswers = request.userAnswers.set(questionPage, answer)
 

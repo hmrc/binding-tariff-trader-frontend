@@ -21,7 +21,6 @@ import models.NormalMode
 import pages.ProvideGoodsNamePage
 import pages.behaviours.PageBehaviours
 
-
 class ProvideGoodsNamePageSpec extends PageBehaviours {
 
   "ProvideGoodsNamePage" must {

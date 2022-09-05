@@ -23,38 +23,38 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
 
   val answer = "answer"
 
-  private def getMessage(key: String, args: String*): Option[String] = {
-    messages(key, args:_*) match {
+  private def getMessage(key: String, args: String*): Option[String] =
+    messages(key, args: _*) match {
       case m if m == key => None
-      case s => Some(s)
+      case s             => Some(s)
     }
-  }
 
-  private def getExpectedLabel(messageKeyPrefix: String, args: String*): String = {
+  private def getExpectedLabel(messageKeyPrefix: String, args: String*): String =
     getMessage(s"$messageKeyPrefix.label") match {
       case Some(l) => l
-      case _ => getMessage(s"$messageKeyPrefix.heading", args:_*) match {
-        case Some(h) => h
-        case _ => ""
-      }
+      case _ =>
+        getMessage(s"$messageKeyPrefix.heading", args: _*) match {
+          case Some(h) => h
+          case _       => ""
+        }
     }
-  }
 
-  protected def stringPage(createView: Form[String] => HtmlFormat.Appendable,
-                           messageKeyPrefix: String,
-                           expectedFormAction: String,
-                           expectedHintKey: Option[String] = None,
-                           forElement: String = "value"): Unit = {
-
+  protected def stringPage(
+    createView: Form[String] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    expectedFormAction: String,
+    expectedHintKey: Option[String] = None,
+    forElement: String              = "value"
+  ): Unit =
     "behave like a page with a string value field" when {
 
       "rendered" must {
 
         "contain a label for the value" in {
-          val doc = asDocument(createView(form))
+          val doc              = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
 
-          assertContainsLabel(doc, forElement,  getExpectedLabel(messageKeyPrefix), expectedHintText)
+          assertContainsLabel(doc, forElement, getExpectedLabel(messageKeyPrefix), expectedHintText)
         }
 
         "contain an input for the value" in {
@@ -65,9 +65,9 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
 
       "rendered with a valid form" must {
         "include the form's value in the value input" in {
-          val doc = asDocument(createView(form.fill(answer)))
+          val doc   = asDocument(createView(form.fill(answer)))
           val input = doc.getElementById(forElement)
-          if(input.tagName() == "textarea")
+          if (input.tagName() == "textarea")
             input.html() shouldBe answer
           else
             input.attr("value") shouldBe answer
@@ -82,36 +82,38 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         }
 
         "show an error in the value field's label" in {
-          val doc = asDocument(createView(form.withError(error(forElement))))
+          val doc       = asDocument(createView(form.withError(error(forElement))))
           val errorSpan = doc.getElementsByClass("govuk-error-message").first
           errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
         }
 
         "show an error prefix in the browser title" in {
           val doc = asDocument(createView(form.withError(error(forElement))))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title")}""")
+          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(
+            s"$messageKeyPrefix.title"
+          )}""")
         }
       }
     }
-  }
 
-  protected def textareaPage(createView: Form[String] => HtmlFormat.Appendable,
-                             messageKeyPrefix: String,
-                             expectedFormAction: String,
-                             expectedFormElementId: String = "value",
-                             messageArgs: Seq[String] = Nil,
-                             expectedHintKey: Option[String] = None): Unit = {
-
+  protected def textareaPage(
+    createView: Form[String] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    expectedFormAction: String,
+    expectedFormElementId: String   = "value",
+    messageArgs: Seq[String]        = Nil,
+    expectedHintKey: Option[String] = None
+  ): Unit =
     "behave like a page with a string value field" when {
 
       "rendered" must {
 
         "contain a label for the value" in {
-          val doc = asDocument(createView(form))
+          val doc              = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
-          val expectedLabel = getExpectedLabel(messageKeyPrefix, messageArgs:_*)
+          val expectedLabel    = getExpectedLabel(messageKeyPrefix, messageArgs: _*)
 
-          assertContainsLabel(doc, expectedFormElementId,  expectedLabel, expectedHintText)
+          assertContainsLabel(doc, expectedFormElementId, expectedLabel, expectedHintText)
         }
 
         "contain an input for the value" in {
@@ -131,22 +133,23 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
 
         "show an error summary" in {
           val view = createView(form.withError(error))
-          val doc = asDocument(view)
+          val doc  = asDocument(view)
           assertRenderedById(doc, "error-summary-title")
         }
 
         "show an error in the value field's label" in {
-          val doc = asDocument(createView(form.withError(error(expectedFormElementId))))
+          val doc       = asDocument(createView(form.withError(error(expectedFormElementId))))
           val errorSpan = doc.getElementsByClass("govuk-error-message").first
           errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
         }
 
         "show an error prefix in the browser title" in {
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title")}""")
+          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(
+            s"$messageKeyPrefix.title"
+          )}""")
         }
       }
     }
-  }
 
 }

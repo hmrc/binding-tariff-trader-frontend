@@ -33,10 +33,13 @@ class EmailConnectorSpec extends ConnectorTest {
   "Connector 'Send'" should {
 
     "POST Email payload" in {
-      stubFor(post(urlEqualTo("/hmrc/email"))
-        .withRequestBody(new EqualToJsonPattern(fromResource("advice_request_email-request.json"), true, false))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_ACCEPTED))
+      stubFor(
+        post(urlEqualTo("/hmrc/email"))
+          .withRequestBody(new EqualToJsonPattern(fromResource("advice_request_email-request.json"), true, false))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_ACCEPTED)
+          )
       )
 
       await(connector.send(email)) shouldBe ((): Unit)
@@ -48,10 +51,12 @@ class EmailConnectorSpec extends ConnectorTest {
     }
 
     "propagate errors" in {
-      stubFor(post(urlEqualTo("/hmrc/email"))
-        .willReturn(aResponse()
-          .withStatus(HttpStatus.SC_BAD_GATEWAY)
-        )
+      stubFor(
+        post(urlEqualTo("/hmrc/email"))
+          .willReturn(
+            aResponse()
+              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+          )
       )
 
       intercept[UpstreamErrorResponse] {

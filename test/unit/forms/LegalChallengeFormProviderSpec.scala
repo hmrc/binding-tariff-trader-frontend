@@ -22,7 +22,7 @@ import play.api.data.FormError
 class LegalChallengeFormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "legalChallenge.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new LegalChallengeFormProvider()()
 

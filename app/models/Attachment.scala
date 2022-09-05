@@ -20,8 +20,7 @@ import java.time.ZonedDateTime
 
 import play.api.libs.json.{Json, OFormat}
 
-case class Attachment
-(
+case class Attachment(
   id: String,
   public: Boolean,
   timestamp: ZonedDateTime = ZonedDateTime.now()

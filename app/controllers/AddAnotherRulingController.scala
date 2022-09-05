@@ -33,17 +33,17 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class AddAnotherRulingController @Inject() (
-                                             appConfig: FrontendAppConfig,
-                                             val dataCacheConnector: DataCacheConnector,
-                                             val navigator: Navigator,
-                                             val identify: IdentifierAction,
-                                             val getData: DataRetrievalAction,
-                                             val requireData: DataRequiredAction,
-                                             formProvider: AddAnotherRulingFormProvider,
-                                             cc: MessagesControllerComponents,
-                                             addAnotherRulingView: addAnotherRuling
-                                           )(implicit ec: ExecutionContext)
-  extends AnswerCachingController[Boolean](cc) {
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: AddAnotherRulingFormProvider,
+  cc: MessagesControllerComponents,
+  addAnotherRulingView: addAnotherRuling
+)(implicit ec: ExecutionContext)
+    extends AnswerCachingController[Boolean](cc) {
 
   lazy val form: Form[Boolean]            = formProvider()
   val questionPage: QuestionPage[Boolean] = AddAnotherRulingPage

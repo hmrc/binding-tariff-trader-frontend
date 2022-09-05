@@ -31,24 +31,29 @@ case class Dashboard(pageData: Paged[Case], sort: Sort) {
 
   private def queryParamsFor(columnName: String): String =
     this
-      .copy(pageData = pageData.copy(pageIndex = 1), sort = Sort(SortField.withName(columnName), sortOrderFor(columnName)))
+      .copy(
+        pageData = pageData.copy(pageIndex = 1),
+        sort     = Sort(SortField.withName(columnName), sortOrderFor(columnName))
+      )
       .toQueryString
 
   private def toQueryString: String = {
-    val query = toMap.map { case (k,v) =>
-      encode(k, ENCODING) + "=" + encode(v, ENCODING)
-    }.mkString("&")
+    val query = toMap
+      .map {
+        case (k, v) =>
+          encode(k, ENCODING) + "=" + encode(v, ENCODING)
+      }
+      .mkString("&")
 
-    if(query.nonEmpty) "?" + query else ""
+    if (query.nonEmpty) "?" + query else ""
   }
 
-  private def toMap: Map[String, String] = {
+  private def toMap: Map[String, String] =
     Map(
-      pageParam -> encode(pageData.pageIndex.toString, ENCODING),
+      pageParam      -> encode(pageData.pageIndex.toString, ENCODING),
       sortFieldParam -> encode(sort.field.toString, ENCODING),
-      orderParam -> encode(sort.direction.toString, ENCODING)
+      orderParam     -> encode(sort.direction.toString, ENCODING)
     )
-  }
 
   private def sortOrderFor(columnName: String): SortDirection = {
     def currentColumn: Boolean =
@@ -68,9 +73,9 @@ object Dashboard {
 
   private val baseUrl: String = routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url
 
-  private val pageParam: String = "page"
+  private val pageParam: String      = "page"
   private val sortFieldParam: String = "sortBy"
-  private val orderParam: String = "order"
+  private val orderParam: String     = "order"
 
   private val ENCODING: String = "UTF-8"
 

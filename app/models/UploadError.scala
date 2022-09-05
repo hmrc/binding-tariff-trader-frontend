@@ -17,9 +17,10 @@
 package models
 
 sealed abstract class UploadError(
-                                   val errorCode: String,
-                                   val errorMessageKey: String
-                                 ) extends Product with Serializable
+  val errorCode: String,
+  val errorMessageKey: String
+) extends Product
+    with Serializable
 
 case object FileTooSmall extends UploadError("EntityTooSmall", "uploadSupportingMaterialMultiple.error.fileTooSmall")
 
@@ -29,12 +30,13 @@ case object FileTooLarge extends UploadError("EntityTooLarge", "uploadSupporting
 case object NoFileSelected extends UploadError("400", "uploadSupportingMaterialMultiple.error.noFileSelected")
 
 case class Other(
-                  override val errorCode: String
-                ) extends UploadError(errorCode, "uploadSupportingMaterialMultiple.error.uploadError")
+  override val errorCode: String
+) extends UploadError(errorCode, "uploadSupportingMaterialMultiple.error.uploadError")
 
 object UploadError {
 
-  val knownErrors : Set[UploadError] = Set(FileTooSmall, FileTooLarge, NoFileSelected)
+  val knownErrors: Set[UploadError] = Set(FileTooSmall, FileTooLarge, NoFileSelected)
 
-  def fromErrorCode(errorCode : String): UploadError = knownErrors.find(_.errorCode == errorCode).getOrElse(Other(errorCode))
+  def fromErrorCode(errorCode: String): UploadError =
+    knownErrors.find(_.errorCode == errorCode).getOrElse(Other(errorCode))
 }

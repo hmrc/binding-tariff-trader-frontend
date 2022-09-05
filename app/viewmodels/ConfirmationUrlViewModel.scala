@@ -22,17 +22,17 @@ sealed trait ConfirmationUrlViewModel {
 }
 
 case object ConfirmationBTAUrlViewModel extends ConfirmationUrlViewModel {
-  override val messageKey = "view.bta.home.link"
+  override val messageKey  = "view.bta.home.link"
   override val url: String = controllers.routes.BTARedirectController.redirectToBTA.url
 }
 
 case object ConfirmationHomeUrlViewModel extends ConfirmationUrlViewModel {
   override val messageKey = "view.application.home.Link"
-  override val url: String = controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url
+  override val url: String =
+    controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url
 }
 
 object ConfirmationUrlViewModel {
-  def apply(isBTAUser: Boolean): ConfirmationUrlViewModel = {
-    if(isBTAUser) ConfirmationBTAUrlViewModel else ConfirmationHomeUrlViewModel
-  }
+  def apply(isBTAUser: Boolean): ConfirmationUrlViewModel =
+    if (isBTAUser) ConfirmationBTAUrlViewModel else ConfirmationHomeUrlViewModel
 }

@@ -24,7 +24,7 @@ import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.{ CommodityCodeDigitsPage, ProvideGoodsNamePage }
+import pages.{CommodityCodeDigitsPage, ProvideGoodsNamePage}
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import play.twirl.api.HtmlFormat
@@ -32,7 +32,7 @@ import views.html.commodityCodeDigits
 
 import scala.concurrent.ExecutionContext
 
-class CommodityCodeDigitsController @Inject()(
+class CommodityCodeDigitsController @Inject() (
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
@@ -42,8 +42,9 @@ class CommodityCodeDigitsController @Inject()(
   formProvider: CommodityCodeDigitsFormProvider,
   cc: MessagesControllerComponents,
   commodityCodeDigitsView: commodityCodeDigits
-)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
-  lazy val form: Form[String] = formProvider()
+)(implicit ec: ExecutionContext)
+    extends AnswerCachingController[String](cc) {
+  lazy val form: Form[String]                    = formProvider()
   val questionPage: CommodityCodeDigitsPage.type = CommodityCodeDigitsPage
 
   def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {

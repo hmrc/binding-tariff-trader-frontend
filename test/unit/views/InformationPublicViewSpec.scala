@@ -20,13 +20,14 @@ import models.requests.IdentifierRequest
 import views.behaviours.ViewBehaviours
 import views.html.informationPublic
 
-class  InformationPublicViewSpec extends ViewBehaviours {
+class InformationPublicViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "informationPublic"
 
   val informationPublicView: informationPublic = app.injector.instanceOf[informationPublic]
 
-  private def createView(eori: Option[String] = Some("eori")) = () => informationPublicView(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages)
+  private def createView(eori: Option[String] = Some("eori")) =
+    () => informationPublicView(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", eori), messages)
 
   "InformationPublic view" must {
     behave like normalPage(createView(), messageKeyPrefix)()
@@ -35,4 +36,3 @@ class  InformationPublicViewSpec extends ViewBehaviours {
   }
 
 }
-

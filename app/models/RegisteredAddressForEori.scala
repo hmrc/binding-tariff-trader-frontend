@@ -18,7 +18,14 @@ package models
 
 import play.api.libs.json._
 
-case class RegisteredAddressForEori(eori: String, businessName: String, addressLine1: String, townOrCity: String, postcode: Option[String], country: String)
+case class RegisteredAddressForEori(
+  eori: String,
+  businessName: String,
+  addressLine1: String,
+  townOrCity: String,
+  postcode: Option[String],
+  country: String
+)
 
 object RegisteredAddressForEori {
   implicit val format: OFormat[RegisteredAddressForEori] = Json.format[RegisteredAddressForEori]

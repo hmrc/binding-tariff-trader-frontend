@@ -46,17 +46,17 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private lazy val error = new IllegalStateException("expected error")
   private val testAnswer = "answer"
 
-  private val mapper = mock[CaseRequestMapper]
-  private val newCaseReq = mock[NewCaseRequest]
-  private val attachment = FileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
+  private val mapper              = mock[CaseRequestMapper]
+  private val newCaseReq          = mock[NewCaseRequest]
+  private val attachment          = FileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
   private val publishedAttachment = PublishedFileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
-  private val applicationPdf = FileAttachment("id", "file.pdf", "application/pdf", 0L)
-  private val createdCase = mock[Case]
-  private val auditService = mock[AuditService]
-  private val casesService = mock[CasesService]
-  private val pdfService = mock[PdfService]
-  private val fileService = mock[FileService]
-  private val btiApp = mock[Application]
+  private val applicationPdf      = FileAttachment("id", "file.pdf", "application/pdf", 0L)
+  private val createdCase         = mock[Case]
+  private val auditService        = mock[AuditService]
+  private val casesService        = mock[CasesService]
+  private val pdfService          = mock[PdfService]
+  private val fileService         = mock[FileService]
+  private val btiApp              = mock[Application]
 
   private val countriesService = new CountriesService
 
@@ -121,13 +121,16 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
         AnswerSection(Some("checkYourAnswers.informationAboutYourItemSection"), Seq.empty),
         AnswerSection(Some("checkYourAnswers.otherInformation"), Seq.empty)
       )
-      contentAsString(result) shouldBe checkYourAnswersView(frontendAppConfig, expectedSections, false)(fakeRequest, messages).toString
+      contentAsString(result) shouldBe checkYourAnswersView(frontendAppConfig, expectedSections, false)(
+        fakeRequest,
+        messages
+      ).toString
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
       val result = controller(dontGetAnyData).onPageLoad()(fakeRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
   }
@@ -142,7 +145,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
     val result = await(controller(extractDataFromCache).onSubmit()(fakeRequest))
 
-    result.header.status shouldBe Status.SEE_OTHER
+    result.header.status            shouldBe Status.SEE_OTHER
     result.header.headers(LOCATION) shouldBe "/foo"
   }
 
@@ -154,20 +157,19 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
     givenTheCaseIsUpdatedWithPdf()
     givenTheCaseCreatedEventIsSuccessful()
 
-    val c = controller(extractDataFromCache)
+    val c   = controller(extractDataFromCache)
     val req = fakeRequest
 
     await(c.onSubmit()(req))
 
-    verify(casesService, times(1)).addCaseCreatedEvent(
-      refEq(createdCase), refEq(Operator("", Some("luigi"))))(any[HeaderCarrier])
+    verify(casesService, times(1))
+      .addCaseCreatedEvent(refEq(createdCase), refEq(Operator("", Some("luigi"))))(any[HeaderCarrier])
   }
-
 
   "not create an event when the ATAR application failed to be submitted " in {
     givenTheCaseCreateFails()
 
-    val c = controller(extractDataFromCache)
+    val c   = controller(extractDataFromCache)
     val req = fakeRequest
 
     val caught = intercept[RuntimeException] {
@@ -187,7 +189,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
     givenTheCaseIsUpdatedWithPdf()
     givenTheCaseCreatedEventIsSuccessful()
 
-    val c = controller(extractDataFromCache)
+    val c   = controller(extractDataFromCache)
     val req = fakeRequest
 
     await(c.onSubmit()(req))
@@ -199,7 +201,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   "not send the expected explicit audit events when the ATAR application failed to be submitted" in {
     givenTheCaseCreateFails()
 
-    val c = controller(extractDataFromCache)
+    val c   = controller(extractDataFromCache)
     val req = fakeRequest
 
     val caught = intercept[error.type] {
@@ -213,39 +215,35 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private def givenTheCaseCreatesSuccessfully(): Unit = {
+  private def givenTheCaseCreatesSuccessfully(): Unit =
     when(casesService.create(any[NewCaseRequest])(any[HeaderCarrier])).thenReturn(successful(createdCase))
-  }
 
-  private def givenTheCaseCreatedEventIsSuccessful(): Unit = {
+  private def givenTheCaseCreatedEventIsSuccessful(): Unit =
     when(casesService.addCaseCreatedEvent(any[Case], any[Operator])(any[HeaderCarrier])).thenReturn(successful(()))
-  }
 
-  private def givenTheCaseCreateFails(): Unit = {
+  private def givenTheCaseCreateFails(): Unit =
     when(casesService.create(any[NewCaseRequest])(any[HeaderCarrier])).thenReturn(failed(error))
-  }
 
-  private def givenTheAttachmentPublishSucceeds(): Unit = {
-    when(fileService.publish(any[Seq[FileAttachment]])(any[HeaderCarrier])).thenReturn(successful(Seq(publishedAttachment)))
-  }
+  private def givenTheAttachmentPublishSucceeds(): Unit =
+    when(fileService.publish(any[Seq[FileAttachment]])(any[HeaderCarrier]))
+      .thenReturn(successful(Seq(publishedAttachment)))
 
-  private def givenTheApplicationPdfGenerates(): Unit = {
+  private def givenTheApplicationPdfGenerates(): Unit =
     when(pdfService.generatePdf(any[Html])).thenReturn(successful(PdfFile(Array.empty, "application/pdf")))
-  }
 
-  private def givenTheApplicationPdfIsUploaded(): Unit = {
-    when(fileService.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier])).thenReturn(successful(applicationPdf))
-  }
+  private def givenTheApplicationPdfIsUploaded(): Unit =
+    when(fileService.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier]))
+      .thenReturn(successful(applicationPdf))
 
-  private def givenTheCaseIsUpdatedWithPdf(): Unit = {
-    when(casesService.update(any[String], any[CaseUpdate])(any[HeaderCarrier])).thenReturn(successful(Some(createdCase)))
-  }
+  private def givenTheCaseIsUpdatedWithPdf(): Unit =
+    when(casesService.update(any[String], any[CaseUpdate])(any[HeaderCarrier]))
+      .thenReturn(successful(Some(createdCase)))
 
   private def extractDataFromCache: DataRetrievalAction = {
     val validData = Map(
-      CheckYourAnswersPage.toString -> JsString(testAnswer),
+      CheckYourAnswersPage.toString                 -> JsString(testAnswer),
       UploadSupportingMaterialMultiplePage.toString -> Json.toJson(Seq(attachment)),
-      MakeFileConfidentialPage.toString -> JsObject(Map("file-id" -> JsBoolean(false)))
+      MakeFileConfidentialPage.toString             -> JsObject(Map("file-id" -> JsBoolean(false)))
     )
     new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
   }

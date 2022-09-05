@@ -25,7 +25,7 @@ import navigation.FakeNavigator
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import views.html.legalChallenge
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -33,7 +33,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class LegalChallengeControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
   private val formProvider = new LegalChallengeFormProvider()
-  private val goodsName = "wine"
+  private val goodsName    = "wine"
 
   val legalChallengeView: legalChallenge = app.injector.instanceOf(classOf[legalChallenge])
 

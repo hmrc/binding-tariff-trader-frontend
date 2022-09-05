@@ -35,12 +35,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
 
   private lazy val formProvider: RegisteredAddressForEoriFormProvider = new RegisteredAddressForEoriFormProvider()
-  private lazy val form: Form[RegisteredAddressForEori] = formProvider()
-  private val countriesService = new CountriesService()
+  private lazy val form: Form[RegisteredAddressForEori]               = formProvider()
+  private val countriesService                                        = new CountriesService()
 
-  val registeredAddressForEoriView: registeredAddressForEori = app.injector.instanceOf(classOf[registeredAddressForEori])
+  val registeredAddressForEoriView: registeredAddressForEori =
+    app.injector.instanceOf(classOf[registeredAddressForEori])
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) = {
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new RegisteredAddressForEoriController(
       frontendAppConfig,
       FakeDataCacheConnector,
@@ -53,52 +54,80 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
       cc,
       registeredAddressForEoriView
     )
-  }
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private def viewAsString(form: Form[RegisteredAddressForEori] = form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get))): String = {
-    registeredAddressForEoriView(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithEori, messages).toString
-  }
+  private def viewAsString(
+    form: Form[RegisteredAddressForEori] = form.fill(RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get))
+  ): String =
+    registeredAddressForEoriView(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(
+      fakeRequestWithEori,
+      messages
+    ).toString
 
   "RegisteredAddressForEori Controller" must {
 
     "return OK and the correct view for a GET" in {
       val result = controller().onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) shouldBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val validData = Map(RegisteredAddressForEoriPage.toString -> Json.toJson(
-        RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get, "businessName", "addressLine1", "townOrCity", Some("postcode"), "country")))
+      val validData = Map(
+        RegisteredAddressForEoriPage.toString -> Json.toJson(
+          RegisteredAddressForEori(
+            fakeRequestWithEori.userEoriNumber.get,
+            "businessName",
+            "addressLine1",
+            "townOrCity",
+            Some("postcode"),
+            "country"
+          )
+        )
+      )
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
 
-      contentAsString(result) shouldBe viewAsString(form.fill(
-        RegisteredAddressForEori(fakeRequestWithEori.userEoriNumber.get, "businessName", "addressLine1", "townOrCity", Some("postcode"), "country")))
+      contentAsString(result) shouldBe viewAsString(
+        form.fill(
+          RegisteredAddressForEori(
+            fakeRequestWithEori.userEoriNumber.get,
+            "businessName",
+            "addressLine1",
+            "townOrCity",
+            Some("postcode"),
+            "country"
+          )
+        )
+      )
     }
 
     "redirect to the next page when valid data is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(
-        ("eori", "GB123"), ("businessName", "value 1"), ("addressLine1", "value 3"),
-        ("townOrCity", "value 4"), ("postcode", "value 5"), ("country", "value 6"))
+        ("eori", "GB123"),
+        ("businessName", "value 1"),
+        ("addressLine1", "value 3"),
+        ("townOrCity", "value 4"),
+        ("postcode", "value 5"),
+        ("country", "value 6")
+      )
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val boundForm   = form.bind(Map("value" -> "invalid value"))
 
       val result = controller().onSubmit(NormalMode)(postRequest)
 
-      status(result) shouldBe BAD_REQUEST
+      status(result)          shouldBe BAD_REQUEST
       contentAsString(result) shouldBe viewAsString(boundForm)
     }
 
@@ -107,15 +136,28 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
     gbCountryCombinations.foreach { country =>
       s"return a Bad Request and errors when invalid gb postcode with country passed like '$country' is submitted" in {
         val postRequest = fakeRequest.withFormUrlEncodedBody(
-          ("eori", "GB123"), ("businessName", "value 1"), ("addressLine1", "value 3"),
-          ("townOrCity", "value 4"), ("postcode", "value 5"), ("country", country))
-        
-        val boundForm = form.bind(Map("eori" -> "GB123", "businessName" -> "value 1", "addressLine1" -> "value 3",
-          "townOrCity" -> "value 4", "postcode" -> "value 5", "country" -> country))
+          ("eori", "GB123"),
+          ("businessName", "value 1"),
+          ("addressLine1", "value 3"),
+          ("townOrCity", "value 4"),
+          ("postcode", "value 5"),
+          ("country", country)
+        )
+
+        val boundForm = form.bind(
+          Map(
+            "eori"         -> "GB123",
+            "businessName" -> "value 1",
+            "addressLine1" -> "value 3",
+            "townOrCity"   -> "value 4",
+            "postcode"     -> "value 5",
+            "country"      -> country
+          )
+        )
 
         val result = controller().onSubmit(NormalMode)(postRequest)
 
-        status(result) shouldBe BAD_REQUEST
+        status(result)          shouldBe BAD_REQUEST
         contentAsString(result) shouldBe viewAsString(boundForm)
       }
     }

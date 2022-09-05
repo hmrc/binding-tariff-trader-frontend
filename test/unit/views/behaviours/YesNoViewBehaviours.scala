@@ -25,7 +25,7 @@ trait YesNoViewBehaviours extends BooleanViewBehaviours[Boolean] {
     messageKeyPrefix: String,
     expectedFormAction: String,
     idPrefix: String = "value"
-  ): Unit = {
+  ): Unit =
     booleanPage(
       createView,
       identity,
@@ -33,7 +33,6 @@ trait YesNoViewBehaviours extends BooleanViewBehaviours[Boolean] {
       expectedFormAction,
       idPrefix
     )(true, false)
-  }
 
 }
 
@@ -44,7 +43,7 @@ trait BooleanViewBehaviours[T] extends QuestionViewBehaviours[T] {
       val key = s"$messageKeyPrefix.$value"
       messages(key) != key
     }
-    if(has("legend")) {
+    if (has("legend")) {
       messages(s"$messageKeyPrefix.legend")
     } else {
       messages(s"$messageKeyPrefix.heading")
@@ -57,28 +56,27 @@ trait BooleanViewBehaviours[T] extends QuestionViewBehaviours[T] {
     messageKeyPrefix: String,
     expectedFormAction: String,
     idPrefix: String = "value"
-  )(choices: T*): Unit = {
-
+  )(choices: T*): Unit =
     "behave like a page with a Yes/No question" when {
       "rendered" must {
         "contain a legend for the question" in {
-          val doc = asDocument(createView(form))
+          val doc     = asDocument(createView(form))
           val legends = doc.getElementsByTag("legend")
 
-          legends.size shouldBe 1
-          legends.first.text should include (expectedLegend(messageKeyPrefix))
+          legends.size       shouldBe 1
+          legends.first.text should include(expectedLegend(messageKeyPrefix))
         }
 
         "contain an input for the value" in {
           val doc = asDocument(createView(form))
-          assertRenderedById(doc, s"${idPrefix}-yes")
-          assertRenderedById(doc, s"${idPrefix}-no")
+          assertRenderedById(doc, s"$idPrefix-yes")
+          assertRenderedById(doc, s"$idPrefix-no")
         }
 
         "have no values checked when rendered with no form" in {
           val doc = asDocument(createView(form))
-          assert(!doc.getElementById(s"${idPrefix}-yes").hasAttr("checked"))
-          assert(!doc.getElementById(s"${idPrefix}-no").hasAttr("checked"))
+          assert(!doc.getElementById(s"$idPrefix-yes").hasAttr("checked"))
+          assert(!doc.getElementById(s"$idPrefix-no").hasAttr("checked"))
         }
 
         "not render an error summary" in {
@@ -89,7 +87,7 @@ trait BooleanViewBehaviours[T] extends QuestionViewBehaviours[T] {
 
       choices.foreach { choice =>
         s"rendered with a value of ${choiceFrom(choice)}" must {
-          behave like answeredYesNoPage(createView, choiceFrom, answer = choice, idPrefix=idPrefix)
+          behave like answeredYesNoPage(createView, choiceFrom, answer = choice, idPrefix = idPrefix)
         }
       }
 
@@ -100,30 +98,31 @@ trait BooleanViewBehaviours[T] extends QuestionViewBehaviours[T] {
         }
 
         "show an error in the value field's label" in {
-          val doc = asDocument(createView(form.withError(error(idPrefix))))
+          val doc       = asDocument(createView(form.withError(error(idPrefix))))
           val errorSpan = doc.getElementsByClass("govuk-error-message").first
           errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
         }
 
         "show an error prefix in the browser title" in {
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title")}""")
+          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(
+            s"$messageKeyPrefix.title"
+          )}""")
         }
       }
     }
-  }
 
   protected def answeredYesNoPage(
-                                   createView: Form[T] => HtmlFormat.Appendable,
-                                   choiceFrom: T => Boolean,
-                                   answer: T,
-                                   idPrefix: String = "value"
-                                 ): Unit = {
+    createView: Form[T] => HtmlFormat.Appendable,
+    choiceFrom: T => Boolean,
+    answer: T,
+    idPrefix: String = "value"
+  ): Unit = {
 
     "have only the correct value checked" in {
       val doc = asDocument(createView(form.fill(answer)))
-      assert(doc.getElementById(s"${idPrefix}-yes").hasAttr("checked") == choiceFrom(answer))
-      assert(doc.getElementById(s"${idPrefix}-no").hasAttr("checked") != choiceFrom(answer))
+      assert(doc.getElementById(s"$idPrefix-yes").hasAttr("checked") == choiceFrom(answer))
+      assert(doc.getElementById(s"$idPrefix-no").hasAttr("checked") != choiceFrom(answer))
     }
 
     "not render an error summary" in {

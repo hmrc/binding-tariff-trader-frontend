@@ -19,12 +19,11 @@ package models.response
 import models.ScanStatus.ScanStatus
 import play.api.libs.json.{Json, OFormat}
 
-case class FilestoreResponse
-(
-  id: String ,
+case class FilestoreResponse(
+  id: String,
   fileName: String,
   mimeType: String,
-  url: Option[String] = None,
+  url: Option[String]            = None,
   scanStatus: Option[ScanStatus] = None
 )
 

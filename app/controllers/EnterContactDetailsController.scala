@@ -32,20 +32,20 @@ import views.html.enterContactDetails
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class EnterContactDetailsController @Inject()(
-                                               appConfig: FrontendAppConfig,
-                                               val dataCacheConnector: DataCacheConnector,
-                                               val navigator: Navigator,
-                                               val identify: IdentifierAction,
-                                               val getData: DataRetrievalAction,
-                                               val requireData: DataRequiredAction,
-                                               formProvider: EnterContactDetailsFormProvider,
-                                               cc: MessagesControllerComponents,
-                                               enterContactDetailsView: enterContactDetails
-                                             )(implicit ec: ExecutionContext)
-  extends AnswerCachingController[EnterContactDetails](cc) {
+class EnterContactDetailsController @Inject() (
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: EnterContactDetailsFormProvider,
+  cc: MessagesControllerComponents,
+  enterContactDetailsView: enterContactDetails
+)(implicit ec: ExecutionContext)
+    extends AnswerCachingController[EnterContactDetails](cc) {
 
-  lazy val form: Form[EnterContactDetails] = formProvider()
+  lazy val form: Form[EnterContactDetails]                  = formProvider()
   lazy val formWithTelValidation: Form[EnterContactDetails] = formProvider.formWithMinTelNumber
 
   val questionPage: EnterContactDetailsPage.type = EnterContactDetailsPage
@@ -54,7 +54,7 @@ class EnterContactDetailsController @Inject()(
     implicit request: DataRequest[_] =>
       val preparedForm = request.userAnswers.get(questionPage) match {
         case Some(value) => enterContactDetailsForm(request.userAnswers).fill(value)
-        case _ => enterContactDetailsForm(request.userAnswers)
+        case _           => enterContactDetailsForm(request.userAnswers)
       }
       Ok(renderView(preparedForm, mode))
   }
@@ -66,7 +66,9 @@ class EnterContactDetailsController @Inject()(
       enterContactDetailsForm(request.userAnswers).bindFromRequest().fold(badRequest, submitAnswer(_, mode))
   }
 
-  def renderView(preparedForm: Form[EnterContactDetails], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
+  def renderView(preparedForm: Form[EnterContactDetails], mode: Mode)(
+    implicit request: DataRequest[_]
+  ): HtmlFormat.Appendable =
     enterContactDetailsView(appConfig, preparedForm, mode)
 
   def enterContactDetailsForm(userAnswers: UserAnswers): Form[EnterContactDetails] =

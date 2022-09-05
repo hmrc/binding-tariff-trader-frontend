@@ -17,6 +17,6 @@
 package models
 
 case class Operator(
-                     id: String,
-                     name: Option[String] = None
-                   )
+  id: String,
+  name: Option[String] = None
+)

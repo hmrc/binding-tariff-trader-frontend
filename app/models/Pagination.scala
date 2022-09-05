@@ -29,15 +29,12 @@ object SearchPagination {
   val pageSize: Int = 50
 }
 
-case class SearchPagination
-(
-  override val page: Int = 1,
+case class SearchPagination(
+  override val page: Int     = 1,
   override val pageSize: Int = SearchPagination.pageSize
 ) extends Pagination
 
-
-case class NoPagination
-(
-  override val page: Int = 1,
+case class NoPagination(
+  override val page: Int     = 1,
   override val pageSize: Int = Pagination.unlimited
 ) extends Pagination

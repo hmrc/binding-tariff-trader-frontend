@@ -31,45 +31,48 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest] {
+trait IdentifierAction
+    extends ActionBuilder[IdentifierRequest, AnyContent]
+    with ActionFunction[Request, IdentifierRequest] {
   protected lazy val atarEnrolment = "HMRC-ATAR-ORG"
-  protected lazy val EORINumber = "EORINumber"
+  protected lazy val EORINumber    = "EORINumber"
 }
 
-class AuthenticatedIdentifierAction @Inject()(
-                                               override val authConnector: AuthConnector,
-                                               cc: ControllerComponents,
-                                               config: FrontendAppConfig
-                                             )(implicit ec: ExecutionContext)
-  extends IdentifierAction with AuthorisedFunctions {
+class AuthenticatedIdentifierAction @Inject() (
+  override val authConnector: AuthConnector,
+  cc: ControllerComponents,
+  config: FrontendAppConfig
+)(implicit ec: ExecutionContext)
+    extends IdentifierAction
+    with AuthorisedFunctions {
 
-  override val parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
+  override val parser: BodyParser[AnyContent]               = cc.parsers.defaultBodyParser
   override protected val executionContext: ExecutionContext = cc.executionContext
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    authorise().retrieve(Retrievals.internalId and Retrievals.allEnrolments) {
-      case ~(Some(internalId: String), allEnrolments: Enrolments) =>
-        eori(allEnrolments).map { eori =>
-          block(IdentifierRequest(request, internalId, Some(eori)))
-        }.getOrElse(throw InsufficientEnrolments())
+    authorise()
+      .retrieve(Retrievals.internalId and Retrievals.allEnrolments) {
+        case ~(Some(internalId: String), allEnrolments: Enrolments) =>
+          eori(allEnrolments)
+            .map(eori => block(IdentifierRequest(request, internalId, Some(eori))))
+            .getOrElse(throw InsufficientEnrolments())
 
-      case _ =>
-        throw new UnauthorizedException("Unable to retrieve internal Id")
+        case _ =>
+          throw new UnauthorizedException("Unable to retrieve internal Id")
 
-    }.recover {
-      case _: NoActiveSession =>
-        redirectToLogin
-      case _: InsufficientEnrolments =>
-        redirectToEoriComponent
-      case _: InsufficientConfidenceLevel |
-           _: UnsupportedAuthProvider |
-           _: UnsupportedAffinityGroup |
-           _: UnsupportedCredentialRole =>
-        redirectToUnauthorised
-    }
+      }
+      .recover {
+        case _: NoActiveSession =>
+          redirectToLogin
+        case _: InsufficientEnrolments =>
+          redirectToEoriComponent
+        case _: InsufficientConfidenceLevel | _: UnsupportedAuthProvider | _: UnsupportedAffinityGroup |
+            _: UnsupportedCredentialRole =>
+          redirectToUnauthorised
+      }
   }
 
   def redirectToLogin: Result =
@@ -83,7 +86,7 @@ class AuthenticatedIdentifierAction @Inject()(
 
   def eori(enrolments: Enrolments): Option[String] =
     for {
-      enrolment <- enrolments.getEnrolment(atarEnrolment)
+      enrolment  <- enrolments.getEnrolment(atarEnrolment)
       identifier <- enrolment.getIdentifier(EORINumber)
     } yield identifier.value
 

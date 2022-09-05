@@ -16,7 +16,7 @@
 
 package models.response
 
-import play.api.libs.json.{ OFormat, Json }
+import play.api.libs.json.{Json, OFormat}
 
 case class UpscanFormTemplate(href: String, fields: Map[String, String])
 
