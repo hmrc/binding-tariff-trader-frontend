@@ -1,5 +1,5 @@
-!.github
-!.gitignore
+/.github
+/.gitignore
 .cache
 /.classpath
 db
@@ -33,7 +33,6 @@ tmp
 bin
 /*.iml
 /*.ipr
-/.classpath
 *.iws
 .jvmopts
 project/metals.sbt
