@@ -31,7 +31,7 @@ import play.twirl.api.HtmlFormat
 
 import scala.concurrent.ExecutionContext
 
-class IsSampleHazardousController @Inject()(
+class IsSampleHazardousController @Inject() (
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
@@ -41,8 +41,9 @@ class IsSampleHazardousController @Inject()(
   formProvider: IsSampleHazardousFormProvider,
   val is_sample_hazardous: views.html.isSampleHazardous,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[Boolean](cc) {
-  lazy val form: Form[Boolean] = formProvider()
+)(implicit ec: ExecutionContext)
+    extends AnswerCachingController[Boolean](cc) {
+  lazy val form: Form[Boolean]                 = formProvider()
   val questionPage: IsSampleHazardousPage.type = IsSampleHazardousPage
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =

@@ -24,8 +24,7 @@ class AreYouSendingSamplesFormProviderSpec extends BooleanFieldBehaviours {
   val form = new AreYouSendingSamplesFormProvider()()
 
   val requiredKey = "areYouSendingSamples.error.required"
-  val invalidKey = "error.boolean"
-
+  val invalidKey  = "error.boolean"
 
   ".value" must {
 

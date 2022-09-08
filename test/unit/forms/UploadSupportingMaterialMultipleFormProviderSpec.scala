@@ -23,14 +23,14 @@ class UploadSupportingMaterialMultipleFormProviderSpec extends StringFieldBehavi
 
   val form = new UploadSupportingMaterialMultipleFormProvider()()
 
-    "file-input" must {
+  "file-input" must {
 
-      val fieldName = "file-input"
+    val fieldName = "file-input"
 
-      behave like fieldThatBindsValidData(
-        form,
-        fieldName,
-        arbitrary[String]
-      )
-    }
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      arbitrary[String]
+    )
+  }
 }

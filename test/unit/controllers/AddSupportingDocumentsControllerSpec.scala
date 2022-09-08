@@ -25,15 +25,15 @@ import navigation.FakeNavigator
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import views.html.addSupportingDocuments
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class AddSupportingDocumentsControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
-  def onwardRoute: Call = Call("GET", "/foo")
-  val formProvider: AddSupportingDocumentsFormProvider = new AddSupportingDocumentsFormProvider()
-  val goodsName: String = "Hen's teeth"
+  def onwardRoute: Call                                  = Call("GET", "/foo")
+  val formProvider: AddSupportingDocumentsFormProvider   = new AddSupportingDocumentsFormProvider()
+  val goodsName: String                                  = "Hen's teeth"
   val addSupportingDocumentsView: addSupportingDocuments = injector.instanceOf[views.html.addSupportingDocuments]
 
   def controller(dataRetrievalAction: DataRetrievalAction) =

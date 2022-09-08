@@ -19,7 +19,7 @@ package pages
 import pages.behaviours.PageBehaviours
 import models.FileAttachment
 
-class UploadSupportingMaterialMultiplePageSpec extends PageBehaviours { 
+class UploadSupportingMaterialMultiplePageSpec extends PageBehaviours {
 
   "UploadSupportingMaterialMultiplePage" must {
 

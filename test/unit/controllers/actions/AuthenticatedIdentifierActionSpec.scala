@@ -28,16 +28,16 @@ class AuthenticatedIdentifierActionSpec extends SpecBase {
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
 
   private val controllerComponents = stubControllerComponents()
-  private val mockAuthConnector = mock[AuthConnector]
-  private val enrolmentIdentifier = EnrolmentIdentifier("EORINumber", "identifierValue")
+  private val mockAuthConnector    = mock[AuthConnector]
+  private val enrolmentIdentifier  = EnrolmentIdentifier("EORINumber", "identifierValue")
 
-  private val enrolment = Enrolment("HMRC-ATAR-ORG", Seq(enrolmentIdentifier), "state")
+  private val enrolment  = Enrolment("HMRC-ATAR-ORG", Seq(enrolmentIdentifier), "state")
   private val enrolments = Enrolments(Set(enrolment))
 
   private val authenticatedIdentifierAction = new AuthenticatedIdentifierAction(
     authConnector = mockAuthConnector,
-    cc = controllerComponents,
-    config = frontendAppConfig
+    cc            = controllerComponents,
+    config        = frontendAppConfig
   )
 
   "AuthenticatedIdentifierAction" when {

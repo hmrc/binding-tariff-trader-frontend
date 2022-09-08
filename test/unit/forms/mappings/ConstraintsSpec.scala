@@ -22,7 +22,6 @@ import play.api.data.validation.{Invalid, Valid}
 
 class ConstraintsSpec extends AnyWordSpec with Matchers with Constraints {
 
-
   "firstError" must {
 
     "return Valid when all constraints pass" in {
@@ -85,22 +84,22 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with Constraints {
   "inRange" must {
 
     "return Valid for a number that is in the range" in {
-      val result = inRange(1, 5,  "error.range").apply(2)
+      val result = inRange(1, 5, "error.range").apply(2)
       result mustEqual Valid
     }
 
     "return Valid for a number is equal to the min range" in {
-      val result = inRange(1, 5,  "error.range").apply(1)
+      val result = inRange(1, 5, "error.range").apply(1)
       result mustEqual Valid
     }
 
     "return Valid for a number is equal to the max range" in {
-      val result = inRange(1, 5,  "error.range").apply(5)
+      val result = inRange(1, 5, "error.range").apply(5)
       result mustEqual Valid
     }
 
     "return Invalid for a number out of range" in {
-      val result = inRange(1, 5,  "error.range").apply(6)
+      val result = inRange(1, 5, "error.range").apply(6)
       result mustEqual Invalid("error.range", 1, 5)
     }
   }

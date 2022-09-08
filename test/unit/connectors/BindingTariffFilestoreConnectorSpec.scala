@@ -36,9 +36,11 @@ import scala.concurrent.Future
 
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
-  private def connector = new BindingTariffFilestoreConnector(wsClient, authenticatedHttpClient, metrics)(mockConfig, implicitly)
+  private def connector =
+    new BindingTariffFilestoreConnector(wsClient, authenticatedHttpClient, metrics)(mockConfig, implicitly)
 
-  private def withHeaderCarrier(value: String): HeaderCarrier = HeaderCarrier(extraHeaders = Seq("X-Api-Token" -> value))
+  private def withHeaderCarrier(value: String): HeaderCarrier =
+    HeaderCarrier(extraHeaders = Seq("X-Api-Token" -> value))
 
   "Connector" should {
 
@@ -55,7 +57,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
       val initiateRequest = FileStoreInitiateRequest(maxFileSize = 0)
 
       await(connector.initiate(initiateRequest)) shouldBe FileStoreInitiateResponse(
-        id = "id",
+        id              = "id",
         upscanReference = "ref",
         uploadRequest = UpscanFormTemplate(
           "http://localhost:20001/upscan/upload",
@@ -79,15 +81,13 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           )
       )
 
-
       await(
         connector.get(FileAttachment("id", "name", "type", 0))(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe FilestoreResponse(
-        id = "id",
+        id       = "id",
         fileName = "file-name.txt",
         mimeType = "text/plain"
       )
-
 
       verify(
         getRequestedFor(urlEqualTo("/file/id"))
@@ -130,10 +130,10 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           connector.get(att)(withHeaderCarrier(appConfig.apiToken))
         ) shouldBe Some(
           FilestoreResponse(
-            id = "id",
-            fileName = "name",
-            mimeType = "text/plain",
-            url = None,
+            id         = "id",
+            fileName   = "name",
+            mimeType   = "text/plain",
+            url        = None,
             scanStatus = None
           )
         )
@@ -158,7 +158,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
       await(
         connector.publish(FileAttachment("id", "name", "type", 0))(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe FilestoreResponse(
-        id = "id",
+        id       = "id",
         fileName = "file-name.txt",
         mimeType = "text/plain"
       )
@@ -180,19 +180,12 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.getFileMetadata(Seq(
-          Attachment(id = "id1", public = false),
-          Attachment(id = "id2", public = false))
-        )(withHeaderCarrier(appConfig.apiToken))
+        connector.getFileMetadata(Seq(Attachment(id = "id1", public = false), Attachment(id = "id2", public = false)))(
+          withHeaderCarrier(appConfig.apiToken)
+        )
       ) shouldBe Seq(
-        FilestoreResponse(
-          id = "id1",
-          fileName = "file-name1.txt",
-          mimeType = "text/plain"),
-        FilestoreResponse(
-          id = "id2",
-          fileName = "file-name2.txt",
-          mimeType = "text/plain")
+        FilestoreResponse(id = "id1", fileName = "file-name1.txt", mimeType = "text/plain"),
+        FilestoreResponse(id = "id2", fileName = "file-name2.txt", mimeType = "text/plain")
       )
 
       verify(
@@ -274,8 +267,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
             )
         )
 
-        await(connector.downloadFile(
-          s"$wireMockUrl/digital-tariffs-local/c432a56d-e811-474c-a26a-76fc3bcaefe5")) shouldBe None
+        await(connector.downloadFile(s"$wireMockUrl/digital-tariffs-local/c432a56d-e811-474c-a26a-76fc3bcaefe5")) shouldBe None
       }
     }
   }

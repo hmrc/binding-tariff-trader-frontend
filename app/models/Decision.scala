@@ -21,13 +21,13 @@ import java.time.Instant
 case class Decision(
   bindingCommodityCode: String,
   effectiveStartDate: Option[Instant] = None,
-  effectiveEndDate: Option[Instant] = None,
+  effectiveEndDate: Option[Instant]   = None,
   justification: String,
   goodsDescription: String,
-  methodSearch: Option[String] = None,
+  methodSearch: Option[String]                 = None,
   methodCommercialDenomination: Option[String] = None,
-  methodExclusion: Option[String] = None,
-  explanation: Option[String] = None,
-  decisionPdf: Option[Attachment] = None,
+  methodExclusion: Option[String]              = None,
+  explanation: Option[String]                  = None,
+  decisionPdf: Option[Attachment]              = None,
   letterPdf: Option[Attachment]                = None
 )

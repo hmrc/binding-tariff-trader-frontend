@@ -33,7 +33,7 @@ trait ListAnswerEditing[A] extends AccumulatingAnswerEditing[List[A], A, Int] {
 
 trait MapAnswerEditing[K, V] extends AccumulatingAnswerEditing[Map[K, V], (K, V), K] {
   val cbf = Map.canBuildFrom[K, V]
-  def editIndex(map: Map[K,V], index: K, elem: (K, V)): Map[K,V] =
+  def editIndex(map: Map[K, V], index: K, elem: (K, V)): Map[K, V] =
     map + elem
 }
 
@@ -41,20 +41,26 @@ trait AccumulatingAnswerEditing[F <: TraversableOnce[A], A, I] extends Accumulat
 
   def editIndex(f: F, index: I, elem: A): F
 
-  def editAnswer(index: I, answer: A, mode: Mode)(implicit request: DataRequest[_], writes: Format[F], ec: ExecutionContext): Future[Result] = {
-    request.userAnswers.get(questionPage).map { fa =>
+  def editAnswer(
+    index: I,
+    answer: A,
+    mode: Mode
+  )(implicit request: DataRequest[_], writes: Format[F], ec: ExecutionContext): Future[Result] =
+    request.userAnswers
+      .get(questionPage)
+      .map { fa =>
+        val updatedAnswers = request.userAnswers.set(questionPage, editIndex(fa, index, answer))
 
-      val updatedAnswers = request.userAnswers.set(questionPage, editIndex(fa, index, answer))
-
-      dataCacheConnector.save(updatedAnswers.cacheMap)
-        .transformWith {
-          case Failure(NonFatal(_)) =>
-            Future.successful(Results.BadGateway)
-          case Success(_) =>
-            Future.successful(Results.Redirect(navigator.nextPage(questionPage, mode)(updatedAnswers)))
-        }
-    }.getOrElse {
-      Future.successful(Results.BadRequest)
-    }
-  }
+        dataCacheConnector
+          .save(updatedAnswers.cacheMap)
+          .transformWith {
+            case Failure(NonFatal(_)) =>
+              Future.successful(Results.BadGateway)
+            case Success(_) =>
+              Future.successful(Results.Redirect(navigator.nextPage(questionPage, mode)(updatedAnswers)))
+          }
+      }
+      .getOrElse {
+        Future.successful(Results.BadRequest)
+      }
 }

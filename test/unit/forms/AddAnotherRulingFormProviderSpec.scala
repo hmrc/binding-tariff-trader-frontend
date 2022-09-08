@@ -22,8 +22,8 @@ import play.api.data.FormError
 
 class AddAnotherRulingFormProviderSpec extends BooleanFieldBehaviours {
   val requiredKey = "addAnotherRuling.error.required"
-  val invalidKey = "error.boolean"
-  val form = new AddAnotherRulingFormProvider()()
+  val invalidKey  = "error.boolean"
+  val form        = new AddAnotherRulingFormProvider()()
   ".value" must {
     val fieldName = "add-another-ruling-choice"
     behave like booleanField(

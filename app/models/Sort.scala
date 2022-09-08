@@ -40,7 +40,7 @@ object SortDirection extends Enumeration {
   type SortDirection = Value
 
   val DESCENDING: models.SortDirection.Value = Value("desc")
-  val ASCENDING: models.SortDirection.Value = Value("asc")
+  val ASCENDING: models.SortDirection.Value  = Value("asc")
 
   def reverse(order: SortDirection): SortDirection =
     order match {
@@ -49,9 +49,10 @@ object SortDirection extends Enumeration {
       case o          => throw new IllegalArgumentException(s"Unrecognised SortDirection: $o")
     }
 
-  implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String])
-  : QueryStringBindable[SortDirection] = new QueryStringBindable[SortDirection] {
-    override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortDirection]] = {
+  implicit def queryStringBindable(
+    implicit stringBinder: QueryStringBindable[String]
+  ): QueryStringBindable[SortDirection] = new QueryStringBindable[SortDirection] {
+    override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortDirection]] =
       stringBinder.bind("order", params).map {
         case Right(sortDirection) =>
           Either
@@ -60,46 +61,42 @@ object SortDirection extends Enumeration {
         case _ =>
           Left("Unable to bind a SortDirection")
       }
-    }
 
-    override def unbind(key: String, sortDirection: SortDirection): String = {
+    override def unbind(key: String, sortDirection: SortDirection): String =
       stringBinder.unbind("order", sortDirection.toString)
-    }
   }
 }
 
 object SortField extends Enumeration {
 
   type SortField = Value
-  val REFERENCE: models.SortField.Value = Value("reference")
-  val CREATED_DATE: models.SortField.Value = Value("created-date")
+  val REFERENCE: models.SortField.Value           = Value("reference")
+  val CREATED_DATE: models.SortField.Value        = Value("created-date")
   val DECISION_START_DATE: models.SortField.Value = Value("decision-start-date")
-  val STATUS: models.SortField.Value = Value("status")
-  val GOODS_NAME: models.SortField.Value = Value("application.goodName")
+  val STATUS: models.SortField.Value              = Value("status")
+  val GOODS_NAME: models.SortField.Value          = Value("application.goodName")
 
   val defaultDirections = Map(
-    REFERENCE -> ASCENDING,
-    CREATED_DATE -> DESCENDING,
+    REFERENCE           -> ASCENDING,
+    CREATED_DATE        -> DESCENDING,
     DECISION_START_DATE -> DESCENDING,
-    STATUS -> ASCENDING,
-    GOODS_NAME -> ASCENDING
+    STATUS              -> ASCENDING,
+    GOODS_NAME          -> ASCENDING
   )
 
-  implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String])
-  : QueryStringBindable[SortField] = new QueryStringBindable[SortField] {
-    override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortField]] = {
-      stringBinder.bind("sortBy", params).map {
-        case Right(sortByField) =>
-          Either
-            .catchOnly[NoSuchElementException](SortField.withName(sortByField))
-            .leftMap(_ => "Unable to bind a SortField")
-        case _ =>
-          Left("Unable to bind a SortField")
-      }
-    }
+  implicit def queryStringBindable(implicit stringBinder: QueryStringBindable[String]): QueryStringBindable[SortField] =
+    new QueryStringBindable[SortField] {
+      override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortField]] =
+        stringBinder.bind("sortBy", params).map {
+          case Right(sortByField) =>
+            Either
+              .catchOnly[NoSuchElementException](SortField.withName(sortByField))
+              .leftMap(_ => "Unable to bind a SortField")
+          case _ =>
+            Left("Unable to bind a SortField")
+        }
 
-    override def unbind(key: String, sortField: SortField): String = {
-      stringBinder.unbind("sortBy", sortField.toString)
+      override def unbind(key: String, sortField: SortField): String =
+        stringBinder.unbind("sortBy", sortField.toString)
     }
-  }
 }

@@ -19,7 +19,7 @@ package views
 import play.api.data.Form
 import controllers.routes
 import forms.ProvideBTIReferenceFormProvider
-import models.{NormalMode, BTIReference}
+import models.{BTIReference, NormalMode}
 import views.behaviours.QuestionViewBehaviours
 import views.html.provideBTIReference
 
@@ -33,8 +33,8 @@ class ProvideBTIReferenceViewSpec extends QuestionViewBehaviours[BTIReference] {
 
   def createView = () => previousBTIReferenceView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => previousBTIReferenceView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
-
+  def createViewUsingForm =
+    (form: Form[_]) => previousBTIReferenceView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "ProvideBTIReference view" must {
 

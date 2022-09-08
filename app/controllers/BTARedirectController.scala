@@ -28,14 +28,20 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
-class BTARedirectController @Inject()(
-                                       identify: IdentifierAction,
-                                       cc: MessagesControllerComponents,
-                                       btaUserService: BTAUserService,
-                                       appConfig: FrontendAppConfig)(implicit ec: ExecutionContext) extends FrontendController(cc) with Logging {
+class BTARedirectController @Inject() (
+  identify: IdentifierAction,
+  cc: MessagesControllerComponents,
+  btaUserService: BTAUserService,
+  appConfig: FrontendAppConfig
+)(implicit ec: ExecutionContext)
+    extends FrontendController(cc)
+    with Logging {
 
   def applicationsAndRulings: Action[AnyContent] = identify.async { implicit request =>
-    performInternalRedirect(request.identifier, controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None))
+    performInternalRedirect(
+      request.identifier,
+      controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None)
+    )
   }
 
   def informationYouNeed: Action[AnyContent] = identify.async { implicit request =>
@@ -51,12 +57,11 @@ class BTARedirectController @Inject()(
     }
   }
 
-  private def performInternalRedirect(requestIdentifier: String, call: Call): Future[Result] = {
+  private def performInternalRedirect(requestIdentifier: String, call: Call): Future[Result] =
     btaUserService.save(requestIdentifier) transformWith {
       case Success(_) => Future.successful(Redirect(call))
       case Failure(NonFatal(error)) =>
         logger.error("An error occurred whilst saving BTA User", error)
         Future.successful(Redirect(routes.ErrorController.onPageLoad))
     }
-  }
 }

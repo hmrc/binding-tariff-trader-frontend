@@ -21,9 +21,8 @@ import play.api.i18n.Messages
 
 object ViewUtils {
 
-  def errorPrefix(form: Form[_])(implicit messages: Messages): String = {
+  def errorPrefix(form: Form[_])(implicit messages: Messages): String =
     if (form.hasErrors || form.hasGlobalErrors) messages("error.browser.title.prefix") else ""
-  }
 
   def humanReadableSize(bytes: Long): String = {
 
@@ -37,8 +36,8 @@ object ViewUtils {
         getExponent(curBytes / (baseValue * newExponent), baseValue, newExponent)
       }
 
-    val exponent = getExponent(bytes, baseValue)
-    val divisor = Math.pow(baseValue, exponent)
+    val exponent   = getExponent(bytes, baseValue)
+    val divisor    = Math.pow(baseValue, exponent)
     val unitString = unitStrings(exponent)
 
     f"${bytes / divisor}%.1f $unitString"

@@ -23,7 +23,7 @@ import forms.UploadSupportingMaterialMultipleFormProvider
 import java.{util => ju}
 import javax.inject.Inject
 import models.{FileAttachment, Mode, UploadError, UserAnswers}
-import models.requests.{ DataRequest, FileStoreInitiateRequest }
+import models.requests.{DataRequest, FileStoreInitiateRequest}
 import navigation.Navigator
 import pages._
 import play.api.Logging
@@ -38,7 +38,7 @@ import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UploadSupportingMaterialMultipleController @Inject()(
+class UploadSupportingMaterialMultipleController @Inject() (
   appConfig: FrontendAppConfig,
   dataCacheConnector: DataCacheConnector,
   identify: IdentifierAction,
@@ -49,7 +49,10 @@ class UploadSupportingMaterialMultipleController @Inject()(
   fileService: FileService,
   cc: MessagesControllerComponents,
   uploadSupportingMaterialMultipleView: uploadSupportingMaterialMultiple
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport with Logging {
+)(implicit ec: ExecutionContext)
+    extends FrontendController(cc)
+    with I18nSupport
+    with Logging {
   private lazy val form = formProvider()
 
   val FormInputField = "file"
@@ -62,17 +65,16 @@ class UploadSupportingMaterialMultipleController @Inject()(
     val updatedFiles = userAnswers
       .get(UploadSupportingMaterialMultiplePage)
       .map { files =>
-        val uploadedFiles = files.filter { file =>
-          file.uploaded && confidentialityStatuses.keySet.contains(file.id)
-        }
-        val index = uploadedFiles.indexWhere(_.id == file.id)
+        val uploadedFiles = files.filter(file => file.uploaded && confidentialityStatuses.keySet.contains(file.id))
+        val index         = uploadedFiles.indexWhere(_.id == file.id)
 
         if (index >= 0) {
           uploadedFiles.updated(index, file)
         } else {
           uploadedFiles :+ file
         }
-      }.getOrElse(Seq(file))
+      }
+      .getOrElse(Seq(file))
 
     userAnswers.set(UploadSupportingMaterialMultiplePage, updatedFiles)
   }
@@ -88,66 +90,80 @@ class UploadSupportingMaterialMultipleController @Inject()(
 
   def onFileUploadSuccess(id: String, mode: Mode): Action[AnyContent] =
     (identify andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
-    val updatedAnswers = for {
-      files <- request.userAnswers.get(UploadSupportingMaterialMultiplePage)
-      file <- files.find(_.id == id)
-      updated = upsertFile(file.copy(uploaded = true), request.userAnswers)
-    } yield updated
+      val updatedAnswers = for {
+        files <- request.userAnswers.get(UploadSupportingMaterialMultiplePage)
+        file  <- files.find(_.id == id)
+        updated = upsertFile(file.copy(uploaded = true), request.userAnswers)
+      } yield updated
 
-    val userAnswers = updatedAnswers.getOrElse {
-      // There is no metadata entry for this file
-      // The metadata entry is usually created by a JS event handler on the file picker
-      // We can end up here if Javascript is disabled
-      upsertFile(FileAttachment(id, "", "", 0L, uploaded = true), request.userAnswers)
+      val userAnswers = updatedAnswers.getOrElse {
+        // There is no metadata entry for this file
+        // The metadata entry is usually created by a JS event handler on the file picker
+        // We can end up here if Javascript is disabled
+        upsertFile(FileAttachment(id, "", "", 0L, uploaded = true), request.userAnswers)
+      }
+
+      dataCacheConnector
+        .save(userAnswers.cacheMap)
+        .map(_ => Redirect(navigator.nextPage(UploadSupportingMaterialMultiplePage, mode)(userAnswers)))
     }
-
-    dataCacheConnector
-      .save(userAnswers.cacheMap)
-      .map(_ => Redirect(navigator.nextPage(UploadSupportingMaterialMultiplePage, mode)(userAnswers)))
-  }
 
   def onFileSelected(): Action[FileAttachment] =
-    (identify andThen getData andThen requireData).async[FileAttachment](parse.json[FileAttachment]) { implicit request: DataRequest[FileAttachment] =>
-      val updatedAnswers = upsertFile(request.body, request.userAnswers)
-      dataCacheConnector
-        .save(updatedAnswers.cacheMap)
-        .map(_ => Ok)
+    (identify andThen getData andThen requireData).async[FileAttachment](parse.json[FileAttachment]) {
+      implicit request: DataRequest[FileAttachment] =>
+        val updatedAnswers = upsertFile(request.body, request.userAnswers)
+        dataCacheConnector
+          .save(updatedAnswers.cacheMap)
+          .map(_ => Ok)
     }
 
-  def renderView(fileId: String, mode: Mode, form: Form[String])(implicit request: DataRequest[AnyContent]): Future[Html] = {
-    fileService.initiate(FileStoreInitiateRequest(
-      id = Some(fileId),
-      successRedirect = Some(appConfig.host + routes.UploadSupportingMaterialMultipleController.onFileUploadSuccess(fileId, mode).url),
-      errorRedirect = Some(appConfig.host + routes.UploadSupportingMaterialMultipleController.onPageLoad(Some(fileId), mode).url),
-      maxFileSize = appConfig.fileUploadMaxSize
-    )).map { response =>
-      val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
-      uploadSupportingMaterialMultipleView(appConfig, response, form, goodsName, mode)
+  def renderView(fileId: String, mode: Mode, form: Form[String])(
+    implicit request: DataRequest[AnyContent]
+  ): Future[Html] =
+    fileService
+      .initiate(
+        FileStoreInitiateRequest(
+          id = Some(fileId),
+          successRedirect = Some(
+            appConfig.host + routes.UploadSupportingMaterialMultipleController.onFileUploadSuccess(fileId, mode).url
+          ),
+          errorRedirect =
+            Some(appConfig.host + routes.UploadSupportingMaterialMultipleController.onPageLoad(Some(fileId), mode).url),
+          maxFileSize = appConfig.fileUploadMaxSize
+        )
+      )
+      .map { response =>
+        val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
+        uploadSupportingMaterialMultipleView(appConfig, response, form, goodsName, mode)
+      }
+
+  def onPageLoad(id: Option[String], mode: Mode): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      val fileId = id.getOrElse(ju.UUID.randomUUID().toString)
+
+      request
+        .getQueryString("errorCode")
+        .map { errorCode =>
+          // Received an error from Upscan
+          val errorMessage   = request.getQueryString("errorMessage").getOrElse("")
+          val uploadError    = UploadError.fromErrorCode(errorCode)
+          val userAnswers    = removeFile(fileId, request.userAnswers)
+          val formWithErrors = form.withError(FormInputField, uploadError.errorMessageKey)
+          logger.error(s"File upload for file with id $fileId failed with error code $errorCode: $errorMessage")
+
+          for {
+            _    <- dataCacheConnector.save(userAnswers.cacheMap)
+            html <- renderView(fileId, mode, formWithErrors)
+          } yield BadRequest(html)
+        }
+        .getOrElse {
+          // Normal page render
+          renderView(fileId, mode, form)
+            .map(Ok(_))
+        }
+        .recoverWith {
+          case NonFatal(_) =>
+            Future.successful(BadGateway)
+        }
     }
-  }
-
-  def onPageLoad(id: Option[String], mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val fileId = id.getOrElse(ju.UUID.randomUUID().toString)
-
-    request.getQueryString("errorCode").map { errorCode =>
-      // Received an error from Upscan
-      val errorMessage = request.getQueryString("errorMessage").getOrElse("")
-      val uploadError = UploadError.fromErrorCode(errorCode)
-      val userAnswers = removeFile(fileId, request.userAnswers)
-      val formWithErrors = form.withError(FormInputField,  uploadError.errorMessageKey)
-      logger.error(s"File upload for file with id ${fileId} failed with error code ${errorCode}: $errorMessage")
-
-      for {
-        _ <- dataCacheConnector.save(userAnswers.cacheMap)
-        html <- renderView(fileId, mode, formWithErrors)
-      } yield BadRequest(html)
-    }.getOrElse {
-      // Normal page render
-      renderView(fileId, mode, form)
-        .map(Ok(_))
-    }.recoverWith {
-      case NonFatal(_) =>
-        Future.successful(BadGateway)
-    }
-  }
 }

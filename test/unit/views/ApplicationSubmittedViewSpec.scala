@@ -33,25 +33,27 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     view_application(frontendAppConfig, pdfViewModel, s => Some("example country name"))(fakeRequest, messages)
 
   private def createViewWithToggle(pdfViewModel: PdfViewModel = pdfView): Html =
-    view_application(frontendAppConfigWithToggle, pdfViewModel, s => Some("example country name"))(fakeRequest, messages)
+    view_application(frontendAppConfigWithToggle, pdfViewModel, s => Some("example country name"))(
+      fakeRequest,
+      messages
+    )
 
-  protected def view(html: Html): Document = {
+  protected def view(html: Html): Document =
     Jsoup.parse(html.toString())
-  }
 
   "Confirmation view" must {
 
     "contain a page heading" in {
       val doc = view(createView())
 
-      doc should containElementWithID("print-pages")
+      doc                               should containElementWithID("print-pages")
       doc.getElementById("print-pages") should containText(messages("view.application.header"))
     }
 
     "contain a page description" in {
       val doc = view(createView())
 
-      doc should containElementWithID("your-records")
+      doc                                should containElementWithID("your-records")
       doc.getElementById("your-records") should containText(messages("view.application.title.text"))
       doc.getElementById("your-records") should containText(messages("view.application.your.record.text"))
     }
@@ -108,8 +110,8 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
 
     "contain supporting material file list details with Keep confidential flag on" in {
       val doc =
-        view(createView(pdfView.copy(
-          attachments = Seq(FileView("file id", "confidential file.pdf", true))))).getElementById("print-document")
+        view(createView(pdfView.copy(attachments = Seq(FileView("file id", "confidential file.pdf", true)))))
+          .getElementById("print-document")
 
       doc should containText(messages("supportingMaterialFileList.checkYourAnswersLabel"))
       doc should containText("- Keep confidential")
@@ -165,7 +167,8 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     }
 
     "contain similar good codes when user selects YES and adds similar good codes " in {
-      val doc = view(createView(pdfView.copy(similarAtarReferences = List("12345", "23456")))).getElementById("print-document")
+      val doc =
+        view(createView(pdfView.copy(similarAtarReferences = List("12345", "23456")))).getElementById("print-document")
 
       doc should containText(messages("commodityCodeRulingReference.checkYourAnswersLabel"))
       doc should containText(pdfView.similarAtarReferences.mkString)
@@ -178,8 +181,8 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     }
 
     "contain reissuedBTIReference when user provides a reference" in {
-      val doc = view(createView(pdfView.copy(reissuedBTIReference =
-        Some("reissuedBTIReference")))).getElementById("print-document")
+      val doc = view(createView(pdfView.copy(reissuedBTIReference = Some("reissuedBTIReference"))))
+        .getElementById("print-document")
 
       doc should containText(messages("provideBTIReference.checkYourAnswersLabel"))
       doc should containText("reissuedBTIReference")
@@ -192,11 +195,11 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     }
 
     "contain a message to not send a sample when samplesNotAccepted toggle is set to true" in {
-        val doc =
-          view(createViewWithToggle(pdfView))
-            .getElementById("print-pages")
+      val doc =
+        view(createViewWithToggle(pdfView))
+          .getElementById("print-pages")
 
-        doc should containText(messages("view.application.paragraph.do.not.send.sample"))
+      doc should containText(messages("view.application.paragraph.do.not.send.sample"))
     }
   }
 }

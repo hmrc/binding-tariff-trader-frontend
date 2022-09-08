@@ -21,7 +21,7 @@ import java.time.Instant
 import models.{Details, Operator}
 
 case class NewEventRequest(
-                            details: Details,
-                            operator: Operator,
-                            timestamp: Instant = Instant.now()
-                          )
+  details: Details,
+  operator: Operator,
+  timestamp: Instant = Instant.now()
+)

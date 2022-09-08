@@ -22,11 +22,11 @@ class CommodityCodeBestMatchPageSpec extends PageBehaviours {
 
   "CommodityCodeBestMatchPage" must {
 
-    beRetrievable[ Boolean ](CommodityCodeBestMatchPage)
+    beRetrievable[Boolean](CommodityCodeBestMatchPage)
 
-    beSettable[ Boolean ](CommodityCodeBestMatchPage)
+    beSettable[Boolean](CommodityCodeBestMatchPage)
 
-    beRemovable[ Boolean ](CommodityCodeBestMatchPage)
+    beRemovable[Boolean](CommodityCodeBestMatchPage)
   }
 
 }

@@ -33,7 +33,7 @@ import views.html.previousBTIRuling
 import scala.concurrent.ExecutionContext
 import play.twirl.api.HtmlFormat
 
-class PreviousBTIRulingController @Inject()(
+class PreviousBTIRulingController @Inject() (
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
@@ -43,9 +43,10 @@ class PreviousBTIRulingController @Inject()(
   formProvider: PreviousBTIRulingFormProvider,
   cc: MessagesControllerComponents,
   previousBTIRulingView: previousBTIRuling
-)(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+)(implicit ec: ExecutionContext)
+    extends YesNoCachingController(cc) {
   lazy val form: Form[Boolean] = formProvider()
-  val journey: YesNoJourney = Journey.previousBTI
+  val journey: YesNoJourney    = Journey.previousBTI
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName: String = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")

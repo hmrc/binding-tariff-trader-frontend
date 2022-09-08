@@ -25,10 +25,10 @@ class ProvideBTIReferenceFormProviderSpec extends StringFieldBehaviours {
 
   ".btiReference" must {
 
-    val fieldName = "btiReference"
+    val fieldName   = "btiReference"
     val requiredKey = "provideBTIReference.error.required"
-    val lengthKey = "provideBTIReference.error.length"
-    val maxLength = 100
+    val lengthKey   = "provideBTIReference.error.length"
+    val maxLength   = 100
 
     behave like fieldThatBindsValidData(
       form,
@@ -39,7 +39,7 @@ class ProvideBTIReferenceFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength = maxLength,
+      maxLength   = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 

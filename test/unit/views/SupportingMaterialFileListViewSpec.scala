@@ -27,7 +27,7 @@ import viewmodels.FileView
 class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
   private lazy val messageKeyPrefix = "supportingMaterialFileList"
-  private val goodsName = "some-goods-name"
+  private val goodsName             = "some-goods-name"
 
   override protected val form = new SupportingMaterialFileListFormProvider()()
 
@@ -39,7 +39,6 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
     supportingMaterialFileListView(frontendAppConfig, f, goodsName, files, NormalMode)(fakeRequest, messages)
 
   "SupportingMaterialFileList view" must {
-
 
     behave like pageWithBackLink(createView)
 
@@ -59,24 +58,21 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
   private def assertHeading: Int => Unit = { n: Int =>
     val filesForm = new SupportingMaterialFileListFormProvider
-    val htmlView = asDocument(createViewWithForm(filesForm(), generateFiles(n)))
+    val htmlView  = asDocument(createViewWithForm(filesForm(), generateFiles(n)))
 
     val headings = htmlView.getElementsByTag("h1")
     assert(headings.size() == 1)
     val heading = headings.first().ownText()
 
     if (n == 1) {
-      assert(heading == messages(s"${messageKeyPrefix}.uploadFileCounter.singular", goodsName))
+      assert(heading == messages(s"$messageKeyPrefix.uploadFileCounter.singular", goodsName))
     } else if (n > 1) {
-      assert(heading == messages(s"${messageKeyPrefix}.uploadFileCounter.plural", n, goodsName))
+      assert(heading == messages(s"$messageKeyPrefix.uploadFileCounter.plural", n, goodsName))
     } else {
-      assert(heading == messages(s"${messageKeyPrefix}.heading", goodsName))
+      assert(heading == messages(s"$messageKeyPrefix.heading", goodsName))
     }
   }
 
-  private def generateFiles(number: Int): Seq[FileView] = {
-    (1 to number).map { idx =>
-      FileView(s"id$idx", s"name$idx", false)
-    }
-  }
+  private def generateFiles(number: Int): Seq[FileView] =
+    (1 to number).map(idx => FileView(s"id$idx", s"name$idx", false))
 }

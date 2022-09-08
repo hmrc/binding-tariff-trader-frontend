@@ -21,7 +21,7 @@ import models.Mode
 import play.api.mvc.Call
 
 case object ProvideGoodsDescriptionPage extends QuestionPage[String] {
-  def route(mode: Mode): Call  =
+  def route(mode: Mode): Call =
     routes.ProvideGoodsDescriptionController.onPageLoad(mode)
   override def toString: String =
     "provideGoodsDescription"

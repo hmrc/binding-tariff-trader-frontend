@@ -26,8 +26,8 @@ class RadioOptionSpec extends SpecBase {
 
       val radioOption = RadioOption("prefix", "option")
 
-      radioOption.id shouldBe "prefix.option"
-      radioOption.value shouldBe "option"
+      radioOption.id         shouldBe "prefix.option"
+      radioOption.value      shouldBe "option"
       radioOption.messageKey shouldBe "prefix.option"
     }
   }

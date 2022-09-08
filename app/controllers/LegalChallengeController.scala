@@ -33,19 +33,20 @@ import views.html.legalChallenge
 
 import scala.concurrent.ExecutionContext
 
-class LegalChallengeController @Inject()(
-                                          appConfig: FrontendAppConfig,
-                                          val dataCacheConnector: DataCacheConnector,
-                                          val navigator: Navigator,
-                                          val identify: IdentifierAction,
-                                          val getData: DataRetrievalAction,
-                                          val requireData: DataRequiredAction,
-                                          formProvider: LegalChallengeFormProvider,
-                                          cc: MessagesControllerComponents,
-                                          legalChallengeView: legalChallenge
-                                        )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+class LegalChallengeController @Inject() (
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: LegalChallengeFormProvider,
+  cc: MessagesControllerComponents,
+  legalChallengeView: legalChallenge
+)(implicit ec: ExecutionContext)
+    extends YesNoCachingController(cc) {
   lazy val form: Form[Boolean] = formProvider()
-  val journey: YesNoJourney = Journey.legalProblems
+  val journey: YesNoJourney    = Journey.legalProblems
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName: String = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")

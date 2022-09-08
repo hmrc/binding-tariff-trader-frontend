@@ -22,10 +22,10 @@ import scala.util.Try
 
 case class Paged[T](results: Seq[T], pageIndex: Int, pageSize: Int, resultCount: Int) {
   def map[X](f: T => X): Paged[X] = this.copy(results = results.map(f))
-  def size: Int = results.size
-  def pageCount: Int = Math.ceil(resultCount.toDouble / pageSize).toInt
-  def isEmpty: Boolean = results.isEmpty
-  def nonEmpty: Boolean = results.nonEmpty
+  def size: Int                   = results.size
+  def pageCount: Int              = Math.ceil(resultCount.toDouble / pageSize).toInt
+  def isEmpty: Boolean            = results.isEmpty
+  def nonEmpty: Boolean           = results.nonEmpty
 }
 
 object Paged {
@@ -34,29 +34,39 @@ object Paged {
 
   def empty[T](pagination: Pagination): Paged[T] = Paged[T](Seq.empty, pagination, 0)
 
-  def apply[T](results: Seq[T], pagination: Pagination, resultCount: Int): Paged[T] = Paged(results, pagination.page, pagination.pageSize, resultCount)
+  def apply[T](results: Seq[T], pagination: Pagination, resultCount: Int): Paged[T] =
+    Paged(results, pagination.page, pagination.pageSize, resultCount)
 
   def apply[T](results: Seq[T]): Paged[T] = Paged(results, NoPagination(), results.size)
 
-  implicit def format[T](implicit fmt: Format[T]): Format[Paged[T]] = Format[Paged[T]](Reads[Paged[T]](reads), Writes[Paged[T]](writes))
+  implicit def format[T](implicit fmt: Format[T]): Format[Paged[T]] =
+    Format[Paged[T]](Reads[Paged[T]](reads), Writes[Paged[T]](writes))
 
-  private def reads[T](implicit fmt: Reads[T]): JsValue => JsResult[Paged[T]] = js => Try(new Paged[T](
-    js \ "results" match {
-      case JsDefined(JsArray(r)) => r.map(jsResult => jsResult.as[T])
-      case _ => throw new IllegalArgumentException("invalid results")
-    },
-    (js \ "pageIndex").as[Int],
-    (js \ "pageSize").as[Int],
-    (js \ "resultCount").as[Int]
-  )).map(JsSuccess(_)).recover {
-    case t: Throwable => JsError(t.getMessage)
-  }.get
+  private def reads[T](implicit fmt: Reads[T]): JsValue => JsResult[Paged[T]] =
+    js =>
+      Try(
+        new Paged[T](
+          js \ "results" match {
+            case JsDefined(JsArray(r)) => r.map(jsResult => jsResult.as[T])
+            case _                     => throw new IllegalArgumentException("invalid results")
+          },
+          (js \ "pageIndex").as[Int],
+          (js \ "pageSize").as[Int],
+          (js \ "resultCount").as[Int]
+        )
+      ).map(JsSuccess(_))
+        .recover {
+          case t: Throwable => JsError(t.getMessage)
+        }
+        .get
 
-  private def writes[T](implicit fmt: Writes[T]): Paged[T] => JsValue = (paged: Paged[T]) => Json.obj(
-    "results" -> JsArray(paged.results.map(fmt.writes)),
-    "pageIndex" -> JsNumber(paged.pageIndex),
-    "pageSize" -> JsNumber(paged.pageSize),
-    "resultCount" -> JsNumber(paged.resultCount)
-  )
+  private def writes[T](implicit fmt: Writes[T]): Paged[T] => JsValue =
+    (paged: Paged[T]) =>
+      Json.obj(
+        "results"     -> JsArray(paged.results.map(fmt.writes)),
+        "pageIndex"   -> JsNumber(paged.pageIndex),
+        "pageSize"    -> JsNumber(paged.pageSize),
+        "resultCount" -> JsNumber(paged.resultCount)
+      )
 
 }

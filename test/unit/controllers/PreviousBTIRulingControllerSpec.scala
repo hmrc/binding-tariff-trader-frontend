@@ -24,7 +24,7 @@ import models.NormalMode
 import navigation.FakeNavigator
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import views.html.previousBTIRuling
 import pages.ProvideGoodsNamePage
 
@@ -33,11 +33,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class PreviousBTIRulingControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
   private val formProvider = new PreviousBTIRulingFormProvider()
-  private val goodsName = "some-goods-name"
+  private val goodsName    = "some-goods-name"
 
   val previousBTIRulingView: previousBTIRuling = app.injector.instanceOf(classOf[previousBTIRuling])
 
-  private def controller(dataRetrievalAction: DataRetrievalAction): PreviousBTIRulingController = {
+  private def controller(dataRetrievalAction: DataRetrievalAction): PreviousBTIRulingController =
     new PreviousBTIRulingController(
       frontendAppConfig,
       FakeDataCacheConnector,
@@ -49,7 +49,6 @@ class PreviousBTIRulingControllerSpec extends ControllerSpecBase with YesNoCachi
       cc,
       previousBTIRulingView
     )
-  }
 
   private def onwardRoute = Call("GET", "/foo")
 

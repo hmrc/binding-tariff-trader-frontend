@@ -25,7 +25,7 @@ import uk.gov.hmrc.crypto.CompositeSymmetricCrypto
 import workers.MigrationWorker
 
 class Module extends PlayModule {
-  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] =
     Seq(
       bind[DataRetrievalAction].to[DataRetrievalActionImpl].eagerly,
       bind[DataRequiredAction].to[DataRequiredActionImpl].eagerly,
@@ -35,7 +35,4 @@ class Module extends PlayModule {
       bind[Clock].to(Clock.systemUTC()),
       bind[MigrationWorker].toSelf.eagerly
     )
-  }
 }
-
-

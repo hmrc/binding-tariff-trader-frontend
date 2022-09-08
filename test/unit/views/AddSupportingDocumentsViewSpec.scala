@@ -38,11 +38,12 @@ class AddSupportingDocumentsViewSpec extends YesNoViewBehaviours {
 
   val addSupportingDocumentsView: addSupportingDocuments = app.injector.instanceOf[addSupportingDocuments]
 
-  def createView: () => HtmlFormat.Appendable = () =>
-    addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  def createView: () => HtmlFormat.Appendable =
+    () => addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable = (form: Form[_]) =>
-    addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
+    (form: Form[_]) =>
+      addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   "AddSupportingDocuments view" must {
 

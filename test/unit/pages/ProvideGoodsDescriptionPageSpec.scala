@@ -19,7 +19,6 @@ package unit.pages
 import pages.ProvideGoodsDescriptionPage
 import pages.behaviours.PageBehaviours
 
-
 class ProvideGoodsDescriptionPageSpec extends PageBehaviours {
 
   "ProvideGoodsDescriptionPage" must {

@@ -32,17 +32,17 @@ import scala.concurrent.Future
 
 class CasesServiceSpec extends SpecBase {
 
-  private val existingCase = mock[Case]
-  private val newCase = mock[NewCaseRequest]
-  private val pagination = mock[Pagination]
-  private val application = mock[Application]
-  private val contact = mock[Contact]
-  private val sort = mock[Sort]
-  private val caseConnector = mock[BindingTariffClassificationConnector]
+  private val existingCase   = mock[Case]
+  private val newCase        = mock[NewCaseRequest]
+  private val pagination     = mock[Pagination]
+  private val application    = mock[Application]
+  private val contact        = mock[Contact]
+  private val sort           = mock[Sort]
+  private val caseConnector  = mock[BindingTariffClassificationConnector]
   private val emailConnector = mock[EmailConnector]
-  private val traderEori = "eoriTrader"
-  private val agentEori = "eoriAgent"
-  private val caseRef = "123114"
+  private val traderEori     = "eoriTrader"
+  private val agentEori      = "eoriAgent"
+  private val caseRef        = "123114"
 
   private val service = new CasesService(caseConnector, emailConnector)
 
@@ -55,7 +55,8 @@ class CasesServiceSpec extends SpecBase {
 
     "delegate to connector" in {
       given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
-      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]])).willReturn(Future.successful(()))
+      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]]))
+        .willReturn(Future.successful(()))
 
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
 
@@ -70,7 +71,8 @@ class CasesServiceSpec extends SpecBase {
 
     "handle error with email silently" in {
       given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
-      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]])).willReturn(Future.failed(new RuntimeException("Error")))
+      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]]))
+        .willReturn(Future.failed(new RuntimeException("Error")))
 
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
     }
@@ -86,7 +88,8 @@ class CasesServiceSpec extends SpecBase {
     }
 
     def theEmailSent: ApplicationSubmittedEmail = {
-      val captor: ArgumentCaptor[ApplicationSubmittedEmail] = ArgumentCaptor.forClass(classOf[ApplicationSubmittedEmail])
+      val captor: ArgumentCaptor[ApplicationSubmittedEmail] =
+        ArgumentCaptor.forClass(classOf[ApplicationSubmittedEmail])
       verify(emailConnector).send(captor.capture())(any[HeaderCarrier], any[Writes[Email[_]]])
       captor.getValue
     }
@@ -98,15 +101,20 @@ class CasesServiceSpec extends SpecBase {
 
       val pagedResult = Paged(Seq(oCase.btiCaseExample, oCase.btiCaseExample), 1, 2, 2)
 
-      given(caseConnector.findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier]))
-        .willReturn(Future.successful(pagedResult))
+      given(
+        caseConnector
+          .findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier])
+      ).willReturn(Future.successful(pagedResult))
 
       await(service.getCases(caseRef, Set.empty, pagination, sort)(HeaderCarrier())) shouldBe pagedResult
     }
 
     "propagate any error" in {
       val exception = new RuntimeException("Error")
-      given(caseConnector.findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier])).willThrow(exception)
+      given(
+        caseConnector
+          .findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier])
+      ).willThrow(exception)
 
       val caught = intercept[RuntimeException] {
         await(service.getCases(caseRef, Set.empty, pagination, sort)(HeaderCarrier()))
@@ -133,25 +141,27 @@ class CasesServiceSpec extends SpecBase {
 
       val caseResult = Some(oCase.btiCaseExample)
 
-      given(caseConnector.updateCase(refEq(caseRef), refEq(CaseUpdate(None)))(any[HeaderCarrier])).willReturn(Future.successful(caseResult))
+      given(caseConnector.updateCase(refEq(caseRef), refEq(CaseUpdate(None)))(any[HeaderCarrier]))
+        .willReturn(Future.successful(caseResult))
 
       await(service.update(caseRef, CaseUpdate(None))(HeaderCarrier())) shouldBe caseResult
     }
   }
 
   "addCaseCreatedEvent" should {
-    val atar = oCase.btiCaseExample
+    val atar     = oCase.btiCaseExample
     val operator = Operator("", Some(""))
 
     "create an event" in {
 
-      given(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier])).willReturn(Future.successful(mock[Event]))
+      given(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier]))
+        .willReturn(Future.successful(mock[Event]))
 
       await(service.addCaseCreatedEvent(atar, operator)(HeaderCarrier())) shouldBe (())
 
       val eventCreated = theEventCreatedFor(caseConnector, atar)
       eventCreated.operator shouldBe Operator("", Some(""))
-      eventCreated.details shouldBe CaseCreated(comment = "Application submitted")
+      eventCreated.details  shouldBe CaseCreated(comment = "Application submitted")
     }
 
     "not create an event when connector throws an exception" in {
@@ -190,7 +200,7 @@ class CasesServiceSpec extends SpecBase {
       given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
 
       await(service.getCaseForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe agentCase
-      await(service.getCaseForUser(agentEori, caseRef)(HeaderCarrier())) shouldBe agentCase
+      await(service.getCaseForUser(agentEori, caseRef)(HeaderCarrier()))  shouldBe agentCase
     }
 
     "not return case for another EORI" in {
@@ -228,7 +238,7 @@ class CasesServiceSpec extends SpecBase {
       given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
 
       await(service.getCaseWithRulingForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe agentCase
-      await(service.getCaseWithRulingForUser(agentEori, caseRef)(HeaderCarrier())) shouldBe agentCase
+      await(service.getCaseWithRulingForUser(agentEori, caseRef)(HeaderCarrier()))  shouldBe agentCase
     }
 
     "not return ruling case for another EORI" in {

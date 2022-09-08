@@ -37,7 +37,7 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
   val request = fakeGETRequestWithCSRF
 
   val initiateResponse: FileStoreInitiateResponse = FileStoreInitiateResponse(
-    id = "id",
+    id              = "id",
     upscanReference = "ref",
     uploadRequest = UpscanFormTemplate(
       "http://localhost:20001/upscan/upload",
@@ -45,19 +45,25 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
     )
   )
 
-  val uploadSupportingMaterialMultipleView: uploadSupportingMaterialMultiple = app.injector.instanceOf[uploadSupportingMaterialMultiple]
+  val uploadSupportingMaterialMultipleView: uploadSupportingMaterialMultiple =
+    app.injector.instanceOf[uploadSupportingMaterialMultiple]
 
-  def createView: () => HtmlFormat.Appendable = () =>
-    uploadSupportingMaterialMultipleView(frontendAppConfig, initiateResponse, form, goodsName, NormalMode)(request, messages)
+  def createView: () => HtmlFormat.Appendable =
+    () =>
+      uploadSupportingMaterialMultipleView(frontendAppConfig, initiateResponse, form, goodsName, NormalMode)(
+        request,
+        messages
+      )
 
   def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
-    (form: Form[String]) => uploadSupportingMaterialMultipleView(
-      frontendAppConfig,
-      initiateResponse,
-      form,
-      goodsName,
-      NormalMode
-    )(request, messages)
+    (form: Form[String]) =>
+      uploadSupportingMaterialMultipleView(
+        frontendAppConfig,
+        initiateResponse,
+        form,
+        goodsName,
+        NormalMode
+      )(request, messages)
 
   "UploadSupportingMaterialMultiple view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()

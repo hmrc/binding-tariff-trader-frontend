@@ -31,11 +31,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class MongoCacheConnectorSpec
-  extends ConnectorTest
-  with ScalaCheckDrivenPropertyChecks
-  with Generators
-  with ScalaFutures
-  with MongoSupport {
+    extends ConnectorTest
+    with ScalaCheckDrivenPropertyChecks
+    with Generators
+    with ScalaFutures
+    with MongoSupport {
 
   val repository = mock[SessionRepository]
 
@@ -48,7 +48,6 @@ class MongoCacheConnectorSpec
       val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
 
       forAll(arbitrary[CacheMap]) { cacheMap =>
-
         val result = mongoCacheConnector.save(cacheMap)
 
         whenReady(result) { savedCacheMap =>
@@ -71,7 +70,6 @@ class MongoCacheConnectorSpec
       val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
 
       forAll(arbitrary[CacheMap]) { cacheMap =>
-
         val result = mongoCacheConnector.remove(cacheMap)
 
         whenReady(result) { savedCacheMap =>
@@ -95,12 +93,9 @@ class MongoCacheConnectorSpec
         val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
 
         forAll(nonEmptyString) { cacheId =>
-
           val result = mongoCacheConnector.fetch(cacheId)
 
-          whenReady(result) { optionalCacheMap =>
-            optionalCacheMap should be(empty)
-          }
+          whenReady(result)(optionalCacheMap => optionalCacheMap should be(empty))
         }
 
       }
@@ -114,14 +109,11 @@ class MongoCacheConnectorSpec
         val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
 
         forAll(arbitrary[CacheMap]) { cacheMap =>
-
           when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
 
           val result = mongoCacheConnector.fetch(cacheMap.id)
 
-          whenReady(result) { optionalCacheMap =>
-            optionalCacheMap shouldBe Some(cacheMap)
-          }
+          whenReady(result)(optionalCacheMap => optionalCacheMap shouldBe Some(cacheMap))
         }
 
       }
@@ -141,12 +133,9 @@ class MongoCacheConnectorSpec
         val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
 
         forAll(nonEmptyString, nonEmptyString) { (cacheId, key) =>
+          val result = mongoCacheConnector.getEntry[String](cacheId, key)
 
-            val result = mongoCacheConnector.getEntry[String](cacheId, key)
-
-            whenReady(result) { optionalValue =>
-              optionalValue should be(empty)
-            }
+          whenReady(result)(optionalValue => optionalValue should be(empty))
         }
 
       }
@@ -166,15 +155,13 @@ class MongoCacheConnectorSpec
           cacheMap <- arbitrary[CacheMap]
         } yield (key, cacheMap copy (data = cacheMap.data - key))
 
-        forAll(gen) { case (k, cacheMap) =>
+        forAll(gen) {
+          case (k, cacheMap) =>
+            when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
 
-          when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
+            val result = mongoCacheConnector.getEntry[String](cacheMap.id, k)
 
-          val result = mongoCacheConnector.getEntry[String](cacheMap.id, k)
-
-          whenReady(result) { optionalValue =>
-            optionalValue should be(empty)
-          }
+            whenReady(result)(optionalValue => optionalValue should be(empty))
         }
 
       }
@@ -193,14 +180,13 @@ class MongoCacheConnectorSpec
           cacheMap <- arbitrary[CacheMap]
         } yield (key, value, cacheMap copy (data = cacheMap.data + (key -> JsString(value))))
 
-        forAll(gen) { case (k, v, cacheMap) =>
-          when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
+        forAll(gen) {
+          case (k, v, cacheMap) =>
+            when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
 
-          val result = mongoCacheConnector.getEntry[String](cacheMap.id, k)
+            val result = mongoCacheConnector.getEntry[String](cacheMap.id, k)
 
-          whenReady(result) { optionalValue =>
-            optionalValue shouldBe Some(v)
-          }
+            whenReady(result)(optionalValue => optionalValue shouldBe Some(v))
         }
 
       }

@@ -19,7 +19,7 @@ package unit.viewmodels
 import base.SpecBase
 import models.oCase
 
-class PdfViewModelSpec extends SpecBase{
+class PdfViewModelSpec extends SpecBase {
 
   "similarAtarCodes" should {
 

@@ -35,13 +35,18 @@ class ReturnSamplesViewSpec extends YesNoViewBehaviours {
 
   def createView: () => Html = () => returnSamplesView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[_] => Html = (form: Form[_]) => returnSamplesView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[_] => Html =
+    (form: Form[_]) => returnSamplesView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "ReturnSamples view" must {
     behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.ReturnSamplesController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      createViewUsingForm,
+      messageKeyPrefix,
+      routes.ReturnSamplesController.onSubmit(NormalMode).url
+    )
   }
 }

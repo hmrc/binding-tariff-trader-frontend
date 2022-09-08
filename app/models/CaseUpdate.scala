@@ -25,18 +25,18 @@ object UpdateType {
 sealed abstract class Update[+A] {
   def map[B](f: A => B): Update[B] = this match {
     case SetValue(a) => SetValue(f(a))
-    case NoChange => NoChange
+    case NoChange    => NoChange
   }
   def getOrElse[AA >: A](default: => AA): AA = this match {
     case SetValue(a) => a
-    case NoChange => default
+    case NoChange    => default
   }
 }
 case class SetValue[A](a: A) extends Update[A]
 case object NoChange extends Update[Nothing]
 
 case class ApplicationUpdate(
-  `type`: String = "BTI",
+  `type`: String                             = "BTI",
   applicationPdf: Update[Option[Attachment]] = NoChange
 )
 

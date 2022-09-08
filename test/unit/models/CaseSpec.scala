@@ -31,7 +31,7 @@ class CaseSpec extends SpecBase {
   "Case class" must {
 
     val futureDate = Instant.now().plus(1, ChronoUnit.DAYS)
-    val pastDate = Instant.now().minus(1, ChronoUnit.DAYS)
+    val pastDate   = Instant.now().minus(1, ChronoUnit.DAYS)
 
     "active decision returns true when end date is in the future" in {
       decisionWithEndDate(futureDate).hasActiveDecision shouldBe true

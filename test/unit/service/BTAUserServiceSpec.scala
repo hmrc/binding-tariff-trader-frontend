@@ -27,11 +27,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class BTAUserServiceSpec extends SpecBase {
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
-  private val dataCacheConnector = mock[DataCacheConnector]
+  private val dataCacheConnector    = mock[DataCacheConnector]
 
-  val keyPrefix = "btaUser-"
-  val requestId = "testRequestId"
-  val cacheMapId = s"$keyPrefix$requestId"
+  val keyPrefix          = "btaUser-"
+  val requestId          = "testRequestId"
+  val cacheMapId         = s"$keyPrefix$requestId"
   val cacheMap: CacheMap = new CacheMap(cacheMapId, Map("isBTAUser" -> Json.toJson(true)))
 
   override def beforeEach(): Unit = {

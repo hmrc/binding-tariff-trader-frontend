@@ -20,13 +20,14 @@ import models.requests.IdentifierRequest
 import views.behaviours.ViewBehaviours
 import views.html.howWeContactYou
 
-class  HowWeContactYouViewSpec extends ViewBehaviours {
+class HowWeContactYouViewSpec extends ViewBehaviours {
 
   private val messageKeyPrefix = "howWeContactYou"
 
   val howWeContactYouView: howWeContactYou = app.injector.instanceOf[howWeContactYou]
 
-  private def createView(eori: Option[String] = Some("eori")) = () => howWeContactYouView()(IdentifierRequest(fakeRequest, "id", eori), messages)
+  private def createView(eori: Option[String] = Some("eori")) =
+    () => howWeContactYouView()(IdentifierRequest(fakeRequest, "id", eori), messages)
 
   "HowWeContactYou view" must {
     behave like normalPage(createView(), messageKeyPrefix)()
@@ -35,4 +36,3 @@ class  HowWeContactYouViewSpec extends ViewBehaviours {
   }
 
 }
-

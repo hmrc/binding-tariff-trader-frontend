@@ -45,7 +45,8 @@ trait PageGenerators {
   implicit lazy val arbitraryCommodityCodeBestMatchPage: Arbitrary[CommodityCodeBestMatchPage.type] =
     Arbitrary(CommodityCodeBestMatchPage)
 
-  implicit lazy val arbitraryUploadSupportingMaterialMultiplePage: Arbitrary[UploadSupportingMaterialMultiplePage.type] =
+  implicit lazy val arbitraryUploadSupportingMaterialMultiplePage
+    : Arbitrary[UploadSupportingMaterialMultiplePage.type] =
     Arbitrary(UploadSupportingMaterialMultiplePage)
 
   implicit lazy val arbitraryProvideBTIReferencePage: Arbitrary[ProvideBTIReferencePage.type] =

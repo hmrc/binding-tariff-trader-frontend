@@ -32,19 +32,20 @@ import views.html.similarItemCommodityCode
 
 import scala.concurrent.ExecutionContext
 
-class SimilarItemCommodityCodeController @Inject()(
-                                                    appConfig: FrontendAppConfig,
-                                                    val dataCacheConnector: DataCacheConnector,
-                                                    val navigator: Navigator,
-                                                    val identify: IdentifierAction,
-                                                    val getData: DataRetrievalAction,
-                                                    val requireData: DataRequiredAction,
-                                                    formProvider: SimilarItemCommodityCodeFormProvider,
-                                                    cc: MessagesControllerComponents,
-                                                    similarItemCommodityCodeView: similarItemCommodityCode
-                                                  )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+class SimilarItemCommodityCodeController @Inject() (
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: SimilarItemCommodityCodeFormProvider,
+  cc: MessagesControllerComponents,
+  similarItemCommodityCodeView: similarItemCommodityCode
+)(implicit ec: ExecutionContext)
+    extends YesNoCachingController(cc) {
   lazy val form: Form[Boolean] = formProvider()
-  val journey: LoopingJourney = Journey.similarItem
+  val journey: LoopingJourney  = Journey.similarItem
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
     similarItemCommodityCodeView(appConfig, preparedForm, mode)

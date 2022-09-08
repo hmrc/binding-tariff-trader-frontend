@@ -26,18 +26,19 @@ import service.CasesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.ruling_information
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
-class RulingController @Inject()(
+class RulingController @Inject() (
   val appConfig: FrontendAppConfig,
   identify: IdentifierAction,
   service: CasesService,
   cc: MessagesControllerComponents,
   rulingInformationView: ruling_information
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+)(implicit ec: ExecutionContext)
+    extends FrontendController(cc)
+    with I18nSupport {
 
   def viewRuling(reference: String): Action[AnyContent] = identify.async { implicit request =>
-
     request.eoriNumber match {
       case Some(eori: String) =>
         service.getCaseForUser(eori, reference) flatMap { c: Case =>

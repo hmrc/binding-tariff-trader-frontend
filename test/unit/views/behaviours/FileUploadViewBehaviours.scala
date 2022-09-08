@@ -21,34 +21,34 @@ import play.twirl.api.HtmlFormat
 
 trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
 
-  private def getMessage(key: String): Option[String] = {
+  private def getMessage(key: String): Option[String] =
     messages(key) match {
       case m if m == key => None
-      case s => Some(s)
+      case s             => Some(s)
     }
-  }
 
-  private def expectedLabel(messageKeyPrefix: String): String = {
+  private def expectedLabel(messageKeyPrefix: String): String =
     getMessage(s"$messageKeyPrefix.label") match {
       case Some(l) => l
-      case _ => getMessage(s"$messageKeyPrefix.heading") match {
-        case Some(h) => h
-        case _ => "no label or value defined"
-      }
+      case _ =>
+        getMessage(s"$messageKeyPrefix.heading") match {
+          case Some(h) => h
+          case _       => "no label or value defined"
+        }
     }
-  }
 
-  def multipleFileUploadPage(createView: Form[String] => HtmlFormat.Appendable,
-                             messageKeyPrefix: String,
-                             expectedFormAction: String,
-                             expectedHintKey: Option[String] = None): Unit = {
-
+  def multipleFileUploadPage(
+    createView: Form[String] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    expectedFormAction: String,
+    expectedHintKey: Option[String] = None
+  ): Unit =
     "behave like a page with a file upload field" when {
 
       "rendered" must {
 
         "contain a label for the value" in {
-          val doc = asDocument(createView(form))
+          val doc              = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
 
           assertContainsLabel(doc, "file", expectedLabel(messageKeyPrefix), expectedHintText)
@@ -64,23 +64,25 @@ trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
 
         "show an error prefix in the browser title" in {
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title")}""")
+          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(
+            s"$messageKeyPrefix.title"
+          )}""")
         }
       }
     }
-  }
 
-  def singleFileUploadPage(createView: Form[String] => HtmlFormat.Appendable,
-                           messageKeyPrefix: String,
-                           expectedFormAction: String,
-                           expectedHintKey: Option[String] = None): Unit = {
-
+  def singleFileUploadPage(
+    createView: Form[String] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    expectedFormAction: String,
+    expectedHintKey: Option[String] = None
+  ): Unit =
     "behave like a page with a file upload field" when {
 
       "rendered" must {
 
         "contain a label for the value" in {
-          val doc = asDocument(createView(form))
+          val doc              = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
 
           assertContainsLabel(doc, "file-input", expectedLabel(messageKeyPrefix), expectedHintText)
@@ -101,10 +103,11 @@ trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
 
         "show an error prefix in the browser title" in {
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title")}""")
+          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(
+            s"$messageKeyPrefix.title"
+          )}""")
         }
       }
     }
-  }
 
 }

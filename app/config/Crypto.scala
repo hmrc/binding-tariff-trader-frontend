@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.crypto.{AesCrypto, CompositeSymmetricCrypto, Decrypter}
 
 @Singleton
-class Crypto @Inject()(appConfig: FrontendAppConfig) extends CompositeSymmetricCrypto {
+class Crypto @Inject() (appConfig: FrontendAppConfig) extends CompositeSymmetricCrypto {
 
   override protected lazy val currentCrypto: AesCrypto = new AesCrypto {
     override protected lazy val encryptionKey: String = appConfig.aesKey

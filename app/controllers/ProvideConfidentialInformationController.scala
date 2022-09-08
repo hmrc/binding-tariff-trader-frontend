@@ -31,7 +31,7 @@ import play.twirl.api.HtmlFormat
 
 import scala.concurrent.ExecutionContext
 
-class ProvideConfidentialInformationController @Inject()(
+class ProvideConfidentialInformationController @Inject() (
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
@@ -41,8 +41,9 @@ class ProvideConfidentialInformationController @Inject()(
   formProvider: ProvideConfidentialInformationFormProvider,
   val provide_confidential_information: views.html.provideConfidentialInformation,
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext) extends AnswerCachingController[String](cc) {
-  lazy val form: Form[String] = formProvider()
+)(implicit ec: ExecutionContext)
+    extends AnswerCachingController[String](cc) {
+  lazy val form: Form[String]                               = formProvider()
   val questionPage: ProvideConfidentialInformationPage.type = ProvideConfidentialInformationPage
 
   def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {

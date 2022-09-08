@@ -25,20 +25,20 @@ trait ModelGenerators {
   implicit lazy val arbitraryUploadSupportingMaterialMultiple: Arbitrary[Seq[FileAttachment]] =
     Arbitrary {
       for {
-        id <- arbitrary[String]
-        name <- arbitrary[String]
+        id       <- arbitrary[String]
+        name     <- arbitrary[String]
         mimeType <- arbitrary[String]
-        size <- arbitrary[Long]
+        size     <- arbitrary[Long]
       } yield Seq(FileAttachment(id, name, mimeType, size))
     }
 
   implicit lazy val arbitraryUploadWrittenAuthorisation: Arbitrary[FileAttachment] =
     Arbitrary {
       for {
-        id <- arbitrary[String]
-        name <- arbitrary[String]
+        id       <- arbitrary[String]
+        name     <- arbitrary[String]
         mimeType <- arbitrary[String]
-        size <- arbitrary[Long]
+        size     <- arbitrary[Long]
       } yield FileAttachment(id, name, mimeType, size)
     }
 
@@ -66,12 +66,12 @@ trait ModelGenerators {
   implicit lazy val arbitraryRegisteredAddressForEori: Arbitrary[RegisteredAddressForEori] =
     Arbitrary {
       for {
-        eori <- arbitrary[String]
+        eori         <- arbitrary[String]
         businessName <- arbitrary[String]
         addressLine1 <- arbitrary[String]
-        town <- arbitrary[String]
-        postcode <- arbitrary[Option[String]]
-        country <- arbitrary[String]
+        town         <- arbitrary[String]
+        postcode     <- arbitrary[Option[String]]
+        country      <- arbitrary[String]
       } yield RegisteredAddressForEori(eori, businessName, addressLine1, town, postcode, country)
     }
 

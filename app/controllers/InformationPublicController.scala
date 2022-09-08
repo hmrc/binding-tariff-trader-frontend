@@ -24,14 +24,14 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.informationPublic
 
-
-class InformationPublicController @Inject()(
-                                             appConfig: FrontendAppConfig,
-                                             identify: IdentifierAction,
-                                             getData: DataRetrievalAction,
-                                             cc: MessagesControllerComponents,
-                                             informationPublicView: informationPublic
-                                           ) extends FrontendController(cc) with I18nSupport {
+class InformationPublicController @Inject() (
+  appConfig: FrontendAppConfig,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  cc: MessagesControllerComponents,
+  informationPublicView: informationPublic
+) extends FrontendController(cc)
+    with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData) { implicit request =>
     Ok(informationPublicView(appConfig))

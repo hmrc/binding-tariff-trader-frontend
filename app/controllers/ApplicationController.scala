@@ -195,7 +195,6 @@ class ApplicationController @Inject() (
       }
     }
 
-
   def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)(
     implicit request: Request[AnyContent]
   ): Future[Result] =

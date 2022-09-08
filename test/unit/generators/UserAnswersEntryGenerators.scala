@@ -24,14 +24,14 @@ import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
-  implicit lazy val arbitraryLegalChallengeDetailsUserAnswersEntry: Arbitrary[(LegalChallengeDetailsPage.type, JsValue)] =
+  implicit lazy val arbitraryLegalChallengeDetailsUserAnswersEntry
+    : Arbitrary[(LegalChallengeDetailsPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[LegalChallengeDetailsPage.type]
         value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))
       } yield (page, value)
     }
-
 
   implicit lazy val arbitraryLegalChallengeUserAnswersEntry: Arbitrary[(LegalChallengePage.type, JsValue)] =
     Arbitrary {
@@ -41,7 +41,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryCommodityCodeBestMatchUserAnswersEntry: Arbitrary[(CommodityCodeBestMatchPage.type, JsValue)] =
+  implicit lazy val arbitraryCommodityCodeBestMatchUserAnswersEntry
+    : Arbitrary[(CommodityCodeBestMatchPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[CommodityCodeBestMatchPage.type]
@@ -49,7 +50,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryCommodityCodeRulingReferenceUserAnswersEntry: Arbitrary[(CommodityCodeRulingReferencePage.type, JsValue)] =
+  implicit lazy val arbitraryCommodityCodeRulingReferenceUserAnswersEntry
+    : Arbitrary[(CommodityCodeRulingReferencePage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[CommodityCodeRulingReferencePage.type]
@@ -57,7 +59,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitrarySimilarItemCommodityCodeUserAnswersEntry: Arbitrary[(SimilarItemCommodityCodePage.type, JsValue)] =
+  implicit lazy val arbitrarySimilarItemCommodityCodeUserAnswersEntry
+    : Arbitrary[(SimilarItemCommodityCodePage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[SimilarItemCommodityCodePage.type]
@@ -89,9 +92,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-
-
-  implicit lazy val arbitraryUploadSupportingMaterialMultipleUserAnswersEntry: Arbitrary[(UploadSupportingMaterialMultiplePage.type, JsValue)] =
+  implicit lazy val arbitraryUploadSupportingMaterialMultipleUserAnswersEntry
+    : Arbitrary[(UploadSupportingMaterialMultiplePage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[UploadSupportingMaterialMultiplePage.type]
@@ -115,7 +117,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryRegisteredAddressForEoriUserAnswersEntry: Arbitrary[(RegisteredAddressForEoriPage.type, JsValue)] =
+  implicit lazy val arbitraryRegisteredAddressForEoriUserAnswersEntry
+    : Arbitrary[(RegisteredAddressForEoriPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[RegisteredAddressForEoriPage.type]

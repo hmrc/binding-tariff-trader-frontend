@@ -33,20 +33,21 @@ import views.html.commodityCodeBestMatch
 
 import scala.concurrent.ExecutionContext
 
-class CommodityCodeBestMatchController @Inject()(
-                                                  appConfig: FrontendAppConfig,
-                                                  val dataCacheConnector: DataCacheConnector,
-                                                  val navigator: Navigator,
-                                                  val identify: IdentifierAction,
-                                                  val getData: DataRetrievalAction,
-                                                  val requireData: DataRequiredAction,
-                                                  formProvider: CommodityCodeBestMatchFormProvider,
-                                                  cc: MessagesControllerComponents,
-                                                  commodityCodeBestMatchView: commodityCodeBestMatch
-                                                )(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+class CommodityCodeBestMatchController @Inject() (
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: CommodityCodeBestMatchFormProvider,
+  cc: MessagesControllerComponents,
+  commodityCodeBestMatchView: commodityCodeBestMatch
+)(implicit ec: ExecutionContext)
+    extends YesNoCachingController(cc) {
 
   lazy val form: Form[Boolean] = formProvider()
-  val journey: YesNoJourney = Journey.commodityCode
+  val journey: YesNoJourney    = Journey.commodityCode
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")

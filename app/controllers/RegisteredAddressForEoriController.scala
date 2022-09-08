@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisteredAddressForEoriFormProvider
+
 import javax.inject.Inject
 import models.{Mode, RegisteredAddressForEori}
 import models.requests.DataRequest
@@ -30,38 +31,45 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
 import service.CountriesService
-import uk.gov.hmrc.play.bootstrap.controller.WithDefaultFormBinding
+import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 import views.html.registeredAddressForEori
 
 import scala.concurrent.ExecutionContext
 
-class RegisteredAddressForEoriController @Inject()(appConfig: FrontendAppConfig,
-                                                   val dataCacheConnector: DataCacheConnector,
-                                                   val navigator: Navigator,
-                                                   val identify: IdentifierAction,
-                                                   val getData: DataRetrievalAction,
-                                                   val requireData: DataRequiredAction,
-                                                   formProvider: RegisteredAddressForEoriFormProvider,
-                                                   countriesService: CountriesService,
-                                                   cc: MessagesControllerComponents,
-                                                   registeredAddressForEoriView: registeredAddressForEori
-                                                  )(implicit ec: ExecutionContext)
-  extends AnswerCachingController[RegisteredAddressForEori](cc) with I18nSupport with WithDefaultFormBinding {
+class RegisteredAddressForEoriController @Inject() (
+  appConfig: FrontendAppConfig,
+  val dataCacheConnector: DataCacheConnector,
+  val navigator: Navigator,
+  val identify: IdentifierAction,
+  val getData: DataRetrievalAction,
+  val requireData: DataRequiredAction,
+  formProvider: RegisteredAddressForEoriFormProvider,
+  countriesService: CountriesService,
+  cc: MessagesControllerComponents,
+  registeredAddressForEoriView: registeredAddressForEori
+)(implicit ec: ExecutionContext)
+    extends AnswerCachingController[RegisteredAddressForEori](cc)
+    with I18nSupport
+    with WithUnsafeDefaultFormBinding {
 
-  lazy val form: Form[RegisteredAddressForEori] = formProvider()
+  lazy val form: Form[RegisteredAddressForEori]       = formProvider()
   val questionPage: RegisteredAddressForEoriPage.type = RegisteredAddressForEoriPage
 
-  def renderView(preparedForm: Form[RegisteredAddressForEori], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
+  def renderView(preparedForm: Form[RegisteredAddressForEori], mode: Mode)(
+    implicit request: DataRequest[_]
+  ): HtmlFormat.Appendable =
     registeredAddressForEoriView(appConfig, preparedForm, mode, countriesService.getAllCountries)
 
-  override def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm: Form[RegisteredAddressForEori] = (request.userAnswers.get(RegisteredAddressForEoriPage), request.eoriNumber) match {
-      case (Some(value), Some(eoriNumber)) => form.fill(value.copy(eori = eoriNumber))
-      case (None,        Some(eoriNumber)) => form.fill(RegisteredAddressForEori(eoriNumber))
-      case (Some(value), _               ) => form.fill(value)
-      case _ => form
-    }
+  override def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+    implicit request =>
+      val preparedForm: Form[RegisteredAddressForEori] =
+        (request.userAnswers.get(RegisteredAddressForEoriPage), request.eoriNumber) match {
+          case (Some(value), Some(eoriNumber)) => form.fill(value.copy(eori = eoriNumber))
+          case (None, Some(eoriNumber))        => form.fill(RegisteredAddressForEori(eoriNumber))
+          case (Some(value), _)                => form.fill(value)
+          case _                               => form
+        }
 
-    Ok(renderView(preparedForm, mode))
+      Ok(renderView(preparedForm, mode))
   }
 }

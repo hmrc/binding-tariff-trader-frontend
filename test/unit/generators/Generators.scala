@@ -24,10 +24,7 @@ trait Generators extends CacheMapGenerator with PageGenerators with ModelGenerat
 
   implicit val dontShrink: Shrink[String] = Shrink.shrinkAny
 
-  def genIntersperseString(gen: Gen[String],
-                           value: String,
-                           frequencyV: Int = 1,
-                           frequencyN: Int = 10): Gen[String] = {
+  def genIntersperseString(gen: Gen[String], value: String, frequencyV: Int = 1, frequencyN: Int = 10): Gen[String] = {
 
     val genValue: Gen[Option[String]] = Gen.frequency(frequencyN -> None, frequencyV -> Gen.const(Some(value)))
 
@@ -85,14 +82,15 @@ trait Generators extends CacheMapGenerator with PageGenerators with ModelGenerat
   def stringsWithMaxLength(maxLength: Int): Gen[String] =
     for {
       length <- choose(1, maxLength)
-      chars <- listOfN(length, arbitrary[Char])
+      chars  <- listOfN(length, arbitrary[Char])
     } yield chars.mkString
 
-  def stringsLongerThan(minLength: Int): Gen[String] = for {
-    maxLength <- (minLength * 2).max(100)
-    length <- Gen.chooseNum(minLength + 1, maxLength)
-    chars <- listOfN(length, arbitrary[Char])
-  } yield chars.mkString
+  def stringsLongerThan(minLength: Int): Gen[String] =
+    for {
+      maxLength <- (minLength * 2).max(100)
+      length    <- Gen.chooseNum(minLength + 1, maxLength)
+      chars     <- listOfN(length, arbitrary[Char])
+    } yield chars.mkString
 
   def stringsShorterThan(minLength: Int): Gen[String] =
     for {
@@ -103,13 +101,12 @@ trait Generators extends CacheMapGenerator with PageGenerators with ModelGenerat
   def stringsExceptSpecificValues(excluded: Set[String]): Gen[String] =
     nonEmptyString suchThat (!excluded.contains(_))
 
-  def oneOf[T](xs: Seq[Gen[T]]): Gen[T] = {
+  def oneOf[T](xs: Seq[Gen[T]]): Gen[T] =
     if (xs.isEmpty) {
       throw new IllegalArgumentException("oneOf called on empty collection")
     } else {
       val vector = xs.toVector
       choose(0, vector.size - 1).flatMap(vector(_))
     }
-  }
 
 }

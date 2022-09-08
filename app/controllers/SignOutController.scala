@@ -29,14 +29,16 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.successful
 
-class SignOutController @Inject()(
-                                   val appConfig: FrontendAppConfig,
-                                   dataCacheConnector: DataCacheConnector,
-                                   urlCacheService: BTAUserService,
-                                   identify: IdentifierAction,
-                                   getData: DataRetrievalAction,
-                                   cc: MessagesControllerComponents
-                                 )(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+class SignOutController @Inject() (
+  val appConfig: FrontendAppConfig,
+  dataCacheConnector: DataCacheConnector,
+  urlCacheService: BTAUserService,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  cc: MessagesControllerComponents
+)(implicit ec: ExecutionContext)
+    extends FrontendController(cc)
+    with I18nSupport {
 
   def startFeedbackSurvey: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     clearDataCache(request)
@@ -58,12 +60,11 @@ class SignOutController @Inject()(
     successful(Ok("OK"))
   }
 
-  def cancelApplication: Action[AnyContent] = (identify andThen getData).async{ implicit request =>
+  def cancelApplication: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     clearDataCache(request)
     successful(Results.Redirect(routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None)))
   }
 
-  private def clearDataCache(request: OptionalDataRequest[AnyContent]): Option[Future[Boolean]] = {
+  private def clearDataCache(request: OptionalDataRequest[AnyContent]): Option[Future[Boolean]] =
     request.userAnswers map { answer => dataCacheConnector.remove(answer.cacheMap) }
-  }
 }

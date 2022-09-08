@@ -16,9 +16,7 @@
 
 package models
 
-
-case class Application
-(
+case class Application(
   `type`: String = "BTI",
   holder: EORIDetails,
   contact: Contact,
@@ -38,8 +36,7 @@ case class Application
   applicationPdf: Option[Attachment] = None
 )
 
-case class EORIDetails
-(
+case class EORIDetails(
   eori: String,
   businessName: String,
   addressLine1: String,
@@ -49,14 +46,12 @@ case class EORIDetails
   country: String
 )
 
-case class AgentDetails
-(
+case class AgentDetails(
   eoriDetails: EORIDetails,
   letterOfAuthorisation: Option[Attachment] = None
 )
 
-case class Contact
-(
+case class Contact(
   name: String,
   email: String,
   phone: Option[String]

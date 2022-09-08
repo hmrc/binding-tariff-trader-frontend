@@ -32,15 +32,21 @@ class SimilarItemCommodityCodeViewSpec extends YesNoViewBehaviours {
 
   val similarItemCommodityCodeView: similarItemCommodityCode = app.injector.instanceOf[similarItemCommodityCode]
 
-  def createView: () => Html = () => similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView: () => Html =
+    () => similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[_] => Html = (form: Form[_]) => similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[_] => Html =
+    (form: Form[_]) => similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "SimilarItemCommodityCode view" must {
     behave like normalPage(createView, messageKeyPrefix)()
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.SimilarItemCommodityCodeController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      createViewUsingForm,
+      messageKeyPrefix,
+      routes.SimilarItemCommodityCodeController.onSubmit(NormalMode).url
+    )
   }
 }

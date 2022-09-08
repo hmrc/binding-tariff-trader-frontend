@@ -25,9 +25,9 @@ class PreviousBTIRulingFormProviderSpec extends BooleanFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "previousBTIRuling.error.required"
-    val invalidKey = "error.boolean"
+    val invalidKey  = "error.boolean"
 
     behave like booleanField(
       form,

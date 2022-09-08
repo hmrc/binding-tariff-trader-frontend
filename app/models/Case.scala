@@ -20,27 +20,25 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import models.CaseStatus.CaseStatus
 
-case class NewCaseRequest
-(
+case class NewCaseRequest(
   application: Application,
   attachments: Seq[Attachment] = Seq.empty
 )
 
-case class Case
-(
+case class Case(
   reference: String,
   status: CaseStatus,
   createdDate: Instant = Instant.now,
   application: Application,
-  decision: Option[Decision] = None,
-  attachments: Seq[Attachment] = Seq.empty,
+  decision: Option[Decision]     = None,
+  attachments: Seq[Attachment]   = Seq.empty,
   dateOfExtract: Option[Instant] = None,
-  keywords: Set[String]             = Set.empty,
-  assignee: Option[Operator] = None
-
+  keywords: Set[String]          = Set.empty,
+  assignee: Option[Operator]     = None
 ) {
 
-  def hasEoriNumber(eoriNumber: String): Boolean = application.holder.eori == eoriNumber || application.agent.exists(_.eoriDetails.eori == eoriNumber)
+  def hasEoriNumber(eoriNumber: String): Boolean =
+    application.holder.eori == eoriNumber || application.agent.exists(_.eoriDetails.eori == eoriNumber)
 
   def hasActiveDecision: Boolean = this.decision.flatMap(_.effectiveEndDate).exists(_.compareTo(Instant.now) >= 0)
 
@@ -50,7 +48,8 @@ case class Case
 
   private val rulingStates: Set[models.CaseStatus.Value] = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
 
-  def daysUntilExpiry: Option[Long] = this.decision.flatMap(_.effectiveEndDate).map(date => ChronoUnit.DAYS.between(Instant.now, date))
+  def daysUntilExpiry: Option[Long] =
+    this.decision.flatMap(_.effectiveEndDate).map(date => ChronoUnit.DAYS.between(Instant.now, date))
   def hasExpiringRuling: Boolean = daysUntilExpiry.exists(days => days > 0 && days <= 120)
 
 }

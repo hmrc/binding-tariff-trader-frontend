@@ -21,12 +21,12 @@ import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
 import pages.QuestionPage
-import play.api.mvc.{ Result, Results }
+import play.api.mvc.{Result, Results}
 import play.api.libs.json.Writes
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
-import scala.util.{ Success, Failure }
+import scala.util.{Failure, Success}
 import play.api.libs.json.Format
 import scala.collection.generic.CanBuildFrom
 
@@ -44,21 +44,28 @@ trait AccumulatingAnswerCaching[F <: TraversableOnce[A], A] {
   def navigator: Navigator
   def questionPage: QuestionPage[F]
 
-  def submitAnswer(answer: A, mode: Mode)(implicit request: DataRequest[_], writes: Format[F], ec: ExecutionContext): Future[Result] = {
-    val withNewAnswer = request.userAnswers.get(questionPage).map { fa =>
-      val builder = cbf(fa)
-      fa.foreach { elem => builder += elem }
-      builder += answer
-      builder.result()
-    }.getOrElse {
-      val builder = cbf()
-      builder += answer
-      builder.result()
-    }
+  def submitAnswer(
+    answer: A,
+    mode: Mode
+  )(implicit request: DataRequest[_], writes: Format[F], ec: ExecutionContext): Future[Result] = {
+    val withNewAnswer = request.userAnswers
+      .get(questionPage)
+      .map { fa =>
+        val builder = cbf(fa)
+        fa.foreach(elem => builder += elem)
+        builder += answer
+        builder.result()
+      }
+      .getOrElse {
+        val builder = cbf()
+        builder += answer
+        builder.result()
+      }
 
     val updatedAnswers = request.userAnswers.set(questionPage, withNewAnswer)
 
-    dataCacheConnector.save(updatedAnswers.cacheMap)
+    dataCacheConnector
+      .save(updatedAnswers.cacheMap)
       .transformWith {
         case Failure(NonFatal(_)) =>
           Future.successful(Results.BadGateway)
@@ -73,10 +80,14 @@ trait AnswerCaching[A] {
   def navigator: Navigator
   def questionPage: QuestionPage[A]
 
-  def submitAnswer(answer: A, mode: Mode)(implicit request: DataRequest[_], writes: Writes[A], ec: ExecutionContext): Future[Result] = {
+  def submitAnswer(
+    answer: A,
+    mode: Mode
+  )(implicit request: DataRequest[_], writes: Writes[A], ec: ExecutionContext): Future[Result] = {
     val updatedAnswers = request.userAnswers.set(questionPage, answer)
 
-    dataCacheConnector.save(updatedAnswers.cacheMap)
+    dataCacheConnector
+      .save(updatedAnswers.cacheMap)
       .transformWith {
         case Failure(NonFatal(_)) =>
           Future.successful(Results.BadGateway)

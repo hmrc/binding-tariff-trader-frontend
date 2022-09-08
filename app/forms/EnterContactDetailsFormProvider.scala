@@ -24,35 +24,35 @@ import models.EnterContactDetails
 
 class EnterContactDetailsFormProvider @Inject() extends Mappings with Constraints {
 
-  val telephoneRegex = """^\+?[-0-9\s\(\)./]{1,20}$"""
+  val telephoneRegex                      = """^\+?[-0-9\s\(\)./]{1,20}$"""
   private val maximumValueForNameAndEmail = 100
-  private val maximumValueForPhoneNumber = 20
-  private val minimumValueForPhoneNumber = 10
+  private val maximumValueForPhoneNumber  = 20
+  private val minimumValueForPhoneNumber  = 10
 
-   def apply(): Form[EnterContactDetails] = Form(
-     mapping(
-       "name" -> text("enterContactDetails.error.name.required")
-         .verifying(maxLength(maximumValueForNameAndEmail, "enterContactDetails.error.name.length")),
-       "email" -> text("enterContactDetails.error.email.required")
-         .verifying(validEmailAddress("enterContactDetails.error.email.invalid"))
-         .verifying(maxLength(maximumValueForNameAndEmail, "enterContactDetails.error.email.length")),
-       "phoneNumber" -> text("enterContactDetails.error.phoneNumber.required")
-         .verifying(maxLength(maximumValueForPhoneNumber, "enterContactDetails.error.phoneNumber.length"))
-         .verifying(regexp(telephoneRegex, "enterContactDetails.error.phoneNumber.invalid"))
-     )(EnterContactDetails.apply)(EnterContactDetails.unapply)
-   )
+  def apply(): Form[EnterContactDetails] = Form(
+    mapping(
+      "name" -> text("enterContactDetails.error.name.required")
+        .verifying(maxLength(maximumValueForNameAndEmail, "enterContactDetails.error.name.length")),
+      "email" -> text("enterContactDetails.error.email.required")
+        .verifying(validEmailAddress("enterContactDetails.error.email.invalid"))
+        .verifying(maxLength(maximumValueForNameAndEmail, "enterContactDetails.error.email.length")),
+      "phoneNumber" -> text("enterContactDetails.error.phoneNumber.required")
+        .verifying(maxLength(maximumValueForPhoneNumber, "enterContactDetails.error.phoneNumber.length"))
+        .verifying(regexp(telephoneRegex, "enterContactDetails.error.phoneNumber.invalid"))
+    )(EnterContactDetails.apply)(EnterContactDetails.unapply)
+  )
 
   def formWithMinTelNumber: Form[EnterContactDetails] = Form(
-     mapping(
-       "name" -> text("enterContactDetails.error.name.required")
-         .verifying(maxLength(maximumValueForNameAndEmail, "enterContactDetails.error.name.length")),
-       "email" -> text("enterContactDetails.error.email.required")
-         .verifying(validEmailAddress("enterContactDetails.error.email.invalid"))
-         .verifying(maxLength(maximumValueForNameAndEmail, "enterContactDetails.error.email.length")),
-       "phoneNumber" -> text("enterContactDetails.error.phoneNumber.required")
-         .verifying(maxLength(maximumValueForPhoneNumber, "enterContactDetails.error.phoneNumber.length"))
-         .verifying(minNumberLength(minimumValueForPhoneNumber, "enterContactDetails.error.phoneNumber.minLength"))
-         .verifying(regexp(telephoneRegex, "enterContactDetails.error.phoneNumber.invalid"))
-     )(EnterContactDetails.apply)(EnterContactDetails.unapply)
-   )
+    mapping(
+      "name" -> text("enterContactDetails.error.name.required")
+        .verifying(maxLength(maximumValueForNameAndEmail, "enterContactDetails.error.name.length")),
+      "email" -> text("enterContactDetails.error.email.required")
+        .verifying(validEmailAddress("enterContactDetails.error.email.invalid"))
+        .verifying(maxLength(maximumValueForNameAndEmail, "enterContactDetails.error.email.length")),
+      "phoneNumber" -> text("enterContactDetails.error.phoneNumber.required")
+        .verifying(maxLength(maximumValueForPhoneNumber, "enterContactDetails.error.phoneNumber.length"))
+        .verifying(minNumberLength(minimumValueForPhoneNumber, "enterContactDetails.error.phoneNumber.minLength"))
+        .verifying(regexp(telephoneRegex, "enterContactDetails.error.phoneNumber.invalid"))
+    )(EnterContactDetails.apply)(EnterContactDetails.unapply)
+  )
 }

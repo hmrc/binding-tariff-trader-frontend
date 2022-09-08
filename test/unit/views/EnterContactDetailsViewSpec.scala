@@ -19,7 +19,7 @@ package views
 import play.api.data.Form
 import controllers.routes
 import forms.EnterContactDetailsFormProvider
-import models.{NormalMode, EnterContactDetails}
+import models.{EnterContactDetails, NormalMode}
 import views.behaviours.QuestionViewBehaviours
 import views.html.enterContactDetails
 
@@ -33,8 +33,8 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
 
   def createView = () => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
-
+  def createViewUsingForm =
+    (form: Form[_]) => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "EnterContactDetails view" must {
 
@@ -46,7 +46,9 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
       createViewUsingForm,
       messageKeyPrefix,
       routes.EnterContactDetailsController.onSubmit(NormalMode).url,
-      "name", "email", "phoneNumber"
+      "name",
+      "email",
+      "phoneNumber"
     )
   }
 

@@ -16,7 +16,7 @@
 
 package models.response
 
-import play.api.libs.json.{ OFormat, Json }
+import play.api.libs.json.{Json, OFormat}
 
 case class FileStoreInitiateResponse(id: String, upscanReference: String, uploadRequest: UpscanFormTemplate)
 

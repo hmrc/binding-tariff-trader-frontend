@@ -45,7 +45,7 @@ class PdfGeneratorServiceConnectorSpec extends ConnectorTest {
       val response: PdfFile = await(connector.generatePdf(pdfTemplate))
 
       response.contentType shouldBe "application/pdf"
-      response.content shouldBe expectedContent
+      response.content     shouldBe expectedContent
 
       verify(
         postRequestedFor(urlEqualTo("/pdf-generator-service/generate"))

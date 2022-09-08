@@ -60,7 +60,8 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
   }
 
   val applicationView: applicationView = app.injector.instanceOf(classOf[views.html.templates.applicationView])
-  val rulingCertificateView: rulingCertificateView = app.injector.instanceOf(classOf[views.html.templates.rulingCertificateView])
+  val rulingCertificateView: rulingCertificateView =
+    app.injector.instanceOf(classOf[views.html.templates.rulingCertificateView])
   val documentNotFoundView: documentNotFound = app.injector.instanceOf(classOf[views.html.documentNotFound])
 
   private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): ApplicationController =
@@ -355,7 +356,6 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     }
 
   }
-
 
   "Ruling View" must {
 

@@ -35,13 +35,19 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
   val registeredAddressForEoriView: registeredAddressForEori = app.injector.instanceOf[registeredAddressForEori]
 
   private def createView = { () =>
-    val request = fakeRequestWithEori
+    val request      = fakeRequestWithEori
     val preparedForm = form.fill(RegisteredAddressForEori(request.userEoriNumber.get))
-    registeredAddressForEoriView(frontendAppConfig, preparedForm, NormalMode, countriesService.getAllCountries)(request, messages)
+    registeredAddressForEoriView(frontendAppConfig, preparedForm, NormalMode, countriesService.getAllCountries)(
+      request,
+      messages
+    )
   }
 
   private def createViewUsingForm = { form: Form[_] =>
-    registeredAddressForEoriView(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(fakeRequestWithEori, messages)
+    registeredAddressForEoriView(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(
+      fakeRequestWithEori,
+      messages
+    )
   }
 
   "RegisteredAddressForEori view" must {
@@ -54,13 +60,17 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
       createViewUsingForm,
       messageKeyPrefix,
       routes.RegisteredAddressForEoriController.onSubmit(NormalMode).url,
-      "businessName", "addressLine1", "townOrCity", "postcode", "country"
+      "businessName",
+      "addressLine1",
+      "townOrCity",
+      "postcode",
+      "country"
     )
 
     "show the expected text" in {
-      val request = fakeRequestWithEori
+      val request      = fakeRequestWithEori
       val preparedForm = form.fill(RegisteredAddressForEori(request.userEoriNumber.get))
-      val text = asDocument(createViewUsingForm(preparedForm)).text()
+      val text         = asDocument(createViewUsingForm(preparedForm)).text()
       text should include(messages("registeredAddressForEori.title"))
       text should include(messages("registeredAddressForEori.heading", "eori-789012"))
       text should include(messages("registeredAddressForEori.note"))

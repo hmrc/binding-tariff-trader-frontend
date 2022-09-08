@@ -58,25 +58,21 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
 
   private def assertHeading: Int => Unit = { n: Int =>
     val rulingForm = new AddAnotherRulingFormProvider
-    val htmlView = asDocument(createViewWithForm(form, generateRulings(n)))
+    val htmlView   = asDocument(createViewWithForm(form, generateRulings(n)))
 
     val headings = htmlView.getElementsByTag("h1")
     assert(headings.size() == 1)
     val heading = headings.first().ownText()
 
     if (n == 1) {
-      assert(heading == messages(s"${messageKeyPrefix}.addRulingCounter.singular", n))
+      assert(heading == messages(s"$messageKeyPrefix.addRulingCounter.singular", n))
     } else if (n > 1) {
-      assert(heading == messages(s"${messageKeyPrefix}.addRulingCounter.plural", n))
+      assert(heading == messages(s"$messageKeyPrefix.addRulingCounter.plural", n))
     } else {
-      assert(heading == messages(s"${messageKeyPrefix}.heading"))
+      assert(heading == messages(s"$messageKeyPrefix.heading"))
     }
   }
 
-  private def generateRulings(number: Int): List[String] = {
-    (1 to number).map { idx =>
-      s"ruling$idx"
-    }
-      .toList
-  }
+  private def generateRulings(number: Int): List[String] =
+    (1 to number).map(idx => s"ruling$idx").toList
 }

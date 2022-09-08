@@ -26,7 +26,7 @@ import utils.JsonFormatters.caseAuditPayloadFormat
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
+class AuditService @Inject() (auditConnector: DefaultAuditConnector) {
 
   // TODO: TxM would like also the upscan file reference for each
   def auditBTIApplicationSubmissionSuccessful(c: Case)(implicit hc: HeaderCarrier): Unit = {
@@ -36,8 +36,7 @@ class AuditService @Inject()(auditConnector: DefaultAuditConnector) {
 
 }
 
-case class CaseAuditPayload
-(
+case class CaseAuditPayload(
   caseReference: String,
   application: Application
 )

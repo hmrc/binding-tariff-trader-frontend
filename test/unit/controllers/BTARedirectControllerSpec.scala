@@ -32,24 +32,25 @@ import scala.concurrent.Future
 class BTARedirectControllerSpec extends ControllerSpecBase {
 
   val btaUserService: BTAUserService = mock[BTAUserService]
-  val cacheMap = new CacheMap("testId", Map.empty)
-  val testHost = "testHost"
-  val testUrl = s"$testHost/business-account"
+  val cacheMap                       = new CacheMap("testId", Map.empty)
+  val testHost                       = "testHost"
+  val testUrl                        = s"$testHost/business-account"
 
   lazy val btaApp: Application = GuiceApplicationBuilder()
     .configure(
-      "metrics.jvm" -> false,
-      "metrics.enabled" -> false,
+      "metrics.jvm"               -> false,
+      "metrics.enabled"           -> false,
       "toggle.samplesNotAccepted" -> false,
-      "business-tax-account.host" -> testHost)
+      "business-tax-account.host" -> testHost
+    )
     .overrides(
       bind[IdentifierAction].toInstance(FakeIdentifierAction),
       bind[BTAUserService].toInstance(btaUserService)
-    ).build()
+    )
+    .build()
 
-  override def beforeEach(): Unit = {
+  override def beforeEach(): Unit =
     reset(btaUserService)
-  }
 
   val controller: BTARedirectController = btaApp.injector.instanceOf[BTARedirectController]
 
@@ -61,7 +62,9 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
         val result = controller.applicationsAndRulings(request)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url)
+        redirectLocation(result) shouldBe Some(
+          routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url
+        )
       }
     }
 
@@ -71,7 +74,7 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
         when(btaUserService.save(request.identifier)).thenReturn(Future.failed(new RuntimeException))
         val result = controller.applicationsAndRulings(request)
 
-        status(result) shouldBe SEE_OTHER
+        status(result)           shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
       }
     }
@@ -84,7 +87,7 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
         when(btaUserService.save(request.identifier)).thenReturn(Future.successful(cacheMap))
         val result = controller.informationYouNeed(request)
 
-        status(result) shouldBe SEE_OTHER
+        status(result)           shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
       }
     }
@@ -95,7 +98,7 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
         when(btaUserService.save(request.identifier)).thenReturn(Future.failed(new RuntimeException))
         val result = controller.informationYouNeed(request)
 
-        status(result) shouldBe SEE_OTHER
+        status(result)           shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
       }
     }
@@ -115,7 +118,7 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
           when(btaUserService.remove(request.identifier)).thenReturn(data._2())
           val result = controller.redirectToBTA(request)
 
-          status(result) shouldBe SEE_OTHER
+          status(result)           shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(testUrl)
         }
       }

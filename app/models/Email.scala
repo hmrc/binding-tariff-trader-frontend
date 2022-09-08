@@ -23,20 +23,20 @@ sealed trait Email[T] {
   val to: Seq[String]
   val templateId: String
   val parameters: T // Must render to JSON as a Map[String, String]
-  val force: Boolean = false
-  val eventUrl: Option[String] = None
+  val force: Boolean            = false
+  val eventUrl: Option[String]  = None
   val onSendUrl: Option[String] = None
 }
 
 object Email {
   implicit val format: Format[Email[_]] =
-    Union.from[Email[_]]("templateId")
-    .and[ApplicationSubmittedEmail](EmailType.APPLICATION_SUBMITTED.toString)
-    .format
+    Union
+      .from[Email[_]]("templateId")
+      .and[ApplicationSubmittedEmail](EmailType.APPLICATION_SUBMITTED.toString)
+      .format
 }
 
-case class ApplicationSubmittedEmail
-(
+case class ApplicationSubmittedEmail(
   override val to: Seq[String],
   override val parameters: ApplicationSubmittedParameters
 ) extends Email[ApplicationSubmittedParameters] {
@@ -47,8 +47,7 @@ object ApplicationSubmittedEmail {
   implicit val format: OFormat[ApplicationSubmittedEmail] = Json.format[ApplicationSubmittedEmail]
 }
 
-case class ApplicationSubmittedParameters
-(
+case class ApplicationSubmittedParameters(
   recipientName_line1: String, // The full name of the recipient. Must match hrmc-email-renderer SalutationHelper param name.
   reference: String
 )
@@ -57,9 +56,8 @@ object ApplicationSubmittedParameters {
   implicit val format: OFormat[ApplicationSubmittedParameters] = Json.format[ApplicationSubmittedParameters]
 }
 
-
 object EmailType extends Enumeration {
   type EmailType = Value
-  val APPLICATION_SUBMITTED: EmailType.Value = Value("digital_tariffs_application_submitted")
+  val APPLICATION_SUBMITTED: EmailType.Value   = Value("digital_tariffs_application_submitted")
   implicit val format: Format[EmailType.Value] = Format(Reads.enumNameReads(EmailType), Writes.enumNameWrites)
 }

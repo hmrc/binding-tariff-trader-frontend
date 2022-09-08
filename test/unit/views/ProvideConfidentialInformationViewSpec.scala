@@ -28,7 +28,8 @@ import views.html.provideConfidentialInformation
 
 class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
 
-  val provideConfidentialInformationView: provideConfidentialInformation = injector.instanceOf[provideConfidentialInformation]
+  val provideConfidentialInformationView: provideConfidentialInformation =
+    injector.instanceOf[provideConfidentialInformation]
 
   val messageKeyPrefix: String = "provideConfidentialInformation"
 
@@ -40,11 +41,12 @@ class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
 
   val goodsName = "shoos"
 
-  def createView: () => Html = () => provideConfidentialInformationView(
-    frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  def createView: () => Html =
+    () => provideConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm: Form[String] => Html = (form: Form[String]) =>
-    provideConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  def createViewUsingForm: Form[String] => Html =
+    (form: Form[String]) =>
+      provideConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   "ProvideConfidentialInformation view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()
@@ -61,7 +63,9 @@ class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
 
     "not allow unescaped HTML" in {
       val xss = "<script>alert('foo');</script>"
-      val doc = asDocument(provideConfidentialInformationView(frontendAppConfig, form, xss, NormalMode)(fakeGETRequest, messages))
+      val doc = asDocument(
+        provideConfidentialInformationView(frontendAppConfig, form, xss, NormalMode)(fakeGETRequest, messages)
+      )
       val scriptTag = doc.getElementsByAttributeValue("for", formElementId).select("script").first
       Option(scriptTag) shouldBe None
     }

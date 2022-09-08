@@ -41,17 +41,17 @@ import scala.concurrent.duration.{Duration, DurationInt}
 
 class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfterAll with MongoSupport { self =>
 
-  val lockId        = "lockId"
-  val ttl: Duration = 1000.millis
+  val lockId                          = "lockId"
+  val ttl: Duration                   = 1000.millis
   val repository: MongoLockRepository = mock[MongoLockRepository]
 
   //val lockRepoProvider = new LockRepoProvider(repository)
 
-  val now: Instant = Instant.now()
-  val clock: Clock = Clock.fixed(now, ZoneOffset.UTC)
+  val now: Instant              = Instant.now()
+  val clock: Clock              = Clock.fixed(now, ZoneOffset.UTC)
   val caseService: CasesService = mock[CasesService]
-  val fileService: FileService = mock[FileService]
-  val pdfService: PdfService = mock[PdfService]
+  val fileService: FileService  = mock[FileService]
+  val pdfService: PdfService    = mock[PdfService]
 
   val configuredApp: GuiceApplicationBuilder => GuiceApplicationBuilder =
     _.configure(
@@ -77,13 +77,19 @@ class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
     )
 
   def attachmentUpdate(id: String): CaseUpdate = CaseUpdate(
-    application = Some(ApplicationUpdate(
-      applicationPdf = SetValue(Some(Attachment(
-        id = id,
-        public = false,
-        timestamp = ZonedDateTime.ofInstant(now, ZoneOffset.UTC)
-      )))
-    ))
+    application = Some(
+      ApplicationUpdate(
+        applicationPdf = SetValue(
+          Some(
+            Attachment(
+              id        = id,
+              public    = false,
+              timestamp = ZonedDateTime.ofInstant(now, ZoneOffset.UTC)
+            )
+          )
+        )
+      )
+    )
   )
 
   val exampleCases: ListMap[String, Case] = ListMap(

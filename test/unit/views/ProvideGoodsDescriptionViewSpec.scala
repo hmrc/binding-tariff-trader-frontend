@@ -30,7 +30,7 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix: String = "provideGoodsDescription"
 
-  val goodsName: String = "goods Name"
+  val goodsName: String  = "goods Name"
   val form: Form[String] = new ProvideGoodsDescriptionFormProvider()()
 
   val formElementId: String = "goodsDescription"
@@ -39,11 +39,12 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
 
   val provideGoodsDescriptionView: provideGoodsDescription = app.injector.instanceOf[provideGoodsDescription]
 
-  def createView: () => Html = () =>
-    provideGoodsDescriptionView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  def createView: () => Html =
+    () => provideGoodsDescriptionView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm: Form[String] => Html = (form: Form[String]) =>
-    provideGoodsDescriptionView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  def createViewUsingForm: Form[String] => Html =
+    (form: Form[String]) =>
+      provideGoodsDescriptionView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   "ProvideGoodsDescription view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()
@@ -60,7 +61,8 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
 
     "not allow unescaped HTML" in {
       val xss = "<script>alert('foo');</script>"
-      val doc = asDocument(provideGoodsDescriptionView(frontendAppConfig, form, xss, NormalMode)(fakeGETRequest, messages))
+      val doc =
+        asDocument(provideGoodsDescriptionView(frontendAppConfig, form, xss, NormalMode)(fakeGETRequest, messages))
       val scriptTag = doc.getElementsByAttributeValue("for", formElementId).select("script").first
       Option(scriptTag) shouldBe None
     }

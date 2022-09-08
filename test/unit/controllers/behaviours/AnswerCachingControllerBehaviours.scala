@@ -17,31 +17,33 @@
 package controllers
 package behaviours
 
-import controllers.actions.{ DataRetrievalAction, FakeDataRetrievalAction }
+import controllers.actions.{DataRetrievalAction, FakeDataRetrievalAction}
 import controllers.routes
 import models.NormalMode
 import play.api.data.Form
-import play.api.libs.json.{ Format, Json, JsValue }
-import play.api.mvc.{ Call, Request }
+import play.api.libs.json.{Format, JsValue, Json}
+import play.api.mvc.{Call, Request}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import models.UserAnswers
 import controllers.actions.DataRetrievalActionImpl
 
-trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControllerBehaviours { self: ControllerSpecBase =>
+trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControllerBehaviours {
+  self: ControllerSpecBase =>
+
   /**
-   * Test the behaviour of a [[controllers.ListEditingController]]
-   *
-   * @param controller A function to create the controller to test
-   * @param onwardRoute The route to navigate to on Navigator#nextPage calls
-   * @param createView A function to create the expected view
-   * @param backgroundData The background user answers data
-   * @param invalidFormData A sample of invalid form data
-   * @param validFormData A list of valid form data for submission
-   * @param expectedUserAnswers A list of the expected [[models.UserAnswers]] after each form submission
-   * @param validEditFormData A list of indices in the user answers along with valid form data to edit the submitted answers
-   * @param expectedEditedAnswers A list of the expected [[models.UserAnswers]] after each edit form submission
-   */
+    * Test the behaviour of a [[controllers.ListEditingController]]
+    *
+    * @param controller A function to create the controller to test
+    * @param onwardRoute The route to navigate to on Navigator#nextPage calls
+    * @param createView A function to create the expected view
+    * @param backgroundData The background user answers data
+    * @param invalidFormData A sample of invalid form data
+    * @param validFormData A list of valid form data for submission
+    * @param expectedUserAnswers A list of the expected [[models.UserAnswers]] after each form submission
+    * @param validEditFormData A list of indices in the user answers along with valid form data to edit the submitted answers
+    * @param expectedEditedAnswers A list of the expected [[models.UserAnswers]] after each edit form submission
+    */
   def listEditingController[A: Format](
     controller: DataRetrievalAction => AccumulatingEditingController[List[A], A, Int],
     onwardRoute: Call,
@@ -52,7 +54,7 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
     expectedUserAnswers: List[UserAnswers],
     validEditFormData: List[(Int, Map[String, String])],
     expectedEditedAnswers: List[UserAnswers]
-  ): Unit = {
+  ): Unit =
     behave like accumulatingEditingController(
       controller,
       onwardRoute,
@@ -64,21 +66,20 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
       validEditFormData,
       expectedEditedAnswers
     )
-  }
 
   /**
-   * Test the behaviour of a [[controllers.AccumulatingEditingController]]
-   *
-   * @param controller A function to create the controller to test
-   * @param onwardRoute The route to navigate to on Navigator#nextPage calls
-   * @param createView A function to create the expected view
-   * @param backgroundData The background user answers data
-   * @param invalidFormData A sample of invalid form data
-   * @param validFormData A list of valid form data for submission
-   * @param expectedUserAnswers A list of the expected [[models.UserAnswers]] after each form submission
-   * @param validEditFormData A list of indices in the user answers along with valid form data to edit the submitted answers
-   * @param expectedEditedAnswers A list of the expected [[models.UserAnswers]] after each edit form submission
-   */
+    * Test the behaviour of a [[controllers.AccumulatingEditingController]]
+    *
+    * @param controller A function to create the controller to test
+    * @param onwardRoute The route to navigate to on Navigator#nextPage calls
+    * @param createView A function to create the expected view
+    * @param backgroundData The background user answers data
+    * @param invalidFormData A sample of invalid form data
+    * @param validFormData A list of valid form data for submission
+    * @param expectedUserAnswers A list of the expected [[models.UserAnswers]] after each form submission
+    * @param validEditFormData A list of indices in the user answers along with valid form data to edit the submitted answers
+    * @param expectedEditedAnswers A list of the expected [[models.UserAnswers]] after each edit form submission
+    */
   def accumulatingEditingController[F <: TraversableOnce[A]: Format, A: Format, I](
     controller: DataRetrievalAction => AccumulatingEditingController[F, A, I],
     onwardRoute: Call,
@@ -105,13 +106,13 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
     "update edited data in the user answers" in {
       validEditFormData.zip(expectedEditedAnswers).foreach {
         case ((index, formData), userAnswers) =>
-          val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(formData.toSeq: _*)
+          val postRequest    = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(formData.toSeq: _*)
           val cacheConnector = noDataController.dataCacheConnector
 
           val controllerWithData = controller(new DataRetrievalActionImpl(cacheConnector))
-          val result = controllerWithData.onEditSubmit(index, NormalMode)(postRequest)
+          val result             = controllerWithData.onEditSubmit(index, NormalMode)(postRequest)
 
-          status(result) shouldBe SEE_OTHER
+          status(result)           shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(onwardRoute.url)
 
           await(cacheConnector.fetch(cacheMapId)).map(UserAnswers(_)) shouldBe Some(userAnswers)
@@ -122,6 +123,7 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
 }
 
 trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBehaviours { self: ControllerSpecBase =>
+
   /**
     * Test the behaviour of a [[controllers.ListCachingController]]
     *
@@ -141,7 +143,7 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
     invalidFormData: Map[String, String],
     validFormData: List[Map[String, String]],
     expectedUserAnswers: List[UserAnswers]
-  ): Unit = {
+  ): Unit =
     behave like accumulatingCachingController[List[A], A](
       controller,
       onwardRoute,
@@ -151,7 +153,6 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
       validFormData,
       expectedUserAnswers
     )
-  }
 
   /**
     * Test the behaviour of a [[controllers.MapCachingController]]
@@ -172,7 +173,7 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
     invalidFormData: Map[String, String],
     validFormData: List[Map[String, String]],
     expectedUserAnswers: List[UserAnswers]
-  ): Unit = {
+  ): Unit =
     behave like accumulatingCachingController[Map[String, A], (String, A)](
       controller,
       onwardRoute,
@@ -182,7 +183,6 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
       validFormData,
       expectedUserAnswers
     )
-  }
 
   /**
     * Test the behaviour of a [[controllers.AccumulatingCachingController]]
@@ -210,12 +210,12 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
 
       val controllerWithData = controller(getRelevantData)
-      val request = fakeGETRequestWithCSRF
-      val result = controllerWithData.onPageLoad(NormalMode)(request)
-      val form = controllerWithData.form
-      val submitAction = controllerWithData.submitAction(NormalMode)
+      val request            = fakeGETRequestWithCSRF
+      val result             = controllerWithData.onPageLoad(NormalMode)(request)
+      val form               = controllerWithData.form
+      val submitAction       = controllerWithData.submitAction(NormalMode)
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) shouldBe createView(form, submitAction, request)
     }
 
@@ -223,9 +223,9 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
       val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(validFormData.head.toSeq: _*)
 
       val controllerWithData = controller(getEmptyCacheMap)
-      val result = controllerWithData.onSubmit(NormalMode)(postRequest)
+      val result             = controllerWithData.onSubmit(NormalMode)(postRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
@@ -233,26 +233,26 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
 
       val controllerWithData = controller(getRelevantData)
-      val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(invalidFormData.toSeq: _*)
-      val boundForm = controllerWithData.form.bind(invalidFormData)
-      val submitAction = controllerWithData.submitAction(NormalMode)
+      val postRequest        = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(invalidFormData.toSeq: _*)
+      val boundForm          = controllerWithData.form.bind(invalidFormData)
+      val submitAction       = controllerWithData.submitAction(NormalMode)
 
       val result = controllerWithData.onSubmit(NormalMode)(postRequest)
 
-      status(result) shouldBe BAD_REQUEST
+      status(result)          shouldBe BAD_REQUEST
       contentAsString(result) shouldBe createView(boundForm, submitAction, postRequest)
     }
 
     "accumulate valid data into the user answers" in {
       validFormData.zip(expectedUserAnswers).foreach {
         case (formData, userAnswers) =>
-          val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(formData.toSeq: _*)
+          val postRequest    = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(formData.toSeq: _*)
           val cacheConnector = noDataController.dataCacheConnector
 
           val controllerWithData = controller(new DataRetrievalActionImpl(cacheConnector))
-          val result = controllerWithData.onSubmit(NormalMode)(postRequest)
+          val result             = controllerWithData.onSubmit(NormalMode)(postRequest)
 
-          status(result) shouldBe SEE_OTHER
+          status(result)           shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(onwardRoute.url)
 
           await(cacheConnector.fetch(cacheMapId)).map(UserAnswers(_)) shouldBe Some(userAnswers)
@@ -262,15 +262,15 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
     "redirect to Session Expired for a GET if no existing data is found" in {
       val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
-      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
+      val result      = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
   }
@@ -281,7 +281,7 @@ trait YesNoCachingControllerBehaviours extends AnswerCachingControllerBehaviours
     controller: DataRetrievalAction => AnswerCachingController[Boolean],
     onwardRoute: Call,
     createView: (Form[Boolean], Request[_]) => String,
-    formField: String = "value",
+    formField: String                    = "value",
     backgroundData: Map[String, JsValue] = Map.empty
   ) = {
     behave like answerCachingController(
@@ -296,32 +296,32 @@ trait YesNoCachingControllerBehaviours extends AnswerCachingControllerBehaviours
 
     "redirect to the next page when Yes is submitted" in {
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
-      val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody((formField, "true"))
+      val postRequest     = fakePOSTRequestWithCSRF.withFormUrlEncodedBody((formField, "true"))
 
       val result = controller(getRelevantData).onSubmit(NormalMode)(postRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "redirect to the next page when No is submitted" in {
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
-      val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody((formField, "false"))
+      val postRequest     = fakePOSTRequestWithCSRF.withFormUrlEncodedBody((formField, "false"))
 
       val result = controller(getRelevantData).onSubmit(NormalMode)(postRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "show error when submitted without answering yes/no" in {
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
-      val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody((formField, ""))
+      val postRequest     = fakePOSTRequestWithCSRF.withFormUrlEncodedBody((formField, ""))
 
       val controllerWithData = controller(getRelevantData)
-      val result = controllerWithData.onSubmit(NormalMode)(postRequest)
+      val result             = controllerWithData.onSubmit(NormalMode)(postRequest)
 
-      status(result) shouldBe BAD_REQUEST
+      status(result)          shouldBe BAD_REQUEST
       contentAsString(result) should include(s"error-message-$formField-input")
     }
   }
@@ -343,23 +343,23 @@ trait AnswerCachingControllerBehaviours { self: ControllerSpecBase =>
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
 
       val controllerWithData = controller(getRelevantData)
-      val request = fakeGETRequestWithCSRF
-      val result = controllerWithData.onPageLoad(NormalMode)(request)
-      val form = controllerWithData.form
+      val request            = fakeGETRequestWithCSRF
+      val result             = controllerWithData.onPageLoad(NormalMode)(request)
+      val form               = controllerWithData.form
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) shouldBe createView(form, request)
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
       validAnswers.foreach { validAnswer =>
-        val validData = backgroundData + (noDataController.questionPage.toString -> Json.toJson(validAnswer))
+        val validData       = backgroundData + (noDataController.questionPage.toString -> Json.toJson(validAnswer))
         val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
         val controllerWithData = controller(getRelevantData)
-        val request = fakeGETRequestWithCSRF
-        val result = controllerWithData.onPageLoad(NormalMode)(request)
-        val form = controllerWithData.form
+        val request            = fakeGETRequestWithCSRF
+        val result             = controllerWithData.onPageLoad(NormalMode)(request)
+        val form               = controllerWithData.form
 
         contentAsString(result) shouldBe createView(form.fill(validAnswer), request)
       }
@@ -370,36 +370,36 @@ trait AnswerCachingControllerBehaviours { self: ControllerSpecBase =>
 
       val result = controller(getEmptyCacheMap).onSubmit(NormalMode)(postRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val validData = backgroundData + (noDataController.questionPage.toString -> Json.toJson(validAnswers.head))
+      val validData       = backgroundData + (noDataController.questionPage.toString -> Json.toJson(validAnswers.head))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val controllerWithData = controller(getRelevantData)
-      val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(invalidFormData.toSeq: _*)
-      val boundForm = controllerWithData.form.bind(invalidFormData)
+      val postRequest        = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(invalidFormData.toSeq: _*)
+      val boundForm          = controllerWithData.form.bind(invalidFormData)
 
       val result = controllerWithData.onSubmit(NormalMode)(postRequest)
 
-      status(result) shouldBe BAD_REQUEST
+      status(result)          shouldBe BAD_REQUEST
       contentAsString(result) shouldBe createView(boundForm, postRequest)
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
       val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "true"))
-      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
+      val result      = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
   }

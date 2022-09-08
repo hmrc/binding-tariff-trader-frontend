@@ -24,24 +24,34 @@ import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Res
 
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class ListEditingController[A](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[A])
-  extends AccumulatingEditingController[List[A], A, Int](cc) with ListAnswerEditing[A]
+abstract class ListEditingController[A](cc: MessagesControllerComponents)(
+  implicit ec: ExecutionContext,
+  format: Format[A]
+) extends AccumulatingEditingController[List[A], A, Int](cc)
+    with ListAnswerEditing[A]
 
-abstract class MapEditingController[V](cc: MessagesControllerComponents)(implicit ec: ExecutionContext, format: Format[V])
-  extends AccumulatingEditingController[Map[String, V], (String, V), String](cc) with MapAnswerEditing[String, V]
+abstract class MapEditingController[V](cc: MessagesControllerComponents)(
+  implicit ec: ExecutionContext,
+  format: Format[V]
+) extends AccumulatingEditingController[Map[String, V], (String, V), String](cc)
+    with MapAnswerEditing[String, V]
 
 abstract class AccumulatingEditingController[F <: TraversableOnce[A], A, I](
   cc: MessagesControllerComponents
-)(implicit ec: ExecutionContext, format: Format[F]) extends AccumulatingCachingController[F,A](cc) with AccumulatingAnswerEditing[F, A, I] {
+)(implicit ec: ExecutionContext, format: Format[F])
+    extends AccumulatingCachingController[F, A](cc)
+    with AccumulatingAnswerEditing[F, A, I] {
 
   def editSubmitAction(index: I, mode: Mode): Call
 
-  def onEditPageLoad(index: I, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request: DataRequest[_] =>
-    Ok(renderView(form, editSubmitAction(index, mode), mode))
+  def onEditPageLoad(index: I, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+    implicit request: DataRequest[_] => Ok(renderView(form, editSubmitAction(index, mode), mode))
   }
 
-  def onEditSubmit(index: I, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request: DataRequest[_] =>
-    val badRequest = (formWithErrors: Form[A]) => Future.successful(Results.BadRequest(renderView(formWithErrors, editSubmitAction(index, mode), mode)))
-    form.bindFromRequest().fold(badRequest, editAnswer(index, _, mode))
+  def onEditSubmit(index: I, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+    implicit request: DataRequest[_] =>
+      val badRequest = (formWithErrors: Form[A]) =>
+        Future.successful(Results.BadRequest(renderView(formWithErrors, editSubmitAction(index, mode), mode)))
+      form.bindFromRequest().fold(badRequest, editAnswer(index, _, mode))
   }
 }

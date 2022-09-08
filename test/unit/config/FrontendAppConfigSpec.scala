@@ -26,8 +26,8 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class FrontendAppConfigSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
-  private val configuration: Configuration = Configuration.from(Map.empty)
-  private val servicesConfig: ServicesConfig = app.injector.instanceOf[ServicesConfig]
+  private val configuration: Configuration         = Configuration.from(Map.empty)
+  private val servicesConfig: ServicesConfig       = app.injector.instanceOf[ServicesConfig]
   private val frontendAppConfig: FrontendAppConfig = new FrontendAppConfig(configuration, servicesConfig)
 
   "FrontendAppConfig" must {
@@ -36,7 +36,7 @@ class FrontendAppConfigSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
     }
 
     "throw an exception with a message if configuration is not defined" in {
-      intercept[Exception]{frontendAppConfig.loginUrl}.getMessage mustBe "Missing configuration key: urls.login"
+      intercept[Exception](frontendAppConfig.loginUrl).getMessage mustBe "Missing configuration key: urls.login"
     }
   }
 }

@@ -25,7 +25,7 @@ class ReturnSamplesFormProviderSpec extends BooleanFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "returnSamples.error.required"
 
     behave like booleanField(

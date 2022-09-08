@@ -25,7 +25,7 @@ import navigation.FakeNavigator
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import views.html.provideConfidentialInformation
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,10 +34,11 @@ class ProvideConfidentialInformationControllerSpec extends ControllerSpecBase wi
 
   def onwardRoute = Call("GET", "/foo")
 
-  val provideConfidentialInformationView: provideConfidentialInformation = injector.instanceOf[provideConfidentialInformation]
+  val provideConfidentialInformationView: provideConfidentialInformation =
+    injector.instanceOf[provideConfidentialInformation]
 
   val formProvider = new ProvideConfidentialInformationFormProvider()
-  val goodsName = "shoos"
+  val goodsName    = "shoos"
 
   def controller(dataRetrievalAction: DataRetrievalAction) =
     new ProvideConfidentialInformationController(
@@ -49,15 +50,16 @@ class ProvideConfidentialInformationControllerSpec extends ControllerSpecBase wi
       new DataRequiredActionImpl,
       formProvider,
       provideConfidentialInformationView,
-      cc)
+      cc
+    )
 
   def viewAsString(form: Form[_], request: Request[_]) =
     provideConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
-  val testAnswer = "answer"
-  val validFormData = Map("confidentialInformation" -> testAnswer)
+  val testAnswer      = "answer"
+  val validFormData   = Map("confidentialInformation" -> testAnswer)
   val invalidFormData = Map("confidentialInformation" -> "")
-  val backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+  val backgroundData  = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
 
   "ProvideConfidentialInformationController" must {
     behave like answerCachingController(

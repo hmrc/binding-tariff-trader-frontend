@@ -32,44 +32,46 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-
-case class DatedCacheMap(id: String,
-                         data: Map[String, JsValue],
-                         lastUpdated: DateTime = DateTime.now(DateTimeZone.UTC))
+case class DatedCacheMap(id: String, data: Map[String, JsValue], lastUpdated: DateTime = DateTime.now(DateTimeZone.UTC))
 
 object DatedCacheMap {
-  implicit val dateFormat: Format[DateTime] = MongoJodaFormats.dateTimeFormat
+  implicit val dateFormat: Format[DateTime]    = MongoJodaFormats.dateTimeFormat
   implicit val formats: OFormat[DatedCacheMap] = Json.format[DatedCacheMap]
 
   def apply(cacheMap: CacheMap): DatedCacheMap = DatedCacheMap(cacheMap.id, cacheMap.data)
 }
 
-class SessionRepository @Inject()(config: Configuration, mongo: MongoComponent)(implicit ec: ExecutionContext)
-  extends PlayMongoRepository[DatedCacheMap](
-    collectionName = config.get[String]("appName"),
-    mongoComponent = mongo,
-    domainFormat = DatedCacheMap.formats,
-    indexes = Seq(
-      IndexModel(ascending("lastUpdated"),
-        IndexOptions().name("userAnswersExpiry")
-          .expireAfter(config.get[Int]("mongodb.timeToLiveInSeconds"), TimeUnit.SECONDS))
-    )) {
+class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)(implicit ec: ExecutionContext)
+    extends PlayMongoRepository[DatedCacheMap](
+      collectionName = config.get[String]("appName"),
+      mongoComponent = mongo,
+      domainFormat   = DatedCacheMap.formats,
+      indexes = Seq(
+        IndexModel(
+          ascending("lastUpdated"),
+          IndexOptions()
+            .name("userAnswersExpiry")
+            .expireAfter(config.get[Int]("mongodb.timeToLiveInSeconds"), TimeUnit.SECONDS)
+        )
+      )
+    ) {
 
-  def upsert(cm: CacheMap): Future[Boolean] = {
-    collection.replaceOne(byId(cm.id), DatedCacheMap(cm), ReplaceOptions().upsert(true)).toFuture().map(_.wasAcknowledged())
-  }
+  def upsert(cm: CacheMap): Future[Boolean] =
+    collection
+      .replaceOne(byId(cm.id), DatedCacheMap(cm), ReplaceOptions().upsert(true))
+      .toFuture()
+      .map(_.wasAcknowledged())
 
-  def get(id: String): Future[Option[CacheMap]] = {
-    collection.find(byId(id)).first().toFutureOption()
-      .map(_.fold(None: Option[CacheMap]){ cacheMap => Some(CacheMap(cacheMap.id, cacheMap.data))})
-  }
+  def get(id: String): Future[Option[CacheMap]] =
+    collection
+      .find(byId(id))
+      .first()
+      .toFutureOption()
+      .map(_.fold(None: Option[CacheMap])(cacheMap => Some(CacheMap(cacheMap.id, cacheMap.data))))
 
-  def remove(cm: CacheMap): Future[Boolean] = {
+  def remove(cm: CacheMap): Future[Boolean] =
     collection.deleteOne(byId(cm.id)).toFuture().map(_.wasAcknowledged())
-  }
 
-  private def byId(value: String): Bson = {
+  private def byId(value: String): Bson =
     equal("id", value)
-  }
 }
-

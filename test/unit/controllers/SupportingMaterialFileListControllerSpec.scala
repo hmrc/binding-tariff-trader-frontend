@@ -25,7 +25,7 @@ import navigation.FakeNavigator
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import play.api.test.Helpers._
 import views.html.supportingMaterialFileList
 
@@ -39,11 +39,12 @@ import pages.AddSupportingDocumentsPage
 import play.api.libs.json.JsBoolean
 
 class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
-  private def onwardRoute = Call("GET", "/foo")
+  private def onwardRoute  = Call("GET", "/foo")
   private val formProvider = new SupportingMaterialFileListFormProvider()
-  private val goodsName = "some-goods-name"
+  private val goodsName    = "some-goods-name"
 
-  val supportingMaterialFileListView: supportingMaterialFileList = app.injector.instanceOf(classOf[supportingMaterialFileList])
+  val supportingMaterialFileListView: supportingMaterialFileList =
+    app.injector.instanceOf(classOf[supportingMaterialFileList])
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new SupportingMaterialFileListController(
@@ -60,14 +61,20 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
 
   // We will not use the provided form here - errors aside, the controller does not prepopulate the view
   private def viewAsString(form: Form[_], request: Request[_]): String =
-    supportingMaterialFileListView(frontendAppConfig, formProvider().copy(errors = form.errors), goodsName, Seq.empty, NormalMode)(request, messages).toString
+    supportingMaterialFileListView(
+      frontendAppConfig,
+      formProvider().copy(errors = form.errors),
+      goodsName,
+      Seq.empty,
+      NormalMode
+    )(request, messages).toString
 
   "SupportingMaterialFileListController" must {
     behave like yesNoCachingController(
       controller,
       onwardRoute,
       viewAsString,
-      formField = "add-file-choice",
+      formField      = "add-file-choice",
       backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
     )
 
@@ -75,19 +82,21 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       val deleteRequest = fakeRequest.withFormUrlEncodedBody(("id", "file-id"))
 
       val backgroundData = Map(
-        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        ProvideGoodsNamePage.toString       -> JsString(goodsName),
         AddSupportingDocumentsPage.toString -> JsBoolean(true),
-        UploadSupportingMaterialMultiplePage.toString -> JsArray(Seq(
-          Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
-        ))
+        UploadSupportingMaterialMultiplePage.toString -> JsArray(
+          Seq(
+            Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L))
+          )
+        )
       )
 
       val getData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
-      val result = controller(getData).onRemove("file-id-2", NormalMode)(deleteRequest)
+      val result  = controller(getData).onRemove("file-id-2", NormalMode)(deleteRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SupportingMaterialFileListController.onPageLoad(NormalMode).url)
     }
 
@@ -95,17 +104,19 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       val deleteRequest = fakeRequest.withFormUrlEncodedBody(("id", "file-id"))
 
       val backgroundData = Map(
-        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        ProvideGoodsNamePage.toString       -> JsString(goodsName),
         AddSupportingDocumentsPage.toString -> JsBoolean(true),
-        UploadSupportingMaterialMultiplePage.toString -> JsArray(Seq(
-          Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L))
-        ))
+        UploadSupportingMaterialMultiplePage.toString -> JsArray(
+          Seq(
+            Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L))
+          )
+        )
       )
 
       val getData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
-      val result = controller(getData).onRemove("file-id-1", NormalMode)(deleteRequest)
+      val result  = controller(getData).onRemove("file-id-1", NormalMode)(deleteRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.AddSupportingDocumentsController.onPageLoad(NormalMode).url)
     }
 
@@ -113,55 +124,61 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       val submitRequest = fakeRequest.withFormUrlEncodedBody(("add-file-choice", "true"))
 
       val backgroundData = Map(
-        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        ProvideGoodsNamePage.toString       -> JsString(goodsName),
         AddSupportingDocumentsPage.toString -> JsBoolean(true),
-        UploadSupportingMaterialMultiplePage.toString -> JsArray(Seq(
-          Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-4", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-5", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-6", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-7", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-8", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-9", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-10", "baz.jpg", "image/jpeg", 1L))
-        ))
+        UploadSupportingMaterialMultiplePage.toString -> JsArray(
+          Seq(
+            Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-4", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-5", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-6", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-7", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-8", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-9", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-10", "baz.jpg", "image/jpeg", 1L))
+          )
+        )
       )
 
-      val getData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
-      val result = controller(getData).onSubmit(NormalMode)(submitRequest)
+      val getData      = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
+      val result       = controller(getData).onSubmit(NormalMode)(submitRequest)
       val resultString = contentAsString(result)
 
       status(result) shouldBe BAD_REQUEST
-      resultString should include("error-message-add-file-choice-input")
-      resultString should include(messages("supportingMaterialFileList.error.numberFiles", appConfig.fileUploadMaxFiles))
+      resultString   should include("error-message-add-file-choice-input")
+      resultString should include(
+        messages("supportingMaterialFileList.error.numberFiles", appConfig.fileUploadMaxFiles)
+      )
     }
 
     "allows user to proceed after they've added the maximum number of uploads" in {
       val submitRequest = fakeRequest.withFormUrlEncodedBody(("add-file-choice", "false"))
 
       val backgroundData = Map(
-        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        ProvideGoodsNamePage.toString       -> JsString(goodsName),
         AddSupportingDocumentsPage.toString -> JsBoolean(true),
-        UploadSupportingMaterialMultiplePage.toString -> JsArray(Seq(
-          Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-4", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-5", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-6", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-7", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-8", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-9", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-10", "baz.jpg", "image/jpeg", 1L))
-        ))
+        UploadSupportingMaterialMultiplePage.toString -> JsArray(
+          Seq(
+            Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-4", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-5", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-6", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-7", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-8", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-9", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-10", "baz.jpg", "image/jpeg", 1L))
+          )
+        )
       )
 
       val getData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
-      val result = controller(getData).onSubmit(NormalMode)(submitRequest)
+      val result  = controller(getData).onSubmit(NormalMode)(submitRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
     }
 
@@ -169,61 +186,69 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       val submitRequest = fakeRequest.withFormUrlEncodedBody(("add-file-choice", "false"))
 
       val backgroundData = Map(
-        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        ProvideGoodsNamePage.toString       -> JsString(goodsName),
         AddSupportingDocumentsPage.toString -> JsBoolean(true),
-        UploadSupportingMaterialMultiplePage.toString -> JsArray(Seq(
-          Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-4", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-5", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-6", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-7", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-8", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-9", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-10", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-11", "baz.jpg", "image/jpeg", 1L))
-        ))
+        UploadSupportingMaterialMultiplePage.toString -> JsArray(
+          Seq(
+            Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-4", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-5", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-6", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-7", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-8", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-9", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-10", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-11", "baz.jpg", "image/jpeg", 1L))
+          )
+        )
       )
 
-      val getData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
-      val result = controller(getData).onSubmit(NormalMode)(submitRequest)
+      val getData      = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
+      val result       = controller(getData).onSubmit(NormalMode)(submitRequest)
       val resultString = contentAsString(result)
 
       status(result) shouldBe BAD_REQUEST
-      resultString should include("error-message-add-file-choice-input")
-      resultString should include(messages("supportingMaterialFileList.error.numberFiles", appConfig.fileUploadMaxFiles))
+      resultString   should include("error-message-add-file-choice-input")
+      resultString should include(
+        messages("supportingMaterialFileList.error.numberFiles", appConfig.fileUploadMaxFiles)
+      )
     }
 
     "show both error messages when the user exceeds max files and doesn't answer the question" in {
       val submitRequest = fakeRequest.withFormUrlEncodedBody(("add-file-choice", ""))
 
       val backgroundData = Map(
-        ProvideGoodsNamePage.toString -> JsString(goodsName),
+        ProvideGoodsNamePage.toString       -> JsString(goodsName),
         AddSupportingDocumentsPage.toString -> JsBoolean(true),
-        UploadSupportingMaterialMultiplePage.toString -> JsArray(Seq(
-          Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-4", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-5", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-6", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-7", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-8", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-9", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-10", "baz.jpg", "image/jpeg", 1L)),
-          Json.toJson(FileAttachment("file-id-11", "baz.jpg", "image/jpeg", 1L))
-        ))
+        UploadSupportingMaterialMultiplePage.toString -> JsArray(
+          Seq(
+            Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-4", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-5", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-6", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-7", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-8", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-9", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-10", "baz.jpg", "image/jpeg", 1L)),
+            Json.toJson(FileAttachment("file-id-11", "baz.jpg", "image/jpeg", 1L))
+          )
+        )
       )
 
-      val getData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
-      val result = controller(getData).onSubmit(NormalMode)(submitRequest)
+      val getData      = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
+      val result       = controller(getData).onSubmit(NormalMode)(submitRequest)
       val resultString = contentAsString(result)
 
       status(result) shouldBe BAD_REQUEST
-      resultString should include("error-message-add-file-choice-input")
-      resultString should include(messages("supportingMaterialFileList.error.required"))
-      resultString should include(messages("supportingMaterialFileList.error.numberFiles", appConfig.fileUploadMaxFiles))
+      resultString   should include("error-message-add-file-choice-input")
+      resultString   should include(messages("supportingMaterialFileList.error.required"))
+      resultString should include(
+        messages("supportingMaterialFileList.error.numberFiles", appConfig.fileUploadMaxFiles)
+      )
     }
   }
 

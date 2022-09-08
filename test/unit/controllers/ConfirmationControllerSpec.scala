@@ -35,21 +35,20 @@ import scala.concurrent.Future
 
 class ConfirmationControllerSpec extends ControllerSpecBase {
 
-  private val cache = mock[DataCacheConnector]
-  private val cacheMap = mock[CacheMap]
-  private val pdfService = mock[PdfService]
-  private val pdfViewModel = oCase.pdf
-  private val countriesService = new CountriesService
-  private val btaUserService = mock[BTAUserService]
+  private val cache             = mock[DataCacheConnector]
+  private val cacheMap          = mock[CacheMap]
+  private val pdfService        = mock[PdfService]
+  private val pdfViewModel      = oCase.pdf
+  private val countriesService  = new CountriesService
+  private val btaUserService    = mock[BTAUserService]
   private val applicationConfig = mock[FrontendAppConfig]
 
-  override def beforeEach(): Unit = {
+  override def beforeEach(): Unit =
     reset(cache, cacheMap, pdfService, btaUserService, applicationConfig)
-  }
 
   val confirmationView: confirmation = app.injector.instanceOf(classOf[confirmation])
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController = {
+  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController =
     new ConfirmationController(
       applicationConfig,
       FakeIdentifierAction,
@@ -62,12 +61,16 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
       cc,
       confirmationView
     )
-  }
 
-  private def viewAsString: String = {
-    confirmationView(applicationConfig, Confirmation("ref", "eori", "marisa@example.test"), "token", pdfViewModel, _ => Some(""),
-      urlViewModel = ConfirmationHomeUrlViewModel)(fakeRequest, messages).toString
-  }
+  private def viewAsString: String =
+    confirmationView(
+      applicationConfig,
+      Confirmation("ref", "eori", "marisa@example.test"),
+      "token",
+      pdfViewModel,
+      _ => Some(""),
+      urlViewModel = ConfirmationHomeUrlViewModel
+    )(fakeRequest, messages).toString
 
   "Confirmation Controller" must {
 
@@ -75,7 +78,8 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
       val fakeRequest = fakeRequestWithNotOptionalEoriAndCache
 
       given(cache.remove(cacheMap)).willReturn(Future.successful(true))
-      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
+      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString))
+        .willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
       given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdfViewModel))
       given(pdfService.encodeToken("eori")).willReturn("token")
       given(btaUserService.isBTAUser(fakeRequest.internalId)).willReturn(false)
@@ -83,7 +87,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
 
       val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
 
-      status(result) shouldBe OK
+      status(result)          shouldBe OK
       contentAsString(result) shouldBe viewAsString
       verify(cache).remove(cacheMap)
     }
@@ -93,13 +97,13 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
 
       val result = controller().onPageLoad(fakeRequest)
 
-      status(result) shouldBe SEE_OTHER
+      status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
 
     val errorScenarios = List(
-        ("isBTAUser", () => Future.failed(new RuntimeException(" Fetch Error"))),
-        ("remove", () => Future.successful(true))
+      ("isBTAUser", () => Future.failed(new RuntimeException(" Fetch Error"))),
+      ("remove", () => Future.successful(true))
     )
 
     "redirect to an error page" when {
@@ -108,13 +112,14 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
           val fakeRequest = fakeRequestWithNotOptionalEoriAndCache
 
           given(cache.remove(cacheMap)).willReturn(Future.successful(true))
-          given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
+          given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString))
+            .willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
           given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdfViewModel))
           given(btaUserService.isBTAUser(fakeRequest.internalId)).willReturn(data._2())
 
           val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
 
-          status(result) shouldBe SEE_OTHER
+          status(result)           shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
         }
       }

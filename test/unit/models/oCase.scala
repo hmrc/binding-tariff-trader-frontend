@@ -23,9 +23,12 @@ import viewmodels.{FileView, PdfViewModel}
 
 object oCase {
   val fileAttachment = Attachment(id = UUID.randomUUID().toString, false)
-  val eoriDetailsExample = EORIDetails("eoriTrader", "Trader Business Name", "line1", "line2", "line3", "postcode", "country")
-  val eoriAgentDetailsExample = AgentDetails(EORIDetails("eoriAgent", "Agent Business Name", "line1", "line2", "line3", "postcode", "country"),
-    Some(fileAttachment))
+  val eoriDetailsExample =
+    EORIDetails("eoriTrader", "Trader Business Name", "line1", "line2", "line3", "postcode", "country")
+  val eoriAgentDetailsExample = AgentDetails(
+    EORIDetails("eoriAgent", "Agent Business Name", "line1", "line2", "line3", "postcode", "country"),
+    Some(fileAttachment)
+  )
   val contactExample = Contact("name", "email", Some("phone"))
   val btiApplicationExample = Application(
     "BTI",
@@ -42,36 +45,74 @@ object oCase {
     None,
     None,
     sampleToBeProvided = false,
-    sampleIsHazardous = None,
+    sampleIsHazardous  = None,
     sampleToBeReturned = false,
-    applicationPdf = Some(Attachment("id", false))
+    applicationPdf     = Some(Attachment("id", false))
   )
 
-  def decisionExample(exp: Option[String] = Some("This is some explanation")) = {
+  def decisionExample(exp: Option[String] = Some("This is some explanation")) =
     Decision(
-      bindingCommodityCode = "commodity-code-123",
-      effectiveStartDate = Some(Instant.now),
-      effectiveEndDate = Some(Instant.now),
-      justification = "justification-content",
-      goodsDescription = "goodsDescription-content",
+      bindingCommodityCode         = "commodity-code-123",
+      effectiveStartDate           = Some(Instant.now),
+      effectiveEndDate             = Some(Instant.now),
+      justification                = "justification-content",
+      goodsDescription             = "goodsDescription-content",
       methodCommercialDenomination = Some("commercial-denomination-content"),
-      explanation = exp,
-      decisionPdf = Some(Attachment("id", false)),
-      letterPdf = Some(Attachment("id", false))
+      explanation                  = exp,
+      decisionPdf                  = Some(Attachment("id", false)),
+      letterPdf                    = Some(Attachment("id", false))
     )
-  }
 
+  val btiCaseWithDecision = Case(
+    reference   = "ref",
+    status      = CaseStatus.COMPLETED,
+    application = btiApplicationExample,
+    decision    = Some(decisionExample())
+  )
+  val btiCaseWithDecisionNoExplanation = Case(
+    reference   = "ref",
+    status      = CaseStatus.COMPLETED,
+    application = btiApplicationExample,
+    decision    = Some(decisionExample(None))
+  )
 
-  val btiCaseWithDecision = Case(reference = "ref", status = CaseStatus.COMPLETED, application = btiApplicationExample, decision = Some(decisionExample()))
-  val btiCaseWithDecisionNoExplanation = Case(reference = "ref", status = CaseStatus.COMPLETED, application = btiApplicationExample, decision = Some(decisionExample(None)))
-
-  val btiCaseExample = Case(reference = "ref", status = CaseStatus.OPEN, application = btiApplicationExample)
+  val btiCaseExample    = Case(reference = "ref", status = CaseStatus.OPEN, application = btiApplicationExample)
   val newBtiCaseExample = NewCaseRequest(btiApplicationExample, Seq.empty)
-  val pdf = PdfViewModel("eori", "reference", eoriDetailsExample, contactExample, Instant.now, "goods name",
-    "goods details", Some("confidential info"), true, false, true, Seq(FileView("id", "file name", false)),
-    Some("commodity code"), Some("legal"), List(), None)
-  val pdfNoSamples = PdfViewModel("eori", "reference", eoriDetailsExample, contactExample, Instant.now, "goods name",
-    "goods details", Some("confidential info"), false, false, false, Seq(FileView("id", "file name", false)),
-    Some("commodity code"), Some("legal"), List(), None)
+  val pdf = PdfViewModel(
+    "eori",
+    "reference",
+    eoriDetailsExample,
+    contactExample,
+    Instant.now,
+    "goods name",
+    "goods details",
+    Some("confidential info"),
+    true,
+    false,
+    true,
+    Seq(FileView("id", "file name", false)),
+    Some("commodity code"),
+    Some("legal"),
+    List(),
+    None
+  )
+  val pdfNoSamples = PdfViewModel(
+    "eori",
+    "reference",
+    eoriDetailsExample,
+    contactExample,
+    Instant.now,
+    "goods name",
+    "goods details",
+    Some("confidential info"),
+    false,
+    false,
+    false,
+    Seq(FileView("id", "file name", false)),
+    Some("commodity code"),
+    Some("legal"),
+    List(),
+    None
+  )
 
 }

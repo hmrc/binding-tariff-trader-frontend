@@ -32,7 +32,7 @@ import views.html.makeFileConfidential
 
 import scala.concurrent.ExecutionContext
 
-class MakeFileConfidentialController @Inject()(
+class MakeFileConfidentialController @Inject() (
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
@@ -42,14 +42,17 @@ class MakeFileConfidentialController @Inject()(
   formProvider: MakeFileConfidentialFormProvider,
   cc: MessagesControllerComponents,
   makeFileConfidentialView: makeFileConfidential
-)(implicit ec: ExecutionContext) extends MapCachingController[Boolean](cc) {
+)(implicit ec: ExecutionContext)
+    extends MapCachingController[Boolean](cc) {
 
-  lazy val form: Form[(String, Boolean)] = formProvider()
+  lazy val form: Form[(String, Boolean)]          = formProvider()
   val questionPage: MakeFileConfidentialPage.type = MakeFileConfidentialPage
 
   override def submitAction(mode: Mode): Call = routes.MakeFileConfidentialController.onSubmit(mode)
 
-  def renderView(preparedForm: Form[(String, Boolean)], submitAction: Call, mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+  def renderView(preparedForm: Form[(String, Boolean)], submitAction: Call, mode: Mode)(
+    implicit request: DataRequest[_]
+  ): HtmlFormat.Appendable = {
     val fileId: String = request.userAnswers.get(UploadSupportingMaterialMultiplePage).map(_.last.id).get
     makeFileConfidentialView(appConfig, preparedForm, submitAction, mode, fileId)
   }

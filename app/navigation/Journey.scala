@@ -25,7 +25,11 @@ sealed abstract class Journey extends Product with Serializable {
 
 case class YesNoJourney(questionPage: QuestionPage[Boolean], detailPages: List[QuestionPage[_]]) extends Journey
 
-case class LoopingJourney(questionPage: QuestionPage[Boolean], detailPages: List[QuestionPage[_]], continuePage: QuestionPage[Boolean]) extends Journey
+case class LoopingJourney(
+  questionPage: QuestionPage[Boolean],
+  detailPages: List[QuestionPage[_]],
+  continuePage: QuestionPage[Boolean]
+) extends Journey
 
 object Journey {
   val confidentialInformation: YesNoJourney =
@@ -35,7 +39,11 @@ object Journey {
     YesNoJourney(AreYouSendingSamplesPage, List(IsSampleHazardousPage, ReturnSamplesPage))
 
   val supportingDocuments: LoopingJourney =
-    LoopingJourney(AddSupportingDocumentsPage, List(UploadSupportingMaterialMultiplePage, MakeFileConfidentialPage), SupportingMaterialFileListPage)
+    LoopingJourney(
+      AddSupportingDocumentsPage,
+      List(UploadSupportingMaterialMultiplePage, MakeFileConfidentialPage),
+      SupportingMaterialFileListPage
+    )
 
   val commodityCode: YesNoJourney =
     YesNoJourney(CommodityCodeBestMatchPage, List(CommodityCodeDigitsPage))

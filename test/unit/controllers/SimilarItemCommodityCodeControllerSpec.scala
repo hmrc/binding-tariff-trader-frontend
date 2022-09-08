@@ -23,7 +23,7 @@ import forms.SimilarItemCommodityCodeFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
 import play.api.data.Form
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import views.html.similarItemCommodityCode
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,7 +32,8 @@ class SimilarItemCommodityCodeControllerSpec extends ControllerSpecBase with Yes
 
   private val formProvider = new SimilarItemCommodityCodeFormProvider()
 
-  val similarItemCommodityCodeView: similarItemCommodityCode = app.injector.instanceOf(classOf[similarItemCommodityCode])
+  val similarItemCommodityCodeView: similarItemCommodityCode =
+    app.injector.instanceOf(classOf[similarItemCommodityCode])
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new SimilarItemCommodityCodeController(

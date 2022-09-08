@@ -63,7 +63,7 @@ class CaseRequestMapperTest extends SpecBase {
     "not fail but set sampleToBeProvided to false" when {
       "the toggle.samplesNotAccepted is set to true and AreYouSendingSamplesPage is removed" in {
         val mapperWithToggle = new CaseRequestMapper(frontendAppConfigWithToggle)
-        val response = mapperWithToggle.map(mandatoryAnswers().remove(AreYouSendingSamplesPage))
+        val response         = mapperWithToggle.map(mandatoryAnswers().remove(AreYouSendingSamplesPage))
 
         val application = response.application
 
@@ -81,32 +81,32 @@ class CaseRequestMapperTest extends SpecBase {
       val application = response.application
 
       val holder: EORIDetails = application.holder
-      holder.eori shouldBe "Trader EORI"
+      holder.eori         shouldBe "Trader EORI"
       holder.businessName shouldBe "Trader Business Name"
       holder.addressLine1 shouldBe "Trader Address Line 1"
       holder.addressLine2 shouldBe "Trader Town"
-      holder.postcode shouldBe "Trader Post Code"
-      holder.country shouldBe "Trader Country"
+      holder.postcode     shouldBe "Trader Post Code"
+      holder.country      shouldBe "Trader Country"
 
       val contact: Contact = application.contact
-      contact.name shouldBe "Name"
+      contact.name  shouldBe "Name"
       contact.email shouldBe "Email"
       contact.phone shouldBe Some("Tel No")
 
-      application.offline shouldBe false
-      application.goodName shouldBe "Good Name"
-      application.goodDescription shouldBe "Good Description"
+      application.offline            shouldBe false
+      application.goodName           shouldBe "Good Name"
+      application.goodDescription    shouldBe "Good Description"
       application.sampleToBeProvided shouldBe true
       application.sampleToBeReturned shouldBe false
 
       // Then optional Fields should be blank
-      application.agent shouldBe None
+      application.agent                   shouldBe None
       application.confidentialInformation shouldBe None
-      application.otherInformation shouldBe None
-      application.reissuedBTIReference shouldBe None
-      application.relatedBTIReferences shouldBe Nil
-      application.knownLegalProceedings shouldBe None
-      application.envisagedCommodityCode shouldBe None
+      application.otherInformation        shouldBe None
+      application.reissuedBTIReference    shouldBe None
+      application.relatedBTIReferences    shouldBe Nil
+      application.knownLegalProceedings   shouldBe None
+      application.envisagedCommodityCode  shouldBe None
     }
 
     "Map optional fields" in {
@@ -121,12 +121,12 @@ class CaseRequestMapperTest extends SpecBase {
       val application = response.application
 
       application.confidentialInformation shouldBe Some("confidential info")
-      application.reissuedBTIReference shouldBe Some("ref")
+      application.reissuedBTIReference    shouldBe Some("ref")
     }
   }
 
   // trader filling the form
-  def mandatoryAnswers(): UserAnswers = {
+  def mandatoryAnswers(): UserAnswers =
     UserAnswers(
       CacheMap(
         "id",
@@ -161,7 +161,6 @@ class CaseRequestMapperTest extends SpecBase {
         )
       )
     )
-  }
 
   def js[T](obj: T)(implicit writes: Writes[T]): JsValue = Json.toJson(obj)
 

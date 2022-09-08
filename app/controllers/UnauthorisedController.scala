@@ -23,14 +23,13 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.unauthorised
 
-class UnauthorisedController @Inject()(
-                                        val appConfig: FrontendAppConfig,
-                                        cc: MessagesControllerComponents,
-                                        unauthorisedView: unauthorised
-                                      ) extends FrontendController(cc) with I18nSupport {
+class UnauthorisedController @Inject() (
+  val appConfig: FrontendAppConfig,
+  cc: MessagesControllerComponents,
+  unauthorisedView: unauthorised
+) extends FrontendController(cc)
+    with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    Ok(unauthorisedView(appConfig))
-  }
+  def onPageLoad: Action[AnyContent] = Action(implicit request => Ok(unauthorisedView(appConfig)))
 
 }

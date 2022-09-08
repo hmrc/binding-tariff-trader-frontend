@@ -22,7 +22,7 @@ import unit.utils.UnitSpec
 class FileViewSpec extends UnitSpec {
 
   private val attachment = Attachment(id = "id1", public = true)
-  private val fileView = FileView(id = "id1", name = "name", confidential = false)
+  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
 
   "FileView" when {
     "fromAttachment" should {

@@ -22,19 +22,21 @@ import play.api.data.{Form, FormError}
 
 trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks {
 
-  protected def validEmailFieldWithMaxLength(form: Form[_],
-                                             fieldName: String,
-                                             maxLength: Int,
-                                             lengthError: FormError,
-                                             invalidEmailError: FormError): Unit = {
+  protected def validEmailFieldWithMaxLength(
+    form: Form[_],
+    fieldName: String,
+    maxLength: Int,
+    lengthError: FormError,
+    invalidEmailError: FormError
+  ): Unit = {
 
     s"not bind valid email addresses longer than $maxLength characters" in {
 
       // TODO: we should use ScalaCheck for testing this, but it is not trivial to generate valid email addresses
 
-      val s = "a123456789"
-      val usr = List.fill(6)(s).mkString
-      val domain = s"${List.fill(3)(s).mkString}.me.you.us"
+      val s                   = "a123456789"
+      val usr                 = List.fill(6)(s).mkString
+      val domain              = s"${List.fill(3)(s).mkString}.me.you.us"
       val tooLongEmailAddress = s"$usr@$domain"
       tooLongEmailAddress.length shouldBe maxLength + 1
 

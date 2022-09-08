@@ -1,6 +1,6 @@
 import play.sbt.routes.RoutesKeys
 import uk.gov.hmrc.DefaultBuildSettings
-import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, targetJvm, integrationTestSettings}
+import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, integrationTestSettings, targetJvm}
 import uk.gov.hmrc.gitstamp.GitStampPlugin._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
@@ -43,7 +43,8 @@ lazy val root = (project in file("."))
   .settings(
     Test / resourceDirectory := baseDirectory.value / "test" / "resources",
     addTestReportOption(Test, "test-reports")
-  ).settings(
+  )
+  .settings(
     TwirlKeys.templateImports ++= Seq(
       "uk.gov.hmrc.govukfrontend.views.html.components._",
       "uk.gov.hmrc.hmrcfrontend.views.html.components._",
@@ -59,3 +60,6 @@ coverageFailOnMinimum := true
 coverageHighlighting := true
 
 lazy val commonSettings: Seq[Setting[_]] = publishingSettings ++ gitStampSettings
+
+addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt test:scalafmt")
+addCommandAlias("scalastyleAll", "all scalastyle test:scalastyle")

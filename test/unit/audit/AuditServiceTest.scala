@@ -27,14 +27,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class AuditServiceTest extends SpecBase {
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
+  private implicit val hc: HeaderCarrier            = HeaderCarrier()
   private val auditConnector: DefaultAuditConnector = mock[DefaultAuditConnector]
 
   private val service = new AuditService(auditConnector)
 
   "BTI application submission auditing" should {
 
-    val aCase = oCase.btiCaseExample
+    val aCase     = oCase.btiCaseExample
     val auditJson = CaseAuditPayload(caseReference = aCase.reference, application = aCase.application)
 
     "call the audit connector as expected " in {

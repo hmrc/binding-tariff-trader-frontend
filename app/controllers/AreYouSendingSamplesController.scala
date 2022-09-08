@@ -33,7 +33,7 @@ import views.html.areYouSendingSamples
 
 import scala.concurrent.ExecutionContext
 
-class AreYouSendingSamplesController @Inject()(
+class AreYouSendingSamplesController @Inject() (
   appConfig: FrontendAppConfig,
   val dataCacheConnector: DataCacheConnector,
   val navigator: Navigator,
@@ -43,9 +43,10 @@ class AreYouSendingSamplesController @Inject()(
   formProvider: AreYouSendingSamplesFormProvider,
   cc: MessagesControllerComponents,
   areYouSendingSamplesView: areYouSendingSamples
-)(implicit ec: ExecutionContext) extends YesNoCachingController(cc) {
+)(implicit ec: ExecutionContext)
+    extends YesNoCachingController(cc) {
   lazy val form: Form[Boolean] = formProvider()
-  val journey: YesNoJourney = Journey.samples
+  val journey: YesNoJourney    = Journey.samples
 
   def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")

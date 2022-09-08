@@ -23,7 +23,7 @@ import forms.ReturnSamplesFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
 import play.api.data.Form
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import views.html.returnSamples
 
 import scala.concurrent.ExecutionContext.Implicits.global

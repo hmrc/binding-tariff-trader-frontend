@@ -27,7 +27,7 @@ import views.behaviours.YesNoViewBehaviours
 class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "previousBTIRuling"
-  val goodsName = "some-goods-name"
+  val goodsName        = "some-goods-name"
 
   val form = new PreviousBTIRulingFormProvider()()
 
@@ -35,7 +35,8 @@ class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
 
   def createView = () => previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm = (form: Form[_]) => previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm =
+    (form: Form[_]) => previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   override protected def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)
@@ -45,6 +46,10 @@ class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.PreviousBTIRulingController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      createViewUsingForm,
+      messageKeyPrefix,
+      routes.PreviousBTIRulingController.onSubmit(NormalMode).url
+    )
   }
 }

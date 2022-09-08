@@ -46,7 +46,8 @@ class IsSampleHazardousControllerSpec extends ControllerSpecBase with YesNoCachi
       new DataRequiredActionImpl,
       formProvider,
       isSampleHazardousView,
-      cc)
+      cc
+    )
 
   def viewAsString(form: Form[_], request: Request[_]): String =
     isSampleHazardousView(frontendAppConfig, form, NormalMode)(request, messages).toString

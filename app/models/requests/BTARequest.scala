@@ -23,4 +23,3 @@ case class BTARequest(url: String)
 object BTARequest {
   implicit val reads: Reads[BTARequest] = Json.reads[BTARequest]
 }
-

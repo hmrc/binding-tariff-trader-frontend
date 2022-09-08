@@ -34,7 +34,7 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase with AnswerCachi
 
   private def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ProvideGoodsNameFormProvider()
+  val formProvider       = new ProvideGoodsNameFormProvider()
   val form: Form[String] = formProvider()
 
   val provideGoodsNameView: provideGoodsName = injector.instanceOf[views.html.provideGoodsName]
@@ -54,12 +54,13 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase with AnswerCachi
       new DataRequiredActionImpl,
       formProvider,
       provideGoodsNameView,
-      cc)
+      cc
+    )
 
-  val testAnswer = "answer"
-  val validFormData = Map("goodsName" -> testAnswer)
+  val testAnswer      = "answer"
+  val validFormData   = Map("goodsName" -> testAnswer)
   val invalidFormData = Map("goodsName" -> "")
-  val backgroundData = Map.empty[String, JsValue]
+  val backgroundData  = Map.empty[String, JsValue]
 
   "ProvideGoodsNameController" must {
     behave like answerCachingController(

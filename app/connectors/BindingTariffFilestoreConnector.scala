@@ -36,26 +36,28 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class BindingTariffFilestoreConnector @Inject()(
-                                                 ws: WSClient,
-                                                 client: AuthenticatedHttpClient,
-                                                 val metrics: Metrics
-                                               )(implicit appConfig: FrontendAppConfig, ec: ExecutionContext)
-  extends InjectAuthHeader
+class BindingTariffFilestoreConnector @Inject() (
+  ws: WSClient,
+  client: AuthenticatedHttpClient,
+  val metrics: Metrics
+)(implicit appConfig: FrontendAppConfig, ec: ExecutionContext)
+    extends InjectAuthHeader
     with HasMetrics {
 
   private val hcConfig = HeaderCarrier.Config.fromConfig(client.configuration)
 
   def get(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
     withMetricsTimerAsync("get-file-by-id") { _ =>
-      client.GET[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}", headers = addAuth(appConfig))
+      client
+        .GET[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}", headers = addAuth(appConfig))
     }
 
   def initiate(request: FileStoreInitiateRequest)(implicit hc: HeaderCarrier): Future[FileStoreInitiateResponse] =
     withMetricsTimerAsync("initiate-file-upload") { _ =>
       client.POST[FileStoreInitiateRequest, FileStoreInitiateResponse](
         s"${appConfig.bindingTariffFileStoreUrl}/file/initiate",
-        request, headers = addAuth(appConfig)
+        request,
+        headers = addAuth(appConfig)
       )
     }
 
@@ -101,24 +103,30 @@ class BindingTariffFilestoreConnector @Inject()(
 
   def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
     withMetricsTimerAsync("publish-file") { _ =>
-      client.POSTEmpty[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish", headers = addAuth(appConfig))
+      client.POSTEmpty[FilestoreResponse](
+        s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish",
+        headers = addAuth(appConfig)
+      )
     }
 
   def getFileMetadata(
-                       attachments: Seq[Attachment]
-                     )(implicit headerCarrier: HeaderCarrier): Future[Seq[FilestoreResponse]] =
+    attachments: Seq[Attachment]
+  )(implicit headerCarrier: HeaderCarrier): Future[Seq[FilestoreResponse]] =
     withMetricsTimerAsync("get-file-metadata") { _ =>
       if (attachments.isEmpty) {
         Future.successful(Seq.empty)
       } else {
         val query = s"?${attachments.map(att => s"id=${att.id}").mkString("&")}"
-        val url = s"${appConfig.bindingTariffFileStoreUrl}/file$query"
+        val url   = s"${appConfig.bindingTariffFileStoreUrl}/file$query"
         client.GET[Seq[FilestoreResponse]](url, headers = addAuth(appConfig))
       }
     }
 
   def get(attachment: Attachment)(implicit headerCarrier: HeaderCarrier): Future[Option[FilestoreResponse]] =
     withMetricsTimerAsync("get-file-by-id") { _ =>
-      client.GET[Option[FilestoreResponse]](s"${appConfig.bindingTariffFileStoreUrl}/file/${attachment.id}", headers = addAuth(appConfig))
+      client.GET[Option[FilestoreResponse]](
+        s"${appConfig.bindingTariffFileStoreUrl}/file/${attachment.id}",
+        headers = addAuth(appConfig)
+      )
     }
 }

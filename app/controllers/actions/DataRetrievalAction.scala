@@ -26,13 +26,12 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRetrievalActionImpl @Inject()(val dataCacheConnector: DataCacheConnector) extends DataRetrievalAction {
+class DataRetrievalActionImpl @Inject() (val dataCacheConnector: DataCacheConnector) extends DataRetrievalAction {
 
-  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
+  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
     dataCacheConnector.fetch(request.identifier).map { maybeData: Option[CacheMap] =>
       OptionalDataRequest(request.request, request.identifier, request.eoriNumber, maybeData.map(UserAnswers(_)))
     }
-  }
 
   override protected def executionContext: ExecutionContext = global
 }

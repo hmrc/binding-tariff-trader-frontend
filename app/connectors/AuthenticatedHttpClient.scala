@@ -25,23 +25,22 @@ import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 @Singleton
-class AuthenticatedHttpClient @Inject()(
-                                         httpAuditing: HttpAuditing,
-                                         wsClient: WSClient,
-                                         actorSystem: ActorSystem
-                                       )(implicit val config: FrontendAppConfig)
-  extends DefaultHttpClient(config.runModeConfiguration, httpAuditing, wsClient, actorSystem) {
-}
+class AuthenticatedHttpClient @Inject() (
+  httpAuditing: HttpAuditing,
+  wsClient: WSClient,
+  actorSystem: ActorSystem
+)(implicit val config: FrontendAppConfig)
+    extends DefaultHttpClient(config.runModeConfiguration, httpAuditing, wsClient, actorSystem) {}
 
 trait InjectAuthHeader {
 
-  def addAuth(config: FrontendAppConfig) (implicit hc: HeaderCarrier): Seq[(String, String)] = {
+  def addAuth(config: FrontendAppConfig)(implicit hc: HeaderCarrier): Seq[(String, String)] = {
 
     val headerName: String = "X-Api-Token"
 
     hc.headers(Seq(headerName)) match {
       case header @ Seq(_) => header
-      case _ => Seq(headerName -> config.apiToken)
+      case _               => Seq(headerName -> config.apiToken)
     }
   }
 

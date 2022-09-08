@@ -23,7 +23,7 @@ import play.api.data.FormError
 class AddConfidentialInformationFormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "addConfidentialInformation.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new AddConfidentialInformationFormProvider()()
 

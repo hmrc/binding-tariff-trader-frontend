@@ -27,18 +27,28 @@ import views.html.makeFileConfidential
 
 class MakeFileConfidentialViewSpec extends BooleanViewBehaviours[(String, Boolean)] {
 
-  val form = new MakeFileConfidentialFormProvider()()
+  val form                = new MakeFileConfidentialFormProvider()()
   private def onwardRoute = Call("GET", "/foo")
 
-  private val fakeGETRequest = fakeGETRequestWithCSRF
+  private val fakeGETRequest   = fakeGETRequestWithCSRF
   private val messageKeyPrefix = "makeFileConfidential"
-  private val fileId = "a-file-id"
+  private val fileId           = "a-file-id"
 
   val makeFileConfidentialView: makeFileConfidential = app.injector.instanceOf[makeFileConfidential]
 
-  def createView = () => makeFileConfidentialView(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(fakeGETRequestWithCSRF, messages)
+  def createView =
+    () =>
+      makeFileConfidentialView(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(
+        fakeGETRequestWithCSRF,
+        messages
+      )
 
-  def createViewUsingForm = (form: Form[_]) => makeFileConfidentialView(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(fakeGETRequestWithCSRF, messages)
+  def createViewUsingForm =
+    (form: Form[_]) =>
+      makeFileConfidentialView(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(
+        fakeGETRequestWithCSRF,
+        messages
+      )
 
   "makeFileConfidential view" must {
     behave like normalPage(createView, messageKeyPrefix)()

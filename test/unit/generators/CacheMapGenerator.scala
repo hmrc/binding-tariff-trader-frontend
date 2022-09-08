@@ -27,31 +27,31 @@ trait CacheMapGenerator {
 
   val generators: Seq[Gen[(Page, JsValue)]] =
     arbitrary[(LegalChallengeDetailsPage.type, JsValue)] ::
-    arbitrary[(LegalChallengePage.type, JsValue)] ::
-    arbitrary[(CommodityCodeRulingReferencePage.type, JsValue)] ::
-    arbitrary[(SimilarItemCommodityCodePage.type, JsValue)] ::
-    arbitrary[(ReturnSamplesPage.type, JsValue)] ::
-    arbitrary[(AreYouSendingSamplesPage.type, JsValue)] ::
-    arbitrary[(CommodityCodeDigitsPage.type, JsValue)] ::
-    arbitrary[(CommodityCodeBestMatchPage.type, JsValue)] ::
-    arbitrary[(UploadSupportingMaterialMultiplePage.type, JsValue)] ::
-    arbitrary[(ProvideBTIReferencePage.type, JsValue)] ::
-    arbitrary[(EnterContactDetailsPage.type, JsValue)] ::
-    arbitrary[(RegisteredAddressForEoriPage.type, JsValue)] ::
-    Nil
+      arbitrary[(LegalChallengePage.type, JsValue)] ::
+      arbitrary[(CommodityCodeRulingReferencePage.type, JsValue)] ::
+      arbitrary[(SimilarItemCommodityCodePage.type, JsValue)] ::
+      arbitrary[(ReturnSamplesPage.type, JsValue)] ::
+      arbitrary[(AreYouSendingSamplesPage.type, JsValue)] ::
+      arbitrary[(CommodityCodeDigitsPage.type, JsValue)] ::
+      arbitrary[(CommodityCodeBestMatchPage.type, JsValue)] ::
+      arbitrary[(UploadSupportingMaterialMultiplePage.type, JsValue)] ::
+      arbitrary[(ProvideBTIReferencePage.type, JsValue)] ::
+      arbitrary[(EnterContactDetailsPage.type, JsValue)] ::
+      arbitrary[(RegisteredAddressForEoriPage.type, JsValue)] ::
+      Nil
 
   implicit lazy val arbitraryCacheMap: Arbitrary[CacheMap] =
     Arbitrary {
       for {
         cacheId <- nonEmptyString
-        data    <- generators match {
-          case Nil => Gen.const(Map[Page, JsValue]())
-          case _   => Gen.mapOf(oneOf(generators))
-        }
+        data <- generators match {
+                 case Nil => Gen.const(Map[Page, JsValue]())
+                 case _   => Gen.mapOf(oneOf(generators))
+               }
       } yield CacheMap(
         cacheId,
         data.map {
-          case (k, v) => ( k.toString, v )
+          case (k, v) => (k.toString, v)
         }
       )
     }

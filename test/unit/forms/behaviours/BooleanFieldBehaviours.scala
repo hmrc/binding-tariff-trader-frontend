@@ -20,9 +20,7 @@ import play.api.data.{Form, FormError}
 
 trait BooleanFieldBehaviours extends FieldBehaviours {
 
-  def booleanField(form: Form[_],
-                   fieldName: String,
-                   invalidError: FormError): Unit = {
+  def booleanField(form: Form[_], fieldName: String, invalidError: FormError): Unit = {
 
     "bind true" in {
       val result = form.bind(Map(fieldName -> "true"))

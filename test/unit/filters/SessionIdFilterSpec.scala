@@ -38,12 +38,12 @@ object SessionIdFilterSpec {
 
   lazy val sessionId = "28836767-a008-46be-ac18-695ab140e705"
 
-  class Filters @Inject()(sessionId: SessionIdFilter) extends DefaultHttpFilters(sessionId)
+  class Filters @Inject() (sessionId: SessionIdFilter) extends DefaultHttpFilters(sessionId)
 
-  class TestSessionIdFilter @Inject()(
-                                       override val mat: Materializer,
-                                       ec: ExecutionContext
-                                     ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec)
+  class TestSessionIdFilter @Inject() (
+    override val mat: Materializer,
+    ec: ExecutionContext
+  ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec)
 
 }
 
@@ -59,30 +59,28 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
   private lazy val sessionId = SessionIdFilterSpec.sessionId
   private lazy val realApp = GuiceApplicationBuilder()
     .configure(
-      "metrics.jvm" -> false,
+      "metrics.jvm"     -> false,
       "metrics.enabled" -> false
-    ).build()
+    )
+    .build()
   private lazy val cc = realApp.injector.instanceOf[MessagesControllerComponents]
 
   private val router: Router = {
     import play.api.routing.sird._
 
     Router.from {
-      case GET(p"/test") => Action {
-        request =>
-          val fromHeader = request.headers.get(HeaderNames.xSessionId).getOrElse("")
+      case GET(p"/test") =>
+        Action { request =>
+          val fromHeader  = request.headers.get(HeaderNames.xSessionId).getOrElse("")
           val fromSession = request.session.get(SessionKeys.sessionId).getOrElse("")
           Results.Ok(
             Json.obj(
-              "fromHeader" -> fromHeader,
+              "fromHeader"  -> fromHeader,
               "fromSession" -> fromSession
             )
           )
-      }
-      case GET(p"/test2") => Action {
-        implicit request =>
-          Results.Ok.addingToSession("foo" -> "bar")
-      }
+        }
+      case GET(p"/test2") => Action(implicit request => Results.Ok.addingToSession("foo" -> "bar"))
     }
   }
 
@@ -96,7 +94,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
       val body = contentAsJson(result)
 
-      (body \ "fromHeader").as[String] shouldBe s"session-$sessionId"
+      (body \ "fromHeader").as[String]  shouldBe s"session-$sessionId"
       (body \ "fromSession").as[String] shouldBe s"session-$sessionId"
     }
 
@@ -106,7 +104,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
       val body = contentAsJson(result)
 
-      (body \ "fromHeader").as[String] shouldBe ""
+      (body \ "fromHeader").as[String]  shouldBe ""
       (body \ "fromSession").as[String] shouldBe "foo"
     }
 

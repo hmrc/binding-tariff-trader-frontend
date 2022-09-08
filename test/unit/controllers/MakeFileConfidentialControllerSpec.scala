@@ -20,31 +20,36 @@ import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.AccumulatingCachingControllerBehaviours
 import forms.MakeFileConfidentialFormProvider
-import models.{ FileAttachment, NormalMode, UserAnswers }
+import models.{FileAttachment, NormalMode, UserAnswers}
 import navigation.FakeNavigator
-import pages.{ QuestionPage, MakeFileConfidentialPage, ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage }
+import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, QuestionPage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
 import play.api.libs.json._
-import play.api.mvc.{ Call, Request }
+import play.api.mvc.{Call, Request}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.makeFileConfidential
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import org.scalatest.BeforeAndAfterEach
 
-class MakeFileConfidentialControllerSpec extends ControllerSpecBase with AccumulatingCachingControllerBehaviours with BeforeAndAfterEach {
-  private def onwardRoute = Call("GET", "/foo")
-  private val formProvider = new MakeFileConfidentialFormProvider()
-  private val goodsName = "some-goods-name"
+class MakeFileConfidentialControllerSpec
+    extends ControllerSpecBase
+    with AccumulatingCachingControllerBehaviours
+    with BeforeAndAfterEach {
+  private def onwardRoute        = Call("GET", "/foo")
+  private val formProvider       = new MakeFileConfidentialFormProvider()
+  private val goodsName          = "some-goods-name"
   private val lastFileUploadedId = "file-id-3"
 
   val backgroundData = Map(
     ProvideGoodsNamePage.toString -> JsString(goodsName),
-    UploadSupportingMaterialMultiplePage.toString -> JsArray(Seq(
-      Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
-      Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
-      Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L))
-    ))
+    UploadSupportingMaterialMultiplePage.toString -> JsArray(
+      Seq(
+        Json.toJson(FileAttachment("file-id-1", "foo.jpg", "image/jpeg", 1L)),
+        Json.toJson(FileAttachment("file-id-2", "bar.jpg", "image/jpeg", 1L)),
+        Json.toJson(FileAttachment("file-id-3", "baz.jpg", "image/jpeg", 1L))
+      )
+    )
   )
 
   val fakeCacheConnector =
@@ -78,17 +83,20 @@ class MakeFileConfidentialControllerSpec extends ControllerSpecBase with Accumul
   val validFormData = List(
     Map("fileId" -> "file-id-1", "confidential" -> "true"),
     Map("fileId" -> "file-id-2", "confidential" -> "false"),
-    Map("fileId" -> "file-id-3", "confidential" -> "true"),
+    Map("fileId" -> "file-id-3", "confidential" -> "true")
   )
 
-  def userAnswersFor[A: Format](backgroundData: Map[String, JsValue], questionPage: QuestionPage[A], answer: A) = {
+  def userAnswersFor[A: Format](backgroundData: Map[String, JsValue], questionPage: QuestionPage[A], answer: A) =
     UserAnswers(CacheMap(cacheMapId, backgroundData ++ Map(questionPage.toString -> Json.toJson(answer))))
-  }
 
   val expectedUserAnswers = List(
     userAnswersFor(backgroundData, MakeFileConfidentialPage, Map("file-id-1" -> true)),
     userAnswersFor(backgroundData, MakeFileConfidentialPage, Map("file-id-1" -> true, "file-id-2" -> false)),
-    userAnswersFor(backgroundData, MakeFileConfidentialPage, Map("file-id-1" -> true, "file-id-2" -> false, "file-id-3" -> true))
+    userAnswersFor(
+      backgroundData,
+      MakeFileConfidentialPage,
+      Map("file-id-1" -> true, "file-id-2" -> false, "file-id-3" -> true)
+    )
   )
 
   "MakeFileConfidentialController" must {

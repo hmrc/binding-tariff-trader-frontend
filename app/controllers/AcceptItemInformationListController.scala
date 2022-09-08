@@ -24,14 +24,15 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.acceptItemInformationList
 
-class AcceptItemInformationListController @Inject()(
+class AcceptItemInformationListController @Inject() (
   appConfig: FrontendAppConfig,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   cc: MessagesControllerComponents,
   acceptItemInformationListView: acceptItemInformationList
-) extends FrontendController(cc) with I18nSupport {
+) extends FrontendController(cc)
+    with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     Ok(acceptItemInformationListView(appConfig))

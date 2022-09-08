@@ -24,12 +24,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class BaseFakeIdentifierAction(
-                                eori: Option[String] = Some("eori-789012")
-                              ) extends IdentifierAction with SpecBase {
+  eori: Option[String] = Some("eori-789012")
+) extends IdentifierAction
+    with SpecBase {
 
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
+  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
     block(IdentifierRequest(request, "id", eori))
-  }
 
   override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
 
@@ -37,6 +37,6 @@ class BaseFakeIdentifierAction(
 }
 
 object FakeIdentifierAction extends BaseFakeIdentifierAction {
-  def apply(): IdentifierAction = new BaseFakeIdentifierAction()
+  def apply(): IdentifierAction                     = new BaseFakeIdentifierAction()
   def apply(eori: Option[String]): IdentifierAction = new BaseFakeIdentifierAction(eori)
 }

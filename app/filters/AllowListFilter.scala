@@ -24,14 +24,13 @@ import play.api.mvc.Call
 import uk.gov.hmrc.allowlist.AkamaiAllowlistFilter
 
 @Singleton
-class AllowListFilter @Inject()(
-                                  config: Configuration,
-                                  override val mat: Materializer
-                                ) extends AkamaiAllowlistFilter {
+class AllowListFilter @Inject() (
+  config: Configuration,
+  override val mat: Materializer
+) extends AkamaiAllowlistFilter {
 
   override val allowlist: Seq[String] = {
-    config
-      .underlying
+    config.underlying
       .getString("filters.allowlist.ips")
       .split(",")
       .map(_.trim)
@@ -44,9 +43,7 @@ class AllowListFilter @Inject()(
   }
 
   override val excludedPaths: Seq[Call] = {
-    config.underlying.getString("filters.allowlist.excluded").split(",").map {
-      path => Call(GET, path.trim)
-    }
+    config.underlying.getString("filters.allowlist.excluded").split(",").map(path => Call(GET, path.trim))
   }
 
 }
