@@ -5,7 +5,7 @@ object AppDependencies {
   import play.core.PlayVersion
 
   private val silencerVersion      = "1.7.9"
-  private val bootstrapPlayVersion = "6.4.0"
+  private val bootstrapPlayVersion = "7.2.0"
   private val hmrcMongoPlayVersion = "0.71.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
@@ -15,6 +15,7 @@ object AppDependencies {
     "uk.gov.hmrc"                  %% "http-caching-client"           % "9.6.0-play-28",
     "uk.gov.hmrc"                  %% "play-language"                 % "5.3.0-play-28",
     "uk.gov.hmrc.mongo"            %% "hmrc-mongo-play-28"            % hmrcMongoPlayVersion,
+    "commons-codec"                % "commons-codec"                  % "1.15",
     "uk.gov.hmrc"                  %% "play-allowlist-filter-play-28" % "1.1.0",
     "uk.gov.hmrc"                  %% "play-json-union-formatter"     % "1.15.0-play-28",
     "org.typelevel"                %% "cats-core"                     % "2.8.0",
