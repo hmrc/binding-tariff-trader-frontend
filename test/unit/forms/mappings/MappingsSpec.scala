@@ -146,7 +146,8 @@ class MappingsSpec extends AnyWordSpec with Matchers with OptionValues with Mapp
     }
 
     "unbind a valid value" in {
-      val result = testForm.fill(123)
+      val value  = 123
+      val result = testForm.fill(value)
       result.apply("value").value.value mustEqual "123"
     }
   }

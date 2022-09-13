@@ -32,7 +32,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
   private val connector =
     new BindingTariffClassificationConnector(authenticatedHttpClient, metrics)(mockConfig, implicitly)
 
-  private def withHeaderCarrier(key: String, value: String) = HeaderCarrier(extraHeaders = Seq(key -> value))
+  private def withHeaderCarrier(value: String) = HeaderCarrier(extraHeaders = Seq("X-Api-Token" -> value))
 
   "Connector 'Create Case'" should {
     val request     = oCase.newBtiCaseExample
@@ -52,7 +52,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           )
       )
 
-      await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", "custom token"))) shouldBe response
+      await(connector.createCase(request)(withHeaderCarrier("custom token"))) shouldBe response
 
       verify(
         postRequestedFor(urlEqualTo("/cases"))
@@ -73,7 +73,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.findCase("id")(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        connector.findCase("id")(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Some(oCase.btiCaseExample)
 
       verify(
@@ -92,7 +92,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       intercept[UpstreamErrorResponse] {
-        await(connector.createCase(request)(withHeaderCarrier("X-Api-Token", appConfig.apiToken)))
+        await(connector.createCase(request)(withHeaderCarrier(appConfig.apiToken)))
       }
 
       verify(
@@ -178,7 +178,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.putCase(caseExample)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        connector.putCase(caseExample)(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe caseExample
 
       verify(
@@ -201,7 +201,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
       intercept[UpstreamErrorResponse] {
         await(
-          connector.putCase(caseExample)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+          connector.putCase(caseExample)(withHeaderCarrier(appConfig.apiToken))
         )
       }
 
@@ -225,7 +225,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
       intercept[UpstreamErrorResponse] {
         await(
-          connector.putCase(caseExample)(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+          connector.putCase(caseExample)(withHeaderCarrier(appConfig.apiToken))
         )
       }
 
@@ -251,7 +251,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.updateCase(caseRef, CaseUpdate())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        connector.updateCase(caseRef, CaseUpdate())(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Some(oCase.btiCaseExample)
 
       verify(
@@ -272,7 +272,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.updateCase("foo", CaseUpdate())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        connector.updateCase("foo", CaseUpdate())(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe None
 
       verify(
@@ -294,7 +294,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
       intercept[UpstreamErrorResponse] {
         await(
-          connector.updateCase("foo", CaseUpdate())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+          connector.updateCase("foo", CaseUpdate())(withHeaderCarrier(appConfig.apiToken))
         )
       }
 
@@ -306,7 +306,10 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
   }
 
   "Connector 'All Cases'" should {
+    val pageSize = 50
+
     "Find empty paged case" in {
+      val page = 2
       val url =
         "/cases?sort_by=created-date&sort_direction=desc&page=2&page_size=50&application_type=BTI&migrated=false"
 
@@ -320,7 +323,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.allCases(SearchPagination(2, 50), Sort())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        connector.allCases(SearchPagination(page, pageSize), Sort())(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Paged.empty[Case]
 
       verify(
@@ -330,6 +333,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "Find valid paged case" in {
+      val page = 2
       val url =
         "/cases?sort_by=created-date&sort_direction=desc&page=2&page_size=50&application_type=BTI&migrated=false"
 
@@ -343,7 +347,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
 
       await(
-        connector.allCases(SearchPagination(2, 50), Sort())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        connector.allCases(SearchPagination(page, pageSize), Sort())(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Paged(Seq(oCase.btiCaseExample))
 
       verify(
@@ -353,6 +357,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     }
 
     "propagate errors" in {
+      val page = 1
       val url =
         "/cases?sort_by=created-date&sort_direction=desc&page=1&page_size=50&application_type=BTI&migrated=false"
 
@@ -366,7 +371,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
       intercept[UpstreamErrorResponse] {
         await(
-          connector.allCases(SearchPagination(1, 50), Sort())(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+          connector.allCases(SearchPagination(page, pageSize), Sort())(withHeaderCarrier(appConfig.apiToken))
         )
       }
 
@@ -398,7 +403,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           Set(CaseStatus.NEW, CaseStatus.OPEN),
           SearchPagination(2),
           Sort()
-        )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        )(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Paged.empty[Case]
 
       verify(
@@ -426,7 +431,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           Set(CaseStatus.NEW, CaseStatus.OPEN),
           SearchPagination(2),
           Sort()
-        )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+        )(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Paged(Seq(oCase.btiCaseExample))
 
       verify(
@@ -454,7 +459,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
             Set(CaseStatus.NEW),
             NoPagination(),
             Sort()
-          )(withHeaderCarrier("X-Api-Token", appConfig.apiToken))
+          )(withHeaderCarrier(appConfig.apiToken))
         )
       }
 

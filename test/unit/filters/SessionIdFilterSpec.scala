@@ -70,7 +70,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     Router.from {
       case GET(p"/test") =>
-        Action { request =>
+        action { request =>
           val fromHeader  = request.headers.get(HeaderNames.xSessionId).getOrElse("")
           val fromSession = request.session.get(SessionKeys.sessionId).getOrElse("")
           Results.Ok(
@@ -80,11 +80,11 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
             )
           )
         }
-      case GET(p"/test2") => Action(implicit request => Results.Ok.addingToSession("foo" -> "bar"))
+      case GET(p"/test2") => action(implicit request => Results.Ok.addingToSession("foo" -> "bar"))
     }
   }
 
-  private def Action: ActionBuilder[MessagesRequest, AnyContent] = cc.messagesActionBuilder.compose(cc.actionBuilder)
+  private def action: ActionBuilder[MessagesRequest, AnyContent] = cc.messagesActionBuilder.compose(cc.actionBuilder)
 
   ".apply" must {
 

@@ -31,13 +31,17 @@ class ViewUtilsSpec extends AnyWordSpec with SpecBase {
 
     "return Kilobytes size for 1000000 Bytes " in {
 
-      ViewUtils.humanReadableSize(1000000L) shouldBe "976.6 KB"
+      val bytes: Long = 1000000L
+
+      ViewUtils.humanReadableSize(bytes) shouldBe "976.6 KB"
 
     }
 
     "return Megabytes size for 1000000000 Bytes " in {
 
-      ViewUtils.humanReadableSize(100000000L) shouldBe "95.4 MB"
+      val bytes: Long = 100000000L
+
+      ViewUtils.humanReadableSize(bytes) shouldBe "95.4 MB"
 
     }
 
@@ -46,7 +50,7 @@ class ViewUtilsSpec extends AnyWordSpec with SpecBase {
   "confidentialityStatusLabel" must {
 
     "return expected string" in {
-      ViewUtils.confidentialityStatusLabel(true)(messages) shouldBe "Keep confidential"
+      ViewUtils.confidentialityStatusLabel(confidential = true)(messages) shouldBe "Keep confidential"
     }
   }
 

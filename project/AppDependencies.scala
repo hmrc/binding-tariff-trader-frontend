@@ -5,7 +5,7 @@ object AppDependencies {
   import play.core.PlayVersion
 
   private val silencerVersion      = "1.7.9"
-  private val bootstrapPlayVersion = "7.2.0"
+  private val bootstrapPlayVersion = "7.3.0"
   private val hmrcMongoPlayVersion = "0.71.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
@@ -25,18 +25,16 @@ object AppDependencies {
     "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
   )
 
-  private lazy val scope: Configuration = Test
-
   private lazy val test: Seq[ModuleID] = Seq(
-    "com.github.tomakehurst" % "wiremock-jre8"            % "2.33.2"             % scope,
-    "com.typesafe.play"      %% "play-test"               % PlayVersion.current  % scope,
-    "uk.gov.hmrc.mongo"      %% "hmrc-mongo-test-play-28" % hmrcMongoPlayVersion % scope,
-    "uk.gov.hmrc"            %% "bootstrap-test-play-28"  % bootstrapPlayVersion % scope,
-    "org.scalatest"          %% "scalatest"               % "3.2.13"             % scope,
-    "org.scalatestplus"      %% "mockito-4-5"             % "3.2.12.0"           % scope,
-    "org.scalatestplus"      %% "scalacheck-1-16"         % "3.2.13.0"           % scope,
-    "com.vladsch.flexmark"   % "flexmark-all"             % "0.62.2"             % scope
-  )
+    "com.github.tomakehurst" % "wiremock-jre8"            % "2.33.2",
+    "com.typesafe.play"      %% "play-test"               % PlayVersion.current,
+    "uk.gov.hmrc.mongo"      %% "hmrc-mongo-test-play-28" % hmrcMongoPlayVersion,
+    "uk.gov.hmrc"            %% "bootstrap-test-play-28"  % bootstrapPlayVersion,
+    "org.scalatest"          %% "scalatest"               % "3.2.13",
+    "org.scalatestplus"      %% "mockito-4-6"             % "3.2.13.0",
+    "org.scalatestplus"      %% "scalacheck-1-16"         % "3.2.13.0",
+    "com.vladsch.flexmark"   % "flexmark-all"             % "0.62.2"
+  ).map(_ % Test)
 
   def apply(): Seq[ModuleID] = compile ++ test
 }

@@ -24,7 +24,16 @@ trait Generators extends CacheMapGenerator with PageGenerators with ModelGenerat
 
   implicit val dontShrink: Shrink[String] = Shrink.shrinkAny
 
-  def genIntersperseString(gen: Gen[String], value: String, frequencyV: Int = 1, frequencyN: Int = 10): Gen[String] = {
+  private val frequencyV: Int      = 1
+  private val frequencyN: Int      = 10
+  private val comparisonValue: Int = 100
+
+  def genIntersperseString(
+    gen: Gen[String],
+    value: String,
+    frequencyV: Int = frequencyV,
+    frequencyN: Int = frequencyN
+  ): Gen[String] = {
 
     val genValue: Gen[Option[String]] = Gen.frequency(frequencyN -> None, frequencyV -> Gen.const(Some(value)))
 
@@ -87,7 +96,7 @@ trait Generators extends CacheMapGenerator with PageGenerators with ModelGenerat
 
   def stringsLongerThan(minLength: Int): Gen[String] =
     for {
-      maxLength <- (minLength * 2).max(100)
+      maxLength <- (minLength * 2).max(comparisonValue)
       length    <- Gen.chooseNum(minLength + 1, maxLength)
       chars     <- listOfN(length, arbitrary[Char])
     } yield chars.mkString

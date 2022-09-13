@@ -24,9 +24,12 @@ import java.time.{Instant, LocalDateTime, Month, ZoneOffset}
 
 class DatesSpec extends SpecBase {
 
-  def cyMessages: Messages = messagesApi.preferred(Seq(Lang("cy")))
+  private def cyMessages: Messages = messagesApi.preferred(Seq(Lang("cy")))
 
-  val date: Instant = LocalDateTime.of(2021, Month.AUGUST, 10, 0, 0).toInstant(ZoneOffset.UTC)
+  private val day: Int  = 10
+  private val year: Int = 2021
+
+  private val date: Instant = LocalDateTime.of(year, Month.AUGUST, day, 0, 0).toInstant(ZoneOffset.UTC)
 
   "format" should {
     "return the formatted date in the dd MMM YYYY fromat in english" in {

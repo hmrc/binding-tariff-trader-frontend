@@ -108,8 +108,7 @@ trait FormBehaviours extends FormSpec {
     }
   }
 
-  def formWithDateField(field: String): Unit = {
-
+  private def formDayFieldCheck(field: String): Unit = {
     s"fail to bind when $field day is omitted" in {
       val data          = validData - s"$field.day"
       val expectedError = error(s"$field.day", "error.date.day_blank")
@@ -139,7 +138,9 @@ trait FormBehaviours extends FormSpec {
       val expectedError = error(s"$field.day", "error.date.day_invalid")
       checkForError(form, data, expectedError)
     }
+  }
 
+  private def formMonthFieldCheck(field: String): Unit = {
     s"fail to bind when $field month is omitted" in {
       val data          = validData - s"$field.month"
       val expectedError = error(s"$field.month", "error.date.month_blank")
@@ -169,7 +170,9 @@ trait FormBehaviours extends FormSpec {
       val expectedError = error(s"$field.month", "error.date.month_invalid")
       checkForError(form, data, expectedError)
     }
+  }
 
+  private def formYearFieldCheck(field: String): Unit = {
     s"fail to bind when $field year is omitted" in {
       val data          = validData - s"$field.year"
       val expectedError = error(s"$field.year", "error.date.year_blank")
@@ -205,7 +208,12 @@ trait FormBehaviours extends FormSpec {
       val expectedError = error("dateOfBirth", "error.invalid_date")
       checkForError(form, data, expectedError)
     }
+  }
 
+  def formWithDateField(field: String): Unit = {
+    formDayFieldCheck(field)
+    formMonthFieldCheck(field)
+    formYearFieldCheck(field)
   }
 
 }

@@ -172,6 +172,7 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
 
     }
 
+    // scalastyle:off magic.number
     "Render 4 pages" in {
       // When
       val doc = view(
@@ -246,6 +247,8 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
 
       doc shouldNot containElementWithID("ID-page_6")
     }
+
+    // scalastyle:on magic.number
 
     "Render 1 previous page" in {
       // When

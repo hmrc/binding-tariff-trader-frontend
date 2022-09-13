@@ -70,7 +70,8 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
           Sort(GOODS_NAME, ASCENDING)
         )
 
-        dashboard.columnSortUrlFor("application.goodName") shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=application.goodName&order=desc"
+        dashboard.columnSortUrlFor("application.goodName") shouldBe
+          "/advance-tariff-application/applications-and-rulings?page=1&sortBy=application.goodName&order=desc"
       }
     }
 
