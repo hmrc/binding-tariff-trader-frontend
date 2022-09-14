@@ -21,7 +21,7 @@ import play.twirl.api.HtmlFormat
 
 trait StringViewBehaviours extends QuestionViewBehaviours[String] {
 
-  val answer = "answer"
+  private val answer = "answer"
 
   private def getMessage(key: String, args: String*): Option[String] =
     messages(key, args: _*) match {
@@ -67,36 +67,18 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         "include the form's value in the value input" in {
           val doc   = asDocument(createView(form.fill(answer)))
           val input = doc.getElementById(forElement)
-          if (input.tagName() == "textarea")
+          if (input.tagName() == "textarea") {
             input.html() shouldBe answer
-          else
+          } else {
             input.attr("value") shouldBe answer
+          }
         }
       }
 
-      "rendered with an error" must {
-
-        "show an error summary" in {
-          val doc = asDocument(createView(form.withError(error(forElement))))
-          assertRenderedById(doc, "error-summary-title")
-        }
-
-        "show an error in the value field's label" in {
-          val doc       = asDocument(createView(form.withError(error(forElement))))
-          val errorSpan = doc.getElementsByClass("govuk-error-message").first
-          errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
-        }
-
-        "show an error prefix in the browser title" in {
-          val doc = asDocument(createView(form.withError(error(forElement))))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(
-            s"$messageKeyPrefix.title"
-          )}""")
-        }
-      }
+      renderWithError(createView, messageKeyPrefix, expectedFormAction, forElement, expectedHintKey)
     }
 
-  protected def textareaPage(
+  protected def textAreaPage(
     createView: Form[String] => HtmlFormat.Appendable,
     messageKeyPrefix: String,
     expectedFormAction: String,
@@ -129,26 +111,33 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         }
       }
 
-      "rendered with an error" must {
+      renderWithError(createView, messageKeyPrefix, expectedFormAction, expectedFormElementId, expectedHintKey)
+    }
 
-        "show an error summary" in {
-          val view = createView(form.withError(error))
-          val doc  = asDocument(view)
-          assertRenderedById(doc, "error-summary-title")
-        }
+  private def renderWithError(
+    createView: Form[String] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    expectedFormAction: String,
+    errorKey: String,
+    expectedHintKey: Option[String]
+  ): Unit =
+    "rendered with an error" must {
+      "show an error summary" in {
+        val doc = asDocument(createView(form.withError(error(errorKey))))
+        assertRenderedById(doc, "error-summary-title")
+      }
 
-        "show an error in the value field's label" in {
-          val doc       = asDocument(createView(form.withError(error(expectedFormElementId))))
-          val errorSpan = doc.getElementsByClass("govuk-error-message").first
-          errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
-        }
+      "show an error in the value field's label" in {
+        val doc       = asDocument(createView(form.withError(error(errorKey))))
+        val errorSpan = doc.getElementsByClass("govuk-error-message").first
+        errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
+      }
 
-        "show an error prefix in the browser title" in {
-          val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(
-            s"$messageKeyPrefix.title"
-          )}""")
-        }
+      "show an error prefix in the browser title" in {
+        val doc = asDocument(createView(form.withError(error)))
+        assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(
+          s"$messageKeyPrefix.title"
+        )}""")
       }
     }
 

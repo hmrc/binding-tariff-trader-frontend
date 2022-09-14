@@ -26,17 +26,18 @@ import views.html.legalChallengeDetails
 
 class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "legalChallengeDetails"
+  private val messageKeyPrefix: String = "legalChallengeDetails"
 
-  val form          = new LegalChallengeDetailsFormProvider()()
-  val formElementId = "legalChallengeDetails"
+  private val formElementId: String = "legalChallengeDetails"
 
-  val legalChallengeDetailsView: legalChallengeDetails = app.injector.instanceOf[legalChallengeDetails]
+  override protected val form: Form[String] = new LegalChallengeDetailsFormProvider()()
 
-  def createView =
+  private val legalChallengeDetailsView: legalChallengeDetails = app.injector.instanceOf[legalChallengeDetails]
+
+  private def createView: () => Html =
     () => legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
 
-  def createViewUsingForm =
+  private def createViewUsingForm: Form[String] => Html =
     (form: Form[String]) =>
       legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
 
@@ -45,7 +46,7 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like textareaPage(
+    behave like textAreaPage(
       createView            = createViewUsingForm,
       messageKeyPrefix      = messageKeyPrefix,
       expectedFormAction    = routes.LegalChallengeDetailsController.onSubmit(NormalMode).url,

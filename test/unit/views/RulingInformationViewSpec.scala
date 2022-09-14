@@ -114,6 +114,7 @@ class RulingInformationViewSpec extends ViewBehaviours {
       getElementText(doc, "rulingInformation.explanation") shouldBe expected
     }
 
+    // scalastyle:off null
     "show explanation when there is decision and no explanation" in {
       val doc      = asDocument(createView(rulingCaseWithDecisionNoExplanation).apply())
       val expected = null
@@ -127,5 +128,6 @@ class RulingInformationViewSpec extends ViewBehaviours {
 
       doc.getElementById("rulingInformation.explanation") should be(expected)
     }
+    // scalastyle:on null
   }
 }

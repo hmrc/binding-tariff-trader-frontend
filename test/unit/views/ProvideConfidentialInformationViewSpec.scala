@@ -28,18 +28,18 @@ import views.html.provideConfidentialInformation
 
 class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
 
-  val provideConfidentialInformationView: provideConfidentialInformation =
+  private val provideConfidentialInformationView: provideConfidentialInformation =
     injector.instanceOf[provideConfidentialInformation]
 
-  val messageKeyPrefix: String = "provideConfidentialInformation"
+  private val messageKeyPrefix: String = "provideConfidentialInformation"
 
-  val form: Form[String] = new ProvideConfidentialInformationFormProvider()()
+  override protected val form: Form[String] = new ProvideConfidentialInformationFormProvider()()
 
-  val formElementId: String = "confidentialInformation"
+  private val formElementId: String = "confidentialInformation"
 
-  val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
+  private val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  val goodsName = "shoos"
+  private val goodsName: String = "shoos"
 
   def createView: () => Html =
     () => provideConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
@@ -53,7 +53,7 @@ class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    behave like textareaPage(
+    behave like textAreaPage(
       createViewUsingForm,
       messageKeyPrefix,
       routes.ProvideConfidentialInformationController.onSubmit(NormalMode).url,

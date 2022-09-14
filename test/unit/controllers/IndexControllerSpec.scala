@@ -39,7 +39,11 @@ class IndexControllerSpec extends ControllerSpecBase {
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
   private val casesService                   = mock[CasesService]
   private val btaUserService                 = mock[BTAUserService]
-  def nextPageRoute                          = Call("GET", "/advance-tariff-application/information-you-need")
+  private def nextPageRoute                  = Call("GET", "/advance-tariff-application/information-you-need")
+
+  private val pageIndex   = 1
+  private val pageSize    = 10
+  private val resultCount = 0
 
   val accountDashboardStatusesView: account_dashboard_statuses =
     app.injector.instanceOf(classOf[views.html.account_dashboard_statuses])
@@ -67,7 +71,7 @@ class IndexControllerSpec extends ControllerSpecBase {
       given(
         casesService
           .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-      ).willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
+      ).willReturn(Future.successful(Paged(Seq(btiCaseExample), pageIndex, pageSize, resultCount)))
 
       val result = controller().getApplications(page = 1)(fakeRequest)
 
@@ -79,7 +83,7 @@ class IndexControllerSpec extends ControllerSpecBase {
       given(
         casesService
           .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-      ).willReturn(Future.successful(Paged(Seq[Case](), 1, 10, 0)))
+      ).willReturn(Future.successful(Paged(Seq[Case](), pageIndex, pageSize, resultCount)))
 
       val result = controller().getApplications(page = 1)(fakeRequest)
 
@@ -100,7 +104,9 @@ class IndexControllerSpec extends ControllerSpecBase {
       given(
         casesService
           .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-      ).willReturn(Future.successful(Paged(Seq(btiCaseWithDecision.copy(decision = None)), 1, 10, 0)))
+      ).willReturn(
+        Future.successful(Paged(Seq(btiCaseWithDecision.copy(decision = None)), pageIndex, pageSize, resultCount))
+      )
 
       val result = controller().getApplications(page = 1)(fakeRequest)
 
@@ -114,7 +120,7 @@ class IndexControllerSpec extends ControllerSpecBase {
         given(
           casesService
             .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-        ).willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+        ).willReturn(Future.successful(Paged(Seq(testCase), pageIndex, pageSize, resultCount)))
 
         val result = controller().getApplications(page = 1)(fakeRequest)
 
@@ -124,24 +130,18 @@ class IndexControllerSpec extends ControllerSpecBase {
         val actualStatus = doc.getElementById("application-list-row-0-status").text().trim
 
         val expectedStatus = testCase.status match {
-          case CaseStatus.NEW | CaseStatus.OPEN => {
+          case CaseStatus.NEW | CaseStatus.OPEN =>
             messages("case.application.status.inProgress")
-          }
-          case CaseStatus.SUPPRESSED | CaseStatus.REJECTED => {
+          case CaseStatus.SUPPRESSED | CaseStatus.REJECTED =>
             messages("case.application.status.rejected")
-          }
-          case CaseStatus.REFERRED => {
+          case CaseStatus.REFERRED =>
             messages("case.application.status.infoRequested")
-          }
-          case CaseStatus.COMPLETED | CaseStatus.CANCELLED => {
+          case CaseStatus.COMPLETED | CaseStatus.CANCELLED =>
             messages("case.application.status.completed")
-          }
-          case CaseStatus.DRAFT => {
+          case CaseStatus.DRAFT =>
             messages("case.application.status.draft")
-          }
-          case CaseStatus.SUSPENDED => {
+          case CaseStatus.SUSPENDED =>
             messages("case.application.status.suspended")
-          }
           case _ => ""
         }
 
@@ -153,7 +153,7 @@ class IndexControllerSpec extends ControllerSpecBase {
         given(
           casesService
             .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-        ).willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+        ).willReturn(Future.successful(Paged(Seq(testCase), pageIndex, pageSize, resultCount)))
 
         val result = controller().getApplications(page = 1)(fakeRequest)
 
@@ -176,7 +176,7 @@ class IndexControllerSpec extends ControllerSpecBase {
       given(
         casesService
           .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-      ).willReturn(Future.successful(Paged(Seq(btiCaseWithDecision), 1, 10, 0)))
+      ).willReturn(Future.successful(Paged(Seq(btiCaseWithDecision), pageIndex, pageSize, resultCount)))
 
       val result = controller().getRulings(page = 1)(fakeRequest)
 
@@ -189,7 +189,7 @@ class IndexControllerSpec extends ControllerSpecBase {
       given(
         casesService
           .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-      ).willReturn(Future.successful(Paged(Seq[Case](), 1, 10, 0)))
+      ).willReturn(Future.successful(Paged(Seq[Case](), pageIndex, pageSize, resultCount)))
 
       val result = controller().getRulings(page = 1)(fakeRequest)
 
@@ -209,7 +209,9 @@ class IndexControllerSpec extends ControllerSpecBase {
       given(
         casesService
           .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-      ).willReturn(Future.successful(Paged(Seq(btiCaseWithDecision.copy(decision = None)), 1, 10, 0)))
+      ).willReturn(
+        Future.successful(Paged(Seq(btiCaseWithDecision.copy(decision = None)), pageIndex, pageSize, resultCount))
+      )
 
       val result = controller().getRulings(page = 1)(fakeRequest)
 
@@ -223,7 +225,7 @@ class IndexControllerSpec extends ControllerSpecBase {
         given(
           casesService
             .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-        ).willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+        ).willReturn(Future.successful(Paged(Seq(testCase), pageIndex, pageSize, resultCount)))
 
         val result = controller().getRulings(page = 1)(fakeRequest)
 
@@ -250,7 +252,7 @@ class IndexControllerSpec extends ControllerSpecBase {
         given(
           casesService
             .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-        ).willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+        ).willReturn(Future.successful(Paged(Seq(testCase), pageIndex, pageSize, resultCount)))
 
         val result = controller().getRulings(page = 1)(fakeRequest)
 
@@ -277,7 +279,7 @@ class IndexControllerSpec extends ControllerSpecBase {
       given(
         casesService
           .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-      ).willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
+      ).willReturn(Future.successful(Paged(Seq(btiCaseExample), pageIndex, pageSize, resultCount)))
       given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
 
       val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
@@ -293,7 +295,7 @@ class IndexControllerSpec extends ControllerSpecBase {
         given(
           casesService
             .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-        ).willReturn(Future.successful(Paged(Seq(btiCaseExample), 1, 10, 0)))
+        ).willReturn(Future.successful(Paged(Seq(btiCaseExample), pageIndex, pageSize, resultCount)))
         given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.failed(new RuntimeException("error")))
 
         val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
@@ -319,7 +321,7 @@ class IndexControllerSpec extends ControllerSpecBase {
         given(
           casesService
             .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-        ).willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+        ).willReturn(Future.successful(Paged(Seq(testCase), pageIndex, pageSize, resultCount)))
         given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
 
         val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
@@ -368,7 +370,7 @@ class IndexControllerSpec extends ControllerSpecBase {
       given(
         casesService
           .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination(1)), any[Sort])(any[HeaderCarrier])
-      ).willReturn(Future.successful(Paged(Seq(testCase), 1, 10, 0)))
+      ).willReturn(Future.successful(Paged(Seq(testCase), pageIndex, pageSize, resultCount)))
       given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
 
       val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)

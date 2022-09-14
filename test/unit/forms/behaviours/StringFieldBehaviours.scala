@@ -16,10 +16,13 @@
 
 package forms.behaviours
 
+import org.scalactic.anyvals.PosInt
 import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
 trait StringFieldBehaviours extends FieldBehaviours {
+
+  private val minimumValue: PosInt = 100
 
   def fieldWithMaxLength(form: Form[_], fieldName: String, maxLength: Int, lengthError: FormError): Unit =
     s"not bind strings longer than $maxLength characters" in {
@@ -55,7 +58,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
 
     "bind strings that pass regex" in {
       val gen = RegexpGen.from(regex)
-      forAll(gen, minSuccessful(100)) { str: String =>
+      forAll(gen, minSuccessful(minimumValue)) { str: String =>
         whenever(str.length <= maxLength) {
           val result = form.bind(Map(fieldName -> str)).apply(fieldName)
           result.errors should be(empty)
@@ -81,7 +84,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
 
     "bind strings that pass regex" in {
       val gen = RegexpGen.from(regex)
-      forAll(gen, minSuccessful(100)) { str: String =>
+      forAll(gen, minSuccessful(minimumValue)) { str: String =>
         whenever(str.length <= maxLength && str.replaceAll("[^0-9]", "").length >= minLength) {
           val result = form.bind(Map(fieldName -> str)).apply(fieldName)
           result.errors should be(empty)

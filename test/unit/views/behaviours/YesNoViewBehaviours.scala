@@ -58,61 +58,76 @@ trait BooleanViewBehaviours[T] extends QuestionViewBehaviours[T] {
     idPrefix: String = "value"
   )(choices: T*): Unit =
     "behave like a page with a Yes/No question" when {
-      "rendered" must {
-        "contain a legend for the question" in {
-          val doc     = asDocument(createView(form))
-          val legends = doc.getElementsByTag("legend")
 
-          legends.size       shouldBe 1
-          legends.first.text should include(expectedLegend(messageKeyPrefix))
-        }
+      renderWithoutError(createView, messageKeyPrefix, idPrefix)
 
-        "contain an input for the value" in {
-          val doc = asDocument(createView(form))
-          assertRenderedById(doc, s"$idPrefix-yes")
-          assertRenderedById(doc, s"$idPrefix-no")
-        }
-
-        "have no values checked when rendered with no form" in {
-          val doc = asDocument(createView(form))
-          assert(!doc.getElementById(s"$idPrefix-yes").hasAttr("checked"))
-          assert(!doc.getElementById(s"$idPrefix-no").hasAttr("checked"))
-        }
-
-        "not render an error summary" in {
-          val doc = asDocument(createView(form))
-          assertNotRenderedById(doc, "error-summary_header")
-        }
-      }
+      renderWithError(createView, messageKeyPrefix, idPrefix)
 
       choices.foreach { choice =>
         s"rendered with a value of ${choiceFrom(choice)}" must {
           behave like answeredYesNoPage(createView, choiceFrom, answer = choice, idPrefix = idPrefix)
         }
       }
+    }
 
-      "rendered with an error" must {
-        "show an error summary" in {
-          val doc = asDocument(createView(form.withError(error)))
-          assertRenderedById(doc, "error-summary-title")
-        }
+  private def renderWithoutError(
+    createView: Form[T] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    idPrefix: String
+  ): Unit =
+    "rendered" must {
+      "contain a legend for the question" in {
+        val doc     = asDocument(createView(form))
+        val legends = doc.getElementsByTag("legend")
 
-        "show an error in the value field's label" in {
-          val doc       = asDocument(createView(form.withError(error(idPrefix))))
-          val errorSpan = doc.getElementsByClass("govuk-error-message").first
-          errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
-        }
+        legends.size       shouldBe 1
+        legends.first.text should include(expectedLegend(messageKeyPrefix))
+      }
 
-        "show an error prefix in the browser title" in {
-          val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(
-            s"$messageKeyPrefix.title"
-          )}""")
-        }
+      "contain an input for the value" in {
+        val doc = asDocument(createView(form))
+        assertRenderedById(doc, s"$idPrefix-yes")
+        assertRenderedById(doc, s"$idPrefix-no")
+      }
+
+      "have no values checked when rendered with no form" in {
+        val doc = asDocument(createView(form))
+        assert(!doc.getElementById(s"$idPrefix-yes").hasAttr("checked"))
+        assert(!doc.getElementById(s"$idPrefix-no").hasAttr("checked"))
+      }
+
+      "not render an error summary" in {
+        val doc = asDocument(createView(form))
+        assertNotRenderedById(doc, "error-summary_header")
       }
     }
 
-  protected def answeredYesNoPage(
+  private def renderWithError(
+    createView: Form[T] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    idPrefix: String
+  ): Unit =
+    "rendered with an error" must {
+      "show an error summary" in {
+        val doc = asDocument(createView(form.withError(error)))
+        assertRenderedById(doc, "error-summary-title")
+      }
+
+      "show an error in the value field's label" in {
+        val doc       = asDocument(createView(form.withError(error(idPrefix))))
+        val errorSpan = doc.getElementsByClass("govuk-error-message").first
+        errorSpan.text shouldBe messages(errorPrefix) + messages(errorMessage)
+      }
+
+      "show an error prefix in the browser title" in {
+        val doc = asDocument(createView(form.withError(error)))
+        assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(
+          s"$messageKeyPrefix.title"
+        )}""")
+      }
+    }
+
+  private def answeredYesNoPage(
     createView: Form[T] => HtmlFormat.Appendable,
     choiceFrom: T => Boolean,
     answer: T,

@@ -21,6 +21,7 @@ import views.PaginationUtil._
 
 class PaginationUtilSpec extends SpecBase {
 
+  // scalastyle:off magic.number
   "PaginationUtil" when {
     "surroundingPages" should {
       "return length of 1" in {
@@ -56,4 +57,5 @@ class PaginationUtilSpec extends SpecBase {
       }
     }
   }
+  // scalastyle:on magic.number
 }

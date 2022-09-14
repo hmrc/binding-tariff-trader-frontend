@@ -31,6 +31,7 @@ import controllers.actions.DataRetrievalActionImpl
 trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControllerBehaviours {
   self: ControllerSpecBase =>
 
+  // scalastyle:off parameter.number method.length
   /**
     * Test the behaviour of a [[controllers.ListEditingController]]
     *
@@ -283,7 +284,7 @@ trait YesNoCachingControllerBehaviours extends AnswerCachingControllerBehaviours
     createView: (Form[Boolean], Request[_]) => String,
     formField: String                    = "value",
     backgroundData: Map[String, JsValue] = Map.empty
-  ) = {
+  ): Unit = {
     behave like answerCachingController(
       controller,
       onwardRoute,
@@ -403,4 +404,5 @@ trait AnswerCachingControllerBehaviours { self: ControllerSpecBase =>
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
     }
   }
+  // scalastyle:on parameter.number method.length
 }
