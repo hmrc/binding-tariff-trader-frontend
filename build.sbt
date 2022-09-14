@@ -1,6 +1,6 @@
 import play.sbt.routes.RoutesKeys
 import uk.gov.hmrc.DefaultBuildSettings
-import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, integrationTestSettings, targetJvm}
+import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, targetJvm}
 import uk.gov.hmrc.gitstamp.GitStampPlugin._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
@@ -12,7 +12,6 @@ lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
-  .settings(integrationTestSettings(): _*)
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
   .settings(majorVersion := 0)
   .settings(

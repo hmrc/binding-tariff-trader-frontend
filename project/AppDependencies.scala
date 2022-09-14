@@ -6,7 +6,7 @@ object AppDependencies {
 
   private val silencerVersion      = "1.7.9"
   private val bootstrapPlayVersion = "7.3.0"
-  private val hmrcMongoPlayVersion = "0.71.0"
+  private val hmrcMongoPlayVersion = "0.72.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
     "commons-validator"            % "commons-validator"              % "1.7",
