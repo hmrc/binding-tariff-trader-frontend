@@ -59,7 +59,7 @@ site.save_and_continue = Cadw ac yn eich blaen
 site.cancel_application = Canslo’r cais
 site.agree_and_continue = Cytuno ac yn eich blaen
 site.keep_confidential = Cadw’n gyfrinachol
-site.save_your_application = Cadw cais fel PDF
+site.save_your_application = Cadwch gais fel PDF
 site.print_your_application = Argraffwch eich cais
 site.notification.success = Wedi llwyddo
 site.print_your_cover_letter=Argraffu’ch llythyr eglurhaol
@@ -319,7 +319,7 @@ commodityCodeRulingReference.error.required =  Nodwch gyfeirnod dyfarniad
 
 enterContactDetails.title = Rhowch y manylion cyswllt ar gyfer y cais hwn – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 enterContactDetails.heading = Rhowch y manylion cyswllt ar gyfer y cais hwn
-enterContactDetails.bodyText = <span class="govuk-!-font-weight-bold">Dim ond</span> er mwyn cysylltu â chi i ofyn cwestiynau yn ymwneud â’r cais hwn y caiff y manylion hyn eu defnyddio.
+enterContactDetails.bodyText = <span class="govuk-!-font-weight-bold">Dim ond</span> er mwyn cysylltu â chi i ofyn cwestiynau sy’n ymwneud â’r cais hwn y caiff y manylion hyn eu defnyddio.
 enterContactDetails.caption = Ynglŷn â’r ymgeisydd
 enterContactDetails.name = Enw llawn
 enterContactDetails.email = Cyfeiriad e-bost
