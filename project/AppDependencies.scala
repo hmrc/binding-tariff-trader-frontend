@@ -25,7 +25,7 @@ object AppDependencies {
   )
 
   private lazy val test: Seq[ModuleID] = Seq(
-    "com.github.tomakehurst" % "wiremock-jre8"            % "2.33.2",
+    "com.github.tomakehurst" % "wiremock-jre8"            % "2.34.0",
     "com.typesafe.play"      %% "play-test"               % PlayVersion.current,
     "uk.gov.hmrc.mongo"      %% "hmrc-mongo-test-play-28" % hmrcMongoPlayVersion,
     "uk.gov.hmrc"            %% "bootstrap-test-play-28"  % bootstrapPlayVersion,

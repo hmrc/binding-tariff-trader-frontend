@@ -34,8 +34,6 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours with PaginationVie
 
   override implicit lazy val app: Application = GuiceApplicationBuilder()
     .configure(
-      "metrics.jvm"               -> false,
-      "metrics.enabled"           -> false,
       "toggle.samplesNotAccepted" -> false
     )
     .build()

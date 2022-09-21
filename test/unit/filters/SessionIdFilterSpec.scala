@@ -58,10 +58,6 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
     .build()
   private lazy val sessionId = SessionIdFilterSpec.sessionId
   private lazy val realApp = GuiceApplicationBuilder()
-    .configure(
-      "metrics.jvm"     -> false,
-      "metrics.enabled" -> false
-    )
     .build()
   private lazy val cc = realApp.injector.instanceOf[MessagesControllerComponents]
 

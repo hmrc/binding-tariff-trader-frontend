@@ -38,8 +38,6 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
 
   lazy val btaApp: Application = GuiceApplicationBuilder()
     .configure(
-      "metrics.jvm"               -> false,
-      "metrics.enabled"           -> false,
       "toggle.samplesNotAccepted" -> false,
       "business-tax-account.host" -> testHost
     )

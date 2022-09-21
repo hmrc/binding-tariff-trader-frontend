@@ -16,79 +16,50 @@
 
 package unit.controllers
 
+import base.SpecBase
 import controllers.routes
 import models.Languages._
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.OptionValues
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.http.Status.SEE_OTHER
+import play.api.test.Helpers.writeableOf_AnyContentAsEmpty
+import play.api.test.{FakeRequest, Helpers}
 
-class LanguageSwitchControllerSpec
-    extends AnyWordSpec
-    with Matchers
-    with OptionValues
-    with GuiceOneAppPerSuite
-    with MockitoSugar {
+class LanguageSwitchControllerSpec extends SpecBase {
 
   "when translation is enabled switching language" should {
     "set the language to Cymraeg" in {
-      val application = applicationBuilder(enableWelshTranslation = true)
+      val request = FakeRequest(Helpers.GET, routes.LanguageSwitchController.switchToLanguage(Cymraeg).url)
 
-      running(application) {
-        val request = FakeRequest(GET, routes.LanguageSwitchController.switchToLanguage(Cymraeg).url)
+      val result = Helpers.route(appWithWelshTranslation, request).get
 
-        val result = route(application, request).value
-
-        status(result)                               shouldBe SEE_OTHER
-        cookies(result).get("PLAY_LANG").value.value shouldBe "cy"
-      }
+      status(result) shouldBe SEE_OTHER
+      getLanguageCookies(result) shouldBe "cy"
     }
 
     "set the language to English" in {
-      val application = applicationBuilder(enableWelshTranslation = true)
+      val request = FakeRequest(Helpers.GET, routes.LanguageSwitchController.switchToLanguage(English).url)
 
-      running(application) {
-        val request = FakeRequest(GET, routes.LanguageSwitchController.switchToLanguage(English).url)
+      val result = Helpers.route(appWithEnglishTranslation, request).get
 
-        val result = route(application, request).value
-
-        status(result)                               shouldBe SEE_OTHER
-        cookies(result).get("PLAY_LANG").value.value shouldBe "en"
-      }
+      status(result)             shouldBe SEE_OTHER
+      getLanguageCookies(result) shouldBe "en"
     }
   }
 
   "when translation is disabled  switching language" should {
 
     "should set the language to English regardless of what is requested" in {
-      val application = applicationBuilder(enableWelshTranslation = false)
+      val cymraegRequest = FakeRequest(Helpers.GET, routes.LanguageSwitchController.switchToLanguage(Cymraeg).url)
+      val englishRequest = FakeRequest(Helpers.GET, routes.LanguageSwitchController.switchToLanguage(English).url)
 
-      running(application) {
-        val cymraegRequest = FakeRequest(GET, routes.LanguageSwitchController.switchToLanguage(Cymraeg).url)
-        val englishRequest = FakeRequest(GET, routes.LanguageSwitchController.switchToLanguage(English).url)
+      val cymraegResult = Helpers.route(appWithEnglishTranslation, cymraegRequest).get
+      val englishResult = Helpers.route(appWithEnglishTranslation, englishRequest).get
 
-        val cymraegResult = route(application, cymraegRequest).value
-        val englishResult = route(application, englishRequest).value
+      status(cymraegResult)             shouldBe SEE_OTHER
+      getLanguageCookies(cymraegResult) shouldBe "en"
 
-        status(cymraegResult)                               shouldBe SEE_OTHER
-        cookies(cymraegResult).get("PLAY_LANG").value.value shouldBe "en"
-
-        status(englishResult)                               shouldBe SEE_OTHER
-        cookies(englishResult).get("PLAY_LANG").value.value shouldBe "en"
-      }
+      status(englishResult)             shouldBe SEE_OTHER
+      getLanguageCookies(englishResult) shouldBe "en"
     }
   }
 
-  private def applicationBuilder(enableWelshTranslation: Boolean) =
-    new GuiceApplicationBuilder()
-      .configure(
-        "metrics.jvm"                                      -> false,
-        "metrics.enabled"                                  -> false,
-        "microservice.services.features.welsh-translation" -> enableWelshTranslation
-      )
-      .build()
 }
