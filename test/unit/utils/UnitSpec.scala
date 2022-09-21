@@ -21,9 +21,11 @@ import akka.stream.Materializer
 import akka.util.ByteString
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.OptionValues
+import org.scalatest.{OptionValues, durations}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import play.api.test.Helpers.{cookies, defaultAwaitTimeout}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.implicitConversions
 
@@ -44,6 +46,9 @@ trait UnitSpec extends AnyWordSpecLike with Matchers with OptionValues {
   def status(of: Result): Int = of.header.status
 
   def status(of: Future[Result])(implicit timeout: Duration): Int = status(Await.result(of, timeout))
+
+  def getLanguageCookies(of: Future[Result])(implicit timeout: Duration): String =
+    cookies(Await.result(of, timeout)).get("PLAY_LANG").get.value
 
   def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue =
     Json.parse(bodyOf(result))

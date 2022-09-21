@@ -39,17 +39,25 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar with 
 
   override implicit lazy val app: Application = GuiceApplicationBuilder()
     .configure(
-      "metrics.jvm"               -> false,
-      "metrics.enabled"           -> false,
       "toggle.samplesNotAccepted" -> false
     )
     .build()
 
   implicit lazy val appWithSamplesToggleOn: Application = GuiceApplicationBuilder()
     .configure(
-      "metrics.jvm"               -> false,
-      "metrics.enabled"           -> false,
       "toggle.samplesNotAccepted" -> true
+    )
+    .build()
+
+  implicit lazy val appWithWelshTranslation: Application = GuiceApplicationBuilder()
+    .configure(
+      "microservice.services.features.welsh-translation" -> true
+    )
+    .build()
+
+  implicit lazy val appWithEnglishTranslation: Application = GuiceApplicationBuilder()
+    .configure(
+      "microservice.services.features.welsh-translation" -> false
     )
     .build()
 

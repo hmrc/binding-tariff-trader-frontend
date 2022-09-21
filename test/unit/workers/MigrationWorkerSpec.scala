@@ -54,10 +54,7 @@ class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
   val pdfService: PdfService    = mock[PdfService]
 
   val configuredApp: GuiceApplicationBuilder => GuiceApplicationBuilder =
-    _.configure(
-      "metrics.jvm"     -> false,
-      "metrics.enabled" -> false
-    ).overrides(
+    _.overrides(
       bind[Metrics].to(new TestMetrics),
       bind[CasesService].to(caseService),
       bind[FileService].to(fileService),
