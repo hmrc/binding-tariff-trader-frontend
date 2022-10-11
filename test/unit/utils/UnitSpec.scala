@@ -21,7 +21,7 @@ import akka.stream.Materializer
 import akka.util.ByteString
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.{OptionValues, durations}
+import org.scalatest.OptionValues
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import play.api.test.Helpers.{cookies, defaultAwaitTimeout}

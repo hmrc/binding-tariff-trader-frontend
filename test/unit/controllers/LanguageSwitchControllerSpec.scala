@@ -31,7 +31,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
 
       val result = Helpers.route(appWithWelshTranslation, request).get
 
-      status(result) shouldBe SEE_OTHER
+      status(result)             shouldBe SEE_OTHER
       getLanguageCookies(result) shouldBe "cy"
     }
 
