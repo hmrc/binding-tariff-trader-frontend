@@ -1,6 +1,5 @@
 import sbt._
 import play.core.PlayVersion.current
-import sbt.librarymanagement.InclExclRule
 
 object AppDependencies {
 
