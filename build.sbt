@@ -27,8 +27,7 @@ lazy val root = (project in file("."))
     concurrentRestrictions in Global += Tags.limit(Tags.Test, 1),
     Test / fork := true,
     resolvers += Resolver.jcenterRepo,
-    // Use the silencer plugin to suppress warnings from unused imports in compiled twirl templates
-    scalacOptions += "-P:silencer:pathFilters=views;routes",
+    scalacOptions += "-Wconf:src=routes/.*:s,src=views/.*:s",
     Concat.groups := Seq(
       "javascripts/bindingtarifftraderfrontend-app.js" ->
         group(Seq("javascripts/show-hide-content.js", "javascripts/bindingtarifftraderfrontend.js"))
