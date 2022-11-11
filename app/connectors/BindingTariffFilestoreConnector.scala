@@ -94,7 +94,7 @@ class BindingTariffFilestoreConnector @Inject() (
         if (response.status / 100 == 2) {
           Future.successful(Some(response.bodyAsSource))
         } else if (response.status / 100 > 4) {
-          Future.failed(new RuntimeException(s"Unable to retrieve file $url from filestore"))
+          Future.failed(new RuntimeException(s"Unable to retrieve file from filestore"))
         } else {
           Future.successful(None)
         }
