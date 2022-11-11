@@ -104,7 +104,7 @@ class BindingTariffFilestoreConnector @Inject() (
   def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
     withMetricsTimerAsync("publish-file") { _ =>
       client.POSTEmpty[FilestoreResponse](
-        s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish",
+        "${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish",
         headers = addAuth(appConfig)
       )
     }
