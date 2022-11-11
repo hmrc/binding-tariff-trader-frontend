@@ -94,7 +94,7 @@ class BindingTariffFilestoreConnector @Inject() (
         if (response.status / 100 == 2) {
           Future.successful(Some(response.bodyAsSource))
         } else if (response.status / 100 > 4) {
-          Future.failed(new RuntimeException(s"Unable to retrieve file from filestore"))
+          Future.failed(new RuntimeException("Unable to retrieve file from filestore"))
         } else {
           Future.successful(None)
         }
@@ -104,7 +104,7 @@ class BindingTariffFilestoreConnector @Inject() (
   def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
     withMetricsTimerAsync("publish-file") { _ =>
       client.POSTEmpty[FilestoreResponse](
-        "${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish",
+        s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish",
         headers = addAuth(appConfig)
       )
     }
