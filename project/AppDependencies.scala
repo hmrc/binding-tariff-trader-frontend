@@ -3,7 +3,7 @@ import play.core.PlayVersion.current
 
 object AppDependencies {
 
-  private val bootstrapPlayVersion = "7.7.0"
+  private val bootstrapPlayVersion = "7.11.0"
   private val hmrcMongoPlayVersion = "0.73.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
@@ -17,11 +17,11 @@ object AppDependencies {
     "uk.gov.hmrc"                  %% "play-allowlist-filter-play-28" % "1.1.0",
     "uk.gov.hmrc"                  %% "play-json-union-formatter"     % "1.15.0-play-28",
     "org.typelevel"                %% "cats-core"                     % "2.8.0",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala"          % "2.13.4"
+    "com.fasterxml.jackson.module" %% "jackson-module-scala"          % "2.14.0"
   )
 
   private lazy val test: Seq[ModuleID] = Seq(
-    "com.github.tomakehurst" % "wiremock-jre8"            % "2.34.0",
+    "com.github.tomakehurst" % "wiremock-jre8"            % "2.35.0",
     "com.typesafe.play"      %% "play-test"               % current,
     "uk.gov.hmrc.mongo"      %% "hmrc-mongo-test-play-28" % hmrcMongoPlayVersion,
     "uk.gov.hmrc"            %% "bootstrap-test-play-28"  % bootstrapPlayVersion,

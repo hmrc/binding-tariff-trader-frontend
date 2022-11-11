@@ -253,7 +253,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
       intercept[RuntimeException] {
         await(connector.downloadFile(s"$wireMockUrl/digital-tariffs-local/717f3a7a-db8e-11e9-8a34-2a2ae2dbcce4"))
-      }.getMessage shouldBe s"Unable to retrieve file $wireMockUrl/digital-tariffs-local/717f3a7a-db8e-11e9-8a34-2a2ae2dbcce4 from filestore"
+      }.getMessage shouldBe "Unable to retrieve file from filestore"
     }
 
     "Handle 404" when {
