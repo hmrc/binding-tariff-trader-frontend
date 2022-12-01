@@ -21,35 +21,35 @@
 
 @elements = @{ new FieldElements(field.id, field, null, args.toMap, messages) }
 
-@value = @{ field.value match { case Some(x) => x case None => "" case x => x }}
+@value = @{ field.value match { case Some(x) => x case None => ""}}
 
+<div class = "govuk-!-width-one-half govuk-body">
+    <div class="govuk-body govuk-form-group @if(elements.hasErrors){ govuk-form-group--error }">
 
-<div class="govuk-form-group @if(elements.hasErrors){ govuk-form-group--error }">
+        <label for="@elements.field.name" class="govuk-label">
+            <span class="label__text">@elements.label</span>
+        </label>
 
-    <label for="@elements.field.name" class="govuk-label">
-        <span class="label__text">
-            @elements.label
-        </span>
-    </label>
-
-    @if(elements.hasErrors){
-        @elements.errors.map { error =>
-            <div id="error-message-@{field.id}-input" class="govuk-error-message"><span class="govuk-visually-hidden">@messages("error.browser.title.prefix")</span>@error</div>
-        }
-    }
-    <select @if(elements.hasErrors){aria-describedby="error-message-@{field.id}-input"} id="@elements.field.name" name="@elements.field.name" class="@elements.args.get('_selectClass) govuk-select">
-        @if(displayEmptyValue) {
-            <option value="">@elements.args.get('_emptyValueText)</option>
-        }
-        @for(option <- elementOptions) {
-            @if(option._2){
-                <option
-                        id="@elements.field.name-@(option._1.toLowerCase.map(x => if(x == ' ') '-' else x).filterNot(x => "()".contains(x)))"
-                        value="@option._1"
-                @if(value==option._1){selected="selected"}
-                >@option._2</option>
+        @if(elements.hasErrors){
+            @elements.errors.map { error =>
+                <div id="error-message-@{field.id}-input" class="govuk-error-message">
+                    <span class="govuk-visually-hidden">@messages("error.browser.title.prefix")</span>
+                    @error
+                </div>
             }
         }
-    </select>
 
+        <select
+                aria-describedby=@if(elements.hasErrors){"error-message-@{field.id}-input"}else{"@elements.field.name"}
+                id="@elements.field.name"
+                name="@elements.field.name"
+                class="@elements.args.get('_selectClass) govuk-select">
+            @if(displayEmptyValue) {
+                <option value id="unselected" label="unselected"></option>
+            }
+            @for(option <- elementOptions) {
+                <option value="@option._1" @if(value==option._1){selected} id="@elements.field.name-@(option._1.toLowerCase.map(x => if(x == ' ') '-' else x).filterNot(x => "()".contains(x)))">@option._2</option>
+            }
+        </select>
+    </div>
 </div>

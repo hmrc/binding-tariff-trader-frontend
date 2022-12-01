@@ -49,19 +49,22 @@
             @components.input_text(
                 field = form("name"),
                 label = Some(messages("enterContactDetails.name")),
-                inputPurpose=Some("name")
+                inputPurpose=Some("name"),
+                autocomplete = true
             )
 
             @components.input_text(
                 field = form("email"),
                 label = Some(messages("enterContactDetails.email")),
-                inputPurpose=Some("email")
+                inputPurpose=Some("email"),
+                autocomplete = true
             )
 
             @components.input_text(
                 field = form("phoneNumber"),
                 label = Some(messages("enterContactDetails.phoneNumber")),
-                inputPurpose=Some("phoneNumber"),
+                inputPurpose=Some("tel"),
+                autocomplete = true,
                 inputType = "tel"
             )
         }

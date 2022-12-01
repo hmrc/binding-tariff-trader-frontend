@@ -20,10 +20,8 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisteredAddressForEoriFormProvider
-
-import javax.inject.Inject
-import models.{Mode, RegisteredAddressForEori}
 import models.requests.DataRequest
+import models.{Mode, RegisteredAddressForEori}
 import navigation.Navigator
 import pages.RegisteredAddressForEoriPage
 import play.api.data.Form
@@ -34,6 +32,7 @@ import service.CountriesService
 import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 import views.html.registeredAddressForEori
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class RegisteredAddressForEoriController @Inject() (

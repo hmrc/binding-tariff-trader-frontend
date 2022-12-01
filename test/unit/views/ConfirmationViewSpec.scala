@@ -153,8 +153,8 @@ class ConfirmationViewSpec extends ViewBehaviours {
       }
 
       "display correct messages when samples are hazardous" in {
-        val text = asDocument(createView(hazardousSamplePdf)).getElementById("pdfView").text()
 
+        val text = asDocument(createView(hazardousSamplePdf)).getElementById("pdfView").text()
         text should include(messages("view.application.paragraph.do.not.send.sample"))
         text should not include (messages("confirmation.sendingSamples.address"))
         text should not include (messages("confirmation.paragraph.sample.return"))

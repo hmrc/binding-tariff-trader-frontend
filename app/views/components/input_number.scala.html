@@ -32,14 +32,15 @@
         <h1 class="govuk-heading-xl">
             @captionMsg.map{caption =>
                 <span class="govuk-caption-xl">
-                    <span class="govuk-visually-hidden">@messages("site.sectionIs") </span>@caption
+                    <span class="govuk-visually-hidden">@messages("site.sectionIs")</span>
+                    @caption
                 </span>
             }
             <label class="govuk-label govuk-label--xl" for="@{field.id}">@label</label>
         </h1>
     } else {
         <label class="govuk-label" for="@{field.id}">
-        @label
+            @label
         </label>
     }
 
@@ -59,12 +60,12 @@
         class="govuk-input"
         type="text"
         inputmode="numeric"
-        max="max"
+        max=@max
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
-        @if(field.hasErrors){aria-describedby="error-message-@{field.id}-input"}
-        @if(inputPurpose.isDefined) {autocomplete="@inputPurpose"}
+        aria-describedby=@if(field.hasErrors){"error-message-@{field.id}-input"}else{"@{field.id}"}
+        autocomplete=@if(inputPurpose.isDefined){"on"}else{"off"}
     />
 </div>
 

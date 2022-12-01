@@ -22,11 +22,12 @@
         inputClass: Option[String] = None,
         inputType: String = "text",
         hint: Option[String] = None,
-        maxlength: Int = 1000,
+        maxLength: Int = 1000,
         inputPurpose: Option[String] = None,
         headingIsLabel: Boolean = false,
         captionMsg: Option[String] = None,
-        contentHtml : Option[Html] = None
+        contentHtml : Option[Html] = None,
+        autocomplete:Boolean = false
 )(implicit messages: Messages)
 
 <div class="govuk-form-group @if(field.hasErrors){govuk-form-group--error}">
@@ -58,12 +59,12 @@
     <input
         class="govuk-input @if(field.hasErrors){govuk-input--error}"
         type=@inputType
-        maxlength=@maxlength
-            id="@{field.id}"
-            name="@{field.name}"
-            value="@{field.value}"
-        @if(field.hasErrors || hint.isDefined){aria-describedby="@if(hint.isDefined){hint-@{field.id}}@if(field.hasErrors && hint.isDefined){ }@if(field.hasErrors){error-message-@{field.id}-input}"}
-        @if(inputPurpose.isDefined) {autocomplete="@inputPurpose"}
+        maxlength=@maxLength
+        id="@{field.id}"
+        name="@{field.name}"
+        value="@{field.value}"
+        aria-describedby="@if(hint.isDefined){hint-@{field.id}} else if(field.hasErrors){error-message-@{field.id}-input} else {@field.id}"
+        autocomplete=@if(autocomplete){"on"}else{"off"}
     />
 </div>
 
