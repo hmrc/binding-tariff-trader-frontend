@@ -145,17 +145,11 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 @messages("pdf.ruling.section.ifYouDisagree.cannot")
             </p>
             <p class="govuk-body-s">
-                @messages("pdf.ruling.section.ifYouDisagree.covid")
-            </p>
-            <p class="govuk-body-s">
                 @messages("pdf.ruling.section.ifYouDisagree.moreInfo") <a class="govuk-link" href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/877291/HMRC1.pdf">@messages("pdf.ruling.section.ifYouDisagree.read")</a>
             </p>
             <h4 class="govuk-heading-s">@messages("pdf.ruling.section.askForReview.title")</h4>
             <p class="govuk-body-s">
                 @Html(messages("pdf.ruling.section.askForReview.email", messages("pdf.ruling.email")))
-            </p>
-            <p class="govuk-body-s">
-                @messages("pdf.ruling.section.askForReview.covid")
             </p>
             <p class="govuk-body-s">
                 @messages("pdf.ruling.section.askForReview.acceptedReview")
