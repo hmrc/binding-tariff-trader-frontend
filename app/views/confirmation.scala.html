@@ -22,12 +22,19 @@
 @import viewmodels.ConfirmationUrlViewModel
 
 @this(
-        govukLayoutWrapper: GovukLayoutWrapper,
-        fullLayoutMainContent: FullLayoutMainContent
+    govukLayoutWrapper: GovukLayoutWrapper,
+    fullLayoutMainContent: FullLayoutMainContent
 )
 
-@(appConfig: FrontendAppConfig, confirmation: Confirmation, pdfToken: String, pdf: PdfViewModel,
-        getCountryName: String => Option[String], compositeMode: Boolean = false, urlViewModel: ConfirmationUrlViewModel)(implicit request: Request[_], messages: Messages)
+@(
+    appConfig: FrontendAppConfig,
+    confirmation: Confirmation,
+    pdfToken: String,
+    pdf: PdfViewModel,
+    getCountryName: String => Option[String],
+    compositeMode: Boolean = false,
+    urlViewModel: ConfirmationUrlViewModel
+)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"
@@ -46,6 +53,7 @@
 ){
 
 <div class="govuk-grid-column-two-thirds p-0 hidden-print">
+
     <div class="govuk-panel govuk-panel--confirmation">
         <h1 class="govuk-panel__title"> @messages("confirmation.heading") </h1>
         <div class="govuk-panel__body">

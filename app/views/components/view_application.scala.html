@@ -18,18 +18,18 @@
 @import viewmodels.PdfViewModel
 @import utils.Dates
 
-@(appConfig: FrontendAppConfig, pdf: PdfViewModel, getCountryName: String => Option[String],
-        compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(
+    appConfig: FrontendAppConfig,
+    pdf: PdfViewModel,
+    getCountryName: String => Option[String],
+    compositeMode: Boolean = false
+)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"
 }
 
 <html>
-    <head>
-        <title>@messages("application.title.pdf")</title>
-    </head>
-    <body>
     <div id="pdfView">
         <div class="govuk-grid-row hidden-print">
             <div class="govuk-grid-column-two-thirds"></div>
