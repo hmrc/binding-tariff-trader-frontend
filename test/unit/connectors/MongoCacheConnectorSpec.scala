@@ -18,7 +18,6 @@ package connectors
 
 import generators.Generators
 import org.mockito.ArgumentMatchers.{any, refEq}
-import org.mockito.Mockito.{verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks

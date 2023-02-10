@@ -16,6 +16,7 @@
 
 package connectors
 
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.PdfFile
 import play.api.http.Status
@@ -47,7 +48,7 @@ class PdfGeneratorServiceConnectorSpec extends ConnectorTest {
       response.contentType shouldBe "application/pdf"
       response.content     shouldBe expectedContent
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo("/pdf-generator-service/generate"))
           .withoutHeader("X-Api-Token")
       )
@@ -69,7 +70,7 @@ class PdfGeneratorServiceConnectorSpec extends ConnectorTest {
 
       caught.getMessage contains "Error calling PdfGeneratorService"
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo("/pdf-generator-service/generate"))
           .withoutHeader("X-Api-Token")
       )

@@ -21,7 +21,7 @@ import connectors.{BindingTariffClassificationConnector, EmailConnector}
 import models.CaseStatus.CaseStatus
 import models._
 import models.requests.NewEventRequest
-import org.mockito.ArgumentCaptor
+import org.mockito.{ArgumentCaptor, Mockito}
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito._
@@ -177,7 +177,7 @@ class CasesServiceSpec extends SpecBase {
       }
 
       caught shouldBe exception
-      verify(caseConnector, never()).createEvent(refEq(existingCase), any[NewEventRequest])(any[HeaderCarrier])
+      verify(caseConnector, never).createEvent(refEq(existingCase), any[NewEventRequest])(any[HeaderCarrier])
     }
 
     def theEventCreatedFor(connector: BindingTariffClassificationConnector, c: Case): NewEventRequest = {

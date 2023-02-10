@@ -16,6 +16,7 @@
 
 package connectors
 
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.matching.EqualToJsonPattern
 import models.{ApplicationSubmittedEmail, ApplicationSubmittedParameters}
@@ -33,7 +34,7 @@ class EmailConnectorSpec extends ConnectorTest {
   "Connector 'Send'" should {
 
     "POST Email payload" in {
-      stubFor(
+      WireMock.stubFor(
         post(urlEqualTo("/hmrc/email"))
           .withRequestBody(new EqualToJsonPattern(fromResource("advice_request_email-request.json"), true, false))
           .willReturn(
@@ -44,14 +45,14 @@ class EmailConnectorSpec extends ConnectorTest {
 
       await(connector.send(email)) shouldBe ((): Unit)
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo("/hmrc/email"))
           .withoutHeader("X-Api-Token")
       )
     }
 
     "propagate errors" in {
-      stubFor(
+      WireMock.stubFor(
         post(urlEqualTo("/hmrc/email"))
           .willReturn(
             aResponse()
@@ -63,7 +64,7 @@ class EmailConnectorSpec extends ConnectorTest {
         await(connector.send(email))
       }
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo("/hmrc/email"))
           .withoutHeader("X-Api-Token")
       )

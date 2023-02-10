@@ -16,6 +16,7 @@
 
 package connectors
 
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models._
 import models.requests.NewEventRequest
@@ -42,7 +43,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val response     = oCase.btiCaseExample
       val responseJSON = Json.toJson(response).toString()
 
-      stubFor(
+      WireMock.stubFor(
         post(urlEqualTo("/cases"))
           .withRequestBody(equalToJson(requestJSON))
           .willReturn(
@@ -54,7 +55,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
       await(connector.createCase(request)(withHeaderCarrier("custom token"))) shouldBe response
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo("/cases"))
           .withHeader("X-Api-Token", equalTo("custom token"))
       )
@@ -63,7 +64,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     "Find valid case with x-api-token" in {
       val responseJSON = Json.toJson(oCase.btiCaseExample).toString()
 
-      stubFor(
+      WireMock.stubFor(
         get(urlEqualTo("/cases/id"))
           .willReturn(
             aResponse()
@@ -76,14 +77,14 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         connector.findCase("id")(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Some(oCase.btiCaseExample)
 
-      verify(
+      WireMock.verify(
         getRequestedFor(urlEqualTo("/cases/id"))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
     "propagate errors with x-api-token" in {
-      stubFor(
+      WireMock.stubFor(
         post(urlEqualTo("/cases"))
           .willReturn(
             aResponse()
@@ -95,7 +96,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         await(connector.createCase(request)(withHeaderCarrier(appConfig.apiToken)))
       }
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo("/cases"))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -105,7 +106,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val response     = oCase.btiCaseExample
       val responseJSON = Json.toJson(response).toString()
 
-      stubFor(
+      WireMock.stubFor(
         post(urlEqualTo("/cases"))
           .withRequestBody(equalToJson(requestJSON))
           .willReturn(
@@ -117,7 +118,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
       await(connector.createCase(request)(hc)) shouldBe response
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo("/cases"))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -126,7 +127,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     "Find valid case without x-api-token" in {
       val responseJSON = Json.toJson(oCase.btiCaseExample).toString()
 
-      stubFor(
+      WireMock.stubFor(
         get(urlEqualTo("/cases/id"))
           .willReturn(
             aResponse()
@@ -137,14 +138,14 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
       await(connector.findCase("id")(hc)) shouldBe Some(oCase.btiCaseExample)
 
-      verify(
+      WireMock.verify(
         getRequestedFor(urlEqualTo("/cases/id"))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
     "propagate errors without x-api-token" in {
-      stubFor(
+      WireMock.stubFor(
         post(urlEqualTo("/cases"))
           .willReturn(
             aResponse()
@@ -156,7 +157,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         await(connector.createCase(request)(hc))
       }
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo("/cases"))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -168,7 +169,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val caseExample = oCase.btiCaseExample
       val url         = s"/cases/${caseExample.reference}"
 
-      stubFor(
+      WireMock.stubFor(
         put(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -181,7 +182,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         connector.putCase(caseExample)(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe caseExample
 
-      verify(
+      WireMock.verify(
         putRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -191,7 +192,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val caseExample = oCase.btiCaseExample
       val url         = s"/cases/${caseExample.reference}"
 
-      stubFor(
+      WireMock.stubFor(
         put(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -205,7 +206,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       }
 
-      verify(
+      WireMock.verify(
         putRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -215,7 +216,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val caseExample = oCase.btiCaseExample
       val url         = s"/cases/${caseExample.reference}"
 
-      stubFor(
+      WireMock.stubFor(
         put(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -229,7 +230,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       }
 
-      verify(
+      WireMock.verify(
         putRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -241,7 +242,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val caseRef = oCase.btiCaseExample.reference
       val url     = s"/cases/$caseRef"
 
-      stubFor(
+      WireMock.stubFor(
         post(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -254,7 +255,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         connector.updateCase(caseRef, CaseUpdate())(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Some(oCase.btiCaseExample)
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -263,7 +264,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     "Return empty response for missing case" in {
       val url = s"/cases/foo"
 
-      stubFor(
+      WireMock.stubFor(
         post(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -275,7 +276,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         connector.updateCase("foo", CaseUpdate())(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe None
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -284,7 +285,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
     "Propagate errors" in {
       val url = "/cases/foo"
 
-      stubFor(
+      WireMock.stubFor(
         post(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -298,7 +299,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       }
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -313,7 +314,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val url =
         "/cases?sort_by=created-date&sort_direction=desc&page=2&page_size=50&application_type=BTI&migrated=false"
 
-      stubFor(
+      WireMock.stubFor(
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -326,7 +327,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         connector.allCases(SearchPagination(page, pageSize), Sort())(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Paged.empty[Case]
 
-      verify(
+      WireMock.verify(
         getRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -337,7 +338,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val url =
         "/cases?sort_by=created-date&sort_direction=desc&page=2&page_size=50&application_type=BTI&migrated=false"
 
-      stubFor(
+      WireMock.stubFor(
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -350,7 +351,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         connector.allCases(SearchPagination(page, pageSize), Sort())(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Paged(Seq(oCase.btiCaseExample))
 
-      verify(
+      WireMock.verify(
         getRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -361,7 +362,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val url =
         "/cases?sort_by=created-date&sort_direction=desc&page=1&page_size=50&application_type=BTI&migrated=false"
 
-      stubFor(
+      WireMock.stubFor(
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -375,7 +376,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       }
 
-      verify(
+      WireMock.verify(
         getRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -388,7 +389,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val url =
         "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50&migrated=false"
 
-      stubFor(
+      WireMock.stubFor(
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -406,7 +407,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Paged.empty[Case]
 
-      verify(
+      WireMock.verify(
         getRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -416,7 +417,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val url =
         "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50&migrated=false"
 
-      stubFor(
+      WireMock.stubFor(
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -434,7 +435,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )(withHeaderCarrier(appConfig.apiToken))
       ) shouldBe Paged(Seq(oCase.btiCaseExample))
 
-      verify(
+      WireMock.verify(
         getRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -444,7 +445,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val url =
         "/cases?eori=eori1234567&status=NEW&sort_by=created-date&sort_direction=desc&page=1&page_size=2147483647&migrated=false"
 
-      stubFor(
+      WireMock.stubFor(
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
@@ -463,7 +464,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         )
       }
 
-      verify(
+      WireMock.verify(
         getRequestedFor(urlEqualTo(url))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -485,7 +486,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val requestJson       = Json.toJson(validEventRequest).toString()
       val responseJson      = Json.toJson(validEvent).toString()
 
-      stubFor(
+      WireMock.stubFor(
         post(urlEqualTo(s"/cases/$ref/events"))
           .withRequestBody(equalToJson(requestJson))
           .willReturn(
@@ -497,7 +498,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
       await(connector.createEvent(validCase, validEventRequest)) shouldBe validEvent
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo(s"/cases/$ref/events"))
           .withHeader("X-Api-Token", equalTo(fakeAuthToken))
       )
@@ -509,7 +510,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       val validEventRequest = eventRequest
       val requestJson       = Json.toJson(validEventRequest).toString()
 
-      stubFor(
+      WireMock.stubFor(
         post(urlEqualTo(s"/cases/$ref/events"))
           .withRequestBody(equalToJson(requestJson))
           .willReturn(
@@ -522,7 +523,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         await(connector.createEvent(validCase, validEventRequest))
       }
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo(s"/cases/$ref/events"))
           .withHeader("X-Api-Token", equalTo(fakeAuthToken))
       )
