@@ -7,17 +7,15 @@ object AppDependencies {
   private val hmrcMongoPlayVersion = "0.74.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
-    "commons-validator"            % "commons-validator"              % "1.7",
-    "uk.gov.hmrc"                  %% "play-frontend-hmrc"            % "6.4.0-play-28",
-    "uk.gov.hmrc"                  %% "bootstrap-frontend-play-28"    % bootstrapPlayVersion,
-    "uk.gov.hmrc"                  %% "http-caching-client"           % "10.0.0-play-28",
-    "uk.gov.hmrc"                  %% "play-language"                 % "6.1.0-play-28",
-    "uk.gov.hmrc.mongo"            %% "hmrc-mongo-play-28"            % hmrcMongoPlayVersion,
-    "commons-codec"                % "commons-codec"                  % "1.15",
-    "uk.gov.hmrc"                  %% "play-allowlist-filter-play-28" % "1.1.0",
-    "uk.gov.hmrc"                  %% "play-json-union-formatter"     % "1.18.0-play-28",
-    "org.typelevel"                %% "cats-core"                     % "2.9.0",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala"          % "2.14.2"
+    "commons-validator"            % "commons-validator"           % "1.7",
+    "uk.gov.hmrc"                  %% "play-frontend-hmrc"         % "6.4.0-play-28",
+    "uk.gov.hmrc"                  %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
+    "uk.gov.hmrc"                  %% "http-caching-client"        % "10.0.0-play-28",
+    "uk.gov.hmrc.mongo"            %% "hmrc-mongo-play-28"         % hmrcMongoPlayVersion,
+    "commons-codec"                % "commons-codec"               % "1.15",
+    "uk.gov.hmrc"                  %% "play-json-union-formatter"  % "1.18.0-play-28",
+    "org.typelevel"                %% "cats-core"                  % "2.9.0",
+    "com.fasterxml.jackson.module" %% "jackson-module-scala"       % "2.14.2"
   )
 
   private lazy val test: Seq[ModuleID] = Seq(

@@ -16,14 +16,14 @@
 
 package service
 
-import java.io.File
-import java.nio.file.Files
-
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
 import base.SpecBase
 import config.FrontendAppConfig
 import connectors.BindingTariffFilestoreConnector
 import models._
-import models.response.FilestoreResponse
+import models.requests.FileStoreInitiateRequest
+import models.response.{FileStoreInitiateResponse, FilestoreResponse, UpscanFormTemplate}
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.reset
@@ -32,12 +32,10 @@ import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.io.File
+import java.nio.file.Files
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.{failed, successful}
-import models.requests.FileStoreInitiateRequest
-import models.response.FileStoreInitiateResponse
-import models.response.UpscanFormTemplate
-import akka.util.ByteString
-import akka.stream.scaladsl.Source
 
 class FileServiceSpec extends SpecBase {
 

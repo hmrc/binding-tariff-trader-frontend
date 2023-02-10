@@ -20,6 +20,8 @@ import controllers.actions._
 import play.api.test.Helpers._
 import views.html.acceptItemInformationList
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class AcceptItemInformationListControllerSpec extends ControllerSpecBase {
 
   val acceptItemInformationListView: acceptItemInformationList =
