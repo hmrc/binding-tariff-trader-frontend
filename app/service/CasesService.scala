@@ -24,11 +24,13 @@ import play.api.Logging
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CasesService @Inject() (connector: BindingTariffClassificationConnector, emailConnector: EmailConnector)
+class CasesService @Inject() (
+  connector: BindingTariffClassificationConnector,
+  emailConnector: EmailConnector
+)(implicit ec: ExecutionContext)
     extends Logging {
 
   def create(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] =

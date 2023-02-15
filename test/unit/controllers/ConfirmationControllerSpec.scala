@@ -21,7 +21,6 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import models.{Confirmation, oCase}
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito._
 import pages.{ConfirmationPage, PdfViewPage}
 import play.api.test.Helpers._
 import service.{BTAUserService, CountriesService, PdfService}
@@ -107,11 +106,11 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
     )
 
     "redirect to an error page" when {
+      given(cache.remove(cacheMap)).willReturn(Future.successful(true))
       errorScenarios foreach { data =>
         s"there is an issue calling ${data._1}" in {
           val fakeRequest = fakeRequestWithNotOptionalEoriAndCache
 
-          given(cache.remove(cacheMap)).willReturn(Future.successful(true))
           given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString))
             .willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
           given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdfViewModel))

@@ -16,22 +16,19 @@
 
 package connectors
 
-import java.nio.charset.StandardCharsets
-
 import akka.util.ByteString
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.response.FilestoreResponse
+import models.requests.FileStoreInitiateRequest
+import models.response.{FileStoreInitiateResponse, FilestoreResponse, UpscanFormTemplate}
 import models.{Attachment, FileAttachment}
 import org.mockito.BDDMockito.given
 import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import models.requests.FileStoreInitiateRequest
-import models.response.FileStoreInitiateResponse
-import models.response.UpscanFormTemplate
 import unit.base.WireMockObject.wireMockUrl
 
+import java.nio.charset.StandardCharsets
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
@@ -45,7 +42,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
   "Connector" should {
 
     "Initiate" in {
-      stubFor(
+      WireMock.stubFor(
         post("/file/initiate")
           .willReturn(
             aResponse()
@@ -65,14 +62,14 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         )
       )
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo("/file/initiate"))
           .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
     "Get" in {
-      stubFor(
+      WireMock.stubFor(
         get("/file/id")
           .willReturn(
             aResponse()
@@ -89,7 +86,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         mimeType = "text/plain"
       )
 
-      verify(
+      WireMock.verify(
         getRequestedFor(urlEqualTo("/file/id"))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -100,14 +97,14 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         val att = mock[Attachment]
         given(att.id) willReturn "id"
 
-        stubFor(
+        WireMock.stubFor(
           get("/file/id")
             .willReturn(aResponse().withStatus(Status.NOT_FOUND))
         )
 
         await(connector.get(att)(withHeaderCarrier(appConfig.apiToken))) shouldBe None
 
-        verify(
+        WireMock.verify(
           getRequestedFor(urlEqualTo("/file/id"))
             .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
         )
@@ -117,7 +114,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         val att = mock[Attachment]
         given(att.id) willReturn "id"
 
-        stubFor(
+        WireMock.stubFor(
           get("/file/id")
             .willReturn(
               aResponse()
@@ -138,7 +135,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           )
         )
 
-        verify(
+        WireMock.verify(
           getRequestedFor(urlEqualTo("/file/id"))
             .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
         )
@@ -146,7 +143,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
     }
 
     "Publish" in {
-      stubFor(
+      WireMock.stubFor(
         post("/file/id/publish")
           .willReturn(
             aResponse()
@@ -163,14 +160,14 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         mimeType = "text/plain"
       )
 
-      verify(
+      WireMock.verify(
         getRequestedFor(urlEqualTo("/file/id"))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
     }
 
     "Get FileMetadata" in {
-      stubFor(
+      WireMock.stubFor(
         get("/file?id=id1&id=id2")
           .willReturn(
             aResponse()
@@ -188,7 +185,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         FilestoreResponse(id = "id2", fileName = "file-name2.txt", mimeType = "text/plain")
       )
 
-      verify(
+      WireMock.verify(
         getRequestedFor(urlEqualTo("/file?id=id1&id=id2"))
           .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
       )
@@ -199,7 +196,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
     }
 
     "Upload Application PDF" in {
-      stubFor(
+      WireMock.stubFor(
         post("/file")
           .willReturn(
             aResponse()
@@ -211,7 +208,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
       await(connector.uploadApplicationPdf("ref", "content".getBytes(StandardCharsets.UTF_8))) shouldBe
         FilestoreResponse("id", "file-name.txt", "text/plain")
 
-      verify(
+      WireMock.verify(
         postRequestedFor(urlEqualTo("/file"))
           .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
@@ -220,7 +217,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
     "Download file from a URL" in {
       val content = "content".getBytes(StandardCharsets.UTF_8)
 
-      stubFor(
+      WireMock.stubFor(
         get(urlEqualTo("/digital-tariffs-local/a1e8057e-fbbc-47a8-a8b4-78d9f015c253"))
           .willReturn(
             aResponse()
@@ -243,7 +240,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
     "Fail to download file from a URL" in {
 
-      stubFor(
+      WireMock.stubFor(
         get(urlEqualTo("/digital-tariffs-local/717f3a7a-db8e-11e9-8a34-2a2ae2dbcce4"))
           .willReturn(
             aResponse()
@@ -259,7 +256,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
     "Handle 404" when {
       "downloading a file from a URL" in {
 
-        stubFor(
+        WireMock.stubFor(
           get(urlEqualTo("/digital-tariffs-local/c432a56d-e811-474c-a26a-76fc3bcaefe5"))
             .willReturn(
               aResponse()

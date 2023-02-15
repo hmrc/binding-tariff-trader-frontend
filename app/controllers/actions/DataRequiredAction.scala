@@ -22,10 +22,9 @@ import models.requests.{DataRequest, OptionalDataRequest}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRequiredActionImpl @Inject() extends DataRequiredAction {
+class DataRequiredActionImpl @Inject() (implicit ec: ExecutionContext) extends DataRequiredAction {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] =
     request.userAnswers match {
@@ -34,7 +33,7 @@ class DataRequiredActionImpl @Inject() extends DataRequiredAction {
         Future.successful(Right(DataRequest(request.request, request.internalId, request.userEoriNumber, data)))
     }
 
-  override protected def executionContext: ExecutionContext = global
+  override protected def executionContext: ExecutionContext = ec
 }
 
 trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

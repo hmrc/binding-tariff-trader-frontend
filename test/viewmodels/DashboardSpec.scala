@@ -19,8 +19,7 @@ package viewmodels
 import models.SortDirection.{ASCENDING, DESCENDING}
 import models.SortField.{CREATED_DATE, GOODS_NAME, REFERENCE}
 import models.{Paged, SearchPagination, Sort, oCase}
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.MockitoSugar
 import play.api.mvc.Request
 import unit.utils.UnitSpec
 

@@ -23,7 +23,6 @@ import mapper.CaseRequestMapper
 import models._
 import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers.{any, refEq}
-import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import pages.{CheckYourAnswersPage, MakeFileConfidentialPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
@@ -178,7 +177,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
     caught shouldBe error
 
-    verify(casesService, never()).addCaseCreatedEvent(any[Case], any[Operator])(any[HeaderCarrier])
+    verify(casesService, never).addCaseCreatedEvent(any[Case], any[Operator])(any[HeaderCarrier])
   }
 
   "send the expected explicit audit events when the ATAR application has been submitted successfully" in {

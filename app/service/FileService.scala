@@ -30,16 +30,16 @@ import play.api.mvc.{MessagesControllerComponents, MultipartFormData}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import scala.concurrent.Future.{sequence, successful}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FileService @Inject() (
   connector: BindingTariffFilestoreConnector,
   cc: MessagesControllerComponents,
   appConfig: FrontendAppConfig
-) extends Logging {
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   private val messagesApi: MessagesApi = cc.messagesApi
   private implicit val lang: Lang      = Lang.defaultLang

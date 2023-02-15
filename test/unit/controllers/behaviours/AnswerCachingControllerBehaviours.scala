@@ -17,16 +17,16 @@
 package controllers
 package behaviours
 
-import controllers.actions.{DataRetrievalAction, FakeDataRetrievalAction}
+import controllers.actions.{DataRetrievalAction, DataRetrievalActionImpl, FakeDataRetrievalAction}
 import controllers.routes
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
 import play.api.data.Form
 import play.api.libs.json.{Format, JsValue, Json}
 import play.api.mvc.{Call, Request}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
-import models.UserAnswers
-import controllers.actions.DataRetrievalActionImpl
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControllerBehaviours {
   self: ControllerSpecBase =>

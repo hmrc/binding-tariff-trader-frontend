@@ -18,7 +18,6 @@ package unit.service
 
 import base.SpecBase
 import connectors.DataCacheConnector
-import org.mockito.Mockito.{reset, times, verify, when}
 import play.api.libs.json.Json
 import service.BTAUserService
 import uk.gov.hmrc.http.cache.client.CacheMap

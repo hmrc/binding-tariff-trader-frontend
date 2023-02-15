@@ -18,16 +18,15 @@ package metrics
 
 import com.codahale.metrics.Timer
 import com.kenshoo.play.metrics.Metrics
-import org.mockito.Mockito
-import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers._
+import org.mockito.{Mockito, MockitoSugar}
+import org.scalatest.compatible.Assertion
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AsyncWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, OptionValues}
-import org.scalatest.compatible.Assertion
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{MessagesAbstractController, Results}
 import play.api.test.{FakeRequest, Helpers}
+
 import scala.concurrent.Future
 
 class HasMetricsSpec

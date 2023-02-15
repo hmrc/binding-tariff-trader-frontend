@@ -38,7 +38,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
   override protected def beforeEach(): Unit = {
     super.beforeEach()
 
-    Mockito.reset(dataCache, btaUserService)
+    reset(dataCache, btaUserService)
   }
 
   private def controller = new SignOutController(
