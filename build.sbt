@@ -17,12 +17,14 @@ lazy val root = (project in file("."))
   .settings(
     commonSettings,
     name := appName,
-    scalaVersion := "2.12.16",
+    scalaVersion := "2.13.10",
     targetJvm := "jvm-1.8",
     RoutesKeys.routesImport ++= Seq("models._", "models.Languages._", "models.SortField._", "models.SortDirection._"),
     PlayKeys.playDefaultPort := 9582,
     scalacOptions ~= { opts => opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard")) },
     libraryDependencies ++= AppDependencies(),
+    // To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
+    libraryDependencySchemes ++= Seq("org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always),
     retrieveManaged := true,
     concurrentRestrictions in Global += Tags.limit(Tags.Test, 1),
     Test / fork := true,
@@ -59,5 +61,5 @@ coverageHighlighting := true
 
 lazy val commonSettings: Seq[Setting[_]] = publishingSettings ++ gitStampSettings
 
-addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt test:scalafmt")
-addCommandAlias("scalastyleAll", "all scalastyle test:scalastyle")
+addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt")
+addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle")

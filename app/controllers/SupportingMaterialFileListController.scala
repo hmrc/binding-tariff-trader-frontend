@@ -76,7 +76,7 @@ class SupportingMaterialFileListController @Inject() (
     val files                   = userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty[FileAttachment])
     val remainingFiles          = files.filterNot(_.id == id)
     val confidentialityStatuses = userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty[String, Boolean])
-    val remainingStatuses       = confidentialityStatuses.filterKeys(_ != id)
+    val remainingStatuses       = confidentialityStatuses.filterKeys(_ != id).toMap
 
     val updatedAnswers = userAnswers
       .set(UploadSupportingMaterialMultiplePage, remainingFiles)
