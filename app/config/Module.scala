@@ -27,12 +27,12 @@ import workers.MigrationWorker
 class Module extends PlayModule {
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] =
     Seq(
-      bind[DataRetrievalAction].to[DataRetrievalActionImpl].eagerly,
-      bind[DataRequiredAction].to[DataRequiredActionImpl].eagerly,
-      bind[IdentifierAction].to[AuthenticatedIdentifierAction].eagerly,
-      bind[DataCacheConnector].to[MongoCacheConnector].eagerly,
+      bind[DataRetrievalAction].to[DataRetrievalActionImpl].eagerly(),
+      bind[DataRequiredAction].to[DataRequiredActionImpl].eagerly(),
+      bind[IdentifierAction].to[AuthenticatedIdentifierAction].eagerly(),
+      bind[DataCacheConnector].to[MongoCacheConnector].eagerly(),
       bind[CompositeSymmetricCrypto].to[Crypto],
       bind[Clock].to(Clock.systemUTC()),
-      bind[MigrationWorker].toSelf.eagerly
+      bind[MigrationWorker].toSelf.eagerly()
     )
 }

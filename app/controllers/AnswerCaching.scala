@@ -28,7 +28,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 import play.api.libs.json.Format
-import scala.collection.generic.CanBuildFrom
+import scala.collection.BuildFrom
 
 trait ListAnswerCaching[A] extends AccumulatingAnswerCaching[List[A], A] {
   val cbf = List.canBuildFrom[A]
@@ -38,8 +38,8 @@ trait MapAnswerCaching[K, V] extends AccumulatingAnswerCaching[Map[K, V], (K, V)
   val cbf = Map.canBuildFrom[K, V]
 }
 
-trait AccumulatingAnswerCaching[F <: TraversableOnce[A], A] {
-  def cbf: CanBuildFrom[F, A, F]
+trait AccumulatingAnswerCaching[F <: IterableOnce[A], A] {
+  def cbf: BuildFrom[F, A, F]
   def dataCacheConnector: DataCacheConnector
   def navigator: Navigator
   def questionPage: QuestionPage[F]

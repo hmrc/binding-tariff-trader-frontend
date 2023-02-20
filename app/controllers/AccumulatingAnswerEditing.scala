@@ -21,18 +21,20 @@ import models.requests.DataRequest
 import play.api.libs.json.Format
 import play.api.mvc.{Result, Results}
 
+import scala.List
+import scala.collection.BuildFrom
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 import scala.util.control.NonFatal
 
 trait ListAnswerEditing[A] extends AccumulatingAnswerEditing[List[A], A, Int] {
-  val cbf = List.canBuildFrom[A]
+//  val cbf = List.canBuildFrom[A]
   def editIndex(list: List[A], index: Int, elem: A): List[A] =
     list.take(index) ++ List(elem) ++ list.drop(index + 1)
 }
 
 trait MapAnswerEditing[K, V] extends AccumulatingAnswerEditing[Map[K, V], (K, V), K] {
-  val cbf = Map.canBuildFrom[K, V]
+//  val cbf = Map.canBuildFrom[K, V]
   def editIndex(map: Map[K, V], index: K, elem: (K, V)): Map[K, V] =
     map + elem
 }

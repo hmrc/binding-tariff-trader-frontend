@@ -17,7 +17,7 @@ lazy val root = (project in file("."))
   .settings(
     commonSettings,
     name := appName,
-    scalaVersion := "2.12.16",
+    scalaVersion := "2.13.10",
     targetJvm := "jvm-1.8",
     RoutesKeys.routesImport ++= Seq("models._", "models.Languages._", "models.SortField._", "models.SortDirection._"),
     PlayKeys.playDefaultPort := 9582,
