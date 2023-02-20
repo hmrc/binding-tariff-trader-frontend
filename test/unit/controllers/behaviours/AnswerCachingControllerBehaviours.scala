@@ -126,36 +126,6 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
 trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBehaviours { self: ControllerSpecBase =>
 
   /**
-    * Test the behaviour of a [[controllers.ListCachingController]]
-    *
-    * @param controller A function to create the controller to test
-    * @param onwardRoute The route to navigate to on Navigator#nextPage calls
-    * @param createView A function to create the expected view
-    * @param backgroundData The background user answers data
-    * @param invalidFormData A sample of invalid form data
-    * @param validFormData A list of valid form data for submission
-    * @param expectedUserAnswers A list of the expected [[models.UserAnswers]] after each form submission
-    */
-  def listCachingController[A: Format](
-    controller: DataRetrievalAction => AccumulatingCachingController[List[A], A],
-    onwardRoute: Call,
-    createView: (Form[A], Call, Request[_]) => String,
-    backgroundData: Map[String, JsValue],
-    invalidFormData: Map[String, String],
-    validFormData: List[Map[String, String]],
-    expectedUserAnswers: List[UserAnswers]
-  ): Unit =
-    behave like accumulatingCachingController[List[A], A](
-      controller,
-      onwardRoute,
-      createView,
-      backgroundData,
-      invalidFormData,
-      validFormData,
-      expectedUserAnswers
-    )
-
-  /**
     * Test the behaviour of a [[controllers.MapCachingController]]
     *
     * @param controller A function to create the controller to test

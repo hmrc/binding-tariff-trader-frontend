@@ -30,19 +30,13 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class ListCachingController[A](cc: MessagesControllerComponents)(
-  implicit ec: ExecutionContext,
-  format: Format[A]
-) extends AccumulatingCachingController[List[A], A](cc)
-    with ListAnswerCaching[A]
-
 abstract class MapCachingController[V](cc: MessagesControllerComponents)(
   implicit ec: ExecutionContext,
   format: Format[V]
 ) extends AccumulatingCachingController[Map[String, V], (String, V)](cc)
     with MapAnswerCaching[String, V]
 
-abstract class AccumulatingCachingController[F <: TraversableOnce[A], A](cc: MessagesControllerComponents)(
+abstract class AccumulatingCachingController[F <: IterableOnce[A], A](cc: MessagesControllerComponents)(
   implicit ec: ExecutionContext,
   format: Format[F]
 ) extends FrontendController(cc)
