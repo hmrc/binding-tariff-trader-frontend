@@ -33,7 +33,7 @@ class SessionIdFilter(
 ) extends Filter {
 
   @Inject
-  def this(mat: Materializer, ec: ExecutionContext) {
+  def this(mat: Materializer, ec: ExecutionContext) = {
     this(mat, UUID.randomUUID(), ec)
   }
 
