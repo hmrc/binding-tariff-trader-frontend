@@ -96,9 +96,7 @@ trait Formatters {
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] =
         baseFormatter
           .bind(key, data)
-          .right
           .map(_.replace(",", ""))
-          .right
           .flatMap {
             case s if s.matches(decimalRegexp) =>
               Left(Seq(FormError(key, wholeNumberKey)))
@@ -121,7 +119,7 @@ trait Formatters {
       private val baseFormatter = stringFormatter(requiredKey)
 
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], A] =
-        baseFormatter.bind(key, data).right.flatMap { str =>
+        baseFormatter.bind(key, data).flatMap { str =>
           ev.withName(str).map(Right.apply).getOrElse(Left(Seq(FormError(key, invalidKey))))
         }
 
