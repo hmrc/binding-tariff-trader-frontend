@@ -20,9 +20,6 @@ import models.Mode
 import models.requests.DataRequest
 import play.api.libs.json.Format
 import play.api.mvc.{Result, Results}
-
-import scala.List
-import scala.collection.BuildFrom
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 import scala.util.control.NonFatal

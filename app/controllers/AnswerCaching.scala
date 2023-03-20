@@ -29,7 +29,7 @@ import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 import play.api.libs.json.Format
 
-import scala.collection.{BuildFrom, mutable}
+import scala.collection.mutable
 
 trait MapAnswerCaching[K, V] extends AccumulatingAnswerCaching[Map[K, V], (K, V)] {
   val cbf = Map.newBuilder[K, V]
