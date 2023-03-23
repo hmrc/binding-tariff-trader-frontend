@@ -39,6 +39,8 @@ class FrontendAppConfig @Inject() (
   lazy val betaFeedbackUrl          = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
   lazy val betaFeedbackUnauthenticatedUrl =
     s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
+  lazy val helpMakeGovUkBetterUrl: String     = runModeConfiguration.get[String]("urls.helpMakeGovUkBetterUrl")
+  lazy val displayMakeGovUkBetterUrl: Boolean = runModeConfiguration.get[Boolean]("toggle.displayResearchBanner")
 
   lazy val authUrl: String                        = serviceConfig.baseUrl("auth")
   lazy val loginUrl: String                       = loadConfig("urls.login")

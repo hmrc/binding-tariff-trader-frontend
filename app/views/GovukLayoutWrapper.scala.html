@@ -35,6 +35,7 @@
         signOut: Option[String] = Some(routes.SignOutController.startFeedbackSurvey.url),
         timeoutActive: Boolean = true,
         showBackLink: Boolean = true,
+        isUserResearchBannerVisible: Boolean = config.displayMakeGovUkBetterUrl,
         customBackLink: Option[Html] = None,
         optCustomLayout: Option[Html => Html] = None,
         additionalJS: Option[Html] = None,
@@ -92,6 +93,14 @@
     @endOfBodyJS.getOrElse({})
 }
 
+@userResearchBanner = @{
+    if(isUserResearchBannerVisible) {
+        Some(UserResearchBanner(url = config.helpMakeGovUkBetterUrl))
+    } else {
+        None
+    }
+}
+
 @govukLayout(
     pageTitle = Some(pageTitle),
     headBlock = Some(hmrcHead(headBlock = Some(head))),
@@ -99,7 +108,7 @@
         serviceUrl = None,
         serviceName = Some(messages("service.name")),
         signOutUrl = signOut,
-        userResearchBanner = None,
+        userResearchBanner = userResearchBanner,
         phaseBanner = None,
         displayHmrcBanner = false
     )),
