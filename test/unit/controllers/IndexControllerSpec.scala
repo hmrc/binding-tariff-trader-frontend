@@ -24,7 +24,6 @@ import navigation.FakeNavigator
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito.reset
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import service.{BTAUserService, CasesService}

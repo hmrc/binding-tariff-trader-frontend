@@ -28,7 +28,6 @@ import views.html.beforeYouStart
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
-import scala.util.control.NonFatal
 
 class BeforeYouStartController @Inject() (
   appConfig: FrontendAppConfig,
@@ -46,7 +45,7 @@ class BeforeYouStartController @Inject() (
     dataCacheConnector.save(initialAnswers.cacheMap).transformWith {
       case Success(_) =>
         Future.successful(Ok(beforeYouStartPageView(appConfig)))
-      case Failure(NonFatal(_)) =>
+      case Failure(_) =>
         Future.successful(Results.BadGateway)
     }
   }

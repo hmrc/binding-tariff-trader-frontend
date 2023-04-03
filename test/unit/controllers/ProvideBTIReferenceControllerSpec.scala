@@ -23,8 +23,8 @@ import forms.ProvideBTIReferenceFormProvider
 import models.{BTIReference, NormalMode}
 import navigation.FakeNavigator
 import play.api.data.Form
-import play.api.mvc.{Call, Request}
 import play.api.libs.json.JsValue
+import play.api.mvc.{Call, Request}
 import views.html.provideBTIReference
 
 import scala.concurrent.ExecutionContext.Implicits.global

@@ -16,10 +16,10 @@
 
 package models
 
+import viewmodels.{FileView, PdfViewModel}
+
 import java.time.Instant
 import java.util.UUID
-
-import viewmodels.{FileView, PdfViewModel}
 
 object oCase {
   val fileAttachment = Attachment(id = UUID.randomUUID().toString, false)

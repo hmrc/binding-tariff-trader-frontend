@@ -16,8 +16,6 @@
 
 package filters
 
-import java.util.UUID
-
 import akka.stream.Materializer
 import com.google.inject.Inject
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -32,6 +30,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderNames, HttpVerbs, SessionKeys}
 import unit.utils.UnitSpec
 
+import java.util.UUID
 import scala.concurrent.ExecutionContext
 
 object SessionIdFilterSpec {
@@ -86,7 +85,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     "add a sessionId if one doesn't already exist" in {
 
-      val Some(result) = route(app, FakeRequest(HttpVerbs.GET, "/test"))
+      val result = route(app, FakeRequest(HttpVerbs.GET, "/test")).get
 
       val body = contentAsJson(result)
 
@@ -96,7 +95,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     "not override a sessionId if one doesn't already exist" in {
 
-      val Some(result) = route(app, FakeRequest(HttpVerbs.GET, "/test").withSession(SessionKeys.sessionId -> "foo"))
+      val result = route(app, FakeRequest(HttpVerbs.GET, "/test").withSession(SessionKeys.sessionId -> "foo")).get
 
       val body = contentAsJson(result)
 
@@ -112,7 +111,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     "not override other session values from the request" in {
 
-      val Some(result) = route(app, FakeRequest(HttpVerbs.GET, "/test").withSession("foo" -> "bar"))
+      val result = route(app, FakeRequest(HttpVerbs.GET, "/test").withSession("foo" -> "bar")).get
       session(result).data should contain("foo" -> "bar")
     }
   }

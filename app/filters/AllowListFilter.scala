@@ -29,21 +29,24 @@ class AllowListFilter @Inject() (
   override val mat: Materializer
 ) extends AkamaiAllowlistFilter {
 
-  override val allowlist: Seq[String] = {
+  override val allowlist: Seq[String] =
     config.underlying
       .getString("filters.allowlist.ips")
       .split(",")
+      .toSeq
       .map(_.trim)
       .filter(_.nonEmpty)
-  }
 
   override val destination: Call = {
     val path = config.underlying.getString("filters.allowlist.destination")
     Call(GET, path)
   }
 
-  override val excludedPaths: Seq[Call] = {
-    config.underlying.getString("filters.allowlist.excluded").split(",").map(path => Call(GET, path.trim))
-  }
+  override val excludedPaths: Seq[Call] =
+    config.underlying
+      .getString("filters.allowlist.excluded")
+      .split(",")
+      .toSeq
+      .map(path => Call(GET, path.trim))
 
 }

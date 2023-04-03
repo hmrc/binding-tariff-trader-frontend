@@ -23,8 +23,8 @@ import forms.EnterContactDetailsFormProvider
 import models.{EnterContactDetails, NormalMode}
 import navigation.FakeNavigator
 import play.api.data.Form
-import play.api.mvc.{Call, Request}
 import play.api.libs.json.JsValue
+import play.api.mvc.{Call, Request}
 import views.html.enterContactDetails
 
 import scala.concurrent.ExecutionContext.Implicits.global

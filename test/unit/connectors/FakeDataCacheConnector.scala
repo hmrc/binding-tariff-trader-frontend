@@ -16,10 +16,10 @@
 
 package connectors
 
-import java.util.concurrent.atomic.AtomicReference
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.cache.client.CacheMap
 
+import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.Future
 
 object FakeDataCacheConnector extends FakeDataCacheConnector(Map.empty[String, CacheMap])

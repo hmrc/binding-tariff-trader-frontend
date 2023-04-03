@@ -20,7 +20,6 @@ import akka.actor.ActorSystem
 import base.SpecBase
 import com.kenshoo.play.metrics.Metrics
 import config.FrontendAppConfig
-import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterAll
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.http.HeaderCarrier

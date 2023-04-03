@@ -19,8 +19,6 @@ package controllers
 import connectors.DataCacheConnector
 import controllers.actions.FakeIdentifierAction
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito
-import org.mockito.Mockito.{verify, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._

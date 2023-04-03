@@ -18,7 +18,6 @@ package unit.controllers
 
 import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import controllers.{BTARedirectController, ControllerSpecBase, routes}
-import org.mockito.Mockito.{reset, when}
 import play.api.Application
 import play.api.http.Status.SEE_OTHER
 import play.api.inject.bind

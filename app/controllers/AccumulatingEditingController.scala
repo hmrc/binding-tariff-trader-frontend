@@ -36,7 +36,7 @@ abstract class MapEditingController[V](cc: MessagesControllerComponents)(
 ) extends AccumulatingEditingController[Map[String, V], (String, V), String](cc)
     with MapAnswerEditing[String, V]
 
-abstract class AccumulatingEditingController[F <: TraversableOnce[A], A, I](
+abstract class AccumulatingEditingController[F <: IterableOnce[A], A, I](
   cc: MessagesControllerComponents
 )(implicit ec: ExecutionContext, format: Format[F])
     extends AccumulatingCachingController[F, A](cc)

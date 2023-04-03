@@ -19,9 +19,9 @@ package filters
 import akka.stream.Materializer
 import com.typesafe.config.ConfigException
 import generators.Generators
+import org.mockito.MockitoSugar
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.Configuration
 import play.api.mvc.Call

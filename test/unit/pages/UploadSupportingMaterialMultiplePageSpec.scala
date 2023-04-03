@@ -16,8 +16,8 @@
 
 package pages
 
-import pages.behaviours.PageBehaviours
 import models.FileAttachment
+import pages.behaviours.PageBehaviours
 
 class UploadSupportingMaterialMultiplePageSpec extends PageBehaviours {
 

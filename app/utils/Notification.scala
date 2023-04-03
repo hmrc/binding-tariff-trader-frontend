@@ -18,8 +18,6 @@ package utils
 
 import play.api.i18n.Messages
 
-import scala.language.implicitConversions
-
 sealed abstract class NotificationType(val key: String)
 
 object NotificationType extends Enumeration {

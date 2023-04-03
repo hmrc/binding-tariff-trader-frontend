@@ -27,8 +27,8 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.beforeYouStart
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 

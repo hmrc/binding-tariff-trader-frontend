@@ -22,7 +22,6 @@ import play.api.libs.json.Format
 import play.api.mvc.{Result, Results}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
-import scala.util.control.NonFatal
 
 trait ListAnswerEditing[A] extends AccumulatingAnswerEditing[List[A], A, Int] {
   val cbf = List.newBuilder[A]
@@ -53,7 +52,7 @@ trait AccumulatingAnswerEditing[F <: IterableOnce[A], A, I] extends Accumulating
         dataCacheConnector
           .save(updatedAnswers.cacheMap)
           .transformWith {
-            case Failure(NonFatal(_)) =>
+            case Failure(_) =>
               Future.successful(Results.BadGateway)
             case Success(_) =>
               Future.successful(Results.Redirect(navigator.nextPage(questionPage, mode)(updatedAnswers)))

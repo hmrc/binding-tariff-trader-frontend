@@ -16,25 +16,23 @@
 
 package controllers
 
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
 import controllers.actions._
 import models.requests.IdentifierRequest
-import models.{Case, oCase}
+import models.response.FilestoreResponse
+import models.{Attachment, Case, oCase}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
-import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.Helpers._
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.documentNotFound
+import views.html.templates.{applicationView, rulingCertificateView}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.{failed, successful}
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
-import models.Attachment
-import models.response.FilestoreResponse
-import views.html.documentNotFound
-import views.html.templates.{applicationView, rulingCertificateView}
 
 class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 

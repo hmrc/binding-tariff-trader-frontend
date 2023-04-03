@@ -20,23 +20,17 @@ import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.SupportingMaterialFileListFormProvider
-import models.NormalMode
+import models.{FileAttachment, NormalMode}
 import navigation.FakeNavigator
-import pages.ProvideGoodsNamePage
+import pages.{AddSupportingDocumentsPage, ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
-import play.api.libs.json.JsString
+import play.api.libs.json.{JsArray, JsBoolean, JsString, Json}
 import play.api.mvc.{Call, Request}
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.supportingMaterialFileList
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import uk.gov.hmrc.http.cache.client.CacheMap
-import models.FileAttachment
-import pages.UploadSupportingMaterialMultiplePage
-import play.api.libs.json.JsArray
-import play.api.libs.json.Json
-import pages.AddSupportingDocumentsPage
-import play.api.libs.json.JsBoolean
 
 class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
   private def onwardRoute  = Call("GET", "/foo")

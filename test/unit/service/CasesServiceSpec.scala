@@ -21,10 +21,9 @@ import connectors.{BindingTariffClassificationConnector, EmailConnector}
 import models.CaseStatus.CaseStatus
 import models._
 import models.requests.NewEventRequest
-import org.mockito.{ArgumentCaptor, Mockito}
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito._
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
 

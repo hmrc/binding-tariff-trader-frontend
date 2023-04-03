@@ -25,7 +25,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
 class BTARedirectController @Inject() (
@@ -51,7 +50,7 @@ class BTARedirectController @Inject() (
   def redirectToBTA: Action[AnyContent] = identify.async { implicit request =>
     btaUserService.remove(request.identifier) transformWith {
       case Success(_) => Future.successful(Redirect(appConfig.businessTaxAccountUrl))
-      case Failure(NonFatal(error)) =>
+      case Failure(error) =>
         logger.error("An error occurred whilst removing the BTA User", error)
         Future.successful(Redirect(appConfig.businessTaxAccountUrl))
     }
@@ -60,7 +59,7 @@ class BTARedirectController @Inject() (
   private def performInternalRedirect(requestIdentifier: String, call: Call): Future[Result] =
     btaUserService.save(requestIdentifier) transformWith {
       case Success(_) => Future.successful(Redirect(call))
-      case Failure(NonFatal(error)) =>
+      case Failure(error) =>
         logger.error("An error occurred whilst saving BTA User", error)
         Future.successful(Redirect(routes.ErrorController.onPageLoad))
     }

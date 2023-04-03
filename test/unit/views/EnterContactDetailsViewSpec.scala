@@ -16,10 +16,10 @@
 
 package views
 
-import play.api.data.Form
 import controllers.routes
 import forms.EnterContactDetailsFormProvider
 import models.{EnterContactDetails, NormalMode}
+import play.api.data.Form
 import views.behaviours.QuestionViewBehaviours
 import views.html.enterContactDetails
 

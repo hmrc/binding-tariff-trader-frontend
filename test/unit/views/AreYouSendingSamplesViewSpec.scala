@@ -17,9 +17,9 @@
 package views
 
 import controllers.routes
-import play.api.data.Form
 import forms.AreYouSendingSamplesFormProvider
 import models.NormalMode
+import play.api.data.Form
 import views.behaviours.YesNoViewBehaviours
 import views.html.areYouSendingSamples
 
