@@ -1,20 +1,19 @@
 import play.sbt.routes.RoutesKeys
 import uk.gov.hmrc.DefaultBuildSettings
-import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, targetJvm}
-import uk.gov.hmrc.gitstamp.GitStampPlugin._
+import uk.gov.hmrc.DefaultBuildSettings.addTestReportOption
+import uk.gov.hmrc.gitstamp.GitStampPlugin.*
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "binding-tariff-trader-frontend"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
-  .settings(DefaultBuildSettings.scalaSettings: _*)
-  .settings(DefaultBuildSettings.defaultSettings(): _*)
+  .settings(DefaultBuildSettings.scalaSettings)
+  .settings(DefaultBuildSettings.defaultSettings())
   .settings(majorVersion := 0)
   .settings(
-    commonSettings,
+    gitStampSettings,
     name := appName,
     scalaVersion := "2.13.10",
     RoutesKeys.routesImport ++= Seq("models._", "models.Languages._", "models.SortField._", "models.SortDirection._"),
@@ -26,7 +25,6 @@ lazy val root = (project in file("."))
     retrieveManaged := true,
     concurrentRestrictions in Global += Tags.limit(Tags.Test, 1),
     Test / fork := true,
-    resolvers += Resolver.jcenterRepo,
     scalacOptions += "-Wconf:src=routes/.*:s,src=views/.*:s",
     Concat.groups := Seq(
       "javascripts/bindingtarifftraderfrontend-app.js" ->
@@ -56,8 +54,6 @@ coverageExcludedFiles := "<empty>;Reverse.*;.*filters.*;.*components.*;.*reposit
 coverageMinimumStmtTotal := 95
 coverageFailOnMinimum := true
 coverageHighlighting := true
-
-lazy val commonSettings: Seq[Setting[_]] = gitStampSettings
 
 addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt")
 addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle")
