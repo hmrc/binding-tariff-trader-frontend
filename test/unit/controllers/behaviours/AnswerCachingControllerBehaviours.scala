@@ -81,7 +81,7 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
     * @param validEditFormData A list of indices in the user answers along with valid form data to edit the submitted answers
     * @param expectedEditedAnswers A list of the expected [[models.UserAnswers]] after each edit form submission
     */
-  def accumulatingEditingController[F <: TraversableOnce[A]: Format, A: Format, I](
+  def accumulatingEditingController[F <: IterableOnce[A]: Format, A: Format, I](
     controller: DataRetrievalAction => AccumulatingEditingController[F, A, I],
     onwardRoute: Call,
     createView: (Form[A], Call, Request[_]) => String,
@@ -166,7 +166,7 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
     * @param validFormData A list of valid form data for submission
     * @param expectedUserAnswers A list of the expected [[models.UserAnswers]] after each form submission
     */
-  def accumulatingCachingController[F <: TraversableOnce[A]: Format, A: Format](
+  def accumulatingCachingController[F <: IterableOnce[A]: Format, A: Format](
     controller: DataRetrievalAction => AccumulatingCachingController[F, A],
     onwardRoute: Call,
     createView: (Form[A], Call, Request[_]) => String,

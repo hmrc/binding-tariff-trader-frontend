@@ -18,8 +18,8 @@ package service
 
 import base.SpecBase
 import models.Country
-import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class CountriesServiceSpec extends SpecBase with ScalaCheckDrivenPropertyChecks {
 

@@ -19,7 +19,6 @@ package audit
 import audit.AuditPayloadType.BTIApplicationSubmission
 import base.SpecBase
 import models._
-import org.mockito.Mockito.verify
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.DefaultAuditConnector
 

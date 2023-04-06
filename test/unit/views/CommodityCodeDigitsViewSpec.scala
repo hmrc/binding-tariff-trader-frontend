@@ -16,9 +16,9 @@
 
 package views
 
-import play.api.data.Form
 import forms.CommodityCodeDigitsFormProvider
 import models.NormalMode
+import play.api.data.Form
 import views.behaviours.StringViewBehaviours
 import views.html.commodityCodeDigits
 

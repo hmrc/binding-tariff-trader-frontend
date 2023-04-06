@@ -26,7 +26,6 @@ import play.api.mvc.{Result, Results}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
-import scala.util.control.NonFatal
 
 trait YesNoCaching extends AnswerCaching[Boolean] {
   def dataCacheConnector: DataCacheConnector
@@ -50,7 +49,7 @@ trait YesNoCaching extends AnswerCaching[Boolean] {
     }
 
     dataCacheConnector.save(updatedAnswers.cacheMap).transformWith {
-      case Failure(NonFatal(_)) =>
+      case Failure(_) =>
         Future.successful(Results.BadGateway)
       case Success(_) =>
         Future.successful(Results.Redirect(navigator.nextPage(questionPage, mode)(updatedAnswers)))

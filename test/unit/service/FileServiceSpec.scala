@@ -26,7 +26,6 @@ import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, FilestoreResponse, UpscanFormTemplate}
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito.reset
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart

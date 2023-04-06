@@ -22,11 +22,11 @@ import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.PreviousBTIRulingFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
+import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
 import play.api.mvc.{Call, Request}
 import views.html.previousBTIRuling
-import pages.ProvideGoodsNamePage
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

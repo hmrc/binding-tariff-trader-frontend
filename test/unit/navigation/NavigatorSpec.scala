@@ -20,7 +20,6 @@ import base.SpecBase
 import controllers.routes
 import models._
 import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
 import pages._
 import play.api.libs.json.Reads
 import play.api.mvc.Call

@@ -17,12 +17,12 @@
 package views
 
 import forms.SupportingMaterialFileListFormProvider
-import models.{FileAttachment, NormalMode}
+import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import viewmodels.FileView
 import views.behaviours.YesNoViewBehaviours
 import views.html.supportingMaterialFileList
-import viewmodels.FileView
 
 class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 

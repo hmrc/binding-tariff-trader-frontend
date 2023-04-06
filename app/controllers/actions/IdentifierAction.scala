@@ -82,7 +82,7 @@ class AuthenticatedIdentifierAction @Inject() (
     Redirect(routes.UnauthorisedController.onPageLoad)
 
   def redirectToEoriComponent: Result =
-    Redirect(config.atarSubscribeUrl)
+    Redirect(config.eoriCommonComponentSubscribeUrl)
 
   def eori(enrolments: Enrolments): Option[String] =
     for {

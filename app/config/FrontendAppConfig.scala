@@ -57,12 +57,13 @@ class FrontendAppConfig @Inject() (
   lazy val languageTranslationEnabled: Boolean =
     runModeConfiguration.getOptional[Boolean]("microservice.services.features.welsh-translation").getOrElse(true)
 
-  private lazy val cdsUrl: String  = loadConfig("customs-frontend.host")
-  lazy val cdsSubscribeUrl: String = s"$cdsUrl/customs/subscribe-for-cds"
-  lazy val cdsRegisterUrl: String  = s"$cdsUrl/customs/register-for-cds"
+  private lazy val eoriCommonComponenRegistrationtUrl = loadConfig("eori-common-component-registration-frontend.host")
+  lazy val eoriCommonComponentRegisterUrl: String =
+    s"$eoriCommonComponenRegistrationtUrl/customs-registration-services/atar/register"
 
   private lazy val eoriCommonComponentUrl = loadConfig("eori-common-component-frontend.host")
-  lazy val atarSubscribeUrl: String       = s"$eoriCommonComponentUrl/customs-enrolment-services/atar/subscribe"
+  lazy val eoriCommonComponentSubscribeUrl: String =
+    s"$eoriCommonComponentUrl/customs-enrolment-services/atar/subscribe"
 
   private lazy val bindingTariffRulingsUrl     = loadConfig("binding-tariff-ruling-frontend.host")
   lazy val bindingTariffRulingsHomeUrl: String = s"$bindingTariffRulingsUrl/search-for-advance-tariff-rulings"

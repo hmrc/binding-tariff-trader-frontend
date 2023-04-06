@@ -18,7 +18,6 @@ package unit.views
 
 import models.{Case, oCase}
 import play.twirl.api.HtmlFormat
-import utils.Dates.format
 import views.ViewMatchers.containElementWithID
 import views.ViewSpecBase
 import views.html.templates.rulingCoverLetterTemplate

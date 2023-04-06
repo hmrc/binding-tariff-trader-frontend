@@ -16,11 +16,11 @@
 
 package views
 
+import base.SpecBase
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
-import play.twirl.api.Html
-import base.SpecBase
 import org.scalatest.Assertion
+import play.twirl.api.Html
 
 trait ViewSpecBase extends SpecBase {
 

@@ -17,12 +17,11 @@
 package views
 
 import controllers.routes
-import play.api.data.Form
 import forms.PreviousBTIRulingFormProvider
 import models.NormalMode
-import views.behaviours.ViewBehaviours
-import views.html.previousBTIRuling
+import play.api.data.Form
 import views.behaviours.YesNoViewBehaviours
+import views.html.previousBTIRuling
 
 class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
 

@@ -25,7 +25,7 @@ import navigation.FakeNavigator
 import org.scalatest.BeforeAndAfterEach
 import pages.{CommodityCodeRulingReferencePage, ProvideGoodsNamePage, QuestionPage}
 import play.api.data.Form
-import play.api.libs.json.{Format, JsArray, JsString, JsValue, Json}
+import play.api.libs.json._
 import play.api.mvc.{Call, Request}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.commodityCodeRulingReference

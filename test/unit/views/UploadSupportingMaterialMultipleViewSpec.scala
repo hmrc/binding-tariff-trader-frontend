@@ -16,15 +16,13 @@
 
 package views
 
-import controllers.routes
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models.NormalMode
+import models.response.{FileStoreInitiateResponse, UpscanFormTemplate}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.FileUploadViewBehaviours
 import views.html.uploadSupportingMaterialMultiple
-import models.response.FileStoreInitiateResponse
-import models.response.UpscanFormTemplate
 
 class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours {
 

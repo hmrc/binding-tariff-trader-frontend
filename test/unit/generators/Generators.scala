@@ -16,9 +16,9 @@
 
 package generators
 
-import org.scalacheck.{Arbitrary, Gen, Shrink}
-import Gen._
-import Arbitrary._
+import org.scalacheck.Arbitrary._
+import org.scalacheck.Gen._
+import org.scalacheck.{Gen, Shrink}
 
 trait Generators extends CacheMapGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators {
 

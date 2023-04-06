@@ -23,8 +23,8 @@ import forms.ProvideGoodsNameFormProvider
 import models.NormalMode
 import navigation.FakeNavigator
 import play.api.data.Form
-import play.api.mvc.{AnyContentAsEmpty, Call, Request}
 import play.api.libs.json.JsValue
+import play.api.mvc.{AnyContentAsEmpty, Call, Request}
 import play.api.test.FakeRequest
 import views.html.provideGoodsName
 

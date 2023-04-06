@@ -22,6 +22,7 @@ import controllers.behaviours.AccumulatingCachingControllerBehaviours
 import forms.MakeFileConfidentialFormProvider
 import models.{FileAttachment, NormalMode, UserAnswers}
 import navigation.FakeNavigator
+import org.scalatest.BeforeAndAfterEach
 import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, QuestionPage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
 import play.api.libs.json._
@@ -30,7 +31,6 @@ import uk.gov.hmrc.http.cache.client.CacheMap
 import views.html.makeFileConfidential
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import org.scalatest.BeforeAndAfterEach
 
 class MakeFileConfidentialControllerSpec
     extends ControllerSpecBase

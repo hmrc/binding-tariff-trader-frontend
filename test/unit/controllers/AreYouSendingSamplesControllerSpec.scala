@@ -29,7 +29,6 @@ import play.api.mvc.{Call, Request}
 import views.html.areYouSendingSamples
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.mvc.Request
 
 class AreYouSendingSamplesControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 

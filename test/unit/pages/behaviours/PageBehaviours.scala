@@ -17,16 +17,16 @@
 package pages.behaviours
 
 import generators.Generators
+import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.matchers.must.Matchers
 import org.scalatest.OptionValues
+import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import pages.QuestionPage
 import play.api.libs.json._
 import uk.gov.hmrc.http.cache.client.CacheMap
-import models.UserAnswers
-import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 trait PageBehaviours
     extends AnyWordSpec

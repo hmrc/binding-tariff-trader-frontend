@@ -16,8 +16,8 @@
 
 package unit.controllers
 
-import controllers.{ControllerSpecBase, HowWeContactYouController}
 import controllers.actions.{FakeDataRetrievalAction, FakeIdentifierAction, IdentifierAction}
+import controllers.{ControllerSpecBase, HowWeContactYouController}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, _}

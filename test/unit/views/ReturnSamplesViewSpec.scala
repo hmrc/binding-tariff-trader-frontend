@@ -17,13 +17,12 @@
 package views
 
 import controllers.routes
-import play.api.data.Form
 import forms.ReturnSamplesFormProvider
 import models.NormalMode
+import play.api.data.Form
 import play.twirl.api.Html
-import views.behaviours.ViewBehaviours
-import views.html.returnSamples
 import views.behaviours.YesNoViewBehaviours
+import views.html.returnSamples
 
 class ReturnSamplesViewSpec extends YesNoViewBehaviours {
 

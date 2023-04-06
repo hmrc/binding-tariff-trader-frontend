@@ -125,7 +125,7 @@ class AuthActionSpec extends SpecBase {
     Some(routes.UnauthorisedController.onPageLoad.url)
 
   private def atarSubscribeLocation =
-    Some(frontendAppConfig.atarSubscribeUrl)
+    Some(frontendAppConfig.eoriCommonComponentSubscribeUrl)
 
   private def beTheLoginPage =
     startWith(frontendAppConfig.loginUrl)

@@ -25,7 +25,6 @@ import play.api.mvc.{Result, Results}
 import play.api.libs.json.Writes
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 import play.api.libs.json.Format
 
@@ -63,7 +62,7 @@ trait AccumulatingAnswerCaching[F <: IterableOnce[A], A] {
     dataCacheConnector
       .save(updatedAnswers.cacheMap)
       .transformWith {
-        case Failure(NonFatal(_)) =>
+        case Failure(_) =>
           Future.successful(Results.BadGateway)
         case Success(_) =>
           Future.successful(Results.Redirect(navigator.nextPage(questionPage, mode)(updatedAnswers)))
@@ -85,7 +84,7 @@ trait AnswerCaching[A] {
     dataCacheConnector
       .save(updatedAnswers.cacheMap)
       .transformWith {
-        case Failure(NonFatal(_)) =>
+        case Failure(_) =>
           Future.successful(Results.BadGateway)
         case Success(_) =>
           Future.successful(Results.Redirect(navigator.nextPage(questionPage, mode)(updatedAnswers)))

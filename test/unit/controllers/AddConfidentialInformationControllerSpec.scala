@@ -25,11 +25,10 @@ import navigation.FakeNavigator
 import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
-import play.api.mvc.Call
+import play.api.mvc.{Call, Request}
+import views.html.addConfidentialInformation
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.mvc.Request
-import views.html.addConfidentialInformation
 
 class AddConfidentialInformationControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 

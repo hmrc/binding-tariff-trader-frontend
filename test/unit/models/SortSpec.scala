@@ -16,8 +16,7 @@
 
 package unit.models
 
-import models.SortDirection
-import models.SortField
+import models.{SortDirection, SortField}
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

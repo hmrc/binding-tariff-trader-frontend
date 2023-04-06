@@ -21,11 +21,10 @@ import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, UpscanFormTemplate}
-import models.{FileAttachment, FileTooLarge, FileTooSmall, NoFileSelected, NormalMode, Other}
+import models._
 import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
