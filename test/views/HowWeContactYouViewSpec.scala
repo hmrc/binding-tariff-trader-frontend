@@ -14,21 +14,25 @@
  * limitations under the License.
  */
 
-package viewmodels
+package views
 
-import models.Attachment
-import utils.UnitSpec
+import models.requests.IdentifierRequest
+import views.behaviours.ViewBehaviours
+import views.html.howWeContactYou
 
-class FileViewSpec extends UnitSpec {
+class HowWeContactYouViewSpec extends ViewBehaviours {
 
-  private val attachment = Attachment(id = "id1", public = true)
-  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
+  private val messageKeyPrefix = "howWeContactYou"
 
-  "FileView" when {
-    "fromAttachment" should {
-      "produce the expected file view model" in {
-        FileView.fromAttachment(attachment, "name") shouldBe fileView
-      }
-    }
+  val howWeContactYouView: howWeContactYou = app.injector.instanceOf[howWeContactYou]
+
+  private def createView(eori: Option[String] = Some("eori")) =
+    () => howWeContactYouView()(IdentifierRequest(fakeRequest, "id", eori), messages)
+
+  "HowWeContactYou view" must {
+    behave like normalPage(createView(), messageKeyPrefix)()
+
+    behave like pageWithBackLink(createView())
   }
+
 }

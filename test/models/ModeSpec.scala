@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package viewmodels
+package models
 
-import models.Attachment
-import utils.UnitSpec
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class FileViewSpec extends UnitSpec {
+class ModeSpec extends AnyWordSpec with Matchers {
 
-  private val attachment = Attachment(id = "id1", public = true)
-  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
-
-  "FileView" when {
-    "fromAttachment" should {
-      "produce the expected file view model" in {
-        FileView.fromAttachment(attachment, "name") shouldBe fileView
-      }
+  "Mode" must {
+    "return a normal type" in {
+      Mode.jsLiteral.to(NormalMode) mustBe "NormalMode"
+    }
+    "return a check mode type" in {
+      Mode.jsLiteral.to(CheckMode) mustBe "CheckMode"
     }
   }
+
 }

@@ -21,7 +21,7 @@ import models.SortField.{CREATED_DATE, GOODS_NAME, REFERENCE}
 import models.{Paged, SearchPagination, Sort, oCase}
 import org.mockito.MockitoSugar
 import play.api.mvc.Request
-import unit.utils.UnitSpec
+import utils.UnitSpec
 
 class DashboardSpec extends UnitSpec with MockitoSugar {
 

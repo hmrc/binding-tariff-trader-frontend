@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-package viewmodels
+package pages
 
-import models.Attachment
-import utils.UnitSpec
+import controllers.routes
+import models.NormalMode
+import pages.behaviours.PageBehaviours
 
-class FileViewSpec extends UnitSpec {
+class ProvideGoodsNamePageSpec extends PageBehaviours {
 
-  private val attachment = Attachment(id = "id1", public = true)
-  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
+  "ProvideGoodsNamePage" must {
 
-  "FileView" when {
-    "fromAttachment" should {
-      "produce the expected file view model" in {
-        FileView.fromAttachment(attachment, "name") shouldBe fileView
-      }
+    beRetrievable[String](ProvideGoodsNamePage)
+
+    beSettable[String](ProvideGoodsNamePage)
+
+    beRemovable[String](ProvideGoodsNamePage)
+
+    "route to appropriate controller route in normal mode" in {
+      ProvideGoodsNamePage.route(NormalMode) mustBe routes.ProvideGoodsNameController.onPageLoad(NormalMode)
     }
   }
 }

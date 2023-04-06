@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package viewmodels
+package pages
 
-import models.Attachment
-import utils.UnitSpec
+import controllers.routes
+import models.NormalMode
+import pages.behaviours.PageBehaviours
 
-class FileViewSpec extends UnitSpec {
+class IndexPageSpec extends PageBehaviours {
 
-  private val attachment = Attachment(id = "id1", public = true)
-  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
+  "IndexPage" when {
+    "route" must {
+      "direct to appropriate controller route in normal mode" in {
+        IndexPage.route(NormalMode) mustBe routes.IndexController.getApplications()
+      }
+    }
 
-  "FileView" when {
-    "fromAttachment" should {
-      "produce the expected file view model" in {
-        FileView.fromAttachment(attachment, "name") shouldBe fileView
+    "toString" must {
+      "have the correct name" in {
+        IndexPage.toString mustBe "index"
       }
     }
   }

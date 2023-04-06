@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package viewmodels
+package utils
 
-import models.Attachment
-import utils.UnitSpec
+import com.codahale.metrics.MetricRegistry
+import com.kenshoo.play.metrics.Metrics
 
-class FileViewSpec extends UnitSpec {
-
-  private val attachment = Attachment(id = "id1", public = true)
-  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
-
-  "FileView" when {
-    "fromAttachment" should {
-      "produce the expected file view model" in {
-        FileView.fromAttachment(attachment, "name") shouldBe fileView
-      }
-    }
-  }
+class TestMetrics extends Metrics {
+  override def defaultRegistry: MetricRegistry = new MetricRegistry
+  override def toJson: String                  = ""
 }
