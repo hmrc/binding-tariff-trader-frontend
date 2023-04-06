@@ -14,20 +14,29 @@
  * limitations under the License.
  */
 
-package viewmodels
+package models
 
-import models.Attachment
-import utils.UnitSpec
+import base.SpecBase
+import play.api.libs.json.{JsValue, Json}
 
-class FileViewSpec extends UnitSpec {
+class CountrySpec extends SpecBase {
 
-  private val attachment = Attachment(id = "id1", public = true)
-  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
+  private val model = Country("IE", "title.ireland", "IE", List("Republic of Ireland", "Eire"))
 
-  "FileView" when {
-    "fromAttachment" should {
-      "produce the expected file view model" in {
-        FileView.fromAttachment(attachment, "name") shouldBe fileView
+  private val expectedJson: JsValue = Json.parse(
+    """
+      |{
+      |  "code": "IE",
+      |  "displayName": "Ireland",
+      |  "synonyms": ["Republic of Ireland", "Eire"]
+      |}
+    """.stripMargin
+  )
+
+  "Country" when {
+    "toAutoCompleteJson" should {
+      "return expected JsObject" in {
+        model.toAutoCompleteJson(messages) shouldBe expectedJson
       }
     }
   }

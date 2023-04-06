@@ -14,21 +14,25 @@
  * limitations under the License.
  */
 
-package viewmodels
+package forms
 
-import models.Attachment
-import utils.UnitSpec
+import forms.behaviours.StringFieldBehaviours
+import play.api.data.FormError
 
-class FileViewSpec extends UnitSpec {
+class ProvideGoodsDescriptionFormProviderSpec extends StringFieldBehaviours {
 
-  private val attachment = Attachment(id = "id1", public = true)
-  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
+  val requiredKey = "provideGoodsDescription.error.required"
 
-  "FileView" when {
-    "fromAttachment" should {
-      "produce the expected file view model" in {
-        FileView.fromAttachment(attachment, "name") shouldBe fileView
-      }
-    }
+  val form = new ProvideGoodsDescriptionFormProvider()()
+
+  ".value" must {
+
+    val fieldName = "goodsDescription"
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
   }
 }

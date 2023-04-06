@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package viewmodels
+package models
 
-import models.Attachment
-import utils.UnitSpec
+import base.SpecBase
+import models.oCase.btiCaseExample
 
-class FileViewSpec extends UnitSpec {
+class ConfirmationSpec extends SpecBase {
 
-  private val attachment = Attachment(id = "id1", public = true)
-  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
+  private val confirmation = Confirmation("ref", "eoriAgent", "email")
 
-  "FileView" when {
-    "fromAttachment" should {
-      "produce the expected file view model" in {
-        FileView.fromAttachment(attachment, "name") shouldBe fileView
+  "Confirmation" when {
+    "apply" should {
+      "produce the expected confirmation model" in {
+        Confirmation.apply(btiCaseExample) shouldBe confirmation
       }
     }
   }

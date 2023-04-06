@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package viewmodels
+package pages
 
-import models.Attachment
-import utils.UnitSpec
+import controllers.routes
+import models.NormalMode
+import pages.behaviours.PageBehaviours
 
-class FileViewSpec extends UnitSpec {
+class BeforeYouStartPageSpec extends PageBehaviours {
 
-  private val attachment = Attachment(id = "id1", public = true)
-  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
+  "BeforeYouStartPage" when {
+    "route" must {
+      "direct to appropriate controller route in normal mode" in {
+        BeforeYouStartPage.route(NormalMode) mustBe routes.BeforeYouStartController.onPageLoad()
+      }
+    }
 
-  "FileView" when {
-    "fromAttachment" should {
-      "produce the expected file view model" in {
-        FileView.fromAttachment(attachment, "name") shouldBe fileView
+    "toString" must {
+      "have the correct name" in {
+        BeforeYouStartPage.toString mustBe "beforeYouStart"
       }
     }
   }

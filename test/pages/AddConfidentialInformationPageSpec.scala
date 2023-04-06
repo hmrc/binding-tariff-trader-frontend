@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package viewmodels
+package pages
 
-import models.Attachment
-import utils.UnitSpec
+import pages.behaviours.PageBehaviours
 
-class FileViewSpec extends UnitSpec {
+class AddConfidentialInformationPageSpec extends PageBehaviours {
 
-  private val attachment = Attachment(id = "id1", public = true)
-  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
+  "AddConfidentialInformationPage" must {
 
-  "FileView" when {
-    "fromAttachment" should {
-      "produce the expected file view model" in {
-        FileView.fromAttachment(attachment, "name") shouldBe fileView
-      }
-    }
+    beRetrievable[Boolean](AddConfidentialInformationPage)
+
+    beSettable[Boolean](AddConfidentialInformationPage)
+
+    beRemovable[Boolean](AddConfidentialInformationPage)
   }
 }

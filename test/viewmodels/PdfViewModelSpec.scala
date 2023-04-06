@@ -16,19 +16,18 @@
 
 package viewmodels
 
-import models.Attachment
-import utils.UnitSpec
+import base.SpecBase
+import models.oCase
 
-class FileViewSpec extends UnitSpec {
+class PdfViewModelSpec extends SpecBase {
 
-  private val attachment = Attachment(id = "id1", public = true)
-  private val fileView   = FileView(id   = "id1", name   = "name", confidential = false)
+  "similarAtarCodes" should {
 
-  "FileView" when {
-    "fromAttachment" should {
-      "produce the expected file view model" in {
-        FileView.fromAttachment(attachment, "name") shouldBe fileView
-      }
+    "build a list with similar atar codes" in {
+
+      val pdf = oCase.pdf.copy(similarAtarReferences = List("12345", "23456"))
+
+      pdf.similarAtarCodes shouldBe "12345\n23456"
     }
   }
 }
