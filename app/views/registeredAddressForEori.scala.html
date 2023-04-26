@@ -18,6 +18,7 @@
 @import controllers.routes._
 @import models.Mode
 @import play.api.libs.json.Json
+@import views.html.helper.CSPNonce
 
 @import views.ViewUtils._
 
@@ -44,11 +45,11 @@
 }
 
 @additionalJS = @{
-    Html(s"""<script type="text/javascript" src="${routes.Assets.versioned("javascripts/accessible-autocomplete.min.js")}"></script>""")
+    Html(s"""<script @CSPNonce.attr type="text/javascript" src="${routes.Assets.versioned("javascripts/accessible-autocomplete.min.js")}"></script>""")
 }
 
 @endOfBodyJS = @{
-    Html("""<script>accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#country')})</script>""")
+    Html("""<script @CSPNonce.attr >accessibleAutocomplete.enhanceSelectElement({selectElement: document.querySelector('#country')})</script>""")
 }
 
 @govukLayoutWrapper(

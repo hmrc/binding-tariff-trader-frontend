@@ -21,14 +21,12 @@ import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
 import pages.QuestionPage
+import play.api.libs.json.{Format, Writes}
 import play.api.mvc.{Result, Results}
-import play.api.libs.json.Writes
-
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
-import play.api.libs.json.Format
 
 import scala.collection.mutable
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 trait MapAnswerCaching[K, V] extends AccumulatingAnswerCaching[Map[K, V], (K, V)] {
   val cbf = Map.newBuilder[K, V]
@@ -47,12 +45,15 @@ trait AccumulatingAnswerCaching[F <: IterableOnce[A], A] {
     val withNewAnswer = request.userAnswers
       .get(questionPage)
       .map { fa =>
-        val builder = cbf.addAll(fa)
+        val builder = cbf
+        builder.clear()
+        builder.addAll(fa)
         builder.addOne(answer)
         builder.result()
-      }
-      .getOrElse {
-        val builder = cbf.addOne(answer)
+      }.getOrElse {
+        val builder = cbf
+        builder.clear()
+        builder.addOne(answer)
         builder += answer
         builder.result()
       }
