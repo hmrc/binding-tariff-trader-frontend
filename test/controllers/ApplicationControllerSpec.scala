@@ -130,7 +130,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       status(result)                        shouldBe OK
       contentAsString(result)               shouldBe "Some content"
       contentType(result)                   shouldBe Some("application/pdf")
-      header("Content-Disposition", result) shouldBe (Some("attachment; filename=some.pdf"))
+      header("Content-Disposition", result) shouldBe Some("attachment; filename=some.pdf")
     }
 
     "return 404 when there is no PDF" in {
@@ -183,7 +183,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller(FakeIdentifierAction(None)).applicationPdf(caseRef, None)(request)
 
       status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad.url)
+      redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
     }
 
   }
@@ -234,7 +234,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       status(result)                        shouldBe OK
       contentType(result)                   shouldBe Some("application/pdf")
-      header("Content-Disposition", result) shouldBe (Some("attachment; filename=some.pdf"))
+      header("Content-Disposition", result) shouldBe Some("attachment; filename=some.pdf")
     }
 
     "return 404 when there is no PDF" in {
@@ -284,7 +284,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller(FakeIdentifierAction(None)).rulingCertificatePdf(caseRef, None)(request)
 
       status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad.url)
+      redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
     }
 
   }
@@ -300,7 +300,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       status(result)                        shouldBe OK
       contentType(result)                   shouldBe Some("application/pdf")
-      header("Content-Disposition", result) shouldBe (Some("attachment; filename=some.pdf"))
+      header("Content-Disposition", result) shouldBe Some("attachment; filename=some.pdf")
     }
 
     "return 404 when there is no PDF" in {
@@ -350,7 +350,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       val result = controller(FakeIdentifierAction(None)).coverLetterPdf(caseRef, None)(request)
 
       status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.UnauthorisedController.onPageLoad.url)
+      redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
     }
 
   }

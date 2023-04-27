@@ -23,7 +23,6 @@ GET         /sign-out                                                  controlle
 GET         /force-sign-out                                            controllers.SignOutController.forceSignOut
 GET         /unauthorised-sign-out                                     controllers.SignOutController.unauthorisedSignOut
 GET         /keep-alive                                                controllers.SignOutController.keepAlive
-GET         /unauthorised                                              controllers.UnauthorisedController.onPageLoad
 GET         /cancel-application                                        controllers.SignOutController.cancelApplication
 GET         /something-went-wrong                                      controllers.ErrorController.onPageLoad
 

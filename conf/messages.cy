@@ -69,8 +69,6 @@ site.cancel_application.hiddenText=a mynd yn ôl i dudalen eich ceisiadau a dyfa
 site.sectionIs = Yr adran hon yw
 site.save_your_ruling_certificate=Cadw’r dystysgrif dyfarniad ar ffurf PDF
 site.print_your_ruling_certificate=Argraffu’ch tystysgrif dyfarniad
-site.save_your_cover_letter=Cadw’r llythyr eglurhaol ar ffurf PDF
-site.print_your_cover_letter=Argraffu’ch llythyr eglurhaol
 
 site.month.1=Ion
 site.month.2=Chwef
@@ -837,21 +835,6 @@ title.yemen=Yemen
 title.zambia=Zambia
 title.zimbabwe=Zimbabwe
 title.aland_islands=Ynysoedd Åland
-
-unauthorised.title=Heb gofrestru ar gyfer y Gwasanaeth Datgan Tollau (CDS)
-unauthorised.heading=I wneud cais am Ddyfarniad Tariffau Uwch (ATaR), mae angen i chi gael mynediad at CDS
-unauthorised.intro1=Y Gwasanaeth Datgan Tollau (CDS) yw’r hyn sy’n cymryd lle system y Tollau ar gyfer Trin Nwyddau a Gaiff eu Mewnforio a’u Hallforio (CHIEF).
-unauthorised.intro2=Yn y dyfodol, byddwch yn gallu defnyddio CDS i reoli’ch rhyngweithiadau â’r tollau. Ar yr adeg hon, dim ond mynediad at geisiadau am ddyfarniad BTI fydd gennych.
-unauthorised.warn_p1=Pan gewch gadarnhad bod gennych fynediad at CDS, bydd angen i chi ddod yn ôl i’r dudalen hon ac
-unauthorised.warn_link=ailddechrau’ch cais.
-unauthorised.warn_p2=Gall gymryd hyd at awr i gael mynediad at CDS. Fel arall, mae croeso i chi aros i gael eich e-bost cadarnhau gan CDS cyn rhoi cynnig arall arni.
-unauthorised.get.eori_p1=I gael mynediad at CDS, bydd arnoch angen
-unauthorised.get.eori_link=Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) (yn agor ffenestr neu dab newydd)
-unauthorised.have.eori_p1=Os oes gennych rif EORI eisoes, gallwch
-unauthorised.have.eori_link=gael mynediad at CDS yma (yn agor ffenestr neu dab newydd)
-unauthorised.help.title=Help a chymorth
-unauthorised.help_p1=Os ydych yn cael problemau wrth gofrestru neu’n ansicr a oes gennych rif EORI, ffoniwch 0300 200 1900.
-unauthorised.help_p2=Ar agor rhwng 8.30am a 5pm, o ddydd Llun i ddydd Gwener (ar gau ar wyliau banc).
 
 global.error.badRequest400.message=Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
 global.error.pageNotFound404.title=Heb ddod o hyd i’r dudalen – 404

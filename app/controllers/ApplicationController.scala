@@ -91,7 +91,7 @@ class ApplicationController @Inject() (
             Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad))
         }
       case _ =>
-        Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad))
+        Future.successful(Redirect(controllers.routes.ErrorController.onPageLoad))
     }
 
   private def getApplicationPDF(eori: Eori, reference: CaseReference)(
