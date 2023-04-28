@@ -123,21 +123,6 @@ site.notification.success = Success
 site.sectionIs = This section is
 site.warning = Warning
 
-unauthorised.title = Not registered for CDS
-unauthorised.heading = To apply for an Advance Tariff Ruling (ATaR) you need to get access to CDS
-unauthorised.intro1 = Customs Declaration Service (CDS) is the replacement for the Customs Handling Imports and Export Freight (CHIEF) system.
-unauthorised.intro2 = In future, you will be able to use CDS to manage your customs interactions. At this time, you will only have access to BTI ruling applications.
-unauthorised.warn_p1 = When you get confirmation of CDS access, you’ll need to return to this page and
-unauthorised.warn_link = restart your application.
-unauthorised.warn_p2 = Access to CDS can take up to 1 hour. Alternatively, you can wait for your confirmation email from CDS before trying again.
-unauthorised.get.eori_p1 = To get access to CDS you’ll need an
-unauthorised.get.eori_link = Economic Operator and Registration Identification (EORI) number (opens in a new window or tab)
-unauthorised.have.eori_p1 = If you already have an EORI number, you can
-unauthorised.have.eori_link = get access to CDS here (opens in a new window or tab)
-unauthorised.help.title = Help and support
-unauthorised.help_p1 = If you are having problems registering or are unsure if you have an EORI number, phone 0300 322 7067.
-unauthorised.help_p2 = Open 8am to 6pm, Monday to Friday (closed bank holidays).
-
 ## Generic messages
 
 caseReference.format = {0}

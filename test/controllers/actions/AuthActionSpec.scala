@@ -17,7 +17,6 @@
 package controllers.actions
 
 import base.SpecBase
-import controllers.routes
 import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
@@ -75,54 +74,14 @@ class AuthActionSpec extends SpecBase {
     }
 
     "the user doesn't have sufficient enrolments" must {
-      "redirect the user to the unauthorised page" in {
+      "redirect the user to the ecc subscription page" in {
         val result: Future[Result] = handleAuthError(InsufficientEnrolments())
 
         status(result)           shouldBe SEE_OTHER
         redirectLocation(result) shouldBe atarSubscribeLocation
       }
     }
-
-    "the user doesn't have sufficient confidence level" must {
-      "redirect the user to the unauthorised page" in {
-        val result: Future[Result] = handleAuthError(InsufficientConfidenceLevel())
-
-        status(result)           shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe unauthorisedLocation
-      }
-    }
-
-    "the user used an unaccepted auth provider" must {
-      "redirect the user to the unauthorised page" in {
-        val result: Future[Result] = handleAuthError(UnsupportedAuthProvider())
-
-        status(result)           shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe unauthorisedLocation
-      }
-    }
-
-    "the user has an unsupported affinity group" must {
-      "redirect the user to the unauthorised page" in {
-        val result: Future[Result] = handleAuthError(UnsupportedAffinityGroup())
-
-        status(result)           shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe unauthorisedLocation
-      }
-    }
-
-    "the user has an unsupported credential role" must {
-      "redirect the user to the unauthorised page" in {
-        val result: Future[Result] = handleAuthError(UnsupportedCredentialRole())
-
-        status(result)           shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe unauthorisedLocation
-      }
-    }
-
   }
-
-  private def unauthorisedLocation =
-    Some(routes.UnauthorisedController.onPageLoad.url)
 
   private def atarSubscribeLocation =
     Some(frontendAppConfig.eoriCommonComponentSubscribeUrl)

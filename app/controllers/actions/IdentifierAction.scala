@@ -18,7 +18,6 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import controllers.routes
 import models.requests.IdentifierRequest
 import play.api.mvc.Results._
 import play.api.mvc._
@@ -69,19 +68,13 @@ class AuthenticatedIdentifierAction @Inject() (
           redirectToLogin
         case _: InsufficientEnrolments =>
           redirectToEoriComponent
-        case _: InsufficientConfidenceLevel | _: UnsupportedAuthProvider | _: UnsupportedAffinityGroup |
-            _: UnsupportedCredentialRole =>
-          redirectToUnauthorised
       }
   }
 
-  def redirectToLogin: Result =
+  private def redirectToLogin: Result =
     Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
 
-  def redirectToUnauthorised: Result =
-    Redirect(routes.UnauthorisedController.onPageLoad)
-
-  def redirectToEoriComponent: Result =
+  private def redirectToEoriComponent: Result =
     Redirect(config.eoriCommonComponentSubscribeUrl)
 
   def eori(enrolments: Enrolments): Option[String] =
