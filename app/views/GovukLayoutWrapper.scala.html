@@ -59,6 +59,7 @@
         )
     }
 
+
     <script @CSPNonce.attr type="text/javascript" src='@routes.Assets.versioned("javascripts/accessible-autocomplete.min.js")'></script>
     @additionalJS.getOrElse({})
     @additionalCSS.getOrElse({})
@@ -95,7 +96,6 @@
         </div>
     </div>
 
-    <script @CSPNonce.attr type="text/javascript" src='@routes.Assets.versioned("javascripts/countrycode.js")'></script>
     @endOfBodyJS.getOrElse({})
 }
 

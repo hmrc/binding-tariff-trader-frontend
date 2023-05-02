@@ -104,6 +104,7 @@
                 '_label -> messages("registeredAddressForEori.country"),
                 '_selectClass -> "js-autocomplete"
             )
+            <script @CSPNonce.attr type="text/javascript" src='@routes.Assets.versioned("javascripts/countrycode.js")'></script>
         }
 
         @components.submit_button(Some(messages("site.continue")))
