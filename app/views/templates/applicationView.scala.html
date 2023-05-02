@@ -18,7 +18,7 @@
 
 @import viewmodels.PdfViewModel
 @import layouts.FullLayoutMainContent
-@import components.printLink
+@import components.printApplicationLink
 
 @this(
         govukLayoutWrapper: GovukLayoutWrapper,
@@ -51,7 +51,7 @@
                 @if(!compositeMode) {
                     <span class="govuk-body">
                         <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
-                        @printLink("site.print_your_application")
+                        @printApplicationLink("site.print_your_application")
                     </span>
                 }
                 </div>
