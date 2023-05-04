@@ -16,6 +16,7 @@
 
 @import views.html.helper.CSPNonce
 
+@this()
 @(messageKey: String)(implicit messages: Messages, request:RequestHeader)
 
 <a id="print-application" class="print-this__link" href="#" data-journey-click="print - click:Your application:Print your application">@messages(messageKey)</a>

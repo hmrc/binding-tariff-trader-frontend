@@ -18,15 +18,19 @@
 
 @import viewmodels.PdfViewModel
 @import layouts.FullLayoutMainContent
-@import components.printApplicationLink
 
 @this(
+        printApplicationLink: components.printApplicationLink,
         govukLayoutWrapper: GovukLayoutWrapper,
         fullMainContent: FullLayoutMainContent,
 )
 
-@(appConfig: FrontendAppConfig, pdf: PdfViewModel, getCountryName: String => Option[String],
-        compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(
+    appConfig: FrontendAppConfig,
+    pdf: PdfViewModel,
+    getCountryName: String => Option[String],
+    compositeMode: Boolean = false
+)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"

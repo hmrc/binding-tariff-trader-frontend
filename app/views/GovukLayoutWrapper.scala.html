@@ -59,8 +59,6 @@
         )
     }
 
-
-    <script @CSPNonce.attr type="text/javascript" src='@routes.Assets.versioned("javascripts/accessible-autocomplete.min.js")'></script>
     @additionalJS.getOrElse({})
     @additionalCSS.getOrElse({})
 }
@@ -75,7 +73,6 @@
 
         @if(showBackLink) {
             @govukBackLink(BackLink(
-                href="javascript: window.history.go(-1)",
                 content = Text(messages("site.back")),
                 attributes = Map("class" -> "govuk-back-link", "id" -> "back-link")
             ))
