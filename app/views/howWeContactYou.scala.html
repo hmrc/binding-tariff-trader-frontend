@@ -14,7 +14,10 @@
  * limitations under the License.
  *@
 
-@this(govukLayoutWrapper: GovukLayoutWrapper)
+@this(
+    cancelApplicationLink: components.cancel_application_link,
+    govukLayoutWrapper: GovukLayoutWrapper
+)
 
 @()(implicit request: Request[_], messages: Messages)
 
@@ -35,5 +38,5 @@
 
     @components.button_link(messages("site.agree_and_continue"), routes.ProvideGoodsNameController.onPageLoad(NormalMode).url)
 
-    @components.cancel_application_link()
+    @cancelApplicationLink()
 }

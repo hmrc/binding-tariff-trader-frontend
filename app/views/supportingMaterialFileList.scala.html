@@ -23,8 +23,10 @@
 @import components.notification_banner
 
 @this(
-        govukLayoutWrapper: GovukLayoutWrapper,
-        formWithCSRF: FormWithCSRF
+    submitButton: components.submit_button,
+    cancelApplicationLink: components.cancel_application_link,
+    govukLayoutWrapper: GovukLayoutWrapper,
+    formWithCSRF: FormWithCSRF
 )
 
 @(appConfig: FrontendAppConfig, form: Form[_], goodsName: String, files: Seq[FileView], mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -48,7 +50,7 @@
             <div class="js-visible">
                 @components.show_file_table(files, mode)
             </div>
-            <div class="js-hidden">
+            <div>
                 <a href="@routes.SupportingMaterialFileListController.onClear(mode)">@messages("supportingMaterialFileList.clearFiles")</a>
             </div>
 
@@ -69,9 +71,8 @@
             )
         }
 
-        @components.submit_button(Some(messages("site.continue")))
-
-        @components.cancel_application_link()
+        @submitButton(Some(messages("site.continue")))
+        @cancelApplicationLink()
     }
 }
 

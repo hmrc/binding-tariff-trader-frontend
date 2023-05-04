@@ -23,7 +23,11 @@
 @import views.html.helper.CSPNonce
 
 
-@this(govukLayoutWrapper: GovukLayoutWrapper)
+@this(
+    submitButton: components.submit_button,
+    cancelApplicationLink: components.cancel_application_link,
+    govukLayoutWrapper: GovukLayoutWrapper
+)
 
 @(appConfig: FrontendAppConfig, initiateResponse: FileStoreInitiateResponse, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
@@ -67,9 +71,9 @@
             accept = Some(".pdf,.doc,.docx,.xlsx,.xls,.png,.jpeg,.jpg,.txt")
         )
 
-        @components.submit_button(Some(messages("site.continue")))
+        @submitButton(Some(messages("site.continue")))
 
-        @components.cancel_application_link()
+        @cancelApplicationLink()
 
         <script @CSPNonce.attr >
             const id = "@initiateResponse.id";

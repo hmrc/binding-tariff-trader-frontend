@@ -42,7 +42,9 @@ lazy val root = (project in file("."))
     TwirlKeys.templateImports ++= Seq(
       "uk.gov.hmrc.govukfrontend.views.html.components._",
       "uk.gov.hmrc.hmrcfrontend.views.html.components._",
-      "uk.gov.hmrc.hmrcfrontend.views.html.helpers._"
+      "uk.gov.hmrc.hmrcfrontend.views.html.helpers._",
+      "play.twirl.api.HtmlFormat",
+      "controllers.routes._"
     )
   )
 

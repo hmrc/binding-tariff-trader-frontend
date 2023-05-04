@@ -21,6 +21,8 @@
 @import views.ViewUtils._
 
 @this(
+    submitButton: components.submit_button,
+    cancelApplicationLink: components.cancel_application_link,
     govukLayoutWrapper: GovukLayoutWrapper,
     formWithCSRF: FormWithCSRF
 )
@@ -65,8 +67,8 @@
             contentHtml = Some(contents)
         )
 
-        @components.submit_button(Some(messages("site.continue")))
+        @submitButton(Some(messages("site.continue")))
 
-        @components.cancel_application_link()
+        @cancelApplicationLink()
     }
 }

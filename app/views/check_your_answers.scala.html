@@ -19,6 +19,8 @@
 @import controllers.routes._
 
 @this(
+        submitButton: components.submit_button,
+        cancelApplicationLink: components.cancel_application_link,
         govukLayoutWrapper: GovukLayoutWrapper,
         formWithCSRF: FormWithCSRF
 )
@@ -52,9 +54,8 @@
                 <p class="govuk-body">@messages("checkYourAnswers.declaration.paragraph2")</p>
             }
 
-            @components.submit_button(Some(messages("checkYourAnswers.declaration.submit")))
-
-            @components.cancel_application_link()
+            @submitButton(Some(messages("checkYourAnswers.declaration.submit")))
+            @cancelApplicationLink()
 
         }
     }
