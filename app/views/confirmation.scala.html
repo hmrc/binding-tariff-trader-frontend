@@ -22,7 +22,7 @@
 @import viewmodels.ConfirmationUrlViewModel
 
 @this(
-    printApplicationLink: components.printApplicationLink,
+    printLink: components.printLink,
     govukLayoutWrapper: GovukLayoutWrapper,
     fullLayoutMainContent: FullLayoutMainContent
 )
@@ -135,7 +135,7 @@
             <span class="govuk-body">
                 <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
 
-                @printApplicationLink("site.print_your_application")
+                @printLink("print-your-application", "application", "site.print_your_application")
 
             </span>
         }
@@ -143,7 +143,7 @@
         <div class="print-save-application hidden-print">
             <span class="govuk-body">
                 <a class="save-this__link" id="save-pdf" href="@controllers.routes.ApplicationController.applicationPdf(pdf.reference).url"
-                data-journey-click="save - click:Your application:Save your application">@messages("site.save_your_application")</a>
+                data-journey-click="save-click:Your-application:Save-your-application">@messages("site.save_your_application")</a>
             </span>
         </div>
     </div>

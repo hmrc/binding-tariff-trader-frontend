@@ -20,7 +20,7 @@
 @import layouts.FullLayoutMainContent
 
 @this(
-        printApplicationLink: components.printApplicationLink,
+        printLink: components.printLink,
         govukLayoutWrapper: GovukLayoutWrapper,
         fullMainContent: FullLayoutMainContent,
 )
@@ -55,7 +55,7 @@
                 @if(!compositeMode) {
                     <span class="govuk-body">
                         <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
-                        @printApplicationLink("site.print_your_application")
+                        @printLink("print-your-application", "application", "site.print_your_application")
                     </span>
                 }
                 </div>
