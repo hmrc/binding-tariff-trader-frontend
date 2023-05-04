@@ -21,6 +21,8 @@
 @import views.ViewUtils._
 
 @this(
+        submitButton: components.submit_button,
+        cancelApplicationLink: components.cancel_application_link,
         govukLayoutWrapper: GovukLayoutWrapper,
         formWithCSRF: FormWithCSRF
 )
@@ -29,9 +31,7 @@
 
 @headingMessage = @{if(rulings.size == 1){messages("addAnotherRuling.addRulingCounter.singular", rulings.length)} else {messages("addAnotherRuling.addRulingCounter.plural", rulings.length)}}
 
-@govukLayoutWrapper(
-    pageTitle = s"${errorPrefix(form)} ${messages("addAnotherRuling.title")}"
-) {
+@govukLayoutWrapper(pageTitle = s"${errorPrefix(form)} ${messages("addAnotherRuling.title")}") {
 
     @formWithCSRF(action = routes.AddAnotherRulingController.onSubmit(mode)) {
 
@@ -54,9 +54,8 @@
             )
         }
 
-        @components.submit_button(Some(messages("site.continue")))
-
-        @components.cancel_application_link()
+        @submitButton(Some(messages("site.continue")))
+        @cancelApplicationLink()
     }
 }
 

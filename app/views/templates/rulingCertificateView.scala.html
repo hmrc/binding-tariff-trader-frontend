@@ -18,6 +18,7 @@
 @import views.html.layouts.FullLayoutMainContent
 
 @this(
+        printLink: components.printLink,
         govukLayoutWrapper: GovukLayoutWrapper,
         fullLayoutMainContent: FullLayoutMainContent
 )
@@ -46,7 +47,7 @@
                 <div class="print-save-application hidden-print">
                     <span id="save-cover-letter" class="govuk-body">
                         <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
-                        <a class="print-this__link" href="javascript:window.print()" data-journey-click="print - click:Your cover letter:Print your cover letter">@messages("site.print_your_cover_letter")</a>
+                        @printLink("print-cover-letter", "cover letter", "site.print_your_cover_letter")
                     </span>
 
                 </div>
@@ -67,14 +68,14 @@
         <div class="print-save-application hidden-print">
             <span id="save-ruling-cert" class="govuk-body">
                 <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
-                <a class="print-this__link" href="javascript:window.print()" data-journey-click="print - click:Your ruling certificate:Print your ruling certificate">@messages("site.print_your_ruling_certificate")</a>
+                @printLink("print-ruling-cert", "ruling certificate", "site.print_your_ruling_certificate")
             </span>
 
         </div>
         <div class="print-save-application hidden-print">
             <span class="govuk-body">
                 <a id="save-ruling-cert-pdf" class="save-this__link"  href="@routes.ApplicationController.rulingCertificatePdf(c.reference).url"
-                data-journey-click="save - click:Your ruling certificate:Save your ruling certificate">@messages("site.save_your_ruling_certificate")</a>
+                data-journey-click="save-click:Your-ruling-certificate:Save-your-ruling-certificate">@messages("site.save_your_ruling_certificate")</a>
             </span>
         </div>
     </div>

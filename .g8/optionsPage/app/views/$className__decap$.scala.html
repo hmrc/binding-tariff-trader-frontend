@@ -14,7 +14,6 @@
 
     @helpers.form(action = $className$Controller.onSubmit(mode), 'autoComplete -> "off") {
 
-        
         @components.error_summary(form.errors)
 
         @components.heading("$className;format="decap"$.heading")
@@ -26,6 +25,6 @@
             inputs = $className$.options.toSeq
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

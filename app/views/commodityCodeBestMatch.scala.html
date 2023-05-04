@@ -21,8 +21,10 @@
 @import views.ViewUtils._
 
 @this(
-        govukLayoutWrapper: GovukLayoutWrapper,
-        formWithCSRF: FormWithCSRF
+    submitButton: components.submit_button,
+    cancelApplicationLink: components.cancel_application_link,
+    govukLayoutWrapper: GovukLayoutWrapper,
+    formWithCSRF: FormWithCSRF
 )
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
@@ -49,8 +51,8 @@
             labelIsHeading = true
         )
 
-        @components.submit_button(Some(messages("site.continue")))
+        @submitButton(Some(messages("site.continue")))
 
-        @components.cancel_application_link()
+        @cancelApplicationLink()
     }
 }

@@ -14,16 +14,10 @@
  * limitations under the License.
  *@
 
+@import views.html.helper.CSPNonce
+
 @this()
+@(id:String, dataJourneyClick:String, messageKey: String)(implicit messages: Messages, request:RequestHeader)
 
-@()(implicit messages: Messages)
-
-
-<div id="cancel-application" class="govuk-form-group">
-  <p class="govuk-body">
-    <a id="cancel-application-link" class="govuk-link" href="@routes.SignOutController.cancelApplication">
-        @messages("site.cancel_application")
-     <span class="govuk-visually-hidden"> @messages("site.cancel_application.hiddenText")</span>
-    </a>
-  </p>
-</div>
+<a id=@id class="print-this__link" href="#" data-journey-click="print - click:Your @dataJourneyClick:Print your @dataJourneyClick">@messages(messageKey)</a>
+<script @{CSPNonce.attr}>document.getElementById("@id").addEventListener("click", () => window.print());</script>

@@ -15,6 +15,7 @@
  *@
 
 @import config.FrontendAppConfig
+@import views.html.helper.CSPNonce
 
 @this(
         config: FrontendAppConfig,
@@ -57,6 +58,7 @@
             signOutButtonText = None
         )
     }
+
     @additionalJS.getOrElse({})
     @additionalCSS.getOrElse({})
 }
@@ -68,12 +70,13 @@
             (En, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.English)}"),
             (Cy, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.Cymraeg)}")
         ))
+
         @if(showBackLink) {
             @govukBackLink(BackLink(
-                href="javascript: window.history.go(-1)",
                 content = Text(messages("site.back")),
                 attributes = Map("class" -> "govuk-back-link", "id" -> "back-link")
             ))
+            <script @{CSPNonce.attr}>document.getElementById("back-link").addEventListener("click", () => window.history.go(-1));</script>
         }
 
         @if(customBackLink.isDefined){ @customBackLink.get }

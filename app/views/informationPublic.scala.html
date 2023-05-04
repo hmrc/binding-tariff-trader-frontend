@@ -16,7 +16,10 @@
 
 @import config.FrontendAppConfig
 
-@this(govukLayoutWrapper: GovukLayoutWrapper)
+@this(
+    cancelApplicationLink: components.cancel_application_link,
+    govukLayoutWrapper: GovukLayoutWrapper
+)
 
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
@@ -39,6 +42,6 @@
 
     @components.button_link(messages("site.agree_and_continue"), routes.HowWeContactYouController.onPageLoad().url)
 
-    @components.cancel_application_link()
+    @cancelApplicationLink()
 
 }

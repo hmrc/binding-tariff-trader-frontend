@@ -20,12 +20,17 @@
 @import layouts.FullLayoutMainContent
 
 @this(
+        printLink: components.printLink,
         govukLayoutWrapper: GovukLayoutWrapper,
         fullMainContent: FullLayoutMainContent,
 )
 
-@(appConfig: FrontendAppConfig, pdf: PdfViewModel, getCountryName: String => Option[String],
-        compositeMode: Boolean = false)(implicit request: Request[_], messages: Messages)
+@(
+    appConfig: FrontendAppConfig,
+    pdf: PdfViewModel,
+    getCountryName: String => Option[String],
+    compositeMode: Boolean = false
+)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"
@@ -50,7 +55,7 @@
                 @if(!compositeMode) {
                     <span class="govuk-body">
                         <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
-                        <a class="print-this__link" href="javascript:window.print()" data-journey-click="print - click:Your application:Print your application">@messages("site.print_your_application")</a>
+                        @printLink("print-your-application", "application", "site.print_your_application")
                     </span>
                 }
                 </div>
