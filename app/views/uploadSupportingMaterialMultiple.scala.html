@@ -32,7 +32,7 @@
 @(appConfig: FrontendAppConfig, initiateResponse: FileStoreInitiateResponse, form: Form[_], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @additionalJS = @{
-        Html(s"""<script @CSPNonce.attr type="text/javascript" src="${routes.Assets.versioned("javascripts/file-input-handler.js")}"></script>""")
+        Html(s"""<script ${CSPNonce.attr} type="text/javascript" src="${routes.Assets.versioned("javascripts/file-input-handler.js")}"></script>""")
 }
 
 @govukLayoutWrapper(
