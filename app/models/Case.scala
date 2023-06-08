@@ -16,9 +16,10 @@
 
 package models
 
+import models.CaseStatus.CaseStatus
+
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import models.CaseStatus.CaseStatus
 
 case class NewCaseRequest(
   application: Application,

@@ -16,11 +16,12 @@
 
 package forms
 
-import javax.inject.Inject
 import forms.mappings.{Constraints, Mappings}
+import models.EnterContactDetails
 import play.api.data.Form
 import play.api.data.Forms._
-import models.EnterContactDetails
+
+import javax.inject.Inject
 
 class EnterContactDetailsFormProvider @Inject() extends Mappings with Constraints {
 

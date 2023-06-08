@@ -20,7 +20,7 @@ import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours._
 import forms.CommodityCodeRulingReferenceFormProvider
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.FakeNavigator
 import org.scalatest.BeforeAndAfterEach
 import pages.{CommodityCodeRulingReferencePage, ProvideGoodsNamePage, QuestionPage}
@@ -146,8 +146,8 @@ class CommodityCodeRulingReferenceControllerSpec
     }
 
     "should return the correct Call object in CheckMode" in {
-      val index = 1
-      val mode = CheckMode
+      val index        = 1
+      val mode         = CheckMode
       val expectedCall = Call("POST", "/advance-tariff-application/change-edit-similar-ruling-reference?index=1")
 
       val result = controller(getEmptyCacheMap).editSubmitAction(index, mode)

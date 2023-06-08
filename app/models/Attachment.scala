@@ -16,9 +16,9 @@
 
 package models
 
-import java.time.ZonedDateTime
-
 import play.api.libs.json.{Json, OFormat}
+
+import java.time.ZonedDateTime
 
 case class Attachment(
   id: String,

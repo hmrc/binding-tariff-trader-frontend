@@ -18,11 +18,10 @@ package utils
 
 import controllers.routes
 import models.requests.DataRequest
-import models.{CheckMode, Country, UserAnswers}
+import models.{CheckMode, Country, FileAttachment, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
-import models.FileAttachment
 
 class CheckYourAnswersHelper(
   userAnswers: UserAnswers,

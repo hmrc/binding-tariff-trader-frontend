@@ -20,8 +20,6 @@ import cats.data.OptionT
 import config.FrontendAppConfig
 import connectors.InjectAuthHeader
 import controllers.actions._
-
-import javax.inject.Inject
 import models.Case
 import play.api.Logging
 import play.api.i18n.I18nSupport
@@ -32,6 +30,7 @@ import viewmodels.{FileView, PdfViewModel}
 import views.html.documentNotFound
 import views.html.templates._
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 

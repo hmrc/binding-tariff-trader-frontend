@@ -18,8 +18,9 @@ package metrics
 
 import com.codahale.metrics.{MetricRegistry, Timer}
 import com.kenshoo.play.metrics.Metrics
-import java.util.concurrent.atomic.AtomicBoolean
 import play.api.mvc.{Action, MessagesBaseController, Result}
+
+import java.util.concurrent.atomic.AtomicBoolean
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 

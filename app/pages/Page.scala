@@ -16,8 +16,8 @@
 
 package pages
 
-import play.api.mvc.Call
 import models.Mode
+import play.api.mvc.Call
 
 trait Page {
   def route(mode: Mode): Call

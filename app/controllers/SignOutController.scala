@@ -26,8 +26,8 @@ import service.BTAUserService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.Future.successful
+import scala.concurrent.{ExecutionContext, Future}
 
 class SignOutController @Inject() (
   val appConfig: FrontendAppConfig,

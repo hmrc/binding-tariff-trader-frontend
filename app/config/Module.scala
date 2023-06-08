@@ -18,11 +18,12 @@ package config
 
 import connectors._
 import controllers.actions._
-import java.time.Clock
-import play.api.{Configuration, Environment}
 import play.api.inject.{Binding, Module => PlayModule}
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.crypto.CompositeSymmetricCrypto
 import workers.MigrationWorker
+
+import java.time.Clock
 
 class Module extends PlayModule {
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] =

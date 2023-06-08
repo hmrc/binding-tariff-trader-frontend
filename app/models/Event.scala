@@ -16,8 +16,9 @@
 
 package models
 
-import java.time.Instant
 import models.EventType.EventType
+
+import java.time.Instant
 
 case class Event(
   id: String,

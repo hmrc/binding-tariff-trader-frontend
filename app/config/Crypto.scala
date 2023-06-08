@@ -16,8 +16,9 @@
 
 package config
 
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.crypto.{AesCrypto, CompositeSymmetricCrypto, Decrypter}
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class Crypto @Inject() (appConfig: FrontendAppConfig) extends CompositeSymmetricCrypto {

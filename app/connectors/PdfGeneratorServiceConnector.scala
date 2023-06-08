@@ -18,7 +18,6 @@ package connectors
 
 import com.kenshoo.play.metrics.Metrics
 import config.FrontendAppConfig
-import javax.inject.{Inject, Singleton}
 import metrics.HasMetrics
 import models.PdfFile
 import play.api.Logging
@@ -26,6 +25,7 @@ import play.api.http.Status
 import play.api.libs.ws.WSClient
 import play.twirl.api.Html
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 

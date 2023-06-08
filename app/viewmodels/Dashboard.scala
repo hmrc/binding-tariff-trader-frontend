@@ -16,13 +16,14 @@
 
 package viewmodels
 
-import java.net.URLEncoder.encode
 import controllers.routes
 import models.SortDirection.SortDirection
 import models.SortField.{CREATED_DATE, SortField}
-import models.{SortField, _}
+import models._
 import play.api.mvc.Request
-import viewmodels.Dashboard.{ENCODING, baseUrl, orderParam, pageParam, sortFieldParam}
+import viewmodels.Dashboard._
+
+import java.net.URLEncoder.encode
 
 case class Dashboard(pageData: Paged[Case], sort: Sort) {
 
