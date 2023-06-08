@@ -55,10 +55,10 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase with AnswerCa
   def viewAsString(form: Form[_], request: Request[_]): String =
     commodityCodeDigitsView(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
-  val testAnswer      = "1234"
-  val validFormData   = Map("value" -> testAnswer)
-  val invalidFormData = Map("value" -> "")
-  val backgroundData  = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+  val testAnswer                            = "1234"
+  val validFormData: Map[String, String]    = Map("value" -> testAnswer)
+  val invalidFormData: Map[String, String]  = Map("value" -> "")
+  val backgroundData: Map[String, JsString] = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
 
   "CommodityCodeDigitsController" must {
     behave like answerCachingController(

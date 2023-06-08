@@ -86,7 +86,7 @@ class FileServiceSpec extends SpecBase {
         "some.pdf",
         "application/pdf",
         0L,
-        false
+        uploaded = false
       )
     }
   }

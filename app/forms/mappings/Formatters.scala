@@ -78,7 +78,7 @@ trait Formatters {
             case _       => Left(Seq(FormError(key, invalidKey)))
           }
 
-      def unbind(key: String, value: Boolean) = Map(key -> value.toString)
+      def unbind(key: String, value: Boolean): Map[String, String] = Map(key -> value.toString)
     }
 
   private[mappings] def intFormatter(

@@ -46,11 +46,11 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
   private val request                = fakeGETRequestWithCSRF
   private val form                   = formProvider()
   private val goodsName              = "goose"
-  private val file                   = FileAttachment("id", "MyFile.jpg", "image/jpeg", 1L, false)
+  private val file                   = FileAttachment("id", "MyFile.jpg", "image/jpeg", 1L)
   private val uploadedFile           = file.copy(uploaded = true)
   private val uploadedFileNoMetadata = FileAttachment("id", "", "", 0L, uploaded = true)
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val uploadSupportingMaterialMultipleView: uploadSupportingMaterialMultiple =
     app.injector.instanceOf(classOf[uploadSupportingMaterialMultiple])
@@ -121,7 +121,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       redirectLocation(result) shouldBe Some(onwardRoute.url)
       await(
         FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
-      ) shouldBe (Some(Seq(uploadedFile)))
+      ) shouldBe Some(Seq(uploadedFile))
     }
 
     "update user answers with file when file upload succeeds and JS is disabled (no pre-existing metadata entry)" in {
@@ -139,7 +139,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       redirectLocation(result) shouldBe Some(onwardRoute.url)
       await(
         FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
-      ) shouldBe (Some(Seq(uploadedFileNoMetadata)))
+      ) shouldBe Some(Seq(uploadedFileNoMetadata))
     }
 
     "remove metadata entry for file when file upload fails with an unknown error" in {
@@ -162,7 +162,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       contentAsString(result) should include(messages(Other("").errorMessageKey))
       await(
         FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
-      ) shouldBe (Some(Seq()))
+      ) shouldBe Some(Seq())
     }
 
     "remove metadata entry for file when file upload fails because the file is too small" in {
@@ -184,7 +184,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       contentAsString(result) should include(messages(FileTooSmall.errorMessageKey))
       await(
         FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
-      ) shouldBe (Some(Seq()))
+      ) shouldBe Some(Seq())
     }
 
     "remove metadata entry for file when file upload fails because the file is too large" in {
@@ -206,7 +206,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       contentAsString(result) should include(messages(FileTooLarge.errorMessageKey))
       await(
         FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
-      ) shouldBe (Some(Seq()))
+      ) shouldBe Some(Seq())
     }
 
     "remove metadata entry for file when file upload fails because a file has not been selected" in {
@@ -228,7 +228,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       contentAsString(result) should include(messages(NoFileSelected.errorMessageKey))
       await(
         FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
-      ) shouldBe (Some(Seq()))
+      ) shouldBe Some(Seq())
     }
 
     "update file metadata when a file is selected in the file input" in {
@@ -241,7 +241,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       status(result) shouldBe OK
       await(
         FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
-      ) shouldBe (Some(Seq(file)))
+      ) shouldBe Some(Seq(file))
 
     }
 
@@ -262,7 +262,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       status(result) shouldBe OK
       await(
         FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
-      ) shouldBe (Some(Seq(uploadedFile, differentFile)))
+      ) shouldBe Some(Seq(uploadedFile, differentFile))
     }
 
     "remove stale metadata entries that the user never uploaded" in {
@@ -281,7 +281,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       status(result) shouldBe OK
       await(
         FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
-      ) shouldBe (Some(Seq(differentFile)))
+      ) shouldBe Some(Seq(differentFile))
     }
 
     "remove stale metadata entries where the user never chose confidentiality status" in {
@@ -300,7 +300,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       status(result) shouldBe OK
       await(
         FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
-      ) shouldBe (Some(Seq(differentFile)))
+      ) shouldBe Some(Seq(differentFile))
     }
 
     "replace file metadata when user selects different file on same page" in {
@@ -319,7 +319,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       status(result) shouldBe OK
       await(
         FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
-      ) shouldBe (Some(Seq(differentFile)))
+      ) shouldBe Some(Seq(differentFile))
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

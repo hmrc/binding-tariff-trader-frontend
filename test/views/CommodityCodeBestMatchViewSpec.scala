@@ -20,6 +20,7 @@ import controllers.routes
 import forms.CommodityCodeBestMatchFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.commodityCodeBestMatch
 
@@ -36,10 +37,10 @@ class CommodityCodeBestMatchViewSpec extends YesNoViewBehaviours {
   override protected def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)
 
-  def createView =
+  def createView: () => HtmlFormat.Appendable =
     () => commodityCodeBestMatchView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  def createViewUsingForm =
+  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
     (form: Form[_]) => commodityCodeBestMatchView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "CommodityCodeBestMatch view" must {

@@ -55,7 +55,7 @@ class PreviousBTIRulingControllerSpec extends ControllerSpecBase with YesNoCachi
   private def viewAsString(form: Form[_], request: Request[_]): String =
     previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
-  val backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+  val backgroundData: Map[String, JsString] = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
 
   "PreviousBTIRulingController" must {
     behave like yesNoCachingController(

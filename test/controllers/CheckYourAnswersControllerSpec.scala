@@ -120,7 +120,11 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
         AnswerSection(Some("checkYourAnswers.informationAboutYourItemSection"), Seq.empty),
         AnswerSection(Some("checkYourAnswers.otherInformation"), Seq.empty)
       )
-      contentAsString(result) shouldBe checkYourAnswersView(frontendAppConfig, expectedSections, false)(
+      contentAsString(result) shouldBe checkYourAnswersView(
+        frontendAppConfig,
+        expectedSections,
+        sendingSamples = false
+      )(
         fakeRequest,
         messages
       ).toString
@@ -228,7 +232,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       .thenReturn(successful(Seq(publishedAttachment)))
 
   private def givenTheApplicationPdfGenerates(): Unit =
-    when(pdfService.generatePdf(any[Html])).thenReturn(successful(PdfFile(Array.empty, "application/pdf")))
+    when(pdfService.generatePdf(any[Html])).thenReturn(successful(PdfFile(Array.empty)))
 
   private def givenTheApplicationPdfIsUploaded(): Unit =
     when(fileService.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier]))

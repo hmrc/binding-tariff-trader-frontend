@@ -17,7 +17,7 @@
 package utils
 
 object PostcodeValidator {
-  val regexString: String =
+  private val regexString: String =
     "(GIR 0AA)|((([A-Z-[QVX]][0-9][0-9]?)|(([A-Z-[QVX]][A-Z-[IJZ]][0-9][0-9]?)|(([A-Z-[QVX]]" +
       "[0-9][A-HJKPSTUW])|([A-Z-[QVX]][A-Z-[IJZ]][0-9][ABEHMNPRVWXY])))) *[0-9][A-Z-[CIKMOV]]{2})"
   private val postcodeRegex = regexString.r

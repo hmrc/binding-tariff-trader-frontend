@@ -54,10 +54,10 @@ class LegalChallengeDetailsControllerSpec extends ControllerSpecBase with Answer
   def viewAsString(form: Form[_], request: Request[_]): String =
     legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(request, messages).toString
 
-  val testAnswer      = "answer"
-  val validFormData   = Map("legalChallengeDetails" -> testAnswer)
-  val invalidFormData = Map("legalChallengeDetails" -> "")
-  val backgroundData  = Map(ProvideGoodsNamePage.toString -> JsString("goodsName"))
+  val testAnswer                            = "answer"
+  val validFormData: Map[String, String]    = Map("legalChallengeDetails" -> testAnswer)
+  val invalidFormData: Map[String, String]  = Map("legalChallengeDetails" -> "")
+  val backgroundData: Map[String, JsString] = Map(ProvideGoodsNamePage.toString -> JsString("goodsName"))
 
   "LegalChallengeDetailsController" must {
     behave like answerCachingController(

@@ -77,7 +77,7 @@ class Navigator @Inject() (configuration: FrontendAppConfig) {
       detailPageRoutes + questionPageRoute
   }
 
-  def loopingJourney(
+  private def loopingJourney(
     journey: LoopingJourney,
     continuingTo: Page,
     mode: Mode

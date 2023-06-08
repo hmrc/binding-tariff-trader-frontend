@@ -24,6 +24,6 @@ object CasePayloads {
   val pagedGatewayCases: String = jsonOf(Paged(Seq(oCase.btiCaseExample), NoPagination(), 1))
   val pagedEmpty: String        = jsonOf(Paged.empty[Case])
 
-  def jsonOf[A: Writes](a: A) =
+  def jsonOf[A: Writes](a: A): String =
     Json.toJson(a).toString()
 }

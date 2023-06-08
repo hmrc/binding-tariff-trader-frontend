@@ -71,7 +71,7 @@ class EnterContactDetailsController @Inject() (
   ): HtmlFormat.Appendable =
     enterContactDetailsView(appConfig, preparedForm, mode)
 
-  def enterContactDetailsForm(userAnswers: UserAnswers): Form[EnterContactDetails] =
+  private def enterContactDetailsForm(userAnswers: UserAnswers): Form[EnterContactDetails] =
     if (userAnswers.get(RegisteredAddressForEoriPage).exists(_.country == "GB")) {
       formWithTelValidation
     } else {

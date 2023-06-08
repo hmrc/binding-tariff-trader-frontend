@@ -42,7 +42,7 @@ class CommodityCodeRulingReferenceControllerSpec
   private val formProvider = new CommodityCodeRulingReferenceFormProvider()
   private val goodsName    = "some-goods-name"
 
-  val backgroundData = Map(
+  val backgroundData: Map[String, JsValue] = Map(
     ProvideGoodsNamePage.toString -> JsString(goodsName),
     CommodityCodeRulingReferencePage.toString -> JsArray(
       Seq(
@@ -88,10 +88,14 @@ class CommodityCodeRulingReferenceControllerSpec
     Map("value" -> "44444444444")
   )
 
-  def userAnswersFor[A: Format](backgroundData: Map[String, JsValue], questionPage: QuestionPage[A], answer: A) =
+  def userAnswersFor[A: Format](
+    backgroundData: Map[String, JsValue],
+    questionPage: QuestionPage[A],
+    answer: A
+  ): UserAnswers =
     UserAnswers(CacheMap(cacheMapId, backgroundData ++ Map(questionPage.toString -> Json.toJson(answer))))
 
-  val expectedUserAnswers = List(
+  val expectedUserAnswers: List[UserAnswers] = List(
     userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("01234567890", "09876543210", "11111111111")),
     userAnswersFor(
       backgroundData,
@@ -110,12 +114,12 @@ class CommodityCodeRulingReferenceControllerSpec
     )
   )
 
-  val validEditFormData = List(
+  val validEditFormData: List[(Int, Map[String, String])] = List(
     1 -> Map("value" -> "09876543211"),
     0 -> Map("value" -> "11234567890")
   )
 
-  val expectedEditedAnswers = List(
+  val expectedEditedAnswers: List[UserAnswers] = List(
     userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("01234567890", "09876543211")),
     userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("11234567890", "09876543211"))
   )

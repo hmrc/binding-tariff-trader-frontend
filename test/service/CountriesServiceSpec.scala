@@ -23,7 +23,7 @@ import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class CountriesServiceSpec extends SpecBase with ScalaCheckDrivenPropertyChecks {
 
-  val expectedCountriesList = List(
+  val expectedCountriesList: List[Country] = List(
     Country("AF", "title.afghanistan", "AF", Nil),
     Country("AL", "title.albania", "AL", Nil),
     Country("DZ", "title.algeria", "DZ", Nil),

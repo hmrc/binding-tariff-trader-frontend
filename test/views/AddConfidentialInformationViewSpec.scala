@@ -22,6 +22,7 @@ import models.NormalMode
 import play.api.data.Form
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
+import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.addConfidentialInformation
 
@@ -37,10 +38,10 @@ class AddConfidentialInformationViewSpec extends YesNoViewBehaviours {
 
   val goodsName: String = "goods name"
 
-  def createView =
+  def createView: () => HtmlFormat.Appendable =
     () => addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm =
+  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
     (form: Form[_]) =>
       addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 

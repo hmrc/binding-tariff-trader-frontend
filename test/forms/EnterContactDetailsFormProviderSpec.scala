@@ -17,15 +17,16 @@
 package forms
 
 import forms.behaviours.{EmailFieldBehaviours, StringFieldBehaviours}
-import play.api.data.FormError
+import models.EnterContactDetails
+import play.api.data.{Form, FormError}
 
 import scala.collection.mutable
 
 class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with EmailFieldBehaviours {
 
-  val formProvider          = new EnterContactDetailsFormProvider()
-  val form                  = formProvider()
-  val formWithTelValidation = formProvider.formWithMinTelNumber
+  val formProvider                                     = new EnterContactDetailsFormProvider()
+  val form: Form[EnterContactDetails]                  = formProvider()
+  val formWithTelValidation: Form[EnterContactDetails] = formProvider.formWithMinTelNumber
 
   // name
   ".name" must {

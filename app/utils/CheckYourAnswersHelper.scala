@@ -46,7 +46,7 @@ class CheckYourAnswersHelper(
     )
   }
 
-  def addConfidentialInformation: Option[AnswerRow] = userAnswers.get(AddConfidentialInformationPage) map { x =>
+  def addConfidentialInformation(): Option[AnswerRow] = userAnswers.get(AddConfidentialInformationPage) map { x =>
     AnswerRow(
       label              = "addConfidentialInformation.checkYourAnswersLabel",
       answer             = yesNoAnswer(x),
@@ -246,8 +246,6 @@ class CheckYourAnswersHelper(
       changeUrl          = routes.PreviousBTIRulingController.onPageLoad(CheckMode).url
     )
   }
-
-  def whichBestDescribesYou: Option[AnswerRow] = None
 
   def registeredAddressForEori(implicit request: DataRequest[_]): Option[AnswerRow] =
     userAnswers.get(RegisteredAddressForEoriPage) map { x =>

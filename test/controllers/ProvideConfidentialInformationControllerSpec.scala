@@ -32,7 +32,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class ProvideConfidentialInformationControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val provideConfidentialInformationView: provideConfidentialInformation =
     injector.instanceOf[provideConfidentialInformation]
@@ -53,13 +53,13 @@ class ProvideConfidentialInformationControllerSpec extends ControllerSpecBase wi
       cc
     )
 
-  def viewAsString(form: Form[_], request: Request[_]) =
+  def viewAsString(form: Form[_], request: Request[_]): String =
     provideConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
-  val testAnswer      = "answer"
-  val validFormData   = Map("confidentialInformation" -> testAnswer)
-  val invalidFormData = Map("confidentialInformation" -> "")
-  val backgroundData  = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+  val testAnswer                            = "answer"
+  val validFormData: Map[String, String]    = Map("confidentialInformation" -> testAnswer)
+  val invalidFormData: Map[String, String]  = Map("confidentialInformation" -> "")
+  val backgroundData: Map[String, JsString] = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
 
   "ProvideConfidentialInformationController" must {
     behave like answerCachingController(

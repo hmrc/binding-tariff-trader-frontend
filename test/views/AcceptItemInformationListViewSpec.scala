@@ -16,6 +16,7 @@
 
 package views
 
+import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
 import views.html.acceptItemInformationList
 
@@ -25,7 +26,8 @@ class AcceptItemInformationListViewSpec extends ViewBehaviours {
 
   def acceptItemInformationListView: acceptItemInformationList = app.injector.instanceOf[acceptItemInformationList]
 
-  def createView = () => acceptItemInformationListView(frontendAppConfig)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable =
+    () => acceptItemInformationListView(frontendAppConfig)(fakeRequest, messages)
 
   "AcceptItemInformationList view" must {
     behave like normalPage(createView, messageKeyPrefix)()

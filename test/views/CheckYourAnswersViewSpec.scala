@@ -61,7 +61,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     "samples may be damaged statement is not visible when sending samples is false" in {
       val text = asDocument(createTraderViewNoSamples()).text()
 
-      text should not include (messages("checkYourAnswers.declaration.paragraph2"))
+      text should not include messages("checkYourAnswers.declaration.paragraph2")
     }
   }
 }

@@ -53,7 +53,7 @@ class AddAnotherRulingController @Inject() (
     addAnotherRulingView(appConfig, form.copy(errors = preparedForm.errors), mode, rulings)
   }
 
-  def removeRuling(index: Int, userAnswers: UserAnswers): UserAnswers = {
+  private def removeRuling(index: Int, userAnswers: UserAnswers): UserAnswers = {
     val rulings          = userAnswers.get(CommodityCodeRulingReferencePage).getOrElse(List.empty[String])
     val remainingRulings = rulings.take(index) ++ rulings.drop(index + 1)
 

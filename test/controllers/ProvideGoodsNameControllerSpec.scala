@@ -57,10 +57,10 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase with AnswerCachi
       cc
     )
 
-  val testAnswer      = "answer"
-  val validFormData   = Map("goodsName" -> testAnswer)
-  val invalidFormData = Map("goodsName" -> "")
-  val backgroundData  = Map.empty[String, JsValue]
+  val testAnswer                           = "answer"
+  val validFormData: Map[String, String]   = Map("goodsName" -> testAnswer)
+  val invalidFormData: Map[String, String] = Map("goodsName" -> "")
+  val backgroundData                       = Map.empty[String, JsValue]
 
   "ProvideGoodsNameController" must {
     behave like answerCachingController(

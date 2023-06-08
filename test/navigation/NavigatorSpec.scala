@@ -34,7 +34,7 @@ class NavigatorSpec extends SpecBase {
 
       "go to Index from a page that doesn't exist in the route map" in {
         case object UnknownPage extends Page {
-          def route(mode: Mode) = Call("GET", "/unknown")
+          def route(mode: Mode): Call = Call("GET", "/unknown")
         }
         navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) shouldBe routes.IndexController.getApplications()
       }
@@ -332,7 +332,7 @@ class NavigatorSpec extends SpecBase {
 
       "go to CheckYourAnswers from a page that doesn't exist in the edit route map" in {
         case object UnknownPage extends Page {
-          def route(mode: Mode) = Call("GET", "/unknown")
+          def route(mode: Mode): Call = Call("GET", "/unknown")
         }
         navigator.nextPage(UnknownPage, CheckMode)(mock[UserAnswers]) shouldBe routes.CheckYourAnswersController
           .onPageLoad()

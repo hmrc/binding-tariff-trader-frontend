@@ -23,9 +23,9 @@ import java.time.{Instant, LocalDateTime, ZoneOffset}
 
 object Dates {
 
-  val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+  private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
-  val pdfDateformatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+  private val pdfDateformatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
   def format(instant: Instant)(implicit messages: Messages): String =
     if (messages.lang.language == "cy") {

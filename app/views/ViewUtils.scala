@@ -19,6 +19,8 @@ package views
 import play.api.data.Form
 import play.api.i18n.Messages
 
+import scala.annotation.tailrec
+
 object ViewUtils {
 
   def errorPrefix(form: Form[_])(implicit messages: Messages): String =
@@ -28,6 +30,7 @@ object ViewUtils {
 
     val (baseValue, unitStrings) = (1024, Vector("B", "KB", "MB"))
 
+    @tailrec
     def getExponent(curBytes: Long, baseValue: Int, curExponent: Int = 0): Int =
       if (curBytes < baseValue) {
         curExponent

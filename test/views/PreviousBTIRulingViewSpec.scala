@@ -20,6 +20,7 @@ import controllers.routes
 import forms.PreviousBTIRulingFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.previousBTIRuling
 
@@ -32,9 +33,10 @@ class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
 
   val previousBTIRulingView: previousBTIRuling = app.injector.instanceOf[previousBTIRuling]
 
-  def createView = () => previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable =
+    () => previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm =
+  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
     (form: Form[_]) => previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   override protected def expectedLegend(messageKeyPrefix: String): String =

@@ -44,7 +44,7 @@ trait HasMetrics {
 
   def metrics: Metrics
 
-  lazy val registry: MetricRegistry = metrics.defaultRegistry
+  private lazy val registry: MetricRegistry = metrics.defaultRegistry
 
   val localMetrics = new LocalMetrics
 
@@ -57,7 +57,7 @@ trait HasMetrics {
 
   class MetricsTimer(metric: Metric) {
     val timer: Timer.Context = localMetrics.startTimer(metric)
-    val timerRunning         = new AtomicBoolean(true)
+    private val timerRunning = new AtomicBoolean(true)
 
     def completeWithSuccess(): Unit =
       if (timerRunning.compareAndSet(true, false)) {

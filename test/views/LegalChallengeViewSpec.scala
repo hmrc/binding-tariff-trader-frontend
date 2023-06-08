@@ -20,6 +20,7 @@ import controllers.routes
 import forms.LegalChallengeFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.legalChallenge
 
@@ -36,9 +37,10 @@ class LegalChallengeViewSpec extends YesNoViewBehaviours {
 
   val legalChallengeView: legalChallenge = app.injector.instanceOf[legalChallenge]
 
-  def createView = () => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable =
+    () => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm =
+  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
     (form: Form[_]) => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   "LegalChallenge view" must {

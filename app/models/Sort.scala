@@ -76,7 +76,7 @@ object SortField extends Enumeration {
   val STATUS: models.SortField.Value              = Value("status")
   val GOODS_NAME: models.SortField.Value          = Value("application.goodName")
 
-  val defaultDirections = Map(
+  val defaultDirections: Map[models.SortField.Value, models.SortDirection.Value] = Map(
     REFERENCE           -> ASCENDING,
     CREATED_DATE        -> DESCENDING,
     DECISION_START_DATE -> DESCENDING,

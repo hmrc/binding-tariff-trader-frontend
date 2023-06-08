@@ -32,7 +32,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class ProvideGoodsDescriptionControllerSpec extends ControllerSpecBase with AnswerCachingControllerBehaviours {
 
-  def onwardRoute                                          = Call("GET", "/foo")
+  def onwardRoute: Call                                    = Call("GET", "/foo")
   val formProvider                                         = new ProvideGoodsDescriptionFormProvider()
   val provideGoodsDescriptionView: provideGoodsDescription = injector.instanceOf[views.html.provideGoodsDescription]
 
@@ -55,9 +55,9 @@ class ProvideGoodsDescriptionControllerSpec extends ControllerSpecBase with Answ
   val testAnswer = "answer"
   val testName   = "Luigi"
 
-  val validFormData   = Map("goodsDescription"            -> testAnswer)
-  val invalidFormData = Map("goodsDescription"            -> "")
-  val backgroundData  = Map(ProvideGoodsNamePage.toString -> JsString(testName))
+  val validFormData: Map[String, String]    = Map("goodsDescription"            -> testAnswer)
+  val invalidFormData: Map[String, String]  = Map("goodsDescription"            -> "")
+  val backgroundData: Map[String, JsString] = Map(ProvideGoodsNamePage.toString -> JsString(testName))
 
   "ProvideGoodsDescriptionController" must {
     behave like answerCachingController(

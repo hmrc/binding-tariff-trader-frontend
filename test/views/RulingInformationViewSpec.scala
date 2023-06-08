@@ -116,15 +116,15 @@ class RulingInformationViewSpec extends ViewBehaviours {
 
     // scalastyle:off null
     "show explanation when there is decision and no explanation" in {
-      val doc      = asDocument(createView(rulingCaseWithDecisionNoExplanation).apply())
-      val expected = null
+      val doc            = asDocument(createView(rulingCaseWithDecisionNoExplanation).apply())
+      val expected: Null = null
 
       doc.getElementById("rulingInformation.explanation") should be(expected)
     }
 
     "show explanation when there is no decision" in {
-      val doc      = asDocument(createView(rulingCaseWithoutDecision).apply())
-      val expected = null
+      val doc            = asDocument(createView(rulingCaseWithoutDecision).apply())
+      val expected: Null = null
 
       doc.getElementById("rulingInformation.explanation") should be(expected)
     }

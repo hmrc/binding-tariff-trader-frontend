@@ -20,6 +20,8 @@ import forms.UploadSupportingMaterialMultipleFormProvider
 import models.NormalMode
 import models.response.{FileStoreInitiateResponse, UpscanFormTemplate}
 import play.api.data.Form
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
 import play.twirl.api.HtmlFormat
 import views.behaviours.FileUploadViewBehaviours
 import views.html.uploadSupportingMaterialMultiple
@@ -32,7 +34,7 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
 
   val goodsName: String = "goose"
 
-  val request = fakeGETRequestWithCSRF
+  val request: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
   val initiateResponse: FileStoreInitiateResponse = FileStoreInitiateResponse(
     id              = "id",
@@ -68,7 +70,7 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
 
     behave like pageWithBackLink(createView)
 
-    behave like multipleFileUploadPage(createViewUsingForm, messageKeyPrefix, initiateResponse.uploadRequest.href)
+    behave like multipleFileUploadPage(createViewUsingForm, messageKeyPrefix)
   }
 
 }
