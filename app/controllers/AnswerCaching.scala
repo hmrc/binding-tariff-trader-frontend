@@ -50,7 +50,8 @@ trait AccumulatingAnswerCaching[F <: IterableOnce[A], A] {
         builder.addAll(fa)
         builder.addOne(answer)
         builder.result()
-      }.getOrElse {
+      }
+      .getOrElse {
         val builder = cbf
         builder.clear()
         builder.addOne(answer)

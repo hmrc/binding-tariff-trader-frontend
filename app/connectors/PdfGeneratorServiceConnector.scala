@@ -53,6 +53,8 @@ class PdfGeneratorServiceConnector @Inject() (
       pdfResult.failed.foreach {
         case NonFatal(e) =>
           logger.error(s"pdf generator failed after ${timer.completeWithFailure()}", e)
+        case _ =>
+          logger.error("Unexpected error occurred during PDF generation.")
       }
       pdfResult
     }

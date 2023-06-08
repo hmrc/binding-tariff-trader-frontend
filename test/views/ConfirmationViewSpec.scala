@@ -101,7 +101,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
       text should include("reference")
       text should include("We have sent your confirmation email to marisa@example.test")
       text should include("Your application will not be processed until we receive your samples")
-      text should include("21 Victoria Avenue")
+      text should include("14 Westfield Avenue")
       text should include(messages("confirmation.paragraph.sample.return"))
       text should include(messages("confirmation.heading2.whatNext"))
     }
