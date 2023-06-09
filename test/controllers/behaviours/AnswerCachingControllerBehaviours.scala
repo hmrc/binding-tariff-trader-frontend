@@ -119,6 +119,32 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
           await(cacheConnector.fetch(cacheMapId)).map(UserAnswers(_)) shouldBe Some(userAnswers)
       }
     }
+
+    "update edited data in the user answers with bad request" in {
+      validEditFormData.zip(invalidFormData).foreach {
+        case ((index, formData), userAnswers) =>
+          val postRequest    = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(invalidFormData.toSeq: _*)
+          val cacheConnector = noDataController.dataCacheConnector
+
+          val controllerWithData = controller(new DataRetrievalActionImpl(cacheConnector))
+          val result = controllerWithData.onEditSubmit(index, NormalMode)(postRequest)
+
+          status(result) shouldBe BAD_REQUEST
+      }
+    }
+
+    "update page load" in {
+      validEditFormData.zip(expectedUserAnswers).foreach {
+        case ((index, formData), userAnswers) =>
+          val postRequest    = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(formData.toSeq: _*)
+          val cacheConnector = noDataController.dataCacheConnector
+
+          val controllerWithData = controller(new DataRetrievalActionImpl(cacheConnector))
+          val result             = controllerWithData.onEditPageLoad(index, NormalMode)(postRequest)
+
+          status(result) shouldBe OK
+      }
+    }
   }
 
 }
