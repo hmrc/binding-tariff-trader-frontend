@@ -127,7 +127,7 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
           val cacheConnector = noDataController.dataCacheConnector
 
           val controllerWithData = controller(new DataRetrievalActionImpl(cacheConnector))
-          val result = controllerWithData.onEditSubmit(index, NormalMode)(postRequest)
+          val result             = controllerWithData.onEditSubmit(index, NormalMode)(postRequest)
 
           status(result) shouldBe BAD_REQUEST
       }

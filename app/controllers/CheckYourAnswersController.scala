@@ -69,7 +69,7 @@ class CheckYourAnswersController @Inject() (
         Seq(
           checkYourAnswersHelper.provideGoodsName,
           checkYourAnswersHelper.provideGoodsDescription,
-          checkYourAnswersHelper.addConfidentialInformation,
+          checkYourAnswersHelper.addConfidentialInformation(),
           checkYourAnswersHelper.provideConfidentialInformation,
           checkYourAnswersHelper.supportingMaterialFileListChoice,
           checkYourAnswersHelper.supportingMaterialFileList,
