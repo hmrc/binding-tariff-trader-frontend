@@ -30,7 +30,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class IsSampleHazardousControllerSpec extends ControllerSpecBase with YesNoCachingControllerBehaviours {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val formProvider = new IsSampleHazardousFormProvider()
 

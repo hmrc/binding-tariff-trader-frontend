@@ -20,8 +20,6 @@ import cats.data.OptionT
 import config.FrontendAppConfig
 import connectors.InjectAuthHeader
 import controllers.actions._
-
-import javax.inject.Inject
 import models.Case
 import play.api.Logging
 import play.api.i18n.I18nSupport
@@ -32,6 +30,7 @@ import viewmodels.{FileView, PdfViewModel}
 import views.html.documentNotFound
 import views.html.templates._
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
@@ -104,7 +103,7 @@ class ApplicationController @Inject() (
   ): Future[Result] =
     getApplicationPDForHtml(eori, reference, pdf = false)
 
-  def fetchApplicationPdf(cse: Case)(implicit request: Request[AnyContent]): Future[Result] = {
+  private def fetchApplicationPdf(cse: Case)(implicit request: Request[AnyContent]): Future[Result] = {
     val applicationResponse = for {
       pdf    <- OptionT.fromOption[Future](cse.application.applicationPdf)
       meta   <- OptionT(fileService.getAttachmentMetadata(pdf))
@@ -124,7 +123,7 @@ class ApplicationController @Inject() (
       }
   }
 
-  def renderApplicationHtml(cse: Case)(implicit request: Request[AnyContent]): Future[Result] =
+  private def renderApplicationHtml(cse: Case)(implicit request: Request[AnyContent]): Future[Result] =
     for {
       attachments <- fileService.getAttachmentMetadata(cse)
       attachmentFileView = attachments.map { attachment =>
@@ -195,7 +194,7 @@ class ApplicationController @Inject() (
       }
     }
 
-  def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)(
+  private def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)(
     implicit request: Request[AnyContent]
   ): Future[Result] =
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>

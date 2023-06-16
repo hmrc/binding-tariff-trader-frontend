@@ -54,10 +54,10 @@ class MigrationWorker @Inject() (
   implicit val hc: HeaderCarrier    = HeaderCarrier(extraHeaders = addAuth(appConfig)(HeaderCarrier()))
   implicit val messages: Messages   = messagesApi.preferred(Seq(Lang.defaultLang))
 
-  val myLock: TimePeriodLockService =
+  private val myLock: TimePeriodLockService =
     TimePeriodLockService(mongoLockRepository, lockId = "migration-lock", ttl = 2.minutes)
 
-  val decider: Supervision.Decider = {
+  private val decider: Supervision.Decider = {
     case NonFatal(e) =>
       logger.error("Skipping case migration due to error", e)
       Supervision.resume
@@ -95,7 +95,7 @@ class MigrationWorker @Inject() (
   private def getCountryName(code: String): Option[String] =
     countriesService.getAllCountriesById.get(code).map(_.countryName)
 
-  def regeneratePdf(cse: Case): Future[Unit] =
+  private def regeneratePdf(cse: Case): Future[Unit] =
     for {
       meta <- fileService.getAttachmentMetadata(cse)
 

@@ -38,7 +38,7 @@ trait ViewSpecBase extends SpecBase {
     assert(elements.first().html().replace("\n", "") == expectedValue)
   }
 
-  def assertPageTitleEqualsMessage(doc: Document, expectedMessageKey: String, args: Any*) = {
+  def assertPageTitleEqualsMessage(doc: Document, expectedMessageKey: String, args: Any*): Any = {
     val headers = doc.getElementsByTag("h1")
     headers.size() match {
       case 0 => ()
@@ -87,13 +87,12 @@ trait ViewSpecBase extends SpecBase {
       assert(label.text() == expectedText, s"\n\nLabel for $forElement was not $expectedText")
 
     expectedHintText match {
-      case Some(hint) => {
+      case Some(hint) =>
         assert(
           doc.getElementsByClass("govuk-hint").first.text == hint,
           s"\n\nLabel for $forElement did not contain hint text $hint"
         )
         assertLabel(label, expectedText, forElement)
-      }
       case _ => assertLabel(label, expectedText, forElement)
     }
   }

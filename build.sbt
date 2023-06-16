@@ -15,7 +15,7 @@ lazy val root = (project in file("."))
   .settings(
     gitStampSettings,
     name := appName,
-    scalaVersion := "2.13.10",
+    scalaVersion := "2.13.11",
     RoutesKeys.routesImport ++= Seq("models._", "models.Languages._", "models.SortField._", "models.SortDirection._"),
     PlayKeys.playDefaultPort := 9582,
     scalacOptions ~= { opts => opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard")) },

@@ -111,17 +111,17 @@ trait FieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks with 
 
     "not bind min length not met" in {
       val result = form.bind(Map(fieldName -> "1")).apply(fieldName)
-      result.errors shouldEqual (Seq(minLengthErrorKey))
+      result.errors shouldEqual Seq(minLengthErrorKey)
     }
 
     "not bind non-numeric values" in {
       val result = form.bind(Map(fieldName -> "122jh12")).apply(fieldName)
-      result.errors.map(_.message) shouldEqual (Seq(notNumericTypeErrorKey.message))
+      result.errors.map(_.message) shouldEqual Seq(notNumericTypeErrorKey.message)
     }
 
     "not bind max length exceeded" in {
       val result = form.bind(Map(fieldName -> "1" * 26)).apply(fieldName)
-      result.errors shouldEqual (Seq(maxLengthErrorKey))
+      result.errors shouldEqual Seq(maxLengthErrorKey)
     }
   }
 

@@ -20,6 +20,7 @@ import controllers.routes
 import forms.AreYouSendingSamplesFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.areYouSendingSamples
 
@@ -33,9 +34,10 @@ class AreYouSendingSamplesViewSpec extends YesNoViewBehaviours {
 
   val areYouSendingSamplesView: areYouSendingSamples = app.injector.instanceOf[areYouSendingSamples]
 
-  def createView = () => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable =
+    () => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  def createViewUsingForm =
+  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
     (form: Form[_]) => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "AreYouSendingSamples view" must {

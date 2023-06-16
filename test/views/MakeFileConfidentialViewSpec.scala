@@ -21,6 +21,7 @@ import forms.MakeFileConfidentialFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.api.mvc.Call
+import play.twirl.api.HtmlFormat
 import views.behaviours.BooleanViewBehaviours
 import views.html.makeFileConfidential
 
@@ -29,20 +30,19 @@ class MakeFileConfidentialViewSpec extends BooleanViewBehaviours[(String, Boolea
   val form                = new MakeFileConfidentialFormProvider()()
   private def onwardRoute = Call("GET", "/foo")
 
-  private val fakeGETRequest   = fakeGETRequestWithCSRF
   private val messageKeyPrefix = "makeFileConfidential"
   private val fileId           = "a-file-id"
 
   val makeFileConfidentialView: makeFileConfidential = app.injector.instanceOf[makeFileConfidential]
 
-  def createView =
+  def createView: () => HtmlFormat.Appendable =
     () =>
       makeFileConfidentialView(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(
         fakeGETRequestWithCSRF,
         messages
       )
 
-  def createViewUsingForm =
+  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
     (form: Form[_]) =>
       makeFileConfidentialView(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(
         fakeGETRequestWithCSRF,
@@ -58,7 +58,6 @@ class MakeFileConfidentialViewSpec extends BooleanViewBehaviours[(String, Boolea
       createViewUsingForm,
       _._2,
       messageKeyPrefix,
-      routes.MakeFileConfidentialController.onSubmit(NormalMode).url,
       "confidential"
     )((fileId, true), (fileId, false))
   }

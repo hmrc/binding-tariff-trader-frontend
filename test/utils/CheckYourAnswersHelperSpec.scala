@@ -77,7 +77,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
 
       "return a row with the correct answer for AddConfidentialInformationPage" in {
         given(userAnswers.get(AddConfidentialInformationPage)).willReturn(Option(true))
-        checkHelper.addConfidentialInformation.get.answer shouldBe "site.yes"
+        checkHelper.addConfidentialInformation().get.answer shouldBe "site.yes"
       }
 
       "return a row with the correct answer for AddSupportingDocumentsPage" in {

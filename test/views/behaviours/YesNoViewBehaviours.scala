@@ -30,7 +30,6 @@ trait YesNoViewBehaviours extends BooleanViewBehaviours[Boolean] {
       createView,
       identity,
       messageKeyPrefix,
-      expectedFormAction,
       idPrefix
     )(true, false)
 
@@ -54,7 +53,6 @@ trait BooleanViewBehaviours[T] extends QuestionViewBehaviours[T] {
     createView: Form[T] => HtmlFormat.Appendable,
     choiceFrom: T => Boolean,
     messageKeyPrefix: String,
-    expectedFormAction: String,
     idPrefix: String = "value"
   )(choices: T*): Unit =
     "behave like a page with a Yes/No question" when {

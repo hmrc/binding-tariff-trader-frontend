@@ -59,7 +59,6 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
     behave like pageWithTextFields(
       createViewUsingForm,
       messageKeyPrefix,
-      routes.RegisteredAddressForEoriController.onSubmit(NormalMode).url,
       "businessName",
       "addressLine1",
       "townOrCity",

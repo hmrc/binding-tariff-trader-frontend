@@ -41,7 +41,7 @@ class MakeFileConfidentialControllerSpec
   private val goodsName          = "some-goods-name"
   private val lastFileUploadedId = "file-id-3"
 
-  val backgroundData = Map(
+  val backgroundData: Map[String, JsValue] = Map(
     ProvideGoodsNamePage.toString -> JsString(goodsName),
     UploadSupportingMaterialMultiplePage.toString -> JsArray(
       Seq(
@@ -78,18 +78,22 @@ class MakeFileConfidentialControllerSpec
   private def viewAsString(form: Form[_], submitAction: Call, request: Request[_]): String =
     makeFileConfidentialView(frontendAppConfig, form, submitAction, NormalMode, lastFileUploadedId)(request, messages).toString
 
-  val invalidFormData = Map("file-id-1" -> "", "confidential" -> "")
+  val invalidFormData: Map[String, String] = Map("file-id-1" -> "", "confidential" -> "")
 
-  val validFormData = List(
+  val validFormData: List[Map[String, String]] = List(
     Map("fileId" -> "file-id-1", "confidential" -> "true"),
     Map("fileId" -> "file-id-2", "confidential" -> "false"),
     Map("fileId" -> "file-id-3", "confidential" -> "true")
   )
 
-  def userAnswersFor[A: Format](backgroundData: Map[String, JsValue], questionPage: QuestionPage[A], answer: A) =
+  def userAnswersFor[A: Format](
+    backgroundData: Map[String, JsValue],
+    questionPage: QuestionPage[A],
+    answer: A
+  ): UserAnswers =
     UserAnswers(CacheMap(cacheMapId, backgroundData ++ Map(questionPage.toString -> Json.toJson(answer))))
 
-  val expectedUserAnswers = List(
+  val expectedUserAnswers: List[UserAnswers] = List(
     userAnswersFor(backgroundData, MakeFileConfidentialPage, Map("file-id-1" -> true)),
     userAnswersFor(backgroundData, MakeFileConfidentialPage, Map("file-id-1" -> true, "file-id-2" -> false)),
     userAnswersFor(

@@ -75,7 +75,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         }
       }
 
-      renderWithError(createView, messageKeyPrefix, expectedFormAction, forElement, expectedHintKey)
+      renderWithError(createView, messageKeyPrefix, forElement)
     }
 
   protected def textAreaPage(
@@ -111,15 +111,13 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         }
       }
 
-      renderWithError(createView, messageKeyPrefix, expectedFormAction, expectedFormElementId, expectedHintKey)
+      renderWithError(createView, messageKeyPrefix, expectedFormElementId)
     }
 
   private def renderWithError(
     createView: Form[String] => HtmlFormat.Appendable,
     messageKeyPrefix: String,
-    expectedFormAction: String,
-    errorKey: String,
-    expectedHintKey: Option[String]
+    errorKey: String
   ): Unit =
     "rendered with an error" must {
       "show an error summary" in {

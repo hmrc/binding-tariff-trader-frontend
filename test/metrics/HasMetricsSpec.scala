@@ -196,10 +196,7 @@ class HasMetricsSpec
           .withMetricsTimerResult(TestMetric) {
             Future.failed(new Exception)
           }
-          .transformWith {
-            case _ =>
-              verifyCompletedWithFailure(TestMetric, metrics)
-          }
+          .transformWith(_ => verifyCompletedWithFailure(TestMetric, metrics))
       }
 
       "increment failure counter when the user throws an exception constructing their code block" in withTestMetrics {

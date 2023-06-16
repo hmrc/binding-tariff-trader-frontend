@@ -23,6 +23,7 @@ import metrics.HasMetrics
 import models.Email
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+
 import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 

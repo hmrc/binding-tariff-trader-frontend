@@ -18,7 +18,6 @@ package connectors
 
 import com.kenshoo.play.metrics.Metrics
 import config.FrontendAppConfig
-import javax.inject.{Inject, Singleton}
 import metrics.HasMetrics
 import models.PdfFile
 import play.api.Logging
@@ -26,6 +25,7 @@ import play.api.http.Status
 import play.api.libs.ws.WSClient
 import play.twirl.api.Html
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
@@ -53,6 +53,8 @@ class PdfGeneratorServiceConnector @Inject() (
       pdfResult.failed.foreach {
         case NonFatal(e) =>
           logger.error(s"pdf generator failed after ${timer.completeWithFailure()}", e)
+        case _ =>
+          logger.error("Unexpected error occurred during PDF generation.")
       }
       pdfResult
     }

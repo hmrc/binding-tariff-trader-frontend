@@ -20,6 +20,7 @@ import controllers.routes
 import forms.ProvideBTIReferenceFormProvider
 import models.{BTIReference, NormalMode}
 import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.provideBTIReference
 
@@ -31,9 +32,10 @@ class ProvideBTIReferenceViewSpec extends QuestionViewBehaviours[BTIReference] {
 
   val previousBTIReferenceView: provideBTIReference = app.injector.instanceOf[provideBTIReference]
 
-  def createView = () => previousBTIReferenceView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable =
+    () => previousBTIReferenceView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm =
+  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
     (form: Form[_]) => previousBTIReferenceView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "ProvideBTIReference view" must {
@@ -45,7 +47,6 @@ class ProvideBTIReferenceViewSpec extends QuestionViewBehaviours[BTIReference] {
     behave like pageWithTextFields(
       createViewUsingForm,
       messageKeyPrefix,
-      routes.ProvideBTIReferenceController.onSubmit(NormalMode).url,
       "btiReference"
     )
   }

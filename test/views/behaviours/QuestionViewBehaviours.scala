@@ -21,18 +21,17 @@ import play.twirl.api.HtmlFormat
 
 trait QuestionViewBehaviours[A] extends ViewBehaviours {
 
-  private val errorKey                = "value"
-  protected val errorMessage          = "error.number"
-  protected val errorPrefix           = "error.browser.title.prefix"
-  protected def error                 = FormError(errorKey, errorMessage)
-  protected def error(errKey: String) = FormError(errKey, errorMessage)
+  private val errorKey                           = "value"
+  protected val errorMessage                     = "error.number"
+  protected val errorPrefix                      = "error.browser.title.prefix"
+  protected def error: FormError                 = FormError(errorKey, errorMessage)
+  protected def error(errKey: String): FormError = FormError(errKey, errorMessage)
 
   protected val form: Form[A]
 
   protected def pageWithTextFields(
     createView: Form[A] => HtmlFormat.Appendable,
     messageKeyPrefix: String,
-    expectedFormAction: String,
     fields: String*
   ): Unit =
     "behave like a question page" when {

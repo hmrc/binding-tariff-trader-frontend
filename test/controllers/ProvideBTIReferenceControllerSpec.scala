@@ -53,9 +53,9 @@ class ProvideBTIReferenceControllerSpec extends ControllerSpecBase with AnswerCa
 
   private def onwardRoute = Call("GET", "/foo")
 
-  val validFormData   = Map("btiReference" -> "value 1")
-  val invalidFormData = Map("value" -> "invalid value")
-  val backgroundData  = Map.empty[String, JsValue]
+  val validFormData: Map[String, String]   = Map("btiReference" -> "value 1")
+  val invalidFormData: Map[String, String] = Map("value" -> "invalid value")
+  val backgroundData                       = Map.empty[String, JsValue]
 
   "ProvideBTIReferenceController" must {
     behave like answerCachingController(

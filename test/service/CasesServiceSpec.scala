@@ -157,7 +157,7 @@ class CasesServiceSpec extends SpecBase {
       given(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier]))
         .willReturn(Future.successful(mock[Event]))
 
-      await(service.addCaseCreatedEvent(atar, operator)(HeaderCarrier())) shouldBe (())
+      await(service.addCaseCreatedEvent(atar, operator)(HeaderCarrier())) shouldBe ()
 
       val eventCreated = theEventCreatedFor(caseConnector, atar)
       eventCreated.operator shouldBe Operator("", Some(""))

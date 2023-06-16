@@ -74,5 +74,5 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
   }
 
   private def generateFiles(number: Int): Seq[FileView] =
-    (1 to number).map(idx => FileView(s"id$idx", s"name$idx", false))
+    (1 to number).map(idx => FileView(s"id$idx", s"name$idx", confidential = false))
 }

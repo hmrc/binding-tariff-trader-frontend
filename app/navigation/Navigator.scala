@@ -18,10 +18,11 @@ package navigation
 
 import config.FrontendAppConfig
 import controllers.routes
-import javax.inject.{Inject, Singleton}
 import models._
 import pages._
 import play.api.mvc.Call
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class Navigator @Inject() (configuration: FrontendAppConfig) {
@@ -76,7 +77,7 @@ class Navigator @Inject() (configuration: FrontendAppConfig) {
       detailPageRoutes + questionPageRoute
   }
 
-  def loopingJourney(
+  private def loopingJourney(
     journey: LoopingJourney,
     continuingTo: Page,
     mode: Mode

@@ -20,7 +20,7 @@ import base.SpecBase
 
 class PostcodeValidatorSpec extends SpecBase {
 
-  val validPostcodes = Seq(
+  val validPostcodes: Seq[String] = Seq(
     "AA11 1AA",
     "AA1A 1AA",
     "AA1 1AA",
@@ -37,7 +37,7 @@ class PostcodeValidatorSpec extends SpecBase {
     " aa111aa "
   )
 
-  val invalidPostcodes = Seq(
+  val invalidPostcodes: Seq[String] = Seq(
     "123456"
   )
 

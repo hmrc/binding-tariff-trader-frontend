@@ -20,7 +20,7 @@ import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours._
 import forms.CommodityCodeRulingReferenceFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.FakeNavigator
 import org.scalatest.BeforeAndAfterEach
 import pages.{CommodityCodeRulingReferencePage, ProvideGoodsNamePage, QuestionPage}
@@ -42,7 +42,7 @@ class CommodityCodeRulingReferenceControllerSpec
   private val formProvider = new CommodityCodeRulingReferenceFormProvider()
   private val goodsName    = "some-goods-name"
 
-  val backgroundData = Map(
+  val backgroundData: Map[String, JsValue] = Map(
     ProvideGoodsNamePage.toString -> JsString(goodsName),
     CommodityCodeRulingReferencePage.toString -> JsArray(
       Seq(
@@ -88,10 +88,14 @@ class CommodityCodeRulingReferenceControllerSpec
     Map("value" -> "44444444444")
   )
 
-  def userAnswersFor[A: Format](backgroundData: Map[String, JsValue], questionPage: QuestionPage[A], answer: A) =
+  def userAnswersFor[A: Format](
+    backgroundData: Map[String, JsValue],
+    questionPage: QuestionPage[A],
+    answer: A
+  ): UserAnswers =
     UserAnswers(CacheMap(cacheMapId, backgroundData ++ Map(questionPage.toString -> Json.toJson(answer))))
 
-  val expectedUserAnswers = List(
+  val expectedUserAnswers: List[UserAnswers] = List(
     userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("01234567890", "09876543210", "11111111111")),
     userAnswersFor(
       backgroundData,
@@ -110,12 +114,12 @@ class CommodityCodeRulingReferenceControllerSpec
     )
   )
 
-  val validEditFormData = List(
+  val validEditFormData: List[(Int, Map[String, String])] = List(
     1 -> Map("value" -> "09876543211"),
     0 -> Map("value" -> "11234567890")
   )
 
-  val expectedEditedAnswers = List(
+  val expectedEditedAnswers: List[UserAnswers] = List(
     userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("01234567890", "09876543211")),
     userAnswersFor(backgroundData, CommodityCodeRulingReferencePage, List("11234567890", "09876543211"))
   )
@@ -132,5 +136,27 @@ class CommodityCodeRulingReferenceControllerSpec
       validEditFormData,
       expectedEditedAnswers
     )
+  }
+
+  "editSubmitAction" must {
+    "should return the correct Call object in NormalMode" in {
+      val index        = 1
+      val mode         = NormalMode
+      val expectedCall = Call("POST", "/advance-tariff-application/edit-similar-ruling-reference?index=1")
+
+      val result = controller(getEmptyCacheMap).editSubmitAction(index, mode)
+
+      assert(result == expectedCall)
+    }
+
+    "should return the correct Call object in CheckMode" in {
+      val index        = 1
+      val mode         = CheckMode
+      val expectedCall = Call("POST", "/advance-tariff-application/change-edit-similar-ruling-reference?index=1")
+
+      val result = controller(getEmptyCacheMap).editSubmitAction(index, mode)
+
+      assert(result == expectedCall)
+    }
   }
 }

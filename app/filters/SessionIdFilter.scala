@@ -16,14 +16,13 @@
 
 package filters
 
-import java.util.UUID
-
 import akka.stream.Materializer
 import com.google.inject.Inject
 import play.api.mvc._
 import play.api.mvc.request.{Cell, RequestAttrKey}
 import uk.gov.hmrc.http.{SessionKeys, HeaderNames => HMRCHeaderNames}
 
+import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
 class SessionIdFilter(

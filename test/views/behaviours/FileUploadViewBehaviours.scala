@@ -40,7 +40,6 @@ trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
   def multipleFileUploadPage(
     createView: Form[String] => HtmlFormat.Appendable,
     messageKeyPrefix: String,
-    expectedFormAction: String,
     expectedHintKey: Option[String] = None
   ): Unit =
     "behave like a page with a file upload field" when {
@@ -74,7 +73,6 @@ trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
   def singleFileUploadPage(
     createView: Form[String] => HtmlFormat.Appendable,
     messageKeyPrefix: String,
-    expectedFormAction: String,
     expectedHintKey: Option[String] = None
   ): Unit =
     "behave like a page with a file upload field" when {

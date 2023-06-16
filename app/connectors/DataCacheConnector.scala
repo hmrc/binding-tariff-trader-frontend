@@ -21,8 +21,9 @@ import com.kenshoo.play.metrics.Metrics
 import metrics.HasMetrics
 import play.api.libs.json.Format
 import repositories.SessionRepository
-import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http.cache.client.CacheMap
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class MongoCacheConnector @Inject() (
   val sessionRepository: SessionRepository,

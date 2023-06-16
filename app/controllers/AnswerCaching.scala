@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 trait MapAnswerCaching[K, V] extends AccumulatingAnswerCaching[Map[K, V], (K, V)] {
-  val cbf = Map.newBuilder[K, V]
+  val cbf: mutable.Builder[(K, V), Map[K, V]] = Map.newBuilder[K, V]
 }
 
 trait AccumulatingAnswerCaching[F <: IterableOnce[A], A] {
@@ -50,7 +50,8 @@ trait AccumulatingAnswerCaching[F <: IterableOnce[A], A] {
         builder.addAll(fa)
         builder.addOne(answer)
         builder.result()
-      }.getOrElse {
+      }
+      .getOrElse {
         val builder = cbf
         builder.clear()
         builder.addOne(answer)

@@ -55,7 +55,7 @@ class LegalChallengeControllerSpec extends ControllerSpecBase with YesNoCachingC
   def viewAsString(form: Form[_], request: Request[_]): String =
     legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
-  val backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
+  val backgroundData: Map[String, JsString] = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
 
   "LegalChallengeController" must {
     behave like yesNoCachingController(

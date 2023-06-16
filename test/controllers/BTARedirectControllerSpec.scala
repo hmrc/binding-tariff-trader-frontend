@@ -101,7 +101,7 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
 
   }
 
-  val redirectScenarios = List(
+  val redirectScenarios: List[(String, () => Future[Boolean])] = List(
     ("been successfully removed", () => Future.successful(true)),
     ("not been successfully removed", () => Future.failed(new RuntimeException("Remove Error")))
   )

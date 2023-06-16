@@ -29,11 +29,11 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
 
   override protected val form = new AddAnotherRulingFormProvider()()
 
-  private def createView: () => HtmlFormat.Appendable = { () => createViewWithForm(form) }
+  private def createView: () => HtmlFormat.Appendable = { () => createViewWithForm() }
 
   val addAnotherRulingView: addAnotherRuling = app.injector.instanceOf[addAnotherRuling]
 
-  private def createViewWithForm(f: Form[Boolean], rulings: List[String] = List.empty): HtmlFormat.Appendable =
+  private def createViewWithForm(rulings: List[String] = List.empty): HtmlFormat.Appendable =
     addAnotherRulingView(frontendAppConfig, form, NormalMode, rulings)(fakeRequest, messages)
 
   "AddAnotherRuling view" must {
@@ -57,8 +57,8 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
   }
 
   private def assertHeading: Int => Unit = { n: Int =>
-    val rulingForm = new AddAnotherRulingFormProvider
-    val htmlView   = asDocument(createViewWithForm(form, generateRulings(n)))
+    new AddAnotherRulingFormProvider
+    val htmlView = asDocument(createViewWithForm(generateRulings(n)))
 
     val headings = htmlView.getElementsByTag("h1")
     assert(headings.size() == 1)

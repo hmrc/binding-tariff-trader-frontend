@@ -51,8 +51,8 @@ class SupportingMaterialFileListController @Inject() (
   lazy val form: Form[Boolean]                          = formProvider()
   val questionPage: SupportingMaterialFileListPage.type = SupportingMaterialFileListPage
 
-  val FormInputField  = "add-file-choice"
-  val MaxFilesMessage = "supportingMaterialFileList.error.numberFiles"
+  val FormInputField          = "add-file-choice"
+  private val MaxFilesMessage = "supportingMaterialFileList.error.numberFiles"
 
   private def exceedsMaxFiles(userAnswers: UserAnswers): Boolean = {
     val numberOfFiles = userAnswers
@@ -115,7 +115,7 @@ class SupportingMaterialFileListController @Inject() (
         .map(_ => Redirect(routes.AddSupportingDocumentsController.onPageLoad(mode)))
   }
 
-  def getFileViews(userAnswers: UserAnswers): Seq[FileView] = {
+  private def getFileViews(userAnswers: UserAnswers): Seq[FileView] = {
     val files                   = userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty[FileAttachment])
     val confidentialityStatuses = userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty[String, Boolean])
     files.filter(_.uploaded).map(file => FileView(file.id, file.name, confidentialityStatuses(file.id)))

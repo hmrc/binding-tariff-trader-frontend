@@ -22,15 +22,15 @@ import java.time.Instant
 import java.util.UUID
 
 object oCase {
-  val fileAttachment = Attachment(id = UUID.randomUUID().toString, false)
-  val eoriDetailsExample =
+  val fileAttachment: Attachment = Attachment(id = UUID.randomUUID().toString, public = false)
+  val eoriDetailsExample: EORIDetails =
     EORIDetails("eoriTrader", "Trader Business Name", "line1", "line2", "line3", "postcode", "country")
-  val eoriAgentDetailsExample = AgentDetails(
+  val eoriAgentDetailsExample: AgentDetails = AgentDetails(
     EORIDetails("eoriAgent", "Agent Business Name", "line1", "line2", "line3", "postcode", "country"),
     Some(fileAttachment)
   )
-  val contactExample = Contact("name", "email", Some("phone"))
-  val btiApplicationExample = Application(
+  val contactExample: Contact = Contact("name", "email", Some("phone"))
+  val btiApplicationExample: Application = Application(
     "BTI",
     eoriDetailsExample,
     contactExample,
@@ -47,10 +47,10 @@ object oCase {
     sampleToBeProvided = false,
     sampleIsHazardous  = None,
     sampleToBeReturned = false,
-    applicationPdf     = Some(Attachment("id", false))
+    applicationPdf     = Some(Attachment("id", public = false))
   )
 
-  def decisionExample(exp: Option[String] = Some("This is some explanation")) =
+  def decisionExample(exp: Option[String] = Some("This is some explanation")): Decision =
     Decision(
       bindingCommodityCode         = "commodity-code-123",
       effectiveStartDate           = Some(Instant.now),
@@ -59,26 +59,26 @@ object oCase {
       goodsDescription             = "goodsDescription-content",
       methodCommercialDenomination = Some("commercial-denomination-content"),
       explanation                  = exp,
-      decisionPdf                  = Some(Attachment("id", false)),
-      letterPdf                    = Some(Attachment("id", false))
+      decisionPdf                  = Some(Attachment("id", public = false)),
+      letterPdf                    = Some(Attachment("id", public = false))
     )
 
-  val btiCaseWithDecision = Case(
+  val btiCaseWithDecision: Case = Case(
     reference   = "ref",
     status      = CaseStatus.COMPLETED,
     application = btiApplicationExample,
     decision    = Some(decisionExample())
   )
-  val btiCaseWithDecisionNoExplanation = Case(
+  val btiCaseWithDecisionNoExplanation: Case = Case(
     reference   = "ref",
     status      = CaseStatus.COMPLETED,
     application = btiApplicationExample,
     decision    = Some(decisionExample(None))
   )
 
-  val btiCaseExample    = Case(reference = "ref", status = CaseStatus.OPEN, application = btiApplicationExample)
-  val newBtiCaseExample = NewCaseRequest(btiApplicationExample, Seq.empty)
-  val pdf = PdfViewModel(
+  val btiCaseExample: Case              = Case(reference = "ref", status = CaseStatus.OPEN, application = btiApplicationExample)
+  val newBtiCaseExample: NewCaseRequest = NewCaseRequest(btiApplicationExample, Seq.empty)
+  val pdf: PdfViewModel = PdfViewModel(
     "eori",
     "reference",
     eoriDetailsExample,
@@ -87,16 +87,16 @@ object oCase {
     "goods name",
     "goods details",
     Some("confidential info"),
-    true,
-    false,
-    true,
-    Seq(FileView("id", "file name", false)),
+    sendingSample   = true,
+    hazardousSample = false,
+    returnSample    = true,
+    Seq(FileView("id", "file name", confidential = false)),
     Some("commodity code"),
     Some("legal"),
     List(),
     None
   )
-  val pdfNoSamples = PdfViewModel(
+  val pdfNoSamples: PdfViewModel = PdfViewModel(
     "eori",
     "reference",
     eoriDetailsExample,
@@ -105,10 +105,10 @@ object oCase {
     "goods name",
     "goods details",
     Some("confidential info"),
-    false,
-    false,
-    false,
-    Seq(FileView("id", "file name", false)),
+    sendingSample   = false,
+    hazardousSample = false,
+    returnSample    = false,
+    Seq(FileView("id", "file name", confidential = false)),
     Some("commodity code"),
     Some("legal"),
     List(),

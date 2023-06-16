@@ -18,11 +18,10 @@ package utils
 
 import controllers.routes
 import models.requests.DataRequest
-import models.{CheckMode, Country, UserAnswers}
+import models.{CheckMode, Country, FileAttachment, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
-import models.FileAttachment
 
 class CheckYourAnswersHelper(
   userAnswers: UserAnswers,
@@ -47,7 +46,7 @@ class CheckYourAnswersHelper(
     )
   }
 
-  def addConfidentialInformation: Option[AnswerRow] = userAnswers.get(AddConfidentialInformationPage) map { x =>
+  def addConfidentialInformation(): Option[AnswerRow] = userAnswers.get(AddConfidentialInformationPage) map { x =>
     AnswerRow(
       label              = "addConfidentialInformation.checkYourAnswersLabel",
       answer             = yesNoAnswer(x),
@@ -247,8 +246,6 @@ class CheckYourAnswersHelper(
       changeUrl          = routes.PreviousBTIRulingController.onPageLoad(CheckMode).url
     )
   }
-
-  def whichBestDescribesYou: Option[AnswerRow] = None
 
   def registeredAddressForEori(implicit request: DataRequest[_]): Option[AnswerRow] =
     userAnswers.get(RegisteredAddressForEoriPage) map { x =>

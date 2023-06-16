@@ -29,9 +29,9 @@ import utils.UnitSpec
 
 class AllowListFilterSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks with MockitoSugar with Generators {
 
-  val mockMaterializer = mock[Materializer]
+  val mockMaterializer: Materializer = mock[Materializer]
 
-  val otherConfigGen = Gen.mapOf[String, String](
+  val otherConfigGen: Gen[Map[String, String]] = Gen.mapOf[String, String](
     for {
       key   <- Gen.alphaNumStr suchThat (_.nonEmpty)
       value <- arbitrary[String]

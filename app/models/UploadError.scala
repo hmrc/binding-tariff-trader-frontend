@@ -35,7 +35,7 @@ case class Other(
 
 object UploadError {
 
-  val knownErrors: Set[UploadError] = Set(FileTooSmall, FileTooLarge, NoFileSelected)
+  private val knownErrors: Set[UploadError] = Set(FileTooSmall, FileTooLarge, NoFileSelected)
 
   def fromErrorCode(errorCode: String): UploadError =
     knownErrors.find(_.errorCode == errorCode).getOrElse(Other(errorCode))

@@ -30,10 +30,10 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
   private val pdfView = oCase.pdf
 
   private def createView(pdfViewModel: PdfViewModel = pdfView): Html =
-    view_application(frontendAppConfig, pdfViewModel, s => Some("example country name"))(fakeRequest, messages)
+    view_application(frontendAppConfig, pdfViewModel, _ => Some("example country name"))(fakeRequest, messages)
 
   private def createViewWithToggle(pdfViewModel: PdfViewModel = pdfView): Html =
-    view_application(frontendAppConfigWithToggle, pdfViewModel, s => Some("example country name"))(
+    view_application(frontendAppConfigWithToggle, pdfViewModel, _ => Some("example country name"))(
       fakeRequest,
       messages
     )
@@ -110,8 +110,9 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
 
     "contain supporting material file list details with Keep confidential flag on" in {
       val doc =
-        view(createView(pdfView.copy(attachments = Seq(FileView("file id", "confidential file.pdf", true)))))
-          .getElementById("print-document")
+        view(
+          createView(pdfView.copy(attachments = Seq(FileView("file id", "confidential file.pdf", confidential = true))))
+        ).getElementById("print-document")
 
       doc should containText(messages("supportingMaterialFileList.checkYourAnswersLabel"))
       doc should containText("- Keep confidential")

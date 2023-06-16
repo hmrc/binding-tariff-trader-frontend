@@ -20,6 +20,7 @@ import controllers.routes
 import forms.EnterContactDetailsFormProvider
 import models.{EnterContactDetails, NormalMode}
 import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.enterContactDetails
 
@@ -31,9 +32,10 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
 
   val enterContactDetailsView: enterContactDetails = app.injector.instanceOf[enterContactDetails]
 
-  def createView = () => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable =
+    () => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm =
+  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
     (form: Form[_]) => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "EnterContactDetails view" must {
@@ -45,7 +47,6 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
     behave like pageWithTextFields(
       createViewUsingForm,
       messageKeyPrefix,
-      routes.EnterContactDetailsController.onSubmit(NormalMode).url,
       "name",
       "email",
       "phoneNumber"

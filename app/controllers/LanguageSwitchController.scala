@@ -42,5 +42,5 @@ class LanguageSwitchController @Inject() (
       English
     }
 
-  def fallbackURL: String = routes.IndexController.getApplications().url
+  private def fallbackURL: String = routes.IndexController.getApplications().url
 }

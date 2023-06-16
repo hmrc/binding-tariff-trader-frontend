@@ -17,8 +17,7 @@
 package pages
 
 import controllers.routes
-import models.EnterContactDetails
-import models.Mode
+import models.{EnterContactDetails, Mode}
 import play.api.mvc.Call
 
 case object EnterContactDetailsPage extends QuestionPage[EnterContactDetails] {

@@ -20,19 +20,15 @@ import models.Mode
 import models.requests.DataRequest
 import play.api.libs.json.Format
 import play.api.mvc.{Result, Results}
+
+import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 trait ListAnswerEditing[A] extends AccumulatingAnswerEditing[List[A], A, Int] {
-  val cbf = List.newBuilder[A]
+  val cbf: mutable.Builder[A, List[A]] = List.newBuilder[A]
   def editIndex(list: List[A], index: Int, elem: A): List[A] =
     list.take(index) ++ List(elem) ++ list.drop(index + 1)
-}
-
-trait MapAnswerEditing[K, V] extends AccumulatingAnswerEditing[Map[K, V], (K, V), K] {
-  val cbf = Map.newBuilder[K, V]
-  def editIndex(map: Map[K, V], index: K, elem: (K, V)): Map[K, V] =
-    map + elem
 }
 
 trait AccumulatingAnswerEditing[F <: IterableOnce[A], A, I] extends AccumulatingAnswerCaching[F, A] {

@@ -18,9 +18,10 @@ package mapper
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import javax.inject.Singleton
 import models._
 import pages._
+
+import javax.inject.Singleton
 
 @Singleton
 class CaseRequestMapper @Inject() (appConfig: FrontendAppConfig) {

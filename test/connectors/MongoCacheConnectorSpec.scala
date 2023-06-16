@@ -36,7 +36,7 @@ class MongoCacheConnectorSpec
     with ScalaFutures
     with MongoSupport {
 
-  val repository = mock[SessionRepository]
+  val repository: SessionRepository = mock[SessionRepository]
 
   ".save" must {
 

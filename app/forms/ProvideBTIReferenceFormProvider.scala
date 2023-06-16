@@ -16,12 +16,12 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import models.BTIReference
 import play.api.data.Form
 import play.api.data.Forms._
-import models.BTIReference
+
+import javax.inject.Inject
 
 class ProvideBTIReferenceFormProvider @Inject() extends Mappings {
 

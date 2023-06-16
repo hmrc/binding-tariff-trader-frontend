@@ -71,14 +71,15 @@ trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar with 
   def fakeRequestWithIdentifier[A](request: Request[AnyContent] = FakeRequest()): IdentifierRequest[AnyContent] =
     IdentifierRequest(request, "id", Some("eori-789012"))
 
-  def fakeRequestWithEori = OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
+  def fakeRequestWithEori: OptionalDataRequest[AnyContentAsEmpty.type] =
+    OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), None)
 
-  def fakeRequestWithNotOptionalEoriAndCache =
+  def fakeRequestWithNotOptionalEoriAndCache: DataRequest[AnyContentAsEmpty.type] =
     DataRequest(fakeRequest, "id", Some("eori-789012"), UserAnswers(CacheMap("id", Map.empty)))
 
-  def fakeRequest = FakeRequest()
+  def fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
-  def fakeRequestWithEoriAndCache =
+  def fakeRequestWithEoriAndCache: OptionalDataRequest[AnyContentAsEmpty.type] =
     OptionalDataRequest(fakeRequest, "id", Some("eori-789012"), Some(UserAnswers(CacheMap("id", Map.empty))))
 
   def fakeGETRequestWithCSRF: FakeRequest[AnyContentAsEmpty.type] =

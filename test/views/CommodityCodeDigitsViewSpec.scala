@@ -19,6 +19,7 @@ package views
 import forms.CommodityCodeDigitsFormProvider
 import models.NormalMode
 import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
 import views.html.commodityCodeDigits
 
@@ -32,9 +33,10 @@ class CommodityCodeDigitsViewSpec extends StringViewBehaviours {
 
   val commodityCodeView: commodityCodeDigits = app.injector.instanceOf[commodityCodeDigits]
 
-  def createView = () => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createView: () => HtmlFormat.Appendable =
+    () => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  def createViewUsingForm =
+  def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
     (form: Form[String]) => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "CommodityCodeDigits view" must {

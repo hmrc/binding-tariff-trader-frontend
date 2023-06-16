@@ -16,10 +16,10 @@
 
 package viewmodels
 
-import java.time.Instant
-
 import models.{Case, Contact, EORIDetails}
 import play.api.i18n.Messages
+
+import java.time.Instant
 
 case class PdfViewModel(
   eori: String,

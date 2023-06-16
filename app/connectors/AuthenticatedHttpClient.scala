@@ -18,11 +18,12 @@ package connectors
 
 import akka.actor.ActorSystem
 import config.FrontendAppConfig
-import javax.inject.{Inject, Singleton}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class AuthenticatedHttpClient @Inject() (
