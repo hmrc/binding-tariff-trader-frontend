@@ -24,6 +24,7 @@ import models.response.FilestoreResponse
 import models.{Attachment, Case, oCase}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
+import org.mockito.stubbing.ScalaOngoingStubbing
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.Helpers._
 import service.{CasesService, CountriesService, FileService, PdfService}
@@ -32,6 +33,7 @@ import views.html.documentNotFound
 import views.html.templates.{applicationView, rulingCertificateView}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.concurrent.Future.{failed, successful}
 
 class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
@@ -76,33 +78,33 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       documentNotFoundView
     )
 
-  private def givenTheCaseServiceFindsTheCase(): Unit =
+  private def givenTheCaseServiceFindsTheCase(): ScalaOngoingStubbing[Future[Case]] =
     when(caseService.getCaseForUser(any[String], any[String])(any[HeaderCarrier])).thenReturn(successful(testCase))
 
-  private def givenTheCaseWithRulingFindsTheCaseWithRuling(): Unit =
+  private def givenTheCaseWithRulingFindsTheCaseWithRuling(): ScalaOngoingStubbing[Future[Case]] =
     when(caseService.getCaseWithRulingForUser(any[String], any[String])(any[HeaderCarrier]))
       .thenReturn(successful(testCaseWithRuling))
 
-  private def givenTheCaseServiceDoesNotFindTheCase(): Unit = {
+  private def givenTheCaseServiceDoesNotFindTheCase(): ScalaOngoingStubbing[Future[Case]] = {
     when(caseService.getCaseForUser(any[String], any[String])(any[HeaderCarrier]))
       .thenReturn(failed(new RuntimeException("Case not found")))
     when(caseService.getCaseWithRulingForUser(any[String], any[String])(any[HeaderCarrier]))
       .thenReturn(failed(new RuntimeException("Case not found")))
   }
 
-  private def givenTheFileServiceFindsTheAttachments(): Unit =
+  private def givenTheFileServiceFindsTheAttachments(): ScalaOngoingStubbing[Future[Seq[FilestoreResponse]]] =
     when(fileService.getAttachmentMetadata(any[Case])(any[HeaderCarrier])).thenReturn(successful(Seq.empty))
 
-  private def givenTheFileServiceHaveNoLetterOfAuthority(): Unit =
+  private def givenTheFileServiceHaveNoLetterOfAuthority(): ScalaOngoingStubbing[Future[Option[FilestoreResponse]]] =
     when(fileService.getLetterOfAuthority(any[Case])(any[HeaderCarrier])).thenReturn(successful(None))
 
-  private def givenThePdfServiceDecodesTheTokenWith(eori: String): Unit =
+  private def givenThePdfServiceDecodesTheTokenWith(eori: String): ScalaOngoingStubbing[Option[String]] =
     when(pdfService.decodeToken(any[String])).thenReturn(Some(eori))
 
-  private def givenThePdfServiceFailsToDecodeTheToken(): Unit =
+  private def givenThePdfServiceFailsToDecodeTheToken(): ScalaOngoingStubbing[Option[String]] =
     when(pdfService.decodeToken(any[String])).thenReturn(None)
 
-  private def givenTheFileServiceFindsThePdf(): Unit = {
+  private def givenTheFileServiceFindsThePdf(): ScalaOngoingStubbing[Future[Option[Source[ByteString, _]]]] = {
     when(fileService.getAttachmentMetadata(any[Attachment])(any[HeaderCarrier])).thenReturn(
       successful(Some(FilestoreResponse("id", "some.pdf", "application/pdf", Some("http://localhost:4572/file/id"))))
     )
@@ -110,10 +112,10 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       .thenReturn(successful(Some(Source.single(ByteString("Some content".getBytes())))))
   }
 
-  private def givenTheFileServiceCannotBeReached(): Unit =
+  private def givenTheFileServiceCannotBeReached(): ScalaOngoingStubbing[Future[Option[FilestoreResponse]]] =
     when(fileService.getAttachmentMetadata(any[Attachment])(any[HeaderCarrier])).thenReturn(failed(new Exception))
 
-  private def givenTheFileServiceFindsNoPdf(): Unit =
+  private def givenTheFileServiceFindsNoPdf(): ScalaOngoingStubbing[Future[Option[FilestoreResponse]]] =
     when(fileService.getAttachmentMetadata(any[Attachment])(any[HeaderCarrier])).thenReturn(successful(None))
 
   "Application Pdf" must {

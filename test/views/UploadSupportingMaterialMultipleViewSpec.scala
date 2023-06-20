@@ -48,9 +48,19 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
   val uploadSupportingMaterialMultipleView: uploadSupportingMaterialMultiple =
     app.injector.instanceOf[uploadSupportingMaterialMultiple]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () =>
       uploadSupportingMaterialMultipleView(frontendAppConfig, initiateResponse, form, goodsName, NormalMode)(
+        request,
+        messages
+      )
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () =>
+      uploadSupportingMaterialMultipleView
+        .render(frontendAppConfig, initiateResponse, form, goodsName, NormalMode, request, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () =>
+      uploadSupportingMaterialMultipleView.f(frontendAppConfig, initiateResponse, form, goodsName, NormalMode)(
         request,
         messages
       )
@@ -65,10 +75,21 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
         NormalMode
       )(request, messages)
 
-  "UploadSupportingMaterialMultiple view" must {
-    behave like normalPage(createView, messageKeyPrefix, goodsName)()
+  "UploadSupportingMaterialMultiple view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix, goodsName)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like multipleFileUploadPage(createViewUsingForm, messageKeyPrefix)
   }

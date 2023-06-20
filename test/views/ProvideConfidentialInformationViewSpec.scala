@@ -22,7 +22,7 @@ import models.NormalMode
 import play.api.data.Form
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import play.twirl.api.Html
+import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
 import views.html.provideConfidentialInformation
 
@@ -41,17 +41,34 @@ class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
 
   private val goodsName: String = "shoos"
 
-  def createView: () => Html =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => provideConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () =>
+      provideConfidentialInformationView
+        .render(frontendAppConfig, form, goodsName, NormalMode, fakeGETRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => provideConfidentialInformationView.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm: Form[String] => Html =
+  def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
     (form: Form[String]) =>
       provideConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  "ProvideConfidentialInformation view" must {
-    behave like normalPage(createView, messageKeyPrefix, goodsName)()
+  "ProvideConfidentialInformation view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix, goodsName)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like textAreaPage(
       createViewUsingForm,

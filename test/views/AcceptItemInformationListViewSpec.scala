@@ -24,14 +24,29 @@ class AcceptItemInformationListViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "acceptItemInformationList"
 
-  def acceptItemInformationListView: acceptItemInformationList = app.injector.instanceOf[acceptItemInformationList]
+  val acceptItemInformationListView: acceptItemInformationList = app.injector.instanceOf[acceptItemInformationList]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => acceptItemInformationListView(frontendAppConfig)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable = () =>
+    acceptItemInformationListView.render(frontendAppConfig, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => acceptItemInformationListView.f(frontendAppConfig)(fakeRequest, messages)
 
-  "AcceptItemInformationList view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
+  "AcceptItemInformationList view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
   }
 }

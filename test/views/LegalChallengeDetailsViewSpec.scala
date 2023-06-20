@@ -20,7 +20,7 @@ import controllers.routes
 import forms.LegalChallengeDetailsFormProvider
 import models.NormalMode
 import play.api.data.Form
-import play.twirl.api.Html
+import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
 import views.html.legalChallengeDetails
 
@@ -34,17 +34,32 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
 
   private val legalChallengeDetailsView: legalChallengeDetails = app.injector.instanceOf[legalChallengeDetails]
 
-  private def createView: () => Html =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => legalChallengeDetailsView.render(frontendAppConfig, form, NormalMode, "goodsName", fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => legalChallengeDetailsView.f(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
 
-  private def createViewUsingForm: Form[String] => Html =
+  private def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
     (form: Form[String]) =>
       legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
 
-  "LegalChallengeDetails view" must {
-    behave like normalPage(createView, messageKeyPrefix, messageHeadingArgs = "goodsName")()
+  "LegalChallengeDetails view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix, messageHeadingArgs = "goodsName")()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like textAreaPage(
       createView            = createViewUsingForm,

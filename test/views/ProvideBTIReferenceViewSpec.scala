@@ -16,7 +16,6 @@
 
 package views
 
-import controllers.routes
 import forms.ProvideBTIReferenceFormProvider
 import models.{BTIReference, NormalMode}
 import play.api.data.Form
@@ -32,17 +31,32 @@ class ProvideBTIReferenceViewSpec extends QuestionViewBehaviours[BTIReference] {
 
   val previousBTIReferenceView: provideBTIReference = app.injector.instanceOf[provideBTIReference]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => previousBTIReferenceView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => previousBTIReferenceView.render(frontendAppConfig, form, NormalMode, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => previousBTIReferenceView.f(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[BTIReference] => HtmlFormat.Appendable =
     (form: Form[BTIReference]) => previousBTIReferenceView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  "ProvideBTIReference view" must {
+  "ProvideBTIReference view" when {
 
-    behave like normalPage(createView, messageKeyPrefix)()
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like pageWithTextFields(
       createViewUsingForm,

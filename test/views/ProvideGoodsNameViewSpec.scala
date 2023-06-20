@@ -34,19 +34,34 @@ class ProvideGoodsNameViewSpec extends StringViewBehaviours {
 
   val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  def provideGoodsNameView: provideGoodsName = injector.instanceOf[provideGoodsName]
+  val provideGoodsNameView: provideGoodsName = injector.instanceOf[provideGoodsName]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => provideGoodsNameView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => provideGoodsNameView.render(frontendAppConfig, form, NormalMode, fakeGETRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => provideGoodsNameView.f(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
   def createViewUsingForm: Form[String] => Html =
     (form: Form[String]) => provideGoodsNameView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
-  "ProvideGoodsName view" must {
+  "ProvideGoodsName view" when {
 
-    behave like normalPage(createView, messageKeyPrefix)()
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like stringPage(
       createViewUsingForm,

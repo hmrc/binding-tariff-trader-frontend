@@ -20,7 +20,7 @@ import controllers.routes
 import forms.ReturnSamplesFormProvider
 import models.NormalMode
 import play.api.data.Form
-import play.twirl.api.{Html, HtmlFormat}
+import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.returnSamples
 
@@ -32,16 +32,31 @@ class ReturnSamplesViewSpec extends YesNoViewBehaviours {
 
   val returnSamplesView: returnSamples = app.injector.instanceOf[returnSamples]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => returnSamplesView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => returnSamplesView.render(frontendAppConfig, form, NormalMode, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => returnSamplesView.f(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) => returnSamplesView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  "ReturnSamples view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
+  "ReturnSamples view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like yesNoPage(
       createViewUsingForm,

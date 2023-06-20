@@ -37,17 +37,32 @@ class CommodityCodeBestMatchViewSpec extends YesNoViewBehaviours {
   override protected def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => commodityCodeBestMatchView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => commodityCodeBestMatchView.render(frontendAppConfig, form, NormalMode, goodsName, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => commodityCodeBestMatchView.f(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) =>
       commodityCodeBestMatchView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  "CommodityCodeBestMatch view" must {
-    behave like normalPage(createView, messageKeyPrefix, goodsName)()
+  "CommodityCodeBestMatch view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix, goodsName)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like yesNoPage(
       createViewUsingForm,

@@ -16,7 +16,6 @@
 
 package views
 
-import controllers.routes
 import forms.RegisteredAddressForEoriFormProvider
 import models.{NormalMode, RegisteredAddressForEori}
 import play.api.data.Form

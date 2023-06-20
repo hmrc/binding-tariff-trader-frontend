@@ -33,8 +33,12 @@ class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
 
   val previousBTIRulingView: previousBTIRuling = app.injector.instanceOf[previousBTIRuling]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => previousBTIRulingView.render(frontendAppConfig, form, goodsName, NormalMode, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => previousBTIRulingView.f(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) =>
@@ -43,10 +47,21 @@ class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
   override protected def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)
 
-  "PreviousBTIRuling view" must {
-    behave like normalPage(createView, messageKeyPrefix, goodsName)()
+  "PreviousBTIRuling view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix, goodsName)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like yesNoPage(
       createViewUsingForm,

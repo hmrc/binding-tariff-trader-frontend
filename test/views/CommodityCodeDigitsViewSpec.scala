@@ -33,18 +33,28 @@ class CommodityCodeDigitsViewSpec extends StringViewBehaviours {
 
   val commodityCodeView: commodityCodeDigits = app.injector.instanceOf[commodityCodeDigits]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
+    () => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
     () => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
-    (form: Form[String]) => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  "CommodityCodeDigits view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix, goodsName)()
 
-  "CommodityCodeDigits view" must {
-    behave like normalPage(createView, messageKeyPrefix, "some goods")()
+        behave like pageWithBackLink(view)
+      }
 
-    behave like pageWithBackLink(createView)
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
 
-    // TODO scaffold test cannot cope with text field with no label
-//    behave like stringPage(createViewUsingForm, messageKeyPrefix, routes.CommodityCodeDigitsController.onSubmit(NormalMode).url)
+    input.foreach(args => (test _).tupled(args))
+
   }
 }

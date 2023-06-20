@@ -17,6 +17,7 @@
 package views
 
 import models.NormalMode
+import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
 import views.html.contactCustomsDutyLiabilityTeam
 
@@ -27,13 +28,29 @@ class ContactCustomsDutyLiabilityTeamViewSpec extends ViewBehaviours {
   val contactCustomsDutyLiabilityTeamView: contactCustomsDutyLiabilityTeam =
     app.injector.instanceOf[contactCustomsDutyLiabilityTeam]
 
-  private def createView() =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => contactCustomsDutyLiabilityTeamView(frontendAppConfig, NormalMode)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => contactCustomsDutyLiabilityTeamView.render(frontendAppConfig, NormalMode, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => contactCustomsDutyLiabilityTeamView.f(frontendAppConfig, NormalMode)(fakeRequest, messages)
 
-  "BeforeYouStart view" must {
-    behave like normalPage(createView(), messageKeyPrefix)()
+  "BeforeYouStart view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
 
-    behave like pageWithBackLink(createView())
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
+
   }
 
 }

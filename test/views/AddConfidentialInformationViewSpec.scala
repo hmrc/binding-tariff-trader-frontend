@@ -38,8 +38,13 @@ class AddConfidentialInformationViewSpec extends YesNoViewBehaviours {
 
   val goodsName: String = "goods name"
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () =>
+      addConfidentialInformationView.render(frontendAppConfig, form, goodsName, NormalMode, fakeGETRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => addConfidentialInformationView.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) =>
@@ -48,11 +53,22 @@ class AddConfidentialInformationViewSpec extends YesNoViewBehaviours {
   override def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)
 
-  "AddConfidentialInformation view" must {
+  "AddConfidentialInformation view" when {
 
-    behave like normalPage(createView, messageKeyPrefix, goodsName)()
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix, goodsName)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like yesNoPage(
       createViewUsingForm,

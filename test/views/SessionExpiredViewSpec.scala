@@ -16,7 +16,7 @@
 
 package views
 
-import play.twirl.api.Html
+import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
 import views.html.session_expired
 
@@ -24,12 +24,27 @@ class SessionExpiredViewSpec extends ViewBehaviours {
 
   val sessionExpiredView: session_expired = app.injector.instanceOf[session_expired]
 
-  def view: () => Html = () => sessionExpiredView(frontendAppConfig)(fakeRequest, messages)
+  val viewViaApply: () => HtmlFormat.Appendable = () => sessionExpiredView(frontendAppConfig)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable = () =>
+    sessionExpiredView.render(frontendAppConfig, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable = () => sessionExpiredView.f(frontendAppConfig)(fakeRequest, messages)
 
   override val expectTimeoutDialog: Boolean = false
 
-  "Session Expired view" must {
+  "Session Expired view" when {
 
-    behave like normalPage(view, "session_expired")("guidance")
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, "session_expired")("guidance")
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
+
   }
 }
