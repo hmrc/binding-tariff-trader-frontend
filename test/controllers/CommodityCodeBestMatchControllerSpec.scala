@@ -37,7 +37,7 @@ class CommodityCodeBestMatchControllerSpec extends ControllerSpecBase with YesNo
 
   val commodityCodeBestMatchView: commodityCodeBestMatch = app.injector.instanceOf(classOf[commodityCodeBestMatch])
 
-  def viewAsString(form: Form[_], request: Request[_]): String =
+  def viewAsString(form: Form[Boolean], request: Request[_]): String =
     commodityCodeBestMatchView(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =

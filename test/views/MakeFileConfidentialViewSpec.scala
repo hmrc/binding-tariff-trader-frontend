@@ -16,7 +16,6 @@
 
 package views
 
-import controllers.routes
 import forms.MakeFileConfidentialFormProvider
 import models.NormalMode
 import play.api.data.Form
@@ -35,24 +34,45 @@ class MakeFileConfidentialViewSpec extends BooleanViewBehaviours[(String, Boolea
 
   val makeFileConfidentialView: makeFileConfidential = app.injector.instanceOf[makeFileConfidential]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () =>
       makeFileConfidentialView(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(
         fakeGETRequestWithCSRF,
         messages
       )
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () =>
+      makeFileConfidentialView
+        .render(frontendAppConfig, form, onwardRoute, NormalMode, fileId, fakeGETRequestWithCSRF, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () =>
+      makeFileConfidentialView.f(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(
+        fakeGETRequestWithCSRF,
+        messages
+      )
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) =>
+  def createViewUsingForm: Form[(String, Boolean)] => HtmlFormat.Appendable =
+    (form: Form[(String, Boolean)]) =>
       makeFileConfidentialView(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(
         fakeGETRequestWithCSRF,
         messages
       )
 
   "makeFileConfidential view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like booleanPage(
       createViewUsingForm,

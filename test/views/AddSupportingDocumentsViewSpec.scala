@@ -38,18 +38,33 @@ class AddSupportingDocumentsViewSpec extends YesNoViewBehaviours {
 
   val addSupportingDocumentsView: addSupportingDocuments = app.injector.instanceOf[addSupportingDocuments]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => addSupportingDocumentsView.render(frontendAppConfig, form, goodsName, NormalMode, fakeGETRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => addSupportingDocumentsView.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) =>
+  def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
+    (form: Form[Boolean]) =>
       addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  "AddSupportingDocuments view" must {
+  "AddSupportingDocuments view" when {
 
-    behave like normalPage(createView, messageKeyPrefix)()
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix, goodsName)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like yesNoPage(
       createViewUsingForm,

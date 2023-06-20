@@ -16,7 +16,6 @@
 
 package views
 
-import controllers.routes
 import forms.EnterContactDetailsFormProvider
 import models.{EnterContactDetails, NormalMode}
 import play.api.data.Form
@@ -32,17 +31,33 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
 
   val enterContactDetailsView: enterContactDetails = app.injector.instanceOf[enterContactDetails]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => enterContactDetailsView.render(frontendAppConfig, form, NormalMode, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => enterContactDetailsView.f(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[EnterContactDetails] => HtmlFormat.Appendable =
+    (form: Form[EnterContactDetails]) =>
+      enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  "EnterContactDetails view" must {
+  "EnterContactDetails view" when {
 
-    behave like normalPage(createView, messageKeyPrefix)()
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like pageWithTextFields(
       createViewUsingForm,

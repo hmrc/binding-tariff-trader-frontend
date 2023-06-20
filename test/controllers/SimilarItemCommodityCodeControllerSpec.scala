@@ -50,7 +50,7 @@ class SimilarItemCommodityCodeControllerSpec extends ControllerSpecBase with Yes
 
   private def onwardRoute: Call = Call("GET", "/foo")
 
-  private def viewAsString(form: Form[_], request: Request[_]): String =
+  private def viewAsString(form: Form[Boolean], request: Request[_]): String =
     similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   "SimilarItemCommodityCodeController" must {

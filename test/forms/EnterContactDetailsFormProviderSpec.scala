@@ -28,7 +28,6 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
   val form: Form[EnterContactDetails]                  = formProvider()
   val formWithTelValidation: Form[EnterContactDetails] = formProvider.formWithMinTelNumber
 
-  // name
   ".name" must {
 
     val fieldName   = "name"
@@ -56,7 +55,6 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
     )
   }
 
-  // email address
   ".email" must {
 
     val fieldName   = "email"
@@ -86,7 +84,6 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
     )
   }
 
-  // phone number
   ".phoneNumber in rest of the world" must {
 
     val fieldName      = "phoneNumber"
@@ -155,5 +152,12 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
       regex     = """[0-9]{1,20}$""",
       error     = FormError(fieldName, phoneFormatKey, mutable.ArraySeq.empty.toSeq)
     )
+  }
+
+  ".formWithMinTelNumber" must {
+    "return the correct result when filled" in {
+      formWithTelValidation.fill(EnterContactDetails("Name", "email@email.com", "0777777777")) shouldBe formWithTelValidation
+        .bind(Map("name" -> "Name", "email" -> "email@email.com", "phoneNumber" -> "0777777777"))
+    }
   }
 }

@@ -34,16 +34,32 @@ class AreYouSendingSamplesViewSpec extends YesNoViewBehaviours {
 
   val areYouSendingSamplesView: areYouSendingSamples = app.injector.instanceOf[areYouSendingSamples]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => areYouSendingSamplesView.render(frontendAppConfig, form, NormalMode, goodsName, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => areYouSendingSamplesView.f(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
+    (form: Form[Boolean]) =>
+      areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  "AreYouSendingSamples view" must {
-    behave like normalPage(createView, messageKeyPrefix, goodsName)()
+  "AreYouSendingSamples view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix, goodsName)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like yesNoPage(
       createViewUsingForm,

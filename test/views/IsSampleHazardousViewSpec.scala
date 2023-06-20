@@ -22,7 +22,7 @@ import models.NormalMode
 import play.api.data.Form
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import play.twirl.api.Html
+import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.isSampleHazardous
 
@@ -36,17 +36,31 @@ class IsSampleHazardousViewSpec extends YesNoViewBehaviours {
 
   val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  def createView: () => Html =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => isSampleHazardousView.render(frontendAppConfig, form, NormalMode, fakeGETRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => isSampleHazardousView.f(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm: Form[_] => Html =
-    (form: Form[_]) => isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+  def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
+    (form: Form[Boolean]) => isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
-  "IsSampleHazardous view" must {
+  "IsSampleHazardous view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
 
-    behave like normalPage(createView, messageKeyPrefix)()
+        behave like pageWithBackLink(view)
+      }
 
-    behave like pageWithBackLink(createView)
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like yesNoPage(
       createViewUsingForm,

@@ -22,7 +22,7 @@ import models.NormalMode
 import play.api.data.Form
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import play.twirl.api.Html
+import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
 import views.html.provideGoodsDescription
 
@@ -40,17 +40,32 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
 
   private val provideGoodsDescriptionView: provideGoodsDescription = app.injector.instanceOf[provideGoodsDescription]
 
-  private def createView: () => Html =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => provideGoodsDescriptionView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => provideGoodsDescriptionView.render(frontendAppConfig, form, goodsName, NormalMode, fakeGETRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => provideGoodsDescriptionView.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  private def createViewUsingForm: Form[String] => Html =
+  private def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
     (form: Form[String]) =>
       provideGoodsDescriptionView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  "ProvideGoodsDescription view" must {
-    behave like normalPage(createView, messageKeyPrefix, goodsName)()
+  "ProvideGoodsDescription view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix, goodsName)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like textAreaPage(
       createViewUsingForm,

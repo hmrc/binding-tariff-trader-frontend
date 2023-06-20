@@ -17,7 +17,7 @@
 package views
 
 import models.{Confirmation, oCase}
-import play.twirl.api.Html
+import play.twirl.api.HtmlFormat
 import viewmodels.{ConfirmationBTAUrlViewModel, ConfirmationHomeUrlViewModel, ConfirmationUrlViewModel, PdfViewModel}
 import views.behaviours.ViewBehaviours
 import views.html.confirmation
@@ -35,7 +35,33 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
   val confirmationView: confirmation = app.injector.instanceOf[confirmation]
 
-  private def createView: () => Html =
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () =>
+      confirmationView.render(
+        frontendAppConfig,
+        confirm,
+        "token",
+        pdfViewModel,
+        _ => Some("example country name"),
+        compositeMode = false,
+        urlViewModel  = ConfirmationHomeUrlViewModel,
+        fakeRequest,
+        messages
+      )
+
+  val viewViaF: () => HtmlFormat.Appendable =
+    () =>
+      confirmationView.f(
+        frontendAppConfig,
+        confirm,
+        "token",
+        pdfViewModel,
+        _ => Some("example country name"),
+        false,
+        ConfirmationHomeUrlViewModel
+      )(fakeRequest, messages)
+
+  private def createView: () => HtmlFormat.Appendable =
     () =>
       confirmationView(
         frontendAppConfig,
@@ -66,9 +92,21 @@ class ConfirmationViewSpec extends ViewBehaviours {
       urlViewModel = confViewModel
     )(fakeRequest, messages)
 
-  "Confirmation view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
-    behave like pageWithoutBackLink(createView)
+  "Confirmation view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
+
+        behave like pageWithoutBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", createView),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     "display a return to BTA button link" when {
       "a user has arrived from BTA" in {

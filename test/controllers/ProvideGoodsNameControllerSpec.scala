@@ -41,7 +41,7 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase with AnswerCachi
 
   val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  def viewAsString(form: Form[_], request: Request[_]): String =
+  def viewAsString(form: Form[String], request: Request[_]): String =
     provideGoodsNameView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =

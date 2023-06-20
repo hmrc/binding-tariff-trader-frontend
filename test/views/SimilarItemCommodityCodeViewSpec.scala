@@ -20,7 +20,7 @@ import controllers.routes
 import forms.SimilarItemCommodityCodeFormProvider
 import models.NormalMode
 import play.api.data.Form
-import play.twirl.api.Html
+import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.similarItemCommodityCode
 
@@ -32,16 +32,31 @@ class SimilarItemCommodityCodeViewSpec extends YesNoViewBehaviours {
 
   val similarItemCommodityCodeView: similarItemCommodityCode = app.injector.instanceOf[similarItemCommodityCode]
 
-  def createView: () => Html =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () => similarItemCommodityCodeView.render(frontendAppConfig, form, NormalMode, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => similarItemCommodityCodeView.f(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[_] => Html =
-    (form: Form[_]) => similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
+    (form: Form[Boolean]) => similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  "SimilarItemCommodityCode view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
+  "SimilarItemCommodityCode view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like yesNoPage(
       createViewUsingForm,

@@ -35,17 +35,33 @@ class CommodityCodeRulingReferenceViewSpec extends StringViewBehaviours {
   val commodityCodeRulingReferenceView: commodityCodeRulingReference =
     app.injector.instanceOf[commodityCodeRulingReference]
 
-  def createView: () => HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable =
     () => commodityCodeRulingReferenceView(frontendAppConfig, form, onwardRoute, NormalMode)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable =
+    () =>
+      commodityCodeRulingReferenceView.render(frontendAppConfig, form, onwardRoute, NormalMode, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => commodityCodeRulingReferenceView.f(frontendAppConfig, form, onwardRoute, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
     (form: Form[String]) =>
       commodityCodeRulingReferenceView(frontendAppConfig, form, onwardRoute, NormalMode)(fakeRequest, messages)
 
-  "CommodityCodeRulingReference view" must {
-    behave like normalPage(createView, messageKeyPrefix)()
+  "CommodityCodeRulingReference view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
 
-    behave like pageWithBackLink(createView)
+        behave like pageWithBackLink(view)
+      }
+
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     behave like stringPage(
       createViewUsingForm,

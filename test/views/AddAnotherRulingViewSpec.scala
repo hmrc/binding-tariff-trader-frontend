@@ -18,7 +18,6 @@ package views
 
 import forms.AddAnotherRulingFormProvider
 import models.NormalMode
-import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.addAnotherRuling
@@ -29,18 +28,34 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
 
   override protected val form = new AddAnotherRulingFormProvider()()
 
-  private def createView: () => HtmlFormat.Appendable = { () => createViewWithForm() }
-
   val addAnotherRulingView: addAnotherRuling = app.injector.instanceOf[addAnotherRuling]
 
-  private def createViewWithForm(rulings: List[String] = List.empty): HtmlFormat.Appendable =
+  val viewViaApply: () => HtmlFormat.Appendable = () =>
+    addAnotherRulingView(frontendAppConfig, form, NormalMode, List.empty)(fakeRequest, messages)
+  val viewViaRender: () => HtmlFormat.Appendable = () =>
+    addAnotherRulingView.render(frontendAppConfig, form, NormalMode, List.empty, fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable =
+    () => addAnotherRulingView.f(frontendAppConfig, form, NormalMode, List.empty)(fakeRequest, messages)
+
+  val viewWithRulings: List[String] => HtmlFormat.Appendable = (rulings: List[String]) => {
     addAnotherRulingView(frontendAppConfig, form, NormalMode, rulings)(fakeRequest, messages)
+  }
 
-  "AddAnotherRuling view" must {
+  "AddAnotherRuling view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like normalPage(view, messageKeyPrefix)()
 
-    behave like normalPage(createView, messageKeyPrefix)()
+        behave like pageWithBackLink(view)
+      }
 
-    behave like pageWithBackLink(createView)
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => (test _).tupled(args))
 
     "show the expected heading when no rulings have been added" in {
       assertHeading(0)
@@ -58,7 +73,7 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
 
   private def assertHeading: Int => Unit = { n: Int =>
     new AddAnotherRulingFormProvider
-    val htmlView = asDocument(createViewWithForm(generateRulings(n)))
+    val htmlView = asDocument(viewWithRulings(generateRulings(n)))
 
     val headings = htmlView.getElementsByTag("h1")
     assert(headings.size() == 1)

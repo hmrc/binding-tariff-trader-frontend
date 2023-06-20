@@ -75,7 +75,7 @@ class MakeFileConfidentialControllerSpec
       makeFileConfidentialView
     )
 
-  private def viewAsString(form: Form[_], submitAction: Call, request: Request[_]): String =
+  private def viewAsString(form: Form[(String, Boolean)], submitAction: Call, request: Request[_]): String =
     makeFileConfidentialView(frontendAppConfig, form, submitAction, NormalMode, lastFileUploadedId)(request, messages).toString
 
   val invalidFormData: Map[String, String] = Map("file-id-1" -> "", "confidential" -> "")
