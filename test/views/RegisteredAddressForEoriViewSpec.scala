@@ -20,6 +20,7 @@ import controllers.routes
 import forms.RegisteredAddressForEoriFormProvider
 import models.{NormalMode, RegisteredAddressForEori}
 import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import service.CountriesService
 import views.behaviours.QuestionViewBehaviours
 import views.html.registeredAddressForEori
@@ -34,7 +35,7 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
 
   val registeredAddressForEoriView: registeredAddressForEori = app.injector.instanceOf[registeredAddressForEori]
 
-  private def createView = { () =>
+  private def createView: () => HtmlFormat.Appendable = { () =>
     val request      = fakeRequestWithEori
     val preparedForm = form.fill(RegisteredAddressForEori(request.userEoriNumber.get))
     registeredAddressForEoriView(frontendAppConfig, preparedForm, NormalMode, countriesService.getAllCountries)(
@@ -43,11 +44,12 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
     )
   }
 
-  private def createViewUsingForm = { form: Form[_] =>
-    registeredAddressForEoriView(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(
-      fakeRequestWithEori,
-      messages
-    )
+  private def createViewUsingForm: Form[RegisteredAddressForEori] => HtmlFormat.Appendable = {
+    form: Form[RegisteredAddressForEori] =>
+      registeredAddressForEoriView(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(
+        fakeRequestWithEori,
+        messages
+      )
   }
 
   "RegisteredAddressForEori view" must {

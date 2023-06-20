@@ -20,7 +20,7 @@ import controllers.routes
 import forms.SimilarItemCommodityCodeFormProvider
 import models.NormalMode
 import play.api.data.Form
-import play.twirl.api.Html
+import play.twirl.api.{Html, HtmlFormat}
 import views.behaviours.YesNoViewBehaviours
 import views.html.similarItemCommodityCode
 
@@ -32,11 +32,11 @@ class SimilarItemCommodityCodeViewSpec extends YesNoViewBehaviours {
 
   val similarItemCommodityCodeView: similarItemCommodityCode = app.injector.instanceOf[similarItemCommodityCode]
 
-  def createView: () => Html =
+  def createView: () => HtmlFormat.Appendable =
     () => similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[_] => Html =
-    (form: Form[_]) => similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
+    (form: Form[Boolean]) => similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "SimilarItemCommodityCode view" must {
     behave like normalPage(createView, messageKeyPrefix)()

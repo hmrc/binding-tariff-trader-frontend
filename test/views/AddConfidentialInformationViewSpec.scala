@@ -41,8 +41,8 @@ class AddConfidentialInformationViewSpec extends YesNoViewBehaviours {
   def createView: () => HtmlFormat.Appendable =
     () => addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) =>
+  def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
+    (form: Form[Boolean]) =>
       addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   override def expectedLegend(messageKeyPrefix: String): String =

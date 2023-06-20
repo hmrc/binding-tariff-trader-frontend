@@ -39,8 +39,8 @@ class IsSampleHazardousViewSpec extends YesNoViewBehaviours {
   def createView: () => Html =
     () => isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm: Form[_] => Html =
-    (form: Form[_]) => isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+  def createViewUsingForm: Form[Boolean] => Html =
+    (form: Form[Boolean]) => isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
   "IsSampleHazardous view" must {
 

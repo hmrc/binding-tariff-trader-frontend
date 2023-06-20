@@ -37,8 +37,9 @@ class AreYouSendingSamplesViewSpec extends YesNoViewBehaviours {
   def createView: () => HtmlFormat.Appendable =
     () => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) => areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
+    (form: Form[Boolean]) =>
+      areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "AreYouSendingSamples view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()

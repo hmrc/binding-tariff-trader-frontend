@@ -41,8 +41,8 @@ class AddSupportingDocumentsViewSpec extends YesNoViewBehaviours {
   def createView: () => HtmlFormat.Appendable =
     () => addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) =>
+  def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
+    (form: Form[Boolean]) =>
       addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   "AddSupportingDocuments view" must {

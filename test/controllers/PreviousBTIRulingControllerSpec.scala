@@ -52,7 +52,7 @@ class PreviousBTIRulingControllerSpec extends ControllerSpecBase with YesNoCachi
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private def viewAsString(form: Form[_], request: Request[_]): String =
+  private def viewAsString(form: Form[Boolean], request: Request[_]): String =
     previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
   val backgroundData: Map[String, JsString] = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))

@@ -27,7 +27,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, rulings: List[String])(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[Boolean], mode: Mode, rulings: List[String])(implicit request: Request[_], messages: Messages)
 
 @headingMessage = @{if(rulings.size == 1){messages("addAnotherRuling.addRulingCounter.singular", rulings.length)} else {messages("addAnotherRuling.addRulingCounter.plural", rulings.length)}}
 

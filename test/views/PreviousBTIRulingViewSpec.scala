@@ -36,8 +36,9 @@ class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
   def createView: () => HtmlFormat.Appendable =
     () => previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) => previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
+    (form: Form[Boolean]) =>
+      previousBTIRulingView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   override protected def expectedLegend(messageKeyPrefix: String): String =
     messages(s"$messageKeyPrefix.heading", goodsName)

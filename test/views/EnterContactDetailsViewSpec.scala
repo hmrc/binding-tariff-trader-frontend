@@ -35,8 +35,9 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
   def createView: () => HtmlFormat.Appendable =
     () => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) => enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[EnterContactDetails] => HtmlFormat.Appendable =
+    (form: Form[EnterContactDetails]) =>
+      enterContactDetailsView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   "EnterContactDetails view" must {
 

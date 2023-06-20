@@ -42,8 +42,8 @@ class MakeFileConfidentialViewSpec extends BooleanViewBehaviours[(String, Boolea
         messages
       )
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) =>
+  def createViewUsingForm: Form[(String, Boolean)] => HtmlFormat.Appendable =
+    (form: Form[(String, Boolean)]) =>
       makeFileConfidentialView(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(
         fakeGETRequestWithCSRF,
         messages

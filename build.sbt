@@ -22,6 +22,8 @@ lazy val root = (project in file("."))
     libraryDependencies ++= AppDependencies(),
     // To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
     libraryDependencySchemes ++= Seq("org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always),
+    // To resolve dependency clash between flexmark v0.64.4+ and play-language to run accessibility tests, remove when versions align
+    dependencyOverrides += "com.ibm.icu" % "icu4j" % "69.1",
     retrieveManaged := true,
     scalacOptions += "-Wconf:src=routes/.*:s,src=views/.*:s",
     Concat.groups := Seq(

@@ -40,8 +40,8 @@ class LegalChallengeViewSpec extends YesNoViewBehaviours {
   def createView: () => HtmlFormat.Appendable =
     () => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+  def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
+    (form: Form[Boolean]) => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   "LegalChallenge view" must {
 

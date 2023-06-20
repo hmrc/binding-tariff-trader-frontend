@@ -40,8 +40,9 @@ class CommodityCodeBestMatchViewSpec extends YesNoViewBehaviours {
   def createView: () => HtmlFormat.Appendable =
     () => commodityCodeBestMatchView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
-  def createViewUsingForm: Form[_] => HtmlFormat.Appendable =
-    (form: Form[_]) => commodityCodeBestMatchView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+  def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
+    (form: Form[Boolean]) =>
+      commodityCodeBestMatchView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   "CommodityCodeBestMatch view" must {
     behave like normalPage(createView, messageKeyPrefix, goodsName)()

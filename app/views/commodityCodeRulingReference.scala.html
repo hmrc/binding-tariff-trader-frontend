@@ -27,7 +27,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, form: Form[_], submitAction: Call, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[String], submitAction: Call, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @contents = {
     <p class="govuk-body">@messages("commodityCodeRulingReference.paragraph0")</p>

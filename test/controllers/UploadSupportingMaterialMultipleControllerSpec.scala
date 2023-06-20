@@ -83,7 +83,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
     )
   )
 
-  private def viewAsString(form: Form[_] = form): String =
+  private def viewAsString(form: Form[String] = form): String =
     uploadSupportingMaterialMultipleView(
       frontendAppConfig,
       initiateResponse,
