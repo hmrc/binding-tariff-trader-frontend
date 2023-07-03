@@ -17,7 +17,7 @@
 package service
 
 import base.SpecBase
-import config.{Crypto, FrontendAppConfig}
+import config.FrontendAppConfig
 import connectors.PdfGeneratorServiceConnector
 import models.PdfFile
 import org.mockito.ArgumentMatchers._
@@ -33,7 +33,7 @@ class PdfServiceSpec extends SpecBase {
   private val connector         = mock[PdfGeneratorServiceConnector]
   private val connectorResponse = PdfFile("Some content".getBytes)
 
-  private def service = new PdfService(connector, new Crypto(config))
+  private def service = new PdfService(connector, config)
 
   "Service 'Generate Pdf'" should {
 
