@@ -3,16 +3,16 @@ import play.core.PlayVersion.current
 
 object AppDependencies {
 
-  private val bootstrapPlayVersion = "7.16.0"
+  private val bootstrapPlayVersion = "7.19.0"
   private val hmrcMongoPlayVersion = "0.74.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
     "commons-validator"            % "commons-validator"           % "1.7",
-    "uk.gov.hmrc"                  %% "play-frontend-hmrc"         % "7.13.0-play-28",
+    "uk.gov.hmrc"                  %% "play-frontend-hmrc"         % "7.14.0-play-28",
     "uk.gov.hmrc"                  %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
     "uk.gov.hmrc"                  %% "http-caching-client"        % "10.0.0-play-28",
     "uk.gov.hmrc.mongo"            %% "hmrc-mongo-play-28"         % hmrcMongoPlayVersion,
-    "commons-codec"                % "commons-codec"               % "1.15",
+    "commons-codec"                % "commons-codec"               % "1.16.0",
     "uk.gov.hmrc"                  %% "play-json-union-formatter"  % "1.18.0-play-28",
     "org.typelevel"                %% "cats-core"                  % "2.9.0",
     "com.fasterxml.jackson.module" %% "jackson-module-scala"       % "2.15.2"
