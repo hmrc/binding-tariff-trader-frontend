@@ -16,25 +16,30 @@
 
 package service
 
+import config.FrontendAppConfig
 import connectors.PdfGeneratorServiceConnector
 import models.PdfFile
 import org.apache.commons.codec.binary.Base64
 import play.api.Logging
 import play.twirl.api.Html
-import uk.gov.hmrc.crypto.{CompositeSymmetricCrypto, Crypted, PlainText}
+import uk.gov.hmrc.crypto.{AesCrypto, Crypted, PlainText}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 @Singleton
-class PdfService @Inject() (connector: PdfGeneratorServiceConnector, crypto: CompositeSymmetricCrypto) extends Logging {
+class PdfService @Inject() (connector: PdfGeneratorServiceConnector, appConfig: FrontendAppConfig)
+    extends Logging
+    with AesCrypto {
 
-  private def encrypt(string: String): String = crypto.encrypt(PlainText(string)).value
+  override protected lazy val encryptionKey: String = appConfig.aesKey
+
+  private def encrypt(string: String): String = encrypt(PlainText(string)).value
 
   private def encode(string: String): String = Base64.encodeBase64String(string.getBytes)
 
-  private def decrypt(string: String): String = crypto.decrypt(Crypted(string)).value
+  private def decrypt(string: String): String = decrypt(Crypted(string)).value
 
   private def decode(string: String): String = new String(Base64.decodeBase64(string.getBytes))
 

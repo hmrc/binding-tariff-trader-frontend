@@ -21,7 +21,6 @@ import controllers.actions._
 import java.time.Clock
 import play.api.{Configuration, Environment}
 import play.api.inject.{Binding, Module => PlayModule}
-import uk.gov.hmrc.crypto.CompositeSymmetricCrypto
 import workers.MigrationWorker
 
 class Module extends PlayModule {
@@ -31,7 +30,6 @@ class Module extends PlayModule {
       bind[DataRequiredAction].to[DataRequiredActionImpl].eagerly(),
       bind[IdentifierAction].to[AuthenticatedIdentifierAction].eagerly(),
       bind[DataCacheConnector].to[MongoCacheConnector].eagerly(),
-      bind[CompositeSymmetricCrypto].to[Crypto],
       bind[Clock].to(Clock.systemUTC()),
       bind[MigrationWorker].toSelf.eagerly()
     )
