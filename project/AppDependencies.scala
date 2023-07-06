@@ -4,7 +4,7 @@ import play.core.PlayVersion.current
 object AppDependencies {
 
   private val bootstrapPlayVersion = "7.19.0"
-  private val hmrcMongoPlayVersion = "0.74.0"
+  private val hmrcMongoPlayVersion = "1.3.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
     "commons-validator"            % "commons-validator"           % "1.7",
