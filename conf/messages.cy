@@ -448,7 +448,7 @@ pdf.ruling.thankYou=Diolch am eich cais am Ddyfarniad Tariffau Uwch (ATaR), dydd
 pdf.ruling.askedFor=Gwnaethoch ofyn am Ddyfarniad Tariffau Uwch ar gyfer <strong>{0}</strong>. Dylech gadw’r dystysgrif dyfarniad hon at eich cofnodion. Mae’n rhoi gwybod i chi am y cod nwyddau rwyf wedi penderfynu arno ar gyfer eich nwyddau a’r rhesymau dros y penderfyniad.
 pdf.ruling.markedConfidential=Bydd gwybodaeth sydd heb ei nodi’n gyfrinachol ar gael i’w gweld ar y wefan <a class="govuk-link" href="https://www.tax.service.gov.uk/search-for-advance-tariff-rulings">Chwilio am Ddyfarniadau Tariffau Uwch</a>.
 pdf.ruling.aboutDecision.heading=Ynghylch y penderfyniad hwn
-pdf.ruling.aboutDecision.text=Rwyf wedi gwneud y penderfyniad hwn o dan adran 24 o Ddeddf Trethiant (Masnach Drawsffiniol) 2018 gan Gyllid a Thollau EM.
+pdf.ruling.aboutDecision.text=Rwyf wedi gwneud y penderfyniad hwn o dan adran 24 o Ddeddf Trethiant (Masnach Drawsffiniol) 2018 gan Gyllid a Thollau EF.
 pdf.ruling.samples=Samplau
 pdf.ruling.keepSamples=Mae’ch samplau wedi’u cadw gan y swyddfa hon.
 pdf.ruling.collectSamples=Bydd samplau sydd heb eu casglu neu sydd heb stampiau i’w dychwelyd drwy’r post yn cael eu dinistrio ar ôl 60 diwrnod i ddyddiad yr e-bost am eich dyfarniad. Os hoffech gasglu’ch samplau (neu drefnu i gludwr eu casglu), e-bostiwch <strong>{0}</strong>, gan roi 48 awr o rybudd.
@@ -491,7 +491,7 @@ pdf.ruling.section.ruling.keywords.label=Geiriau allweddol
 pdf.ruling.section.ruling.commercialDenomination.label=Dosbarthiad masnachol
 pdf.ruling.section.ruling.justification.label=Cyfiawnhad
 pdf.ruling.section.ruling.legalInformation.section1.label=Gwybodaeth gyfreithiol am y dyfarniad hwn
-pdf.ruling.section.ruling.legalInformation.paragraph=Mae’r dyfarniad hwn yn ddilys o {0} tan {1} ac mae wedi’i gyhoeddi o dan Adran 24 o Ddeddf Trethiant (Masnach Drawsffiniol) 2018 gan Gyllid a Thollau EM. Mae gan y deiliad yr hawl i ofyn am adolygiad neu i gyflwyno apêl o’r dyfarniad hwn.
+pdf.ruling.section.ruling.legalInformation.paragraph=Mae’r dyfarniad hwn yn ddilys o {0} tan {1} ac mae wedi’i gyhoeddi o dan Adran 24 o Ddeddf Trethiant (Masnach Drawsffiniol) 2018 gan Gyllid a Thollau EF. Mae gan y deiliad yr hawl i ofyn am adolygiad neu i gyflwyno apêl o’r dyfarniad hwn.
 
 application.dashboard.status.title = Dyfarniadau Tariffau Uwch
 application.section.aboutItem.envisagedCommodityCode = Cod nwyddau
@@ -566,7 +566,7 @@ rulingInformation.ruling = Cyfeirnod y dyfarniad
 rulingInformation.startDate = Dyddiad dechrau
 rulingInformation.expiryDate = Dyddiad dod i ben
 rulingInformation.commoditySubheading = Y cod nwyddau a gyhoeddwyd gennym a’r rheswm pam rydym wedi gwneud y penderfyniad hwn
-rulingInformation.commoditySuffix = Rwyf wedi gwneud y penderfyniad hwn o dan adran 24 o Ddeddf Trethiant (Masnach Drawsffiniol) 2018 gan Gyllid a Thollau EM.
+rulingInformation.commoditySuffix = Rwyf wedi gwneud y penderfyniad hwn o dan adran 24 o Ddeddf Trethiant (Masnach Drawsffiniol) 2018 gan Gyllid a Thollau EF.
 rulingInformation.commodityGuideText = Dod o hyd i ragor o wybodaeth am ddynodiadau yn y canllaw
 rulingInformation.commodityIntro=Cod nwyddau ar gyfer eich nwyddau:
 rulingInformation.commodityGuideLink = Gwnewch gais am Ddyfarniad Tariffau Uwch a all gael ei ddefnyddio o 1 Ionawr 2021 ymlaen.
