@@ -9,7 +9,7 @@ ThisBuild / libraryDependencySchemes ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 )
 
-addSbtPlugin("com.typesafe.play"         % "sbt-plugin"               % "2.8.19")
+addSbtPlugin("com.typesafe.play"         % "sbt-plugin"               % "2.8.20")
 addSbtPlugin("com.typesafe.sbt"          % "sbt-digest"               % "1.1.4")
 addSbtPlugin("net.ground5hark.sbt"       % "sbt-concat"               % "0.2.0")
 addSbtPlugin("io.github.irundaia"        % "sbt-sassify"              % "1.5.2")
