@@ -22,9 +22,24 @@ body {
     line-height: 1.6;
     padding-top: 15px;
 }
+
 .print-document {
     page-break-after  : always;
 }
+
+.print-document__information-box-no-border {
+    display: block;
+    margin-bottom: 1em;
+    padding: 4mm;
+    width: 100%;
+    background-color: #e1f3f1;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact
+}
+
 
 .body-text {
    margin-top: .26316em;
@@ -68,6 +83,7 @@ body {
    margin: 0;
    line-height: 2.1;
 }
+
 .print-document .print-header h2 {
     text-align: right;
     margin-top: 2em;
@@ -75,8 +91,10 @@ body {
     color: #00703C;
     font-weight: 600;
 }
+
 .print-document .information-box {
-    border: 2px solid #00703C;
+    border: none;
+    border-radius: 25px;
     display: block;
     margin-bottom: 1em;
     padding: 5px 10px;
@@ -88,6 +106,7 @@ body {
     box-sizing: border-box;
     display: block;
 }
+
 .print-document .print-header h3 {
     text-align: right;
     margin-top: 2em;
@@ -292,4 +311,24 @@ address {
 }
 .pre-wrap {
     white-space: pre-wrap;
+}
+
+.hidden-print {
+  display: none !important;
+}
+
+@media print {
+
+  body {
+    visibility: hidden;
+  }
+
+  .page-break { page-break-before: always; }
+
+  #print-pages-1 {
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
 }

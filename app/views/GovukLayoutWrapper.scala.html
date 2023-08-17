@@ -61,6 +61,7 @@
 
     @additionalJS.getOrElse({})
     @additionalCSS.getOrElse({})
+    <link rel="stylesheet" href='@controllers.routes.Assets.versioned("stylesheets/print_pdf.css")' type="text/css" media="print"/>
 }
 
 @beforeContentBlock = {

@@ -20,4 +20,6 @@
 @(id:String, dataJourneyClick:String, messageKey: String)(implicit messages: Messages, request:RequestHeader)
 
 <a id=@id class="print-this__link" href="#" data-journey-click="print - click:Your @dataJourneyClick:Print your @dataJourneyClick">@messages(messageKey)</a>
-<script @{CSPNonce.attr}>document.getElementById("@id").addEventListener("click", () => window.print());</script>
+<script @{CSPNonce.attr}>
+ document.getElementById("@id").addEventListener("click", () => window.print());
+</script>

@@ -30,7 +30,6 @@
 }
 
 @additionalCSS = @{
-    //Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/print_pdf.css")}'/>""")
     Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")}'/>""")
 }
 
@@ -40,14 +39,14 @@
     additionalCSS = Some(additionalCSS)
 )  {
 
-    <div class="govuk-grid-row hidden-print hidden-print">
+    <div class="govuk-grid-row hidden-print">
         <div class="govuk-grid-column-two-thirds">
             @components.heading(messages("view.rulingPdf.header"))
             <div>
                 <div class="print-save-application hidden-print">
                     <span id="save-cover-letter" class="govuk-body">
                         <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
-                        @printLink("print-cover-letter", "cover letter", "site.print_your_cover_letter")
+                            @printLink("print-cover-letter", "cover letter", "site.print_your_cover_letter")
                     </span>
 
                 </div>
@@ -61,25 +60,22 @@
         </div>
     </div>
 
-
     @rulingCoverLetterTemplate(appConfig, c, c.decision.get, getCountryName: String => Option[String], compositeMode = true)
 
-    <div>
-        <div class="print-save-application hidden-print">
+    <div class="print-save-application hidden-print">
             <span id="save-ruling-cert" class="govuk-body">
                 <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
                 @printLink("print-ruling-cert", "ruling certificate", "site.print_your_ruling_certificate")
             </span>
 
         </div>
-        <div class="print-save-application hidden-print">
+
+    <div class="print-save-application hidden-print">
             <span class="govuk-body">
                 <a id="save-ruling-cert-pdf" class="save-this__link"  href="@routes.ApplicationController.rulingCertificatePdf(c.reference).url"
                 data-journey-click="save-click:Your-ruling-certificate:Save-your-ruling-certificate">@messages("site.save_your_ruling_certificate")</a>
             </span>
         </div>
-    </div>
 
     @rulingCertificateTemplate(appConfig, c, c.decision.get, getCountryName: String => Option[String], compositeMode = true)
-
 }

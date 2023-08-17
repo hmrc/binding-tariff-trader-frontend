@@ -29,7 +29,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 <div class="grid-row hidden-print">
     <div class="column-two-thirds"></div>
 </div>
-<div id="print-pages" class="print-pages">
+<div id="print-pages-1" class="print-pages">
     <div id="cover-letter1" class="print-document">
         <div class="govuk-grid-row print-header">
             <div class="govuk-grid-column-one-third">
@@ -80,42 +80,46 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
             </div>
 
             @if(c.application.sampleToBeProvided){
-            <div class="govuk-grid-column-two-thirds">
 
-                <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
-                <p class="govuk-body-s">
-                    @messages("pdf.ruling.aboutDecision.text")
-                </p>
-                <p class="govuk-body-s">
-                    @d.explanation
-                </p>
-            </div>
-            <div class="govuk-grid-column-one-third">
-                <div class="information-box" id="samples-section">
-                    <h3 class="govuk-heading-m">@messages("pdf.ruling.samples")</h3>
-                    <hr class="green-hr"/>
+                <div class="govuk-grid-column-two-thirds page-break">
+
+                    <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
                     <p class="govuk-body-s">
-                        @messages("pdf.ruling.keepSamples")
+                        @messages("pdf.ruling.aboutDecision.text")
                     </p>
                     <p class="govuk-body-s">
-                        @Html(messages("pdf.ruling.collectSamples", messages("pdf.ruling.email")))
-                    </p>
-                    <p class="govuk-body-s">
-                        @Html(messages("pdf.ruling.collectSamples", c.reference))
+                        @d.explanation
                     </p>
                 </div>
-            </div>
-            }else{
-            <div class="govuk-grid-column-full">
+                <div class="govuk-grid-column-one-third">
+                    <div class="information-box" id="samples-section">
+                        <h3 class="govuk-heading-m">@messages("pdf.ruling.samples")</h3>
+                        <hr class="green-hr"/>
+                        <p class="govuk-body-s">
+                            @messages("pdf.ruling.keepSamples")
+                        </p>
+                        <p class="govuk-body-s">
+                            @Html(messages("pdf.ruling.collectSamples", messages("pdf.ruling.email")))
+                        </p>
+                        <p class="govuk-body-s">
+                            @Html(messages("pdf.ruling.collectSamples", c.reference))
+                        </p>
+                    </div>
+                </div>
 
-                <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
-                <p class="govuk-body-s">
-                    @messages("pdf.ruling.aboutDecision.text")
-                </p>
-                <p class="govuk-body-s">
-                    @d.explanation
-                </p>
-            </div>
+            } else {
+
+                <div class="govuk-grid-column-full">
+
+                    <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
+                    <p class="govuk-body-s">
+                        @messages("pdf.ruling.aboutDecision.text")
+                    </p>
+                    <p class="govuk-body-s">
+                        @d.explanation
+                    </p>
+                </div>
+
             }
         </div>
     </div>
