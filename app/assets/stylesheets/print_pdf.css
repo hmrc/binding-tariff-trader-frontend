@@ -4,9 +4,11 @@ body {
     height: auto;
     margin: 0;
 }
+
 .govuk-heading-xl {
     display: none;
 }
+
 .print-document {
     padding: 10px 10px;
     position: relative;
@@ -15,6 +17,7 @@ body {
     width: 210mm;
     height: auto;
 }
+
 .print-document .logotype {
     font-size: 1.4em;
     font-weight: normal;
@@ -94,7 +97,8 @@ body {
 
 .print-document .information-box {
     border: none;
-    border-radius: 25px;
+    overflow-wrap: break-word;
+    border-radius: 15px;
     display: block;
     margin-bottom: 1em;
     padding: 5px 10px;
@@ -105,6 +109,18 @@ body {
     margin-right: auto;
     box-sizing: border-box;
     display: block;
+}
+
+.new_information-box-no-border {
+    display: block;
+    overflow-wrap: break-word;
+    margin-bottom: 1em;
+    padding: 4mm;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact
 }
 
 .print-document .print-header h3 {
@@ -256,12 +272,14 @@ body {
     margin: .63158em 4em .21053em 0;
     width: 50%;
   }
+
 .govuk-summary-list__value {
     padding-bottom: .47368em;
     word-break: break-word;
     overflow-wrap: break-word;
     width: 50%;
 }
+
 .govuk-summary-list>*>* {
     display: table-cell;
     border-bottom: 1px solid #bfc1c3;
@@ -277,15 +295,18 @@ body {
     margin-top: 0px;
     margin-right: 10px;
 }
+
 .notice strong {
     display: block;
     padding-left: 65px;
     margin-left: -15px;
 }
+
 .icon-important_ {
     width: 35px;
     height: 35px;
 }
+
 .panel {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -317,18 +338,4 @@ address {
   display: none !important;
 }
 
-@media print {
 
-  body {
-    visibility: hidden;
-  }
-
-  .page-break { page-break-before: always; }
-
-  #print-pages-1 {
-    visibility: visible;
-    position: absolute;
-    left: 0;
-    top: 0;
-  }
-}

@@ -15,6 +15,12 @@
   text-decoration: none;
 }
 
+.hr-green {
+    height: 3px;
+    background-color: #4AB37C;
+    border: none;
+}
+
 .print-document {
   border: 1px solid #6f777b;
   box-shadow: 6px 6px 0 0 #dee0e2;
@@ -58,7 +64,7 @@
 }
 
 .print-document .information-box {
-  border-radius: 25px;
+  border-radius: 15px;
   display: block;
   margin-bottom: 1em;
   padding: 5px 10px;
@@ -268,10 +274,14 @@
     box-shadow: none;
     zoom: 100%;
   }
+
   .information-box {
     background: #e1f3f1;
+    display: block;
+    overflow-wrap: break-word;
     -webkit-print-color-adjust: exact
   }
+
   .print-document .govuk-grid-column-half {
     width: 50%;
     float: left;

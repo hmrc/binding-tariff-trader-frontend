@@ -29,8 +29,11 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 <div class="grid-row hidden-print">
     <div class="column-two-thirds"></div>
 </div>
+
 <div id="print-pages-1" class="print-pages">
+
     <div id="cover-letter1" class="print-document">
+
         <div class="govuk-grid-row print-header">
             <div class="govuk-grid-column-one-third">
                 <img class="crown-logo-atar" id="pdf.ruling.header.logo" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
@@ -63,68 +66,67 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
             </div>
         </div>
         </div>
+
         <div class="govuk-grid-row main-content">
             <div class="govuk-grid-column-full">
-                <p class="govuk-body-s">
-                    @messages("pdf.ruling.dear") @c.application.contact.name
-                </p>
-                <p class="govuk-body-s">
-                    @messages("pdf.ruling.thankYou") @Dates.format(c.createdDate)
-                </p>
-                <p class="govuk-body-s">
-                    @Html(messages("pdf.ruling.askedFor", c.application.goodName))
-                </p>
-                <p class="govuk-body-s">
-                    @Html(messages("pdf.ruling.markedConfidential"))
-                </p>
+                <p class="govuk-body-s">@messages("pdf.ruling.dear") @c.application.contact.name</p>
+                <p class="govuk-body-s">@messages("pdf.ruling.thankYou") @Dates.format(c.createdDate)</p>
+                <p class="govuk-body-s">@Html(messages("pdf.ruling.askedFor", c.application.goodName))</p>
+                <p class="govuk-body-s">@Html(messages("pdf.ruling.markedConfidential"))</p>
             </div>
-
-            @if(c.application.sampleToBeProvided){
-
-                <div class="govuk-grid-column-two-thirds page-break">
-
-                    <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
-                    <p class="govuk-body-s">
-                        @messages("pdf.ruling.aboutDecision.text")
-                    </p>
-                    <p class="govuk-body-s">
-                        @d.explanation
-                    </p>
-                </div>
-                <div class="govuk-grid-column-one-third">
-                    <div class="information-box" id="samples-section">
-                        <h3 class="govuk-heading-m">@messages("pdf.ruling.samples")</h3>
-                        <hr class="green-hr"/>
-                        <p class="govuk-body-s">
-                            @messages("pdf.ruling.keepSamples")
-                        </p>
-                        <p class="govuk-body-s">
-                            @Html(messages("pdf.ruling.collectSamples", messages("pdf.ruling.email")))
-                        </p>
-                        <p class="govuk-body-s">
-                            @Html(messages("pdf.ruling.collectSamples", c.reference))
-                        </p>
-                    </div>
-                </div>
-
-            } else {
-
-                <div class="govuk-grid-column-full">
-
-                    <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
-                    <p class="govuk-body-s">
-                        @messages("pdf.ruling.aboutDecision.text")
-                    </p>
-                    <p class="govuk-body-s">
-                        @d.explanation
-                    </p>
-                </div>
-
-            }
         </div>
     </div>
 
     <div id="cover-letter2" class="print-document">
+
+        <div class="govuk-grid-row main-content">
+
+            @if(c.application.sampleToBeProvided){
+
+            <div class="govuk-grid-column-two-thirds">
+                <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
+                <p class="govuk-body-s">
+                    @messages("pdf.ruling.aboutDecision.text")
+                </p>
+                <p class="govuk-body-s">
+                    @d.explanation
+                </p>
+            </div>
+
+            <div class="govuk-grid-column-one-third">
+                <div class="information-box" id="samples-section">
+                    <h3 class="govuk-heading-m">@messages("pdf.ruling.samples")</h3>
+                    <hr class="hr-green"/>
+                    <p class="govuk-body-s">
+                        @messages("pdf.ruling.keepSamples")
+                    </p>
+                    <p class="govuk-body-s">
+                        @Html(messages("pdf.ruling.collectSamples", messages("pdf.ruling.email")))
+                    </p>
+                    <p class="govuk-body-s">
+                        @Html(messages("pdf.ruling.collectSamples", c.reference))
+                    </p>
+                </div>
+            </div>
+
+
+
+            } else {
+            <div class="govuk-grid-column-full">
+
+                <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
+                <p class="govuk-body-s">
+                    @messages("pdf.ruling.aboutDecision.text")
+                </p>
+                <p class="govuk-body-s">
+                    @d.explanation
+                </p>
+            </div>
+            }
+        </div>
+    </div>
+
+    <div id="cover-letter3" class="print-document">
         <div class="govuk-grid-row print-header">
             <div class="govuk-grid-column-one-third">
                 <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
