@@ -564,6 +564,7 @@ rulingInformation.certificateSubheading = ATaR ruling certificate
 rulingInformation.samplesSubheading = Samples
 rulingInformation.appealsSubheading = Appeals
 rulingInformation.certificateText = You can view and download a PDF copy of the ruling for your records. You''ll always be able to access this ruling certificate from your ATaR home page.
+rulingInformation.coverLetter = View ruling cover letter
 rulingInformation.certificateLink = View ruling certificate
 rulingInformation.samplesText = Get information on samples in the guide
 rulingInformation.samplesLink = Apply for an Advance Tariff Ruling that can be used from 1 January 2021.

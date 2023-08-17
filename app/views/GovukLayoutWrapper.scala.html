@@ -61,7 +61,7 @@
 
     @additionalJS.getOrElse({})
     @additionalCSS.getOrElse({})
-    <link rel="stylesheet" href='@controllers.routes.Assets.versioned("stylesheets/print_pdf.css")' type="text/css" media="print"/>
+<!--    <link rel="stylesheet" href='@controllers.routes.Assets.versioned("stylesheets/print_pdf.css")' type="text/css" media="print"/>-->
 }
 
 @beforeContentBlock = {
@@ -109,7 +109,7 @@
     pageTitle = Some(pageTitle),
     headBlock = Some(hmrcHead(headBlock = Some(head))),
     headerBlock = Some(hmrcStandardHeader(
-        serviceUrl = None,
+        serviceUrl = Some(controllers.routes.IndexController.getApplicationsAndRulings(1, None, None).url),
         serviceName = Some(messages("service.name")),
         signOutUrl = signOut,
         userResearchBanner = userResearchBanner,

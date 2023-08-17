@@ -43,6 +43,7 @@ class ApplicationController @Inject() (
   countriesService: CountriesService,
   cc: MessagesControllerComponents,
   applicationView: applicationView,
+  rulingCoverLetterView: rulingCoverLetterView,
   rulingCertificateView: rulingCertificateView,
   documentNotFoundView: documentNotFound
 )(implicit ec: ExecutionContext)
@@ -68,6 +69,10 @@ class ApplicationController @Inject() (
 
   def viewRulingCertificate(reference: String, token: Option[String]): Action[AnyContent] = identify.async {
     implicit request => getPdfOrHtml(request.eoriNumber, reference, token, rulingCertificateHtmlView)
+  }
+
+  def viewRulingCoverLetter(reference: String, token: Option[String]): Action[AnyContent] = identify.async {
+    implicit request => getPdfOrHtml(request.eoriNumber, reference, token, rulingCoverLetterHtmlView)
   }
 
   def viewApplication(reference: String, token: Option[String]): Action[AnyContent] = identify.async {
@@ -199,6 +204,13 @@ class ApplicationController @Inject() (
   ): Future[Result] =
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
       Future.successful(Ok(rulingCertificateView(appConfig, c, getCountryName)))
+    }
+
+  private def rulingCoverLetterHtmlView(eori: Eori, reference: CaseReference)(
+    implicit request: Request[AnyContent]
+  ): Future[Result] =
+    caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
+      Future.successful(Ok(rulingCoverLetterView(appConfig, c, getCountryName)))
     }
 
   def getCountryName(code: String): Option[String] =

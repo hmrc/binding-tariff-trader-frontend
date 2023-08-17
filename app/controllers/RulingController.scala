@@ -44,7 +44,6 @@ class RulingController @Inject() (
         service.getCaseForUser(eori, reference) flatMap { c: Case =>
           Future.successful(Ok(rulingInformationView(appConfig, c)))
         }
-
       case None =>
         Future.successful(Redirect(routes.BeforeYouStartController.onPageLoad()))
     }

@@ -91,6 +91,12 @@
         <p class="govuk-body">@messages("rulingInformation.certificateText")</p>
 
         <p class="govuk-body">
+            <a id="rulingInformation-cover-letter" href="@routes.ApplicationController.viewRulingCoverLetter(c.reference)" class="govuk-link">
+                @messages("rulingInformation.coverLetter")
+            </a>
+        </p>
+
+        <p class="govuk-body">
             <a id="rulingInformation.certificateLink" href="@routes.ApplicationController.viewRulingCertificate(c.reference)" class="govuk-link">
                 @messages("rulingInformation.certificateLink")
             </a>
