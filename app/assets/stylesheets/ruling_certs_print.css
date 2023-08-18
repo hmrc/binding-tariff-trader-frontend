@@ -5,15 +5,11 @@ body {
     margin: 0;
 }
 
-.govuk-heading-xl {
-    display: none;
-}
-
 .print-document {
-    padding: 10px 10px;
+    padding: 50px 30px;
     position: relative;
     margin-bottom: 15em;
-    zoom: 100%;
+    zoom: 80%;
     width: 210mm;
     height: auto;
 }
@@ -58,9 +54,7 @@ body {
     padding: 0;
     margin: 0;
 }
-.print-document h2, h3, h4 {
-    margin-top: 0;
-}
+
 .print-document h2 {
     text-align: right;
     margin-top: 2em;
@@ -123,13 +117,6 @@ body {
     -webkit-print-color-adjust: exact
 }
 
-.print-document .print-header h3 {
-    text-align: right;
-    margin-top: 2em;
-    font-size: 1.2em;
-    color: #00703C;
-    font-weight: 600
-}
 .print-document .hero-text {
     margin-bottom: 0.26316em;
     font-size: 1.4em;
@@ -141,12 +128,7 @@ body {
 .print-document .footer-page-date {
      float: right;
  }
-.print-document h3 {
-    margin-top: 1em;
-    margin-bottom: 0.4em;
-    font-size: 1.8em;
-    font-weight: 600;
-}
+
 .print-header, .header-space,
 .print-footer, .footer-space {
  height: 15mm;
@@ -166,9 +148,7 @@ body {
 .date-of-result, .decision-service-version {
     border-bottom: 2px solid #00703C
 }
-.date-of-result h3 {
-    margin-bottom: 0
-}
+
 .date-of-result h2 {
     color: #333;
     text-align: left;

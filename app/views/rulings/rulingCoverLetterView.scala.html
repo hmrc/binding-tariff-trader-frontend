@@ -16,6 +16,7 @@
 
 @import config.FrontendAppConfig
 @import views.html.layouts.FullLayoutMainContent
+@import views.html.templates._
 
 @this(
         printLink: components.printLink,
@@ -30,7 +31,12 @@
 }
 
 @additionalCSS = @{
-    Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")}'/>""")
+    Html(
+        s"""
+            <link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/bindingtarifftraderfrontend-app.css")}'/>
+            <link rel="stylesheet" type="text/css" media="print" href='${routes.Assets.versioned("stylesheets/ruling_cover_print.css")}'/>
+        """
+    )
 }
 
 @govukLayoutWrapper(
@@ -45,7 +51,7 @@
             <div>
                 <div class="print-save-application hidden-print">
                     <span id="save-cover-letter" class="govuk-body">
-                        <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")" />
+                        <img alt="Print Icon" aria-hidden="true" src="@createLink("images/icon-print.svg")"/>
                             @printLink("print-cover-letter", "cover letter", "site.print_your_cover_letter")
                     </span>
 

@@ -5,9 +5,6 @@ body {
     margin: 0;
 }
 
-.govuk-heading-xl {
-    display: none;
-}
 
 .print-document {
     padding: 10px 10px;

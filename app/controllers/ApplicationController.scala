@@ -28,6 +28,7 @@ import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.{FileView, PdfViewModel}
 import views.html.documentNotFound
+import views.html.rulings._
 import views.html.templates._
 
 import javax.inject.Inject
