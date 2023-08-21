@@ -41,15 +41,17 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
         <div>
             <div class="govuk-grid-row mt-4">
-                <div class="govuk-grid-column-two-third">
+                <div class="govuk-grid-column-two-third govuk-!-padding-left-3">
                     <span class="govuk-caption-xl">@messages("pdf.ruling.certificate.rulingFor", c.reference)</span>
                     <h1 class="govuk-heading-xl">@c.application.goodName</h1>
-                    <p class="govuk-body">@messages("pdf.ruling.certificate.issuedBy")</p>
                 </div>
-                <div class="govuk-grid-column-one-third"><p></p></div>
+                <div class="govuk-grid-column-one-third"></div>
             </div>
             <div class="govuk-grid-row main-content">
-            <div class="govuk-grid-column-one-half" id="section-holder">
+
+                <p class="govuk-body govuk-!-padding-bottom-9 govuk-!-padding-left-3">@messages("pdf.ruling.certificate.issuedBy")</p>
+
+                <div class="govuk-grid-column-one-half" id="section-holder">
                 <h4 class="govuk-heading-s">@messages("pdf.ruling.section.holder.heading")</h4>
                 <p class="govuk-body-s" id="ruling.holder.businessName">
                     <strong>@messages("pdf.ruling.section.holder.name.label")</strong><br>
@@ -67,8 +69,8 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     <strong>@messages("pdf.ruling.section.holder.eori.label")</strong><br>
                     @c.application.holder.eori
                 </p>
-            </div>
-            <div class="govuk-grid-column-one-half" id="section-ruling">
+                </div>
+                <div class="govuk-grid-column-one-half" id="section-ruling">
                 <h4 class="govuk-heading-s">@messages("pdf.ruling.section.ruling.heading")</h4>
                 <p class="govuk-body-s">
                     <strong>@messages("pdf.ruling.section.ruling.commodityCode.label")</strong><br>
@@ -87,54 +89,102 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     @Dates.format(d.effectiveEndDate)
                 </p>
             </div>
-        </div>
-            <h3 class="govuk-heading-s">@messages("pdf.ruling.section.ruling.legalInformation.section1.label")</h3>
-            <p class="govuk-body">@messages("pdf.ruling.section.ruling.legalInformation.paragraph", Dates.format(d.effectiveStartDate), Dates.format(d.effectiveEndDate))</p>
+            </div>
+            <div>
+                <h3 class="govuk-heading-s">@messages("pdf.ruling.section.ruling.legalInformation.section1.label")</h3>
+                <p class="govuk-body">@messages("pdf.ruling.section.ruling.legalInformation.paragraph", Dates.format(d.effectiveStartDate), Dates.format(d.effectiveEndDate))</p>
+            </div>
         </div>
     </div>
 
-    <div id="ruling-certificate-2" class="print-document" id="print-document">
+    <div id="ruling-certificate-2" class="print-document">
         <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full" id="section-goods-info">
-            <h3 class="govuk-heading-m">@messages("pdf.ruling.section.ruling.details", c.application.goodName)</h3>
-            <dl class="govuk-summary-list" >
-                <div class="govuk-summary-list__row" id="section-goods">
-                    <dt class="govuk-summary-list__key">
-                        @messages("pdf.ruling.section.ruling.description.label")
-                    </dt>
-                    <dd class="govuk-summary-list__value" id="ruling.goodsDescription">
-                        @d.goodsDescription
-                    </dd>
+
+            <div class="govuk-grid-column-full" id="section-goods-info-2">
+                <span class="govuk-caption-l govuk-!-padding-top-5">@messages("pdf.ruling.certificate.rulingFor", c.reference)</span>
+                <h1 class="govuk-heading-xl govuk-!-padding-bottom-8 govuk-!-padding-right-1">@messages("pdf.ruling.section.ruling.details", c.application.goodName)</h1>
+            </div>
+
+            <div class="govuk-grid-column-one-third">
+                <strong id="goods-details-description-label" class="govuk-heading-m goods-details-description">@messages("pdf.ruling.section.ruling.description.label")</strong>
+            </div>
+
+            <div class="govuk-grid-column-two-thirds">
+                <div class="information-box-no-colour">
+                    <p id="goods-details-description" class="govuk-body-s">@d.goodsDescription</p>
                 </div>
-                <div class="govuk-summary-list__row" id="section-commercial">
-                    <dt class="govuk-summary-list__key">
+            </div>
+
+            <div class="govuk-grid-column-full">
+                <hr class="hr-gray"/>
+            </div>
+
+                <div class="govuk-grid-column-one-third govuk-!-padding-top-8">
+                    <strong id="commercial-denomination-label" class="govuk-heading-m goods-details-description">
                         @messages("pdf.ruling.section.ruling.commercialDenomination.label")
-                    </dt>
-                    <dd class="govuk-summary-list__value" id="ruling.methodCommercialDenomination">
-                        @d.methodCommercialDenomination.getOrElse("")
-                    </dd>
+                    </strong>
                 </div>
-                <div class="govuk-summary-list__row" id="section-justification">
-                    <dt class="govuk-summary-list__key">
-                        @messages("pdf.ruling.section.ruling.justification.label")
-                    </dt>
-                    <dd class="govuk-summary-list__value" id="ruling.justification">
+
+                <div class="govuk-grid-column-two-thirds govuk-!-padding-top-8">
+                    <div class="information-box-no-colour">
+                        <p id="commercial-denomination-description" class="govuk-body-s">
+                            @d.methodCommercialDenomination.getOrElse("")
+                        </p>
+                    </div>
+                </div>
+
+            <div class="govuk-grid-column-full">
+                <hr class="hr-gray"/>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="ruling-certificate-3" class="print-document">
+        <div class="govuk-grid-row">
+
+            <div class="govuk-grid-column-full" id="section-goods-info-3">
+                <span class="govuk-caption-l govuk-!-padding-top-5">@messages("pdf.ruling.certificate.rulingFor", c.reference)</span>
+                <h1 class="govuk-heading-xl govuk-!-padding-bottom-8 govuk-!-padding-right-1">@messages("pdf.ruling.section.ruling.details", c.application.goodName)</h1>
+            </div>
+
+            <div class="govuk-grid-column-one-third">
+                <strong id="justification-label" class="govuk-heading-m goods-details-description">
+                    @messages("pdf.ruling.section.ruling.justification.label")
+                </strong>
+            </div>
+
+            <div class="govuk-grid-column-two-thirds">
+                <div class="information-box-no-colour">
+                    <p id="justification-description" class="govuk-body-s">
                         @d.justification
-                    </dd>
+                    </p>
                 </div>
-                <div class="govuk-summary-list__row" id="section-keywords">
-                    <dt class="govuk-summary-list__key">
-                        @messages("pdf.ruling.section.ruling.keywords.label")
-                    </dt>
-                    <dd class="govuk-summary-list__value">
+            </div>
+
+            <div class="govuk-grid-column-full">
+                <hr class="hr-gray"/>
+            </div>
+
+            <div class="govuk-grid-column-one-third govuk-!-padding-top-8">
+                <strong id="keywords-label" class="govuk-heading-m goods-details-description">
+                    @messages("pdf.ruling.section.ruling.keywords.label")
+                </strong>
+            </div>
+
+            <div class="govuk-grid-column-two-thirds govuk-!-padding-top-8">
+                <div class="information-box-no-colour">
+                    <p id="keywords-description" class="govuk-body-s">
                         @for(keyword <- c.keywords){
                             <strong class="govuk-tag govuk-tag--grey">@keyword</strong>
-                        }
-                        &nbsp;
-                    </dd>
+                        }&nbsp;
+                    </p>
                 </div>
-            </dl>
-        </div>
+            </div>
+
+            <div class="govuk-grid-column-full">
+                <hr class="hr-gray"/>
+            </div>
         </div>
     </div>
 

@@ -6,12 +6,22 @@ body {
 }
 
 .print-document {
-    padding: 50px 30px;
+    padding: 50px 50px;
     position: relative;
     margin-bottom: 15em;
     zoom: 80%;
     width: 210mm;
     height: auto;
+}
+
+.print-document .hr-gray {
+    display: block;
+    height: 3px;
+    background: transparent;
+    background-color: #4AB37C;
+    width: 100%;
+    border: none;
+    border-top: solid 3px #aaa;
 }
 
 .print-document .logotype {
@@ -38,7 +48,6 @@ body {
     box-sizing: border-box;
     -webkit-print-color-adjust: exact
 }
-
 
 .body-text {
    margin-top: .26316em;
@@ -89,6 +98,11 @@ body {
     font-weight: 600;
 }
 
+.print-document .goods-details-description h2 {
+    text-align: left;
+    margin-top: 2em;
+}
+
 .print-document .information-box {
     border: none;
     overflow-wrap: break-word;
@@ -99,6 +113,21 @@ body {
     width: 100%;
     background-color: #e1f3f1;
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    display: block;
+}
+
+.print-document .information-box-no-colour {
+    border: none;
+    overflow-wrap: break-word;
+    border-radius: 15px;
+    display: block;
+    margin-bottom: 1em;
+    padding: 5px 10px;
+    width: 100%;
+    text-align: left;
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
@@ -122,9 +151,11 @@ body {
     font-size: 1.4em;
     font-weight: 700;
 }
+
 .print-document .reference-number {
     font-size: 36px;
 }
+
 .print-document .footer-page-date {
      float: right;
  }
@@ -133,6 +164,7 @@ body {
 .print-footer, .footer-space {
  height: 15mm;
 }
+
 .print-document__information-box {
     border: 2px solid #00703C;
     display: block;
@@ -145,6 +177,7 @@ body {
     box-sizing: border-box;
     -webkit-print-color-adjust: exact
 }
+
 .date-of-result, .decision-service-version {
     border-bottom: 2px solid #00703C
 }
@@ -276,7 +309,7 @@ body {
     margin-right: 10px;
 }
 
-.notice strong {
+.notice strong {x
     display: block;
     padding-left: 65px;
     margin-left: -15px;
