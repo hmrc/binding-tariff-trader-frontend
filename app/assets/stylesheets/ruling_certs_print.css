@@ -16,12 +16,12 @@ body {
 
 .print-document .hr-gray {
     display: block;
-    height: 3px;
+    height: 2px;
     background: transparent;
     background-color: #4AB37C;
     width: 100%;
     border: none;
-    border-top: solid 3px #aaa;
+    border-top: solid 2px #aaa;
 }
 
 .print-document .logotype {

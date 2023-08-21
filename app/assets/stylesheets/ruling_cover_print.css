@@ -97,8 +97,9 @@ body {
     overflow-wrap: break-word;
     border-radius: 15px;
     display: block;
-    margin-bottom: 1em;
-    padding: 5px 10px;
+    margin-top: 1em;
+
+    padding: 10px 10px;
     width: 100%;
     background-color: #e1f3f1;
     text-align: center;
@@ -353,3 +354,4 @@ address {
     top: 0;
   }
 }
+

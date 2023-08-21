@@ -26,35 +26,31 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 }
 
 
-<div class="grid-row hidden-print">
-    <div class="column-two-thirds"></div>
-</div>
-
 <div class="printable">
 
     <div id="cover-letter1" class="print-document">
 
         <div class="govuk-grid-row print-header">
-            <div class="govuk-grid-column-one-third">
-                <img class="crown-logo-atar" id="pdf.ruling.header.logo" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
+            <div class="govuk-grid-column-one-third govuk-!-margin-bottom-9">
+                <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
             </div>
             <div>
-                <h2 class="margin-top-small no-margin-bottom print-header__heading govuk-heading-m">
-                    @messages("pdf.ruling.title")
+                <h2 class="govuk-heading-m margin-top-small no-margin-bottom">
+                    @messages("pdf.ruling.coverLetter.title")
                 </h2>
             </div>
         </div>
 
         <div class="govuk-grid-row mt-4">
             <div class="govuk-grid-column-two-thirds"><p></p></div>
-            <div class="govuk-grid-column-one-third align-right">
+            <div class="govuk-grid-column-one-third govuk-!-padding-top-5 align-right">
                 <p class="govuk-body-s">
                     @Html(messages("confirmation.sendingSamples.address"))
                 </p>
                 <p class="govuk-body-s">@Dates.format(d.effectiveStartDate)</p>
             </div>
         <div>
-            <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-grid-column-two-thirds govuk-!-padding-top-9">
                 <p class="govuk-body-s">
                     @c.application.contact.name<br/>
                     @c.application.holder.addressLine1 <br/>
@@ -62,13 +58,14 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     @c.application.holder.addressLine3 <br/>
                     @c.application.holder.postcode <br/>
                     @messages(getCountryName(c.application.holder.country).mkString)
+
                 </p>
             </div>
         </div>
         </div>
 
         <div class="govuk-grid-row main-content">
-            <div class="govuk-grid-column-full">
+            <div class="govuk-grid-column-full govuk-!-padding-top-8">
                 <p class="govuk-body-s">@messages("pdf.ruling.dear") @c.application.contact.name</p>
                 <p class="govuk-body-s">@messages("pdf.ruling.thankYou") @Dates.format(c.createdDate)</p>
                 <p class="govuk-body-s">@Html(messages("pdf.ruling.askedFor", c.application.goodName))</p>
@@ -79,18 +76,26 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
     <div id="cover-letter2" class="print-document">
 
-        <div class="govuk-grid-row main-content">
+        <div class="govuk-grid-row print-header">
+            <div class="govuk-grid-column-one-third">
+                <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
+            </div>
+            <div>
+                <h2 class="govuk-heading-m margin-top-small no-margin-bottom">
+                    @messages("pdf.ruling.coverLetter.title")
+                </h2>
+            </div>
+        </div>
+
+        <h1 class="govuk-heading-l govuk-!-padding-bottom-9 govuk-!-padding-top-9">@messages("pdf.ruling.aboutDecision.heading")</h1>
+
+        <div class="govuk-grid-row">
 
             @if(c.application.sampleToBeProvided){
 
             <div class="govuk-grid-column-two-thirds">
-                <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
-                <p class="govuk-body-s">
-                    @messages("pdf.ruling.aboutDecision.text")
-                </p>
-                <p class="govuk-body-s">
-                    @d.explanation
-                </p>
+                <p class="govuk-body-s">@messages("pdf.ruling.aboutDecision.text")</p>
+                <p class="govuk-body-s">@d.explanation</p>
             </div>
 
             <div class="govuk-grid-column-one-third">
@@ -110,21 +115,21 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
             </div>
 
             } else {
-            <div class="govuk-grid-column-full">
+                <div class="govuk-grid-column-full">
 
-                <h3 class="govuk-heading-m">@messages("pdf.ruling.aboutDecision.heading")</h3>
-                <p class="govuk-body-s">
-                    @messages("pdf.ruling.aboutDecision.text")
-                </p>
-                <p class="govuk-body-s">
-                    @d.explanation
-                </p>
-            </div>
+                    <p class="govuk-body-s">
+                        @messages("pdf.ruling.aboutDecision.text")
+                    </p>
+                    <p class="govuk-body-s">
+                        @d.explanation
+                    </p>
+                </div>
             }
         </div>
     </div>
 
-    <div id="cover-letter3" class="print-document">
+    <div id="cover-letter-3" class="print-document">
+
         <div class="govuk-grid-row print-header">
             <div class="govuk-grid-column-one-third">
                 <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
@@ -135,9 +140,10 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 </h2>
             </div>
         </div>
+
         <div class="govuk-grid-row mt-2 main-content">
         <div class="govuk-grid-column-full">
-            <h3 class="govuk-heading-m">@messages("pdf.ruling.section.ifYouDisagree.title")</h3>
+            <h3 class="govuk-heading-m govuk-!-padding-top-9 govuk-!-padding-bottom-5">@messages("pdf.ruling.section.ifYouDisagree.title")</h3>
             <p class="govuk-body-s">
                 @messages("pdf.ruling.section.ifYouDisagree")
             </p>
@@ -149,20 +155,23 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                 @messages("pdf.ruling.section.ifYouDisagree.cannot")
             </p>
             <p class="govuk-body-s">
-                @messages("pdf.ruling.section.ifYouDisagree.moreInfo") <a class="govuk-link" href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/877291/HMRC1.pdf">@messages("pdf.ruling.section.ifYouDisagree.read")</a>
+                @messages("pdf.ruling.section.ifYouDisagree.moreInfo")
+                <a class="govuk-link" href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/877291/HMRC1.pdf">
+                    @messages("pdf.ruling.section.ifYouDisagree.read")
+                </a>
             </p>
-            <h4 class="govuk-heading-s">@messages("pdf.ruling.section.askForReview.title")</h4>
+            <h3 class="govuk-heading-m">@messages("pdf.ruling.section.askForReview.title")</h3>
             <p class="govuk-body-s">
                 @Html(messages("pdf.ruling.section.askForReview.email", messages("pdf.ruling.email")))
             </p>
             <p class="govuk-body-s">
                 @messages("pdf.ruling.section.askForReview.acceptedReview")
             </p>
-            <h4 class="govuk-heading-s">@messages("pdf.ruling.section.appealing.title")</h4>
+            <h3 class="govuk-heading-m">@messages("pdf.ruling.section.appealing.title")</h3>
             <p class="govuk-body-s">
                 @messages("pdf.ruling.section.appealing.mustContact")
             </p>
-            <p class="govuk-body-s mt-2">
+            <p class="govuk-body-s govuk-!-padding-bottom-2">
                 @messages("pdf.ruling.section.yours")
             </p>
             <p class="govuk-body-s">
