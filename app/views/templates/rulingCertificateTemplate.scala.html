@@ -30,7 +30,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
     <div id="ruling-certificate" class="print-document">
 
         <div class="govuk-grid-row print-header">
-            <div class="govuk-grid-column-one-third govuk-!-margin-bottom-9">
+            <div class="govuk-grid-column-one-third">
                 <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
             </div>
             <div>
@@ -46,7 +46,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
                     <span class="govuk-caption-xl">@messages("pdf.ruling.certificate.rulingFor", c.reference)</span>
                     <h1 class="govuk-heading-xl">@c.application.goodName</h1>
                 </div>
-                <div class="govuk-grid-column-one-third"></div>
+                <div class="govuk-grid-column-one-third"><p></p></div>
             </div>
             <div class="govuk-grid-row main-content">
 
@@ -101,7 +101,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
     <div id="ruling-certificate-2" class="print-document">
 
         <div class="govuk-grid-row print-header">
-            <div class="govuk-grid-column-one-third govuk-!-margin-bottom-9">
+            <div class="govuk-grid-column-one-third">
                 <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
             </div>
             <div>
@@ -113,9 +113,12 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
         <div class="govuk-grid-row">
 
-            <div class="govuk-grid-column-full" id="section-goods-info-2">
-                <span class="govuk-caption-l govuk-!-padding-top-5">@messages("pdf.ruling.certificate.rulingFor", c.reference)</span>
-                <h1 class="govuk-heading-xl govuk-!-padding-bottom-8 govuk-!-padding-right-1">@messages("pdf.ruling.section.ruling.details", c.application.goodName)</h1>
+            <div id="section-goods-info-2" class="govuk-grid-row mt-4">
+                <div class="govuk-grid-column-two-third govuk-!-padding-left-6">
+                    <span class="govuk-caption-l">@messages("pdf.ruling.certificate.rulingFor", c.reference)</span>
+                    <h1 class="govuk-heading-xl">@messages("pdf.ruling.section.ruling.details", c.application.goodName)</h1>
+                </div>
+                <div class="govuk-grid-column-one-third"><p></p></div>
             </div>
 
             <div class="govuk-grid-column-one-third">
@@ -156,7 +159,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
     <div id="ruling-certificate-3" class="print-document">
 
         <div class="govuk-grid-row print-header">
-            <div class="govuk-grid-column-one-third govuk-!-margin-bottom-9">
+            <div class="govuk-grid-column-one-third">
                 <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@messages("logo.encoded")"/>
             </div>
             <div>
@@ -168,9 +171,12 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
         <div class="govuk-grid-row">
 
-            <div class="govuk-grid-column-full" id="section-goods-info-3">
-                <span class="govuk-caption-l govuk-!-padding-top-5">@messages("pdf.ruling.certificate.rulingFor", c.reference)</span>
-                <h1 class="govuk-heading-xl govuk-!-padding-bottom-8 govuk-!-padding-right-1">@messages("pdf.ruling.section.ruling.details", c.application.goodName)</h1>
+            <div id="section-goods-info-3" class="govuk-grid-row mt-4">
+                <div class="govuk-grid-column-two-third govuk-!-padding-left-6">
+                    <span class="govuk-caption-l">@messages("pdf.ruling.certificate.rulingFor", c.reference)</span>
+                    <h1 class="govuk-heading-xl">@messages("pdf.ruling.section.ruling.details", c.application.goodName)</h1>
+                </div>
+                <div class="govuk-grid-column-one-third"><p></p></div>
             </div>
 
             <div class="govuk-grid-column-one-third">
