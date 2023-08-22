@@ -30,7 +30,8 @@ import play.api.test.Helpers._
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.documentNotFound
-import views.html.templates.{applicationView, rulingCertificateView}
+import views.html.rulings.{rulingCertificateView, rulingCoverLetterView}
+import views.html.templates.applicationView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -59,23 +60,24 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     )
   }
 
-  val applicationView: applicationView = app.injector.instanceOf(classOf[views.html.templates.applicationView])
-  val rulingCertificateView: rulingCertificateView =
-    app.injector.instanceOf(classOf[views.html.templates.rulingCertificateView])
-  val documentNotFoundView: documentNotFound = app.injector.instanceOf(classOf[views.html.documentNotFound])
+  val applicationView: applicationView             = app.injector.instanceOf(classOf[views.html.templates.applicationView])
+  val rulingCertView: rulingCertificateView        = app.injector.instanceOf(classOf[rulingCertificateView])
+  val rulingCoverLetterView: rulingCoverLetterView = app.injector.instanceOf(classOf[rulingCoverLetterView])
+  val documentNotFoundView: documentNotFound       = app.injector.instanceOf(classOf[views.html.documentNotFound])
 
   private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): ApplicationController =
     new ApplicationController(
-      frontendAppConfig,
-      action,
-      pdfService,
-      caseService,
-      fileService,
-      countriesService,
-      cc,
-      applicationView,
-      rulingCertificateView,
-      documentNotFoundView
+      appConfig             = frontendAppConfig,
+      identify              = action,
+      pdfService            = pdfService,
+      caseService           = caseService,
+      fileService           = fileService,
+      countriesService      = countriesService,
+      cc                    = cc,
+      applicationView       = applicationView,
+      rulingCoverLetterView = rulingCoverLetterView,
+      rulingCertificateView = rulingCertView,
+      documentNotFoundView  = documentNotFoundView
     )
 
   private def givenTheCaseServiceFindsTheCase(): ScalaOngoingStubbing[Future[Case]] =
