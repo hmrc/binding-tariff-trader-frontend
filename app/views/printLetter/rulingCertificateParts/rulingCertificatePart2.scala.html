@@ -89,6 +89,8 @@
             </div>
         }
 
+<!--        TODO: add back in CommercialDenomination accidently taken out-->
+
         <div class="govuk-grid-column-one-third govuk-!-padding-top-8">
             <strong id="commercial-denomination-label" class="govuk-heading-m goods-details-description">
                 @messages("pdf.ruling.section.ruling.commercialDenomination.label")
@@ -98,7 +100,7 @@
         <div class="govuk-grid-column-two-thirds govuk-!-padding-top-8">
             <div class="information-box-no-colour">
                 <p id="commercial-denomination-description" class="govuk-body-s">
-                    @d.methodCommercialDenomination.map(_.length).getOrElse("")
+                    @d.methodCommercialDenomination.getOrElse("")
                 </p>
             </div>
         </div>
