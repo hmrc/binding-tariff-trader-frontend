@@ -25,6 +25,7 @@
     c: Case,
     d: Decision,
     goodDescriptionSplitted: Option[List[String]],
+    methodCommercialDenominationSplitted: Option[List[String]],
     justificationSplitted: Option[List[String]],
     getCountryName: String => Option[String],
     compositeMode: Boolean = false
@@ -39,7 +40,7 @@ s"$protocol://${req.host}${routes.Assets.versioned(path)}"
 
     @rulingCertificatePart1(c, d, getCountryName)
 
-    @rulingCertificatePart2(c, d, goodDescriptionSplitted)
+    @rulingCertificatePart2(c, d, goodDescriptionSplitted, methodCommercialDenominationSplitted)
 
     @rulingCertificatePart3(c, d, justificationSplitted)
 

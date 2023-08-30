@@ -24,7 +24,14 @@
         fullLayoutMainContent: FullLayoutMainContent
 )
 
-@(appConfig: FrontendAppConfig, c: Case, goodDescriptionSplitted: Option[List[String]], justificationSplitted: Option[List[String]], getCountryName: String => Option[String])(implicit request: Request[_], messages: Messages)
+@(
+    appConfig: FrontendAppConfig,
+    c: Case,
+    goodDescriptionSplitted: Option[List[String]],
+    methodCommercialDenominationSplitted: Option[List[String]],
+    justificationSplitted: Option[List[String]],
+    getCountryName: String => Option[String]
+)(implicit request: Request[_], messages: Messages)
 
 @createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"
@@ -66,5 +73,5 @@
             </span>
     </div>
 
-    @rulingCertificateTemplate(appConfig, c, c.decision.get, goodDescriptionSplitted, justificationSplitted, getCountryName: String => Option[String], compositeMode = true)
+    @rulingCertificateTemplate(appConfig, c, c.decision.get, goodDescriptionSplitted, methodCommercialDenominationSplitted, justificationSplitted, getCountryName, compositeMode = true)
 }

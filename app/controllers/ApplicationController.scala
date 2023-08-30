@@ -213,10 +213,11 @@ class ApplicationController @Inject() (
   ): Future[Result] =
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
       val goodDescriptionSplitted: Option[List[String]] = c.decision.map(d => stringSplitter(d.goodsDescription))
+      val methodCommercialDenominationSplitted: Option[List[String]]   = c.decision.flatMap(d => d.methodCommercialDenomination.map(s =>stringSplitter(s)))
       val justificationSplitted: Option[List[String]]   = c.decision.map(d => stringSplitter(d.justification))
 
       Future.successful(
-        Ok(rulingCertificateView(appConfig, c, goodDescriptionSplitted, justificationSplitted, getCountryName))
+        Ok(rulingCertificateView(appConfig, c, goodDescriptionSplitted, methodCommercialDenominationSplitted, justificationSplitted, getCountryName))
       )
     }
 
