@@ -417,6 +417,8 @@ view.applicationPdf.legalProblemQuestion = Have there been any legal challenges 
 view.applicationPdf.legalProblem = Legal challenges
 
 view.rulingPdf.header = Your ruling documents for
+view.rulingCertificate.header = Your ruling certificate for
+view.rulingCoverLetter.header = Your ruling cover letter for
 
 confirmation.yourRefNumber = Your application reference
 confirmation.paragraph.confirmationEmail = We have sent your confirmation email to {0}.

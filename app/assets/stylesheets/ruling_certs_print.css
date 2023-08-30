@@ -14,6 +14,10 @@ body {
     height: auto;
 }
 
+.greenText {
+    color: #00703C;
+}
+
 .page-break {
     page-break-after  : always;
 }
