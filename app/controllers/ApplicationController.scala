@@ -160,15 +160,16 @@ class ApplicationController @Inject() (
     implicit request: Request[AnyContent]
   ): Future[Result] =
     caseService.getCaseWithRulingForUser(eori, reference).flatMap { c: Case =>
-      val rulingResponse = for {
-        decision <- OptionT.fromOption[Future].apply(c.decision)
-        pdf      <- OptionT.fromOption[Future](decision.decisionPdf)
-        meta     <- OptionT(fileService.getAttachmentMetadata(pdf))
-        url      <- OptionT.fromOption[Future](meta.url)
-        result   <- OptionT(fileService.downloadFile(url))
-      } yield Ok
-        .streamed(result, None, Some(meta.mimeType))
-        .withHeaders("Content-Disposition" -> s"attachment; filename=${meta.fileName}")
+      val rulingResponse =
+        for {
+          decision <- OptionT.fromOption[Future].apply(c.decision)
+          pdf      <- OptionT.fromOption[Future](decision.decisionPdf)
+          meta     <- OptionT(fileService.getAttachmentMetadata(pdf))
+          url      <- OptionT.fromOption[Future](meta.url)
+          result   <- OptionT(fileService.downloadFile(url))
+        } yield Ok
+          .streamed(result, None, Some(meta.mimeType))
+          .withHeaders("Content-Disposition" -> s"attachment; filename=${meta.fileName}")
 
       val messages     = request.messages
       val documentType = messages("documentNotFound.rulingCertificate")
@@ -200,11 +201,23 @@ class ApplicationController @Inject() (
       }
     }
 
+  def stringSplitter(s: String): List[String] = {
+    val head: String         = s.take(2000)
+    val remainder: List[String] = s.drop(2000).grouped(3000).toList
+
+    head +: remainder
+  }
+
   private def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)(
     implicit request: Request[AnyContent]
   ): Future[Result] =
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
-      Future.successful(Ok(rulingCertificateView(appConfig, c, getCountryName)))
+      val goodDescriptionSplitted: Option[List[String]] = c.decision.map(d => stringSplitter(d.goodsDescription))
+      val justificationSplitted: Option[List[String]]   = c.decision.map(d => stringSplitter(d.justification))
+
+      Future.successful(
+        Ok(rulingCertificateView(appConfig, c, goodDescriptionSplitted, justificationSplitted, getCountryName))
+      )
     }
 
   private def rulingCoverLetterHtmlView(eori: Eori, reference: CaseReference)(

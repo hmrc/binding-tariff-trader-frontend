@@ -1,0 +1,87 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+@import utils.Dates
+@import views.html.printLetter._
+
+
+@(
+    c:Case,
+    d: Decision,
+    getCountryName: String => Option[String]
+)(implicit messages: Messages)
+
+<div id="ruling-certificate" class="print-document">
+
+    @letterLogo()
+
+    @letterh1(c.application.goodName, messages("pdf.ruling.certificate.rulingFor", c.reference))
+
+    <div>
+        <div class="govuk-grid-row main-content">
+
+            <p class="govuk-body govuk-!-padding-bottom-9 govuk-!-padding-left-3">@messages("pdf.ruling.certificate.issuedBy")</p>
+
+            <div class="govuk-grid-column-one-half" id="section-holder">
+                <h4 class="govuk-heading-s">@messages("pdf.ruling.section.holder.heading")</h4>
+                <p class="govuk-body-s" id="ruling.holder.businessName">
+                    <strong>@messages("pdf.ruling.section.holder.name.label")</strong><br>
+                    @c.application.holder.businessName
+                </p>
+                <p class="govuk-body-s" id="ruling.holder.address">
+                    <strong>@messages("pdf.ruling.section.holder.address.label")</strong><br>
+                    @c.application.holder.addressLine1 <br/>
+                    @c.application.holder.addressLine2 <br/>
+                    @c.application.holder.addressLine3 <br/>
+                    @c.application.holder.postcode <br/>
+                    @messages(getCountryName(c.application.holder.country).mkString)
+                </p>
+                <p class="govuk-body-s" id="ruling.holder.eori">
+                    <strong>@messages("pdf.ruling.section.holder.eori.label")</strong><br>
+                    @c.application.holder.eori
+                </p>
+            </div>
+
+            <div class="govuk-grid-column-one-half" id="section-ruling">
+                <h4 class="govuk-heading-s">@messages("pdf.ruling.section.ruling.heading")</h4>
+                <p class="govuk-body-s">
+                    <strong>@messages("pdf.ruling.section.ruling.commodityCode.label")</strong><br>
+                    @d.bindingCommodityCode
+                </p>
+                <p class="govuk-body-s">
+                    <strong>@messages("pdf.ruling.section.ruling.rulingReference.label")</strong><br>
+                    @c.reference
+                </p>
+                <p class="govuk-body-s">
+                    <strong>@messages("pdf.ruling.section.ruling.validFrom.label")</strong><br>
+                    @Dates.format(d.effectiveStartDate)
+                </p>
+                <p class="govuk-body-s">
+                    <strong>@messages("pdf.ruling.section.ruling.validTo.label")</strong><br>
+                    @Dates.format(d.effectiveEndDate)
+                </p>
+            </div>
+
+        </div>
+
+        <div>
+            <h3 class="govuk-heading-s">@messages("pdf.ruling.section.ruling.legalInformation.section1.label")</h3>
+            <p class="govuk-body">@messages("pdf.ruling.section.ruling.legalInformation.paragraph", Dates.format(d.effectiveStartDate), Dates.format(d.effectiveEndDate))</p>
+        </div>
+
+    </div>
+</div>

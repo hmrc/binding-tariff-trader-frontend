@@ -1,0 +1,107 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+@import utils.Dates
+@import views.html.printLetter.rulingCertificateParts._
+@import views.html.printLetter._
+
+
+@(
+    c:Case,
+    d: Decision,
+    justificationSplitted: Option[List[String]]
+)(implicit messages: Messages)
+
+<div id="ruling-certificate-3" class="print-document">
+
+    @letterLogo()
+
+    @letterh1(messages("pdf.ruling.section.ruling.details", c.application.goodName), messages("pdf.ruling.certificate.rulingFor", c.reference))
+
+    <div class="govuk-grid-row">
+
+        @justificationSplitted.map{ listOfStrings =>
+
+            <div class="page-break">
+                <div class="govuk-grid-column-one-third">
+                    <strong id="justification-description-label-first" class="govuk-heading-m goods-details-description">
+                        @messages("pdf.ruling.section.ruling.justification.label")
+                    </strong>
+                </div>
+                <div class="govuk-grid-column-two-thirds">
+                    <div class="information-box-no-colour">
+                        <p id="justification-description-first" class="govuk-body-s">@listOfStrings.head</p>
+                    </div>
+                </div>
+                @hr()
+            </div>
+
+            @listOfStrings.drop(1).dropRight(1).map{ sections =>
+
+                <div class="page-break-2">
+                    <div class="govuk-grid-column-one-third">
+                    <strong id="justification-description-label" class="govuk-heading-m goods-details-description">
+                        @messages("pdf.ruling.section.ruling.justification.label")
+                    </strong>
+                </div>
+                    <div class="govuk-grid-column-two-thirds">
+                    <div class="information-box-no-colour">
+                        <p id="justification-description" class="govuk-body-s">@sections</p>
+                    </div>
+                </div>
+
+                    @hr()
+                </div>
+            }
+
+            <div class="ruling-cert-2-tail">
+
+                <div class="govuk-grid-column-one-third">
+                    <strong id="justification-description-label-last" class="govuk-heading-m goods-details-description">
+                        @messages("pdf.ruling.section.ruling.justification.label")
+                    </strong>
+                </div>
+
+                <div class="govuk-grid-column-two-thirds">
+                    <div class="information-box-no-colour">
+                        <p id="justification-description-last" class="govuk-body-s">@listOfStrings.takeRight(1)</p>
+                    </div>
+                </div>
+
+                @hr()
+            </div>
+        }
+
+        <div class="govuk-grid-column-one-third govuk-!-padding-top-8">
+            <strong id="keywords-label" class="govuk-heading-m goods-details-description">
+                @messages("pdf.ruling.section.ruling.keywords.label")
+            </strong>
+        </div>
+
+        <div class="govuk-grid-column-two-thirds govuk-!-padding-top-8">
+            <div class="information-box-no-colour">
+                <p id="keywords-description" class="govuk-body-s">
+                    @for(keyword <- c.keywords){
+                    <strong class="govuk-tag govuk-tag--grey">@keyword</strong>
+                    }&nbsp;
+                </p>
+            </div>
+        </div>
+
+        @hr()
+    </div>
+</div>
