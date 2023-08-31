@@ -25,7 +25,11 @@ lazy val root = (project in file("."))
     // To resolve dependency clash between flexmark v0.64.4+ and play-language to run accessibility tests, remove when versions align
     dependencyOverrides += "com.ibm.icu" % "icu4j" % "69.1",
     retrieveManaged := true,
-    scalacOptions += "-Wconf:src=routes/.*:s,src=views/.*:s",
+    scalacOptions ++= Seq(
+      "-feature",
+      "-Wconf:src=routes/.*:s",
+      "-Wconf:cat=unused-imports&src=views/.*:s"
+    ),
     Concat.groups := Seq(
       "javascripts/bindingtarifftraderfrontend-app.js" ->
         group(Seq("javascripts/show-hide-content.js", "javascripts/bindingtarifftraderfrontend.js"))
@@ -55,5 +59,5 @@ coverageMinimumStmtTotal := 96
 coverageFailOnMinimum := true
 coverageHighlighting := true
 
-addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt")
-addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle")
+addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt A11y/scalafmt")
+addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle A11y/scalastyle")

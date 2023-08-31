@@ -51,7 +51,7 @@
     pageTitle = s"${errorPrefix(goodsDescriptionForm)} ${messages("provideGoodsDescription.title", goodsName)}",
 ) {
 
-    @formWithCSRF(action = ProvideGoodsDescriptionController.onSubmit(mode), 'autoComplete -> "off") {
+    @formWithCSRF(action = ProvideGoodsDescriptionController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
 
         @components.error_summary(goodsDescriptionForm.errors)

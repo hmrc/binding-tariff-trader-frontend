@@ -27,6 +27,7 @@ import play.api.test.Helpers.{cookies, defaultAwaitTimeout}
 
 import java.nio.charset.Charset
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.language.implicitConversions
 
 trait UnitSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
