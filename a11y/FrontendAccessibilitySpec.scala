@@ -86,7 +86,6 @@ class FrontendAccessibilitySpec extends AutomaticAccessibilitySpec {
     case enterContactDetails: enterContactDetails                           => render(enterContactDetails)
     case error_template: error_template                                     => render(error_template)
     case howWeContactYou: howWeContactYou                                   => render(howWeContactYou)
-    case index: index                                                       => render(index)
     case informationPublic: informationPublic                               => render(informationPublic)
     case isSampleHazardous: isSampleHazardous                               => render(isSampleHazardous)
     case legalChallenge: legalChallenge                                     => render(legalChallenge)

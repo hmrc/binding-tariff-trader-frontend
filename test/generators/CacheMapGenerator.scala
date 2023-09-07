@@ -20,7 +20,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import pages._
 import play.api.libs.json.JsValue
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 
 trait CacheMapGenerator {
   self: Generators =>

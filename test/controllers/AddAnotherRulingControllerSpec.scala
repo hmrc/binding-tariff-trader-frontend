@@ -27,7 +27,7 @@ import play.api.data.Form
 import play.api.libs.json.{JsArray, JsBoolean, JsString}
 import play.api.mvc.{Call, Request}
 import play.api.test.Helpers.{redirectLocation, _}
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 import views.html.addAnotherRuling
 
 import scala.concurrent.ExecutionContext.Implicits.global

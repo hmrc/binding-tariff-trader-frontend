@@ -27,7 +27,7 @@ import play.api.data.Form
 import play.api.libs.json.{JsArray, JsBoolean, JsString, Json}
 import play.api.mvc.{Call, Request}
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 import views.html.supportingMaterialFileList
 
 import scala.concurrent.ExecutionContext.Implicits.global

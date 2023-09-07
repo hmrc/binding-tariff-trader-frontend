@@ -28,8 +28,6 @@ headingIsLabel: Boolean = false,
 captionMsg: Option[String] = None
 )(implicit messages: Messages)
 
-@ariaDescribeElements={@hint.map{_ =>@{field.id}-hint}@field.error.map{_ =>error-message-@{field.id}-input}}
-
 <div class="govuk-form-group @if(field.hasErrors){govuk-form-group--error}">
 
     @if(headingIsLabel){

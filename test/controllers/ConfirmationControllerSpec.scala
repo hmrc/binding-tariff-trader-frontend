@@ -24,7 +24,7 @@ import org.mockito.BDDMockito.given
 import pages.{ConfirmationPage, PdfViewPage}
 import play.api.test.Helpers._
 import service.{BTAUserService, CountriesService, PdfService}
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 import utils.JsonFormatters._
 import viewmodels.{ConfirmationHomeUrlViewModel, PdfViewModel}
 import views.html.confirmation

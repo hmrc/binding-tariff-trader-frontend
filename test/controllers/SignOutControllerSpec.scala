@@ -23,7 +23,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import service.BTAUserService
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -88,7 +88,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
     "return a redirect and clear session" in {
       val result: Future[Result] = controller.unauthorisedSignOut(fakeRequest)
       status(result)               shouldBe SEE_OTHER
-      redirectLocation(result).get should endWith("/applications")
+      redirectLocation(result).get should endWith("/advance-tariff-application/applications-and-rulings")
       cookies(result).size         shouldBe 0
     }
   }

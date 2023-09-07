@@ -29,10 +29,6 @@
 
 @(appConfig: FrontendAppConfig, form: Form[Boolean], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@contents = {
-    <p class="govuk-body">@messages("similarItemCommodityCode.bodyText")</p>
-}
-
 @govukLayoutWrapper(
     pageTitle = s"${errorPrefix(form)} ${messages("similarItemCommodityCode.title")}"
 ) {

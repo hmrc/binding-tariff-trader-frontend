@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package pages
+package models.cache
 
-import controllers.routes
-import models.NormalMode
-import pages.behaviours.PageBehaviours
+import play.api.libs.json.{JsValue, Json, OFormat, Reads}
 
-class IndexPageSpec extends PageBehaviours {
+case class CacheMap(id: String, data: Map[String, JsValue]) {
 
-  "IndexPage" when {
-    "route" must {
-      "direct to appropriate controller route in normal mode" in {
-        IndexPage.route(NormalMode) mustBe routes.IndexController.getApplicationsAndRulings(1, None, None)
-      }
-    }
+  def getEntry[T](key: String)(implicit fjs: Reads[T]): Option[T] =
+    data
+      .get(key)
+      .map(json =>
+        json
+          .validate[T]
+          .fold(
+            errors => throw new KeyStoreEntryValidationException(key, json, errors),
+            valid => valid
+          )
+      )
+}
 
-    "toString" must {
-      "have the correct name" in {
-        IndexPage.toString mustBe "index"
-      }
-    }
-  }
+object CacheMap {
+  implicit val formats: OFormat[CacheMap] = Json.format[CacheMap]
 }

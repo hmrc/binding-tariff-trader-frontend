@@ -24,7 +24,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 import views.html.beforeYouStart
 
 import scala.concurrent.ExecutionContext.Implicits.global

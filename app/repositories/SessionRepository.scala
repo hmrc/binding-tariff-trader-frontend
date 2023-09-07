@@ -23,7 +23,7 @@ import org.mongodb.scala.model.Filters._
 import org.mongodb.scala.model.{IndexModel, IndexOptions, ReplaceOptions}
 import play.api.Configuration
 import play.api.libs.json.{Format, JsValue, Json, OFormat}
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 import uk.gov.hmrc.mongo.play.json.formats.MongoJodaFormats

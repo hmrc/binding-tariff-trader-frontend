@@ -17,7 +17,7 @@
 package connectors
 
 import play.api.libs.json.Format
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.Future

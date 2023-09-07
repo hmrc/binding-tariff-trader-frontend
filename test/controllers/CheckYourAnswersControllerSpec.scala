@@ -32,7 +32,7 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 import viewmodels.AnswerSection
 import views.html.check_your_answers
 

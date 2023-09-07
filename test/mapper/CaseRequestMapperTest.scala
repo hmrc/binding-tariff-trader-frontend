@@ -20,7 +20,7 @@ import base.SpecBase
 import models._
 import pages._
 import play.api.libs.json.{JsValue, Json, Writes}
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 
 class CaseRequestMapperTest extends SpecBase {
 
