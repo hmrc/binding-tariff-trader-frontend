@@ -105,7 +105,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
     "not override other session values from the response" in {
 
-      val Some(result) = route(app, FakeRequest(HttpVerbs.GET, "/test2"))
+      val result = route(app, FakeRequest(HttpVerbs.GET, "/test2")).get
       session(result).data should contain("foo" -> "bar")
     }
 

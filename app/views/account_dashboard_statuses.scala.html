@@ -33,7 +33,7 @@
         Some(govukBackLink(BackLink(
             href = routes.BTARedirectController.redirectToBTA.url,
             content = Text(messages("index.bta.link")),
-            attributes = Map("class" -> "govuk-back-link", "id" -> "bta-return-link")
+            attributes = Map("id" -> "bta-return-link")
         )))
       }else{
         None
@@ -76,7 +76,7 @@
         </div>
     }
 
-    @components.button_link(messages("site.start"), routes.BeforeYouStartController.onPageLoad.url, id = Some("start-application"))
+    @components.button_link(messages("site.start"), routes.BeforeYouStartController.onPageLoad().url, id = Some("start-application"))
 
     @if(dashboard.pageData.nonEmpty){
         <div id="applications-rulings-list">

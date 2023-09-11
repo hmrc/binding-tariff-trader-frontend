@@ -64,7 +64,6 @@
 }
 
 @beforeContentBlock = {
-    <div>
         @hmrcLanguageSelect(LanguageSelect(
             if (messages.lang.code == "cy") Cy else En,
             (En, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.English)}"),
@@ -74,13 +73,12 @@
         @if(showBackLink) {
             @govukBackLink(BackLink(
                 content = Text(messages("site.back")),
-                attributes = Map("class" -> "govuk-back-link", "id" -> "back-link")
+                attributes = Map("id" -> "back-link")
             ))
             <script @{CSPNonce.attr}>document.getElementById("back-link").addEventListener("click", () => window.history.go(-1));</script>
         }
 
         @if(customBackLink.isDefined){ @customBackLink.get }
-    </div>
 }
 
 @content = {

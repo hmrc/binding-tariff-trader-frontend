@@ -42,8 +42,8 @@
 
     @helper.form(
         action = Call("POST", initiateResponse.uploadRequest.href),
-        'enctype -> "multipart/form-data",
-        'id -> "upload-files-form") {
+        Symbol("enctype") -> "multipart/form-data",
+        Symbol("id") -> "upload-files-form") {
 
         @components.error_summary(form.errors)
 

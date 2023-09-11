@@ -20,16 +20,10 @@
 @(appConfig: FrontendAppConfig, c: Case, d: Decision, getCountryName: String => Option[String],
 compositeMode: Boolean = false)(implicit messages: Messages)
 
-@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
-val protocol = if(req.secure) "https" else "http"
-s"$protocol://${req.host}${routes.Assets.versioned(path)}"
-}
-
-
 <div class="grid-row hidden-print">
     <div class="column-two-thirds"></div>
 </div>
-<div id="print-pages" class="print-pages">
+<div class="print-pages">
     <div id="cover-letter1" class="print-document">
         <div class="govuk-grid-row print-header">
             <div class="govuk-grid-column-one-third">

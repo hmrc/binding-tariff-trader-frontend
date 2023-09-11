@@ -77,7 +77,7 @@
 
     <!--Samples toggle logic start-->
 
-    @if(true == false){
+    @if(appConfig.samplesToggle){
         <div class="govuk-inset-text">@messages("view.application.paragraph.do.not.send.sample")</div>
     } else {
         <div id="sampleInformation">
@@ -85,7 +85,7 @@
                 @if(pdf.hazardousSample){
                     @components.icon_important("view.application.paragraph.do.not.send.sample")
                 } else if (!pdf.hazardousSample && pdf.returnSample) {
-                    <p class="govuk-body">@components.icon_important("confirmation.sendingSamples.important")</p>
+                    @components.icon_important("confirmation.sendingSamples.important")
                     <div class="govuk-inset-text">@messages("confirmation.paragraph.sample.return")</div>
 
                     <p class="govuk-body">@messages("confirmation.paragraph1.sendingSamples")

@@ -20,11 +20,11 @@
 
 @(activeTab: CaseDetailTab)(implicit messages: Messages)
 
-<ul class="govuk-tabs__list" role="tablist">
-    <li class="govuk-tabs__list-item @if(activeTab == CaseDetailTab.APPLICATION){govuk-tabs__list-item--selected}" role="tab">
-        <a class="govuk-tabs__tab" @if(activeTab == CaseDetailTab.APPLICATION){aria-selected="true"} href="@routes.IndexController.getApplications()">@messages("case.tabs.applications")</a>
+<ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item @if(activeTab == CaseDetailTab.APPLICATION){govuk-tabs__list-item--selected}">
+        <a class="govuk-tabs__tab" href="@routes.IndexController.getApplications()">@messages("case.tabs.applications")</a>
     </li>
-    <li class="govuk-tabs__list-item @if(activeTab == CaseDetailTab.RULING){govuk-tabs__list-item--selected}" role="tab">
-        <a class="govuk-tabs__tab" @if(activeTab == CaseDetailTab.RULING){aria-selected="true"} href="@routes.IndexController.getRulings()">@messages("case.tabs.rulings")</a>
+    <li class="govuk-tabs__list-item @if(activeTab == CaseDetailTab.RULING){govuk-tabs__list-item--selected}">
+        <a class="govuk-tabs__tab" href="@routes.IndexController.getRulings()">@messages("case.tabs.rulings")</a>
     </li>
 </ul>

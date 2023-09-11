@@ -72,6 +72,17 @@ Run `./run_all_tests.sh`. This also runs Scalastyle and does coverage testing.
 
 or `sbt test` to run the tests only.
 
+## Accessibility Tests
+
+### Prerequisites
+Have node installed on your machine
+
+### Execute tests
+To run the tests locally, simply run:
+```bash
+sbt clean A11y/test
+```
+
 ### License
 
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").

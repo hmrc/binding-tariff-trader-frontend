@@ -107,8 +107,8 @@
                 field = form("country"),
                 elementOptions = countries.map{ c => (c.code, messages(c.countryName).trim) },
                 displayEmptyValue = true,
-                '_label -> messages("registeredAddressForEori.country"),
-                '_selectClass -> "js-autocomplete"
+                Symbol("_label") -> messages("registeredAddressForEori.country"),
+                Symbol("_selectClass") -> "js-autocomplete"
             )
             <script @CSPNonce.attr type="text/javascript" src='@routes.Assets.versioned("javascripts/countrycode.js")'></script>
         }
