@@ -15,7 +15,7 @@ checkYourAnswers.declaration.paragraph0 = By applying for an Advance Tariff Ruli
 checkYourAnswers.declaration.paragraph1 = You agree that HMRC can:
 checkYourAnswers.declaration.listItem1 = store the information you provided or may provide after you send your application
 checkYourAnswers.declaration.listItem2 = publish information that is not confidential on the Advance Tariff Ruling website
-checkYourAnswers.declaration.email = tariff.classification@hmrc.gov.uk
+checkYourAnswers.declaration.email = tariffclassification@hmrc.gov.uk
 checkYourAnswers.declaration.listItem3 = contact you by email, or by the way you have specified in an email to us at <a class="govuk-link" href="mailto:{0}">{1}</a>
 checkYourAnswers.declaration.paragraph2 = You understand that your samples may be damaged during testing.
 checkYourAnswers.declaration.submit = Accept and apply for a ruling
@@ -86,7 +86,7 @@ howWeContactYou.paragraph1.part2 = We would like to contact you by email. Howeve
 howWeContactYou.paragraph1.listItem1 = are not secure
 howWeContactYou.paragraph1.listItem2 = could be changed or read by someone else before they reach you
 howWeContactYou.paragraph2.part1 = If you do not want us to contact you by email, tell us how we should contact you by emailing us at <a class="govuk-link" href="mailto:{0}">{1}</a>
-howWeContactYou.paragraph2.email = tariff.classification@hmrc.gov.uk
+howWeContactYou.paragraph2.email = tariffclassification@hmrc.gov.uk
 howWeContactYou.paragraph2.part2 = If you choose to opt out of emails, we will only send automated emails. For example, when you complete this application we will send you an automated confirmation email.
 howWeContactYou.paragraph2.part3 = If we do not hear from you, we will assume you have accepted the risks.
 
@@ -490,7 +490,7 @@ pdf.ruling.section.ruling.legalInformation.section2.paragraph1.listitem1=the hol
 pdf.ruling.section.ruling.legalInformation.section2.paragraph1.listitem2=commercial denomination information (confidential information about the goods)
 pdf.ruling.section.ruling.legalInformation.section2.paragraph2=We might publish:
 pdf.ruling.section.ruling.legalInformation.section2.paragraph2.listitem1=information about the goods that is not confidential
-pdf.ruling.email=tariff.classification@hmrc.gov.uk
+pdf.ruling.email=tariffclassification@hmrc.gov.uk
 pdf.ruling.section.askForReview.acceptedReview=If you accept an offer for a review of the ruling decision, it will be carried out by an HMRC officer who has not been involved in your case. You will be able to give any evidence and further information and the review officer will email you to tell you the outcome of the review.
 pdf.ruling.section.appealing.title=Appealing to an independent tribunal
 pdf.ruling.section.appealing.mustContact=You must contact the tribunal within 30 days of your ruling email to discuss your case. If you disagree with your review from HMRC, then you must contact the tribunal within 30 days of that outcome.
@@ -577,7 +577,7 @@ rulingInformation.expiryDate = Expiry date
 documentNotFound.title = Page not found - Manage your Advance Tariff Rulings - GOV.UK
 documentNotFound.heading = Page not found
 documentNotFound.message = The {0} for application reference: {1} could not be found
-documentNotFound.email = You can email tariff.classification@hmrc.gov.uk to ask for a copy of this document.
+documentNotFound.email = You can email tariffclassification@hmrc.gov.uk to ask for a copy of this document.
 documentNotFound.application = application document
 documentNotFound.rulingCertificate = ruling certificate
 

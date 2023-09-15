@@ -113,7 +113,7 @@ howWeContactYou.paragraph1.part2 = Hoffem gysylltu â chi dros e-bost. Fodd bynn
 howWeContactYou.paragraph1.listItem1 = nid ydynt yn ddiogel
 howWeContactYou.paragraph1.listItem2 = mae modd i rywun arall eu newid neu eu darllen cyn iddynt eich cyrraedd
 howWeContactYou.paragraph2.part1 = Os nad ydych am i ni gysylltu â chi dros e-bost, rhowch wybod i ni sut y dylem gysylltu â chi drwy e-bostio <a class="govuk-link" href="mailto:{0}">{1}</a>
-howWeContactYou.paragraph2.email = tariff.classification@hmrc.gov.uk
+howWeContactYou.paragraph2.email = tariffclassification@hmrc.gov.uk
 howWeContactYou.paragraph2.part2 = Os ydych yn dewis optio allan o dderbyn e-byst, dim ond e-byst awtomataidd y byddwn yn eu hanfon atoch. Er enghraifft, pan fyddwch wedi cwblhau’r cais hwn, byddwn yn anfon e-bost cadarnhau awtomataidd.
 howWeContactYou.paragraph2.part3 = Os na fyddwn yn clywed oddi wrthych, byddwn yn cymryd eich bod wedi derbyn y risgiau.
 
@@ -386,7 +386,7 @@ checkYourAnswers.declaration.paragraph0 = Drwy wneud cais am Ddyfarniad Tariffau
 checkYourAnswers.declaration.paragraph1 = Rydych yn cytuno y gall CThEF wneud y canlynol:
 checkYourAnswers.declaration.listItem1 = storio’r wybodaeth a roddwyd gennych, neu y gallech ei roi, ar ôl i chi anfon eich cais
 checkYourAnswers.declaration.listItem2 = cyhoeddi gwybodaeth nad yw’n gyfrinachol ar wefan y Dyfarniadau Tariffau Uwch
-checkYourAnswers.declaration.email = tariff.classification@hmrc.gov.uk
+checkYourAnswers.declaration.email = tariffclassification@hmrc.gov.uk
 checkYourAnswers.declaration.listItem3 = cysylltu â chi dros e-bost, neu drwy’r dull a nodwyd gennych mewn e-bost at <a class="govuk-link" href="mailto:{0}">{1}</a>
 checkYourAnswers.declaration.paragraph2 = Rydych yn deall y gall eich samplau gael eu difrodi wrth eu profi.
 checkYourAnswers.declaration.submit = Derbyn a gwneud cais am ddyfarniad
@@ -464,7 +464,7 @@ pdf.ruling.section.ifYouDisagree.read=ddarllen dogfen HMRC1
 pdf.ruling.section.ifYouDisagree.phone=neu ffonio 0300 200 3705.
 pdf.ruling.section.askForReview.title=Gofyn am adolygiad gan CThEF
 pdf.ruling.section.askForReview.email=E-bostiwch <strong>{0}</strong> yn gofyn am adolygiad a rhowch eich rhesymau cyn pen 30 diwrnod ar ôl cael yr e-bost am eich dyfarniad.
-pdf.ruling.email=tariff.classification@hmrc.gov.uk
+pdf.ruling.email=tariffclassification@hmrc.gov.uk
 pdf.ruling.section.askForReview.acceptedReview=Os derbyniwch gynnig am adolygiad o’r dyfarniad, bydd yn cael ei gynnal gan un o swyddogion CThEF na fu’n ymwneud â’ch achos. Byddwch yn gallu rhoi unrhyw dystiolaeth a gwybodaeth bellach a bydd y swyddog adolygu yn anfon e-bost atoch i roi gwybod am ganlyniad yr adolygiad i chi.
 pdf.ruling.section.appealing.title=Apelio ar dribiwnlys annibynnol
 pdf.ruling.section.appealing.mustContact=Mae’n rhaid i chi gysylltu â’r tribiwnlys cyn pen 30 diwrnod ar ôl yr e-bost am eich dyfarniad i drafod eich achos. Os ydych yn anghytuno â’ch adolygiad gan CThEF, yna mae’n rhaid i chi gysylltu â’r tribiwnlys cyn pen 30 diwrnod ar ôl y canlyniad hwnnw.
@@ -583,7 +583,7 @@ rulingInformation.appealsLink = Gwnewch gais am Ddyfarniad Tariffau Uwch a all g
 documentNotFound.title = Heb ddod o hyd i’r dudalen - Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 documentNotFound.heading = Heb ddod o hyd i’r dudalen
 documentNotFound.message = Nid oedd modd dod o hyd {0} ar gyfer cyfeirnod y cais, sef {1}.
-documentNotFound.email = Gallwch e-bostio tariff.classification@hmrc.gov.uk i ofyn am gopi o’r ddogfen hon.
+documentNotFound.email = Gallwch e-bostio tariffclassification@hmrc.gov.uk i ofyn am gopi o’r ddogfen hon.
 documentNotFound.application = i’r ddogfen gais
 documentNotFound.rulingCertificate = i dystysgrif y dyfarniad
 
