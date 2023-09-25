@@ -21,8 +21,8 @@ import play.api.libs.json.{JsPath, JsValue, Json, JsonValidationError}
 class KeyStoreEntryValidationException(
   val key: String,
   val invalidJson: JsValue,
-  val errors: scala.collection.Seq[
-    (JsPath, scala.collection.Seq[JsonValidationError])
+  val errors: Iterable[
+    (JsPath, Iterable[JsonValidationError])
   ] // default Seq for Scala 2.13 is scala.collection.immutable.Seq - this keeps it the same as JsResult
 ) extends Exception {
   override def getMessage: String =

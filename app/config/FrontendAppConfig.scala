@@ -17,9 +17,7 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
-import models.Languages.English
 import play.api.Configuration
-import play.api.i18n.Lang
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
@@ -31,18 +29,9 @@ class FrontendAppConfig @Inject() (
   private def loadConfig(key: String): String =
     runModeConfiguration.getOptional[String](key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
-  private lazy val contactHost             = runModeConfiguration.getOptional[String]("contact-frontend.host").getOrElse("")
-  private val contactFormServiceIdentifier = "AdvanceTariffApplication"
-
-  lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  lazy val reportAProblemNonJSUrl   = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  lazy val betaFeedbackUrl          = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
-  lazy val betaFeedbackUnauthenticatedUrl =
-    s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
   lazy val helpMakeGovUkBetterUrl: String     = runModeConfiguration.get[String]("urls.helpMakeGovUkBetterUrl")
   lazy val displayMakeGovUkBetterUrl: Boolean = runModeConfiguration.get[Boolean]("toggle.displayResearchBanner")
 
-  lazy val authUrl: String                        = serviceConfig.baseUrl("auth")
   lazy val loginUrl: String                       = loadConfig("urls.login")
   lazy val loginContinueUrl: String               = loadConfig("urls.loginContinue")
   lazy val bindingTariffClassificationUrl: String = serviceConfig.baseUrl("binding-tariff-classification")
@@ -56,10 +45,6 @@ class FrontendAppConfig @Inject() (
 
   lazy val languageTranslationEnabled: Boolean =
     runModeConfiguration.getOptional[Boolean]("microservice.services.features.welsh-translation").getOrElse(true)
-
-  private lazy val eoriCommonComponenRegistrationtUrl = loadConfig("eori-common-component-registration-frontend.host")
-  lazy val eoriCommonComponentRegisterUrl: String =
-    s"$eoriCommonComponenRegistrationtUrl/customs-registration-services/atar/register"
 
   private lazy val eoriCommonComponentUrl = loadConfig("eori-common-component-frontend.host")
   lazy val eoriCommonComponentSubscribeUrl: String =
@@ -86,12 +71,6 @@ class FrontendAppConfig @Inject() (
   lazy val timeOutCountDownSeconds: Int = runModeConfiguration
     .getOptional[Int]("timeoutDialog.time-out-countdown-seconds")
     .getOrElse(timeOutCountDownSecondsAlternative)
-
-  lazy val refreshInterval: Int = timeOutSeconds + 10
-  lazy val enableRefresh: Boolean =
-    runModeConfiguration.getOptional[Boolean]("timeoutDialog.enableRefresh").getOrElse(true)
-
-  def defaultLang: Lang = English.lang
 
   lazy val host: String = loadConfig("host")
 
