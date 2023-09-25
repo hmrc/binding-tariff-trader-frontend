@@ -27,7 +27,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import service.CountriesService
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 import views.html.registeredAddressForEori
 
 import scala.concurrent.ExecutionContext.Implicits.global

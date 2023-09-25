@@ -20,7 +20,6 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
-import play.api.i18n.Lang
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class FrontendAppConfigSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
@@ -30,10 +29,6 @@ class FrontendAppConfigSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
   private val frontendAppConfig: FrontendAppConfig = new FrontendAppConfig(configuration, servicesConfig)
 
   "FrontendAppConfig" must {
-    "return english language by default" in {
-      frontendAppConfig.defaultLang mustBe Lang("en")
-    }
-
     "throw an exception with a message if configuration is not defined" in {
       intercept[Exception](frontendAppConfig.loginUrl).getMessage mustBe "Missing configuration key: urls.login"
     }

@@ -23,7 +23,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{defaultAwaitTimeout, redirectLocation}
 import service.BTAUserService
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 
 import scala.concurrent.Future
 

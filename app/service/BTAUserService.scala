@@ -17,8 +17,8 @@
 package service
 
 import connectors.DataCacheConnector
+import models.cache.CacheMap
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.cache.client.CacheMap
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,7 +32,6 @@ class BTAUserService @Inject() (dataCacheConnector: DataCacheConnector)(implicit
     dataCacheConnector.fetch(cachedId).flatMap {
       case Some(cacheMap) => Future.successful(cacheMap)
       case None           => dataCacheConnector.save(new CacheMap(cachedId, Map(isBTAUser -> Json.toJson(true))))
-
     }
   }
 

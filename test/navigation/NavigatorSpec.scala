@@ -36,7 +36,8 @@ class NavigatorSpec extends SpecBase {
         case object UnknownPage extends Page {
           def route(mode: Mode): Call = Call("GET", "/unknown")
         }
-        navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) shouldBe routes.IndexController.getApplications()
+        navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) shouldBe routes.IndexController
+          .getApplicationsAndRulings(1, None, None)
       }
 
       "Go to Before you start from index when required" in {

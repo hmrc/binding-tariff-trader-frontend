@@ -31,7 +31,7 @@ import play.api.libs.Files.TemporaryFileCreator
 import play.api.mvc.{AnyContent, AnyContentAsEmpty, MessagesControllerComponents, Request}
 import play.api.test.CSRFTokenHelper.CSRFFRequestHeader
 import play.api.test.{FakeHeaders, FakeRequest}
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 import utils.UnitSpec
 
 trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar with BeforeAndAfterEach {

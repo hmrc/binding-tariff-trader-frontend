@@ -21,7 +21,7 @@ import connectors.DataCacheConnector
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import org.mockito.MockitoSugar
 import org.scalatest.concurrent.ScalaFutures
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

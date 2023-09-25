@@ -210,7 +210,7 @@ class Navigator @Inject() (configuration: FrontendAppConfig) {
   ).foldLeft(Map.empty[Page, UserAnswers => Call])(_ ++ _)
 
   def nextPage(page: Page, mode: Mode): UserAnswers => Call = mode match {
-    case NormalMode => routeMap.getOrElse(page, _ => routes.IndexController.getApplications())
+    case NormalMode => routeMap.getOrElse(page, _ => routes.IndexController.getApplicationsAndRulings(1, None, None))
     case CheckMode  => checkRouteMap.getOrElse(page, _ => routes.CheckYourAnswersController.onPageLoad())
   }
 }

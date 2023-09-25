@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-package pages
+package models.cache
 
-import controllers.routes
-import models.NormalMode
-import pages.behaviours.PageBehaviours
+import base.SpecBase
+import play.api.libs.json.{JsPath, Json}
 
-class IndexPageSpec extends PageBehaviours {
+class KeyStoreEntryValidationExceptionSpec extends SpecBase {
 
-  "IndexPage" when {
-    "route" must {
-      "direct to appropriate controller route in normal mode" in {
-        IndexPage.route(NormalMode) mustBe routes.IndexController.getApplicationsAndRulings(1, None, None)
-      }
-    }
+  private val model = new KeyStoreEntryValidationException(
+    "key1",
+    Json.parse("""{"key1":"value1"}"""),
+    Seq(
+      (JsPath \ "key1", Seq.empty)
+    )
+  )
 
-    "toString" must {
-      "have the correct name" in {
-        IndexPage.toString mustBe "index"
+  "KeyStoreEntryValidationException" when {
+    "getMessage" should {
+      "return expected message" in {
+        model.getMessage shouldBe "KeyStore entry for key 'key1' was '{\"key1\":\"value1\"}'. Attempt to convert to " +
+          "models.cache.CacheMap$ gave errors: List((/key1,List()))"
       }
     }
   }

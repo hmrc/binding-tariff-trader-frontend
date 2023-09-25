@@ -37,7 +37,7 @@
     urlViewModel: ConfirmationUrlViewModel
 )(implicit request: Request[_], messages: Messages)
 
-@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
+@createLink(path: String) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"
 }
 

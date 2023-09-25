@@ -21,7 +21,7 @@ import com.kenshoo.play.metrics.Metrics
 import metrics.HasMetrics
 import play.api.libs.json.Format
 import repositories.SessionRepository
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 
 import scala.concurrent.{ExecutionContext, Future}
 

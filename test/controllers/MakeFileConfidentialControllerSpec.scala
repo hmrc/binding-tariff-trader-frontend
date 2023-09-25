@@ -27,7 +27,7 @@ import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, QuestionPage, Uplo
 import play.api.data.Form
 import play.api.libs.json._
 import play.api.mvc.{Call, Request}
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 import views.html.makeFileConfidential
 
 import scala.concurrent.ExecutionContext.Implicits.global

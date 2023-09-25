@@ -53,7 +53,7 @@ class SignOutController @Inject() (
   }
 
   def unauthorisedSignOut: Action[AnyContent] = Action {
-    Redirect(routes.IndexController.getApplications()).withNewSession
+    Redirect(routes.IndexController.getApplicationsAndRulings(1, None, None)).withNewSession
   }
 
   def keepAlive(): Action[AnyContent] = Action.async {

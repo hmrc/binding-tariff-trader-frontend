@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import controllers.actions.FakeDataRetrievalAction
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 
 trait ControllerSpecBase extends SpecBase {
 

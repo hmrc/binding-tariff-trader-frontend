@@ -30,13 +30,10 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
   private val pdfView = oCase.pdf
 
   private def createView(pdfViewModel: PdfViewModel = pdfView): Html =
-    view_application(frontendAppConfig, pdfViewModel, _ => Some("example country name"))(fakeRequest, messages)
+    view_application(frontendAppConfig, pdfViewModel, _ => Some("example country name"))(messages)
 
   private def createViewWithToggle(pdfViewModel: PdfViewModel = pdfView): Html =
-    view_application(frontendAppConfigWithToggle, pdfViewModel, _ => Some("example country name"))(
-      fakeRequest,
-      messages
-    )
+    view_application(frontendAppConfigWithToggle, pdfViewModel, _ => Some("example country name"))(messages)
 
   protected def view(html: Html): Document =
     Jsoup.parse(html.toString())

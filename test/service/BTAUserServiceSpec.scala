@@ -19,7 +19,7 @@ package service
 import base.SpecBase
 import connectors.DataCacheConnector
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 
 import scala.concurrent.{ExecutionContext, Future}
 

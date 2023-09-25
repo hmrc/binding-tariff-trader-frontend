@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package models.cache
 
-import controllers.routes
-import models.NormalMode
-import pages.behaviours.PageBehaviours
+import play.api.libs.json.{JsPath, JsValue, Json, JsonValidationError}
 
-class IndexPageSpec extends PageBehaviours {
-
-  "IndexPage" when {
-    "route" must {
-      "direct to appropriate controller route in normal mode" in {
-        IndexPage.route(NormalMode) mustBe routes.IndexController.getApplicationsAndRulings(1, None, None)
-      }
-    }
-
-    "toString" must {
-      "have the correct name" in {
-        IndexPage.toString mustBe "index"
-      }
-    }
-  }
+class KeyStoreEntryValidationException(
+  val key: String,
+  val invalidJson: JsValue,
+  val errors: Iterable[
+    (JsPath, Iterable[JsonValidationError])
+  ] // default Seq for Scala 2.13 is scala.collection.immutable.Seq - this keeps it the same as JsResult
+) extends Exception {
+  override def getMessage: String =
+    s"KeyStore entry for key '$key' was '${Json.stringify(invalidJson)}'. Attempt to convert to ${CacheMap.getClass.getName} gave errors: $errors"
 }

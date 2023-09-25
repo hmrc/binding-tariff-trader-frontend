@@ -29,13 +29,11 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.{BTAUserService, CasesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.Dashboard
-import views.CaseDetailTab
-import views.html.components.{table_applications, table_rulings}
-import views.html.{account_dashboard_statuses, index}
+import views.html.account_dashboard_statuses
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Future.successful
-import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 class IndexController @Inject() (
@@ -45,8 +43,7 @@ class IndexController @Inject() (
   service: CasesService,
   cc: MessagesControllerComponents,
   btaUserService: BTAUserService,
-  accountDashboardStatusesView: account_dashboard_statuses,
-  indexView: index
+  accountDashboardStatusesView: account_dashboard_statuses
 )(implicit ec: ExecutionContext)
     extends FrontendController(cc)
     with I18nSupport
@@ -63,41 +60,6 @@ class IndexController @Inject() (
     CaseStatus.SUSPENDED,
     CaseStatus.COMPLETED
   )
-  private val rulingStatuses = Set(
-    CaseStatus.REJECTED,
-    CaseStatus.SUSPENDED,
-    CaseStatus.CANCELLED,
-    CaseStatus.COMPLETED,
-    CaseStatus.NEW,
-    CaseStatus.OPEN,
-    CaseStatus.REFERRED
-  )
-
-  def getApplications(page: Int): Action[AnyContent] = identify.async { implicit request =>
-    request.eoriNumber match {
-      case Some(eori: String) =>
-        service.getCases(eori, applicationStatuses, SearchPagination(page), Sort()).map { pagedResult =>
-          Ok(indexView(appConfig, CaseDetailTab.APPLICATION, table_applications(pagedResult)))
-        }
-
-      case None =>
-        val initialAnswers = UserAnswers(request.identifier)
-        Future.successful(Redirect(navigator.nextPage(IndexPage, NormalMode)(initialAnswers)))
-    }
-  }
-
-  def getRulings(page: Int): Action[AnyContent] = identify.async { implicit request =>
-    request.eoriNumber match {
-      case Some(eori: String) =>
-        service.getCases(eori, rulingStatuses, SearchPagination(page), Sort(SortField.DECISION_START_DATE)).map {
-          pagedResult => Ok(indexView(appConfig, CaseDetailTab.RULING, table_rulings(pagedResult)))
-        }
-
-      case None =>
-        val initialAnswers = UserAnswers(request.identifier)
-        Future.successful(Redirect(navigator.nextPage(IndexPage, NormalMode)(initialAnswers)))
-    }
-  }
 
   def getApplicationsAndRulings(
     page: Int,

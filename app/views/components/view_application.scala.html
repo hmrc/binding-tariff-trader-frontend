@@ -23,9 +23,9 @@ appConfig: FrontendAppConfig,
 pdf: PdfViewModel,
 getCountryName: String => Option[String],
 compositeMode: Boolean = false
-)(implicit request: Request[_], messages: Messages)
+)(implicit messages: Messages)
 
-@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
+@createLink(path: String) = @{
 s"${appConfig.host}${routes.Assets.versioned(path)}"
 }
 

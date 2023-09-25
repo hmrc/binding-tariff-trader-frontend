@@ -43,7 +43,7 @@
                 aria-describedby=@if(elements.hasErrors){"error-message-@{field.id}-input"}else{"@elements.field.name"}
                 id="@elements.field.name"
                 name="@elements.field.name"
-                class="@elements.args.get('_selectClass) govuk-select">
+                class="@elements.args.get(Symbol("_selectClass")) govuk-select">
             @if(displayEmptyValue) {
                 <option value id="unselected" label="unselected"></option>
             }

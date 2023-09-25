@@ -34,7 +34,7 @@ import play.api.mvc.request.RequestTarget
 import play.api.test.Helpers._
 import service.FileService
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.cache.client.CacheMap
+import models.cache.CacheMap
 import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
