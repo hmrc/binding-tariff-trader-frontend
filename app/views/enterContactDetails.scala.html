@@ -18,13 +18,16 @@
 @import controllers.routes._
 @import models.Mode
 
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
 @import views.ViewUtils._
 
 @this(
         submitButton: components.submit_button,
         cancelApplicationLink: components.cancel_application_link,
         govukLayoutWrapper: GovukLayoutWrapper,
-        formWithCSRF: FormWithCSRF
+        formWithCSRF: FormWithCSRF,
+        govukDetails : GovukDetails
 )
 
 @(appConfig: FrontendAppConfig, form: Form[EnterContactDetails], mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -70,6 +73,34 @@
                 inputType = "tel"
             )
         }
+
+        <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  @messages("enterContactDetails.details.link.text")
+                </span>
+            </summary>
+            <div class="govuk-details__text">
+                @if(messages.lang.code == "cy"){
+                    <p class="govuk-body">@Html(messages("enterContactDetails.details.link.bodyText", messages("enterContactDetails.tariff.email.cy"), messages("enterContactDetails.tariff.email.cy"), messages("enterContactDetails.tariff.email"), messages("enterContactDetails.tariff.email")))</p>
+                } else {
+                    <p class="govuk-body">@Html(messages("enterContactDetails.details.link.bodyText", messages("enterContactDetails.tariff.email"), messages("enterContactDetails.tariff.email")))</p>
+                }
+
+                <p>@messages("enterContactDetails.details.link.leadIn")</p>
+
+                <ul class="list list-bullet">
+                    <li>@messages("enterContactDetails.details.link.listItem1")</li>
+                    <li>@messages("enterContactDetails.details.link.listItem2")</li>
+                    <li>@messages("enterContactDetails.details.link.listItem3")</li>
+                </ul>
+
+                <p>
+                    @messages("enterContactDetails.details.link.paragraph")
+                </p>
+            </div>
+        </details>
+
             @submitButton(Some(messages("site.continue")))
             @cancelApplicationLink()
 

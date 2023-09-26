@@ -24,19 +24,45 @@
 @govukLayoutWrapper(pageTitle = messages("howWeContactYou.title")) {
     @components.heading(messages("howWeContactYou.heading"))
 
-    <p class="govuk-body">@messages("howWeContactYou.paragraph1.part1")</p>
-    <p class="govuk-body">@messages("howWeContactYou.paragraph1.part2")</p>
+    <p class="govuk-body">
+        @messages("howWeContactYou.paragraph1.part1")
+    </p>
+
+    <h2 class="heading-medium govuk-heading-m">@messages("howWeContactYou.paragraph1.h2")</h2>
+
+    <p class="govuk-body">@messages("howWeContactYou.paragraph1.leadIn")</p>
 
     <ul class="govuk-list govuk-list--bullet">
         <li>@messages("howWeContactYou.paragraph1.listItem1")</li>
         <li>@messages("howWeContactYou.paragraph1.listItem2")</li>
     </ul>
 
-    <p class="govuk-body">@Html(messages("howWeContactYou.paragraph2.part1", messages("howWeContactYou.paragraph2.email"), messages("howWeContactYou.paragraph2.email")))</p>
-    <p class="govuk-body">@messages("howWeContactYou.paragraph2.part2")</p>
-    <p class="govuk-body">@messages("howWeContactYou.paragraph2.part3")</p>
+    <p class="govuk-body">
+        @messages("howWeContactYou.paragraph1.closure")
+    </p>
 
-    @components.button_link(messages("site.agree_and_continue"), routes.ProvideGoodsNameController.onPageLoad(NormalMode).url)
+    <h2 class="heading-medium govuk-heading-m">
+        @messages("howWeContactYou.paragraph2.h2")
+    </h2>
 
+    @if(messages.lang.code == "cy"){
+        <p class="govuk-body">@Html(messages("howWeContactYou.paragraph2.part1", messages("howWeContactYou.paragraph2.email.cy"), messages("howWeContactYou.paragraph2.email.cy"), messages("howWeContactYou.paragraph2.email"), messages("howWeContactYou.paragraph2.email")))</p>
+    } else {
+        <p class="govuk-body">@Html(messages("howWeContactYou.paragraph2.part1", messages("howWeContactYou.paragraph2.email"), messages("howWeContactYou.paragraph2.email")))</p>
+    }
+
+    <p class="govuk-body">@messages("howWeContactYou.paragraph2.leadIn")</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages("howWeContactYou.paragraph2.bullet1")</li>
+        <li>@messages("howWeContactYou.paragraph2.bullet2")</li>
+        <li>@messages("howWeContactYou.paragraph2.bullet3")</li>
+    </ul>
+
+    <p class="govuk-body">
+        @messages("howWeContactYou.paragraph2.part2")
+    </p>
+
+    @components.button_link(messages("site.accept_and_continue"), routes.ProvideGoodsNameController.onPageLoad(NormalMode).url)
     @cancelApplicationLink()
 }

@@ -13,10 +13,12 @@ checkYourAnswers.aboutTheApplicantSection = About the applicant
 checkYourAnswers.declaration.subheading = Your declaration
 checkYourAnswers.declaration.paragraph0 = By applying for an Advance Tariff Ruling you confirm that the information you have provided is correct and complete to the best of your knowledge.
 checkYourAnswers.declaration.paragraph1 = You agree that HMRC can:
-checkYourAnswers.declaration.listItem1 = store the information you provided or may provide after you send your application
-checkYourAnswers.declaration.listItem2 = publish information that is not confidential on the Advance Tariff Ruling website
+checkYourAnswers.declaration.listItem1 = store the information you have provided in your application
+checkYourAnswers.declaration.listItem2 = store any information you may provide after you send your application
+checkYourAnswers.declaration.listItem3 = publish information that is not confidential on the Advance Tariff Ruling website
 checkYourAnswers.declaration.email = tariffclassification@hmrc.gov.uk
-checkYourAnswers.declaration.listItem3 = contact you by email, or by the way you have specified in an email to us at <a class="govuk-link" href="mailto:{0}">{1}</a>
+checkYourAnswers.declaration.listItem4 = contact you by email, or by the way you have specified in an email to us at <a class="govuk-link" href="mailto:{0}">{1}</a>
+checkYourAnswers.declaration.listItem5 = contact you about this application after you have received a ruling decision
 checkYourAnswers.declaration.paragraph2 = You understand that your samples may be damaged during testing.
 checkYourAnswers.declaration.submit = Accept and apply for a ruling
 
@@ -81,14 +83,20 @@ informationPublic.paragraph3 = You will be able to mark information and files as
 
 howWeContactYou.title = How we contact you about your application - Manage your Advance Tariff Rulings - GOV.UK
 howWeContactYou.heading = How we contact you about your application
-howWeContactYou.paragraph1.part1 = We may need to contact you to ask for further information or to let you know the status of your application.
-howWeContactYou.paragraph1.part2 = We would like to contact you by email. However there are some risks with emails including that they:
-howWeContactYou.paragraph1.listItem1 = are not secure
-howWeContactYou.paragraph1.listItem2 = could be changed or read by someone else before they reach you
-howWeContactYou.paragraph2.part1 = If you do not want us to contact you by email, tell us how we should contact you by emailing us at <a class="govuk-link" href="mailto:{0}">{1}</a>
+howWeContactYou.paragraph1.part1 = We may need to contact you to ask for more information about your application. We will use the email address that you provide in your application to contact you.
+howWeContactYou.paragraph1.h2 = When we contact you
+howWeContactYou.paragraph1.leadIn = We will only contact you:
+howWeContactYou.paragraph1.listItem1 = if we need more information about your application
+howWeContactYou.paragraph1.listItem2 = to let you know the status of your application
+howWeContactYou.paragraph1.closure = In some cases we may also need to contact you after you receive a ruling decision.
+howWeContactYou.paragraph2.h2 = If you do not want us to contact you by email
 howWeContactYou.paragraph2.email = tariffclassification@hmrc.gov.uk
-howWeContactYou.paragraph2.part2 = If you choose to opt out of emails, we will only send automated emails. For example, when you complete this application we will send you an automated confirmation email.
-howWeContactYou.paragraph2.part3 = If we do not hear from you, we will assume you have accepted the risks.
+howWeContactYou.paragraph2.part1 = You must email <a class="govuk-link" href="mailto:{0}">{1}</a> before you submit your application and tell us how we can contact you.
+howWeContactYou.paragraph2.leadIn = In your email you must include:
+howWeContactYou.paragraph2.bullet1 = your EORI number
+howWeContactYou.paragraph2.bullet2 = your contact details (these should be the same as the details that you provide in the application)
+howWeContactYou.paragraph2.bullet3 = the address that you want us to use
+howWeContactYou.paragraph2.part2 = If you are an agent you must also provide the EORI for the trader.
 
 session_expired.title = For your security, we deleted your answers
 session_expired.heading = For your security, we deleted your answers
@@ -111,6 +119,7 @@ service.name = Manage your Advance Tariff Rulings
 site.save_and_continue = Save and continue
 site.cancel_application = Cancel application
 site.cancel_application.hiddenText=and return to your applications and rulings page.
+site.accept_and_continue = Accept and continue
 site.agree_and_continue = Agree and continue
 site.keep_confidential = Keep confidential
 site.save_your_application = Save application as a PDF
@@ -163,7 +172,7 @@ registerBusinessRepresenting.error.eoriNumber.format = Enter an EORI number in t
 
 enterContactDetails.title = Provide the contact details for this application - Manage your Advance Tariff Rulings - GOV.UK
 enterContactDetails.heading = Provide the contact details for this application
-enterContactDetails.bodyText = These details <span class="govuk-!-font-weight-bold">will only</span> be used to contact you with questions relating to this application.
+enterContactDetails.bodyText = These details will only be used to contact you with questions relating to this application.
 enterContactDetails.caption = About the applicant
 enterContactDetails.name = Full name
 enterContactDetails.email = Email address
@@ -180,6 +189,14 @@ enterContactDetails.error.email.length = Email address must be 100 characters or
 enterContactDetails.error.phoneNumber.length = Telephone number must be 20 characters or less
 enterContactDetails.error.phoneNumber.minLength = Telephone number must be 10 numbers or more
 enterContactDetails.error.phoneNumber.invalid = Enter a telephone number, like 01632 960000, 07700 900000 or +44 0808 157 0192
+enterContactDetails.details.link.text = If you do not want us to contact you by email
+enterContactDetails.tariff.email = tariffclassification@hmrc.gov.uk
+enterContactDetails.details.link.bodyText = You must email <a class="govuk-link" href="mailto:{0}">{1}</a> before you submit your application and tell us how we can contact you.
+enterContactDetails.details.link.leadIn = In your email you must include:
+enterContactDetails.details.link.listItem1 = your EORI number
+enterContactDetails.details.link.listItem2 = your contact details (these should be the same as the details that you provide in the application)
+enterContactDetails.details.link.listItem3 = the address that you want us to use
+enterContactDetails.details.link.paragraph = If you are an agent you must also provide the EORI for the trader.
 
 acceptItemInformationList.title = Information you must provide about your item to get the correct commodity code - Manage your Advance Tariff Rulings - GOV.UK
 acceptItemInformationList.heading = Information you must provide about your item to get the correct commodity code
