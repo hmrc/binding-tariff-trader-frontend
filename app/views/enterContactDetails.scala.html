@@ -18,16 +18,13 @@
 @import controllers.routes._
 @import models.Mode
 
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-
 @import views.ViewUtils._
 
 @this(
         submitButton: components.submit_button,
         cancelApplicationLink: components.cancel_application_link,
         govukLayoutWrapper: GovukLayoutWrapper,
-        formWithCSRF: FormWithCSRF,
-        govukDetails : GovukDetails
+        formWithCSRF: FormWithCSRF
 )
 
 @(appConfig: FrontendAppConfig, form: Form[EnterContactDetails], mode: Mode)(implicit request: Request[_], messages: Messages)
