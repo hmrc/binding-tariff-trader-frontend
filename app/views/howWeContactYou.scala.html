@@ -45,11 +45,7 @@
         @messages("howWeContactYou.paragraph2.h2")
     </h2>
 
-    @if(messages.lang.code == "cy"){
-        <p class="govuk-body">@Html(messages("howWeContactYou.paragraph2.part1", messages("howWeContactYou.paragraph2.email.cy"), messages("howWeContactYou.paragraph2.email.cy"), messages("howWeContactYou.paragraph2.email"), messages("howWeContactYou.paragraph2.email")))</p>
-    } else {
-        <p class="govuk-body">@Html(messages("howWeContactYou.paragraph2.part1", messages("howWeContactYou.paragraph2.email"), messages("howWeContactYou.paragraph2.email")))</p>
-    }
+    <p class="govuk-body">@Html(messages("howWeContactYou.paragraph2.part1", messages("howWeContactYou.paragraph2.email"), messages("howWeContactYou.paragraph2.email")))</p>
 
     <p class="govuk-body">@messages("howWeContactYou.paragraph2.leadIn")</p>
 

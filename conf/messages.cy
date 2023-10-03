@@ -117,8 +117,7 @@ howWeContactYou.paragraph1.listItem2 = i roi gwybod i chi am statws eich cais
 howWeContactYou.paragraph1.closure = Mewn rhai achosion, gallwn hefyd gysylltu â chi ar ôl i chi gael dyfarniad.
 howWeContactYou.paragraph2.h2 = Os nad ydych am i ni gysylltu â chi drwy e-bost
 howWeContactYou.paragraph2.email = tariffclassification@hmrc.gov.uk
-howWeContactYou.paragraph2.email.cy = gwasanaethcymraeg@hmrc.gov.uk
-howWeContactYou.paragraph2.part1 = Mae’n rhaid i chi e-bostio <a class="govuk-link" href="mailto:{0}">{1}</a> neu <a class="govuk-link" href="mailto:{2}">{3}</a> cyn i chi gyflwyno’ch cais a rhoi gwybod i ni sut y gallwn gysylltu â chi.
+howWeContactYou.paragraph2.part1 = Mae’n rhaid i chi e-bostio <a class="govuk-link" href="mailto:{0}">{1}</a> cyn i chi gyflwyno’ch cais a rhoi gwybod i ni sut y gallwn gysylltu â chi.
 howWeContactYou.paragraph2.leadIn = Yn eich e-bost, mae’n rhaid i chi gynnwys:
 howWeContactYou.paragraph2.bullet1 = eich rhif EORI
 howWeContactYou.paragraph2.bullet2 = eich manylion cyswllt (dylai’r rhain fod yr un peth â’r manylion a rowch yn y cais)
@@ -343,9 +342,8 @@ enterContactDetails.error.phoneNumber.length = Mae’n rhaid i’r rhif ffôn fo
 enterContactDetails.error.phoneNumber.minLength = Mae’n rhaid i’r rhif ffôn fod yn 10 rif neu fwy
 enterContactDetails.error.phoneNumber.invalid = Nodwch rif ffôn, fel 01632 960000, 07700 900000 neu +44 0808 157 0192
 enterContactDetails.details.link.text = Os nad ydych am i ni gysylltu â chi drwy e-bost
-enterContactDetails.tariff.email.cy = gwasanaethcymraeg@hmrc.gov.uk
 enterContactDetails.tariff.email = tariffclassification@hmrc.gov.uk
-enterContactDetails.details.link.bodyText = Mae’n rhaid i chi e-bostio <a class="govuk-link" href="mailto:{0}">{1}</a> neu <a class="govuk-link" href="mailto:{2}">{3}</a> cyn i chi gyflwyno’ch cais a rhoi gwybod i ni sut y gallwn gysylltu â chi.
+enterContactDetails.details.link.bodyText = Mae’n rhaid i chi e-bostio <a class="govuk-link" href="mailto:{0}">{1}</a> cyn i chi gyflwyno’ch cais a rhoi gwybod i ni sut y gallwn gysylltu â chi.
 enterContactDetails.details.link.leadIn = Yn eich e-bost, mae’n rhaid i chi gynnwys:
 enterContactDetails.details.link.listItem1 = eich rhif EORI
 enterContactDetails.details.link.listItem2 = eich manylion cyswllt (dylai’r rhain fod yr un peth â’r manylion a rowch yn y cais)
@@ -404,9 +402,8 @@ checkYourAnswers.declaration.paragraph1 = Rydych yn cytuno y gall CThEF wneud y 
 checkYourAnswers.declaration.listItem1 = storio’r wybodaeth rydych wedi’i rhoi yn eich cais
 checkYourAnswers.declaration.listItem2 = storio’r wybodaeth y gallwch ei rhoi ar ôl i chi anfon eich cais
 checkYourAnswers.declaration.listItem3 = cyhoeddi gwybodaeth nad yw’n gyfrinachol ar wefan y Dyfarniadau Tariffau Ymlaen Llaw
-checkYourAnswers.declaration.email.cy = gwasanaethcymraeg@hmrc.gov.uk
 checkYourAnswers.declaration.email = tariffclassification@hmrc.gov.uk
-checkYourAnswers.declaration.listItem4 = cysylltu â chi drwy e-bost, neu yn y ffordd a nodwyd gennych mewn e-bost atom yn <a class="govuk-link" href="mailto:{0}">{1}</a> neu <a class="govuk-link" href="mailto:{2}">{3}</a>
+checkYourAnswers.declaration.listItem4 = cysylltu â chi drwy e-bost, neu yn y ffordd a nodwyd gennych mewn e-bost atom yn <a class="govuk-link" href="mailto:{0}">{1}</a>
 checkYourAnswers.declaration.listItem5 = cysylltu â chi am y cais hwn ar ôl i chi gael dyfarniad
 checkYourAnswers.declaration.paragraph2 = Rydych yn deall y gall eich samplau gael eu difrodi wrth eu profi.
 checkYourAnswers.declaration.submit = Derbyn a gwneud cais am ddyfarniad

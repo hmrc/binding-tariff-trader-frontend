@@ -48,11 +48,7 @@
                 <li>@messages("checkYourAnswers.declaration.listItem1")</li>
                 <li>@messages("checkYourAnswers.declaration.listItem2")</li>
                 <li>@messages("checkYourAnswers.declaration.listItem3")</li>
-                @if(messages.lang.code == "cy"){
-                    <li>@Html(messages("checkYourAnswers.declaration.listItem4", messages("checkYourAnswers.declaration.email.cy"), messages("checkYourAnswers.declaration.email.cy"), messages("checkYourAnswers.declaration.email"), messages("checkYourAnswers.declaration.email")))</li>
-                } else {
-                    <li>@Html(messages("checkYourAnswers.declaration.listItem4", messages("checkYourAnswers.declaration.email"), messages("checkYourAnswers.declaration.email")))</li>
-                }
+                <li>@Html(messages("checkYourAnswers.declaration.listItem4", messages("checkYourAnswers.declaration.email"), messages("checkYourAnswers.declaration.email")))</li>
                 <li>@messages("checkYourAnswers.declaration.listItem5")</li>
             </ul>
 

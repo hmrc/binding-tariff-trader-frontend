@@ -81,11 +81,7 @@
                 </span>
             </summary>
             <div class="govuk-details__text">
-                @if(messages.lang.code == "cy"){
-                    <p class="govuk-body">@Html(messages("enterContactDetails.details.link.bodyText", messages("enterContactDetails.tariff.email.cy"), messages("enterContactDetails.tariff.email.cy"), messages("enterContactDetails.tariff.email"), messages("enterContactDetails.tariff.email")))</p>
-                } else {
-                    <p class="govuk-body">@Html(messages("enterContactDetails.details.link.bodyText", messages("enterContactDetails.tariff.email"), messages("enterContactDetails.tariff.email")))</p>
-                }
+                <p class="govuk-body">@Html(messages("enterContactDetails.details.link.bodyText", messages("enterContactDetails.tariff.email"), messages("enterContactDetails.tariff.email")))</p>
 
                 <p>@messages("enterContactDetails.details.link.leadIn")</p>
 
