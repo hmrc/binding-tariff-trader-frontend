@@ -42,7 +42,6 @@ lazy val root = (project in file("."))
   .settings(
     Test / resourceDirectory := baseDirectory.value / "test" / "resources",
     Test / fork := true,
-    Test / parallelExecution := false
   )
   .settings(
     TwirlKeys.templateImports ++= Seq(

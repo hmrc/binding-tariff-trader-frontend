@@ -57,6 +57,7 @@ site.upload_continue = Uwchlwytho ac yn eich blaen
 service.name = Rheoli’ch Dyfarniadau Tariffau Uwch
 site.save_and_continue = Cadw ac yn eich blaen
 site.cancel_application = Canslo’r cais
+site.accept_and_continue = Derbyn ac yn eich blaen
 site.agree_and_continue = Cytuno ac yn eich blaen
 site.keep_confidential = Cadw’n gyfrinachol
 site.save_your_application = Cadwch eich cais fel PDF
@@ -106,16 +107,22 @@ informationPublic.paragraph1.part2 = Mae’r wybodaeth hon ar gael i fasnachwyr 
 informationPublic.paragraph2 = Wrth i chi wneud y cais, cewch wybod ba wybodaeth a allai ymddangos ar wefan y Dyfarniadau Tariffau Uwch.
 informationPublic.paragraph3 = Byddwch yn gallu marcio bod gwybodaeth a ffeiliau’n gyfrinachol yn eich cais. Ni fyddwn yn cyhoeddi gwybodaeth gyfrinachol na ffeiliau cyfrinachol ar wefan y Dyfarniadau Tariffau Uwch
 
-howWeContactYou.title = Sut y byddwn yn cysylltu â chi ynghylch eich cais - Rheoli’ch Dyfarniadau Tariffau Uwch - GOV.UK
-howWeContactYou.heading = Sut y byddwn yn cysylltu â chi ynghylch eich cais
-howWeContactYou.paragraph1.part1 = Efallai y bydd angen i ni gysylltu â chi i ofyn am fanylion pellach neu i roi gwybod i chi am statws eich cais.
-howWeContactYou.paragraph1.part2 = Hoffem gysylltu â chi dros e-bost. Fodd bynnag, mae rhai risgiau yn gysylltiedig ag e-byst gan gynnwys y canlynol:
-howWeContactYou.paragraph1.listItem1 = nid ydynt yn ddiogel
-howWeContactYou.paragraph1.listItem2 = mae modd i rywun arall eu newid neu eu darllen cyn iddynt eich cyrraedd
-howWeContactYou.paragraph2.part1 = Os nad ydych am i ni gysylltu â chi dros e-bost, rhowch wybod i ni sut y dylem gysylltu â chi drwy e-bostio <a class="govuk-link" href="mailto:{0}">{1}</a>
+howWeContactYou.title = Sut rydym yn cysylltu â chi am eich cais – Rheoli’ch Dyfarniadau Tariffau Ymlaen Llaw – GOV.UK
+howWeContactYou.heading = Sut rydym yn cysylltu â chi am eich cais
+howWeContactYou.paragraph1.part1 = Efallai y byddwn yn cysylltu â chi er mwyn gofyn am ragor o wybodaeth am eich cais. Byddwn yn defnyddio’r cyfeiriad e-bost a rowch yn eich cais i gysylltu â chi.
+howWeContactYou.paragraph1.h2 = Pryd y byddwn yn cysylltu â chi
+howWeContactYou.paragraph1.leadIn = Byddwn ond yn cysylltu â chi:
+howWeContactYou.paragraph1.listItem1 = os bydd angen rhagor o wybodaeth arnom am eich cais
+howWeContactYou.paragraph1.listItem2 = i roi gwybod i chi am statws eich cais
+howWeContactYou.paragraph1.closure = Mewn rhai achosion, gallwn hefyd gysylltu â chi ar ôl i chi gael dyfarniad.
+howWeContactYou.paragraph2.h2 = Os nad ydych am i ni gysylltu â chi drwy e-bost
 howWeContactYou.paragraph2.email = tariffclassification@hmrc.gov.uk
-howWeContactYou.paragraph2.part2 = Os ydych yn dewis optio allan o dderbyn e-byst, dim ond e-byst awtomataidd y byddwn yn eu hanfon atoch. Er enghraifft, pan fyddwch wedi cwblhau’r cais hwn, byddwn yn anfon e-bost cadarnhau awtomataidd.
-howWeContactYou.paragraph2.part3 = Os na fyddwn yn clywed oddi wrthych, byddwn yn cymryd eich bod wedi derbyn y risgiau.
+howWeContactYou.paragraph2.part1 = Mae’n rhaid i chi e-bostio <a class="govuk-link" href="mailto:{0}">{1}</a> cyn i chi gyflwyno’ch cais a rhoi gwybod i ni sut y gallwn gysylltu â chi.
+howWeContactYou.paragraph2.leadIn = Yn eich e-bost, mae’n rhaid i chi gynnwys:
+howWeContactYou.paragraph2.bullet1 = eich rhif EORI
+howWeContactYou.paragraph2.bullet2 = eich manylion cyswllt (dylai’r rhain fod yr un peth â’r manylion a rowch yn y cais)
+howWeContactYou.paragraph2.bullet3 = y cyfeiriad rydych am i ni ei ddefnyddio
+howWeContactYou.paragraph2.part2 = Os ydych yn asiant, mae’n rhaid i chi hefyd roi’r EORI ar gyfer y masnachwr.
 
 provideGoodsName.title = Rhoi enw ar gyfer y nwyddau – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 provideGoodsName.heading = Rhoi enw ar gyfer y nwyddau
@@ -315,9 +322,9 @@ commodityCodeRulingReference.hint = Mae’r cyfeirnod, er enghraifft GB12345678 
 commodityCodeRulingReference.checkYourAnswersLabel = Cyfeirnodau ar gyfer dyfarniadau tebyg
 commodityCodeRulingReference.error.required =  Nodwch gyfeirnod dyfarniad
 
-enterContactDetails.title = Rhowch y manylion cyswllt ar gyfer y cais hwn – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+enterContactDetails.title = Rhowch y manylion cyswllt ar gyfer y cais hwn – Rheoli’ch Dyfarniadau Tariffau Ymlaen Llaw – GOV.UK
 enterContactDetails.heading = Rhowch y manylion cyswllt ar gyfer y cais hwn
-enterContactDetails.bodyText = <span class="govuk-!-font-weight-bold">Dim ond</span> er mwyn cysylltu â chi i ofyn cwestiynau sy’n ymwneud â’r cais hwn y caiff y manylion hyn eu defnyddio.
+enterContactDetails.bodyText = Dim ond er mwyn cysylltu â chi i ofyn cwestiynau yn ymwneud â’r cais hwn y caiff y manylion hyn eu defnyddio.
 enterContactDetails.caption = Ynglŷn â’r ymgeisydd
 enterContactDetails.name = Enw llawn
 enterContactDetails.email = Cyfeiriad e-bost
@@ -334,6 +341,14 @@ enterContactDetails.error.email.length = Mae’n rhaid i’r cyfeiriad e-bost fo
 enterContactDetails.error.phoneNumber.length = Mae’n rhaid i’r rhif ffôn fod yn 20 o gymeriadau neu lai
 enterContactDetails.error.phoneNumber.minLength = Mae’n rhaid i’r rhif ffôn fod yn 10 rif neu fwy
 enterContactDetails.error.phoneNumber.invalid = Nodwch rif ffôn, fel 01632 960000, 07700 900000 neu +44 0808 157 0192
+enterContactDetails.details.link.text = Os nad ydych am i ni gysylltu â chi drwy e-bost
+enterContactDetails.tariff.email = tariffclassification@hmrc.gov.uk
+enterContactDetails.details.link.bodyText = Mae’n rhaid i chi e-bostio <a class="govuk-link" href="mailto:{0}">{1}</a> cyn i chi gyflwyno’ch cais a rhoi gwybod i ni sut y gallwn gysylltu â chi.
+enterContactDetails.details.link.leadIn = Yn eich e-bost, mae’n rhaid i chi gynnwys:
+enterContactDetails.details.link.listItem1 = eich rhif EORI
+enterContactDetails.details.link.listItem2 = eich manylion cyswllt (dylai’r rhain fod yr un peth â’r manylion a rowch yn y cais)
+enterContactDetails.details.link.listItem3 = y cyfeiriad rydych am i ni ei ddefnyddio
+enterContactDetails.details.link.paragraph = Os ydych yn asiant, mae’n rhaid i chi hefyd roi’r EORI ar gyfer y masnachwr.
 
 acceptItemInformationList.title=Gwybodaeth y mae’n rhaid i chi ei rhoi am eich eitem i gael y cod nwyddau cywir – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
 acceptItemInformationList.heading=Gwybodaeth y mae’n rhaid i chi ei rhoi am eich eitem i gael y cod nwyddau cywir
@@ -376,18 +391,20 @@ registeredAddressForEori.error.townOrCity.length = Mae’n rhaid i’r dref neu�
 registeredAddressForEori.error.postcode.length = Mae’n rhaid i’r cod post fod yn {0} o gymeriadau neu lai
 registeredAddressForEori.error.postcode.gb = Nodwch god post go iawn
 
-checkYourAnswers.title = Gwiriwch eich atebion cyn anfon eich cais – Rheoli’ch Dyfarniadau Tariffau Uwch – GOV.UK
+checkYourAnswers.title = Gwiriwch eich atebion cyn anfon eich cais – Rheoli’ch Dyfarniadau Tariffau Ymlaen Llaw – GOV.UK
 checkYourAnswers.heading = Gwiriwch eich atebion cyn anfon eich cais
 checkYourAnswers.aboutTheGoodsSection = Ynglŷn â’r nwyddau
 checkYourAnswers.aboutOtherRulingsSection = Ynglŷn â dyfarniadau eraill
 checkYourAnswers.aboutTheApplicantSection = Ynglŷn â’r ymgeisydd
 checkYourAnswers.declaration.subheading = Eich datganiad
-checkYourAnswers.declaration.paragraph0 = Drwy wneud cais am Ddyfarniad Tariffau Uwch, rydych yn cadarnhau bod yr wybodaeth a roddwyd gennych yn gywir ac yn gyflawn hyd eithaf eich gwybodaeth.
+checkYourAnswers.declaration.paragraph0 = Drwy wneud cais am Ddyfarniad Tariffau Ymlaen Llaw, rydych yn cadarnhau bod yr wybodaeth a roddwyd gennych yn gywir ac yn gyflawn hyd eithaf eich gwybodaeth.
 checkYourAnswers.declaration.paragraph1 = Rydych yn cytuno y gall CThEF wneud y canlynol:
-checkYourAnswers.declaration.listItem1 = storio’r wybodaeth a roddwyd gennych, neu y gallech ei roi, ar ôl i chi anfon eich cais
-checkYourAnswers.declaration.listItem2 = cyhoeddi gwybodaeth nad yw’n gyfrinachol ar wefan y Dyfarniadau Tariffau Uwch
+checkYourAnswers.declaration.listItem1 = storio’r wybodaeth rydych wedi’i rhoi yn eich cais
+checkYourAnswers.declaration.listItem2 = storio’r wybodaeth y gallwch ei rhoi ar ôl i chi anfon eich cais
+checkYourAnswers.declaration.listItem3 = cyhoeddi gwybodaeth nad yw’n gyfrinachol ar wefan y Dyfarniadau Tariffau Ymlaen Llaw
 checkYourAnswers.declaration.email = tariffclassification@hmrc.gov.uk
-checkYourAnswers.declaration.listItem3 = cysylltu â chi dros e-bost, neu drwy’r dull a nodwyd gennych mewn e-bost at <a class="govuk-link" href="mailto:{0}">{1}</a>
+checkYourAnswers.declaration.listItem4 = cysylltu â chi drwy e-bost, neu yn y ffordd a nodwyd gennych mewn e-bost atom yn <a class="govuk-link" href="mailto:{0}">{1}</a>
+checkYourAnswers.declaration.listItem5 = cysylltu â chi am y cais hwn ar ôl i chi gael dyfarniad
 checkYourAnswers.declaration.paragraph2 = Rydych yn deall y gall eich samplau gael eu difrodi wrth eu profi.
 checkYourAnswers.declaration.submit = Derbyn a gwneud cais am ddyfarniad
 
