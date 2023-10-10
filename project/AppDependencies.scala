@@ -7,7 +7,7 @@ object AppDependencies {
 
   private lazy val compile: Seq[ModuleID] = Seq(
     "commons-validator"            % "commons-validator"           % "1.7",
-    "uk.gov.hmrc"                  %% "play-frontend-hmrc"         % "7.21.0-play-28",
+    "uk.gov.hmrc"                  %% "play-frontend-hmrc"         % "7.23.0-play-28",
     "uk.gov.hmrc"                  %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
     "uk.gov.hmrc.mongo"            %% "hmrc-mongo-play-28"         % hmrcMongoPlayVersion,
     "commons-codec"                % "commons-codec"               % "1.16.0",
