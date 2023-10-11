@@ -1,22 +1,21 @@
-import play.sbt.routes.RoutesKeys
-import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.gitstamp.GitStampPlugin.*
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
-import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "binding-tariff-trader-frontend"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
-  .settings(DefaultBuildSettings.scalaSettings)
-  .settings(DefaultBuildSettings.defaultSettings())
   .settings(majorVersion := 0)
   .settings(
     gitStampSettings,
     name := appName,
-    scalaVersion := "2.13.11",
-    RoutesKeys.routesImport ++= Seq("models._", "models.Languages._", "models.SortField._", "models.SortDirection._"),
+    scalaVersion := "2.13.12",
+    play.sbt.routes.RoutesKeys.routesImport ++= Seq(
+      "models._",
+      "models.Languages._",
+      "models.SortField._",
+      "models.SortDirection._"
+    ),
     PlayKeys.playDefaultPort := 9582,
     scalacOptions ~= { opts => opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard")) },
     libraryDependencies ++= AppDependencies(),
@@ -24,7 +23,6 @@ lazy val root = (project in file("."))
     libraryDependencySchemes ++= Seq("org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always),
     // To resolve dependency clash between flexmark v0.64.4+ and play-language to run accessibility tests, remove when versions align
     dependencyOverrides += "com.ibm.icu" % "icu4j" % "69.1",
-    retrieveManaged := true,
     scalacOptions ++= Seq(
       "-feature",
       "-Wconf:src=routes/.*:s",
@@ -41,7 +39,7 @@ lazy val root = (project in file("."))
   )
   .settings(
     Test / resourceDirectory := baseDirectory.value / "test" / "resources",
-    Test / fork := true,
+    Test / fork := true
   )
   .settings(
     TwirlKeys.templateImports ++= Seq(
