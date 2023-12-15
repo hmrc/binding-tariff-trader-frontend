@@ -53,10 +53,20 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
       play.api.inject.bind[HttpFilters].to[SessionIdFilterSpec.Filters],
       play.api.inject.bind[SessionIdFilter].to[SessionIdFilterSpec.TestSessionIdFilter]
     )
+    .configure(
+      "metrics.enabled"        -> false,
+      "auditing.enabled"       -> false,
+      "auditing.traceRequests" -> false
+    )
     .router(router)
     .build()
   private lazy val sessionId = SessionIdFilterSpec.sessionId
   private lazy val realApp = GuiceApplicationBuilder()
+    .configure(
+      "metrics.enabled"        -> false,
+      "auditing.enabled"       -> false,
+      "auditing.traceRequests" -> false
+    )
     .build()
   private lazy val cc = realApp.injector.instanceOf[MessagesControllerComponents]
 

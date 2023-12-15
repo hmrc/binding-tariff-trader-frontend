@@ -20,7 +20,6 @@ import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import play.api.Application
 import play.api.http.Status.SEE_OTHER
 import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{defaultAwaitTimeout, redirectLocation}
 import service.BTAUserService
 import models.cache.CacheMap
@@ -34,7 +33,7 @@ class BTARedirectControllerSpec extends ControllerSpecBase {
   val testHost                       = "testHost"
   val testUrl                        = s"$testHost/business-account"
 
-  lazy val btaApp: Application = GuiceApplicationBuilder()
+  lazy val btaApp: Application = baseConfigBuilder
     .configure(
       "toggle.samplesNotAccepted" -> false,
       "business-tax-account.host" -> testHost

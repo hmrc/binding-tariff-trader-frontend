@@ -103,7 +103,7 @@ class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
     given(repository.refreshExpiry(any[String], any[String], any[Duration]))
       .willReturn(Future.successful(true))
     given(repository.takeLock(any[String], any[String], any[Duration]))
-      .willReturn(Future.successful(true))
+      .willReturn(Future.successful(None))
     given(repository.releaseLock(any[String], any[String]))
       .willReturn(Future.successful(()))
     given(caseService.allCases(any[Pagination], any[Sort])(any[HeaderCarrier]))

@@ -62,7 +62,7 @@ class FrontendAppConfig @Inject() (
 
   lazy val apiToken: String = loadConfig("auth.api-token")
 
-  lazy val aesKey: String   = loadConfig("pdfService.aes-key")
+  lazy val aesKey: String = loadConfig("pdfService.aes-key")
 
   private val timeOutSecondsAlternative          = 780
   private val timeOutCountDownSecondsAlternative = 120

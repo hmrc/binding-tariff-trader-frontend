@@ -18,7 +18,6 @@ package views
 
 import models.{Case, Paged, Sort, oCase}
 import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.twirl.api.HtmlFormat
 import viewmodels.Dashboard
 import views.behaviours.{PaginationViewBehaviours, ViewBehaviours}
@@ -31,7 +30,7 @@ class AccountDashboardStatusesViewSpec extends ViewBehaviours with PaginationVie
   val paginationIdOneResult          = "bottom-applications-pagination-one-result"
   val paginationIdMultipleResult     = "bottom-applications-pagination-some-result"
 
-  override implicit lazy val app: Application = GuiceApplicationBuilder()
+  override implicit lazy val app: Application = baseConfigBuilder
     .configure(
       "toggle.samplesNotAccepted" -> false
     )
