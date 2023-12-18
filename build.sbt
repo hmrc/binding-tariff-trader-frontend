@@ -38,10 +38,6 @@ lazy val root = (project in file("."))
     Assets / pipelineStages := Seq(concat)
   )
   .settings(
-    Test / resourceDirectory := baseDirectory.value / "test" / "resources",
-    Test / fork := true
-  )
-  .settings(
     TwirlKeys.templateImports ++= Seq(
       "uk.gov.hmrc.govukfrontend.views.html.components._",
       "uk.gov.hmrc.hmrcfrontend.views.html.components._",
