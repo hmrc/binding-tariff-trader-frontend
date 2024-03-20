@@ -17,7 +17,7 @@
 package connectors
 
 import com.google.inject.Inject
-import com.kenshoo.play.metrics.Metrics
+import com.codahale.metrics.MetricRegistry
 import config.FrontendAppConfig
 import metrics.HasMetrics
 import models.CaseStatus.CaseStatus
@@ -33,7 +33,7 @@ import uk.gov.hmrc.http.HttpReads.Implicits._
 @Singleton
 class BindingTariffClassificationConnector @Inject() (
   client: AuthenticatedHttpClient,
-  val metrics: Metrics
+  val metrics: MetricRegistry
 )(implicit appConfig: FrontendAppConfig, ec: ExecutionContext)
     extends InjectAuthHeader
     with HasMetrics {

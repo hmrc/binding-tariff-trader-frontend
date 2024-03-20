@@ -16,9 +16,9 @@
 
 package workers
 
-import akka.actor.ActorSystem
-import akka.stream.scaladsl.{Sink, Source}
-import akka.stream.{ActorAttributes, Supervision}
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.scaladsl.{Sink, Source}
+import org.apache.pekko.stream.{ActorAttributes, Supervision}
 import config.FrontendAppConfig
 import connectors.InjectAuthHeader
 import models._

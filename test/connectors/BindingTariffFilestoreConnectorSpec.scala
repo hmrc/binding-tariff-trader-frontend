@@ -16,7 +16,7 @@
 
 package connectors
 
-import akka.util.ByteString
+import org.apache.pekko.util.ByteString
 import base.WireMockObject.wireMockUrl
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._

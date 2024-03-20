@@ -16,8 +16,8 @@
 
 package controllers
 
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.util.ByteString
 import controllers.actions._
 import models.requests.IdentifierRequest
 import models.response.FilestoreResponse

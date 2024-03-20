@@ -17,7 +17,7 @@
 package connectors
 
 import com.google.inject.Inject
-import com.kenshoo.play.metrics.Metrics
+import com.codahale.metrics.MetricRegistry
 import config.FrontendAppConfig
 import metrics.HasMetrics
 import models.Email
@@ -31,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class EmailConnector @Inject() (
   configuration: FrontendAppConfig,
   client: HttpClient,
-  val metrics: Metrics
+  val metrics: MetricRegistry
 )(implicit ec: ExecutionContext)
     extends HasMetrics {
 

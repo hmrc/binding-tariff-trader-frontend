@@ -17,7 +17,7 @@
 package metrics
 
 import com.codahale.metrics.{MetricRegistry, Timer}
-import com.kenshoo.play.metrics.Metrics
+import com.codahale.metrics.MetricRegistry
 import play.api.mvc.{Action, MessagesBaseController, Result}
 
 import java.util.concurrent.atomic.AtomicBoolean
@@ -42,9 +42,9 @@ trait HasActionMetrics extends HasMetrics { self: MessagesBaseController =>
 trait HasMetrics {
   type Metric = String
 
-  def metrics: Metrics
+  def metrics: MetricRegistry
 
-  private lazy val registry: MetricRegistry = metrics.defaultRegistry
+  private lazy val registry: MetricRegistry = metrics
 
   val localMetrics = new LocalMetrics
 

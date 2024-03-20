@@ -16,7 +16,7 @@
 
 package filters
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import com.google.inject.Inject
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application

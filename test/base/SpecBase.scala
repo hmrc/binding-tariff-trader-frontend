@@ -16,7 +16,7 @@
 
 package base
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import config.FrontendAppConfig
 import models.UserAnswers
 import models.requests.{DataRequest, IdentifierRequest, OptionalDataRequest}
