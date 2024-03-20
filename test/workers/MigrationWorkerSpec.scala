@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package workers
 
-import com.kenshoo.play.metrics.Metrics
+import com.codahale.metrics.MetricRegistry
 import models._
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito._
@@ -30,8 +30,7 @@ import service.{CasesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.mongo.test.MongoSupport
-import utils.{TestMetrics, UnitSpec}
-
+import utils.UnitSpec
 import java.time.{Clock, Instant, ZoneOffset, ZonedDateTime}
 import scala.collection.immutable.ListMap
 import scala.concurrent.Future
@@ -53,7 +52,7 @@ class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfter
 
   val configuredApp: GuiceApplicationBuilder => GuiceApplicationBuilder =
     _.overrides(
-      bind[Metrics].to(new TestMetrics),
+      bind[MetricRegistry].to(new MetricRegistry),
       bind[CasesService].to(caseService),
       bind[FileService].to(fileService),
       bind[PdfService].to(pdfService),

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package metrics
 
 import com.codahale.metrics.Timer
-import com.kenshoo.play.metrics.Metrics
+import com.codahale.metrics.MetricRegistry
 import org.mockito.ArgumentMatchers._
 import org.mockito.{Mockito, MockitoSugar}
 import org.scalatest.compatible.Assertion
@@ -38,7 +38,7 @@ class HasMetricsSpec
 
   trait MockHasMetrics { self: HasMetrics =>
     val timer: Timer.Context                = mock[Timer.Context]
-    val metrics: Metrics                    = mock[Metrics]
+    val metrics: MetricRegistry             = mock[MetricRegistry]
     override val localMetrics: LocalMetrics = mock[LocalMetrics]
     when(localMetrics.startTimer(anyString())) thenReturn timer
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import models.requests.NewEventRequest
 import play.api.libs.json._
 import uk.gov.hmrc.play.json.Union
 import viewmodels.{FileView, PdfViewModel}
+import scala.util.Try
 
 object JsonFormatters {
 
@@ -70,7 +71,20 @@ object JsonFormatters {
 
 object EnumJson {
 
-  def format[E <: Enumeration](`enum`: E): Format[E#Value] =
-    Format(Reads.enumNameReads(enum), Writes.enumNameWrites)
+  private def enumReads[E <: Enumeration](`enum`: E): Reads[E#Value] = {
+    case JsString(s) =>
+      Try(JsSuccess(enum.withName(s))).recover {
+        case _: NoSuchElementException =>
+          JsError(
+            s"Expected an enumeration of type: '${enum.getClass.getSimpleName}', but it does not contain the name: '$s'"
+          )
+      }.get
+
+    case _ => JsError("String value is expected")
+  }
+
+  implicit def enumWrites[E <: Enumeration]: Writes[E#Value] = (v: E#Value) => JsString(v.toString)
+
+  implicit def format[E <: Enumeration](`enum`: E): Format[E#Value] = Format(enumReads(enum), enumWrites)
 
 }

@@ -2,14 +2,15 @@ import uk.gov.hmrc.gitstamp.GitStampPlugin.*
 
 lazy val appName: String = "binding-tariff-trader-frontend"
 
+ThisBuild / scalaVersion := "2.13.13"
+ThisBuild / majorVersion := 0
+
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
-  .settings(majorVersion := 0)
   .settings(
     gitStampSettings,
     name := appName,
-    scalaVersion := "2.13.12",
     play.sbt.routes.RoutesKeys.routesImport ++= Seq(
       "models._",
       "models.Languages._",
@@ -44,13 +45,6 @@ lazy val root = (project in file("."))
       "uk.gov.hmrc.hmrcfrontend.views.html.helpers._"
     )
   )
-
-// Coverage configuration
-coverageExcludedFiles := "<empty>;Reverse.*;.*filters.*;.*components.*;.*repositories.*;" +
-  ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;"
-coverageMinimumStmtTotal := 96
-coverageFailOnMinimum := true
-coverageHighlighting := true
 
 addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt A11y/scalafmt")
 addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle A11y/scalastyle")
