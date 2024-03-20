@@ -1,5 +1,5 @@
 import sbt.Setting
-import scoverage.ScoverageKeys.{*, coverageHighlighting}
+import scoverage.ScoverageKeys.{coverageHighlighting, _}
 
 object CodeCoverageSettings {
   val settings: Seq[Setting[?]] = Seq(
