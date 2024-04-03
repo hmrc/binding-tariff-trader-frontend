@@ -53,7 +53,7 @@ class CacheMapSpec extends SpecBase {
         }
 
         exception.getMessage shouldBe "KeyStore entry for key 'key1' was '\"value1\"'. Attempt to convert to " +
-          "models.cache.CacheMap$ gave errors: List((,List(JsonValidationError(List(error.expected.jsobject),List()))))"
+          "models.cache.CacheMap$ gave errors: List((,List(JsonValidationError(List(error.expected.jsobject),ArraySeq()))))"
       }
     }
   }
