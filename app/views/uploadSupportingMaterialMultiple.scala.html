@@ -21,12 +21,14 @@
 @import views.html.helper.{form, CSRF}
 @import views.ViewUtils._
 @import views.html.helper.CSPNonce
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 
 @this(
     submitButton: components.submit_button,
     cancelApplicationLink: components.cancel_application_link,
-    govukLayoutWrapper: GovukLayoutWrapper
+    govukLayoutWrapper: GovukLayoutWrapper,
+    formWithCSRF: FormWithCSRF
 )
 
 @(appConfig: FrontendAppConfig, initiateResponse: FileStoreInitiateResponse, form: Form[String], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -40,12 +42,15 @@
     additionalJS = Some(additionalJS)
 ) {
 
-    @helper.form(
+    @formWithCSRF(
+
         action = Call("POST", initiateResponse.uploadRequest.href),
         Symbol("enctype") -> "multipart/form-data",
         Symbol("id") -> "upload-files-form") {
 
         @components.error_summary(form.errors)
+
+
 
         @components.heading(
             messages("uploadSupportingMaterialMultiple.heading", goodsName),

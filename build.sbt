@@ -20,10 +20,6 @@ lazy val root = (project in file("."))
     PlayKeys.playDefaultPort := 9582,
     scalacOptions ~= { opts => opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard")) },
     libraryDependencies ++= AppDependencies(),
-    // To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
-    libraryDependencySchemes ++= Seq("org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always),
-    // To resolve dependency clash between flexmark v0.64.4+ and play-language to run accessibility tests, remove when versions align
-    dependencyOverrides += "com.ibm.icu" % "icu4j" % "69.1",
     scalacOptions ++= Seq(
       "-feature",
       "-Wconf:src=routes/.*:s",
@@ -45,6 +41,7 @@ lazy val root = (project in file("."))
       "uk.gov.hmrc.hmrcfrontend.views.html.helpers._"
     )
   )
+  .settings(CodeCoverageSettings.settings)
 
 addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt A11y/scalafmt")
 addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle A11y/scalastyle")
