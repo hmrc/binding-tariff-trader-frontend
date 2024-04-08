@@ -1,10 +1,9 @@
 import sbt.Setting
-import scoverage.ScoverageKeys.{coverageHighlighting, _}
+import scoverage.ScoverageKeys._
 
 object CodeCoverageSettings {
   val settings: Seq[Setting[?]] = Seq(
-    coverageExcludedFiles := "<empty>;Reverse.*;.*filters.*;.*components.*;.*repositories.*;" +
-      ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;",
+    coverageExcludedFiles := ";.components.;.Routes.;",
     coverageMinimumStmtTotal := 96,
     coverageFailOnMinimum := true,
     coverageHighlighting := true
