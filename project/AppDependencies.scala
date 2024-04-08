@@ -20,10 +20,8 @@ object AppDependencies {
   private lazy val test: Seq[ModuleID] = Seq(
     "uk.gov.hmrc.mongo"    %% "hmrc-mongo-test-play-30" % hmrcMongoPlayVersion,
     "uk.gov.hmrc"          %% "bootstrap-test-play-30"  % bootstrapPlayVersion,
-    "org.scalatest"        %% "scalatest"               % "3.2.18",
     "org.scalatestplus"    %% "scalacheck-1-17"         % "3.2.18.0",
     "org.mockito"          %% "mockito-scala-scalatest" % "1.17.31",
-    "com.vladsch.flexmark" % "flexmark-all"             % "0.64.8",
     "io.github.wolfendale" %% "scalacheck-gen-regexp"   % "1.1.0"
   ).map(_ % Test)
 
