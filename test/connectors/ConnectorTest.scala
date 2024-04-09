@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package connectors
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import base.{SpecBase, WireMockObject}
-import com.kenshoo.play.metrics.Metrics
+import com.codahale.metrics.MetricRegistry
 import config.FrontendAppConfig
 import org.scalatest.BeforeAndAfterAll
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import utils.TestMetrics
+import utils.UnitSpec
 
 import scala.io.Source
 
@@ -33,9 +33,9 @@ trait ConnectorTest extends SpecBase with BeforeAndAfterAll {
 
   protected lazy val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
-  protected lazy val fakeAuthToken      = "AUTH_TOKEN"
-  protected lazy val wsClient: WSClient = injector.instanceOf[WSClient]
-  protected lazy val metrics: Metrics   = new TestMetrics
+  protected lazy val fakeAuthToken           = "AUTH_TOKEN"
+  protected lazy val wsClient: WSClient      = injector.instanceOf[WSClient]
+  protected lazy val metrics: MetricRegistry = new MetricRegistry
   protected lazy val authenticatedHttpClient = new AuthenticatedHttpClient(
     auditing,
     wsClient,

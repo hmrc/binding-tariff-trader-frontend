@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package connectors
 
-import akka.NotUsed
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
-import com.kenshoo.play.metrics.Metrics
+import org.apache.pekko.NotUsed
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.util.ByteString
+import com.codahale.metrics.MetricRegistry
 import config.FrontendAppConfig
 import metrics.HasMetrics
 import models.requests.FileStoreInitiateRequest
@@ -39,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class BindingTariffFilestoreConnector @Inject() (
   ws: WSClient,
   client: AuthenticatedHttpClient,
-  val metrics: Metrics
+  val metrics: MetricRegistry
 )(implicit appConfig: FrontendAppConfig, ec: ExecutionContext)
     extends InjectAuthHeader
     with HasMetrics {

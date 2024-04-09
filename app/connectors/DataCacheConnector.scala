@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package connectors
 
 import com.google.inject.Inject
-import com.kenshoo.play.metrics.Metrics
+import com.codahale.metrics.MetricRegistry
 import metrics.HasMetrics
 import play.api.libs.json.Format
 import repositories.SessionRepository
@@ -27,7 +27,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class MongoCacheConnector @Inject() (
   val sessionRepository: SessionRepository,
-  val metrics: Metrics
+  val metrics: MetricRegistry
 )(implicit ec: ExecutionContext)
     extends DataCacheConnector
     with HasMetrics {
