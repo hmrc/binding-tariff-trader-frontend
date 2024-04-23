@@ -126,8 +126,8 @@ site.save_your_application = Save application as a PDF
 site.print_your_application = Print your application
 site.save_your_ruling_certificate = Save ruling certificate as a PDF
 site.print_your_ruling_certificate = Print your ruling certificate
-site.save_your_cover_letter = Save cover letter as a PDF GASTON
-site.print_your_cover_letter = Print your cover letter GASTON
+site.save_your_cover_letter = Save cover letter as a PDF
+site.print_your_cover_letter = Print your cover letter
 site.notification.success = Success
 site.sectionIs = This section is
 site.warning = Warning
@@ -478,10 +478,11 @@ pdf.ruling.section.ifYouDisagree.within=You must do so within 30 days of the dat
 pdf.ruling.section.ifYouDisagree.cannot=You cannot ask for a review with HMRC and an appeal with an independent tribunal at the same time. However, you can appeal to an independent tribunal if you disagree with the outcome of your review. If you first appeal to a tribunal, a review cannot be offered.
 
 pdf.ruling.section.askForReview.title=Asking for a review with HMRC
+pdf.ruling.section.ruling.details={0} details
 pdf.ruling.section.askForReview.reviewOfficer=A review officer, who is impartial, will look at the decision. The review outcome will be issued to you within 45 days.
 pdf.ruling.section.askForReview.ifYouDisagree=If you disagree with the outcome of the review, you can still appeal to the tribunal. You must do this within 30 days of the date of the letter telling you the outcome of the review. Once a review has commenced, you cannot appeal to a tribunal until the review officer tells you the outcome of their review.
 pdf.ruling.section.askForReview.furtherInfo=For further information about reviews, please see the following page.
-pdf.ruling.section.askForReview.guidance.url=<a href="www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision" target="_blank">www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision</a>
+pdf.ruling.section.askForReview.guidance.url=<a class="govuk-link" href="https://www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision" target="_blank">www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision</a>
 pdf.ruling.section.askForReview.requestReview=To request a review, please email, or write to, HMRC's Solicitors Office and Legal Services directly. You'll find the email and postal addresses below.
 pdf.ruling.section.askForReview.solsTeam=Because the SOLS team is a separate part of HMRC, they'll need the following information to identify your case and undertake the review:
 pdf.ruling.section.askForReview.solsTeam.1=your name, or business name, as shown on the top of this letter,
@@ -490,8 +491,7 @@ pdf.ruling.section.askForReview.solsTeam.3=the name of the HMRC officer or team 
 pdf.ruling.section.askForReview.solsTeam.4=any new information,
 pdf.ruling.section.askForReview.solsTeam.5=reasons why you disagree with the decision.
 pdf.ruling.section.askForReview.solsTeam.cannotWrite=If there is a reason why you cannot write to the SOLS team within 30 days from the date of this letter, you will need a reasonable excuse for the delay to obtain an extension. You will need to write to the SOLS team as soon as possible to explain the delay in accepting the offer of a review. If you do not have a reasonable excuse, the review cannot be undertaken. You can ask a tribunal to accept a late appeal.
-pdf.ruling.section.askForReview.solsTeam.email=reviews@hmrc.gov.uk
-pdf.ruling.section.askForReview.solsTeam.emailText=The SOLS team email address is: <a class="govuk-link" href="mailto:{0}">{1}</a> If you decide to use email to correspond, please see the important information at the end of this letter. If you want to contact the team in writing the address is –
+pdf.ruling.section.askForReview.solsTeam.email=The SOLS team email address is: <a class="govuk-link" href="mailto:reviews@hmrc.gov.uk">reviews@hmrc.gov.uk</a> If you decide to use email to correspond, please see the important information at the end of this letter. If you want to contact the team in writing the address is –
 pdf.application.footer.solicitors.office.and.legal.services.address=Solicitors Office and Legal Services<br> HM Revenue and Customs<br> BX9 1ZT
 
 pdf.ruling.section.appealForIndependentTribunal.title=If you want to appeal to an independent tribunal
@@ -502,20 +502,20 @@ pdf.ruling.section.appealForIndependentTribunal.requestRequirements.1=this lette
 pdf.ruling.section.appealForIndependentTribunal.requestRequirements.2=any assessment
 pdf.ruling.section.appealForIndependentTribunal.relevantInfo=If you do not send the relevant information, HM Courts and Tribunals may reject your appeal.
 pdf.ruling.section.appealForIndependentTribunal.tribunalsInfo=For more information about tribunals go to the page below or call 0300 123 1024.
-pdf.ruling.section.appealForIndependentTribunal.page=<a href="www.gov.uk/tax-tribunal" target="_blank">www.gov.uk/tax-tribunal</a>
+pdf.ruling.section.appealForIndependentTribunal.page=<a class="govuk-link" href="https://www.gov.uk/tax-tribunal" target="_blank">www.gov.uk/tax-tribunal</a>
 
 pdf.ruling.section.appealsAndReviews.title=More information about appeals and reviews
 pdf.ruling.section.appealsAndReviews.moreInfo=For more information about your appeal and review rights, go to the following page:
-pdf.ruling.section.appealsAndReviews.page=<a href="www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision" target="_blank">www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision</a>
+pdf.ruling.section.appealsAndReviews.page=<a class="govuk-link" href="https://www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision" target="_blank">www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision</a>
 pdf.ruling.section.appealsAndReviews.copy=You can ask for a copy of the HMRC1 document by calling 0300 200 3610.
 
 pdf.ruling.section.communicatingByEmail.title=Important information about communicating by email
-pdf.ruling.section.communicatingByEmail.tellUs=If you want to correspond by email, you must first tell us that you understand and accept the risks of using email. These are detailed in our factsheet CC/FS72 DSC1, 'Corresponding with HMRC by email'.  To find this factsheet, go to this page:
-pdf.ruling.section.communicatingByEmail.page=<a href="www.gov.uk/government/publications/corresponding-with-hmrc-by-email-ccfs72" target="_blank">www.gov.uk/government/publications/corresponding-with-hmrc-by-email-ccfs72</a>
+pdf.ruling.section.communicatingByEmail.tellUs=If you want to correspond by email, you must first tell us that you understand and accept the risks of using email. These are detailed in our factsheet CC/FS72 DSC1, ''Corresponding with HMRC by email''.  To find this factsheet, go to this page:
+pdf.ruling.section.communicatingByEmail.page=<a class="govuk-link" href="https://www.gov.uk/government/publications/corresponding-with-hmrc-by-email-ccfs72" target="_blank">www.gov.uk/government/publications/corresponding-with-hmrc-by-email-ccfs72</a>
 pdf.ruling.section.communicatingByEmail.copy=You can ask for a copy of the factsheet DSC1 by calling 0300 200 3610.
 
 pdf.ruling.section.acknowledgement.title=If you understand and accept the risks of using email, please include this acknowledgement within any initial correspondence.
-pdf.ruling.section.acknowledgement=We will only contact you by email about a tax matter where you have already given us permission to do so. If you have any doubt about the authenticity of an email which claims to come from HMRC, then do not click on any links, give any personal details, or reply to the email. Please forward the email to us at: <a class="govuk-link" href= "mailto:phishing@hmrc.gov.uk">phishing@hmrc.gov.uk</a>
+pdf.ruling.section.acknowledgement=We will only contact you by email about a tax matter where you have already given us permission to do so. If you have any doubt about the authenticity of an email which claims to come from HMRC, then do not click on any links, give any personal details, or reply to the email. Please forward the email to us at: <a class="govuk-link" href="mailto:phishing@hmrc.gov.uk">phishing@hmrc.gov.uk</a>
 
 pdf.ruling.section.holder.heading=Holder details
 pdf.ruling.section.holder.name.label=Account name

@@ -169,10 +169,10 @@ compositeMode: Boolean = false)(implicit messages: Messages)
                 @messages("pdf.ruling.section.askForReview.solsTeam.cannotWrite")
             </p>
             <p class="govuk-body-s">
-                @Html(messages("pdf.ruling.section.askForReview.solsTeam.emailText", messages("pdf.ruling.section.askForReview.solsTeam.email"), messages("pdf.ruling.section.askForReview.solsTeam.email")))
+                @Html(messages("pdf.ruling.section.askForReview.solsTeam.emailText"))
             </p>
             <p class="govuk-body-s">
-                @messages("pdf.application.footer.solicitors.office.and.legal.services.address")
+                @Html(messages("pdf.application.footer.solicitors.office.and.legal.services.address"))
             </p>
             <h4 class="govuk-heading-s">@messages("pdf.ruling.section.appealForIndependentTribunal.title")</h4>
             <p class="govuk-body-s">
@@ -202,12 +202,12 @@ compositeMode: Boolean = false)(implicit messages: Messages)
                 @messages("pdf.ruling.section.appealsAndReviews.moreInfo")
             </p>
             <p class="govuk-body-s">
-                @Html(messages("pdf.ruling.section.appealForIndependentTribunal.page"))
+                @Html(messages("pdf.ruling.section.appealsAndReviews.page"))
             </p>
             <p class="govuk-body-s">
                 @messages("pdf.ruling.section.appealsAndReviews.copy")
             </p>
-            <h4 class="heading-small">@messages("pdf.ruling.section.communicatingByEmail.title")</h4>
+            <h4 class="govuk-heading-s">@messages("pdf.ruling.section.communicatingByEmail.title")</h4>
             <p class="govuk-body-s">
                 @messages("pdf.ruling.section.communicatingByEmail.tellUs")
             </p>
@@ -217,7 +217,7 @@ compositeMode: Boolean = false)(implicit messages: Messages)
             <p class="govuk-body-s">
                 @messages("pdf.ruling.section.communicatingByEmail.copy")
             </p>
-            <h4 class="heading-small">@messages("pdf.ruling.section.acknowledgement.title")</h4>
+            <h4 class="govuk-heading-s">@messages("pdf.ruling.section.acknowledgement.title")</h4>
             <p class="govuk-body-s">
                 @Html(messages("pdf.ruling.section.acknowledgement"))
             </p>
