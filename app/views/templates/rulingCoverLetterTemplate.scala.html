@@ -136,21 +136,90 @@ compositeMode: Boolean = false)(implicit messages: Messages)
                 <li>@messages("pdf.ruling.section.ifYouDisagree.2")</li>
             </ul>
             <p class="govuk-body-s">
-                @messages("pdf.ruling.section.ifYouDisagree.cannot")
+                @messages("pdf.ruling.section.ifYouDisagree.within")
             </p>
             <p class="govuk-body-s">
-                @messages("pdf.ruling.section.ifYouDisagree.moreInfo") <a class="govuk-link" href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/877291/HMRC1.pdf">@messages("pdf.ruling.section.ifYouDisagree.read")</a>
+                @messages("pdf.ruling.section.ifYouDisagree.cannot")
             </p>
             <h4 class="govuk-heading-s">@messages("pdf.ruling.section.askForReview.title")</h4>
             <p class="govuk-body-s">
-                @Html(messages("pdf.ruling.section.askForReview.email", messages("pdf.ruling.email")))
+                @messages("pdf.ruling.section.askForReview.reviewOfficer")
             </p>
             <p class="govuk-body-s">
-                @messages("pdf.ruling.section.askForReview.acceptedReview")
+                @messages("pdf.ruling.section.askForReview.ifYouDisagree")
             </p>
-            <h4 class="govuk-heading-s">@messages("pdf.ruling.section.appealing.title")</h4>
             <p class="govuk-body-s">
-                @messages("pdf.ruling.section.appealing.mustContact")
+                @messages("pdf.ruling.section.askForReview.furtherInfo")
+            </p>
+            <h4 class="govuk-heading-s">@Html(messages("pdf.ruling.section.askForReview.guidance.url"))</h4>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.askForReview.requestReview")
+            </p>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.askForReview.solsTeam")
+            </p>
+            <ul class="govuk-list govuk-list--bullet govuk-body-s">
+                <li>@messages("pdf.ruling.section.askForReview.solsTeam.1")</li>
+                <li>@messages("pdf.ruling.section.askForReview.solsTeam.2")</li>
+                <li>@messages("pdf.ruling.section.askForReview.solsTeam.3")</li>
+                <li>@messages("pdf.ruling.section.askForReview.solsTeam.4")</li>
+                <li>@messages("pdf.ruling.section.askForReview.solsTeam.5")</li>
+            </ul>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.askForReview.solsTeam.cannotWrite")
+            </p>
+            <p class="govuk-body-s">
+                @Html(messages("pdf.ruling.section.askForReview.solsTeam.emailText", messages("pdf.ruling.section.askForReview.solsTeam.email"), messages("pdf.ruling.section.askForReview.solsTeam.email")))
+            </p>
+            <p class="govuk-body-s">
+                @messages("pdf.application.footer.solicitors.office.and.legal.services.address")
+            </p>
+            <h4 class="govuk-heading-s">@messages("pdf.ruling.section.appealForIndependentTribunal.title")</h4>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.appealForIndependentTribunal.appealImmediately")
+            </p>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.appealForIndependentTribunal.courtsAndTribunals")
+            </p>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.appealForIndependentTribunal.requestRequirements")
+            </p>
+            <ul class="govuk-list govuk-list--bullet govuk-body-s">
+                <li>@messages("pdf.ruling.section.appealForIndependentTribunal.requestRequirements.1")</li>
+                <li>@messages("pdf.ruling.section.appealForIndependentTribunal.requestRequirements.2")</li>
+            </ul>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.appealForIndependentTribunal.relevantInfo")
+            </p>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.appealForIndependentTribunal.tribunalsInfo")
+            </p>
+            <p class="govuk-body-s">
+                @Html(messages("pdf.ruling.section.appealForIndependentTribunal.page"))
+            </p>
+            <h4 class="govuk-heading-s">@messages("pdf.ruling.section.appealsAndReviews.title")</h4>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.appealsAndReviews.moreInfo")
+            </p>
+            <p class="govuk-body-s">
+                @Html(messages("pdf.ruling.section.appealForIndependentTribunal.page"))
+            </p>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.appealsAndReviews.copy")
+            </p>
+            <h4 class="heading-small">@messages("pdf.ruling.section.communicatingByEmail.title")</h4>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.communicatingByEmail.tellUs")
+            </p>
+            <p class="govuk-body-s">
+                @Html(messages("pdf.ruling.section.communicatingByEmail.page"))
+            </p>
+            <p class="govuk-body-s">
+                @messages("pdf.ruling.section.communicatingByEmail.copy")
+            </p>
+            <h4 class="heading-small">@messages("pdf.ruling.section.acknowledgement.title")</h4>
+            <p class="govuk-body-s">
+                @Html(messages("pdf.ruling.section.acknowledgement"))
             </p>
             <p class="govuk-body-s mt-2">
                 @messages("pdf.ruling.section.yours")

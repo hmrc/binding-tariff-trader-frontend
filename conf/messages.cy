@@ -469,32 +469,63 @@ pdf.ruling.aboutDecision.text=Rwyf wedi gwneud y penderfyniad hwn o dan adran 24
 pdf.ruling.samples=Samplau
 pdf.ruling.keepSamples=Mae’ch samplau wedi’u cadw gan y swyddfa hon.
 pdf.ruling.collectSamples=Bydd samplau sydd heb eu casglu neu sydd heb stampiau i’w dychwelyd drwy’r post yn cael eu dinistrio ar ôl 60 diwrnod i ddyddiad yr e-bost am eich dyfarniad. Os hoffech gasglu’ch samplau (neu drefnu i gludwr eu casglu), e-bostiwch <strong>{0}</strong>, gan roi 48 awr o rybudd.
-pdf.ruling.collectSamples.quote=Mae’n rhaid i chi roi cyfeirnod ATaR {0} a nodi faint o’r gloch y bydd y samplau’n cael eu casglu.
 pdf.ruling.coverLetter.title=Llythyr eglurhaol am y Dyfarniad Tariffau Uwch
+
 pdf.ruling.section.ifYouDisagree.title=Yr hyn i’w wneud os ydych yn anghytuno â’r penderfyniad hwn
 pdf.ruling.section.ifYouDisagree=Os ydych yn anghytuno â’r penderfyniad hwn, gallwch naill ai:
 pdf.ruling.section.ifYouDisagree.1=gofyn am adolygiad gan CThEF
 pdf.ruling.section.ifYouDisagree.2=apelio ar dribiwnlys annibynnol
-pdf.ruling.section.ifYouDisagree.cannot=Ni allwch ofyn i CThEF gynnal adolygiad ac apelio ar dribiwnlys annibynnol ar yr un pryd. Fodd bynnag, gallwch apelio ar dribiwnlys annibynnol os ydych yn anghytuno â chanlyniad eich adolygiad.
-pdf.ruling.section.ifYouDisagree.moreInfo=I gael rhagor o wybodaeth am adolygiadau ac apeliadau, gallwch
-pdf.ruling.section.ifYouDisagree.read=ddarllen dogfen HMRC1
-pdf.ruling.section.ifYouDisagree.phone=neu ffonio 0300 200 3705.
+pdf.ruling.section.ifYouDisagree.within=Mae'n rhaid i chi wneud hynny cyn pen 30 diwrnod o ddyddiad y llythyr hwn.
+pdf.ruling.section.ifYouDisagree.cannot=Ni allwch ofyn i CThEF gynnal adolygiad ac apelio ar dribiwnlys annibynnol ar yr un pryd. Fodd bynnag, gallwch apelio ar dribiwnlys annibynnol os ydych yn anghytuno â chanlyniad eich adolygiad. Os byddwch yn apelio ar dribiwnlys, ni ellir cynnig adolygiad.
+
 pdf.ruling.section.askForReview.title=Gofyn am adolygiad gan CThEF
-pdf.ruling.section.askForReview.email=E-bostiwch <strong>{0}</strong> yn gofyn am adolygiad a rhowch eich rhesymau cyn pen 30 diwrnod ar ôl cael yr e-bost am eich dyfarniad.
+pdf.ruling.section.askForReview.reviewOfficer=Bydd swyddog adolygu yn edrych ar y penderfyniad. Mae'r swyddog hwnnw yn ddiduedd. Bydd canlyniad yr adolygiad yn cael ei anfon atoch cyn pen 45 diwrnod.
+pdf.ruling.section.askForReview.ifYouDisagree=Os byddwch yn anghytuno â chanlyniad yr adolygiad, bydd yn dal i fod yn bosibl i chi apelio ar y tribiwnlys. Mae'n rhaid i chi wneud hyn cyn pen 30 diwrnod i ddyddiad y llythyr sy'n rhoi gwybod i chi am ganlyniad yr adolygiad. Ar ôl i adolygiad cael ei ddechrau, ni allwch apelio ar dribiwnlys hyd nes y bydd y swyddog adolygu'n rhoi gwybod i chi beth yw canlyniad ei adolygiad.
+pdf.ruling.section.askForReview.furtherInfo=I gael rhagor o wybodaeth am adolygiadau, darllenwch y dudalen ganlynol.
+pdf.ruling.section.askForReview.guidance.url=<a href="www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision.cy" target="_blank">www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision.cy</a>
+pdf.ruling.section.askForReview.requestReview=I wneud cais am adolygiad, e-bostiwch, neu ysgrifennwch at, Swyddfa'r Cyfreithiwr a Gwasanaethau Cyfreithiol CThEF (SOLS) yn uniongyrchol. Mae'r cyfeiriad e-bost a'r cyfeiriad post i'w gweld isod.
+pdf.ruling.section.askForReview.solsTeam=Gan fod y tîm SOLS yn rhan wahanol o CThEF, bydd angen yr wybodaeth ganlynol arnynt i gael hyd i'ch achos ac i ymgymryd â'r adolygiad:
+pdf.ruling.section.askForReview.solsTeam.1=eich enw, neu enw'r busnes, fel y dangosir ar frig y llythyr hwn,
+pdf.ruling.section.askForReview.solsTeam.2=pob cyfeirnod a ddefnyddir ar frig y llythyr hwn,
+pdf.ruling.section.askForReview.solsTeam.3=enw'r tîm neu'r swyddog i CThEF a enwir ar ddiwedd y llythyr hwn,
+pdf.ruling.section.askForReview.solsTeam.4=unrhyw wybodaeth newydd,
+pdf.ruling.section.askForReview.solsTeam.5=rhesymau pam rydych yn anghytuno â'r penderfyniad.
+pdf.ruling.section.askForReview.solsTeam.cannotWrite=Os oes yna reswm pam na allwch ysgrifennu at y tîm SOLS cyn pen 30 diwrnod i ddyddiad y llythyr hwn, bydd angen esgus rhesymol arnoch am yr oedi er mwyn cael estyniad. Bydd angen i chi ysgrifennu at y tîm SOLS cyn gynted â phosibl i esbonio'r oedi wrth dderbyn y cynnig o adolygiad. Os nad oes gennych esgus rhesymol, ni ellir ymgymryd â'r adolygiad. Gallwch ofyn i dribiwnlys dderbyn apêl hwyr.
+pdf.ruling.section.askForReview.solsTeam.email=reviews@hmrc.gov.uk
+pdf.ruling.section.askForReview.solsTeam.emailText=Cyfeiriad e-bost y tîm SOLS yw: <a class="govuk-link" href="mailto:{0}">{1}</a> Os byddwch yn penderfynu defnyddio e-bost i gyfathrebu, gweler yr wybodaeth bwysig ar ddiwedd y llythyr hwn. Os ydych am gysylltu â'r tîm yn ysgrifenedig, y cyfeiriad yw –
+pdf.application.footer.solicitors.office.and.legal.services.address=Swyddfa'r Cyfreithiwr a Gwasanaethau Cyfreithiol<br> Solicitor's Office and Legal Services<br> Cyllid a Thollau EF<br> HM Revenue and Customs<br> BX9 1ZT
+
+pdf.ruling.section.appealForIndependentTribunal.title=Os hoffech apelio ar dribiwnlys annibynnol
+pdf.ruling.section.appealForIndependentTribunal.appealImmediately=Os byddai'n well gennych, gallwch apelio'n uniongyrchol ar dribiwnlys annibynnol. Gallwch hefyd symud ymlaen i apêl tribiwnlys unwaith y byddwch wedi cael canlyniad yr adolygiad ac yn anghytuno â'r penderfyniad.
+pdf.ruling.section.appealForIndependentTribunal.courtsAndTribunals=Mae'n rhaid i'r cais gyrraedd Gwasanaeth Llysoedd a Thribiwnlysoedd EF cyn pen 30 diwrnod i ddyddiad y llythyr hwn, neu cyn pen 30 diwrnod i'r dyddiad ar y llythyr sy'n nodi canlyniad yr adolygiad.
+pdf.ruling.section.appealForIndependentTribunal.requestRequirements=Dylai'r cais hwn cynnwys copïau o'r canlynol:
+pdf.ruling.section.appealForIndependentTribunal.requestRequirements.1=y llythyr hwn, neu'r llythyr canlyniad yr adolygiad
+pdf.ruling.section.appealForIndependentTribunal.requestRequirements.2=unrhyw asesiad
+pdf.ruling.section.appealForIndependentTribunal.relevantInfo=Os nad ydych yn anfon yr wybodaeth berthnasol, gall y Gwasanaeth Llysoedd a Thribiwnlysoedd EF wrthod eich apêl.
+pdf.ruling.section.appealForIndependentTribunal.tribunalsInfo=I gael rhagor o wybodaeth am dribiwnlysoedd ewch i'r dudalen isod neu ffoniwch 0300 303 5176.
+pdf.ruling.section.appealForIndependentTribunal.page=<a href="www.gov.uk/tribiwnlys-treth" target="_blank">www.gov.uk/tribiwnlys-treth</a>
+
+pdf.ruling.section.appealsAndReviews.title=Rhagor o wybodaeth am apeliadau ac adolygiadau
+pdf.ruling.section.appealsAndReviews.moreInfo=I gael rhagor o wybodaeth am eich hawliau o ran apelio ac adolygiadau, ewch i'r dudalen ganlynol:
+pdf.ruling.section.appealsAndReviews.page=<a href="www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision.cy" target="_blank">www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision.cy</a>
+pdf.ruling.section.appealsAndReviews.copy=Gallwch ofyn am gopi o'r ddogfen HMRC1 drwy ffonio 0300 200 1900.
+
+pdf.ruling.section.communicatingByEmail.title=Gwybodaeth bwysig am ohebu drwy e-bost
+pdf.ruling.section.communicatingByEmail.tellUs=Os hoffech ohebu drwy e-bost, mae'n rhaid i chi roi gwybod i ni eich bod yn deall ac yn derbyn y risgiau o wneud hynny. Manylir ar y rhain yn ein taflen wybodaeth CC/FS72 DSC1, 'Gohebu â CThEF drwy e-bost'. I ddod o hyd i'r daflen wybodaeth hon, ewch i'r dudalen:
+pdf.ruling.section.communicatingByEmail.page=<a href="www.gov.uk/government/publications/corresponding-with-hmrc-by-email-ccfs72.cy" target="_blank">www.gov.uk/government/publications/corresponding-with-hmrc-by-email-ccfs72.cy</a>
+pdf.ruling.section.communicatingByEmail.copy=Gallwch ofyn am gopi o daflen wybodaeth DSC1 drwy ffonio 0300 200 1900.
+
+pdf.ruling.section.acknowledgement.title=Os ydych yn deall ac yn derbyn y risgiau o ddefnyddio e-bost, dylech gynnwys y gydnabyddiaeth hon o fewn unrhyw ohebiaeth gychwynnol.
+pdf.ruling.section.acknowledgement=Ni fyddwn yn cysylltu â chi drwy e-bost ynghylch mater sy'n ymwneud â threth, oni bai eich bod eisoes wedi rhoi caniatâd i ni wneud hynny. Os oes amheuaeth gennych ynghylch dilysrwydd e-bost sy'n honni ei fod yn dod oddi wrth CThEF, peidiwch â chlicio ar unrhyw gysylltiadau, rhoi unrhyw fanylion personol nac ateb yr e-bost chwaith. Anfonwch yr e-bost ymlaen atom yn: <a class="govuk-link" href= "mailto:gwasanaeth.cymraeg@hmrc.gov.uk">gwasanaeth.cymraeg@hmrc.gov.uk</a>
+
 pdf.ruling.email=tariffclassification@hmrc.gov.uk
-pdf.ruling.section.askForReview.acceptedReview=Os derbyniwch gynnig am adolygiad o’r dyfarniad, bydd yn cael ei gynnal gan un o swyddogion CThEF na fu’n ymwneud â’ch achos. Byddwch yn gallu rhoi unrhyw dystiolaeth a gwybodaeth bellach a bydd y swyddog adolygu yn anfon e-bost atoch i roi gwybod am ganlyniad yr adolygiad i chi.
-pdf.ruling.section.appealing.title=Apelio ar dribiwnlys annibynnol
-pdf.ruling.section.appealing.mustContact=Mae’n rhaid i chi gysylltu â’r tribiwnlys cyn pen 30 diwrnod ar ôl yr e-bost am eich dyfarniad i drafod eich achos. Os ydych yn anghytuno â’ch adolygiad gan CThEF, yna mae’n rhaid i chi gysylltu â’r tribiwnlys cyn pen 30 diwrnod ar ôl y canlyniad hwnnw.
-pdf.ruling.section.appealing.notAvailable=Nid yw CThEF yn gallu rhoi estyniad 3 mis ar gyfer yr apêl hon – dim ond y tribiwnlys annibynnol a all ei roi.
 pdf.ruling.section.yours=Yn gywir,
 pdf.ruling.section.hmrctcs=Gwasanaeth Dynodi Tariffau CThEF
 pdf.ruling.section.ruling.details=Manylion {0}
 pdf.ruling.certificate.title=Tystysgrif Dyfarniad Tariffau Uwch
 pdf.ruling.certificate.issuedBy=Anfonwyd gan: Tîm Dynodi Tariffau CThEF
 pdf.ruling.certificate.rulingFor=Dyfarniad Tariffau Uwch (ATaR) ar gyfer {0}
-
 pdf.ruling.section.holder.heading=Manylion y deiliad
-pdf.ruling.section.date.expiry=Dyddiad dod i ben
 pdf.ruling.section.holder.name.label=Enw’r cyfrif
 pdf.ruling.section.holder.address.label=Cyfeiriad y cyfrif
 pdf.ruling.section.holder.eori.label=EORI
