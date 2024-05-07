@@ -483,8 +483,8 @@ pdf.ruling.section.askForReview.reviewOfficer=A review officer, who is impartial
 pdf.ruling.section.askForReview.ifYouDisagree=If you disagree with the outcome of the review, you can still appeal to the tribunal. You must do this within 30 days of the date of the letter telling you the outcome of the review. Once a review has commenced, you cannot appeal to a tribunal until the review officer tells you the outcome of their review.
 pdf.ruling.section.askForReview.furtherInfo=For further information about reviews, please see the following page.
 pdf.ruling.section.askForReview.guidance.url=<a class="govuk-link" href="https://www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision" target="_blank">www.gov.uk/guidance/how-to-get-a-review-of-an-hmrc-decision</a>
-pdf.ruling.section.askForReview.requestReview=To request a review, please email, or write to, HMRC's Solicitors Office and Legal Services directly. You'll find the email and postal addresses below.
-pdf.ruling.section.askForReview.solsTeam=Because the SOLS team is a separate part of HMRC, they'll need the following information to identify your case and undertake the review:
+pdf.ruling.section.askForReview.requestReview=To request a review, please email, or write to, HMRC''s Solicitors Office and Legal Services directly. You''ll find the email and postal addresses below.
+pdf.ruling.section.askForReview.solsTeam=Because the SOLS team is a separate part of HMRC, they''ll need the following information to identify your case and undertake the review:
 pdf.ruling.section.askForReview.solsTeam.1=your name, or business name, as shown on the top of this letter,
 pdf.ruling.section.askForReview.solsTeam.2=all references used at the top of this letter,
 pdf.ruling.section.askForReview.solsTeam.3=the name of the HMRC officer or team named at the end of this letter,
@@ -533,8 +533,6 @@ pdf.ruling.section.ruling.justification.label=Justification
 pdf.ruling.section.ruling.legalInformation.section1.label=Legal information about this ruling
 pdf.ruling.section.ruling.legalInformation.paragraph=This ruling is valid from {0} to {1} and has been issued under section 24 of The Taxation (Cross-border Trade) Act 2018 by HM Revenue & Customs. The holder has the right to request a review or submit an appeal of this ruling.
 pdf.ruling.email=tariffclassification@hmrc.gov.uk
-pdf.ruling.section.yours=Yours sincerely,
-pdf.ruling.section.hmrctcs=HMRC Tariff Classification Service
 
 case.tabs.applications = Applications
 

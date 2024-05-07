@@ -169,7 +169,7 @@ compositeMode: Boolean = false)(implicit messages: Messages)
                 @messages("pdf.ruling.section.askForReview.solsTeam.cannotWrite")
             </p>
             <p class="govuk-body-s">
-                @Html(messages("pdf.ruling.section.askForReview.solsTeam.emailText"))
+                @Html(messages("pdf.ruling.section.askForReview.solsTeam.email"))
             </p>
             <p class="govuk-body-s">
                 @Html(messages("pdf.application.footer.solicitors.office.and.legal.services.address"))
@@ -220,15 +220,6 @@ compositeMode: Boolean = false)(implicit messages: Messages)
             <h4 class="govuk-heading-s">@messages("pdf.ruling.section.acknowledgement.title")</h4>
             <p class="govuk-body-s">
                 @Html(messages("pdf.ruling.section.acknowledgement"))
-            </p>
-            <p class="govuk-body-s mt-2">
-                @messages("pdf.ruling.section.yours")
-            </p>
-            <p class="govuk-body-s">
-                @c.assignee.map(_.name).getOrElse("")
-            </p>
-            <p class="govuk-body-s">
-                @messages("pdf.ruling.section.hmrctcs")
             </p>
         </div>
         </div>

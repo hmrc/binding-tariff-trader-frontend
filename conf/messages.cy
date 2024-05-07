@@ -518,8 +518,6 @@ pdf.ruling.section.acknowledgement.title=Os ydych yn deall ac yn derbyn y risgia
 pdf.ruling.section.acknowledgement=Ni fyddwn yn cysylltu â chi drwy e-bost ynghylch mater sy’n ymwneud â threth, oni bai eich bod eisoes wedi rhoi caniatâd i ni wneud hynny. Os oes amheuaeth gennych ynghylch dilysrwydd e-bost sy’n honni ei fod yn dod oddi wrth CThEF, peidiwch â chlicio ar unrhyw gysylltiadau, rhoi unrhyw fanylion personol nac ateb yr e-bost chwaith. Anfonwch yr e-bost ymlaen atom yn: <a class="govuk-link" href="mailto:gwasanaeth.cymraeg@hmrc.gov.uk">gwasanaeth.cymraeg@hmrc.gov.uk</a>
 
 pdf.ruling.email=tariffclassification@hmrc.gov.uk
-pdf.ruling.section.yours=Yn gywir,
-pdf.ruling.section.hmrctcs=Gwasanaeth Dynodi Tariffau CThEF
 pdf.ruling.section.ruling.details=Manylion {0}
 pdf.ruling.certificate.title=Tystysgrif Dyfarniad Tariffau Uwch
 pdf.ruling.certificate.issuedBy=Anfonwyd gan: Tîm Dynodi Tariffau CThEF
