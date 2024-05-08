@@ -511,7 +511,7 @@ pdf.ruling.section.appealsAndReviews.page=<a class="govuk-link" href="https://ww
 pdf.ruling.section.appealsAndReviews.copy=Gallwch ofyn am gopi o’r ddogfen HMRC1 drwy ffonio 0300 200 1900.
 
 pdf.ruling.section.communicatingByEmail.title=Gwybodaeth bwysig am ohebu drwy e-bost
-pdf.ruling.section.communicatingByEmail.tellUs=Os hoffech ohebu drwy e-bost, mae’n rhaid i chi roi gwybod i ni eich bod yn deall ac yn derbyn y risgiau o wneud hynny. Manylir ar y rhain yn ein taflen wybodaeth CC/FS72 DSC1, ’Gohebu â CThEF drwy e-bost’. I ddod o hyd i’r daflen wybodaeth hon, ewch i’r dudalen:
+pdf.ruling.section.communicatingByEmail.tellUs=Os hoffech ohebu drwy e-bost, mae’n rhaid i chi roi gwybod i ni eich bod yn deall ac yn derbyn y risgiau o wneud hynny. Manylir ar y rhain yn ein taflen wybodaeth CC/FS72 DSC1, ‘Gohebu â CThEF drwy e-bost’. I ddod o hyd i’r daflen wybodaeth hon, ewch i’r dudalen:
 pdf.ruling.section.communicatingByEmail.page=<a class="govuk-link" href="https://www.gov.uk/government/publications/corresponding-with-hmrc-by-email-ccfs72.cy" target="_blank">www.gov.uk/government/publications/corresponding-with-hmrc-by-email-ccfs72.cy</a>
 pdf.ruling.section.communicatingByEmail.copy=Gallwch ofyn am gopi o daflen wybodaeth DSC1 drwy ffonio 0300 200 1900.
 
