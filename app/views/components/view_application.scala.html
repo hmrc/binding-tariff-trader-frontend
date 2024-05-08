@@ -37,7 +37,7 @@ s"${appConfig.host}${routes.Assets.versioned(path)}"
         <div id="your-records" class="print-document">
             <div class="govuk-grid-row print-header">
                 <div class="govuk-grid-column-one-third">
-                    <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink(messages("logo.file.name"))"/>
+                    <img class="crown-logo-atar" alt="@messages("hmrc")" src="@messages("logo.encoded")"/>
                 </div>
                 <div class="govuk-grid-column-two-thirds">
                     <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-!-margin-bottom-0 print-header__heading">
@@ -193,8 +193,7 @@ s"${appConfig.host}${routes.Assets.versioned(path)}"
 <div class="print-document" id="print-document">
     <div class="govuk-grid-row print-header">
         <div class="govuk-grid-column-one-third">
-            <img class="crown-logo-atar" alt="HM Revenue and Customs" src="@createLink(messages("logo.file.name"))"
-            />
+            <img class="crown-logo-atar" alt="@messages("hmrc")" src="@messages("logo.encoded")"/>
         </div>
         <div>
             <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-!-margin-bottom-0 print-header__heading">
