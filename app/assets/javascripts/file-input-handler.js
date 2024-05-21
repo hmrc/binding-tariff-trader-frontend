@@ -12,9 +12,13 @@ function toggleSubmitButton(enabled) {
     }
 }
 
-function onFileSelected(id, targetURL, csrf) {
+function onFileSelected(id, targetURL) {
     return function(event) {
         const files = event.target.files;
+
+        const csrfToken = document.querySelector('input[name="csrfToken"]').value;
+
+//        document.write (csrfToken); // Please only use this for manual testing purposes. Uncomment this to test the csrf token or use console and check document.querySelector('input[name="csrfToken"]').value;
 
         if (files.length > 0) {
             toggleSubmitButton(false);
@@ -22,7 +26,7 @@ function onFileSelected(id, targetURL, csrf) {
 
             xhr.open("POST", targetURL, true);
 
-            xhr.setRequestHeader('Csrf-Token', csrf);
+            xhr.setRequestHeader('Csrf-Token', csrfToken);
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
             xhr.onload = function () {
