@@ -12,9 +12,11 @@ function toggleSubmitButton(enabled) {
     }
 }
 
-function onFileSelected(id, targetURL, csrf) {
+function onFileSelected(id, targetURL) {
     return function(event) {
         const files = event.target.files;
+
+        const csrfToken = document.querySelector('input[name="csrfToken"]').value;
 
         if (files.length > 0) {
             toggleSubmitButton(false);
