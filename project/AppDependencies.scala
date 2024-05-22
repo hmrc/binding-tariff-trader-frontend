@@ -3,7 +3,7 @@ import sbt.*
 object AppDependencies {
 
   private val bootstrapPlayVersion = "8.6.0"
-  private val hmrcMongoPlayVersion = "1.8.0"
+  private val hmrcMongoPlayVersion = "1.9.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
     "commons-validator"            % "commons-validator"           % "1.8.0",
@@ -13,7 +13,7 @@ object AppDependencies {
     "commons-codec"                % "commons-codec"               % "1.17.0",
     "uk.gov.hmrc"                  %% "play-json-union-formatter"  % "1.21.0",
     "org.typelevel"                %% "cats-core"                  % "2.10.0",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala"       % "2.17.0",
+    "com.fasterxml.jackson.module" %% "jackson-module-scala"       % "2.17.1",
     "org.apache.pekko"             %% "pekko-connectors-csv"       % "1.0.2"
   )
 
