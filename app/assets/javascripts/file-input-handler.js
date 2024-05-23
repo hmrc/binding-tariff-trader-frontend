@@ -24,7 +24,7 @@ function onFileSelected(id, targetURL) {
 
             xhr.open("POST", targetURL, true);
 
-            xhr.setRequestHeader('Csrf-Token', csrf);
+            xhr.setRequestHeader('Csrf-Token', csrfToken);
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
             xhr.onload = function () {
