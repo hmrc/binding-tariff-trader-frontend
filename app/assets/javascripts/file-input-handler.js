@@ -12,11 +12,9 @@ function toggleSubmitButton(enabled) {
     }
 }
 
-function onFileSelected(id, targetURL) {
+function onFileSelected(id, targetURL, csrf) {
     return function(event) {
         const files = event.target.files;
-
-        const csrfToken = document.querySelector('input[name="csrfToken"]').value;
 
         if (files.length > 0) {
             toggleSubmitButton(false);
@@ -24,7 +22,7 @@ function onFileSelected(id, targetURL) {
 
             xhr.open("POST", targetURL, true);
 
-            xhr.setRequestHeader('Csrf-Token', csrfToken);
+            xhr.setRequestHeader('Csrf-Token', csrf);
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
             xhr.onload = function () {

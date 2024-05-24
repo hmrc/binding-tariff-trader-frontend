@@ -18,6 +18,7 @@
 @import controllers.routes._
 @import models.Mode
 @import models.response.FileStoreInitiateResponse
+@import views.html.helper.{form, CSRF}
 @import views.ViewUtils._
 @import views.html.helper.CSPNonce
 
@@ -25,8 +26,7 @@
 @this(
     submitButton: components.submit_button,
     cancelApplicationLink: components.cancel_application_link,
-    govukLayoutWrapper: GovukLayoutWrapper,
-    formWithCSRF: FormWithCSRF
+    govukLayoutWrapper: GovukLayoutWrapper
 )
 
 @(appConfig: FrontendAppConfig, initiateResponse: FileStoreInitiateResponse, form: Form[String], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -40,7 +40,7 @@
     additionalJS = Some(additionalJS)
 ) {
 
-    @formWithCSRF(
+    @helper.form(
         action = Call("POST", initiateResponse.uploadRequest.href),
         Symbol("enctype") -> "multipart/form-data",
         Symbol("id") -> "upload-files-form") {
@@ -78,10 +78,11 @@
         <script @CSPNonce.attr >
             const id = "@initiateResponse.id";
             const targetURL = "@UploadSupportingMaterialMultipleController.onFileSelected().url";
+            const csrfToken = "@CSRF.getToken.value";
 
             document
                 .getElementById("file")
-                .addEventListener("change", onFileSelected(id, targetURL));
+                .addEventListener("change", onFileSelected(id, targetURL, csrfToken));
         </script>
     }
 }
