@@ -20,6 +20,8 @@ import models._
 import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.api.data.Forms.{boolean, text, tuple}
+import play.api.mvc.Request
+import play.api.test.CSRFTokenHelper
 import play.twirl.api.Html
 import service.CountriesService
 import uk.gov.hmrc.scalatestaccessibilitylinter.views.AutomaticAccessibilitySpec
@@ -102,7 +104,9 @@ class FrontendAccessibilitySpec extends AutomaticAccessibilitySpec {
     case session_expired: session_expired                                   => render(session_expired)
     case similarItemCommodityCode: similarItemCommodityCode                 => render(similarItemCommodityCode)
     case supportingMaterialFileList: supportingMaterialFileList             => render(supportingMaterialFileList)
-    case uploadSupportingMaterialMultiple: uploadSupportingMaterialMultiple => render(uploadSupportingMaterialMultiple)
+    case uploadSupportingMaterialMultiple: uploadSupportingMaterialMultiple =>
+      implicit val arbRequest: Arbitrary[Request[_]] = fixed(CSRFTokenHelper.addCSRFToken(fakeRequest))
+      render(uploadSupportingMaterialMultiple)
     case applicationView: applicationView                                   => render(applicationView)
     case rulingCertificateView: rulingCertificateView                       => render(rulingCertificateView)
   }
