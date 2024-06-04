@@ -24,6 +24,7 @@ import navigation.FakeNavigator
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito.{mock, reset}
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import service.{BTAUserService, CasesService}
@@ -36,8 +37,8 @@ import scala.concurrent.Future
 class IndexControllerSpec extends ControllerSpecBase {
 
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
-  private val casesService                   = mock[CasesService]
-  private val btaUserService                 = mock[BTAUserService]
+  private val casesService                   = mock(classOf[CasesService])
+  private val btaUserService                 = mock(classOf[BTAUserService])
   private def nextPageRoute                  = Call("GET", "/advance-tariff-application/information-you-need")
 
   private val pageIndex   = 1
@@ -47,8 +48,10 @@ class IndexControllerSpec extends ControllerSpecBase {
   val accountDashboardStatusesView: account_dashboard_statuses =
     app.injector.instanceOf(classOf[views.html.account_dashboard_statuses])
 
-  override def beforeEach(): Unit =
-    reset(casesService, btaUserService)
+  override def beforeEach(): Unit = {
+    reset(casesService)
+    reset(btaUserService)
+  }
 
   private def controller(identifier: IdentifierAction = FakeIdentifierAction): IndexController =
     new IndexController(

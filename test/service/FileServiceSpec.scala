@@ -16,16 +16,17 @@
 
 package service
 
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.util.ByteString
 import base.SpecBase
 import config.FrontendAppConfig
 import connectors.BindingTariffFilestoreConnector
 import models._
 import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, FilestoreResponse, UpscanFormTemplate}
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.util.ByteString
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito.{mock, reset}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
@@ -38,8 +39,8 @@ import scala.concurrent.Future.{failed, successful}
 
 class FileServiceSpec extends SpecBase {
 
-  private val connector     = mock[BindingTariffFilestoreConnector]
-  private val configuration = mock[FrontendAppConfig]
+  private val connector     = mock(classOf[BindingTariffFilestoreConnector])
+  private val configuration = mock(classOf[FrontendAppConfig])
 
   private val fileSizeSmall = 10
   private val fileSizeMax   = 1000
@@ -215,7 +216,7 @@ class FileServiceSpec extends SpecBase {
   }
 
   "GetAttachmentMetadata" should {
-    val c: Case           = mock[Case]
+    val c: Case           = mock(classOf[Case])
     val connectorResponse = Seq(FilestoreResponse("id", "filename-updated", "type"))
 
     "Delegate to connector" in {
@@ -252,7 +253,7 @@ class FileServiceSpec extends SpecBase {
   }
 
   private def withAgentDetails(): Case => Case = c => {
-    val details = AgentDetails(mock[EORIDetails], None)
+    val details = AgentDetails(mock(classOf[EORIDetails]), None)
     val app     = c.application.copy(agent = Some(details))
     c.copy(application = app)
   }
@@ -263,7 +264,7 @@ class FileServiceSpec extends SpecBase {
   }
 
   private def withLetterOfAuthWithId(id: String): Case => Case = c => {
-    val details = AgentDetails(mock[EORIDetails], Some(anAttachmentWithId(id)))
+    val details = AgentDetails(mock(classOf[EORIDetails]), Some(anAttachmentWithId(id)))
     val app     = c.application.copy(agent = Some(details))
     c.copy(application = app)
   }

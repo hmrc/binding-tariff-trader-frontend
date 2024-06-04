@@ -18,13 +18,14 @@ package controllers
 
 import connectors.DataCacheConnector
 import controllers.actions._
+import models.cache.CacheMap
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito.{mock, reset, verify}
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import models.cache.CacheMap
 import views.html.beforeYouStart
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,7 +33,7 @@ import scala.concurrent.Future
 
 class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
-  val mockDataCacheConnector: DataCacheConnector = mock[DataCacheConnector]
+  val mockDataCacheConnector: DataCacheConnector = mock(classOf[DataCacheConnector])
 
   val beforeYouStartView: beforeYouStart = app.injector.instanceOf(classOf[beforeYouStart])
 

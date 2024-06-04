@@ -18,25 +18,26 @@ package controllers
 
 import connectors.DataCacheConnector
 import controllers.actions.FakeIdentifierAction
+import models.cache.CacheMap
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{mock, reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import service.BTAUserService
-import models.cache.CacheMap
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
-  private val dataCache: DataCacheConnector  = mock[DataCacheConnector]
-  private val btaUserService: BTAUserService = mock[BTAUserService]
+  private val dataCache: DataCacheConnector  = mock(classOf[DataCacheConnector])
+  private val btaUserService: BTAUserService = mock(classOf[BTAUserService])
   private implicit val ec: ExecutionContext  = app.injector.instanceOf[ExecutionContext]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
-
-    reset(dataCache, btaUserService)
+    reset(dataCache)
+    reset(btaUserService)
   }
 
   private def controller = new SignOutController(

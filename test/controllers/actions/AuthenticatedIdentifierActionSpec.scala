@@ -17,6 +17,7 @@
 package controllers.actions
 
 import base.SpecBase
+import org.mockito.Mockito.mock
 import play.api.test.Helpers.stubControllerComponents
 import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment, EnrolmentIdentifier, Enrolments}
 
@@ -27,7 +28,7 @@ class AuthenticatedIdentifierActionSpec extends SpecBase {
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
 
   private val controllerComponents = stubControllerComponents()
-  private val mockAuthConnector    = mock[AuthConnector]
+  private val mockAuthConnector    = mock(classOf[AuthConnector])
   private val enrolmentIdentifier  = EnrolmentIdentifier("EORINumber", "identifierValue")
 
   private val enrolment  = Enrolment("HMRC-ATAR-ORG", Seq(enrolmentIdentifier), "state")

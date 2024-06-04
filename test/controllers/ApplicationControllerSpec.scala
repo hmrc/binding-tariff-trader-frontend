@@ -16,15 +16,16 @@
 
 package controllers
 
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.util.ByteString
 import controllers.actions._
 import models.requests.IdentifierRequest
 import models.response.FilestoreResponse
 import models.{Attachment, Case, oCase}
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.util.ByteString
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
-import org.mockito.stubbing.ScalaOngoingStubbing
+import org.mockito.Mockito.{mock, when}
+import org.mockito.stubbing.OngoingStubbing
 import org.scalatest.BeforeAndAfterEach
 import play.api.test.Helpers._
 import service.{CasesService, CountriesService, FileService, PdfService}
@@ -38,9 +39,9 @@ import scala.concurrent.Future.{failed, successful}
 
 class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
-  private val pdfService         = mock[PdfService]
-  private val caseService        = mock[CasesService]
-  private val fileService        = mock[FileService]
+  private val pdfService         = mock(classOf[PdfService])
+  private val caseService        = mock(classOf[CasesService])
+  private val fileService        = mock(classOf[FileService])
   private val countriesService   = new CountriesService
   private val testCase           = oCase.btiCaseExample
   private val testCaseWithRuling = oCase.btiCaseWithDecision
@@ -78,33 +79,33 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       documentNotFoundView
     )
 
-  private def givenTheCaseServiceFindsTheCase(): ScalaOngoingStubbing[Future[Case]] =
+  private def givenTheCaseServiceFindsTheCase(): OngoingStubbing[Future[Case]] =
     when(caseService.getCaseForUser(any[String], any[String])(any[HeaderCarrier])).thenReturn(successful(testCase))
 
-  private def givenTheCaseWithRulingFindsTheCaseWithRuling(): ScalaOngoingStubbing[Future[Case]] =
+  private def givenTheCaseWithRulingFindsTheCaseWithRuling(): OngoingStubbing[Future[Case]] =
     when(caseService.getCaseWithRulingForUser(any[String], any[String])(any[HeaderCarrier]))
       .thenReturn(successful(testCaseWithRuling))
 
-  private def givenTheCaseServiceDoesNotFindTheCase(): ScalaOngoingStubbing[Future[Case]] = {
+  private def givenTheCaseServiceDoesNotFindTheCase(): OngoingStubbing[Future[Case]] = {
     when(caseService.getCaseForUser(any[String], any[String])(any[HeaderCarrier]))
       .thenReturn(failed(new RuntimeException("Case not found")))
     when(caseService.getCaseWithRulingForUser(any[String], any[String])(any[HeaderCarrier]))
       .thenReturn(failed(new RuntimeException("Case not found")))
   }
 
-  private def givenTheFileServiceFindsTheAttachments(): ScalaOngoingStubbing[Future[Seq[FilestoreResponse]]] =
+  private def givenTheFileServiceFindsTheAttachments(): OngoingStubbing[Future[Seq[FilestoreResponse]]] =
     when(fileService.getAttachmentMetadata(any[Case])(any[HeaderCarrier])).thenReturn(successful(Seq.empty))
 
-  private def givenTheFileServiceHaveNoLetterOfAuthority(): ScalaOngoingStubbing[Future[Option[FilestoreResponse]]] =
+  private def givenTheFileServiceHaveNoLetterOfAuthority(): OngoingStubbing[Future[Option[FilestoreResponse]]] =
     when(fileService.getLetterOfAuthority(any[Case])(any[HeaderCarrier])).thenReturn(successful(None))
 
-  private def givenThePdfServiceDecodesTheTokenWith(eori: String): ScalaOngoingStubbing[Option[String]] =
+  private def givenThePdfServiceDecodesTheTokenWith(eori: String): OngoingStubbing[Option[String]] =
     when(pdfService.decodeToken(any[String])).thenReturn(Some(eori))
 
-  private def givenThePdfServiceFailsToDecodeTheToken(): ScalaOngoingStubbing[Option[String]] =
+  private def givenThePdfServiceFailsToDecodeTheToken(): OngoingStubbing[Option[String]] =
     when(pdfService.decodeToken(any[String])).thenReturn(None)
 
-  private def givenTheFileServiceFindsThePdf(): ScalaOngoingStubbing[Future[Option[Source[ByteString, _]]]] = {
+  private def givenTheFileServiceFindsThePdf(): OngoingStubbing[Future[Option[Source[ByteString, _]]]] = {
     when(fileService.getAttachmentMetadata(any[Attachment])(any[HeaderCarrier])).thenReturn(
       successful(Some(FilestoreResponse("id", "some.pdf", "application/pdf", Some("http://localhost:4572/file/id"))))
     )
@@ -112,10 +113,10 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
       .thenReturn(successful(Some(Source.single(ByteString("Some content".getBytes())))))
   }
 
-  private def givenTheFileServiceCannotBeReached(): ScalaOngoingStubbing[Future[Option[FilestoreResponse]]] =
+  private def givenTheFileServiceCannotBeReached(): OngoingStubbing[Future[Option[FilestoreResponse]]] =
     when(fileService.getAttachmentMetadata(any[Attachment])(any[HeaderCarrier])).thenReturn(failed(new Exception))
 
-  private def givenTheFileServiceFindsNoPdf(): ScalaOngoingStubbing[Future[Option[FilestoreResponse]]] =
+  private def givenTheFileServiceFindsNoPdf(): OngoingStubbing[Future[Option[FilestoreResponse]]] =
     when(fileService.getAttachmentMetadata(any[Attachment])(any[HeaderCarrier])).thenReturn(successful(None))
 
   "Application Pdf" must {

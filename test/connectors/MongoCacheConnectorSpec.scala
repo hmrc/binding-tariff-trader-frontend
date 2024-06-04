@@ -17,13 +17,14 @@
 package connectors
 
 import generators.Generators
+import models.cache.CacheMap
 import org.mockito.ArgumentMatchers.{any, refEq}
+import org.mockito.Mockito.{mock, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.libs.json.JsString
 import repositories.SessionRepository
-import models.cache.CacheMap
 import uk.gov.hmrc.mongo.test.MongoSupport
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -36,7 +37,7 @@ class MongoCacheConnectorSpec
     with ScalaFutures
     with MongoSupport {
 
-  val repository: SessionRepository = mock[SessionRepository]
+  val repository: SessionRepository = mock(classOf[SessionRepository])
 
   ".save" must {
 

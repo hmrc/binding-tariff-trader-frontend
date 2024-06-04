@@ -21,6 +21,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import org.mockito.ArgumentMatchers
 import org.mockito.BDDMockito._
+import org.mockito.Mockito.mock
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
 import org.scalatest.BeforeAndAfterEach
@@ -31,7 +32,7 @@ import views.html.components.pagination
 
 class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
 
-  private val goToPage: Int => Call = mock[Int => Call]
+  private val goToPage: Int => Call = mock(classOf[Int => Call])
 
   protected def view(html: Html): Document =
     Jsoup.parse(html.toString())

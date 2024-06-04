@@ -16,10 +16,10 @@
 
 package metrics
 
-import com.codahale.metrics.Timer
-import com.codahale.metrics.MetricRegistry
+import com.codahale.metrics.{MetricRegistry, Timer}
 import org.mockito.ArgumentMatchers._
-import org.mockito.{Mockito, MockitoSugar}
+import org.mockito.Mockito
+import org.mockito.Mockito.{mock, times, verifyNoMoreInteractions, when}
 import org.scalatest.compatible.Assertion
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AsyncWordSpecLike
@@ -29,18 +29,13 @@ import play.api.test.{FakeRequest, Helpers}
 
 import scala.concurrent.Future
 
-class HasMetricsSpec
-    extends AsyncWordSpecLike
-    with Matchers
-    with OptionValues
-    with MockitoSugar
-    with BeforeAndAfterAll {
+class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues with BeforeAndAfterAll {
 
   trait MockHasMetrics { self: HasMetrics =>
-    val timer: Timer.Context                = mock[Timer.Context]
-    val metrics: MetricRegistry             = mock[MetricRegistry]
-    override val localMetrics: LocalMetrics = mock[LocalMetrics]
-    when(localMetrics.startTimer(anyString())) thenReturn timer
+    val timer: Timer.Context                = mock(classOf[Timer.Context])
+    val metrics: MetricRegistry             = mock(classOf[MetricRegistry])
+    override val localMetrics: LocalMetrics = mock(classOf[LocalMetrics])
+    when(localMetrics.startTimer(anyString())).thenReturn(timer)
   }
 
   class TestHasMetrics extends HasMetrics with MockHasMetrics

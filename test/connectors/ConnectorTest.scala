@@ -16,22 +16,22 @@
 
 package connectors
 
-import org.apache.pekko.actor.ActorSystem
 import base.{SpecBase, WireMockObject}
 import com.codahale.metrics.MetricRegistry
 import config.FrontendAppConfig
+import org.apache.pekko.actor.ActorSystem
+import org.mockito.Mockito.{mock, when}
 import org.scalatest.BeforeAndAfterAll
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import utils.UnitSpec
 
 import scala.io.Source
 
 trait ConnectorTest extends SpecBase with BeforeAndAfterAll {
 
-  protected lazy val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
+  protected lazy val mockConfig: FrontendAppConfig = mock(classOf[FrontendAppConfig])
 
   protected lazy val fakeAuthToken           = "AUTH_TOKEN"
   protected lazy val wsClient: WSClient      = injector.instanceOf[WSClient]
@@ -65,7 +65,10 @@ trait ConnectorTest extends SpecBase with BeforeAndAfterAll {
   }
 
   protected def fromResource(path: String): String = {
-    val url = getClass.getClassLoader.getResource(path)
-    Source.fromURL(url, "UTF-8").getLines().mkString
+    val url      = getClass.getClassLoader.getResource(path)
+    val resource = Source.fromURL(url, "UTF-8")
+    val result   = resource.getLines().mkString
+    resource.close()
+    result
   }
 }

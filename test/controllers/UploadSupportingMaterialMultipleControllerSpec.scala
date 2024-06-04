@@ -20,11 +20,13 @@ import connectors.FakeDataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models._
+import models.cache.CacheMap
 import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, UpscanFormTemplate}
 import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito.{mock, reset}
 import org.scalatest.BeforeAndAfterEach
 import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
@@ -34,13 +36,12 @@ import play.api.mvc.request.RequestTarget
 import play.api.test.Helpers._
 import service.FileService
 import uk.gov.hmrc.http.HeaderCarrier
-import models.cache.CacheMap
 import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
-  private val fileService            = mock[FileService]
+  private val fileService            = mock(classOf[FileService])
   private val cacheConnector         = FakeDataCacheConnector
   private val formProvider           = new UploadSupportingMaterialMultipleFormProvider()
   private val request                = fakeGETRequestWithCSRF
