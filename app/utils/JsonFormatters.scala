@@ -22,6 +22,8 @@ import models.requests.NewEventRequest
 import play.api.libs.json._
 import uk.gov.hmrc.play.json.Union
 import viewmodels.{FileView, PdfViewModel}
+
+import scala.language.implicitConversions
 import scala.util.Try
 
 object JsonFormatters {

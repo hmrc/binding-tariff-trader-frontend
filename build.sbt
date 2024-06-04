@@ -2,16 +2,15 @@ import uk.gov.hmrc.gitstamp.GitStampPlugin.*
 
 lazy val appName: String = "binding-tariff-trader-frontend"
 
-ThisBuild / scalaVersion := "2.13.13"
+ThisBuild / scalaVersion := "2.13.14"
 ThisBuild / majorVersion := 0
 
-lazy val root = (project in file("."))
+lazy val microservice = Project(appName, file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(
     gitStampSettings,
-    name := appName,
-    play.sbt.routes.RoutesKeys.routesImport ++= Seq(
+    routesImport ++= Seq(
       "models._",
       "models.Languages._",
       "models.SortField._",
