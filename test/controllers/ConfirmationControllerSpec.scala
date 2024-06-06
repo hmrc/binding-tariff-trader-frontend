@@ -19,12 +19,13 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
+import models.cache.CacheMap
 import models.{Confirmation, oCase}
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito.{mock, reset, verify}
 import pages.{ConfirmationPage, PdfViewPage}
 import play.api.test.Helpers._
 import service.{BTAUserService, CountriesService, PdfService}
-import models.cache.CacheMap
 import utils.JsonFormatters._
 import viewmodels.{ConfirmationHomeUrlViewModel, PdfViewModel}
 import views.html.confirmation
@@ -34,16 +35,21 @@ import scala.concurrent.Future
 
 class ConfirmationControllerSpec extends ControllerSpecBase {
 
-  private val cache             = mock[DataCacheConnector]
-  private val cacheMap          = mock[CacheMap]
-  private val pdfService        = mock[PdfService]
+  private val cache             = mock(classOf[DataCacheConnector])
+  private val cacheMap          = mock(classOf[CacheMap])
+  private val pdfService        = mock(classOf[PdfService])
   private val pdfViewModel      = oCase.pdf
   private val countriesService  = new CountriesService
-  private val btaUserService    = mock[BTAUserService]
-  private val applicationConfig = mock[FrontendAppConfig]
+  private val btaUserService    = mock(classOf[BTAUserService])
+  private val applicationConfig = mock(classOf[FrontendAppConfig])
 
-  override def beforeEach(): Unit =
-    reset(cache, cacheMap, pdfService, btaUserService, applicationConfig)
+  override def beforeEach(): Unit = {
+    reset(cache)
+    reset(cacheMap)
+    reset(pdfService)
+    reset(btaUserService)
+    reset(applicationConfig)
+  }
 
   val confirmationView: confirmation = app.injector.instanceOf(classOf[confirmation])
 

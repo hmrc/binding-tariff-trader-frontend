@@ -16,14 +16,15 @@
 
 package connectors
 
-import org.apache.pekko.util.ByteString
 import base.WireMockObject.wireMockUrl
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, FilestoreResponse, UpscanFormTemplate}
 import models.{Attachment, FileAttachment}
+import org.apache.pekko.util.ByteString
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito.mock
 import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -94,7 +95,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
     "Connector 'GET' one" should {
       "handle 404" in {
-        val att = mock[Attachment]
+        val att = mock(classOf[Attachment])
         given(att.id) willReturn "id"
 
         WireMock.stubFor(
@@ -111,7 +112,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
       }
 
       "handle response with mandatory fields only" in {
-        val att = mock[Attachment]
+        val att = mock(classOf[Attachment])
         given(att.id) willReturn "id"
 
         WireMock.stubFor(

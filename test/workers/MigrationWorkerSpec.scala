@@ -20,7 +20,7 @@ import com.codahale.metrics.MetricRegistry
 import models._
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito._
-import org.mockito.MockitoSugar
+import org.mockito.Mockito.{mock, verify}
 import org.scalatest.BeforeAndAfterAll
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -31,24 +31,23 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.mongo.test.MongoSupport
 import utils.UnitSpec
+
 import java.time.{Clock, Instant, ZoneOffset, ZonedDateTime}
 import scala.collection.immutable.ListMap
 import scala.concurrent.Future
 import scala.concurrent.duration.{Duration, DurationInt}
 
-class MigrationWorkerSpec extends UnitSpec with MockitoSugar with BeforeAndAfterAll with MongoSupport { self =>
+class MigrationWorkerSpec extends UnitSpec with BeforeAndAfterAll with MongoSupport { self =>
 
   val lockId                          = "lockId"
   val ttl: Duration                   = 1000.millis
-  val repository: MongoLockRepository = mock[MongoLockRepository]
-
-  //val lockRepoProvider = new LockRepoProvider(repository)
+  val repository: MongoLockRepository = mock(classOf[MongoLockRepository])
 
   val now: Instant              = Instant.now()
   val clock: Clock              = Clock.fixed(now, ZoneOffset.UTC)
-  val caseService: CasesService = mock[CasesService]
-  val fileService: FileService  = mock[FileService]
-  val pdfService: PdfService    = mock[PdfService]
+  val caseService: CasesService = mock(classOf[CasesService])
+  val fileService: FileService  = mock(classOf[FileService])
+  val pdfService: PdfService    = mock(classOf[PdfService])
 
   val configuredApp: GuiceApplicationBuilder => GuiceApplicationBuilder =
     _.overrides(

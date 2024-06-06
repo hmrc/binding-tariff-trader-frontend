@@ -22,15 +22,16 @@ import connectors.PdfGeneratorServiceConnector
 import models.PdfFile
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito.mock
 import play.twirl.api.Html
 
 import scala.concurrent.Future._
 
 class PdfServiceSpec extends SpecBase {
 
-  private val pdfHtml           = mock[Html]
-  private val config            = mock[FrontendAppConfig]
-  private val connector         = mock[PdfGeneratorServiceConnector]
+  private val pdfHtml           = mock(classOf[Html])
+  private val config            = mock(classOf[FrontendAppConfig])
+  private val connector         = mock(classOf[PdfGeneratorServiceConnector])
   private val connectorResponse = PdfFile("Some content".getBytes)
 
   private def service = new PdfService(connector, config)

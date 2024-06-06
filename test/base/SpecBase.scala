@@ -16,11 +16,11 @@
 
 package base
 
-import org.apache.pekko.stream.Materializer
 import config.FrontendAppConfig
 import models.UserAnswers
+import models.cache.CacheMap
 import models.requests.{DataRequest, IdentifierRequest, OptionalDataRequest}
-import org.mockito.MockitoSugar
+import org.apache.pekko.stream.Materializer
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -31,10 +31,9 @@ import play.api.libs.Files.TemporaryFileCreator
 import play.api.mvc.{AnyContent, AnyContentAsEmpty, MessagesControllerComponents, Request}
 import play.api.test.CSRFTokenHelper.CSRFFRequestHeader
 import play.api.test.{FakeHeaders, FakeRequest}
-import models.cache.CacheMap
 import utils.UnitSpec
 
-trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with MockitoSugar with BeforeAndAfterEach {
+trait SpecBase extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach {
 
   val baseConfigBuilder: GuiceApplicationBuilder = GuiceApplicationBuilder()
     .configure(

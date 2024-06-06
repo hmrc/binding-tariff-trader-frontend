@@ -19,11 +19,11 @@ package viewmodels
 import models.SortDirection.{ASCENDING, DESCENDING}
 import models.SortField.{CREATED_DATE, GOODS_NAME, REFERENCE}
 import models.{Paged, SearchPagination, Sort, oCase}
-import org.mockito.MockitoSugar
+import org.mockito.Mockito.{mock, when}
 import play.api.mvc.Request
 import utils.UnitSpec
 
-class DashboardSpec extends UnitSpec with MockitoSugar {
+class DashboardSpec extends UnitSpec {
 
   "columnSortUrlFor" when {
     "supplied with a new column to sort by whose default ordering is ascending" should {
@@ -89,7 +89,7 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
   "getSortBy" when {
     "supplied with a request containing a valid sortBy param value" should {
       "result in the expected SortField" in {
-        implicit val request: Request[_] = mock[Request[_]]
+        implicit val request: Request[_] = mock(classOf[Request[_]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("sortBy"))).thenReturn(Some("application.goodName"))
 
@@ -99,7 +99,7 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
 
     "supplied with a request containing an invalid sortBy param value" should {
       "throw NoSuchElementException when attempting to create SortField" in {
-        implicit val request: Request[_] = mock[Request[_]]
+        implicit val request: Request[_] = mock(classOf[Request[_]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("sortBy")))
           .thenReturn(Some("application.goodsName"))
@@ -112,7 +112,7 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
 
     "supplied with a request containing no sortBy param" should {
       "result in None" in {
-        implicit val request: Request[_] = mock[Request[_]]
+        implicit val request: Request[_] = mock(classOf[Request[_]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("sortBy"))).thenReturn(None)
 
@@ -124,7 +124,7 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
   "getSortDirection" when {
     "supplied with a request containing a valid order param value" should {
       "result in the expected SortDirection" in {
-        implicit val request: Request[_] = mock[Request[_]]
+        implicit val request: Request[_] = mock(classOf[Request[_]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("order"))).thenReturn(Some("asc"))
 
@@ -134,7 +134,7 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
 
     "supplied with a request containing an invalid order param value" should {
       "throw NoSuchElementException when attempting to create SortDirection" in {
-        implicit val request: Request[_] = mock[Request[_]]
+        implicit val request: Request[_] = mock(classOf[Request[_]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("order"))).thenReturn(Some("ascending"))
 
@@ -146,7 +146,7 @@ class DashboardSpec extends UnitSpec with MockitoSugar {
 
     "supplied with a request containing no order param" should {
       "result in None" in {
-        implicit val request: Request[_] = mock[Request[_]]
+        implicit val request: Request[_] = mock(classOf[Request[_]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("order"))).thenReturn(None)
 

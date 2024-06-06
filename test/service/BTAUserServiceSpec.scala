@@ -18,14 +18,15 @@ package service
 
 import base.SpecBase
 import connectors.DataCacheConnector
-import play.api.libs.json.Json
 import models.cache.CacheMap
+import org.mockito.Mockito._
+import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class BTAUserServiceSpec extends SpecBase {
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
-  private val dataCacheConnector    = mock[DataCacheConnector]
+  private val dataCacheConnector    = mock(classOf[DataCacheConnector])
 
   val keyPrefix          = "btaUser-"
   val requestId          = "testRequestId"

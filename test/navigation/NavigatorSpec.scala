@@ -20,13 +20,18 @@ import base.SpecBase
 import controllers.routes
 import models._
 import org.mockito.ArgumentMatchers._
+import org.mockito.Mockito.{mock, reset, when}
 import pages._
 import play.api.libs.json.Reads
 import play.api.mvc.Call
 
 class NavigatorSpec extends SpecBase {
 
-  val navigator = new Navigator(frontendAppConfig)
+  val navigator: Navigator         = new Navigator(frontendAppConfig)
+  val mockUserAnswers: UserAnswers = mock(classOf[UserAnswers])
+
+  override def beforeEach(): Unit =
+    reset(mockUserAnswers)
 
   "Navigator" when {
 
@@ -36,19 +41,18 @@ class NavigatorSpec extends SpecBase {
         case object UnknownPage extends Page {
           def route(mode: Mode): Call = Call("GET", "/unknown")
         }
-        navigator.nextPage(UnknownPage, NormalMode)(mock[UserAnswers]) shouldBe routes.IndexController
+        navigator.nextPage(UnknownPage, NormalMode)(mockUserAnswers) shouldBe routes.IndexController
           .getApplicationsAndRulings(1, None, None)
       }
 
       "Go to Before you start from index when required" in {
 
-        navigator.nextPage(IndexPage, NormalMode)(mock[UserAnswers]) shouldBe routes.BeforeYouStartController
+        navigator.nextPage(IndexPage, NormalMode)(mockUserAnswers) shouldBe routes.BeforeYouStartController
           .onPageLoad()
 
       }
 
       "go to ProvideGoodsDescriptionPage after ProvideGoodsName page" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(ProvideGoodsNamePage)).thenReturn(Some("goods name"))
 
@@ -57,7 +61,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to AddConfidentialInformationPage after ProvideGoodsDescriptionPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(ProvideGoodsDescriptionPage)).thenReturn(Some("goods description"))
 
@@ -66,7 +69,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to AddSupportingDocumentsPage when no is selected in AddConfidentialInformation page" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddConfidentialInformationPage)).thenReturn(Some(false))
 
@@ -75,7 +77,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to ProvideConfidentialInformation when yes is selected in AddConfidentialInformation page" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddConfidentialInformationPage)).thenReturn(Some(true))
 
@@ -84,7 +85,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to AddSupportingDocumentsPage after entering confidential info in ProvideConfidentialInformation page" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(ProvideConfidentialInformationPage)).thenReturn(Some("confidential information"))
 
@@ -93,7 +93,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to UploadSupportingMaterialMultiplePage when user selects yes to add a file on AddSupportingDocumentsPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddSupportingDocumentsPage)).thenReturn(Some(true))
 
@@ -102,7 +101,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to AreYouSendingSamples when user selects no to adding files on AddSupportingDocumentsPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddSupportingDocumentsPage)).thenReturn(Some(false))
 
@@ -111,7 +109,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to UploadSupportingMaterialMultiplePage when user selects yes to add another file on SupportingMaterialFileListPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(true))
 
@@ -120,7 +117,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to MakeFileConfidentialPage after uploading a file on UploadSupportingMaterialMultiplePage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(UploadSupportingMaterialMultiplePage))
           .thenReturn(Some(Seq(FileAttachment("id", "foo.jpg", "image/jpeg", 1L))))
@@ -130,7 +126,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to SupportingMaterialFileListPage after entering an answer on MakeFileConfidentialPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(MakeFileConfidentialPage)).thenReturn(Some(Map("id" -> true)))
 
@@ -139,7 +134,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to AreYouSendingSamples page when user selects no to adding another file on SupportingMaterialFileListPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(false))
 
@@ -148,7 +142,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to IsSampleHazardous page when user selects YES from AreYouSendingSamplesPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AreYouSendingSamplesPage)).thenReturn(Some(true))
 
@@ -157,17 +150,16 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to ReturnSamplesPage from IsSampleHazardousPage" in {
-        navigator.nextPage(IsSampleHazardousPage, NormalMode)(mock[UserAnswers]) shouldBe
+        navigator.nextPage(IsSampleHazardousPage, NormalMode)(mockUserAnswers) shouldBe
           routes.ReturnSamplesController.onPageLoad(NormalMode)
       }
 
       "redirect to CommodityCodeBestMatchPage from ReturnSamplesPage" in {
-        navigator.nextPage(ReturnSamplesPage, NormalMode)(mock[UserAnswers]) shouldBe
+        navigator.nextPage(ReturnSamplesPage, NormalMode)(mockUserAnswers) shouldBe
           routes.CommodityCodeBestMatchController.onPageLoad(NormalMode)
       }
 
       "redirect to CommodityCodeBestMatchPage page when user selects NO from AreYouSendingSamples page" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AreYouSendingSamplesPage)).thenReturn(Some(false))
 
@@ -176,7 +168,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to CommodityCodeDigitsPage page when user selects YES from CommodityCodeBestMatchPage page" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(CommodityCodeBestMatchPage)).thenReturn(Some(true))
 
@@ -185,7 +176,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to LegalChallengePage page when user selects NO from CommodityCodeBestMatchPage page" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(CommodityCodeBestMatchPage)).thenReturn(Some(false))
 
@@ -194,14 +184,12 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to LegalChallengePage page from CommodityCodeDigitsPage page" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         navigator.nextPage(CommodityCodeDigitsPage, NormalMode)(mockUserAnswers) shouldBe
           routes.LegalChallengeController.onPageLoad(NormalMode)
       }
 
       "redirect to LegalChallengeDetailsPage page when user selects YES from LegalChallengePage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(LegalChallengePage)).thenReturn(Some(true))
 
@@ -210,7 +198,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to PreviousBTIRulingPage when user selects NO from LegalChallengePage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(LegalChallengePage)).thenReturn(Some(false))
 
@@ -219,14 +206,12 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to PreviousBTIRulingPage page from LegalChallengeDetailsPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         navigator.nextPage(LegalChallengeDetailsPage, NormalMode)(mockUserAnswers) shouldBe
           routes.PreviousBTIRulingController.onPageLoad(NormalMode)
       }
 
       "redirect to ProvideBTIReferencePage when user selects YES from PreviousBTIRulingPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(PreviousBTIRulingPage)).thenReturn(Some(true))
 
@@ -235,12 +220,11 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to SimilarItemCommodityCodePage from ProvideBTIReferencePage" in {
-        navigator.nextPage(ProvideBTIReferencePage, NormalMode)(mock[UserAnswers]) shouldBe
+        navigator.nextPage(ProvideBTIReferencePage, NormalMode)(mockUserAnswers) shouldBe
           routes.SimilarItemCommodityCodeController.onPageLoad(NormalMode)
       }
 
       "redirect to SimilarItemCommodityCodePage when user selects NO from PreviousBTIRulingPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(PreviousBTIRulingPage)).thenReturn(Some(false))
 
@@ -249,7 +233,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to CommodityCodeRulingReferencePage when user selects YES from SimilarItemCommodityCodePage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SimilarItemCommodityCodePage)).thenReturn(Some(true))
 
@@ -258,12 +241,11 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to AddAnotherRulingPage from CommodityCodeRulingReferencePage" in {
-        navigator.nextPage(CommodityCodeRulingReferencePage, NormalMode)(mock[UserAnswers]) shouldBe
+        navigator.nextPage(CommodityCodeRulingReferencePage, NormalMode)(mockUserAnswers) shouldBe
           routes.AddAnotherRulingController.onPageLoad(NormalMode)
       }
 
       "redirect to RegisteredAddressForEoriPage when user selects NO from SimilarItemCommodityCodePage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SimilarItemCommodityCodePage)).thenReturn(Some(false))
 
@@ -272,7 +254,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect back to CommodityCodeRulingReferencePage when user selects yes to add another ruling on AddAnotherRulingPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddAnotherRulingPage)).thenReturn(Some(true))
 
@@ -281,7 +262,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to RegisteredAddressForEoriPage when user selects no to adding another ruling from AddAnotherRulingPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddAnotherRulingPage)).thenReturn(Some(false))
 
@@ -290,22 +270,21 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to EnterContactDetailsPage from RegisteredAddressForEoriPage" in {
-        navigator.nextPage(RegisteredAddressForEoriPage, NormalMode)(mock[UserAnswers]) shouldBe
+        navigator.nextPage(RegisteredAddressForEoriPage, NormalMode)(mockUserAnswers) shouldBe
           routes.EnterContactDetailsController.onPageLoad(NormalMode)
       }
 
       "redirect to CheckYourAnswersPage from EnterContactDetailsPage" in {
-        navigator.nextPage(EnterContactDetailsPage, NormalMode)(mock[UserAnswers]) shouldBe
+        navigator.nextPage(EnterContactDetailsPage, NormalMode)(mockUserAnswers) shouldBe
           routes.CheckYourAnswersController.onPageLoad()
       }
 
       "redirect to ConfirmationPage from CheckYourAnswersPage" in {
-        navigator.nextPage(CheckYourAnswersPage, NormalMode)(mock[UserAnswers]) shouldBe
+        navigator.nextPage(CheckYourAnswersPage, NormalMode)(mockUserAnswers) shouldBe
           routes.ConfirmationController.onPageLoad()
       }
 
       "redirect to self if no answers were entered" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(any[DataPage[String]])(any[Reads[String]])).thenReturn(None)
 
@@ -335,12 +314,11 @@ class NavigatorSpec extends SpecBase {
         case object UnknownPage extends Page {
           def route(mode: Mode): Call = Call("GET", "/unknown")
         }
-        navigator.nextPage(UnknownPage, CheckMode)(mock[UserAnswers]) shouldBe routes.CheckYourAnswersController
+        navigator.nextPage(UnknownPage, CheckMode)(mockUserAnswers) shouldBe routes.CheckYourAnswersController
           .onPageLoad()
       }
 
       "go to ProvideConfidentialInformationPage when yes is selected in AddConfidentialInformationPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddConfidentialInformationPage)).thenReturn(Some(true))
 
@@ -349,7 +327,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "return to CheckYourAnswersPage when no is selected in AddConfidentialInformationPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddConfidentialInformationPage)).thenReturn(Some(false))
 
@@ -358,7 +335,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to UploadSupportingMaterialMultiplePage when user selects yes to add a file on AddSupportingDocumentsPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddSupportingDocumentsPage)).thenReturn(Some(true))
 
@@ -367,7 +343,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to CheckYourAnswersPage when user selects no to adding files on AddSupportingDocumentsPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddSupportingDocumentsPage)).thenReturn(Some(false))
 
@@ -376,7 +351,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to UploadSupportingMaterialMultiplePage when user selects yes to add another file on SupportingMaterialFileListPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(true))
 
@@ -385,7 +359,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to MakeFileConfidentialPage after uploading a file on UploadSupportingMaterialMultiplePage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(UploadSupportingMaterialMultiplePage))
           .thenReturn(Some(Seq(FileAttachment("id", "foo.jpg", "image/jpeg", 1L))))
@@ -395,7 +368,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to SupportingMaterialFileListPage after entering an answer on MakeFileConfidentialPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(MakeFileConfidentialPage)).thenReturn(Some(Map("id" -> true)))
 
@@ -404,7 +376,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "redirect to CheckYourAnswersPage when user selects no to adding another file on SupportingMaterialFileListPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SupportingMaterialFileListPage)).thenReturn(Some(false))
 
@@ -413,7 +384,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to IsSampleHazardousPage when yes is selected in AreYouSendingSamplesPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AreYouSendingSamplesPage)).thenReturn(Some(true))
 
@@ -422,7 +392,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to ReturnSamplesPage when information is provided on IsSampleHazardousPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(IsSampleHazardousPage)).thenReturn(Some(true))
 
@@ -438,7 +407,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go back to CheckYourAnswersPage when no is selected in AreYouSendingSamplesPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AreYouSendingSamplesPage)).thenReturn(Some(false))
 
@@ -447,7 +415,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to CommodityCodeDigitsPage when yes is selected in CommodityCodeBestMatchPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(CommodityCodeBestMatchPage)).thenReturn(Some(true))
 
@@ -456,7 +423,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go back to CheckYourAnswersPage when no is selected in CommodityCodeBestMatchPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(CommodityCodeBestMatchPage)).thenReturn(Some(false))
 
@@ -465,7 +431,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to LegalChallengeDetailsPage when yes is selected in LegalChallengePage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(LegalChallengePage)).thenReturn(Some(true))
 
@@ -474,7 +439,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go back to CheckYourAnswersPage when no is selected in LegalChallengePage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(LegalChallengePage)).thenReturn(Some(false))
 
@@ -483,7 +447,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to ProvideBTIReferencePage when yes is selected in PreviousBTIRulingPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(PreviousBTIRulingPage)).thenReturn(Some(true))
 
@@ -492,7 +455,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go back to CheckYourAnswersPage when no is selected in PreviousBTIRulingPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(PreviousBTIRulingPage)).thenReturn(Some(false))
 
@@ -501,7 +463,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to CommodityCodeRulingReferencePage when yes is selected in SimilarItemCommodityCodePage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SimilarItemCommodityCodePage)).thenReturn(Some(true))
 
@@ -510,7 +471,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go back to CheckYourAnswersPage when no is selected in SimilarItemCommodityCodePage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(SimilarItemCommodityCodePage)).thenReturn(Some(false))
 
@@ -519,12 +479,11 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go to AddAnotherRulingPage from CommodityCodeRulingReferencePage" in {
-        navigator.nextPage(CommodityCodeRulingReferencePage, CheckMode)(mock[UserAnswers]) shouldBe
+        navigator.nextPage(CommodityCodeRulingReferencePage, CheckMode)(mockUserAnswers) shouldBe
           routes.AddAnotherRulingController.onPageLoad(CheckMode)
       }
 
       "go to CommodityCodeRulingReferencePage when yes is selected to add another ruling on AddAnotherRulingPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddAnotherRulingPage)).thenReturn(Some(true))
 
@@ -533,7 +492,6 @@ class NavigatorSpec extends SpecBase {
       }
 
       "go back to CheckYourAnswersPage when no is selected to stop adding rulings on AddAnotherRulingPage" in {
-        val mockUserAnswers = mock[UserAnswers]
 
         when(mockUserAnswers.get(AddAnotherRulingPage)).thenReturn(Some(false))
 

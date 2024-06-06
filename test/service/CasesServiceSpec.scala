@@ -24,6 +24,7 @@ import models.requests.NewEventRequest
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito.{mock, never, verify}
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -32,14 +33,14 @@ import scala.concurrent.Future
 
 class CasesServiceSpec extends SpecBase {
 
-  private val existingCase   = mock[Case]
-  private val newCase        = mock[NewCaseRequest]
-  private val pagination     = mock[Pagination]
-  private val application    = mock[Application]
-  private val contact        = mock[Contact]
-  private val sort           = mock[Sort]
-  private val caseConnector  = mock[BindingTariffClassificationConnector]
-  private val emailConnector = mock[EmailConnector]
+  private val existingCase   = mock(classOf[Case])
+  private val newCase        = mock(classOf[NewCaseRequest])
+  private val pagination     = mock(classOf[Pagination])
+  private val application    = mock(classOf[Application])
+  private val contact        = mock(classOf[Contact])
+  private val sort           = mock(classOf[Sort])
+  private val caseConnector  = mock(classOf[BindingTariffClassificationConnector])
+  private val emailConnector = mock(classOf[EmailConnector])
   private val traderEori     = "eoriTrader"
   private val agentEori      = "eoriAgent"
   private val caseRef        = "123114"
@@ -155,7 +156,7 @@ class CasesServiceSpec extends SpecBase {
     "create an event" in {
 
       given(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier]))
-        .willReturn(Future.successful(mock[Event]))
+        .willReturn(Future.successful(mock(classOf[Event])))
 
       await(service.addCaseCreatedEvent(atar, operator)(HeaderCarrier())) shouldBe ()
 

@@ -21,6 +21,7 @@ import models._
 import models.requests.DataRequest
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
+import org.mockito.Mockito.mock
 import pages._
 import play.api.libs.json.Reads
 import play.api.test.FakeRequest
@@ -30,7 +31,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
 
   val countriesService = new CountriesService
 
-  private val userAnswers = mock[UserAnswers]
+  private val userAnswers = mock(classOf[UserAnswers])
   private val checkHelper = new CheckYourAnswersHelper(
     userAnswers,
     countriesService.getAllCountriesById
@@ -128,14 +129,14 @@ class CheckYourAnswersHelperSpec extends SpecBase {
       }
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check disabled" in {
-        val requestWithoutEori = DataRequest(FakeRequest(), "", None, mock[UserAnswers])
+        val requestWithoutEori = DataRequest(FakeRequest(), "", None, mock(classOf[UserAnswers]))
         given(userAnswers.get(RegisteredAddressForEoriPage))
           .willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
         checkHelper.registeredAddressForEori(requestWithoutEori).get.answer shouldBe "eori\nf1\nf2\nf3\nf4\nIreland"
       }
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check enabled" in {
-        val requestWithEori = DataRequest(FakeRequest(), "", Some("eori"), mock[UserAnswers])
+        val requestWithEori = DataRequest(FakeRequest(), "", Some("eori"), mock(classOf[UserAnswers]))
         given(userAnswers.get(RegisteredAddressForEoriPage))
           .willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
         checkHelper.registeredAddressForEori(requestWithEori).get.answer shouldBe "f1\nf2\nf3\nf4\nIreland"

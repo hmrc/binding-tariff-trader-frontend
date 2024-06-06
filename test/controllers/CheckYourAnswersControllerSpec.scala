@@ -21,8 +21,10 @@ import connectors.FakeDataCacheConnector
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeDataRetrievalAction, FakeIdentifierAction}
 import mapper.CaseRequestMapper
 import models._
+import models.cache.CacheMap
 import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers.{any, refEq}
+import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import pages.{CheckYourAnswersPage, MakeFileConfidentialPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
@@ -32,7 +34,6 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
-import models.cache.CacheMap
 import viewmodels.AnswerSection
 import views.html.check_your_answers
 
@@ -45,17 +46,17 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private lazy val error = new IllegalStateException("expected error")
   private val testAnswer = "answer"
 
-  private val mapper              = mock[CaseRequestMapper]
-  private val newCaseReq          = mock[NewCaseRequest]
+  private val mapper              = mock(classOf[CaseRequestMapper])
+  private val newCaseReq          = mock(classOf[NewCaseRequest])
   private val attachment          = FileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
   private val publishedAttachment = PublishedFileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
   private val applicationPdf      = FileAttachment("id", "file.pdf", "application/pdf", 0L)
-  private val createdCase         = mock[Case]
-  private val auditService        = mock[AuditService]
-  private val casesService        = mock[CasesService]
-  private val pdfService          = mock[PdfService]
-  private val fileService         = mock[FileService]
-  private val btiApp              = mock[Application]
+  private val createdCase         = mock(classOf[Case])
+  private val auditService        = mock(classOf[AuditService])
+  private val casesService        = mock(classOf[CasesService])
+  private val pdfService          = mock(classOf[PdfService])
+  private val fileService         = mock(classOf[FileService])
+  private val btiApp              = mock(classOf[Application])
 
   private val countriesService = new CountriesService
 
@@ -85,7 +86,8 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
   override protected def afterEach(): Unit = {
     super.afterEach()
-    reset(casesService, auditService)
+    reset(casesService)
+    reset(auditService)
   }
 
   val checkYourAnswersView: check_your_answers = app.injector.instanceOf(classOf[check_your_answers])

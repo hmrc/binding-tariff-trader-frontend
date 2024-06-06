@@ -129,7 +129,7 @@ trait BooleanViewBehaviours[T] extends QuestionViewBehaviours[T] {
     createView: Form[T] => HtmlFormat.Appendable,
     choiceFrom: T => Boolean,
     answer: T,
-    idPrefix: String = "value"
+    idPrefix: String
   ): Unit = {
 
     "have only the correct value checked" in {

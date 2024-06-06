@@ -17,18 +17,19 @@
 package controllers
 
 import controllers.actions.{FakeIdentifierAction, IdentifierAction}
+import models.cache.CacheMap
+import org.mockito.Mockito.{mock, reset, when}
 import play.api.Application
 import play.api.http.Status.SEE_OTHER
 import play.api.inject.bind
 import play.api.test.Helpers.{defaultAwaitTimeout, redirectLocation}
 import service.BTAUserService
-import models.cache.CacheMap
 
 import scala.concurrent.Future
 
 class BTARedirectControllerSpec extends ControllerSpecBase {
 
-  val btaUserService: BTAUserService = mock[BTAUserService]
+  val btaUserService: BTAUserService = mock(classOf[BTAUserService])
   val cacheMap                       = new CacheMap("testId", Map.empty)
   val testHost                       = "testHost"
   val testUrl                        = s"$testHost/business-account"
