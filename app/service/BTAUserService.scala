@@ -37,8 +37,10 @@ class BTAUserService @Inject() (dataCacheConnector: DataCacheConnector)(implicit
 
   def isBTAUser(requestId: String): Future[Boolean] =
     dataCacheConnector.fetch(cacheMapId(requestId)).map {
-      case Some(cacheMap) => cacheMap.getEntry[Boolean](isBTAUser).getOrElse(false)
-      case None           => false
+      case Some(cacheMap) =>
+        cacheMap.getEntry[Boolean](isBTAUser).getOrElse(false)
+      case None =>
+        false
     }
 
   def remove(requestId: String): Future[Boolean] =

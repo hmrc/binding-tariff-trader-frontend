@@ -12,6 +12,7 @@ GET         /countries-json                                            controlle
 
 GET         /                                                          controllers.Default.redirect(to = controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url)
 GET         /applications-and-rulings                                  controllers.IndexController.getApplicationsAndRulings(page: Int ?= 1, sortBy: Option[SortField], order: Option[SortDirection])
+POST        /applications-and-rulings                                  controllers.IndexController.onSubmit()
 
 GET         /bta-applications-and-rulings                              controllers.BTARedirectController.applicationsAndRulings
 GET         /bta-information-you-need                                  controllers.BTARedirectController.informationYouNeed
@@ -112,6 +113,7 @@ GET         /check-your-answers                                        controlle
 POST        /check-your-answers                                        controllers.CheckYourAnswersController.onSubmit()
 
 GET         /application-complete                                      controllers.ConfirmationController.onPageLoad()
+POST        /application-complete                                      controllers.ConfirmationController.onSubmit()
 
 GET         /applications/:reference                                   controllers.ApplicationController.viewApplication(reference: String, token: Option[String] ?= None)
 GET         /applications/:reference/pdf                               controllers.ApplicationController.applicationPdf(reference: String, token: Option[String] ?= None)

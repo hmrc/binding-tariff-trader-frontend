@@ -16,6 +16,7 @@
 
 package controllers
 
+import connectors.DataCacheConnector
 import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import models.CaseStatus.CaseStatus
 import models._
@@ -25,6 +26,7 @@ import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers._
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.{mock, reset}
+import pages.ConfirmationPage
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import service.{BTAUserService, CasesService}
@@ -36,6 +38,7 @@ import scala.concurrent.Future
 
 class IndexControllerSpec extends ControllerSpecBase {
 
+  private val cache                          = mock(classOf[DataCacheConnector])
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
   private val casesService                   = mock(classOf[CasesService])
   private val btaUserService                 = mock(classOf[BTAUserService])
@@ -59,57 +62,108 @@ class IndexControllerSpec extends ControllerSpecBase {
       identifier,
       new FakeNavigator(nextPageRoute),
       casesService,
+      getEmptyCacheMap,
+      cache,
       cc,
       btaUserService,
       accountDashboardStatusesView
     )
 
-  "Index Controller - Get Applications and Rulings" should {
+  "Index Controller - Get Applications and Rulings" when {
 
-    "return the correct view for a load applications and rulings" in {
-      val request = fakeRequestWithIdentifier()
+    ".onPageLoad" should {
 
-      given(
-        casesService
-          .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination()), any[Sort])(any[HeaderCarrier])
-      ).willReturn(Future.successful(Paged(Seq(btiCaseExample), pageIndex, pageSize, resultCount)))
-      given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
+      "return the correct view for a load applications and rulings" in {
 
-      val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
-
-      status(result)          shouldBe OK
-      contentAsString(result) should include("applications-rulings-list-table")
-    }
-
-    "redirect to an error page" when {
-      "there is an issue fetching data from the btaUserService" in {
         val request = fakeRequestWithIdentifier()
 
         given(
           casesService
             .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination()), any[Sort])(any[HeaderCarrier])
         ).willReturn(Future.successful(Paged(Seq(btiCaseExample), pageIndex, pageSize, resultCount)))
-        given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.failed(new RuntimeException("error")))
+        given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
 
         val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
 
-        status(result)           shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
+        status(result)          shouldBe OK
+        contentAsString(result) should include("applications-rulings-list-table")
       }
-    }
 
-    "redirect to BeforeYouStart when EORI unavailable" in {
-      val result = controller(givenUserDoesntHaveAnEORI)
-        .getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
+      "redirect to an error page" when {
 
-      status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
-    }
+        "there is an issue fetching data from the btaUserService" in {
+          val request = fakeRequestWithIdentifier()
 
-    for (caseStatus <- CaseStatus.values.toSeq) {
-      s"return the correct view with correct applications and rulings status in table for case status '$caseStatus'" in {
+          given(
+            casesService
+              .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination()), any[Sort])(any[HeaderCarrier])
+          ).willReturn(Future.successful(Paged(Seq(btiCaseExample), pageIndex, pageSize, resultCount)))
+          given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.failed(new RuntimeException("error")))
+
+          val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
+
+          status(result)           shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
+        }
+      }
+
+      "redirect to BeforeYouStart when EORI unavailable" in {
+
+        val result = controller(givenUserDoesntHaveAnEORI)
+          .getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
+
+        status(result)           shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
+      }
+
+      for (caseStatus <- CaseStatus.values.toSeq) {
+
+        s"return the correct view with correct applications and rulings status in table for case status '$caseStatus'" in {
+
+          val request  = fakeRequestWithIdentifier()
+          val testCase = btiCaseWithDecision.copy(status = caseStatus)
+
+          given(
+            casesService
+              .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination()), any[Sort])(any[HeaderCarrier])
+          ).willReturn(Future.successful(Paged(Seq(testCase), pageIndex, pageSize, resultCount)))
+          given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
+
+          val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
+
+          status(result) shouldBe OK
+
+          val doc          = Jsoup.parse(contentAsString(result))
+          val actualStatus = doc.getElementById("applications-rulings-list-row-0-status").text().trim
+
+          val expectedStatus = testCase.status match {
+            case CaseStatus.NEW =>
+              messages("case.application.status.submitted")
+            case CaseStatus.OPEN | CaseStatus.SUSPENDED =>
+              messages("case.application.status.inProgress")
+            case CaseStatus.REFERRED =>
+              messages("case.application.status.infoRequested")
+            case CaseStatus.SUPPRESSED | CaseStatus.REJECTED =>
+              messages("case.application.status.rejected")
+            case CaseStatus.COMPLETED if testCase.hasActiveDecision =>
+              if (testCase.daysUntilExpiry.get > 120) {
+                messages("case.application.status.approvedRuling")
+              } else {
+                messages("case.application.status.approvedRulingExpiring", testCase.daysUntilExpiry.get)
+              }
+            case CaseStatus.COMPLETED if testCase.hasExpiredDecision =>
+              messages("case.application.ruling.status.expired")
+            case CaseStatus.CANCELLED =>
+              messages("case.application.status.cancelled")
+            case _ => ""
+          }
+          actualStatus shouldBe expectedStatus
+        }
+      }
+
+      "return the correct view with View ruling link for COMPLETED cases" in {
         val request  = fakeRequestWithIdentifier()
-        val testCase = btiCaseWithDecision.copy(status = caseStatus)
+        val testCase = btiCaseWithDecision.copy(status = CaseStatus.COMPLETED)
 
         given(
           casesService
@@ -117,58 +171,39 @@ class IndexControllerSpec extends ControllerSpecBase {
         ).willReturn(Future.successful(Paged(Seq(testCase), pageIndex, pageSize, resultCount)))
         given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
 
-        val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
+        val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
 
         status(result) shouldBe OK
 
-        val doc          = Jsoup.parse(contentAsString(result))
-        val actualStatus = doc.getElementById("applications-rulings-list-row-0-status").text().trim
+        val doc            = Jsoup.parse(contentAsString(result))
+        val actualLinkText = doc.getElementById("applications-rulings-list-row-0-view-rulings-link").text().trim
 
-        val expectedStatus = testCase.status match {
-          case CaseStatus.NEW =>
-            messages("case.application.status.submitted")
-          case CaseStatus.OPEN | CaseStatus.SUSPENDED =>
-            messages("case.application.status.inProgress")
-          case CaseStatus.REFERRED =>
-            messages("case.application.status.infoRequested")
-          case CaseStatus.SUPPRESSED | CaseStatus.REJECTED =>
-            messages("case.application.status.rejected")
-          case CaseStatus.COMPLETED if testCase.hasActiveDecision =>
-            if (testCase.daysUntilExpiry.get > 120) {
-              messages("case.application.status.approvedRuling")
-            } else {
-              messages("case.application.status.approvedRulingExpiring", testCase.daysUntilExpiry.get)
-            }
-          case CaseStatus.COMPLETED if testCase.hasExpiredDecision =>
-            messages("case.application.ruling.status.expired")
-          case CaseStatus.CANCELLED =>
-            messages("case.application.status.cancelled")
-          case _ => ""
-        }
-        actualStatus shouldBe expectedStatus
+        val expectedLinkTextView = messages("case.application.ruling.viewRuling")
+
+        actualLinkText should startWith(expectedLinkTextView)
       }
     }
 
-    "return the correct view with View ruling link for COMPLETED cases" in {
-      val request  = fakeRequestWithIdentifier()
-      val testCase = btiCaseWithDecision.copy(status = CaseStatus.COMPLETED)
+    ".onSubmit" should {
 
-      given(
-        casesService
-          .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination()), any[Sort])(any[HeaderCarrier])
-      ).willReturn(Future.successful(Paged(Seq(testCase), pageIndex, pageSize, resultCount)))
-      given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
+      "return the correct view for a load applications and rulings" in {
 
-      val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
+        val request = fakeRequestWithIdentifier()
 
-      status(result) shouldBe OK
+        val confirmation: Confirmation = Confirmation("ref", "eori", "marisa@example.test")
 
-      val doc            = Jsoup.parse(contentAsString(result))
-      val actualLinkText = doc.getElementById("applications-rulings-list-row-0-view-rulings-link").text().trim
+        val ua =
+          UserAnswers(emptyCacheMap)
+            .set(ConfirmationPage, confirmation)
 
-      val expectedLinkTextView = messages("case.application.ruling.viewRuling")
+        given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
+        given(cache.remove(ua.cacheMap)).willReturn(Future(true))
 
-      actualLinkText should startWith(expectedLinkTextView)
+        val result = controller().onSubmit()(request)
+
+        status(result)           shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
+      }
     }
   }
 }

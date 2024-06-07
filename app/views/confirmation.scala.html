@@ -24,7 +24,9 @@
 @this(
     printLink: components.printLink,
     govukLayoutWrapper: GovukLayoutWrapper,
-    fullLayoutMainContent: FullLayoutMainContent
+    fullLayoutMainContent: FullLayoutMainContent,
+    submitButton: components.submit_button,
+    formWithCSRF: FormWithCSRF
 )
 
 @(
@@ -53,7 +55,9 @@
     additionalCSS = Some(additionalCSS)
 ){
 
-<div class="govuk-grid-column-two-thirds p-0 hidden-print">
+@formWithCSRF(action = routes.ConfirmationController.onSubmit()) {
+
+    <div class="govuk-grid-column-two-thirds p-0 hidden-print">
 
     <div class="govuk-panel govuk-panel--confirmation">
         <h1 class="govuk-panel__title"> @messages("confirmation.heading") </h1>
@@ -124,7 +128,7 @@
     <!--Samples toggle logic end-->
 
     <div class="mt-2 footer-page-break">
-        @components.button_link(messages(urlViewModel.messageKey), urlViewModel.url, Some("returnButtonLink"))
+        @submitButton(Some(messages(urlViewModel.messageKey)))
     </div>
 
     <div>
@@ -148,7 +152,8 @@
         </div>
     </div>
 
-</div>
+    </div>
 
-@components.view_application(appConfig, pdf, getCountryName, compositeMode)
+    @components.view_application(appConfig, pdf, getCountryName, compositeMode)
+    }
 }

@@ -93,6 +93,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
     )(fakeRequest, messages)
 
   "Confirmation view" when {
+
     def test(method: String, view: () => HtmlFormat.Appendable): Unit =
       s"$method" must {
         behave like normalPage(view, messageKeyPrefix)()
@@ -108,28 +109,23 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
     input.foreach(args => (test _).tupled(args))
 
-    "display a return to BTA button link" when {
+    "display a return to BTA submit button" when {
+
       "a user has arrived from BTA" in {
+
         val btaConfViewModel = ConfirmationBTAUrlViewModel
         val doc              = asDocument(createView(btaConfViewModel))
-        assertLinkContainsHrefAndText(
-          doc,
-          "returnButtonLink",
-          controllers.routes.BTARedirectController.redirectToBTA.url,
-          messages("view.bta.home.link")
-        )
+
+        doc.getElementById("submit").text shouldBe messages("view.bta.home.link")
       }
     }
 
-    "display a return to Applications and Rulings button link" when {
+    "display a return to Applications and Rulings submit button" when {
+
       "a user has not arrived from BTA" in {
+
         val doc = asDocument(createView())
-        assertLinkContainsHrefAndText(
-          doc,
-          "returnButtonLink",
-          controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url,
-          messages("view.application.home.Link")
-        )
+        doc.getElementById("submit").text shouldBe messages("view.application.home.Link")
       }
     }
 
@@ -145,6 +141,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
     }
 
     "Main HTML view" must {
+
       "not display sample related text when no samples are sent" in {
         val text = asDocument(createView(pdfViewNoSamplesModel)).text()
 

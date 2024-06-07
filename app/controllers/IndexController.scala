@@ -17,10 +17,12 @@
 package controllers
 
 import config.FrontendAppConfig
-import controllers.actions.IdentifierAction
+import connectors.DataCacheConnector
+import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.SortDirection.SortDirection
 import models.SortField.SortField
 import models._
+import models.requests.OptionalDataRequest
 import navigation.Navigator
 import pages.IndexPage
 import play.api.Logging
@@ -32,8 +34,8 @@ import viewmodels.Dashboard
 import views.html.account_dashboard_statuses
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 import scala.concurrent.Future.successful
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 class IndexController @Inject() (
@@ -41,6 +43,8 @@ class IndexController @Inject() (
   identify: IdentifierAction,
   navigator: Navigator,
   service: CasesService,
+  getData: DataRetrievalAction,
+  dataCacheConnector: DataCacheConnector,
   cc: MessagesControllerComponents,
   btaUserService: BTAUserService,
   accountDashboardStatusesView: account_dashboard_statuses
@@ -65,13 +69,13 @@ class IndexController @Inject() (
     page: Int,
     sortBy: Option[SortField],
     order: Option[SortDirection]
-  ): Action[AnyContent] = identify.async { implicit request =>
-    request.eoriNumber match {
+  ): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[AnyContent] =>
+    request.userEoriNumber match {
       case Some(eori: String) =>
         val sort = Sort(sortBy.getOrElse(Dashboard.defaultSortField), order)
         (for {
           pagedResult <- service.getCases(eori, applicationStatuses, SearchPagination(page), sort)
-          isBTAUser   <- btaUserService.isBTAUser(request.identifier)
+          isBTAUser   <- btaUserService.isBTAUser(request.internalId)
         } yield {
           Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort), isBTAUser))
         }) recover {
@@ -80,8 +84,13 @@ class IndexController @Inject() (
             Redirect(routes.ErrorController.onPageLoad)
         }
       case None =>
-        val initialAnswers = UserAnswers(request.identifier)
+        val initialAnswers = UserAnswers(request.internalId)
         successful(Redirect(navigator.nextPage(IndexPage, NormalMode)(initialAnswers)))
     }
+  }
+
+  def onSubmit(): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+    request.userAnswers map { answer => dataCacheConnector.remove(answer.cacheMap) }
+    Future(Redirect(routes.BeforeYouStartController.onPageLoad()))
   }
 }

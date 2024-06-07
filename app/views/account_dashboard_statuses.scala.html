@@ -23,7 +23,9 @@
 @this(
         govukLayoutWrapper: GovukLayoutWrapper,
         fullMainContent: FullLayoutMainContent,
-        govukBackLink: GovukBackLink
+        govukBackLink: GovukBackLink,
+        submitButton: components.submit_button,
+        formWithCSRF: FormWithCSRF
 )
 
 @(appConfig: FrontendAppConfig, dashboard: Dashboard, isBTAUser: Boolean)(implicit request: Request[_], messages: Messages)
@@ -65,6 +67,8 @@
     additionalCSS = Some(additionalCSS)
 ) {
 
+@formWithCSRF(action = routes.IndexController.onSubmit()) {
+
     @components.heading(
         messages("index.heading"),
         captionMsg = Some(messages("application.dashboard.status.title"))
@@ -76,7 +80,8 @@
         </div>
     }
 
-    @components.button_link(messages("site.start"), routes.BeforeYouStartController.onPageLoad().url, id = Some("start-application"))
+    @submitButton(Some(messages("site.start")))
+}
 
     @if(dashboard.pageData.nonEmpty){
         <div id="applications-rulings-list">

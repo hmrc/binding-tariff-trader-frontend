@@ -19,20 +19,19 @@ package controllers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
-import models.Confirmation
-import pages.{ConfirmationPage, PdfViewPage}
+import models.requests.DataRequest
+import pages._
 import play.api.Logging
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import service.{BTAUserService, CountriesService, PdfService}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import service.{BTAUserService, CountriesService, PdfService, UserAnswerDeletionService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.JsonFormatters._
-import viewmodels.{ConfirmationUrlViewModel, PdfViewModel}
+import viewmodels.ConfirmationUrlViewModel
 import views.html.confirmation
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
 
 class ConfirmationController @Inject() (
   appConfig: FrontendAppConfig,
@@ -43,6 +42,7 @@ class ConfirmationController @Inject() (
   countriesService: CountriesService,
   pdfService: PdfService,
   btaUserService: BTAUserService,
+  userAnswerDeletionService: UserAnswerDeletionService,
   cc: MessagesControllerComponents,
   confirmationView: confirmation
 )(implicit ec: ExecutionContext)
@@ -50,31 +50,58 @@ class ConfirmationController @Inject() (
     with I18nSupport
     with Logging {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    def show(c: Confirmation, pdf: PdfViewModel): Future[Result] =
-      (for {
-        isBTAUser <- btaUserService.isBTAUser(request.internalId)
-        removed   <- dataCacheConnector.remove(request.userAnswers.cacheMap)
-        _             = if (!removed) logger.warn("Session entry failed to be removed from the cache")
-        token: String = pdfService.encodeToken(c.eori)
-      } yield {
-        Ok(
-          confirmationView(appConfig, c, token, pdf, getCountryName, urlViewModel = ConfirmationUrlViewModel(isBTAUser))
-        )
-      }) recover {
-        case NonFatal(error) =>
-          logger.error("An error occurred whilst processing data for the confirmation view", error)
-          Redirect(routes.ErrorController.onPageLoad)
-      }
-
-    (request.userAnswers.get(ConfirmationPage), request.userAnswers.get(PdfViewPage)) match {
-      case (Some(c: Confirmation), Some(pdf: PdfViewModel)) => show(c, pdf)
-      case _                                                => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
-    }
-  }
-
-  def getCountryName(code: String): Option[String] =
+  private def getCountryName(code: String): Option[String] =
     countriesService.getAllCountriesById
       .get(code)
       .map(_.countryName)
+
+  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    (request.userAnswers.get(ConfirmationPage), request.userAnswers.get(PdfViewPage)) match {
+      case (Some(confirmation), Some(pdf)) =>
+        val excludedPages: Seq[DataPage[_]] =
+          Seq(
+            ConfirmationPage,
+            PdfViewPage
+          )
+
+        (
+          for {
+            isBTAUser <- btaUserService.isBTAUser(request.internalId)
+            updatedUA <- Future.successful(
+                          userAnswerDeletionService.deleteAllUserAnswersExcept(request.userAnswers, excludedPages)
+                        )
+            _ <- dataCacheConnector.save(updatedUA.cacheMap)
+            token = pdfService.encodeToken(confirmation.eori)
+          } yield {
+            Ok(
+              confirmationView(
+                appConfig,
+                confirmation,
+                token,
+                pdf,
+                getCountryName,
+                urlViewModel = ConfirmationUrlViewModel(isBTAUser)
+              )
+            )
+          }
+        ).recover {
+          case e: Throwable =>
+            Redirect(routes.ErrorController.onPageLoad)
+        }
+      case _ =>
+        Future(Redirect(routes.ErrorController.onPageLoad))
+    }
+  }
+
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+    implicit request: DataRequest[_] =>
+      for {
+        isBTAUser <- btaUserService.isBTAUser(request.internalId)
+        removed   <- dataCacheConnector.remove(request.userAnswers.cacheMap)
+        _ = if (!removed) logger.warn("Session entry failed to be removed from the cache")
+      } yield {
+        Redirect(ConfirmationUrlViewModel(isBTAUser).call)
+      }
+  }
+
 }
