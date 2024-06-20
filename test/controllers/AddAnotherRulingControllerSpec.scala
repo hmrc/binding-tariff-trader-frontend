@@ -21,13 +21,13 @@ import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeDat
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.AddAnotherRulingFormProvider
 import models.NormalMode
+import models.cache.CacheMap
 import navigation.FakeNavigator
 import pages.{CommodityCodeRulingReferencePage, SimilarItemCommodityCodePage}
 import play.api.data.Form
 import play.api.libs.json.{JsArray, JsBoolean, JsString}
 import play.api.mvc.{Call, Request}
 import play.api.test.Helpers.{redirectLocation, _}
-import models.cache.CacheMap
 import views.html.addAnotherRuling
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -72,15 +72,16 @@ class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachin
     "redirect to the same page when deleting a file" in {
       val deleteRequest = fakeRequest
 
-      val backgroundData = Map(
-        SimilarItemCommodityCodePage.toString -> JsBoolean(true),
-        CommodityCodeRulingReferencePage.toString -> JsArray(
-          Seq(
-            JsString("12345678"),
-            JsString("87654321")
+      val backgroundData =
+        Map(
+          SimilarItemCommodityCodePage.toString -> JsBoolean(true),
+          CommodityCodeRulingReferencePage.toString -> JsArray(
+            Seq(
+              JsString("12345678"),
+              JsString("87654321")
+            )
           )
         )
-      )
 
       val getData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
       val result  = controller(getData).onRemove(0, NormalMode)(deleteRequest)
@@ -90,6 +91,7 @@ class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachin
     }
 
     "redirect to the add documents choice when deleting the last remaining file" in {
+
       val deleteRequest = fakeRequest
 
       val backgroundData = Map(

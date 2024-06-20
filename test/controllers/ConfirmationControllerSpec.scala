@@ -20,14 +20,18 @@ import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions._
 import models.cache.CacheMap
-import models.{Confirmation, oCase}
+import models.requests.DataRequest
+import models.{Confirmation, UserAnswers, oCase}
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito.{mock, reset, verify}
+import org.mockito.Mockito.{mock, reset}
 import pages.{ConfirmationPage, PdfViewPage}
+import play.api.libs.json.JsValue
+import play.api.mvc.{Action, AnyContent}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import service.{BTAUserService, CountriesService, PdfService}
+import service.{BTAUserService, CountriesService, PdfService, UserAnswerDeletionService}
 import utils.JsonFormatters._
-import viewmodels.{ConfirmationHomeUrlViewModel, PdfViewModel}
+import viewmodels.ConfirmationHomeUrlViewModel
 import views.html.confirmation
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,97 +39,214 @@ import scala.concurrent.Future
 
 class ConfirmationControllerSpec extends ControllerSpecBase {
 
-  private val cache             = mock(classOf[DataCacheConnector])
-  private val cacheMap          = mock(classOf[CacheMap])
-  private val pdfService        = mock(classOf[PdfService])
-  private val pdfViewModel      = oCase.pdf
-  private val countriesService  = new CountriesService
-  private val btaUserService    = mock(classOf[BTAUserService])
-  private val applicationConfig = mock(classOf[FrontendAppConfig])
+  private val mockDataCacheConnector        = mock(classOf[DataCacheConnector])
+  private val mockPdfService                = mock(classOf[PdfService])
+  private val pdfViewModel                  = oCase.pdf
+  private val countriesService              = new CountriesService
+  private val mockBtaUserService            = mock(classOf[BTAUserService])
+  private val mockUserAnswerDeletionService = mock(classOf[UserAnswerDeletionService])
+  private val mockApplicationConfig         = mock(classOf[FrontendAppConfig])
 
   override def beforeEach(): Unit = {
-    reset(cache)
-    reset(cacheMap)
-    reset(pdfService)
-    reset(btaUserService)
-    reset(applicationConfig)
+    reset(mockDataCacheConnector)
+    reset(mockPdfService)
+    reset(mockBtaUserService)
+    reset(mockApplicationConfig)
   }
 
   val confirmationView: confirmation = app.injector.instanceOf(classOf[confirmation])
 
-  private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap): ConfirmationController =
+  override def emptyCacheMap: CacheMap = CacheMap(cacheMapId, Map[String, JsValue]())
+
+  private def controller(userAnswers: Option[UserAnswers]): ConfirmationController =
     new ConfirmationController(
-      applicationConfig,
-      FakeIdentifierAction,
-      dataRetrievalAction,
-      new DataRequiredActionImpl,
-      cache,
-      countriesService,
-      pdfService,
-      btaUserService,
-      cc,
-      confirmationView
+      appConfig                 = mockApplicationConfig,
+      identify                  = FakeIdentifierAction,
+      getData                   = new FakeDataRetrievalAction(userAnswers.map(_.cacheMap)),
+      requireData               = new DataRequiredActionImpl,
+      dataCacheConnector        = mockDataCacheConnector,
+      countriesService          = countriesService,
+      pdfService                = mockPdfService,
+      btaUserService            = mockBtaUserService,
+      userAnswerDeletionService = mockUserAnswerDeletionService,
+      cc                        = cc,
+      confirmationView          = confirmationView
     )
 
   private def viewAsString: String =
     confirmationView(
-      applicationConfig,
-      Confirmation("ref", "eori", "marisa@example.test"),
-      "token",
-      pdfViewModel,
-      _ => Some(""),
-      urlViewModel = ConfirmationHomeUrlViewModel
+      appConfig      = mockApplicationConfig,
+      confirmation   = Confirmation("ref", "eori", "marisa@example.test"),
+      pdfToken       = "token",
+      pdf            = pdfViewModel,
+      getCountryName = _ => Some(""),
+      urlViewModel   = ConfirmationHomeUrlViewModel
     )(fakeRequest, messages).toString
 
-  "Confirmation Controller" must {
+  val confirmation: Confirmation = Confirmation("ref", "eori", "marisa@example.test")
 
-    "return OK and the correct view for a GET" in {
-      val fakeRequest = fakeRequestWithNotOptionalEoriAndCache
+  "ConfirmationController" when {
 
-      given(cache.remove(cacheMap)).willReturn(Future.successful(true))
-      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString))
-        .willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
-      given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdfViewModel))
-      given(pdfService.encodeToken("eori")).willReturn("token")
-      given(btaUserService.isBTAUser(fakeRequest.internalId)).willReturn(false)
-      given(applicationConfig.businessTaxAccountUrl).willReturn("testBtaHostUrl")
+    ".onPageLoad()" when {
 
-      val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
+      "for HappyPath and correct data present" should {
 
-      status(result)          shouldBe OK
-      contentAsString(result) shouldBe viewAsString
-      verify(cache).remove(cacheMap)
-    }
+        "return OK and the correct view for a GET" in {
 
-    "redirect given missing data" in {
-      given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString)).willReturn(None)
+          val ua =
+            UserAnswers(emptyCacheMap)
+              .set(ConfirmationPage, confirmation)
+              .set(PdfViewPage, pdfViewModel)
 
-      val result = controller().onPageLoad(fakeRequest)
+          val fakeDataRequest =
+            DataRequest(
+              request     = FakeRequest(),
+              internalId  = "id",
+              eoriNumber  = Some("eori-789012"),
+              userAnswers = ua
+            )
 
-      status(result)           shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
-    }
+          given(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(false)
 
-    val errorScenarios = List(
-      ("isBTAUser", () => Future.failed(new RuntimeException(" Fetch Error"))),
-      ("remove", () => Future.successful(true))
-    )
+          given(
+            mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
+          ).willReturn(ua)
 
-    "redirect to an error page" when {
-      given(cache.remove(cacheMap)).willReturn(Future.successful(true))
-      errorScenarios foreach { data =>
-        s"there is an issue calling ${data._1}" in {
-          val fakeRequest = fakeRequestWithNotOptionalEoriAndCache
+          given(mockDataCacheConnector.save(ua.cacheMap)).willReturn(ua.cacheMap)
+          given(mockPdfService.encodeToken("eori")).willReturn("token")
 
-          given(cacheMap.getEntry[Confirmation](ConfirmationPage.toString))
-            .willReturn(Some(Confirmation("ref", "eori", "marisa@example.test")))
-          given(cacheMap.getEntry[PdfViewModel](PdfViewPage.toString)).willReturn(Some(pdfViewModel))
-          given(btaUserService.isBTAUser(fakeRequest.internalId)).willReturn(data._2())
+          val result = controller(Some(ua)).onPageLoad(fakeDataRequest)
 
-          val result = controller(new FakeDataRetrievalAction(Some(cacheMap))).onPageLoad(fakeRequest)
+          status(result)          shouldBe OK
+          contentAsString(result) shouldBe viewAsString
+        }
+      }
+
+      "given no user answers redirect to SessionExpired page" in {
+
+        val result = controller(None).onPageLoad(FakeRequest())
+
+        status(result)           shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
+      }
+
+      "is a BTA User and given a failure" should {
+
+        "redirect to the Error page" in {
+
+          val ua =
+            UserAnswers(emptyCacheMap)
+              .set(ConfirmationPage, confirmation)
+              .set(PdfViewPage, pdfViewModel)
+
+          val fakeDataRequest =
+            DataRequest(
+              request     = FakeRequest(),
+              internalId  = "id",
+              eoriNumber  = Some("eori-789012"),
+              userAnswers = ua
+            )
+
+          given(mockBtaUserService.isBTAUser(fakeDataRequest.internalId))
+            .willReturn(Future.failed(new RuntimeException(" Fetch Error")))
+
+          val result = controller(Some(ua)).onPageLoad(fakeDataRequest)
 
           status(result)           shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
+        }
+      }
+
+      "the ConfirmationPage and PdfViewPage data is missing" should {
+
+        "redirect to the Error page" in {
+
+          val ua =
+            UserAnswers(emptyCacheMap)
+
+          val fakeDataRequest =
+            DataRequest(
+              request     = FakeRequest(),
+              internalId  = "id",
+              eoriNumber  = Some("eori-789012"),
+              userAnswers = ua
+            )
+
+          val result = controller(Some(ua)).onPageLoad(fakeDataRequest)
+
+          status(result)           shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.ErrorController.onPageLoad.url)
+        }
+      }
+    }
+
+    ".onSubmit()" when {
+
+      "isBTAUser" should {
+
+        "return SEE_OTHER and redirect" in {
+
+          val ua =
+            UserAnswers(emptyCacheMap)
+              .set(ConfirmationPage, confirmation)
+              .set(PdfViewPage, pdfViewModel)
+
+          val fakeDataRequest =
+            DataRequest(
+              request     = FakeRequest(),
+              internalId  = "id",
+              eoriNumber  = Some("eori-789012"),
+              userAnswers = ua
+            )
+
+          given(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(true)
+
+          given(
+            mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
+          ).willReturn(ua)
+
+          given(mockDataCacheConnector.remove(ua.cacheMap)).willReturn(Future(true))
+          given(mockPdfService.encodeToken("eori")).willReturn("token")
+
+          val result = controller(Some(ua)).onSubmit()(fakeDataRequest)
+
+          status(result)           shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.routes.BTARedirectController.redirectToBTA.url)
+        }
+      }
+
+      "is NOT a BTAUser" should {
+
+        "return SEE_OTHER and redirect" in {
+
+          val ua =
+            UserAnswers(emptyCacheMap)
+              .set(ConfirmationPage, confirmation)
+              .set(PdfViewPage, pdfViewModel)
+
+          val fakeDataRequest =
+            DataRequest(
+              request     = FakeRequest(),
+              internalId  = "id",
+              eoriNumber  = Some("eori-789012"),
+              userAnswers = ua
+            )
+
+          given(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(false)
+
+          given(
+            mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
+          ).willReturn(ua)
+
+          given(mockDataCacheConnector.remove(ua.cacheMap)).willReturn(Future(true))
+          given(mockPdfService.encodeToken("eori")).willReturn("token")
+
+          val result = controller(Some(ua)).onSubmit()(fakeDataRequest)
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(
+            controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url
+          )
         }
       }
     }

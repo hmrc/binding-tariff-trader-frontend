@@ -19,6 +19,7 @@ package controllers
 import base.SpecBase
 import controllers.actions.FakeDataRetrievalAction
 import models.cache.CacheMap
+import play.api.libs.json.JsValue
 
 trait ControllerSpecBase extends SpecBase {
 
@@ -26,7 +27,7 @@ trait ControllerSpecBase extends SpecBase {
 
   def getEmptyCacheMap = new FakeDataRetrievalAction(Some(emptyCacheMap))
 
-  def emptyCacheMap: CacheMap = CacheMap(cacheMapId, Map())
+  def emptyCacheMap: CacheMap = CacheMap(cacheMapId, Map[String, JsValue]())
 
   def dontGetAnyData = new FakeDataRetrievalAction(None)
 

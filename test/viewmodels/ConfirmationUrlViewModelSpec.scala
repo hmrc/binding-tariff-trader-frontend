@@ -23,27 +23,30 @@ class ConfirmationUrlViewModelSpec extends UnitSpec {
   val btaHostUrl = "testHost"
 
   "confirmationUrlViewModel" should {
+
     "create a ConfirmationBTAUrlViewModel" when {
+
       "isBTAUser is set to true" in {
-        val isBTAUser                                           = true
-        val expectedViewModel: ConfirmationBTAUrlViewModel.type = ConfirmationBTAUrlViewModel
+        val isBTAUser                                   = true
+        val expectedViewModel: ConfirmationUrlViewModel = ConfirmationBTAUrlViewModel
 
         ConfirmationUrlViewModel(isBTAUser) shouldBe expectedViewModel
         expectedViewModel.messageKey        shouldBe "view.bta.home.link"
-        expectedViewModel.url               shouldBe controllers.routes.BTARedirectController.redirectToBTA.url
+        expectedViewModel.call              shouldBe controllers.routes.BTARedirectController.redirectToBTA
       }
     }
 
     "create a ConfirmationHomeUrlViewModel" when {
+
       "isBTAUser is set to false" in {
-        val isBTAUser                                            = false
-        val expectedViewModel: ConfirmationHomeUrlViewModel.type = ConfirmationHomeUrlViewModel
+        val isBTAUser                                   = false
+        val expectedViewModel: ConfirmationUrlViewModel = ConfirmationHomeUrlViewModel
 
         ConfirmationUrlViewModel(isBTAUser) shouldBe expectedViewModel
         expectedViewModel.messageKey        shouldBe "view.application.home.Link"
-        expectedViewModel.url shouldBe controllers.routes.IndexController
-          .getApplicationsAndRulings(sortBy = None, order = None)
-          .url
+        expectedViewModel.call shouldBe
+          controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None)
+
       }
     }
   }

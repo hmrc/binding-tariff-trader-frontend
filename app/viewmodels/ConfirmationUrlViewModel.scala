@@ -16,20 +16,22 @@
 
 package viewmodels
 
+import play.api.mvc.Call
+
 sealed trait ConfirmationUrlViewModel {
   val messageKey: String
-  val url: String
+  val call: Call
 }
 
 case object ConfirmationBTAUrlViewModel extends ConfirmationUrlViewModel {
-  override val messageKey  = "view.bta.home.link"
-  override val url: String = controllers.routes.BTARedirectController.redirectToBTA.url
+  override val messageKey = "view.bta.home.link"
+  override val call: Call = controllers.routes.BTARedirectController.redirectToBTA
 }
 
 case object ConfirmationHomeUrlViewModel extends ConfirmationUrlViewModel {
   override val messageKey = "view.application.home.Link"
-  override val url: String =
-    controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url
+  override val call: Call =
+    controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None)
 }
 
 object ConfirmationUrlViewModel {
