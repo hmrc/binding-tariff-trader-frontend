@@ -1,0 +1,12 @@
+<fop version="1.0">
+    <base>./</base>
+    <renderers>
+        <renderer mime="application/pdf">
+            <fonts>
+              <font embed-url="/System/Library/Fonts/Optima.ttc" sub-font="Optima Regular">
+                <font-triplet name="Optima Regular" style="normal" weight="normal"/>
+              </font>
+            </fonts>
+        </renderer>
+    </renderers>
+</fop>

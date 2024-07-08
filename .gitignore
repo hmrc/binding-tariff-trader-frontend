@@ -38,3 +38,4 @@ project/metals.sbt
 .metals/
 .vscode/
 .bsp/
+test/resources/fop/test.pdf

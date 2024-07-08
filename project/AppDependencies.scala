@@ -6,13 +6,14 @@ object AppDependencies {
   private val hmrcMongoPlayVersion = "2.1.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
-    "commons-validator" % "commons-validator"           % "1.9.0",
-    "uk.gov.hmrc"       %% "play-frontend-hmrc-play-30" % "10.4.0",
-    "uk.gov.hmrc"       %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
-    "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30"         % hmrcMongoPlayVersion,
-    "commons-codec"     % "commons-codec"               % "1.17.0",
-    "uk.gov.hmrc"       %% "play-json-union-formatter"  % "1.21.0",
-    "org.typelevel"     %% "cats-core"                  % "2.12.0"
+    "commons-validator"      % "commons-validator"           % "1.9.0",
+    "uk.gov.hmrc"            %% "play-frontend-hmrc-play-30" % "10.4.0",
+    "uk.gov.hmrc"            %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
+    "uk.gov.hmrc.mongo"      %% "hmrc-mongo-play-30"         % hmrcMongoPlayVersion,
+    "commons-codec"          % "commons-codec"               % "1.17.0",
+    "uk.gov.hmrc"            %% "play-json-union-formatter"  % "1.21.0",
+    "org.typelevel"          %% "cats-core"                  % "2.12.0",
+    "org.apache.xmlgraphics" % "fop"                         % "2.9"
   )
 
   private lazy val test: Seq[ModuleID] = Seq(
