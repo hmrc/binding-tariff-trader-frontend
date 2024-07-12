@@ -26,6 +26,8 @@
     govukLayoutWrapper: GovukLayoutWrapper,
     fullLayoutMainContent: FullLayoutMainContent,
     submitButton: components.submit_button,
+    warning: components.warning_text,
+    view_application: components.view_application,
     formWithCSRF: FormWithCSRF
 )
 
@@ -87,9 +89,9 @@
         <div id="sampleInformation">
             @if(pdf.sendingSample) {
                 @if(pdf.hazardousSample){
-                    @components.icon_important("view.application.paragraph.do.not.send.sample")
+                    @warning(messages("view.application.paragraph.do.not.send.sample"))
                 } else if (!pdf.hazardousSample && pdf.returnSample) {
-                    @components.icon_important("confirmation.sendingSamples.important")
+                    @warning(messages("confirmation.sendingSamples.important"))
                     <div class="govuk-inset-text">@messages("confirmation.paragraph.sample.return")</div>
 
                     <p class="govuk-body">@messages("confirmation.paragraph1.sendingSamples")
@@ -106,7 +108,7 @@
                         </a>
                     </p>
                 } else {
-                    @components.icon_important("confirmation.sendingSamples.important")
+                    @warning(messages("confirmation.sendingSamples.important"))
 
                     <p class="govuk-body">@messages("confirmation.paragraph1.sendingSamples")
                         <span class="bold"> @messages("caseReference.format", confirmation.reference)</span>
@@ -154,6 +156,6 @@
 
     </div>
 
-    @components.view_application(appConfig, pdf, getCountryName, compositeMode)
+    @view_application(appConfig, pdf, getCountryName, compositeMode)
     }
 }

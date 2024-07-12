@@ -26,7 +26,6 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito.{mock, reset}
 import pages.{ConfirmationPage, PdfViewPage}
 import play.api.libs.json.JsValue
-import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.{BTAUserService, CountriesService, PdfService, UserAnswerDeletionService}

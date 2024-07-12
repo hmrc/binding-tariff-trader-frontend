@@ -25,20 +25,22 @@ import views.ViewMatchers._
 import views.behaviours.ViewBehaviours
 import views.html.components.view_application
 
-class ApplicationSubmittedViewSpec extends ViewBehaviours {
+class ViewApplicationSpec extends ViewBehaviours {
 
-  private val pdfView = oCase.pdf
+  private val pdfView: PdfViewModel = oCase.pdf
+
+  private val viewApplication: view_application = app.injector.instanceOf[view_application]
 
   private def createView(pdfViewModel: PdfViewModel = pdfView): Html =
-    view_application(frontendAppConfig, pdfViewModel, _ => Some("example country name"))(messages)
+    viewApplication(frontendAppConfig, pdfViewModel, _ => Some("example country name"))(messages)
 
-  private def createViewWithToggle(pdfViewModel: PdfViewModel = pdfView): Html =
-    view_application(frontendAppConfigWithToggle, pdfViewModel, _ => Some("example country name"))(messages)
+  private def createViewWithToggle(): Html =
+    viewApplication(frontendAppConfigWithToggle, pdfView, _ => Some("example country name"))(messages)
 
   protected def view(html: Html): Document =
     Jsoup.parse(html.toString())
 
-  "Confirmation view" must {
+  "View Application" must {
 
     "contain a page heading" in {
       val doc = view(createView())
@@ -100,7 +102,7 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
 
     "contain supporting material file list details" in {
       val doc =
-        view(createView(pdfView)).getElementById("print-document")
+        view(createView()).getElementById("print-document")
 
       doc should containText(messages("supportingMaterialFileList.checkYourAnswersLabel"))
     }
@@ -173,7 +175,7 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     }
 
     "not contain similar good codes when user selects NO" in {
-      val doc = view(createView(pdfView)).getElementById("print-document")
+      val doc = view(createView()).getElementById("print-document")
 
       doc should containText(messages("commodityCodeRulingReference.checkYourAnswersLabel"))
     }
@@ -187,14 +189,14 @@ class ApplicationSubmittedViewSpec extends ViewBehaviours {
     }
 
     "not contain reissuedBTIReference when user does not provide a reference" in {
-      val doc = view(createView(pdfView)).getElementById("print-document")
+      val doc = view(createView()).getElementById("print-document")
 
       doc should containText(messages("provideBTIReference.checkYourAnswersLabel"))
     }
 
     "contain a message to not send a sample when samplesNotAccepted toggle is set to true" in {
       val doc =
-        view(createViewWithToggle(pdfView))
+        view(createViewWithToggle())
           .getElementById("print-pages")
 
       doc should containText(messages("view.application.paragraph.do.not.send.sample"))

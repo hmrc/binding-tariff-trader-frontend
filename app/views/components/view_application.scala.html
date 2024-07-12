@@ -18,6 +18,8 @@
 @import viewmodels.PdfViewModel
 @import utils.Dates
 
+@this(warning: components.warning_text)
+
 @(
 appConfig: FrontendAppConfig,
 pdf: PdfViewModel,
@@ -107,13 +109,7 @@ compositeMode: Boolean = false
                             <div class="govuk-inset-text">@messages("view.application.paragraph.do.not.send.sample")
                             </div>
                             }else{
-                            <div class="govuk-warning-text">
-                                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                                <strong class="govuk-warning-text__text">
-                                    <span class="govuk-warning-text__assistive">@messages("site.warning")</span>
-                                    @messages("confirmation.sendingSamples.important")
-                                </strong>
-                            </div>
+                                @warning(messages("confirmation.sendingSamples.important"))
                             @if(pdf.returnSample) {
                             <div class="govuk-inset-text">@messages("confirmation.paragraph.sample.return")</div>
                             }
