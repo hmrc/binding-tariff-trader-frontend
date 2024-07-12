@@ -21,6 +21,7 @@
 
 @this(
         printLink: components.printLink,
+        view_application: components.view_application,
         govukLayoutWrapper: GovukLayoutWrapper,
         fullMainContent: FullLayoutMainContent,
 )
@@ -67,6 +68,6 @@
                 </div>
             </div>
         </div>
-        @components.view_application(appConfig, pdf, getCountryName, compositeMode)
+        @view_application(appConfig, pdf, getCountryName, compositeMode)
     </div>
 }
