@@ -13,7 +13,8 @@ object AppDependencies {
     "commons-codec"          % "commons-codec"               % "1.17.0",
     "uk.gov.hmrc"            %% "play-json-union-formatter"  % "1.21.0",
     "org.typelevel"          %% "cats-core"                  % "2.12.0",
-    "org.apache.xmlgraphics" % "fop"                         % "2.9"
+    "org.apache.xmlgraphics" % "fop"                         % "2.9",
+    "net.sf.saxon"           % "Saxon-HE"                    % "12.5"
   )
 
   private lazy val test: Seq[ModuleID] = Seq(

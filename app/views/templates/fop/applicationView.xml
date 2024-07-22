@@ -1,0 +1,108 @@
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:fox="http://xmlgraphics.apache.org/fop/extensions" version="2.0">
+  <xsl:include href="./app/views/components/fop/hmrc-frontend-fop-conversions.xsl"/>
+  <xsl:include href="./app/views/templates/fop/applicationView-fop-conversions.xsl"/>
+  <xsl:include href="./app/views/components/fop/hmrc-frontend-fop-matchers.xsl"/>
+
+  <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" media-type="application/pdf"/>
+
+  <xsl:param name="documentAttributeSets"
+             select="document('./app/views/templates/fop/applicationView-fop-conversions.xsl')//xsl:attribute-set"/>
+
+  <xsl:template match="span[@class='address']" mode="pdf" priority="1">
+    <fo:block>
+      <xsl:apply-templates select="node()" mode="pdf"/>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="div[@class='print-document']" mode="pdf" priority="1">
+    <fo:block xsl:use-attribute-sets="print-document" break-before="page">
+      <xsl:comment>Applying govuk-uk-summary-list__row template</xsl:comment>
+      <xsl:apply-templates select="node()" mode="pdf"/>
+    </fo:block>
+  </xsl:template>
+
+  <!-- Specific to off Pattern Summary List -->
+
+  <xsl:template match="dl[@class='govuk-summary-list govuk-summary-list--no-border']" mode="pdf" priority="1">
+    <fo:table table-layout="fixed" width="100%" xsl:use-attribute-sets="govuk-summary-list govuk-summary-list--no-border debug-red">
+      <fo:table-body>
+        <xsl:apply-templates select="node()" mode="pdf"/>
+      </fo:table-body>
+    </fo:table>
+  </xsl:template>
+
+  <xsl:template match="dt[@class='govuk-!-font-weight-bold']" mode="pdf" priority="1">
+    <fo:table-row>
+      <fo:table-cell>
+        <fo:block xsl:use-attribute-sets="govuk-i-font-weight-bold">
+          <xsl:apply-templates select="node()" mode="pdf"/>
+        </fo:block>
+      </fo:table-cell>
+    </fo:table-row>
+  </xsl:template>
+
+  <xsl:template match="dd[@class='stack']" mode="pdf" priority="1">
+    <fo:table-row>
+      <fo:table-cell>
+        <fo:block xsl:use-attribute-sets="stack">
+          <xsl:apply-templates select="node()" mode="pdf"/>
+        </fo:block>
+      </fo:table-cell>
+    </fo:table-row>
+  </xsl:template>
+
+  <xsl:template match="dd[@class='govuk-!-margin-left-0']" mode="pdf" priority="1">
+    <fo:table-row>
+      <fo:table-cell xsl:use-attribute-sets="govuk-i-margin-left-0">
+        <fo:block >
+          <xsl:apply-templates select="node()" mode="pdf"/>
+        </fo:block>
+      </fo:table-cell>
+    </fo:table-row>
+  </xsl:template>
+
+  <xsl:template match="dt[@class='govuk-!-margin-left-0']" mode="pdf" priority="1">
+    <fo:table-row>
+      <fo:table-cell xsl:use-attribute-sets="govuk-i-margin-left-0">
+        <fo:block>
+          <xsl:apply-templates select="node()" mode="pdf"/>
+        </fo:block>
+      </fo:table-cell>
+    </fo:table-row>
+  </xsl:template>
+
+  <xsl:template match="div[@class='header']" name="header" mode="pdf" priority="1">
+    <xsl:choose>
+      <xsl:when test="@data-render-header = 'yes'">
+        <xsl:apply-templates select="node()" mode="pdf"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:comment>Header not rendered</xsl:comment>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+
+  <xsl:template match = "/">
+
+    <fo:root xml:lang="en" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:fox="http://xmlgraphics.apache.org/fop/extensions">
+      <fo:layout-master-set>
+        <fo:simple-page-master master-name="main" page-height="297mm" page-width="210mm" margin-top="1.3cm"
+                               margin-bottom="1.3cm" margin-left="1.4cm" margin-right="1.4cm">
+          <fo:region-body region-name="xsl-region-body" margin-top="2.8cm" margin-bottom="0.5cm"/>
+          <fo:region-before region-name="xsl-region-before" extent="2.8cm"/>
+          <fo:region-after region-name="xsl-region-after"/>
+        </fo:simple-page-master>
+      </fo:layout-master-set>
+
+      <fo:page-sequence master-reference="main">
+        <fo:static-content flow-name="xsl-region-before">
+          <xsl:apply-templates select="(//div[@class='header'])[1]/node()" mode="pdf"/>
+        </fo:static-content>
+        <fo:flow flow-name="xsl-region-body" text-align="left">
+          <xsl:apply-templates select="." mode="pdf"/>
+        </fo:flow>
+      </fo:page-sequence>
+    </fo:root>
+  </xsl:template>
+</xsl:stylesheet>

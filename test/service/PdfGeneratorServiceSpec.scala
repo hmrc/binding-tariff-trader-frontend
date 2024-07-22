@@ -17,6 +17,8 @@
 package service
 
 import base.SpecBase
+import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.text.PDFTextStripper
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 
 import java.nio.file.{Files, Paths}
@@ -24,15 +26,27 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.Source
 
 class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with IntegrationPatience {
-  private val pdfGeneratorService = new PdfGeneratorService
+  private val pdfGeneratorService: PdfGeneratorService = new PdfGeneratorService
 
   "PDFGeneratorService" should {
     "have a render method" in {
-      val input        = Source.fromResource("applicationView.xml").mkString
-      val result       = pdfGeneratorService.render(input).futureValue
+      val input  = Source.fromResource("applicationView.xml").mkString
+      val result = pdfGeneratorService.render(input).futureValue
 
       val fileName = "test/resources/fop/test.pdf"
       Files.write(Paths.get(fileName), result)
     }
+    "generate a test PDF" in {
+
+      val file: Array[Byte] = Files.readAllBytes(Paths.get("test/resources/fop/test.pdf"))
+      val document: PDDocument = PDDocument.load(file)
+
+      val textStripper: PDFTextStripper = new PDFTextStripper
+      val text: String        = textStripper.getText(document)
+      val lines: List[String] = text.split("\n").toList.map(_.trim)
+
+      lines(2) shouldBe "Your Advanced Tariff Ruling application"
+    }
   }
+
 }

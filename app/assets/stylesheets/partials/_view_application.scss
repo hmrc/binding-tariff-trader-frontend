@@ -41,9 +41,9 @@
   margin: 0;
   line-height: 1;
 }
-.print-document .print-header h2 {
+
+.print-document .print-header {
   text-align: right;
-  margin-top: 2em;
   font-size: 1.2em;
   color: #00703C;
   font-weight: 600;
@@ -58,6 +58,8 @@
 }
 
 .print-document .information-box {
+  font-family: 'GDS Transport', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
   border: 2px solid #00703C;
   display: block;
   margin-bottom: 1em;
@@ -83,7 +85,9 @@
   font-weight: 700;
 }
 .print-document .reference-number {
+  margin-bottom: 0.26316em;
   font-size: 36px;
+  font-weight: 700;
 }
 .print-document .footer-page-date {
   float: right;
@@ -121,13 +125,11 @@
 }
 
 .about-this-result-box {
+  height: fit-content;
   background: #e1f3f1;
   padding: 1px 10px;
   font-size: 15px;
   -webkit-print-color-adjust: exact
-}
-.about-this-result-box-do-not-send {
-  height: 480px;
 }
 
 .about-this-result, .date-of-result {
@@ -229,7 +231,10 @@
   @page {
     height: 297mm;
     width: 210mm;
-    margin: 15px;
+    margin-top: 1.3cm;
+    margin-bottom: 1.3cm;
+    margin-left: 1.4cm;
+    margin-right: 1.4cm;
   }
   .main-wrapper.govuk-width-container {
     display: none;
@@ -256,11 +261,10 @@
   .govuk-footer {
     display: none !important;
   }
-  #your-records.print-document {
-    page-break-after: always;
-  }
+
   .print-document {
-    margin: 10mm;
+    margin-right: 0mm;
+    margin-left: -15mm;
     border: none;
     width: 210mm;
     height: auto;
@@ -279,12 +283,7 @@
   #print-and-save-result {
     display: none;
   }
-  .print-header {
-    position: fixed;
-    top: 0px;
-    margin-top: 20mm;
-    width: 210mm;
-  }
+
   .notice .icon {
     position: absolute;
     left: 0;
@@ -388,4 +387,35 @@
     display: inline;
     width: 100%;
   }
+}
+
+.organisation-logo__container {
+    margin-left: 8px;
+    border-left: 2px solid #009390;
+}
+
+.organisation-logo__name {
+  font-family: HelveticaNeue,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  font-size: 1.3em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  line-height: 1.35;
+  margin: 0;
+  padding-left: 8px;
+  width: 125px;
+}
+
+.organisation-logo__crest-hmrc {
+  width: 40px;
+  height: auto;
+  padding-left: 8px;
+}
+
+.address {
+  display: block;
+}
+
+.prevent-content-split {
+  page-break-inside: avoid;
 }

@@ -23,17 +23,18 @@ import org.apache.xmlgraphics.util.MimeConstants
 import views.html.templates.test_view
 
 import java.io.{File, StringReader}
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import javax.xml.transform.TransformerFactory
-import javax.xml.transform.sax.SAXResult
+import javax.xml.transform.sax.{SAXResult, SAXTransformerFactory}
 import javax.xml.transform.stream.StreamSource
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Using
 
-class PdfGeneratorService @Inject()(implicit ec: ExecutionContext) extends {
+@Singleton
+class PdfGeneratorService @Inject() (implicit ec: ExecutionContext) extends {
 
   private val baseURI = getClass.getClassLoader.getResource("./").toURI
-  private val cfgBuilder = new DefaultConfigurationBuilder()
+  private val cfgBuilder         = new DefaultConfigurationBuilder()
   private val cfg: Configuration = cfgBuilder.buildFromFile(new File("./conf/fop.xconf"))
 
   val fopFactory: FopFactory = new FopFactoryBuilder(baseURI).setConfiguration(cfg).build()
@@ -44,17 +45,17 @@ class PdfGeneratorService @Inject()(implicit ec: ExecutionContext) extends {
       userAgent.setAccessibility(true)
 
       val xslt = new StreamSource(new StringReader(input))
-      val fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, out)
+      val fop  = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, out)
 
-      val view = test_view().toString()
+      val view             = test_view().toString()
       val viewWithHtmlTags = "<html>" + view + "</html>"
 
       try {
         val source: StreamSource = new StreamSource(new StringReader(viewWithHtmlTags))
-        val result = new SAXResult(fop.getDefaultHandler)
+        val result               = new SAXResult(fop.getDefaultHandler)
 
-        val transformerFactory = TransformerFactory.newInstance()
-        val transformer = transformerFactory.newTransformer(xslt)
+        val transformerFactory = TransformerFactory.newInstance().asInstanceOf[SAXTransformerFactory]
+        val transformer        = transformerFactory.newTransformer(xslt)
         transformer.transform(source, result)
 
       } catch {

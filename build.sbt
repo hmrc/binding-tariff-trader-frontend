@@ -24,7 +24,10 @@ lazy val microservice = Project(appName, file("."))
       "-Wconf:src=routes/.*:s",
       "-Wconf:cat=unused-imports&src=views/.*:s"
     ),
-    Compile / unmanagedResourceDirectories += baseDirectory.value / "app/views/templates",
+    Compile / unmanagedResourceDirectories += baseDirectory.value / "app/views/templates/fop",
+    Compile / unmanagedResourceDirectories += baseDirectory.value / "app/views/components/fop",
+    Test / unmanagedResourceDirectories += baseDirectory.value / "app/views/templates/fop",
+    Test / unmanagedResourceDirectories += baseDirectory.value / "app/views/components/fop",
     Concat.groups := Seq(
       "javascripts/bindingtarifftraderfrontend-app.js" ->
         group(Seq("javascripts/show-hide-content.js", "javascripts/bindingtarifftraderfrontend.js"))
