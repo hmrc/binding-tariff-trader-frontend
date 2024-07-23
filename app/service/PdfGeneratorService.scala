@@ -17,10 +17,11 @@
 package service
 
 import org.apache.commons.io.output.ByteArrayOutputStream
-import org.apache.fop.apps.{FopFactory, FopFactoryBuilder}
+import org.apache.fop.apps.{FOUserAgent, Fop, FopFactory, FopFactoryBuilder}
 import org.apache.fop.configuration.{Configuration, DefaultConfigurationBuilder}
 import org.apache.xmlgraphics.util.MimeConstants
-import views.html.templates.test_view
+import play.api.Logging
+import play.twirl.api.Html
 
 import java.io.{File, StringReader}
 import javax.inject.{Inject, Singleton}
@@ -31,23 +32,23 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Using
 
 @Singleton
-class PdfGeneratorService @Inject() (implicit ec: ExecutionContext) extends {
+class PdfGeneratorService @Inject() (implicit ec: ExecutionContext) extends Logging {
 
-  private val baseURI = getClass.getClassLoader.getResource("./").toURI
+  private val baseURI            = getClass.getClassLoader.getResource("./").toURI
   private val cfgBuilder         = new DefaultConfigurationBuilder()
   private val cfg: Configuration = cfgBuilder.buildFromFile(new File("./conf/fop.xconf"))
 
   val fopFactory: FopFactory = new FopFactoryBuilder(baseURI).setConfiguration(cfg).build()
 
-  def render(input: String): Future[Array[Byte]] = Future {
+  def render(input: Html, xlsTransformer: String): Future[Array[Byte]] = Future {
     Using.resource(new ByteArrayOutputStream()) { out =>
-      val userAgent = fopFactory.newFOUserAgent()
+      val userAgent: FOUserAgent = fopFactory.newFOUserAgent()
       userAgent.setAccessibility(true)
 
-      val xslt = new StreamSource(new StringReader(input))
-      val fop  = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, out)
+      val xslt: StreamSource = new StreamSource(new StringReader(xlsTransformer))
+      val fop: Fop           = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, out)
 
-      val view             = test_view().toString()
+      val view             = input.toString()
       val viewWithHtmlTags = "<html>" + view + "</html>"
 
       try {
@@ -60,7 +61,7 @@ class PdfGeneratorService @Inject() (implicit ec: ExecutionContext) extends {
 
       } catch {
         case e: Exception =>
-          println(s"Error: ${e.getMessage}")
+          throw new Exception(s"[PdfGeneratorService][render] Error rendering PDF: ${e.getMessage}")
       }
 
       out.toByteArray

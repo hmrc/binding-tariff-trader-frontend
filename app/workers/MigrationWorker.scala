@@ -16,19 +16,19 @@
 
 package workers
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.scaladsl.{Sink, Source}
-import org.apache.pekko.stream.{ActorAttributes, Supervision}
 import config.FrontendAppConfig
 import connectors.InjectAuthHeader
 import models._
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.scaladsl.{Sink, Source}
+import org.apache.pekko.stream.{ActorAttributes, Supervision}
 import play.api.Logging
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mongo.lock.{MongoLockRepository, TimePeriodLockService}
 import viewmodels.{FileView, PdfViewModel}
-import views.html.components.view_application_pdf
+import views.html.components.view_application
 
 import java.time.{Clock, ZonedDateTime}
 import javax.inject.{Inject, Singleton}
@@ -110,9 +110,9 @@ class MigrationWorker @Inject() (
 
       _ = logger.info(s"Regenerating application PDF for case ${cse.reference}")
 
-      pdfFile <- pdfService.generatePdf(view_application_pdf(appConfig, pdfModel, getCountryName))
+      pdfFile <- pdfService.generatePdf(view_application(appConfig, pdfModel, getCountryName))
 
-      pdfStored <- fileService.uploadApplicationPdf(cse.reference, pdfFile.content)
+      pdfStored <- fileService.uploadApplicationPdf(cse.reference, pdfFile)
 
       creationTime = ZonedDateTime.ofInstant(clock.instant(), clock.getZone)
 

@@ -18,40 +18,31 @@ package service
 
 import base.SpecBase
 import config.FrontendAppConfig
-import connectors.PdfGeneratorServiceConnector
-import models.PdfFile
-import org.mockito.ArgumentMatchers._
+import org.mockito.ArgumentMatchers.any
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.mock
 import play.twirl.api.Html
 
-import scala.concurrent.Future._
+import scala.concurrent.Future
 
 class PdfServiceSpec extends SpecBase {
 
-  private val pdfHtml           = mock(classOf[Html])
-  private val config            = mock(classOf[FrontendAppConfig])
-  private val connector         = mock(classOf[PdfGeneratorServiceConnector])
-  private val connectorResponse = PdfFile("Some content".getBytes)
+  private val pdfHtml             = mock(classOf[Html])
+  private val config              = mock(classOf[FrontendAppConfig])
+  private val pdfGeneratorService = mock(classOf[PdfGeneratorService])
+  private val generatorResponse   = "Some content".getBytes
 
-  private def service = new PdfService(connector, config)
+  private def service = new PdfService(pdfGeneratorService, config)
 
-  "Service 'Generate Pdf'" should {
+  "Service 'Render Pdf'" should {
 
-    "delegate to connector" in {
-      given(connector.generatePdf(any[Html])).willReturn(successful(connectorResponse))
+    "delegate to PdfGeneratorService" in {
+      given(pdfGeneratorService.render(any[Html], any[String])).willReturn(Future.successful(generatorResponse))
 
-      val file: PdfFile = await(service.generatePdf(pdfHtml))
+      val file = await(service.generatePdf(pdfHtml))
 
-      file shouldBe connectorResponse
-    }
+      file shouldBe generatorResponse
 
-    "propagates errors" in {
-      given(connector.generatePdf(any[Html])).willReturn(failed(new RuntimeException))
-
-      intercept[RuntimeException] {
-        await(service.generatePdf(pdfHtml))
-      }
     }
 
   }

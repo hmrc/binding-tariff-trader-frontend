@@ -1,12 +1,16 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:fox="http://xmlgraphics.apache.org/fop/extensions" version="2.0">
 
+  <!-- This stylesheet is used to convert 'hmrc-frontend' HTML to FOP elements for Apache FOP pdf generation.
+       It provides generic methods for converting HTML tags and specific implementations to match
+       'hmrc-frontend' components. -->
+
   <xsl:variable name="hmrc-frontend-attributes" select="'./hmrc-frontend-fop-conversions.xsl'"/>
 
   <xsl:key name="attr-by-name" match="attr" use="@name" />
 
   <xsl:param name="attributeSets"
       select="document($hmrc-frontend-attributes)//xsl:attribute-set | $documentAttributeSets"/>
-  <xsl:param name="log" select="true()"/>
+  <xsl:param name="log" select="false()"/>
 
   <xsl:template
       match="*[self::h1 or self::h2 or self::h3 or self::p or self::strong or self::div or self::dt or self::dd]"
@@ -23,14 +27,14 @@
   </xsl:template>
 
   <xsl:template match="img" mode="pdf" priority="0">
-    <xsl:variable name="collectedAttributes">
+    <xsl:variable name="collectAttributes">
       <xsl:call-template name="combineAttributes">
         <xsl:with-param name="class" select="@class"/>
       </xsl:call-template>
     </xsl:variable>
     <fo:block>
       <xsl:call-template name="applySortedAttributes">
-        <xsl:with-param name="collectedAttributes" select="$collectedAttributes"/>
+        <xsl:with-param name="collectAttributes" select="$collectAttributes"/>
       </xsl:call-template>
       <fo:external-graphic content-width="{@width}" content-height="{@height}" scaling="uniform" src="{@src}" fox:alt-text="{@alt}"/>
     </fo:block>
@@ -44,17 +48,17 @@
     </xsl:call-template>
   </xsl:template>
 
-  <!--summary list component-->
+  <!-- Representation of 'Summary list' component in the GOV.UK Design system https://design-system.service.gov.uk/components/summary-list/ -->
 
   <xsl:template match="dl" mode="pdf" priority="0.5">
-    <xsl:variable name="collectedAttributes">
+    <xsl:variable name="collectAttributes">
       <xsl:call-template name="combineAttributes">
         <xsl:with-param name="class" select="@class"/>
       </xsl:call-template>
     </xsl:variable>
-    <fo:table table-layout="fixed" width="100%" xsl:use-attribute-sets="debug-red">
+    <fo:table table-layout="fixed" width="100%">
       <xsl:call-template name="applySortedAttributes">
-        <xsl:with-param name="collectedAttributes" select="$collectedAttributes"/>
+        <xsl:with-param name="collectAttributes" select="$collectAttributes"/>
       </xsl:call-template>
       <xsl:choose>
         <xsl:when test="@data-column = '1'">
@@ -76,6 +80,8 @@
     </fo:table>
   </xsl:template>
 
+  <!-- <dd> & <dt> HTML tags are using the FOP matcher for Summary List -->
+
   <xsl:template match="div[@class='govuk-summary-list__row']" mode="pdf" priority="0.5">
     <fo:table-row xsl:use-attribute-sets="govuk-summary-list__row">
       <xsl:comment>Applying govuk-uk-summary-list__row template</xsl:comment>
@@ -83,12 +89,10 @@
     </fo:table-row>
   </xsl:template>
 
-  <!--dd & dt work with the standard implementation in this case -->
-
-  <!--link to warning text component-->
+  <!-- Representation of 'Warning text' component in the GOV.UK Design system https://design-system.service.gov.uk/components/warning-text/ -->
 
   <xsl:template match="div[@class='govuk-warning-text']" mode="pdf" priority="0.5">
-    <fo:block xsl:use-attribute-sets="govuk-warning-text debug-red">
+    <fo:block xsl:use-attribute-sets="govuk-warning-text">
       <fo:table table-layout="fixed" width="100%">
         <fo:table-column column-width="30px"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
@@ -125,17 +129,17 @@
     </fo:table-cell>
   </xsl:template>
 
-  <!--grid layouts-->
+  <!-- Representation of 'Common Layouts' page structures in the GOV.UK Design system https://design-system.service.gov.uk/styles/layout/#common-layouts -->
 
   <xsl:template match="div[contains(@class, 'govuk-grid-row')]" mode="pdf" priority="0.5">
-    <xsl:variable name="collectedAttributes">
+    <xsl:variable name="collectAttributes">
       <xsl:call-template name="combineAttributes">
         <xsl:with-param name="class" select="@class"/>
       </xsl:call-template>
     </xsl:variable>
     <fo:block>
       <xsl:call-template name="applySortedAttributes">
-        <xsl:with-param name="collectedAttributes" select="$collectedAttributes"/>
+        <xsl:with-param name="collectAttributes" select="$collectAttributes"/>
       </xsl:call-template>
       <fo:table table-layout="fixed" width="100%">
         <xsl:if test="@data-column = 'half'">
@@ -153,7 +157,7 @@
           <fo:table-column column-width="proportional-column-width(66.66667)"/>
           <fo:table-column column-width="proportional-column-width(33.33333)"/>
         </xsl:if>
-        <fo:table-body xsl:use-attribute-sets="govuk-grid-row debug-red">
+        <fo:table-body>
           <fo:table-row>
             <xsl:comment>Applying govuk-grid-row template</xsl:comment>
             <xsl:apply-templates select="node()" mode="pdf"/>
@@ -165,7 +169,7 @@
 
   <xsl:template match="div[@class='govuk-grid-column-one-half']" mode="pdf" priority="0.5">
     <fo:table-cell>
-      <fo:block xsl:use-attribute-sets="govuk-grid-column-one-half debug-blue">
+      <fo:block xsl:use-attribute-sets="govuk-grid-column-one-half">
         <xsl:comment>Applying govuk-grid-column-one-half template</xsl:comment>
         <xsl:apply-templates select="node()" mode="pdf"/>
       </fo:block>
@@ -202,7 +206,7 @@
   <xsl:template name="remapClass">
     <xsl:param name="class"/>
     <xsl:param name="tag"/>
-    <xsl:variable name="collectedAttributes">
+    <xsl:variable name="collectAttributes">
       <xsl:call-template name="combineAttributes">
         <xsl:with-param name="class" select="$class"/>
         <xsl:with-param name="logAttributes" select="true()"/>
@@ -213,7 +217,7 @@
         <fo:table-cell>
           <fo:block>
             <xsl:call-template name="applySortedAttributes">
-              <xsl:with-param name="collectedAttributes" select="$collectedAttributes"/>
+              <xsl:with-param name="collectAttributes" select="$collectAttributes"/>
             </xsl:call-template>
             <xsl:apply-templates select="node()" mode="pdf"/>
           </fo:block>
@@ -222,16 +226,16 @@
       <xsl:when test="$tag = 'span'">
         <fo:inline>
           <xsl:call-template name="applySortedAttributes">
-            <xsl:with-param name="collectedAttributes" select="$collectedAttributes"/>
+            <xsl:with-param name="collectAttributes" select="$collectAttributes"/>
           </xsl:call-template>
           <xsl:apply-templates select="node()" mode="pdf"/>
         </fo:inline>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message><xsl:value-of select="$collectedAttributes"/></xsl:message>
+        <xsl:message><xsl:value-of select="$collectAttributes"/></xsl:message>
         <fo:block>
           <xsl:call-template name="applySortedAttributes">
-            <xsl:with-param name="collectedAttributes" select="$collectedAttributes"/>
+            <xsl:with-param name="collectAttributes" select="$collectAttributes"/>
           </xsl:call-template>
           <xsl:apply-templates select="node()" mode="pdf"/>
         </fo:block>
@@ -239,13 +243,14 @@
     </xsl:choose>
   </xsl:template>
 
+  <!-- Allows attributes from different CSS classes to be combined and applied to the FOP element -->
+
   <xsl:template name="combineAttributes">
     <xsl:param name="class"/>
     <xsl:param name="logAttributes" select="false()"/>
     <xsl:for-each select="tokenize($class, ' ')">
       <xsl:variable name="currentClass" select="."/>
       <xsl:variable name="formatClassName" select="replace($currentClass, '!', 'i')"/>
-      <!-- For each class, select and add its attributes to the sequence -->
       <xsl:if test="$logAttributes = true()">
         <xsl:call-template name="log">
           <xsl:with-param name="message" select="concat('    Attributes from Class: ', $formatClassName)"/>
@@ -265,8 +270,8 @@
   </xsl:template>
 
   <xsl:template name="applySortedAttributes">
-    <xsl:param name="collectedAttributes"/>
-    <xsl:for-each select="$collectedAttributes/attr[generate-id() = generate-id(key('attr-by-name', @name)[last()])]">
+    <xsl:param name="collectAttributes"/>
+    <xsl:for-each select="$collectAttributes/attr[generate-id() = generate-id(key('attr-by-name', @name)[last()])]">
       <xsl:sort select="@name"/>
       <xsl:attribute name="{@name}">
         <xsl:value-of select="@value"/>

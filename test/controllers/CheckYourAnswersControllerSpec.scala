@@ -39,6 +39,7 @@ import views.html.check_your_answers
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.concurrent.Future.{failed, successful}
 
 class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
@@ -234,7 +235,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       .thenReturn(successful(Seq(publishedAttachment)))
 
   private def givenTheApplicationPdfGenerates(): Unit =
-    when(pdfService.generatePdf(any[Html])).thenReturn(successful(PdfFile(Array.empty)))
+    when(pdfService.generatePdf(any[Html])).thenReturn(Future.successful(Array.empty))
 
   private def givenTheApplicationPdfIsUploaded(): Unit =
     when(fileService.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier]))

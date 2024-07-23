@@ -1,12 +1,16 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:fox="http://xmlgraphics.apache.org/fop/extensions" version="2.0">
   <xsl:include href="./app/views/components/fop/hmrc-frontend-fop-conversions.xsl"/>
-  <xsl:include href="./app/views/templates/fop/applicationView-fop-conversions.xsl"/>
+  <xsl:include href="./app/views/components/fop/view_application-fop-conversions.xsl"/>
   <xsl:include href="./app/views/components/fop/hmrc-frontend-fop-matchers.xsl"/>
+
+  <!-- This template is used to convert the 'application_view.scala.html' Twirl template into FOP elements & attributes.
+       HTML elements following a standard pattern are converted by 'hmrc-frontend-fop-matchers.xsl'.
+       Custom elements and elements which are different to the 'GOV.UK Design system' are defined here. -->
 
   <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" media-type="application/pdf"/>
 
   <xsl:param name="documentAttributeSets"
-             select="document('./app/views/templates/fop/applicationView-fop-conversions.xsl')//xsl:attribute-set"/>
+             select="document('./app/views/components/fop/view_application-fop-conversions.xsl')//xsl:attribute-set"/>
 
   <xsl:template match="span[@class='address']" mode="pdf" priority="1">
     <fo:block>
@@ -16,15 +20,12 @@
 
   <xsl:template match="div[@class='print-document']" mode="pdf" priority="1">
     <fo:block xsl:use-attribute-sets="print-document" break-before="page">
-      <xsl:comment>Applying govuk-uk-summary-list__row template</xsl:comment>
       <xsl:apply-templates select="node()" mode="pdf"/>
     </fo:block>
   </xsl:template>
 
-  <!-- Specific to off Pattern Summary List -->
-
   <xsl:template match="dl[@class='govuk-summary-list govuk-summary-list--no-border']" mode="pdf" priority="1">
-    <fo:table table-layout="fixed" width="100%" xsl:use-attribute-sets="govuk-summary-list govuk-summary-list--no-border debug-red">
+    <fo:table table-layout="fixed" width="100%" xsl:use-attribute-sets="govuk-summary-list govuk-summary-list--no-border">
       <fo:table-body>
         <xsl:apply-templates select="node()" mode="pdf"/>
       </fo:table-body>

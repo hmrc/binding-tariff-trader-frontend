@@ -155,7 +155,13 @@
     </div>
 
     </div>
-
-    @view_application(appConfig, pdf, getCountryName, compositeMode)
+    <div id="pdfView">
+        <div class="govuk-grid-row hidden-print">
+            <div class="govuk-grid-column-two-thirds"></div>
+        </div>
+        <div id="print-pages">
+            @view_application(appConfig, pdf, getCountryName, compositeMode)
+        </div>
+    </div>
     }
 }
