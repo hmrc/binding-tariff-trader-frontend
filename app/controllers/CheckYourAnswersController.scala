@@ -54,7 +54,8 @@ class CheckYourAnswersController @Inject() (
   fileService: FileService,
   mapper: CaseRequestMapper,
   cc: MessagesControllerComponents,
-  checkYourAnswersView: check_your_answers
+  checkYourAnswersView: check_your_answers,
+  view_application: view_application
 )(implicit ec: ExecutionContext)
     extends FrontendController(cc)
     with I18nSupport {

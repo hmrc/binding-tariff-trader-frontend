@@ -125,7 +125,7 @@
   </xsl:attribute-set>
 
   <xsl:attribute-set name="govuk-summary-list--no-border">
-      <xsl:attribute name="border">0px</xsl:attribute>
+    <!-- Removed border property as causes warning and not requirement for current designs -->
   </xsl:attribute-set>
 
   <xsl:attribute-set name="govuk-summary-list__row">

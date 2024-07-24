@@ -58,7 +58,6 @@ trait ConnectorTest extends SpecBase with BeforeAndAfterAll {
 
     when(mockConfig.bindingTariffFileStoreUrl) thenReturn WireMockObject.wireMockUrl
     when(mockConfig.bindingTariffClassificationUrl) thenReturn WireMockObject.wireMockUrl
-    when(mockConfig.pdfGeneratorUrl) thenReturn WireMockObject.wireMockUrl
     when(mockConfig.emailUrl) thenReturn WireMockObject.wireMockUrl
 
     when(mockConfig.apiToken) thenReturn fakeAuthToken

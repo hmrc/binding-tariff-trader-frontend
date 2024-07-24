@@ -25,6 +25,7 @@ import play.twirl.api.Html
 import viewmodels.PdfViewModel
 import views.html.components.view_application
 
+import java.io.File
 import java.nio.file.{Files, Paths}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.Source
@@ -32,6 +33,8 @@ import scala.io.Source
 class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with IntegrationPatience {
 
   private val pdfGeneratorService: PdfGeneratorService = new PdfGeneratorService
+
+  private val view_application: view_application = injector.instanceOf[view_application]
 
   private val pdfViewModel: PdfViewModel          = oCase.pdf
   private val pdfViewNoSamplesModel: PdfViewModel = oCase.pdfNoSamples
@@ -57,7 +60,7 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
 
       s"generate a valid $pdfType PDF file" in {
 
-        val file: Array[Byte]    = Files.readAllBytes(Paths.get(s"test/resources/fop/$pdfType-test.pdf"))
+        val file: File = new File(s"test/resources/fop/$pdfType-test.pdf")
         val document: PDDocument = PDDocument.load(file)
 
         try {

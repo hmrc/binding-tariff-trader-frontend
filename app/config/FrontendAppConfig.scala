@@ -37,7 +37,6 @@ class FrontendAppConfig @Inject() (
   lazy val bindingTariffClassificationUrl: String = serviceConfig.baseUrl("binding-tariff-classification")
   lazy val bindingTariffFileStoreUrl: String      = serviceConfig.baseUrl("binding-tariff-filestore")
   lazy val emailUrl: String                       = serviceConfig.baseUrl("email")
-  lazy val pdfGeneratorUrl: String                = serviceConfig.baseUrl("pdf-generator-service")
 
   lazy val fileUploadMaxFiles: Int          = loadConfig("fileupload.maxFiles").toInt
   lazy val fileUploadMaxSize: Int           = loadConfig("fileupload.maxSize").toInt

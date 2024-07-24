@@ -405,6 +405,9 @@ confirmation.sendingSamples.address=Tariff Classification Service<br> COVT<br> H
 confirmation.sendingSamples.address1=Tariff Classification Service
 confirmation.sendingSamples.address2=COVT
 confirmation.sendingSamples.address3=HM Revenue and Customs
+### address4 & address5 are empty to accommodate Welsh translations
+confirmation.sendingSamples.address4=
+confirmation.sendingSamples.address5=
 confirmation.heading2.whatNext = What happens next
 confirmation.important = We try to issue ATaR decisions within 30 working days from the date that the application is accepted. Although it can take up to 120 days, as per UK law.
 confirmation.paragraph.signup = You can sign in to

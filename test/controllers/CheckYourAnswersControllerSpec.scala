@@ -36,6 +36,7 @@ import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 import viewmodels.AnswerSection
 import views.html.check_your_answers
+import views.html.components.view_application
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -60,6 +61,8 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private val btiApp              = mock(classOf[Application])
 
   private val countriesService = new CountriesService
+
+  val view_application: view_application = injector.instanceOf[view_application]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -108,7 +111,8 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       fileService,
       mapper,
       cc,
-      checkYourAnswersView
+      checkYourAnswersView,
+      view_application
     )
 
   "Check Your Answers Controller" must {

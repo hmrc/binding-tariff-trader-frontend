@@ -45,7 +45,8 @@ class MigrationWorker @Inject() (
   pdfService: PdfService,
   messagesApi: MessagesApi,
   clock: Clock,
-  mongoLockRepository: MongoLockRepository
+  mongoLockRepository: MongoLockRepository,
+  view_application: view_application
 )(implicit system: ActorSystem)
     extends InjectAuthHeader
     with Logging {
