@@ -30,8 +30,7 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.test.Helpers._
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
-import views.html.documentNotFound
-import views.html.templates.{applicationView, rulingCertificateView}
+import views.html.{applicationView, documentNotFound, rulingCertificateView}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -60,10 +59,10 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
     )
   }
 
-  val applicationView: applicationView = app.injector.instanceOf(classOf[views.html.templates.applicationView])
+  val applicationView: applicationView = app.injector.instanceOf(classOf[applicationView])
   val rulingCertificateView: rulingCertificateView =
-    app.injector.instanceOf(classOf[views.html.templates.rulingCertificateView])
-  val documentNotFoundView: documentNotFound = app.injector.instanceOf(classOf[views.html.documentNotFound])
+    app.injector.instanceOf(classOf[rulingCertificateView])
+  val documentNotFoundView: documentNotFound = app.injector.instanceOf(classOf[documentNotFound])
 
   private def controller(action: IdentifierAction = FakeIdentifierAction(Some(userEori))): ApplicationController =
     new ApplicationController(

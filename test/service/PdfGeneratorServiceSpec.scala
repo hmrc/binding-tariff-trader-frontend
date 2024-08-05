@@ -60,7 +60,7 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
 
       s"generate a valid $pdfType PDF file" in {
 
-        val file: File = new File(s"test/resources/fop/$pdfType-test.pdf")
+        val file: File           = new File(s"test/resources/fop/$pdfType-test.pdf")
         val document: PDDocument = PDDocument.load(file)
 
         try {

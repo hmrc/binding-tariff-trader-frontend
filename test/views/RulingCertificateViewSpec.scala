@@ -19,7 +19,7 @@ package views
 import models.{Case, oCase}
 import play.twirl.api.HtmlFormat
 import utils.Dates.format
-import views.html.templates.rulingCertificateTemplate
+import views.html.components.rulingCertificateTemplate
 
 class RulingCertificateViewSpec extends ViewSpecBase {
 

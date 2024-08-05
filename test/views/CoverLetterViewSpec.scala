@@ -19,7 +19,7 @@ package views
 import models.{Case, oCase}
 import play.twirl.api.HtmlFormat
 import views.ViewMatchers.containElementWithID
-import views.html.templates.rulingCoverLetterTemplate
+import views.html.components.rulingCoverLetterTemplate
 
 class CoverLetterViewSpec extends ViewSpecBase {
 

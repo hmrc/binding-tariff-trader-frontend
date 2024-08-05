@@ -1,0 +1,129 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+@import utils.Dates
+
+@(appConfig: FrontendAppConfig, c: Case, d: Decision, getCountryName: String => Option[String],
+compositeMode: Boolean = false)(implicit messages: Messages)
+
+<div class="print-document" id="print-document">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <img class="crown-logo-atar" alt="@messages("hmrc")" src="@messages("logo.encoded")"/>
+        </div>
+        <div>
+            <h2 class="govuk-heading-m margin-top-small no-margin-bottom print-header">
+                @messages("pdf.ruling.certificate.title")
+            </h2>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full mt-1">
+            <span class="govuk-caption-xl">@messages("pdf.ruling.certificate.rulingFor", c.reference)</span>
+            <h2 class="govuk-heading-xl">@c.application.goodName</h2>
+            <p class="govuk-body">@messages("pdf.ruling.certificate.issuedBy")</p>
+        </div>
+    </div>
+    <div class="govuk-grid-row main-content">
+        <div class="govuk-grid-column-one-half" id="section-holder">
+            <h2 class="govuk-heading-s">@messages("pdf.ruling.section.holder.heading")</h2>
+            <p class="govuk-body-s" id="ruling.holder.businessName">
+                <strong>@messages("pdf.ruling.section.holder.name.label")</strong><br>
+                @c.application.holder.businessName
+            </p>
+            <p class="govuk-body-s" id="ruling.holder.address">
+                <strong>@messages("pdf.ruling.section.holder.address.label")</strong><br>
+                @c.application.holder.addressLine1 <br/>
+                @c.application.holder.addressLine2 <br/>
+                @c.application.holder.addressLine3 <br/>
+                @c.application.holder.postcode <br/>
+                @messages(getCountryName(c.application.holder.country).mkString)
+            </p>
+            <p class="govuk-body-s" id="ruling.holder.eori">
+                <strong>@messages("pdf.ruling.section.holder.eori.label")</strong><br>
+                @c.application.holder.eori
+            </p>
+        </div>
+        <div class="govuk-grid-column-one-half" id="section-ruling">
+            <h2 class="govuk-heading-s">@messages("pdf.ruling.section.ruling.heading")</h2>
+            <p class="govuk-body-s">
+                <strong>@messages("pdf.ruling.section.ruling.commodityCode.label")</strong><br>
+                @d.bindingCommodityCode
+            </p>
+            <p class="govuk-body-s">
+                <strong>@messages("pdf.ruling.section.ruling.rulingReference.label")</strong><br>
+                @c.reference
+            </p>
+            <p class="govuk-body-s">
+                <strong>@messages("pdf.ruling.section.ruling.validFrom.label")</strong><br>
+                @Dates.format(d.effectiveStartDate)
+            </p>
+            <p class="govuk-body-s">
+                <strong>@messages("pdf.ruling.section.ruling.validTo.label")</strong><br>
+                @Dates.format(d.effectiveEndDate)
+            </p>
+        </div>
+    </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full" id="section-goods-info">
+                <h2 class="govuk-heading-m">@messages("pdf.ruling.section.ruling.details", c.application.goodName)</h2>
+                <dl class="govuk-summary-list" >
+                    <div class="govuk-summary-list__row" id="section-goods">
+                        <dt class="govuk-summary-list__key">
+                            @messages("pdf.ruling.section.ruling.description.label")
+                        </dt>
+                        <dd class="govuk-summary-list__value" id="ruling.goodsDescription">
+                            @d.goodsDescription
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row" id="section-commercial">
+                        <dt class="govuk-summary-list__key">
+                            @messages("pdf.ruling.section.ruling.commercialDenomination.label")
+                        </dt>
+                        <dd class="govuk-summary-list__value" id="ruling.methodCommercialDenomination">
+                            @d.methodCommercialDenomination.getOrElse("")
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row" id="section-justification">
+                        <dt class="govuk-summary-list__key">
+                            @messages("pdf.ruling.section.ruling.justification.label")
+                        </dt>
+                        <dd class="govuk-summary-list__value" id="ruling.justification">
+                            @d.justification
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row" id="section-keywords">
+                        <dt class="govuk-summary-list__key">
+                            @messages("pdf.ruling.section.ruling.keywords.label")
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            @for(keyword <- c.keywords){
+                                <strong class="govuk-tag govuk-tag--grey">@keyword</strong>
+                            }
+                            &nbsp;
+                        </dd>
+                    </div>
+                </dl>
+
+                <h2 class="govuk-heading-s">@messages("pdf.ruling.section.ruling.legalInformation.section1.label")</h2>
+                <p class="govuk-body">@messages("pdf.ruling.section.ruling.legalInformation.paragraph", Dates.format(d.effectiveStartDate), Dates.format(d.effectiveEndDate))</p>
+            </div>
+        </div>
+
+
+</div>
+
