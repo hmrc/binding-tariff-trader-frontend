@@ -62,16 +62,16 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
     input.foreach(args => (test _).tupled(args))
 
     behave like textAreaPage(
-      createView            = createViewUsingForm,
-      messageKeyPrefix      = messageKeyPrefix,
-      expectedFormAction    = routes.LegalChallengeDetailsController.onSubmit(NormalMode).url,
+      createView = createViewUsingForm,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.LegalChallengeDetailsController.onSubmit(NormalMode).url,
       expectedFormElementId = formElementId,
-      messageArgs           = Seq("goodsName")
+      messageArgs = Seq("goodsName")
     )
 
     "not allow unescaped HTML" in {
-      val xss       = "<script>alert('foo');</script>"
-      val doc       = asDocument(legalChallengeDetailsView(frontendAppConfig, form, NormalMode, xss)(fakeRequest, messages))
+      val xss = "<script>alert('foo');</script>"
+      val doc = asDocument(legalChallengeDetailsView(frontendAppConfig, form, NormalMode, xss)(fakeRequest, messages))
       val scriptTag = doc.getElementsByAttributeValue("for", formElementId).select("script").first
       Option(scriptTag) shouldBe None
     }

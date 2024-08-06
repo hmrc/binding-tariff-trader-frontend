@@ -56,7 +56,9 @@ class NavigatorSpec extends SpecBase {
 
         when(mockUserAnswers.get(ProvideGoodsNamePage)).thenReturn(Some("goods name"))
 
-        navigator.nextPage(ProvideGoodsNamePage, NormalMode)(mockUserAnswers) shouldBe routes.ProvideGoodsDescriptionController
+        navigator.nextPage(ProvideGoodsNamePage, NormalMode)(
+          mockUserAnswers
+        ) shouldBe routes.ProvideGoodsDescriptionController
           .onPageLoad(NormalMode)
       }
 
@@ -64,7 +66,9 @@ class NavigatorSpec extends SpecBase {
 
         when(mockUserAnswers.get(ProvideGoodsDescriptionPage)).thenReturn(Some("goods description"))
 
-        navigator.nextPage(ProvideGoodsDescriptionPage, NormalMode)(mockUserAnswers) shouldBe routes.AddConfidentialInformationController
+        navigator.nextPage(ProvideGoodsDescriptionPage, NormalMode)(
+          mockUserAnswers
+        ) shouldBe routes.AddConfidentialInformationController
           .onPageLoad(NormalMode)
       }
 

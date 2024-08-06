@@ -46,7 +46,7 @@ class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)
     extends PlayMongoRepository[DatedCacheMap](
       collectionName = config.get[String]("appName"),
       mongoComponent = mongo,
-      domainFormat   = DatedCacheMap.formats,
+      domainFormat = DatedCacheMap.formats,
       indexes = Seq(
         IndexModel(
           ascending("lastUpdated"),

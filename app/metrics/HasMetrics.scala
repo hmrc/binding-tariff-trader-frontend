@@ -25,14 +25,17 @@ import scala.util.control.NonFatal
 
 trait HasActionMetrics extends HasMetrics { self: MessagesBaseController =>
 
-  /**
-    * Execute a [[play.api.mvc.Action]] with a metrics timer.
-    * Intended for use in controllers that return HTTP responses.
+  /** Execute a [[play.api.mvc.Action]] with a metrics timer. Intended for use in controllers that return HTTP
+    * responses.
     *
-    * @param metric The id of the metric to be collected
-    * @param action The action to wrap with metrics collection
-    * @param ec The [[scala.concurrent.ExecutionContext]] on which the block of code should run
-    * @return an action which captures metrics about the wrapped action
+    * @param metric
+    *   The id of the metric to be collected
+    * @param action
+    *   The action to wrap with metrics collection
+    * @param ec
+    *   The [[scala.concurrent.ExecutionContext]] on which the block of code should run
+    * @return
+    *   an action which captures metrics about the wrapped action
     */
   def withMetricsTimerAction[A](metric: Metric)(action: Action[A])(implicit ec: ExecutionContext): Action[A] =
     Action(action.parser).async(request => withMetricsTimerResult(metric)(action(request)))
@@ -74,14 +77,16 @@ trait HasMetrics {
       }
   }
 
-  /**
-    * Execute a block of code with a metrics timer.
-    * Intended for use in controllers that return HTTP responses.
+  /** Execute a block of code with a metrics timer. Intended for use in controllers that return HTTP responses.
     *
-    * @param metric The id of the metric to be collected
-    * @param block The block of code to execute asynchronously
-    * @param ec The [[scala.concurrent.ExecutionContext]] on which the block of code should run
-    * @return The result of the block of code
+    * @param metric
+    *   The id of the metric to be collected
+    * @param block
+    *   The block of code to execute asynchronously
+    * @param ec
+    *   The [[scala.concurrent.ExecutionContext]] on which the block of code should run
+    * @return
+    *   The result of the block of code
     */
   def withMetricsTimerResult(metric: Metric)(block: => Future[Result])(implicit ec: ExecutionContext): Future[Result] =
     withMetricsTimer(metric) { timer =>
@@ -109,22 +114,24 @@ trait HasMetrics {
       }
     }
 
-  /**
-    * Execute a block of code with a metrics timer.
+  /** Execute a block of code with a metrics timer.
     *
     * Intended for use in connectors that call other microservices.
     *
-    * It's expected that the user of this method might want to handle
-    * connector failures gracefully and therefore they are given a [[MetricsTimer]]
-    * to optionally record whether the call was a success or a failure.
+    * It's expected that the user of this method might want to handle connector failures gracefully and therefore they
+    * are given a [[MetricsTimer]] to optionally record whether the call was a success or a failure.
     *
-    * If the user does not specify otherwise the status of the result Future is
-    * used to determine whether the block was successful or not.
+    * If the user does not specify otherwise the status of the result Future is used to determine whether the block was
+    * successful or not.
     *
-    * @param metric The id of the metric to be collected
-    * @param block The block of code to execute asynchronously
-    * @param ec The [[scala.concurrent.ExecutionContext]] on which the block of code should run
-    * @return The result of the block of code
+    * @param metric
+    *   The id of the metric to be collected
+    * @param block
+    *   The block of code to execute asynchronously
+    * @param ec
+    *   The [[scala.concurrent.ExecutionContext]] on which the block of code should run
+    * @return
+    *   The result of the block of code
     */
   def withMetricsTimerAsync[T](
     metric: Metric

@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.AddConfidentialInformationFormProvider
@@ -26,6 +25,7 @@ import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
 import play.api.mvc.{Call, Request}
+import service.FakeDataCacheService
 import views.html.addConfidentialInformation
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,7 +41,7 @@ class AddConfidentialInformationControllerSpec extends ControllerSpecBase with Y
   def controller(dataRetrievalAction: DataRetrievalAction) =
     new AddConfidentialInformationController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

@@ -34,7 +34,7 @@ class RulingInformationViewSpec extends ViewBehaviours {
   private val rulingCaseWithDecision              = oCase.btiCaseWithDecision
   private val rulingCaseWithoutDecision           = oCase.btiCaseWithDecision.copy(decision = None)
   private val rulingCaseWithDecisionNoExplanation = oCase.btiCaseWithDecisionNoExplanation
-  private val ruling                              = rulingCaseWithDecision.decision.getOrElse(throw new Exception("Bad test data"))
+  private val ruling = rulingCaseWithDecision.decision.getOrElse(throw new Exception("Bad test data"))
 
   "Ruling Information View" must {
 
@@ -114,20 +114,18 @@ class RulingInformationViewSpec extends ViewBehaviours {
       getElementText(doc, "rulingInformation.explanation") shouldBe expected
     }
 
-    // scalastyle:off null
     "show explanation when there is decision and no explanation" in {
       val doc            = asDocument(createView(rulingCaseWithDecisionNoExplanation).apply())
-      val expected: Null = null
+      val expected: Null = None.orNull
 
       doc.getElementById("rulingInformation.explanation") should be(expected)
     }
 
     "show explanation when there is no decision" in {
       val doc            = asDocument(createView(rulingCaseWithoutDecision).apply())
-      val expected: Null = null
+      val expected: Null = None.orNull
 
       doc.getElementById("rulingInformation.explanation") should be(expected)
     }
-    // scalastyle:on null
   }
 }

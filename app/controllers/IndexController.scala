@@ -17,7 +17,6 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.SortDirection.SortDirection
 import models.SortField.SortField
@@ -28,7 +27,7 @@ import pages.IndexPage
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import service.{BTAUserService, CasesService}
+import service.{BTAUserService, CasesService, DataCacheService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.Dashboard
 import views.html.account_dashboard_statuses
@@ -44,7 +43,7 @@ class IndexController @Inject() (
   navigator: Navigator,
   service: CasesService,
   getData: DataRetrievalAction,
-  dataCacheConnector: DataCacheConnector,
+  dataCacheService: DataCacheService,
   cc: MessagesControllerComponents,
   btaUserService: BTAUserService,
   accountDashboardStatusesView: account_dashboard_statuses
@@ -76,9 +75,7 @@ class IndexController @Inject() (
         (for {
           pagedResult <- service.getCases(eori, applicationStatuses, SearchPagination(page), sort)
           isBTAUser   <- btaUserService.isBTAUser(request.internalId)
-        } yield {
-          Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort), isBTAUser))
-        }) recover {
+        } yield Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort), isBTAUser))) recover {
           case NonFatal(error) =>
             logger.error("An error occurred whilst fetching data for dashboard view", error)
             Redirect(routes.ErrorController.onPageLoad)
@@ -90,7 +87,7 @@ class IndexController @Inject() (
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData).async { implicit request =>
-    request.userAnswers map { answer => dataCacheConnector.remove(answer.cacheMap) }
+    request.userAnswers map { answer => dataCacheService.remove(answer.cacheMap) }
     Future(Redirect(routes.BeforeYouStartController.onPageLoad()))
   }
 }

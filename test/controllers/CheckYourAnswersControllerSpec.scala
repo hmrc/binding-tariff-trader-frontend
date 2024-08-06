@@ -17,7 +17,6 @@
 package controllers
 
 import audit.AuditService
-import connectors.FakeDataCacheConnector
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeDataRetrievalAction, FakeIdentifierAction}
 import mapper.CaseRequestMapper
 import models._
@@ -32,7 +31,7 @@ import play.api.libs.json._
 import play.api.mvc.Call
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import service.{CasesService, CountriesService, FileService, PdfService}
+import service._
 import uk.gov.hmrc.http.HeaderCarrier
 import viewmodels.AnswerSection
 import views.html.check_your_answers
@@ -99,7 +98,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CheckYourAnswersController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       auditService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,

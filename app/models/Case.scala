@@ -31,11 +31,11 @@ case class Case(
   status: CaseStatus,
   createdDate: Instant = Instant.now,
   application: Application,
-  decision: Option[Decision]     = None,
-  attachments: Seq[Attachment]   = Seq.empty,
+  decision: Option[Decision] = None,
+  attachments: Seq[Attachment] = Seq.empty,
   dateOfExtract: Option[Instant] = None,
-  keywords: Set[String]          = Set.empty,
-  assignee: Option[Operator]     = None
+  keywords: Set[String] = Set.empty,
+  assignee: Option[Operator] = None
 ) {
 
   def hasEoriNumber(eoriNumber: String): Boolean =

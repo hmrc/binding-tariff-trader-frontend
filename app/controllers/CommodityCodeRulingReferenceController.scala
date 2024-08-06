@@ -17,10 +17,8 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import forms.CommodityCodeRulingReferenceFormProvider
-import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
@@ -28,13 +26,15 @@ import pages.CommodityCodeRulingReferencePage
 import play.api.data.Form
 import play.api.mvc.{Call, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
+import service.DataCacheService
 import views.html.commodityCodeRulingReference
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class CommodityCodeRulingReferenceController @Inject() (
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
+  val dataCacheService: DataCacheService,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
@@ -52,8 +52,8 @@ class CommodityCodeRulingReferenceController @Inject() (
   def editSubmitAction(index: Int, mode: Mode): Call =
     routes.CommodityCodeRulingReferenceController.onEditSubmit(index, mode)
 
-  def renderView(preparedForm: Form[String], submitAction: Call, mode: Mode)(
-    implicit request: DataRequest[_]
+  def renderView(preparedForm: Form[String], submitAction: Call, mode: Mode)(implicit
+    request: DataRequest[_]
   ): HtmlFormat.Appendable =
     commodityCodeRulingReferenceView(appConfig, preparedForm, submitAction, mode)
 

@@ -280,8 +280,7 @@ class CountriesService {
     Country("AX", "title.aland_islands", "AX", List("Aland Islands"))
   )
 
-  private val countriesById = countries.map {
-    case country @ Country(code, _, _, _) =>
-      code -> country
+  private val countriesById = countries.map { case country @ Country(code, _, _, _) =>
+    code -> country
   }.toMap
 }

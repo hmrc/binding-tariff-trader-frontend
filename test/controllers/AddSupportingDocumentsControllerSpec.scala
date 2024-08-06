@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.AddSupportingDocumentsFormProvider
@@ -26,6 +25,7 @@ import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
 import play.api.mvc.{Call, Request}
+import service.FakeDataCacheService
 import views.html.addSupportingDocuments
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -39,7 +39,7 @@ class AddSupportingDocumentsControllerSpec extends ControllerSpecBase with YesNo
   def controller(dataRetrievalAction: DataRetrievalAction) =
     new AddSupportingDocumentsController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

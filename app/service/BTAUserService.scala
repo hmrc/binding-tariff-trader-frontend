@@ -16,27 +16,26 @@
 
 package service
 
-import connectors.DataCacheConnector
 import models.cache.CacheMap
 import play.api.libs.json.Json
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BTAUserService @Inject() (dataCacheConnector: DataCacheConnector)(implicit ec: ExecutionContext) {
+class BTAUserService @Inject() (dataCacheService: DataCacheService)(implicit ec: ExecutionContext) {
   private val isBTAUser = "isBTAUser"
   private val keyPrefix = "btaUser-"
 
   def save(requestId: String): Future[CacheMap] = {
     val cachedId = cacheMapId(requestId)
-    dataCacheConnector.fetch(cachedId).flatMap {
+    dataCacheService.fetch(cachedId).flatMap {
       case Some(cacheMap) => Future.successful(cacheMap)
-      case None           => dataCacheConnector.save(new CacheMap(cachedId, Map(isBTAUser -> Json.toJson(true))))
+      case None           => dataCacheService.save(new CacheMap(cachedId, Map(isBTAUser -> Json.toJson(true))))
     }
   }
 
   def isBTAUser(requestId: String): Future[Boolean] =
-    dataCacheConnector.fetch(cacheMapId(requestId)).map {
+    dataCacheService.fetch(cacheMapId(requestId)).map {
       case Some(cacheMap) =>
         cacheMap.getEntry[Boolean](isBTAUser).getOrElse(false)
       case None =>
@@ -45,8 +44,8 @@ class BTAUserService @Inject() (dataCacheConnector: DataCacheConnector)(implicit
 
   def remove(requestId: String): Future[Boolean] =
     for {
-      maybeCacheMap   <- dataCacheConnector.fetch(cacheMapId(requestId))
-      cacheMapRemoved <- maybeCacheMap.fold(Future.successful(false))(dataCacheConnector.remove)
+      maybeCacheMap   <- dataCacheService.fetch(cacheMapId(requestId))
+      cacheMapRemoved <- maybeCacheMap.fold(Future.successful(false))(dataCacheService.remove)
     } yield cacheMapRemoved
 
   private def cacheMapId(requestId: String): String = s"$keyPrefix$requestId"

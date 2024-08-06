@@ -17,7 +17,6 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import models.cache.CacheMap
 import models.requests.DataRequest
@@ -28,7 +27,7 @@ import pages.{ConfirmationPage, PdfViewPage}
 import play.api.libs.json.JsValue
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import service.{BTAUserService, CountriesService, PdfService, UserAnswerDeletionService}
+import service._
 import utils.JsonFormatters._
 import viewmodels.ConfirmationHomeUrlViewModel
 import views.html.confirmation
@@ -38,7 +37,7 @@ import scala.concurrent.Future
 
 class ConfirmationControllerSpec extends ControllerSpecBase {
 
-  private val mockDataCacheConnector        = mock(classOf[DataCacheConnector])
+  private val mockDataCacheService          = mock(classOf[DataCacheService])
   private val mockPdfService                = mock(classOf[PdfService])
   private val pdfViewModel                  = oCase.pdf
   private val countriesService              = new CountriesService
@@ -47,7 +46,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
   private val mockApplicationConfig         = mock(classOf[FrontendAppConfig])
 
   override def beforeEach(): Unit = {
-    reset(mockDataCacheConnector)
+    reset(mockDataCacheService)
     reset(mockPdfService)
     reset(mockBtaUserService)
     reset(mockApplicationConfig)
@@ -59,27 +58,27 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
 
   private def controller(userAnswers: Option[UserAnswers]): ConfirmationController =
     new ConfirmationController(
-      appConfig                 = mockApplicationConfig,
-      identify                  = FakeIdentifierAction,
-      getData                   = new FakeDataRetrievalAction(userAnswers.map(_.cacheMap)),
-      requireData               = new DataRequiredActionImpl,
-      dataCacheConnector        = mockDataCacheConnector,
-      countriesService          = countriesService,
-      pdfService                = mockPdfService,
-      btaUserService            = mockBtaUserService,
+      appConfig = mockApplicationConfig,
+      identify = FakeIdentifierAction,
+      getData = new FakeDataRetrievalAction(userAnswers.map(_.cacheMap)),
+      requireData = new DataRequiredActionImpl,
+      dataCacheService = mockDataCacheService,
+      countriesService = countriesService,
+      pdfService = mockPdfService,
+      btaUserService = mockBtaUserService,
       userAnswerDeletionService = mockUserAnswerDeletionService,
-      cc                        = cc,
-      confirmationView          = confirmationView
+      cc = cc,
+      confirmationView = confirmationView
     )
 
   private def viewAsString: String =
     confirmationView(
-      appConfig      = mockApplicationConfig,
-      confirmation   = Confirmation("ref", "eori", "marisa@example.test"),
-      pdfToken       = "token",
-      pdf            = pdfViewModel,
+      appConfig = mockApplicationConfig,
+      confirmation = Confirmation("ref", "eori", "marisa@example.test"),
+      pdfToken = "token",
+      pdf = pdfViewModel,
       getCountryName = _ => Some(""),
-      urlViewModel   = ConfirmationHomeUrlViewModel
+      urlViewModel = ConfirmationHomeUrlViewModel
     )(fakeRequest, messages).toString
 
   val confirmation: Confirmation = Confirmation("ref", "eori", "marisa@example.test")
@@ -99,9 +98,9 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
 
           val fakeDataRequest =
             DataRequest(
-              request     = FakeRequest(),
-              internalId  = "id",
-              eoriNumber  = Some("eori-789012"),
+              request = FakeRequest(),
+              internalId = "id",
+              eoriNumber = Some("eori-789012"),
               userAnswers = ua
             )
 
@@ -111,7 +110,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
             mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
           ).willReturn(ua)
 
-          given(mockDataCacheConnector.save(ua.cacheMap)).willReturn(ua.cacheMap)
+          given(mockDataCacheService.save(ua.cacheMap)).willReturn(ua.cacheMap)
           given(mockPdfService.encodeToken("eori")).willReturn("token")
 
           val result = controller(Some(ua)).onPageLoad(fakeDataRequest)
@@ -140,9 +139,9 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
 
           val fakeDataRequest =
             DataRequest(
-              request     = FakeRequest(),
-              internalId  = "id",
-              eoriNumber  = Some("eori-789012"),
+              request = FakeRequest(),
+              internalId = "id",
+              eoriNumber = Some("eori-789012"),
               userAnswers = ua
             )
 
@@ -165,9 +164,9 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
 
           val fakeDataRequest =
             DataRequest(
-              request     = FakeRequest(),
-              internalId  = "id",
-              eoriNumber  = Some("eori-789012"),
+              request = FakeRequest(),
+              internalId = "id",
+              eoriNumber = Some("eori-789012"),
               userAnswers = ua
             )
 
@@ -192,9 +191,9 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
 
           val fakeDataRequest =
             DataRequest(
-              request     = FakeRequest(),
-              internalId  = "id",
-              eoriNumber  = Some("eori-789012"),
+              request = FakeRequest(),
+              internalId = "id",
+              eoriNumber = Some("eori-789012"),
               userAnswers = ua
             )
 
@@ -204,7 +203,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
             mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
           ).willReturn(ua)
 
-          given(mockDataCacheConnector.remove(ua.cacheMap)).willReturn(Future(true))
+          given(mockDataCacheService.remove(ua.cacheMap)).willReturn(Future(true))
           given(mockPdfService.encodeToken("eori")).willReturn("token")
 
           val result = controller(Some(ua)).onSubmit()(fakeDataRequest)
@@ -225,9 +224,9 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
 
           val fakeDataRequest =
             DataRequest(
-              request     = FakeRequest(),
-              internalId  = "id",
-              eoriNumber  = Some("eori-789012"),
+              request = FakeRequest(),
+              internalId = "id",
+              eoriNumber = Some("eori-789012"),
               userAnswers = ua
             )
 
@@ -237,7 +236,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
             mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
           ).willReturn(ua)
 
-          given(mockDataCacheConnector.remove(ua.cacheMap)).willReturn(Future(true))
+          given(mockDataCacheService.remove(ua.cacheMap)).willReturn(Future(true))
           given(mockPdfService.encodeToken("eori")).willReturn("token")
 
           val result = controller(Some(ua)).onSubmit()(fakeDataRequest)

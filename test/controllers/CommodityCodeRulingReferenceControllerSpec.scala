@@ -16,10 +16,10 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours._
 import forms.CommodityCodeRulingReferenceFormProvider
+import models.cache.CacheMap
 import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.FakeNavigator
 import org.scalatest.BeforeAndAfterEach
@@ -27,7 +27,7 @@ import pages.{CommodityCodeRulingReferencePage, ProvideGoodsNamePage, QuestionPa
 import play.api.data.Form
 import play.api.libs.json._
 import play.api.mvc.{Call, Request}
-import models.cache.CacheMap
+import service.FakeDataCacheService
 import views.html.commodityCodeRulingReference
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -52,12 +52,12 @@ class CommodityCodeRulingReferenceControllerSpec
     )
   )
 
-  val fakeCacheConnector =
-    new FakeDataCacheConnector(Map(cacheMapId -> CacheMap(cacheMapId, backgroundData)))
+  val fakeCacheService =
+    new FakeDataCacheService(Map(cacheMapId -> CacheMap(cacheMapId, backgroundData)))
 
   override protected def beforeEach(): Unit = {
-    await(fakeCacheConnector.remove(CacheMap(cacheMapId, Map.empty)))
-    await(fakeCacheConnector.save(CacheMap(cacheMapId, backgroundData)))
+    await(fakeCacheService.remove(CacheMap(cacheMapId, Map.empty)))
+    await(fakeCacheService.save(CacheMap(cacheMapId, backgroundData)))
   }
 
   val commodityCodeRulingReferenceView: commodityCodeRulingReference =
@@ -66,7 +66,7 @@ class CommodityCodeRulingReferenceControllerSpec
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new CommodityCodeRulingReferenceController(
       frontendAppConfig,
-      fakeCacheConnector,
+      fakeCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

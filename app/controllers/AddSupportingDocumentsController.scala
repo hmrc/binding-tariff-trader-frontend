@@ -16,26 +16,25 @@
 
 package controllers
 
-import connectors.DataCacheConnector
+import config.FrontendAppConfig
 import controllers.actions._
 import forms.AddSupportingDocumentsFormProvider
-import navigation.{Journey, LoopingJourney, Navigator}
-
-import javax.inject.Inject
-import play.api.mvc.MessagesControllerComponents
-
-import scala.concurrent.ExecutionContext
 import models.Mode
 import models.requests.DataRequest
-import play.api.data.Form
-import play.twirl.api.HtmlFormat
-import views.html.addSupportingDocuments
-import config.FrontendAppConfig
+import navigation.{Journey, LoopingJourney, Navigator}
 import pages.ProvideGoodsNamePage
+import play.api.data.Form
+import play.api.mvc.MessagesControllerComponents
+import play.twirl.api.HtmlFormat
+import service.DataCacheService
+import views.html.addSupportingDocuments
+
+import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class AddSupportingDocumentsController @Inject() (
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
+  val dataCacheService: DataCacheService,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,

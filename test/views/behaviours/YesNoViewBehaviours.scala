@@ -78,7 +78,7 @@ trait BooleanViewBehaviours[T] extends QuestionViewBehaviours[T] {
         val doc     = asDocument(createView(form))
         val legends = doc.getElementsByTag("legend")
 
-        legends.size       shouldBe 1
+        legends.size     shouldBe 1
         legends.first.text should include(expectedLegend(messageKeyPrefix))
       }
 
@@ -119,9 +119,13 @@ trait BooleanViewBehaviours[T] extends QuestionViewBehaviours[T] {
 
       "show an error prefix in the browser title" in {
         val doc = asDocument(createView(form.withError(error)))
-        assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(
-          s"$messageKeyPrefix.title"
-        )}""")
+        assertEqualsValue(
+          doc,
+          "title",
+          s"""${messages("error.browser.title.prefix")} ${messages(
+            s"$messageKeyPrefix.title"
+          )}"""
+        )
       }
     }
 

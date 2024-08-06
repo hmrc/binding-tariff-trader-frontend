@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.AnswerCachingControllerBehaviours
 import forms.CommodityCodeDigitsFormProvider
@@ -26,6 +25,7 @@ import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
 import play.api.mvc.{Call, Request}
+import service.FakeDataCacheService
 import views.html.commodityCodeDigits
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -42,7 +42,7 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase with AnswerCa
   def controller(dataRetrievalAction: DataRetrievalAction) =
     new CommodityCodeDigitsController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

@@ -49,8 +49,8 @@ object SortDirection extends Enumeration {
       case o          => throw new IllegalArgumentException(s"Unrecognised SortDirection: $o")
     }
 
-  implicit def queryStringBindable(
-    implicit stringBinder: QueryStringBindable[String]
+  implicit def queryStringBindable(implicit
+    stringBinder: QueryStringBindable[String]
   ): QueryStringBindable[SortDirection] = new QueryStringBindable[SortDirection] {
     override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, SortDirection]] =
       stringBinder.bind("order", params).map {

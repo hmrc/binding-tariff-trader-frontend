@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.PreviousBTIRulingFormProvider
@@ -26,6 +25,7 @@ import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
 import play.api.mvc.{Call, Request}
+import service.FakeDataCacheService
 import views.html.previousBTIRuling
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,7 +40,7 @@ class PreviousBTIRulingControllerSpec extends ControllerSpecBase with YesNoCachi
   private def controller(dataRetrievalAction: DataRetrievalAction): PreviousBTIRulingController =
     new PreviousBTIRulingController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

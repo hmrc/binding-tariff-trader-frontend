@@ -32,20 +32,20 @@ trait Mappings extends Formatters with Constraints {
     of(postcodeFormatter(emptyPostcodeErrorKey, notValidPostcodeErrorKey))
 
   protected def int(
-    requiredKey: String    = "error.required",
+    requiredKey: String = "error.required",
     wholeNumberKey: String = "error.wholeNumber",
-    nonNumericKey: String  = "error.nonNumeric"
+    nonNumericKey: String = "error.nonNumeric"
   ): FieldMapping[Int] =
     of(intFormatter(requiredKey, wholeNumberKey, nonNumericKey))
 
   protected def boolean(
     requiredKey: String = "error.required",
-    invalidKey: String  = "error.boolean"
+    invalidKey: String = "error.boolean"
   ): FieldMapping[Boolean] =
     of(booleanFormatter(requiredKey, invalidKey))
 
-  protected def enumerable[A](requiredKey: String = "error.required", invalidKey: String = "error.invalid")(
-    implicit ev: Enumerable[A]
+  protected def enumerable[A](requiredKey: String = "error.required", invalidKey: String = "error.invalid")(implicit
+    ev: Enumerable[A]
   ): FieldMapping[A] =
     of(enumerableFormatter[A](requiredKey, invalidKey))
 }

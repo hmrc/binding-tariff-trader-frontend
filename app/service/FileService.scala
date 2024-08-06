@@ -16,13 +16,13 @@
 
 package service
 
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.util.ByteString
 import config.FrontendAppConfig
 import connectors.BindingTariffFilestoreConnector
 import models._
 import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, FilestoreResponse}
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.util.ByteString
 import play.api.Logging
 import play.api.i18n.{Lang, MessagesApi}
 import play.api.libs.Files.TemporaryFile
@@ -47,8 +47,8 @@ class FileService @Inject() (
   def initiate(request: FileStoreInitiateRequest)(implicit hc: HeaderCarrier): Future[FileStoreInitiateResponse] =
     connector.initiate(request)
 
-  def uploadApplicationPdf(reference: String, content: Array[Byte])(
-    implicit hc: HeaderCarrier
+  def uploadApplicationPdf(reference: String, content: Array[Byte])(implicit
+    hc: HeaderCarrier
   ): Future[FileAttachment] =
     connector.uploadApplicationPdf(reference, content).map(toFileAttachment(content.length.toLong))
 
@@ -77,10 +77,9 @@ class FileService @Inject() (
   def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[PublishedFileAttachment]] =
     sequence(
       files.map { f: FileAttachment =>
-        publish(f).map(Option(_)).recover {
-          case t: Throwable =>
-            logger.error(s"Failed to publish file [${f.id}].", t)
-            None
+        publish(f).map(Option(_)).recover { case t: Throwable =>
+          logger.error(s"Failed to publish file [${f.id}].", t)
+          None
         }
       }
     ).map(_.filter(_.isDefined).map(_.get))

@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.SimilarItemCommodityCodeFormProvider
@@ -24,6 +23,7 @@ import models.NormalMode
 import navigation.FakeNavigator
 import play.api.data.Form
 import play.api.mvc.{Call, Request}
+import service.FakeDataCacheService
 import views.html.similarItemCommodityCode
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -38,7 +38,7 @@ class SimilarItemCommodityCodeControllerSpec extends ControllerSpecBase with Yes
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new SimilarItemCommodityCodeController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

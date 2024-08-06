@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.AnswerCachingControllerBehaviours
 import forms.ProvideBTIReferenceFormProvider
@@ -25,6 +24,7 @@ import navigation.FakeNavigator
 import play.api.data.Form
 import play.api.libs.json.JsValue
 import play.api.mvc.{Call, Request}
+import service.FakeDataCacheService
 import views.html.provideBTIReference
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,7 +41,7 @@ class ProvideBTIReferenceControllerSpec extends ControllerSpecBase with AnswerCa
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new ProvideBTIReferenceController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

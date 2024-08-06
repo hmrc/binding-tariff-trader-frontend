@@ -23,9 +23,9 @@ object FormConstraints {
   private val eoriCodeRegex = "^[a-zA-Z0-9]{1,17}"
   private val eoriCodeError = "registerBusinessRepresenting.error.eoriNumber.format"
 
-  val eoriCodeConstraint: Constraint[String] = Constraint("constraints.eoriFormat")({
+  val eoriCodeConstraint: Constraint[String] = Constraint("constraints.eoriFormat") {
     case s: String if s.isEmpty                => Valid
     case s: String if s.matches(eoriCodeRegex) => Valid
     case _: String                             => Invalid(eoriCodeError)
-  })
+  }
 }

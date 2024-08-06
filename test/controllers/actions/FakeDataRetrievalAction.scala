@@ -17,8 +17,8 @@
 package controllers.actions
 
 import models.UserAnswers
-import models.requests.{IdentifierRequest, OptionalDataRequest}
 import models.cache.CacheMap
+import models.requests.{IdentifierRequest, OptionalDataRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}

@@ -16,9 +16,9 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import forms.RegisteredAddressForEoriFormProvider
+import models.cache.CacheMap
 import models.{NormalMode, RegisteredAddressForEori}
 import navigation.FakeNavigator
 import pages.RegisteredAddressForEoriPage
@@ -26,8 +26,7 @@ import play.api.data.Form
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.Helpers._
-import service.CountriesService
-import models.cache.CacheMap
+import service.{CountriesService, FakeDataCacheService}
 import views.html.registeredAddressForEori
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,7 +43,7 @@ class RegisteredAddressForEoriControllerSpec extends ControllerSpecBase {
   private def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new RegisteredAddressForEoriController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

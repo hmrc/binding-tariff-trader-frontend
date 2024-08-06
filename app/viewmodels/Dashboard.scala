@@ -34,15 +34,14 @@ case class Dashboard(pageData: Paged[Case], sort: Sort) {
     this
       .copy(
         pageData = pageData.copy(pageIndex = 1),
-        sort     = Sort(SortField.withName(columnName), sortOrderFor(columnName))
+        sort = Sort(SortField.withName(columnName), sortOrderFor(columnName))
       )
       .toQueryString
 
   private def toQueryString: String = {
     val query = toMap
-      .map {
-        case (k, v) =>
-          encode(k, ENCODING) + "=" + encode(v, ENCODING)
+      .map { case (k, v) =>
+        encode(k, ENCODING) + "=" + encode(v, ENCODING)
       }
       .mkString("&")
 

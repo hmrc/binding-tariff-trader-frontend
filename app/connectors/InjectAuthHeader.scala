@@ -16,27 +16,12 @@
 
 package connectors
 
-import org.apache.pekko.actor.ActorSystem
 import config.FrontendAppConfig
-import play.api.libs.ws.WSClient
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.HttpAuditing
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-
-import javax.inject.{Inject, Singleton}
-
-@Singleton
-class AuthenticatedHttpClient @Inject() (
-  httpAuditing: HttpAuditing,
-  wsClient: WSClient,
-  actorSystem: ActorSystem
-)(implicit val config: FrontendAppConfig)
-    extends DefaultHttpClient(config.runModeConfiguration, httpAuditing, wsClient, actorSystem) {}
 
 trait InjectAuthHeader {
 
-  def addAuth(config: FrontendAppConfig)(implicit hc: HeaderCarrier): Seq[(String, String)] = {
-
+  def authHeaders(implicit config: FrontendAppConfig, hc: HeaderCarrier): Seq[(String, String)] = {
     val headerName: String = "X-Api-Token"
 
     hc.headers(Seq(headerName)) match {

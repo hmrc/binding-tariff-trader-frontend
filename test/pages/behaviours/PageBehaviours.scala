@@ -49,13 +49,12 @@ trait PageBehaviours
               cacheMap <- arbitrary[CacheMap]
             } yield (page, cacheMap copy (data = cacheMap.data - page.toString))
 
-            forAll(gen) {
-              case (page, cacheMap) =>
-                whenever(!cacheMap.data.keySet.contains(page.toString)) {
+            forAll(gen) { case (page, cacheMap) =>
+              whenever(!cacheMap.data.keySet.contains(page.toString)) {
 
-                  val userAnswers = UserAnswers(cacheMap)
-                  userAnswers.get(page) must be(empty)
-                }
+                val userAnswers = UserAnswers(cacheMap)
+                userAnswers.get(page) must be(empty)
+              }
             }
           }
         }
@@ -77,10 +76,9 @@ trait PageBehaviours
               cacheMap copy (data = cacheMap.data + (page.toString -> Json.toJson(savedValue)))
             )
 
-            forAll(gen) {
-              case (page, savedValue, cacheMap) =>
-                val userAnswers = UserAnswers(cacheMap)
-                userAnswers.get(page).value mustEqual savedValue
+            forAll(gen) { case (page, savedValue, cacheMap) =>
+              val userAnswers = UserAnswers(cacheMap)
+              userAnswers.get(page).value mustEqual savedValue
             }
           }
         }
@@ -98,11 +96,10 @@ trait PageBehaviours
           cacheMap <- arbitrary[CacheMap]
         } yield (page, newValue, cacheMap)
 
-        forAll(gen) {
-          case (page, newValue, cacheMap) =>
-            val userAnswers    = UserAnswers(cacheMap)
-            val updatedAnswers = userAnswers.set(page, newValue)
-            updatedAnswers.get(page).value mustEqual newValue
+        forAll(gen) { case (page, newValue, cacheMap) =>
+          val userAnswers    = UserAnswers(cacheMap)
+          val updatedAnswers = userAnswers.set(page, newValue)
+          updatedAnswers.get(page).value mustEqual newValue
         }
       }
   }
@@ -117,11 +114,10 @@ trait PageBehaviours
           cacheMap   <- arbitrary[CacheMap]
         } yield (page, cacheMap copy (data = cacheMap.data + (page.toString -> Json.toJson(savedValue))))
 
-        forAll(gen) {
-          case (page, cacheMap) =>
-            val userAnswers    = UserAnswers(cacheMap)
-            val updatedAnswers = userAnswers.remove(page)
-            updatedAnswers.get(page) must be(empty)
+        forAll(gen) { case (page, cacheMap) =>
+          val userAnswers    = UserAnswers(cacheMap)
+          val updatedAnswers = userAnswers.remove(page)
+          updatedAnswers.get(page) must be(empty)
         }
       }
   }

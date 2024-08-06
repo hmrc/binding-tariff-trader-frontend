@@ -49,10 +49,10 @@ class CommodityCodeDigitsFormProviderSpec extends StringFieldBehaviours {
     behave like commodityCodeField(
       form,
       fieldName,
-      requiredErrorKey       = FormError(fieldName, requiredKey),
+      requiredErrorKey = FormError(fieldName, requiredKey),
       notNumericTypeErrorKey = FormError(fieldName, numericType),
-      maxLengthErrorKey      = FormError(fieldName, maxLengthKey, Seq(maxLength)),
-      minLengthErrorKey      = FormError(fieldName, minLengthKey, Seq(minLength))
+      maxLengthErrorKey = FormError(fieldName, maxLengthKey, Seq(maxLength)),
+      minLengthErrorKey = FormError(fieldName, minLengthKey, Seq(minLength))
     )
   }
 }

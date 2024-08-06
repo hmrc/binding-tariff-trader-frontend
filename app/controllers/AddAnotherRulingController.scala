@@ -17,7 +17,6 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import forms.AddAnotherRulingFormProvider
 import models.requests.DataRequest
@@ -27,6 +26,7 @@ import pages._
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
+import service.DataCacheService
 import views.html.addAnotherRuling
 
 import javax.inject.Inject
@@ -34,7 +34,7 @@ import scala.concurrent.ExecutionContext
 
 class AddAnotherRulingController @Inject() (
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
+  val dataCacheService: DataCacheService,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
@@ -77,7 +77,7 @@ class AddAnotherRulingController @Inject() (
           routes.AddAnotherRulingController.onPageLoad(mode)
         }
 
-      dataCacheConnector
+      dataCacheService
         .save(updatedAnswers.cacheMap)
         .map(_ => Redirect(onwardRoute))
   }

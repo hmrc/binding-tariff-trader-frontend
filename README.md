@@ -60,9 +60,7 @@ When running the unit tests, PDFs are generated at **/test/resources/fop** using
 
 ### Testing
 
-Run `./run_all_tests.sh`. This also runs Scalastyle and does coverage testing. The last step will also run the a11y test that generates a report.
-
-or `sbt test` to run the tests only.
+Run `./run_all_tests.sh`. This also runs scalafmt and does coverage testing. The last step will also run the a11y test that generates a report.
 
 ## Accessibility Tests
 

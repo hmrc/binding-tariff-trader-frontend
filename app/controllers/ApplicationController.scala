@@ -92,13 +92,13 @@ class ApplicationController @Inject() (
         Future.successful(Redirect(controllers.routes.ErrorController.onPageLoad))
     }
 
-  private def getApplicationPDF(eori: Eori, reference: CaseReference)(
-    implicit request: Request[AnyContent]
+  private def getApplicationPDF(eori: Eori, reference: CaseReference)(implicit
+    request: Request[AnyContent]
   ): Future[Result] =
     getApplicationPDForHtml(eori, reference, pdf = true)
 
-  private def getApplicationView(eori: Eori, reference: CaseReference)(
-    implicit request: Request[AnyContent]
+  private def getApplicationView(eori: Eori, reference: CaseReference)(implicit
+    request: Request[AnyContent]
   ): Future[Result] =
     getApplicationPDForHtml(eori, reference, pdf = false)
 
@@ -117,8 +117,8 @@ class ApplicationController @Inject() (
 
     applicationResponse
       .getOrElse(NotFound(documentNotFoundView(appConfig, documentType, cse.reference)))
-      .recover {
-        case NonFatal(_) => BadGateway
+      .recover { case NonFatal(_) =>
+        BadGateway
       }
   }
 
@@ -126,16 +126,16 @@ class ApplicationController @Inject() (
     for {
       attachments <- fileService.getAttachmentMetadata(cse)
       attachmentFileView = attachments.map { attachment =>
-        FileView(
-          id           = attachment.id,
-          name         = attachment.fileName,
-          confidential = cse.attachments.find(_.id == attachment.id).exists(!_.public)
-        )
-      }
+                             FileView(
+                               id = attachment.id,
+                               name = attachment.fileName,
+                               confidential = cse.attachments.find(_.id == attachment.id).exists(!_.public)
+                             )
+                           }
     } yield Ok(applicationView(appConfig, PdfViewModel(cse, attachmentFileView), getCountryName))
 
-  private def getApplicationPDForHtml(eori: Eori, reference: CaseReference, pdf: Boolean)(
-    implicit request: Request[AnyContent]
+  private def getApplicationPDForHtml(eori: Eori, reference: CaseReference, pdf: Boolean)(implicit
+    request: Request[AnyContent]
   ): Future[Result] =
     caseService.getCaseForUser(eori, reference).flatMap { c =>
       val result = if (pdf) {
@@ -144,13 +144,13 @@ class ApplicationController @Inject() (
         renderApplicationHtml(c)
       }
 
-      result.recover {
-        case NonFatal(_) => BadGateway
+      result.recover { case NonFatal(_) =>
+        BadGateway
       }
     }
 
-  private def getRulingPDF(eori: Eori, reference: CaseReference)(
-    implicit request: Request[AnyContent]
+  private def getRulingPDF(eori: Eori, reference: CaseReference)(implicit
+    request: Request[AnyContent]
   ): Future[Result] =
     caseService.getCaseWithRulingForUser(eori, reference).flatMap { c: Case =>
       val rulingResponse = for {
@@ -171,8 +171,8 @@ class ApplicationController @Inject() (
       }
     }
 
-  private def getLetterPDF(eori: Eori, reference: CaseReference)(
-    implicit request: Request[AnyContent]
+  private def getLetterPDF(eori: Eori, reference: CaseReference)(implicit
+    request: Request[AnyContent]
   ): Future[Result] =
     caseService.getCaseWithRulingForUser(eori, reference).flatMap { c: Case =>
       val rulingResponse = for {
@@ -193,8 +193,8 @@ class ApplicationController @Inject() (
       }
     }
 
-  private def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)(
-    implicit request: Request[AnyContent]
+  private def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)(implicit
+    request: Request[AnyContent]
   ): Future[Result] =
     caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
       Future.successful(Ok(rulingCertificateView(appConfig, c, getCountryName)))

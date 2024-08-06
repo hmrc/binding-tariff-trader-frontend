@@ -18,12 +18,13 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
-import javax.inject.Inject
 import models.Mode
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.contactCustomsDutyLiabilityTeam
+
+import javax.inject.Inject
 
 class ContactCustomsDutyLiabilityTeamController @Inject() (
   appConfig: FrontendAppConfig,

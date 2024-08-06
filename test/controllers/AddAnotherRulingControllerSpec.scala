@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeDataRetrievalAction, FakeIdentifierAction}
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.AddAnotherRulingFormProvider
@@ -28,6 +27,7 @@ import play.api.data.Form
 import play.api.libs.json.{JsArray, JsBoolean, JsString}
 import play.api.mvc.{Call, Request}
 import play.api.test.Helpers.{redirectLocation, _}
+import service.FakeDataCacheService
 import views.html.addAnotherRuling
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,7 +40,7 @@ class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachin
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new AddAnotherRulingController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
@@ -66,7 +66,7 @@ class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachin
       onwardRoute,
       viewAsString,
       backgroundData = Map.empty,
-      formField      = "add-another-ruling-choice"
+      formField = "add-another-ruling-choice"
     )
 
     "redirect to the same page when deleting a file" in {

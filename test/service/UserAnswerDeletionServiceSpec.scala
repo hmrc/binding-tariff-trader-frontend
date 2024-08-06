@@ -85,7 +85,7 @@ class UserAnswerDeletionServiceSpec extends SpecBase {
 
           val actual: UserAnswers =
             service.deleteAllUserAnswersExcept(
-              userAnswers   = savedAnswers,
+              userAnswers = savedAnswers,
               excludedPages = Seq()
             )
 

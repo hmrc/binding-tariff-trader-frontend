@@ -53,21 +53,21 @@ class CaseRequestMapper @Inject() (appConfig: FrontendAppConfig) {
     val holderDetails: EORIDetails = holderDetailsFrom(answers)
 
     val app = Application(
-      holder                  = holderDetails,
-      contact                 = contact,
-      agent                   = None,
-      offline                 = false,
-      goodName                = goodsName.getOrElse(throwError("goods name")),
-      goodDescription         = goodsDescription.getOrElse(throwError("goods description")),
+      holder = holderDetails,
+      contact = contact,
+      agent = None,
+      offline = false,
+      goodName = goodsName.getOrElse(throwError("goods name")),
+      goodDescription = goodsDescription.getOrElse(throwError("goods description")),
       confidentialInformation = provideConfidentialInformation,
-      otherInformation        = None,
-      reissuedBTIReference    = provideBTIReference.map(_.reference),
-      relatedBTIReferences    = commodityCodeRulingReference.getOrElse(Nil),
-      knownLegalProceedings   = legalChallengeDetails,
-      envisagedCommodityCode  = commodityCodeDigits,
-      sampleToBeProvided      = sampleProvided,
-      sampleIsHazardous       = sampleHazardous,
-      sampleToBeReturned      = returnSample
+      otherInformation = None,
+      reissuedBTIReference = provideBTIReference.map(_.reference),
+      relatedBTIReferences = commodityCodeRulingReference.getOrElse(Nil),
+      knownLegalProceedings = legalChallengeDetails,
+      envisagedCommodityCode = commodityCodeDigits,
+      sampleToBeProvided = sampleProvided,
+      sampleIsHazardous = sampleHazardous,
+      sampleToBeReturned = returnSample
     )
 
     NewCaseRequest(app)
@@ -99,7 +99,7 @@ class CaseRequestMapper @Inject() (appConfig: FrontendAppConfig) {
 
   private def toContact: EnterContactDetails => Contact = { details: EnterContactDetails =>
     Contact(
-      name  = details.name,
+      name = details.name,
       email = details.email,
       phone = Option(details.phoneNumber)
     )

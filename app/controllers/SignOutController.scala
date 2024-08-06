@@ -17,12 +17,11 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.requests.OptionalDataRequest
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
-import service.BTAUserService
+import service.{BTAUserService, DataCacheService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
@@ -31,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class SignOutController @Inject() (
   val appConfig: FrontendAppConfig,
-  dataCacheConnector: DataCacheConnector,
+  dataCacheService: DataCacheService,
   urlCacheService: BTAUserService,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
@@ -66,5 +65,5 @@ class SignOutController @Inject() (
   }
 
   private def clearDataCache(request: OptionalDataRequest[AnyContent]): Option[Future[Boolean]] =
-    request.userAnswers map { answer => dataCacheConnector.remove(answer.cacheMap) }
+    request.userAnswers map { answer => dataCacheService.remove(answer.cacheMap) }
 }

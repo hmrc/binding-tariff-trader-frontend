@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.AnswerCachingControllerBehaviours
 import forms.ProvideGoodsDescriptionFormProvider
@@ -26,6 +25,7 @@ import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
 import play.api.mvc.{Call, Request}
+import service.FakeDataCacheService
 import views.html.provideGoodsDescription
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -39,7 +39,7 @@ class ProvideGoodsDescriptionControllerSpec extends ControllerSpecBase with Answ
   def controller(dataRetrievalAction: DataRetrievalAction) =
     new ProvideGoodsDescriptionController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
@@ -55,8 +55,8 @@ class ProvideGoodsDescriptionControllerSpec extends ControllerSpecBase with Answ
   val testAnswer = "answer"
   val testName   = "Luigi"
 
-  val validFormData: Map[String, String]    = Map("goodsDescription"            -> testAnswer)
-  val invalidFormData: Map[String, String]  = Map("goodsDescription"            -> "")
+  val validFormData: Map[String, String]    = Map("goodsDescription" -> testAnswer)
+  val invalidFormData: Map[String, String]  = Map("goodsDescription" -> "")
   val backgroundData: Map[String, JsString] = Map(ProvideGoodsNamePage.toString -> JsString(testName))
 
   "ProvideGoodsDescriptionController" must {

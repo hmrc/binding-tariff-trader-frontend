@@ -115,46 +115,46 @@ class Navigator @Inject() (configuration: FrontendAppConfig) {
     normalPage(ProvideGoodsDescriptionPage, AddConfidentialInformationPage, NormalMode),
     // Do you want to add any confidential information about the goods?
     yesNoJourney(
-      journey      = Journey.confidentialInformation,
+      journey = Journey.confidentialInformation,
       continuingTo = AddSupportingDocumentsPage,
-      mode         = NormalMode
+      mode = NormalMode
     ),
     // Do you want to upload any supporting documents?
     loopingJourney(
       journey = Journey.supportingDocuments,
       // TODO: Remove the if else condition from getOrElse when the toggle logic is removed.
       continuingTo = if (configuration.samplesToggle) CommodityCodeBestMatchPage else AreYouSendingSamplesPage,
-      mode         = NormalMode
+      mode = NormalMode
     ),
     // Will you send a sample of the goods to HMRC?
     yesNoJourney(
-      journey      = Journey.samples,
+      journey = Journey.samples,
       continuingTo = CommodityCodeBestMatchPage,
-      mode         = NormalMode
+      mode = NormalMode
     ),
     // Have you found a commodity code for the goods?
     yesNoJourney(
-      journey      = Journey.commodityCode,
+      journey = Journey.commodityCode,
       continuingTo = LegalChallengePage,
-      mode         = NormalMode
+      mode = NormalMode
     ),
     // Have there been any legal problems classifying the goods?
     yesNoJourney(
-      journey      = Journey.legalProblems,
+      journey = Journey.legalProblems,
       continuingTo = PreviousBTIRulingPage,
-      mode         = NormalMode
+      mode = NormalMode
     ),
     // Do you have a previous BTI ruling reference for the goods?
     yesNoJourney(
-      journey      = Journey.previousBTI,
+      journey = Journey.previousBTI,
       continuingTo = SimilarItemCommodityCodePage,
-      mode         = NormalMode
+      mode = NormalMode
     ),
     // Do you know of a similar item that already has an Advance Tariff Ruling?
     loopingJourney(
-      journey      = Journey.similarItem,
+      journey = Journey.similarItem,
       continuingTo = RegisteredAddressForEoriPage,
-      mode         = NormalMode
+      mode = NormalMode
     ),
     // About the applicant
     normalPage(RegisteredAddressForEoriPage, EnterContactDetailsPage, NormalMode),
@@ -167,45 +167,45 @@ class Navigator @Inject() (configuration: FrontendAppConfig) {
   private val checkRouteMap: Map[Page, UserAnswers => Call] = List(
     // Do you want to add any confidential information about the goods?
     yesNoJourney(
-      journey      = Journey.confidentialInformation,
+      journey = Journey.confidentialInformation,
       continuingTo = CheckYourAnswersPage,
-      mode         = CheckMode
+      mode = CheckMode
     ),
     // Do you want to upload any supporting documents?
     loopingJourney(
-      journey      = Journey.supportingDocuments,
+      journey = Journey.supportingDocuments,
       continuingTo = CheckYourAnswersPage,
-      mode         = CheckMode
+      mode = CheckMode
     ),
     // Will you send a sample of the goods to HMRC?
     yesNoJourney(
-      journey      = Journey.samples,
+      journey = Journey.samples,
       continuingTo = CheckYourAnswersPage,
-      mode         = CheckMode
+      mode = CheckMode
     ),
     // Have you found a commodity code for the goods?
     yesNoJourney(
-      journey      = Journey.commodityCode,
+      journey = Journey.commodityCode,
       continuingTo = CheckYourAnswersPage,
-      mode         = CheckMode
+      mode = CheckMode
     ),
     // Have there been any legal problems classifying the goods?
     yesNoJourney(
-      journey      = Journey.legalProblems,
+      journey = Journey.legalProblems,
       continuingTo = CheckYourAnswersPage,
-      mode         = CheckMode
+      mode = CheckMode
     ),
     // Do you have a previous BTI ruling reference for the goods?
     yesNoJourney(
-      journey      = Journey.previousBTI,
+      journey = Journey.previousBTI,
       continuingTo = CheckYourAnswersPage,
-      mode         = CheckMode
+      mode = CheckMode
     ),
     // Do you know of a similar item that already has an Advance Tariff Ruling?
     loopingJourney(
-      journey      = Journey.similarItem,
+      journey = Journey.similarItem,
       continuingTo = CheckYourAnswersPage,
-      mode         = CheckMode
+      mode = CheckMode
     )
   ).foldLeft(Map.empty[Page, UserAnswers => Call])(_ ++ _)
 

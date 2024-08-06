@@ -45,4 +45,3 @@ lazy val microservice = Project(appName, file("."))
   .settings(CodeCoverageSettings.settings)
 
 addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt A11y/scalafmt")
-addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle A11y/scalastyle")

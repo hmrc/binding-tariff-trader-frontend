@@ -36,8 +36,8 @@ class AuthenticatedIdentifierActionSpec extends SpecBase {
 
   private val authenticatedIdentifierAction = new AuthenticatedIdentifierAction(
     authConnector = mockAuthConnector,
-    cc            = controllerComponents,
-    config        = frontendAppConfig
+    cc = controllerComponents,
+    config = frontendAppConfig
   )
 
   "AuthenticatedIdentifierAction" when {

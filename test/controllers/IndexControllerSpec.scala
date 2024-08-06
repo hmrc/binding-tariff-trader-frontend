@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.DataCacheConnector
 import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import models.CaseStatus.CaseStatus
 import models._
@@ -29,7 +28,7 @@ import org.mockito.Mockito.{mock, reset}
 import pages.ConfirmationPage
 import play.api.mvc.Call
 import play.api.test.Helpers._
-import service.{BTAUserService, CasesService}
+import service.{BTAUserService, CasesService, DataCacheService}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.account_dashboard_statuses
 
@@ -38,7 +37,7 @@ import scala.concurrent.Future
 
 class IndexControllerSpec extends ControllerSpecBase {
 
-  private val cache                          = mock(classOf[DataCacheConnector])
+  private val cache                          = mock(classOf[DataCacheService])
   private lazy val givenUserDoesntHaveAnEORI = FakeIdentifierAction(None)
   private val casesService                   = mock(classOf[CasesService])
   private val btaUserService                 = mock(classOf[BTAUserService])
@@ -85,7 +84,7 @@ class IndexControllerSpec extends ControllerSpecBase {
 
         val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
 
-        status(result)          shouldBe OK
+        status(result)        shouldBe OK
         contentAsString(result) should include("applications-rulings-list-table")
       }
 
@@ -116,8 +115,7 @@ class IndexControllerSpec extends ControllerSpecBase {
         redirectLocation(result) shouldBe Some(routes.BeforeYouStartController.onPageLoad().url)
       }
 
-      for (caseStatus <- CaseStatus.values.toSeq) {
-
+      for (caseStatus <- CaseStatus.values.toSeq)
         s"return the correct view with correct applications and rulings status in table for case status '$caseStatus'" in {
 
           val request  = fakeRequestWithIdentifier()
@@ -159,7 +157,6 @@ class IndexControllerSpec extends ControllerSpecBase {
           }
           actualStatus shouldBe expectedStatus
         }
-      }
 
       "return the correct view with View ruling link for COMPLETED cases" in {
         val request  = fakeRequestWithIdentifier()

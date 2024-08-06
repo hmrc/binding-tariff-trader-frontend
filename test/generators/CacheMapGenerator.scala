@@ -45,13 +45,13 @@ trait CacheMapGenerator {
       for {
         cacheId <- nonEmptyString
         data <- generators match {
-                 case Nil => Gen.const(Map[Page, JsValue]())
-                 case _   => Gen.mapOf(oneOf(generators))
-               }
+                  case Nil => Gen.const(Map[Page, JsValue]())
+                  case _   => Gen.mapOf(oneOf(generators))
+                }
       } yield CacheMap(
         cacheId,
-        data.map {
-          case (k, v) => (k.toString, v)
+        data.map { case (k, v) =>
+          (k.toString, v)
         }
       )
     }

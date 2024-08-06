@@ -45,38 +45,38 @@ object oCase {
     None,
     None,
     sampleToBeProvided = false,
-    sampleIsHazardous  = None,
+    sampleIsHazardous = None,
     sampleToBeReturned = false,
-    applicationPdf     = Some(Attachment("id", public = false))
+    applicationPdf = Some(Attachment("id", public = false))
   )
 
   def decisionExample(exp: Option[String] = Some("This is some explanation")): Decision =
     Decision(
-      bindingCommodityCode         = "commodity-code-123",
-      effectiveStartDate           = Some(Instant.now),
-      effectiveEndDate             = Some(Instant.now),
-      justification                = "justification-content",
-      goodsDescription             = "goodsDescription-content",
+      bindingCommodityCode = "commodity-code-123",
+      effectiveStartDate = Some(Instant.now),
+      effectiveEndDate = Some(Instant.now),
+      justification = "justification-content",
+      goodsDescription = "goodsDescription-content",
       methodCommercialDenomination = Some("commercial-denomination-content"),
-      explanation                  = exp,
-      decisionPdf                  = Some(Attachment("id", public = false)),
-      letterPdf                    = Some(Attachment("id", public = false))
+      explanation = exp,
+      decisionPdf = Some(Attachment("id", public = false)),
+      letterPdf = Some(Attachment("id", public = false))
     )
 
   val btiCaseWithDecision: Case = Case(
-    reference   = "ref",
-    status      = CaseStatus.COMPLETED,
+    reference = "ref",
+    status = CaseStatus.COMPLETED,
     application = btiApplicationExample,
-    decision    = Some(decisionExample())
+    decision = Some(decisionExample())
   )
   val btiCaseWithDecisionNoExplanation: Case = Case(
-    reference   = "ref",
-    status      = CaseStatus.COMPLETED,
+    reference = "ref",
+    status = CaseStatus.COMPLETED,
     application = btiApplicationExample,
-    decision    = Some(decisionExample(None))
+    decision = Some(decisionExample(None))
   )
 
-  val btiCaseExample: Case              = Case(reference = "ref", status = CaseStatus.OPEN, application = btiApplicationExample)
+  val btiCaseExample: Case = Case(reference = "ref", status = CaseStatus.OPEN, application = btiApplicationExample)
   val newBtiCaseExample: NewCaseRequest = NewCaseRequest(btiApplicationExample, Seq.empty)
   val pdf: PdfViewModel = PdfViewModel(
     "eori",
@@ -87,9 +87,9 @@ object oCase {
     "goods name",
     "goods details",
     Some("confidential info"),
-    sendingSample   = true,
+    sendingSample = true,
     hazardousSample = false,
-    returnSample    = true,
+    returnSample = true,
     Seq(FileView("id", "file name", confidential = false)),
     Some("commodity code"),
     Some("legal"),
@@ -105,9 +105,9 @@ object oCase {
     "goods name",
     "goods details",
     Some("confidential info"),
-    sendingSample   = false,
+    sendingSample = false,
     hazardousSample = false,
-    returnSample    = false,
+    returnSample = false,
     Seq(FileView("id", "file name", confidential = false)),
     Some("commodity code"),
     Some("legal"),

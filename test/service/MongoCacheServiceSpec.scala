@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package connectors
+package service
 
+import connectors.ConnectorTest
 import generators.Generators
 import models.cache.CacheMap
 import org.mockito.ArgumentMatchers.{any, refEq}
@@ -30,7 +31,7 @@ import uk.gov.hmrc.mongo.test.MongoSupport
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class MongoCacheConnectorSpec
+class MongoCacheServiceSpec
     extends ConnectorTest
     with ScalaCheckDrivenPropertyChecks
     with Generators
@@ -45,10 +46,10 @@ class MongoCacheConnectorSpec
 
       when(repository.upsert(any[CacheMap])) thenReturn Future.successful(true)
 
-      val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
+      val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
       forAll(arbitrary[CacheMap]) { cacheMap =>
-        val result = mongoCacheConnector.save(cacheMap)
+        val result = mongoCacheService.save(cacheMap)
 
         whenReady(result) { savedCacheMap =>
           savedCacheMap shouldEqual cacheMap
@@ -67,10 +68,10 @@ class MongoCacheConnectorSpec
 
       when(repository.remove(any[CacheMap])) thenReturn Future.successful(true)
 
-      val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
+      val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
       forAll(arbitrary[CacheMap]) { cacheMap =>
-        val result = mongoCacheConnector.remove(cacheMap)
+        val result = mongoCacheService.remove(cacheMap)
 
         whenReady(result) { savedCacheMap =>
           savedCacheMap shouldEqual true
@@ -90,10 +91,10 @@ class MongoCacheConnectorSpec
 
         when(repository.get(any[String])) thenReturn Future.successful(None)
 
-        val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
+        val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
         forAll(nonEmptyString) { cacheId =>
-          val result = mongoCacheConnector.fetch(cacheId)
+          val result = mongoCacheService.fetch(cacheId)
 
           whenReady(result)(optionalCacheMap => optionalCacheMap should be(empty))
         }
@@ -106,12 +107,12 @@ class MongoCacheConnectorSpec
 
       "return the record" in {
 
-        val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
+        val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
         forAll(arbitrary[CacheMap]) { cacheMap =>
           when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
 
-          val result = mongoCacheConnector.fetch(cacheMap.id)
+          val result = mongoCacheService.fetch(cacheMap.id)
 
           whenReady(result)(optionalCacheMap => optionalCacheMap shouldBe Some(cacheMap))
         }
@@ -130,10 +131,10 @@ class MongoCacheConnectorSpec
 
         when(repository.upsert(any[CacheMap])) thenReturn Future.successful(false)
 
-        val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
+        val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
         forAll(nonEmptyString, nonEmptyString) { (cacheId, key) =>
-          val result = mongoCacheConnector.getEntry[String](cacheId, key)
+          val result = mongoCacheService.getEntry[String](cacheId, key)
 
           whenReady(result)(optionalValue => optionalValue should be(empty))
         }
@@ -148,20 +149,19 @@ class MongoCacheConnectorSpec
 
         when(repository.upsert(any[CacheMap])) thenReturn Future.successful(false)
 
-        val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
+        val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
         val gen = for {
           key      <- nonEmptyString
           cacheMap <- arbitrary[CacheMap]
         } yield (key, cacheMap copy (data = cacheMap.data - key))
 
-        forAll(gen) {
-          case (k, cacheMap) =>
-            when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
+        forAll(gen) { case (k, cacheMap) =>
+          when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
 
-            val result = mongoCacheConnector.getEntry[String](cacheMap.id, k)
+          val result = mongoCacheService.getEntry[String](cacheMap.id, k)
 
-            whenReady(result)(optionalValue => optionalValue should be(empty))
+          whenReady(result)(optionalValue => optionalValue should be(empty))
         }
 
       }
@@ -172,7 +172,7 @@ class MongoCacheConnectorSpec
 
       "return the key's value" in {
 
-        val mongoCacheConnector = new MongoCacheConnector(repository, metrics)
+        val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
         val gen = for {
           key      <- nonEmptyString
@@ -180,13 +180,12 @@ class MongoCacheConnectorSpec
           cacheMap <- arbitrary[CacheMap]
         } yield (key, value, cacheMap copy (data = cacheMap.data + (key -> JsString(value))))
 
-        forAll(gen) {
-          case (k, v, cacheMap) =>
-            when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
+        forAll(gen) { case (k, v, cacheMap) =>
+          when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
 
-            val result = mongoCacheConnector.getEntry[String](cacheMap.id, k)
+          val result = mongoCacheService.getEntry[String](cacheMap.id, k)
 
-            whenReady(result)(optionalValue => optionalValue shouldBe Some(v))
+          whenReady(result)(optionalValue => optionalValue shouldBe Some(v))
         }
 
       }

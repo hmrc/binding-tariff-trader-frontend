@@ -24,7 +24,7 @@ object PaginationUtil {
     var indexes: Seq[Int] = Seq(pageIndex)
     var surrounded        = surround(indexes, pageCount)
     while (surrounded.size <= available && indexes != surrounded) {
-      indexes    = surrounded
+      indexes = surrounded
       surrounded = surround(indexes, pageCount)
     }
     indexes

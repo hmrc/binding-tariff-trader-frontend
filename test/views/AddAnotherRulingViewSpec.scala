@@ -37,9 +37,8 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
   val viewViaF: () => HtmlFormat.Appendable =
     () => addAnotherRulingView.f(frontendAppConfig, form, NormalMode, List.empty)(fakeRequest, messages)
 
-  val viewWithRulings: List[String] => HtmlFormat.Appendable = (rulings: List[String]) => {
+  val viewWithRulings: List[String] => HtmlFormat.Appendable = (rulings: List[String]) =>
     addAnotherRulingView(frontendAppConfig, form, NormalMode, rulings)(fakeRequest, messages)
-  }
 
   "AddAnotherRuling view" when {
     def test(method: String, view: () => HtmlFormat.Appendable): Unit =

@@ -20,12 +20,12 @@ import models.Mode
 import models.requests.DataRequest
 import play.api.data.Form
 import play.api.libs.json.Format
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
+import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class ListEditingController[A](cc: MessagesControllerComponents)(
-  implicit ec: ExecutionContext,
+abstract class ListEditingController[A](cc: MessagesControllerComponents)(implicit
+  ec: ExecutionContext,
   format: Format[A]
 ) extends AccumulatingEditingController[List[A], A, Int](cc)
     with ListAnswerEditing[A]

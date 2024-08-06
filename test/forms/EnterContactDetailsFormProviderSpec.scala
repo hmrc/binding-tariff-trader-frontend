@@ -44,7 +44,7 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
+      maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
@@ -72,8 +72,8 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
     behave like validEmailFieldWithMaxLength(
       form,
       fieldName,
-      maxLength         = maxLength,
-      lengthError       = FormError(fieldName, lengthKey, Seq(maxLength)),
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength)),
       invalidEmailError = FormError(fieldName, validKey)
     )
 
@@ -100,7 +100,7 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
+      maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
@@ -109,8 +109,8 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
       fieldName,
       "432jfsdfs453fcs",
       maxLength = maxLength,
-      regex     = formProvider.telephoneRegex,
-      error     = FormError(fieldName, phoneFormatKey, mutable.ArraySeq.empty.toSeq)
+      regex = formProvider.telephoneRegex,
+      error = FormError(fieldName, phoneFormatKey, mutable.ArraySeq.empty.toSeq)
     )
   }
 
@@ -132,14 +132,14 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
     behave like fieldWithMaxLength(
       formWithTelValidation,
       fieldName,
-      maxLength   = maxLength,
+      maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
     behave like fieldWithMinLength(
       formWithTelValidation,
       fieldName,
-      minLength   = minLength,
+      minLength = minLength,
       lengthError = FormError(fieldName, minLengthKey, Seq(minLength))
     )
 
@@ -149,14 +149,16 @@ class EnterContactDetailsFormProviderSpec extends StringFieldBehaviours with Ema
       "432jfsdfs453fcs",
       minLength = minLength,
       maxLength = maxLength,
-      regex     = """[0-9]{1,20}$""",
-      error     = FormError(fieldName, phoneFormatKey, mutable.ArraySeq.empty.toSeq)
+      regex = """[0-9]{1,20}$""",
+      error = FormError(fieldName, phoneFormatKey, mutable.ArraySeq.empty.toSeq)
     )
   }
 
   ".formWithMinTelNumber" must {
     "return the correct result when filled" in {
-      formWithTelValidation.fill(EnterContactDetails("Name", "email@email.com", "0777777777")) shouldBe formWithTelValidation
+      formWithTelValidation.fill(
+        EnterContactDetails("Name", "email@email.com", "0777777777")
+      ) shouldBe formWithTelValidation
         .bind(Map("name" -> "Name", "email" -> "email@email.com", "phoneNumber" -> "0777777777"))
     }
   }

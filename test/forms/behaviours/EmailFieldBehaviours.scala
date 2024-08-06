@@ -22,7 +22,6 @@ import play.api.data.{Form, FormError}
 
 trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks {
 
-  // scalastyle:off magic.number
   protected def validEmailFieldWithMaxLength(
     form: Form[_],
     fieldName: String,
@@ -74,6 +73,5 @@ trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks 
     }
 
   }
-  // scalastyle:on magic.number
 
 }

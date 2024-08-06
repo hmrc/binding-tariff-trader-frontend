@@ -80,7 +80,7 @@ class CasesServiceSpec extends SpecBase {
 
     "propagate any error on case create" in {
       val exception = new RuntimeException("Error")
-      given(caseConnector.createCase(any[NewCaseRequest])(any[HeaderCarrier])).willThrow(exception)
+      given(caseConnector.createCase(any[NewCaseRequest])(any[HeaderCarrier])).willReturn(Future.failed(exception))
 
       val caught = intercept[RuntimeException] {
         await(service.create(newCase)(HeaderCarrier()))
@@ -115,7 +115,7 @@ class CasesServiceSpec extends SpecBase {
       given(
         caseConnector
           .findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier])
-      ).willThrow(exception)
+      ).willReturn(Future.failed(exception))
 
       val caught = intercept[RuntimeException] {
         await(service.getCases(caseRef, Set.empty, pagination, sort)(HeaderCarrier()))
@@ -216,7 +216,7 @@ class CasesServiceSpec extends SpecBase {
 
     "propagate any error" in {
       val exception = new RuntimeException("Error")
-      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willThrow(exception)
+      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.failed(exception))
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseForUser("eori", caseRef)(HeaderCarrier()))
@@ -264,7 +264,7 @@ class CasesServiceSpec extends SpecBase {
 
     "propagate any error" in {
       val exception = new RuntimeException("Error")
-      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willThrow(exception)
+      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.failed(exception))
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseForUser("eort", caseRef)(HeaderCarrier()))

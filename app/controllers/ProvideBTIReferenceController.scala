@@ -17,24 +17,24 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import forms.ProvideBTIReferenceFormProvider
-import javax.inject.Inject
-import models.{BTIReference, Mode}
 import models.requests.DataRequest
+import models.{BTIReference, Mode}
 import navigation.Navigator
 import pages.ProvideBTIReferencePage
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import play.twirl.api.HtmlFormat
+import service.DataCacheService
 import views.html.provideBTIReference
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class ProvideBTIReferenceController @Inject() (
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
+  val dataCacheService: DataCacheService,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
@@ -47,8 +47,8 @@ class ProvideBTIReferenceController @Inject() (
   lazy val form: Form[BTIReference]              = formProvider()
   val questionPage: ProvideBTIReferencePage.type = ProvideBTIReferencePage
 
-  def renderView(preparedForm: Form[BTIReference], mode: Mode)(
-    implicit request: DataRequest[_]
+  def renderView(preparedForm: Form[BTIReference], mode: Mode)(implicit
+    request: DataRequest[_]
   ): HtmlFormat.Appendable =
     provideBTIReferenceView(appConfig, preparedForm, mode)
 }

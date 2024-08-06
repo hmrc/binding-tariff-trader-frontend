@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.LegalChallengeFormProvider
@@ -26,6 +25,7 @@ import pages.ProvideGoodsNamePage
 import play.api.data.Form
 import play.api.libs.json.JsString
 import play.api.mvc.{Call, Request}
+import service.FakeDataCacheService
 import views.html.legalChallenge
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,7 +40,7 @@ class LegalChallengeControllerSpec extends ControllerSpecBase with YesNoCachingC
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new LegalChallengeController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

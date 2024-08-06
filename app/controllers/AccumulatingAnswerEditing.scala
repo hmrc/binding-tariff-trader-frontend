@@ -45,7 +45,7 @@ trait AccumulatingAnswerEditing[F <: IterableOnce[A], A, I] extends Accumulating
       .map { fa =>
         val updatedAnswers = request.userAnswers.set(questionPage, editIndex(fa, index, answer))
 
-        dataCacheConnector
+        dataCacheService
           .save(updatedAnswers.cacheMap)
           .transformWith {
             case Failure(_) =>

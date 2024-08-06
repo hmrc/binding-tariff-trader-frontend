@@ -17,14 +17,13 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import models.requests.DataRequest
 import pages._
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import service.{BTAUserService, CountriesService, PdfService, UserAnswerDeletionService}
+import service._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.JsonFormatters._
 import viewmodels.ConfirmationUrlViewModel
@@ -38,7 +37,7 @@ class ConfirmationController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  dataCacheConnector: DataCacheConnector,
+  dataCacheService: DataCacheService,
   countriesService: CountriesService,
   pdfService: PdfService,
   btaUserService: BTAUserService,
@@ -68,25 +67,22 @@ class ConfirmationController @Inject() (
           for {
             isBTAUser <- btaUserService.isBTAUser(request.internalId)
             updatedUA <- Future.successful(
-                          userAnswerDeletionService.deleteAllUserAnswersExcept(request.userAnswers, excludedPages)
-                        )
-            _ <- dataCacheConnector.save(updatedUA.cacheMap)
+                           userAnswerDeletionService.deleteAllUserAnswersExcept(request.userAnswers, excludedPages)
+                         )
+            _ <- dataCacheService.save(updatedUA.cacheMap)
             token = pdfService.encodeToken(confirmation.eori)
-          } yield {
-            Ok(
-              confirmationView(
-                appConfig,
-                confirmation,
-                token,
-                pdf,
-                getCountryName,
-                urlViewModel = ConfirmationUrlViewModel(isBTAUser)
-              )
+          } yield Ok(
+            confirmationView(
+              appConfig,
+              confirmation,
+              token,
+              pdf,
+              getCountryName,
+              urlViewModel = ConfirmationUrlViewModel(isBTAUser)
             )
-          }
-        ).recover {
-          case e: Throwable =>
-            Redirect(routes.ErrorController.onPageLoad)
+          )
+        ).recover { case e: Throwable =>
+          Redirect(routes.ErrorController.onPageLoad)
         }
       case _ =>
         Future(Redirect(routes.ErrorController.onPageLoad))
@@ -97,11 +93,9 @@ class ConfirmationController @Inject() (
     implicit request: DataRequest[_] =>
       for {
         isBTAUser <- btaUserService.isBTAUser(request.internalId)
-        removed   <- dataCacheConnector.remove(request.userAnswers.cacheMap)
+        removed   <- dataCacheService.remove(request.userAnswers.cacheMap)
         _ = if (!removed) logger.warn("Session entry failed to be removed from the cache")
-      } yield {
-        Redirect(ConfirmationUrlViewModel(isBTAUser).call)
-      }
+      } yield Redirect(ConfirmationUrlViewModel(isBTAUser).call)
   }
 
 }

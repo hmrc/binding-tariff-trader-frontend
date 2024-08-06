@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package connectors
+package service
 
-import com.google.inject.Inject
 import com.codahale.metrics.MetricRegistry
 import metrics.HasMetrics
+import models.cache.CacheMap
 import play.api.libs.json.Format
 import repositories.SessionRepository
-import models.cache.CacheMap
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class MongoCacheConnector @Inject() (
+class MongoCacheService @Inject() (
   val sessionRepository: SessionRepository,
   val metrics: MetricRegistry
 )(implicit ec: ExecutionContext)
-    extends DataCacheConnector
+    extends DataCacheService
     with HasMetrics {
 
   def save[A](cacheMap: CacheMap): Future[CacheMap] =
@@ -47,7 +47,7 @@ class MongoCacheConnector @Inject() (
     withMetricsTimerAsync("mongo-cache-remove")(_ => sessionRepository.remove(cacheMap))
 }
 
-trait DataCacheConnector {
+trait DataCacheService {
 
   def save[A](cacheMap: CacheMap): Future[CacheMap]
 

@@ -17,7 +17,6 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import forms.RegisteredAddressForEoriFormProvider
 import models.requests.DataRequest
@@ -28,7 +27,7 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
-import service.CountriesService
+import service.{CountriesService, DataCacheService}
 import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 import views.html.registeredAddressForEori
 
@@ -37,7 +36,7 @@ import scala.concurrent.ExecutionContext
 
 class RegisteredAddressForEoriController @Inject() (
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
+  val dataCacheService: DataCacheService,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
@@ -54,8 +53,8 @@ class RegisteredAddressForEoriController @Inject() (
   lazy val form: Form[RegisteredAddressForEori]       = formProvider()
   val questionPage: RegisteredAddressForEoriPage.type = RegisteredAddressForEoriPage
 
-  def renderView(preparedForm: Form[RegisteredAddressForEori], mode: Mode)(
-    implicit request: DataRequest[_]
+  def renderView(preparedForm: Form[RegisteredAddressForEori], mode: Mode)(implicit
+    request: DataRequest[_]
   ): HtmlFormat.Appendable =
     registeredAddressForEoriView(appConfig, preparedForm, mode, countriesService.getAllCountries)
 

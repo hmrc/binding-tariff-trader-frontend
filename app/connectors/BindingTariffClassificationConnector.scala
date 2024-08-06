@@ -16,79 +16,89 @@
 
 package connectors
 
-import com.google.inject.Inject
 import com.codahale.metrics.MetricRegistry
 import config.FrontendAppConfig
 import metrics.HasMetrics
 import models.CaseStatus.CaseStatus
 import models._
 import models.requests.NewEventRequest
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.libs.json.Json
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import utils.JsonFormatters._
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.http.HttpReads.Implicits._
 
 @Singleton
 class BindingTariffClassificationConnector @Inject() (
-  client: AuthenticatedHttpClient,
+  httpClient: HttpClientV2,
   val metrics: MetricRegistry
 )(implicit appConfig: FrontendAppConfig, ec: ExecutionContext)
-    extends InjectAuthHeader
-    with HasMetrics {
+    extends HasMetrics
+    with InjectAuthHeader {
 
-  def createCase(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] =
+  private val env: String = appConfig.bindingTariffClassificationUrl
+
+  def createCase(`case`: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] =
     withMetricsTimerAsync("create-case") { _ =>
-      val url = s"${appConfig.bindingTariffClassificationUrl}/cases"
-      client.POST[NewCaseRequest, Case](url = url, body = c, headers = addAuth(appConfig))
+      httpClient.post(url"$env/cases").withBody(Json.toJson(`case`)).setHeader(authHeaders: _*).execute[Case]
     }
 
-  def putCase(c: Case)(implicit hc: HeaderCarrier): Future[Case] =
+  def putCase(`case`: Case)(implicit hc: HeaderCarrier): Future[Case] =
     withMetricsTimerAsync("put-case") { _ =>
-      val url = s"${appConfig.bindingTariffClassificationUrl}/cases/${c.reference}"
-      client.PUT[Case, Case](url = url, body = c, headers = addAuth(appConfig))
+      httpClient
+        .put(url"$env/cases/${`case`.reference}")
+        .withBody(Json.toJson(`case`))
+        .setHeader(authHeaders: _*)
+        .execute[Case]
     }
 
   def updateCase(reference: String, update: CaseUpdate)(implicit hc: HeaderCarrier): Future[Option[Case]] =
     withMetricsTimerAsync("update-case") { _ =>
-      val url = s"${appConfig.bindingTariffClassificationUrl}/cases/$reference"
-      client.POST[CaseUpdate, Option[Case]](url, update, headers = addAuth(appConfig))
+      httpClient
+        .post(url"$env/cases/$reference")
+        .withBody(Json.toJson(update))
+        .setHeader(authHeaders: _*)
+        .execute[Option[Case]]
     }
 
   def findCase(reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] =
     withMetricsTimerAsync("get-case-by-reference") { _ =>
-      val url = s"${appConfig.bindingTariffClassificationUrl}/cases/$reference"
-      client.GET[Option[Case]](url, headers = addAuth(appConfig))
+      httpClient.get(url"$env/cases/$reference").setHeader(authHeaders: _*).execute[Option[Case]]
     }
 
   def allCases(pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] =
     withMetricsTimerAsync("all-cases") { _ =>
-      val url = s"${appConfig.bindingTariffClassificationUrl}/cases" +
+      val queryUrl = s"$env/cases" +
         s"?sort_by=${sort.field}&sort_direction=${sort.direction}" +
         s"&page=${pagination.page}&page_size=${pagination.pageSize}" +
         "&application_type=BTI&migrated=false"
 
-      client.GET[Paged[Case]](url, headers = addAuth(appConfig))
+      httpClient.get(url"$queryUrl").setHeader(authHeaders: _*).execute[Paged[Case]]
     }
 
-  def findCasesBy(eori: String, status: Set[CaseStatus], pagination: Pagination, sort: Sort)(
-    implicit hc: HeaderCarrier
+  def findCasesBy(eori: String, status: Set[CaseStatus], pagination: Pagination, sort: Sort)(implicit
+    hc: HeaderCarrier
   ): Future[Paged[Case]] =
     withMetricsTimerAsync("search-cases") { _ =>
-      val url = s"${appConfig.bindingTariffClassificationUrl}/cases" +
+      val queryUrl = s"$env/cases" +
         s"?eori=$eori&status=${status.mkString(",")}" +
         s"&sort_by=${sort.field}&sort_direction=${sort.direction}" +
         s"&page=${pagination.page}&page_size=${pagination.pageSize}" +
         "&migrated=false"
 
-      client.GET[Paged[Case]](url, headers = addAuth(appConfig))
+      httpClient.get(url"$queryUrl").setHeader(authHeaders: _*).execute[Paged[Case]]
     }
 
-  def createEvent(c: Case, e: NewEventRequest)(implicit hc: HeaderCarrier): Future[Event] =
+  def createEvent(`case`: Case, event: NewEventRequest)(implicit hc: HeaderCarrier): Future[Event] =
     withMetricsTimerAsync("create-event") { _ =>
-      val url = s"${appConfig.bindingTariffClassificationUrl}/cases/${c.reference}/events"
-      client.POST[NewEventRequest, Event](url = url, body = e, headers = addAuth(appConfig))
+      httpClient
+        .post(url"$env/cases/${`case`.reference}/events")
+        .withBody(Json.toJson(event))
+        .setHeader(authHeaders: _*)
+        .execute[Event]
     }
 
 }

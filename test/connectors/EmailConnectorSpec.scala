@@ -27,7 +27,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class EmailConnectorSpec extends ConnectorTest {
 
-  private val connector = new EmailConnector(mockConfig, standardHttpClient, metrics)
+  private val connector: EmailConnector = new EmailConnector(mockConfig, httpClient, metrics)
 
   private val email = ApplicationSubmittedEmail(Seq("user@domain.com"), ApplicationSubmittedParameters("ref", "name"))
 

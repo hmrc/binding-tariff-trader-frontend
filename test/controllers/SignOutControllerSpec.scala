@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.DataCacheConnector
 import controllers.actions.FakeIdentifierAction
 import models.cache.CacheMap
 import org.mockito.ArgumentMatchers.any
@@ -24,13 +23,13 @@ import org.mockito.Mockito.{mock, reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import service.BTAUserService
+import service.{BTAUserService, DataCacheService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
-  private val dataCache: DataCacheConnector  = mock(classOf[DataCacheConnector])
+  private val dataCache: DataCacheService    = mock(classOf[DataCacheService])
   private val btaUserService: BTAUserService = mock(classOf[BTAUserService])
   private implicit val ec: ExecutionContext  = app.injector.instanceOf[ExecutionContext]
 
@@ -53,7 +52,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
     "return 200 for a start feedback survey" in {
       val result: Future[Result] = controller.startFeedbackSurvey(fakeRequestWithEori)
-      status(result)               shouldBe SEE_OTHER
+      status(result)             shouldBe SEE_OTHER
       redirectLocation(result).get should endWith("/feedback/ABTIR")
     }
 
@@ -70,7 +69,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
       when(btaUserService.remove(request.internalId)).thenReturn(Future.successful(true))
 
       val result: Future[Result] = controller.forceSignOut(request)
-      status(result)               shouldBe SEE_OTHER
+      status(result)             shouldBe SEE_OTHER
       redirectLocation(result).get should endWith("/this-service-has-been-reset")
     }
 
@@ -88,18 +87,18 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
     "return a redirect and clear session" in {
       val result: Future[Result] = controller.unauthorisedSignOut(fakeRequest)
-      status(result)               shouldBe SEE_OTHER
+      status(result)             shouldBe SEE_OTHER
       redirectLocation(result).get should endWith("/advance-tariff-application/applications-and-rulings")
-      cookies(result).size         shouldBe 0
+      cookies(result).size       shouldBe 0
     }
   }
 
   "Cancel application controller" must {
     "return a redirect and clear session" in {
       val result: Future[Result] = controller.cancelApplication(fakeRequest)
-      status(result)               shouldBe SEE_OTHER
+      status(result)             shouldBe SEE_OTHER
       redirectLocation(result).get should endWith("/applications-and-rulings")
-      cookies(result).size         shouldBe 0
+      cookies(result).size       shouldBe 0
     }
   }
 }
