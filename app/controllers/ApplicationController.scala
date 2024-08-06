@@ -27,8 +27,7 @@ import play.api.mvc._
 import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.{FileView, PdfViewModel}
-import views.html.documentNotFound
-import views.html.templates._
+import views.html.{applicationView, documentNotFound, rulingCertificateView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

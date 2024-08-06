@@ -16,6 +16,8 @@
 
 @import config.FrontendAppConfig
 @import views.html.layouts.FullLayoutMainContent
+@import components.rulingCertificateTemplate
+@import components.rulingCoverLetterTemplate
 
 @this(
         printLink: components.printLink,
@@ -80,6 +82,8 @@
         </div>
     </div>
 
+  <div class="print-pages">
     @rulingCertificateTemplate(appConfig, c, c.decision.get, getCountryName: String => Option[String], compositeMode = true)
+  </div>
 
 }

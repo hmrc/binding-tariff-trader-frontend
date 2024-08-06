@@ -36,9 +36,11 @@ import service.{CasesService, CountriesService, FileService, PdfService}
 import uk.gov.hmrc.http.HeaderCarrier
 import viewmodels.AnswerSection
 import views.html.check_your_answers
+import views.html.components.view_application
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.concurrent.Future.{failed, successful}
 
 class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
@@ -59,6 +61,8 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private val btiApp              = mock(classOf[Application])
 
   private val countriesService = new CountriesService
+
+  val view_application: view_application = injector.instanceOf[view_application]
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -107,7 +111,8 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       fileService,
       mapper,
       cc,
-      checkYourAnswersView
+      checkYourAnswersView,
+      view_application
     )
 
   "Check Your Answers Controller" must {
@@ -234,7 +239,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       .thenReturn(successful(Seq(publishedAttachment)))
 
   private def givenTheApplicationPdfGenerates(): Unit =
-    when(pdfService.generatePdf(any[Html])).thenReturn(successful(PdfFile(Array.empty)))
+    when(pdfService.generatePdf(any[Html])).thenReturn(Future.successful(Array.empty))
 
   private def givenTheApplicationPdfIsUploaded(): Unit =
     when(fileService.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier]))

@@ -35,6 +35,7 @@ import utils.CheckYourAnswersHelper
 import utils.JsonFormatters._
 import viewmodels.{AnswerSection, FileView, PdfViewModel}
 import views.html.check_your_answers
+import views.html.components.view_application
 
 import scala.concurrent.Future.successful
 import scala.concurrent.{ExecutionContext, Future}
@@ -53,7 +54,8 @@ class CheckYourAnswersController @Inject() (
   fileService: FileService,
   mapper: CaseRequestMapper,
   cc: MessagesControllerComponents,
-  checkYourAnswersView: check_your_answers
+  checkYourAnswersView: check_your_answers,
+  view_application: view_application
 )(implicit ec: ExecutionContext)
     extends FrontendController(cc)
     with I18nSupport {
@@ -133,8 +135,8 @@ class CheckYourAnswersController @Inject() (
         atar <- createCase(newCaseRequest, attachments)
 
         pdf = PdfViewModel(atar, fileView)
-        pdfFile   <- pdfService.generatePdf(views.html.components.view_application_pdf(appConfig, pdf, getCountryName))
-        pdfStored <- fileService.uploadApplicationPdf(atar.reference, pdfFile.content)
+        pdfFile   <- pdfService.generatePdf(view_application(appConfig, pdf, getCountryName))
+        pdfStored <- fileService.uploadApplicationPdf(atar.reference, pdfFile)
         pdfAttachment = Attachment(pdfStored.id, public = false)
         caseUpdate = CaseUpdate(
           Some(

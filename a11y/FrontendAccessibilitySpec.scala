@@ -28,7 +28,6 @@ import uk.gov.hmrc.scalatestaccessibilitylinter.views.AutomaticAccessibilitySpec
 import viewmodels._
 import views.CaseDetailTab
 import views.html._
-import views.html.templates.{applicationView, rulingCertificateView}
 
 class FrontendAccessibilitySpec extends AutomaticAccessibilitySpec {
 

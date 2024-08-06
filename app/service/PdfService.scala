@@ -17,8 +17,6 @@
 package service
 
 import config.FrontendAppConfig
-import connectors.PdfGeneratorServiceConnector
-import models.PdfFile
 import org.apache.commons.codec.binary.Base64
 import play.api.Logging
 import play.twirl.api.Html
@@ -26,11 +24,14 @@ import uk.gov.hmrc.crypto.{AesCrypto, Crypted, PlainText}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
+import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
 @Singleton
-class PdfService @Inject() (connector: PdfGeneratorServiceConnector, appConfig: FrontendAppConfig)
-    extends Logging
+class PdfService @Inject() (
+  pdfGeneratorService: PdfGeneratorService,
+  appConfig: FrontendAppConfig
+) extends Logging
     with AesCrypto {
 
   override protected lazy val encryptionKey: String = appConfig.aesKey
@@ -59,9 +60,9 @@ class PdfService @Inject() (connector: PdfGeneratorServiceConnector, appConfig: 
         None
     }
 
-  def generatePdf(htmlContent: Html): Future[PdfFile] = {
-    val pdf = connector.generatePdf(htmlContent)
-    pdf
+  def generatePdf(htmlContent: Html): Future[Array[Byte]] = {
+    val xlsTransformer = Source.fromResource("view_application.xml").mkString
+    pdfGeneratorService.render(htmlContent, xlsTransformer)
   }
 
 }

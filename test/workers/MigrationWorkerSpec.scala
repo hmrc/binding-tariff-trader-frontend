@@ -116,7 +116,7 @@ class MigrationWorkerSpec extends UnitSpec with BeforeAndAfterAll with MongoSupp
     given(fileService.getAttachmentMetadata(any[Case])(any[HeaderCarrier]))
       .willReturn(Future.successful(Seq.empty))
     given(pdfService.generatePdf(any[Html]))
-      .willReturn(Future.successful(PdfFile(Array.empty)))
+      .willReturn(Future.successful(Array.empty))
     given(fileService.uploadApplicationPdf(refEq("ref1"), any[Array[Byte]])(any[HeaderCarrier]))
       .willReturn(Future.successful(FileAttachment("id1", "some.pdf", "application/pdf", 0L, uploaded = true)))
     given(fileService.uploadApplicationPdf(refEq("ref2"), any[Array[Byte]])(any[HeaderCarrier]))

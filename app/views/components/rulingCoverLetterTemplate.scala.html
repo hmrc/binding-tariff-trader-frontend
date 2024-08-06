@@ -25,12 +25,12 @@ compositeMode: Boolean = false)(implicit messages: Messages)
 </div>
 <div class="print-pages">
     <div id="cover-letter1" class="print-document">
-        <div class="govuk-grid-row print-header">
+        <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third">
                 <img class="crown-logo-atar" id="pdf.ruling.header.logo" alt="@messages("hmrc")" src="@messages("logo.encoded")"/>
             </div>
             <div>
-                <h2 class="margin-top-small no-margin-bottom print-header__heading govuk-heading-m">
+                <h2 class="govuk-heading-m margin-top-small no-margin-bottom print-header">
                     @messages("pdf.ruling.title")
                 </h2>
             </div>
@@ -115,12 +115,12 @@ compositeMode: Boolean = false)(implicit messages: Messages)
     </div>
 
     <div id="cover-letter2" class="print-document">
-        <div class="govuk-grid-row print-header">
+        <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third">
                 <img class="crown-logo-atar" alt="@messages("hmrc")" src="@messages("logo.encoded")"/>
             </div>
             <div>
-                <h2 class="govuk-heading-m margin-top-small no-margin-bottom print-header__heading">
+                <h2 class="govuk-heading-m margin-top-small no-margin-bottom print-header">
                     @messages("pdf.ruling.coverLetter.title")
                 </h2>
             </div>

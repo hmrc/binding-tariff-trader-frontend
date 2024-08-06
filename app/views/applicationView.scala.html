@@ -18,12 +18,13 @@
 
 @import viewmodels.PdfViewModel
 @import layouts.FullLayoutMainContent
+@import components.view_application
 
 @this(
         printLink: components.printLink,
         view_application: components.view_application,
         govukLayoutWrapper: GovukLayoutWrapper,
-        fullMainContent: FullLayoutMainContent,
+        fullMainContent: FullLayoutMainContent
 )
 
 @(
@@ -68,6 +69,13 @@
                 </div>
             </div>
         </div>
-        @view_application(appConfig, pdf, getCountryName, compositeMode)
+        <div id="pdfView">
+            <div class="govuk-grid-row hidden-print">
+                <div class="govuk-grid-column-two-thirds"></div>
+            </div>
+            <div id="print-pages">
+            @view_application(appConfig, pdf, getCountryName, compositeMode)
+            </div>
+        </div>
     </div>
 }
