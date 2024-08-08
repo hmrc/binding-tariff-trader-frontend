@@ -1,7 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:fox="http://xmlgraphics.apache.org/fop/extensions" version="2.0">
-  <xsl:include href="./app/views/components/fop/hmrc-frontend-fop-conversions.xsl"/>
-  <xsl:include href="./app/views/components/fop/view_application-fop-conversions.xsl"/>
-  <xsl:include href="./app/views/components/fop/hmrc-frontend-fop-matchers.xsl"/>
+  <xsl:include href="*/hmrc-frontend-fop-conversions.xsl"/>
+  <xsl:include href="*/view_application-fop-conversions.xsl"/>
+  <xsl:include href="*/hmrc-frontend-fop-matchers.xsl"/>
 
   <!-- This template is used to convert the 'application_view.scala.html' Twirl template into FOP elements & attributes.
        HTML elements following a standard pattern are converted by 'hmrc-frontend-fop-matchers.xsl'.
@@ -10,7 +10,7 @@
   <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" media-type="application/pdf"/>
 
   <xsl:param name="documentAttributeSets"
-             select="document('./app/views/components/fop/view_application-fop-conversions.xsl')//xsl:attribute-set"/>
+             select="document('*/view_application-fop-conversions.xsl')//xsl:attribute-set"/>
 
   <xsl:template match="span[@class='address']" mode="pdf" priority="1">
     <fo:block>

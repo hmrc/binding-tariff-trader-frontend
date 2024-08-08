@@ -42,14 +42,15 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
 
   private val xlsTransformer = Source.fromResource("view_application.xml").mkString
 
-  "PDFGeneratorService" must {
+  "render" must {
+
     def test(
       pdfType: String,
       pdfViewModel: PdfViewModel,
       visibleContent: Seq[String],
       hiddenContent: Seq[String]
     ): Unit = {
-      s"render a PDF $pdfType" in {
+      s"create a PDF $pdfType" in {
         val pdfContent: Html = view_application(frontendAppConfig, pdfViewModel, _ => Some("country"))(messages)
 
         val result = pdfGeneratorService.render(pdfContent, xlsTransformer).futureValue
@@ -58,7 +59,7 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
         Files.write(Paths.get(fileName), result)
       }
 
-      s"generate a valid $pdfType PDF file" in {
+      s"write a valid $pdfType PDF file" in {
 
         val file: File           = new File(s"test/resources/fop/$pdfType-test.pdf")
         val document: PDDocument = PDDocument.load(file)
@@ -97,17 +98,50 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
     )
 
     input.foreach(args => (test _).tupled(args))
-  }
 
-  "log an error when provided HTML is invalid and the PDF cannot be generated" in {
+    "log an error when provided HTML is invalid and the PDF cannot be generated" in {
 
-    val result = intercept[Exception] {
-      pdfGeneratorService.render(Html("invalid html"), xlsTransformer).futureValue
+      val result = intercept[Exception] {
+        pdfGeneratorService.render(Html("invalid html"), xlsTransformer).futureValue
+      }
+
+      result.getMessage should include("Error rendering PDF")
+      result.getMessage should include("is missing child elements")
+
     }
 
-    result.getMessage should include("Error rendering PDF")
-    result.getMessage should include("is missing child elements")
-
   }
 
+  "resolve" must {
+
+    def test(
+      description: String,
+      hrefToResolve: String,
+      path: String
+    ): Unit =
+      s"construct XLS file references when the required file $description" in {
+        val filePath = Paths.get(path)
+        val file     = filePath.toFile
+
+        if (!file.exists()) {
+          Files.createFile(filePath)
+        }
+
+        try {
+          val result = pdfGeneratorService.resolve(hrefToResolve, file.getParent)
+          result.getSystemId shouldBe file.getCanonicalFile.toURI.toString
+        } finally {
+          file.delete()
+        }
+      }
+
+    val input: Seq[(String, String, String)] = Seq(
+      ("is in '/conf' (JAR environment)", "*/file.xls", "app/views/components/fop/file.xls"),
+      ("is not in '/conf' (local environment)", "*/file.xls", "app/views/components/fop/file.xls"),
+      ("does not start with a custom resolver '*/'", "test/resources/fop/file.xls", "test/resources/fop/file.xls")
+    )
+
+    input.foreach(args => (test _).tupled(args))
+
+  }
 }

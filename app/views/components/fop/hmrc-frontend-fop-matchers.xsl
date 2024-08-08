@@ -4,7 +4,7 @@
        It provides generic methods for converting HTML tags and specific implementations to match
        'hmrc-frontend' components. -->
 
-  <xsl:variable name="hmrc-frontend-attributes" select="'./hmrc-frontend-fop-conversions.xsl'"/>
+  <xsl:variable name="hmrc-frontend-attributes" select="'*/hmrc-frontend-fop-conversions.xsl'"/>
 
   <xsl:key name="attr-by-name" match="attr" use="@name" />
 

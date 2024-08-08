@@ -25,20 +25,34 @@ import play.twirl.api.Html
 
 import java.io.{File, StringReader}
 import javax.inject.{Inject, Singleton}
-import javax.xml.transform.TransformerFactory
 import javax.xml.transform.sax.{SAXResult, SAXTransformerFactory}
 import javax.xml.transform.stream.StreamSource
+import javax.xml.transform.{Source, TransformerFactory, URIResolver}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Using
 
 @Singleton
-class PdfGeneratorService @Inject() (implicit ec: ExecutionContext) extends Logging {
+class PdfGeneratorService @Inject() (implicit ec: ExecutionContext) extends Logging with URIResolver {
 
   private val baseURI            = getClass.getClassLoader.getResource("./").toURI
   private val cfgBuilder         = new DefaultConfigurationBuilder()
   private val cfg: Configuration = cfgBuilder.buildFromFile(new File("./conf/fop.xconf"))
 
-  val fopFactory: FopFactory = new FopFactoryBuilder(baseURI).setConfiguration(cfg).build()
+  private val fopFactory: FopFactory = new FopFactoryBuilder(baseURI).setConfiguration(cfg).build()
+
+  override def resolve(href: String, base: String): Source = {
+    val pathForEnv = href.replace("*/", "")
+
+    val file: File = if (href.startsWith("*/")) {
+      Option(new File(s"conf/$pathForEnv"))
+        .filter(_.exists)
+        .getOrElse(new File(s"app/views/components/fop/$pathForEnv"))
+    } else {
+      new File(href)
+    }
+
+    new StreamSource(file)
+  }
 
   def render(input: Html, xlsTransformer: String): Future[Array[Byte]] = Future {
     Using.resource(new ByteArrayOutputStream()) { out =>
@@ -56,7 +70,8 @@ class PdfGeneratorService @Inject() (implicit ec: ExecutionContext) extends Logg
         val result               = new SAXResult(fop.getDefaultHandler)
 
         val transformerFactory = TransformerFactory.newInstance().asInstanceOf[SAXTransformerFactory]
-        val transformer        = transformerFactory.newTransformer(xslt)
+        transformerFactory.setURIResolver(this)
+        val transformer = transformerFactory.newTransformer(xslt)
         transformer.transform(source, result)
 
       } catch {
