@@ -39,3 +39,4 @@ project/metals.sbt
 .vscode/
 .bsp/
 test/resources/fop/*test.pdf
+file.xls
