@@ -139,8 +139,8 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
       }
 
     val input: Seq[(String, String, String)] = Seq(
-      ("is in '/conf' (JAR environment)", "*/file.xls", "./app/views/components/fop/file.xls"),
-      ("is not in '/conf' (local environment)", "*/file.xls", "./app/views/components/fop/file.xls"),
+      ("is in '/conf' (JAR environment)", "*/file.xls", "app/views/components/fop/file.xls"),
+      ("is not in '/conf' (local environment)", "*/file.xls", "app/views/components/fop/file.xls"),
       ("does not start with a custom resolver '*/'", "test/resources/fop/file.xls", "test/resources/fop/file.xls")
     )
 
