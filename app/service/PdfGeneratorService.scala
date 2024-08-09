@@ -45,21 +45,8 @@ class PdfGeneratorService @Inject() (environment: Environment)(implicit ec: Exec
   override def resolve(href: String, base: String): Source = {
     val pathForEnv = href.replace("*/", "")
 
-    val rootPath = environment.rootPath.toURI
-    val rootFile = new File(rootPath)
-
-    val parentFile  = rootFile.getParentFile
-    val parentFiles = Option(parentFile.listFiles()).getOrElse(Array.empty)
-    logger.info(
-      s"Files and directories at parent of rootPath (${parentFile.getAbsolutePath}):\n\n   ${parentFiles.map(_.getName).toList.mkString(", ")}"
-    )
-    parentFiles.filter(_.isDirectory).foreach { dir =>
-      val childFiles = Option(dir.listFiles()).getOrElse(Array.empty)
-      logger.info(s"Files and directories in ${dir.getAbsolutePath}:\n\n   ${childFiles.map(_.getName).mkString(", ")}")
-    }
-
     val file: File = if (href.startsWith("*/")) {
-      Option(new File(s"conf/$pathForEnv"))
+      Option(new File(s"${environment.rootPath.toURI}conf/$pathForEnv"))
         .filter(_.exists)
         .getOrElse(new File(s"app/views/components/fop/$pathForEnv"))
     } else {
