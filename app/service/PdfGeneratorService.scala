@@ -20,7 +20,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream
 import org.apache.fop.apps.{FOUserAgent, Fop, FopFactory, FopFactoryBuilder}
 import org.apache.fop.configuration.{Configuration, DefaultConfigurationBuilder}
 import org.apache.xmlgraphics.util.MimeConstants
-import play.api.Logging
+import play.api.{Environment, Logging}
 import play.twirl.api.Html
 
 import java.io.{File, StringReader}
@@ -32,7 +32,9 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Using
 
 @Singleton
-class PdfGeneratorService @Inject() (implicit ec: ExecutionContext) extends Logging with URIResolver {
+class PdfGeneratorService @Inject() (environment: Environment)(implicit ec: ExecutionContext)
+    extends Logging
+    with URIResolver {
 
   private val baseURI            = getClass.getClassLoader.getResource("./").toURI
   private val cfgBuilder         = new DefaultConfigurationBuilder()
@@ -42,6 +44,9 @@ class PdfGeneratorService @Inject() (implicit ec: ExecutionContext) extends Logg
 
   override def resolve(href: String, base: String): Source = {
     val pathForEnv = href.replace("*/", "")
+
+    logger.info(s"classLoaderPath: ${environment.classLoader.getResources("").nextElement().toURI.toString}")
+    logger.info(s"rootPath: ${environment.rootPath.toURI.toString}")
 
     val file: File = if (href.startsWith("*/")) {
       Option(new File(s"conf/$pathForEnv"))
