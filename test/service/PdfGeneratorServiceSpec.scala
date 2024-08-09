@@ -21,6 +21,7 @@ import models.oCase
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import play.api.Environment
 import play.twirl.api.Html
 import viewmodels.PdfViewModel
 import views.html.components.view_application
@@ -32,7 +33,9 @@ import scala.io.Source
 
 class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with IntegrationPatience {
 
-  private val pdfGeneratorService: PdfGeneratorService = new PdfGeneratorService
+  val env = injector.instanceOf[Environment]
+
+  private val pdfGeneratorService: PdfGeneratorService = new PdfGeneratorService(env)
 
   private val view_application: view_application = injector.instanceOf[view_application]
 
@@ -136,8 +139,8 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
       }
 
     val input: Seq[(String, String, String)] = Seq(
-      ("is in '/conf' (JAR environment)", "*/file.xls", "app/views/components/fop/file.xls"),
-      ("is not in '/conf' (local environment)", "*/file.xls", "app/views/components/fop/file.xls"),
+      ("is in '/conf' (JAR environment)", "*/file.xls", "./app/views/components/fop/file.xls"),
+      ("is not in '/conf' (local environment)", "*/file.xls", "./app/views/components/fop/file.xls"),
       ("does not start with a custom resolver '*/'", "test/resources/fop/file.xls", "test/resources/fop/file.xls")
     )
 
