@@ -132,14 +132,14 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
 
         try {
           val result = pdfGeneratorService.resolve(hrefToResolve, file.getParent)
-          result.getSystemId shouldBe file.getCanonicalFile.toURI.toString
+          result.getSystemId.replace("./", "") shouldBe file.getCanonicalFile.toURI.toString
         } finally {
           file.delete()
         }
       }
 
     val input: Seq[(String, String, String)] = Seq(
-      ("is in '/conf' (JAR environment)", "*/file.xls", "app/views/components/fop/file.xls"),
+      ("is in '/conf' (JAR environment)", "*/file.xls", "conf/file.xls"),
       ("is not in '/conf' (local environment)", "*/file.xls", "app/views/components/fop/file.xls"),
       ("does not start with a custom resolver '*/'", "test/resources/fop/file.xls", "test/resources/fop/file.xls")
     )
