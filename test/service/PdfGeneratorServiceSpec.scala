@@ -18,6 +18,7 @@ package service
 
 import base.SpecBase
 import models.oCase
+import org.apache.fop.apps.FopFactory
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -33,9 +34,10 @@ import scala.io.Source
 
 class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with IntegrationPatience {
 
-  val env = injector.instanceOf[Environment]
+  val env: Environment       = injector.instanceOf[Environment]
+  val fopFactory: FopFactory = injector.instanceOf[FopFactory]
 
-  private val pdfGeneratorService: PdfGeneratorService = new PdfGeneratorService(env)
+  private val pdfGeneratorService: PdfGeneratorService = new PdfGeneratorService(fopFactory, env)
 
   private val view_application: view_application = injector.instanceOf[view_application]
 
