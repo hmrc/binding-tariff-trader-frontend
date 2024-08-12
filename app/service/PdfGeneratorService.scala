@@ -46,7 +46,7 @@ class PdfGeneratorService @Inject() (environment: Environment)(implicit ec: Exec
     val pathForEnv = href.replace("*/", "")
 
     val file: File = if (href.startsWith("*/")) {
-      Option(new File(s"${environment.rootPath.toURI.toString}conf/$pathForEnv"))
+      Option(new File(s"${environment.rootPath.toURI.getPath}conf/$pathForEnv"))
         .filter(_.exists)
         .getOrElse(new File(s"app/views/components/fop/$pathForEnv"))
     } else {
