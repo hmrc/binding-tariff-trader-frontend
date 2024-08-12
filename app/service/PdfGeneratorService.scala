@@ -17,8 +17,7 @@
 package service
 
 import org.apache.commons.io.output.ByteArrayOutputStream
-import org.apache.fop.apps.{FOUserAgent, Fop, FopFactory, FopFactoryBuilder}
-import org.apache.fop.configuration.{Configuration, DefaultConfigurationBuilder}
+import org.apache.fop.apps.{FOUserAgent, Fop, FopFactory}
 import org.apache.xmlgraphics.util.MimeConstants
 import play.api.{Environment, Logging}
 import play.twirl.api.Html
@@ -32,15 +31,9 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Using
 
 @Singleton
-class PdfGeneratorService @Inject() (environment: Environment)(implicit ec: ExecutionContext)
+class PdfGeneratorService @Inject() (fopFactory: FopFactory, environment: Environment)(implicit ec: ExecutionContext)
     extends Logging
     with URIResolver {
-
-  private val baseURI            = getClass.getClassLoader.getResource("./").toURI
-  private val cfgBuilder         = new DefaultConfigurationBuilder()
-  private val cfg: Configuration = cfgBuilder.buildFromFile(new File("./conf/fop.xconf"))
-
-  private val fopFactory: FopFactory = new FopFactoryBuilder(baseURI).setConfiguration(cfg).build()
 
   override def resolve(href: String, base: String): Source = {
     val pathForEnv = href.replace("*/", "")

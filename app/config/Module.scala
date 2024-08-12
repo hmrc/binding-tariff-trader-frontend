@@ -18,6 +18,8 @@ package config
 
 import connectors._
 import controllers.actions._
+import org.apache.fop.apps.FopFactory
+
 import java.time.Clock
 import play.api.{Configuration, Environment}
 import play.api.inject.{Binding, Module => PlayModule}
@@ -30,6 +32,7 @@ class Module extends PlayModule {
       bind[DataRequiredAction].to[DataRequiredActionImpl].eagerly(),
       bind[IdentifierAction].to[AuthenticatedIdentifierAction].eagerly(),
       bind[DataCacheConnector].to[MongoCacheConnector].eagerly(),
+      bind[FopFactory].toProvider[FopFactoryProvider].eagerly(),
       bind[Clock].to(Clock.systemUTC()),
       bind[MigrationWorker].toSelf.eagerly()
     )
