@@ -133,9 +133,7 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
         try {
           val result = pdfGeneratorService.resolve(hrefToResolve, file.getParent)
           result.getSystemId.replace("./", "") shouldBe file.getCanonicalFile.toURI.toString
-        } finally {
-          file.delete()
-        }
+        } finally file.delete()
       }
 
     val input: Seq[(String, String, String)] = Seq(

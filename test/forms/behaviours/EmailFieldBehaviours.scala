@@ -32,8 +32,6 @@ trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks 
 
     s"not bind valid email addresses longer than $maxLength characters" in {
 
-      // TODO: we should use ScalaCheck for testing this, but it is not trivial to generate valid email addresses
-
       val s                   = "a123456789"
       val usr                 = List.fill(6)(s).mkString
       val domain              = s"${List.fill(3)(s).mkString}.me.you.us"
@@ -48,8 +46,6 @@ trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks 
     }
 
     "not bind invalid email addresses" in {
-
-      // TODO: we should use ScalaCheck for testing this
 
       val invalidEmailAddresses = List(
         s"${List.fill(65)('a').mkString}@email.me",

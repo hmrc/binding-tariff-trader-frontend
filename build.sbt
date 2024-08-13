@@ -17,7 +17,6 @@ lazy val microservice = Project(appName, file("."))
       "models.SortDirection._"
     ),
     PlayKeys.playDefaultPort := 9582,
-    scalacOptions ~= { opts => opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard")) },
     libraryDependencies ++= AppDependencies(),
     scalacOptions ++= Seq(
       "-feature",

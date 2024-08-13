@@ -38,7 +38,6 @@ class CaseRequestMapper @Inject() (appConfig: FrontendAppConfig) {
     val legalChallengeDetails: Option[String]              = answers.get(LegalChallengeDetailsPage)
     val commodityCodeDigits: Option[String]                = answers.get(CommodityCodeDigitsPage)
 
-    // TODO: Remove the if else condition from getOrElse when the toggle logic is removed.
     val sampleProvided: Boolean = answers
       .get(AreYouSendingSamplesPage)
       .getOrElse(
