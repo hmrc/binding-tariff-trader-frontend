@@ -17,7 +17,7 @@
 package service
 
 import base.SpecBase
-import connectors.DataCacheConnector
+import service.DataCacheService
 import models.cache.CacheMap
 import org.mockito.Mockito._
 import play.api.libs.json.Json
@@ -26,7 +26,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class BTAUserServiceSpec extends SpecBase {
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
-  private val dataCacheConnector    = mock(classOf[DataCacheConnector])
+  private val dataCacheService      = mock(classOf[DataCacheService])
 
   val keyPrefix          = "btaUser-"
   val requestId          = "testRequestId"
@@ -35,15 +35,15 @@ class BTAUserServiceSpec extends SpecBase {
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(dataCacheConnector)
+    reset(dataCacheService)
   }
 
   "save" should {
     "store the boolean value true in a cacheMap " when {
       "a CacheMap is not already present " in {
-        val btaUserService = new BTAUserService(dataCacheConnector)
-        when(dataCacheConnector.fetch(cacheMapId)).thenReturn(Future.successful(None))
-        when(dataCacheConnector.save(cacheMap)).thenReturn(Future.successful(cacheMap))
+        val btaUserService = new BTAUserService(dataCacheService)
+        when(dataCacheService.fetch(cacheMapId)).thenReturn(Future.successful(None))
+        when(dataCacheService.save(cacheMap)).thenReturn(Future.successful(cacheMap))
         val cacheMapResult: CacheMap = await(btaUserService.save(requestId))
 
         cacheMapResult shouldBe cacheMap
@@ -51,27 +51,27 @@ class BTAUserServiceSpec extends SpecBase {
     }
 
     "return a saved CacheMap" in {
-      val btaUserService = new BTAUserService(dataCacheConnector)
-      when(dataCacheConnector.fetch(cacheMapId)).thenReturn(Future.successful(Some(cacheMap)))
+      val btaUserService = new BTAUserService(dataCacheService)
+      when(dataCacheService.fetch(cacheMapId)).thenReturn(Future.successful(Some(cacheMap)))
       val cacheMapResult: CacheMap = await(btaUserService.save(requestId))
 
       cacheMapResult shouldBe cacheMap
-      verify(dataCacheConnector, times(0)).save(cacheMap)
+      verify(dataCacheService, times(0)).save(cacheMap)
     }
   }
 
   "isBTAUser" should {
     "return true if a boolean flag has been cached" in {
-      val btaUserService = new BTAUserService(dataCacheConnector)
-      when(dataCacheConnector.fetch(cacheMapId)).thenReturn(Future.successful(Some(cacheMap)))
+      val btaUserService = new BTAUserService(dataCacheService)
+      when(dataCacheService.fetch(cacheMapId)).thenReturn(Future.successful(Some(cacheMap)))
       val result: Boolean = await(btaUserService.isBTAUser(requestId))
 
       result shouldBe true
     }
 
     "return false if a boolean flag has not been cached" in {
-      val btaUserService = new BTAUserService(dataCacheConnector)
-      when(dataCacheConnector.fetch(cacheMapId)).thenReturn(Future.successful(None))
+      val btaUserService = new BTAUserService(dataCacheService)
+      when(dataCacheService.fetch(cacheMapId)).thenReturn(Future.successful(None))
       val result: Boolean = await(btaUserService.isBTAUser(requestId))
 
       result shouldBe false
@@ -80,23 +80,23 @@ class BTAUserServiceSpec extends SpecBase {
 
   "remove" should {
     "remove a cacheMap containing a boolean true value" in {
-      val btaUserService = new BTAUserService(dataCacheConnector)
-      when(dataCacheConnector.fetch(cacheMapId)).thenReturn(Future.successful(Some(cacheMap)))
-      when(dataCacheConnector.remove(cacheMap)).thenReturn(Future.successful(true))
+      val btaUserService = new BTAUserService(dataCacheService)
+      when(dataCacheService.fetch(cacheMapId)).thenReturn(Future.successful(Some(cacheMap)))
+      when(dataCacheService.remove(cacheMap)).thenReturn(Future.successful(true))
 
       val result = await(btaUserService.remove(requestId))
 
       result shouldBe true
-      verify(dataCacheConnector, times(1)).remove(cacheMap)
+      verify(dataCacheService, times(1)).remove(cacheMap)
     }
 
     "not remove a cacheMap containing a boolean value if one does not exist" in {
-      val btaUserService = new BTAUserService(dataCacheConnector)
-      when(dataCacheConnector.fetch(cacheMapId)).thenReturn(Future.successful(None))
+      val btaUserService = new BTAUserService(dataCacheService)
+      when(dataCacheService.fetch(cacheMapId)).thenReturn(Future.successful(None))
       val result = await(btaUserService.remove(requestId))
 
       result shouldBe false
-      verify(dataCacheConnector, times(0)).remove(cacheMap)
+      verify(dataCacheService, times(0)).remove(cacheMap)
     }
   }
 }

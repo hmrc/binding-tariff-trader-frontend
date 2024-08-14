@@ -22,7 +22,6 @@ import play.api.data.{Form, FormError}
 
 trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks {
 
-  // scalastyle:off magic.number
   protected def validEmailFieldWithMaxLength(
     form: Form[_],
     fieldName: String,
@@ -32,8 +31,6 @@ trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks 
   ): Unit = {
 
     s"not bind valid email addresses longer than $maxLength characters" in {
-
-      // TODO: we should use ScalaCheck for testing this, but it is not trivial to generate valid email addresses
 
       val s                   = "a123456789"
       val usr                 = List.fill(6)(s).mkString
@@ -49,8 +46,6 @@ trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks 
     }
 
     "not bind invalid email addresses" in {
-
-      // TODO: we should use ScalaCheck for testing this
 
       val invalidEmailAddresses = List(
         s"${List.fill(65)('a').mkString}@email.me",
@@ -74,6 +69,5 @@ trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks 
     }
 
   }
-  // scalastyle:on magic.number
 
 }

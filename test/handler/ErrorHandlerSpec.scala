@@ -21,19 +21,21 @@ import handlers.ErrorHandler
 import play.api.i18n.MessagesApi
 import views.html.error_template
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class ErrorHandlerSpec extends SpecBase {
 
   private val messageApi: MessagesApi       = app.injector.instanceOf[MessagesApi]
   private val errorTemplate: error_template = app.injector.instanceOf[error_template]
-  private val errorHandler                  = new ErrorHandler(frontendAppConfig, messageApi, errorTemplate)
+  private val errorHandler: ErrorHandler    = new ErrorHandler(frontendAppConfig, messageApi, errorTemplate)
 
   "ErrorHandler" must {
 
     "return an error page" in {
       val result = errorHandler.standardErrorTemplate(
         pageTitle = "pageTitle",
-        heading   = "heading",
-        message   = "message"
+        heading = "heading",
+        message = "message"
       )(fakeRequest)
 
       result.body should include("pageTitle")

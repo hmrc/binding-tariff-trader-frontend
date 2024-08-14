@@ -17,7 +17,6 @@
 package workers
 
 import config.FrontendAppConfig
-import connectors.InjectAuthHeader
 import models._
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.scaladsl.{Sink, Source}
@@ -48,11 +47,10 @@ class MigrationWorker @Inject() (
   mongoLockRepository: MongoLockRepository,
   view_application: view_application
 )(implicit system: ActorSystem)
-    extends InjectAuthHeader
-    with Logging {
+    extends Logging {
 
   implicit val ec: ExecutionContext = system.dispatchers.lookup("migration-dispatcher")
-  implicit val hc: HeaderCarrier    = HeaderCarrier(extraHeaders = addAuth(appConfig)(HeaderCarrier()))
+  implicit val hc: HeaderCarrier    = HeaderCarrier()
   implicit val messages: Messages   = messagesApi.preferred(Seq(Lang.defaultLang))
 
   private val myLock: TimePeriodLockService =
@@ -103,9 +101,9 @@ class MigrationWorker @Inject() (
       metaById = meta.map(m => (m.id, m)).toMap
 
       fileViews = cse.attachments.map { att =>
-        val fileMeta = metaById.getOrElse(att.id, throw noFileMetadata(cse, att))
-        FileView(att.id, fileMeta.fileName, !att.public)
-      }
+                    val fileMeta = metaById.getOrElse(att.id, throw noFileMetadata(cse, att))
+                    FileView(att.id, fileMeta.fileName, !att.public)
+                  }
 
       pdfModel = PdfViewModel(cse, fileViews)
 
@@ -120,12 +118,12 @@ class MigrationWorker @Inject() (
       pdfAttachment = Attachment(pdfStored.id, public = false, timestamp = creationTime)
 
       caseUpdate = CaseUpdate(
-        Some(
-          ApplicationUpdate(
-            applicationPdf = SetValue(Some(pdfAttachment))
-          )
-        )
-      )
+                     Some(
+                       ApplicationUpdate(
+                         applicationPdf = SetValue(Some(pdfAttachment))
+                       )
+                     )
+                   )
 
       _ <- casesService.update(cse.reference, caseUpdate)
 

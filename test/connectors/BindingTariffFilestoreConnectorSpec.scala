@@ -25,7 +25,7 @@ import models.{Attachment, FileAttachment}
 import org.apache.pekko.util.ByteString
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.mock
-import play.api.http.Status
+import play.api.http.Status._
 import uk.gov.hmrc.http.HeaderCarrier
 
 import java.nio.charset.StandardCharsets
@@ -34,8 +34,7 @@ import scala.concurrent.Future
 
 class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
-  private def connector =
-    new BindingTariffFilestoreConnector(wsClient, authenticatedHttpClient, metrics)(mockConfig, implicitly)
+  private def connector = new BindingTariffFilestoreConnector(httpClient, metrics)(mockConfig, implicitly)
 
   private def withHeaderCarrier(value: String): HeaderCarrier =
     HeaderCarrier(extraHeaders = Seq("X-Api-Token" -> value))
@@ -47,7 +46,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         post("/file/initiate")
           .willReturn(
             aResponse()
-              .withStatus(Status.ACCEPTED)
+              .withStatus(ACCEPTED)
               .withBody(fromResource("binding-tariff-filestore_initiate-response.json"))
           )
       )
@@ -55,7 +54,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
       val initiateRequest = FileStoreInitiateRequest(maxFileSize = 0)
 
       await(connector.initiate(initiateRequest)) shouldBe FileStoreInitiateResponse(
-        id              = "id",
+        id = "id",
         upscanReference = "ref",
         uploadRequest = UpscanFormTemplate(
           "http://localhost:20001/upscan/upload",
@@ -74,22 +73,22 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         get("/file/id")
           .willReturn(
             aResponse()
-              .withStatus(Status.OK)
+              .withStatus(OK)
               .withBody(fromResource("binding-tariff-filestore_upload-response.json"))
           )
       )
 
       await(
-        connector.get(FileAttachment("id", "name", "type", 0))(withHeaderCarrier(appConfig.apiToken))
+        connector.get(FileAttachment("id", "name", "type", 0))(withHeaderCarrier(mockConfig.apiToken))
       ) shouldBe FilestoreResponse(
-        id       = "id",
+        id = "id",
         fileName = "file-name.txt",
         mimeType = "text/plain"
       )
 
       WireMock.verify(
         getRequestedFor(urlEqualTo("/file/id"))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
@@ -100,14 +99,14 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
         WireMock.stubFor(
           get("/file/id")
-            .willReturn(aResponse().withStatus(Status.NOT_FOUND))
+            .willReturn(aResponse().withStatus(NOT_FOUND))
         )
 
-        await(connector.get(att)(withHeaderCarrier(appConfig.apiToken))) shouldBe None
+        await(connector.get(att)(withHeaderCarrier(mockConfig.apiToken))) shouldBe None
 
         WireMock.verify(
           getRequestedFor(urlEqualTo("/file/id"))
-            .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+            .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
         )
       }
 
@@ -119,26 +118,26 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           get("/file/id")
             .willReturn(
               aResponse()
-                .withStatus(Status.OK)
+                .withStatus(OK)
                 .withBody(fromResource("single-file-response.json"))
             )
         )
 
         await(
-          connector.get(att)(withHeaderCarrier(appConfig.apiToken))
+          connector.get(att)(withHeaderCarrier(mockConfig.apiToken))
         ) shouldBe Some(
           FilestoreResponse(
-            id         = "id",
-            fileName   = "name",
-            mimeType   = "text/plain",
-            url        = None,
+            id = "id",
+            fileName = "name",
+            mimeType = "text/plain",
+            url = None,
             scanStatus = None
           )
         )
 
         WireMock.verify(
           getRequestedFor(urlEqualTo("/file/id"))
-            .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+            .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
         )
       }
     }
@@ -148,22 +147,22 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         post("/file/id/publish")
           .willReturn(
             aResponse()
-              .withStatus(Status.ACCEPTED)
+              .withStatus(ACCEPTED)
               .withBody(fromResource("binding-tariff-filestore_upload-response.json"))
           )
       )
 
       await(
-        connector.publish(FileAttachment("id", "name", "type", 0))(withHeaderCarrier(appConfig.apiToken))
+        connector.publish(FileAttachment("id", "name", "type", 0))(withHeaderCarrier(mockConfig.apiToken))
       ) shouldBe FilestoreResponse(
-        id       = "id",
+        id = "id",
         fileName = "file-name.txt",
         mimeType = "text/plain"
       )
 
       WireMock.verify(
         getRequestedFor(urlEqualTo("/file/id"))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
@@ -172,14 +171,14 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         get("/file?id=id1&id=id2")
           .willReturn(
             aResponse()
-              .withStatus(Status.OK)
+              .withStatus(OK)
               .withBody(fromResource("binding-tariff-filestore_filemetadata-response.json"))
           )
       )
 
       await(
         connector.getFileMetadata(Seq(Attachment(id = "id1", public = false), Attachment(id = "id2", public = false)))(
-          withHeaderCarrier(appConfig.apiToken)
+          withHeaderCarrier(mockConfig.apiToken)
         )
       ) shouldBe Seq(
         FilestoreResponse(id = "id1", fileName = "file-name1.txt", mimeType = "text/plain"),
@@ -188,7 +187,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
       WireMock.verify(
         getRequestedFor(urlEqualTo("/file?id=id1&id=id2"))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
@@ -201,7 +200,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         post("/file")
           .willReturn(
             aResponse()
-              .withStatus(Status.ACCEPTED)
+              .withStatus(ACCEPTED)
               .withBody(fromResource("binding-tariff-filestore_upload-response.json"))
           )
       )
@@ -231,8 +230,8 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           .downloadFile(s"$wireMockUrl/digital-tariffs-local/a1e8057e-fbbc-47a8-a8b4-78d9f015c253")
           .flatMap(maybeSource =>
             maybeSource.fold(Future.successful(ByteString.empty)) { source =>
-              source.runFold(ByteString.empty) {
-                case (bytes, nextBytes) => bytes ++ nextBytes
+              source.runFold(ByteString.empty) { case (bytes, nextBytes) =>
+                bytes ++ nextBytes
               }
             }
           )
@@ -245,7 +244,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
         get(urlEqualTo("/digital-tariffs-local/717f3a7a-db8e-11e9-8a34-2a2ae2dbcce4"))
           .willReturn(
             aResponse()
-              .withStatus(Status.INTERNAL_SERVER_ERROR)
+              .withStatus(INTERNAL_SERVER_ERROR)
           )
       )
 
@@ -261,11 +260,13 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
           get(urlEqualTo("/digital-tariffs-local/c432a56d-e811-474c-a26a-76fc3bcaefe5"))
             .willReturn(
               aResponse()
-                .withStatus(Status.NOT_FOUND)
+                .withStatus(NOT_FOUND)
             )
         )
 
-        await(connector.downloadFile(s"$wireMockUrl/digital-tariffs-local/c432a56d-e811-474c-a26a-76fc3bcaefe5")) shouldBe None
+        await(
+          connector.downloadFile(s"$wireMockUrl/digital-tariffs-local/c432a56d-e811-474c-a26a-76fc3bcaefe5")
+        ) shouldBe None
       }
     }
   }

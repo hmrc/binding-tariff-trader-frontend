@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package connectors
+package service
 
-import play.api.libs.json.Format
 import models.cache.CacheMap
+import play.api.libs.json.Format
 
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.Future
 
-object FakeDataCacheConnector extends FakeDataCacheConnector(Map.empty[String, CacheMap])
+object FakeDataCacheService extends FakeDataCacheService(Map.empty[String, CacheMap])
 
-class FakeDataCacheConnector(initialData: Map[String, CacheMap]) extends DataCacheConnector {
+class FakeDataCacheService(initialData: Map[String, CacheMap]) extends DataCacheService {
   val cache = new AtomicReference(initialData)
 
   override def save[A](cacheMap: CacheMap): Future[CacheMap] = Future.successful {

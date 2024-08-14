@@ -17,7 +17,6 @@ lazy val microservice = Project(appName, file("."))
       "models.SortDirection._"
     ),
     PlayKeys.playDefaultPort := 9582,
-    scalacOptions ~= { opts => opts.filterNot(Set("-Xfatal-warnings", "-Ywarn-value-discard")) },
     libraryDependencies ++= AppDependencies(),
     scalacOptions ++= Seq(
       "-feature",
@@ -45,4 +44,3 @@ lazy val microservice = Project(appName, file("."))
   .settings(CodeCoverageSettings.settings)
 
 addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt A11y/scalafmt")
-addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle A11y/scalastyle")

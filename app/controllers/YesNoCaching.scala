@@ -16,19 +16,19 @@
 
 package controllers
 
-import connectors.DataCacheConnector
 import models.requests.DataRequest
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
 import play.api.libs.json.Writes
 import play.api.mvc.{Result, Results}
+import service.DataCacheService
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 trait YesNoCaching extends AnswerCaching[Boolean] {
-  def dataCacheConnector: DataCacheConnector
+  def dataCacheService: DataCacheService
   def navigator: Navigator
   def detailPages: List[QuestionPage[_]]
 
@@ -43,12 +43,12 @@ trait YesNoCaching extends AnswerCaching[Boolean] {
     val updatedAnswers: UserAnswers = if (answer) {
       questionPageAnswers
     } else {
-      detailPages.foldLeft(questionPageAnswers) {
-        case (userAnswers, detailPage) => userAnswers.remove(detailPage)
+      detailPages.foldLeft(questionPageAnswers) { case (userAnswers, detailPage) =>
+        userAnswers.remove(detailPage)
       }
     }
 
-    dataCacheConnector.save(updatedAnswers.cacheMap).transformWith {
+    dataCacheService.save(updatedAnswers.cacheMap).transformWith {
       case Failure(_) =>
         Future.successful(Results.BadGateway)
       case Success(_) =>

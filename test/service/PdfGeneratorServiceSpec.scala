@@ -75,11 +75,9 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
           val lines: List[String]           = text.split("\n").toList.map(_.trim)
 
           lines(2) shouldBe "Your Advance Tariff Ruling application"
-          lines    should contain allElementsOf visibleContent
+          lines      should contain allElementsOf visibleContent
           lines shouldNot contain allElementsOf hiddenContent
-        } finally {
-          document.close()
-        }
+        } finally document.close()
 
       }
     }
@@ -135,9 +133,7 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
         try {
           val result = pdfGeneratorService.resolve(hrefToResolve, file.getParent)
           result.getSystemId.replace("./", "") shouldBe file.getCanonicalFile.toURI.toString
-        } finally {
-          file.delete()
-        }
+        } finally file.delete()
       }
 
     val input: Seq[(String, String, String)] = Seq(

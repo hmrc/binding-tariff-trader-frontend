@@ -16,14 +16,14 @@
 
 package config
 
-import connectors._
 import controllers.actions._
 import org.apache.fop.apps.FopFactory
+import play.api.inject.{Binding, Module => PlayModule}
+import play.api.{Configuration, Environment}
+import service.{DataCacheService, MongoCacheService}
+import workers.MigrationWorker
 
 import java.time.Clock
-import play.api.{Configuration, Environment}
-import play.api.inject.{Binding, Module => PlayModule}
-import workers.MigrationWorker
 
 class Module extends PlayModule {
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] =
@@ -31,8 +31,8 @@ class Module extends PlayModule {
       bind[DataRetrievalAction].to[DataRetrievalActionImpl].eagerly(),
       bind[DataRequiredAction].to[DataRequiredActionImpl].eagerly(),
       bind[IdentifierAction].to[AuthenticatedIdentifierAction].eagerly(),
-      bind[DataCacheConnector].to[MongoCacheConnector].eagerly(),
       bind[FopFactory].toProvider[FopFactoryProvider].eagerly(),
+      bind[DataCacheService].to[MongoCacheService].eagerly(),
       bind[Clock].to(Clock.systemUTC()),
       bind[MigrationWorker].toSelf.eagerly()
     )

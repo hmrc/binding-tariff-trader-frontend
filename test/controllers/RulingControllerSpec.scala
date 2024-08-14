@@ -52,7 +52,7 @@ class RulingControllerSpec extends ControllerSpecBase {
         .willReturn(Future.successful(oCase.btiCaseWithDecision))
       val result = controller().viewRuling("a-ruling")(fakeRequest)
 
-      status(result)          shouldBe OK
+      status(result)        shouldBe OK
       contentAsString(result) should include(oCase.btiCaseWithDecision.reference)
       contentAsString(result) should include(oCase.btiCaseWithDecision.decision.get.bindingCommodityCode)
     }

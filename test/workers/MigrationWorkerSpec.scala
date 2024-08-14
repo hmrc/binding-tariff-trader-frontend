@@ -75,8 +75,8 @@ class MigrationWorkerSpec extends UnitSpec with BeforeAndAfterAll with MongoSupp
         applicationPdf = SetValue(
           Some(
             Attachment(
-              id        = id,
-              public    = false,
+              id = id,
+              public = false,
               timestamp = ZonedDateTime.ofInstant(now, ZoneOffset.UTC)
             )
           )
@@ -92,8 +92,8 @@ class MigrationWorkerSpec extends UnitSpec with BeforeAndAfterAll with MongoSupp
   )
 
   val pagedCases: Paged[Case] = Paged(
-    results     = exampleCases.values.toList,
-    pagination  = pagination,
+    results = exampleCases.values.toList,
+    pagination = pagination,
     resultCount = 3
   )
 

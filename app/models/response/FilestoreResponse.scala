@@ -23,7 +23,7 @@ case class FilestoreResponse(
   id: String,
   fileName: String,
   mimeType: String,
-  url: Option[String]            = None,
+  url: Option[String] = None,
   scanStatus: Option[ScanStatus] = None
 )
 

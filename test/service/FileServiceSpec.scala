@@ -61,7 +61,7 @@ class FileServiceSpec extends SpecBase {
     val initiateRequest = FileStoreInitiateRequest(maxFileSize = 0)
 
     val initiateResponse = FileStoreInitiateResponse(
-      id              = "id",
+      id = "id",
       upscanReference = "ref",
       uploadRequest = UpscanFormTemplate(
         "http://localhost:20001/upscan/upload",
@@ -271,16 +271,16 @@ class FileServiceSpec extends SpecBase {
 
   private def anAttachmentWithId(id: String): Attachment =
     Attachment(
-      id     = id,
+      id = id,
       public = true
     )
 
   private def someMetadataWithId(id: String): FilestoreResponse =
     FilestoreResponse(
-      id         = id,
-      fileName   = s"name-$id",
-      mimeType   = s"type-$id",
-      url        = Some(s"url-$id"),
+      id = id,
+      fileName = s"name-$id",
+      mimeType = s"type-$id",
+      url = Some(s"url-$id"),
       scanStatus = Some(ScanStatus.READY)
     )
 

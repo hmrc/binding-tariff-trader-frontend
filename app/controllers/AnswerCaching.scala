@@ -16,13 +16,13 @@
 
 package controllers
 
-import connectors.DataCacheConnector
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
 import pages.QuestionPage
 import play.api.libs.json.{Format, Writes}
 import play.api.mvc.{Result, Results}
+import service.DataCacheService
 
 import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,7 +34,7 @@ trait MapAnswerCaching[K, V] extends AccumulatingAnswerCaching[Map[K, V], (K, V)
 
 trait AccumulatingAnswerCaching[F <: IterableOnce[A], A] {
   def cbf: mutable.Builder[A, F]
-  def dataCacheConnector: DataCacheConnector
+  def dataCacheService: DataCacheService
   def navigator: Navigator
   def questionPage: QuestionPage[F]
 
@@ -61,7 +61,7 @@ trait AccumulatingAnswerCaching[F <: IterableOnce[A], A] {
 
     val updatedAnswers = request.userAnswers.set(questionPage, withNewAnswer)
 
-    dataCacheConnector
+    dataCacheService
       .save(updatedAnswers.cacheMap)
       .transformWith {
         case Failure(_) =>
@@ -73,7 +73,7 @@ trait AccumulatingAnswerCaching[F <: IterableOnce[A], A] {
 }
 
 trait AnswerCaching[A] {
-  def dataCacheConnector: DataCacheConnector
+  def dataCacheService: DataCacheService
   def navigator: Navigator
   def questionPage: QuestionPage[A]
 
@@ -83,7 +83,7 @@ trait AnswerCaching[A] {
   )(implicit request: DataRequest[_], writes: Writes[A], ec: ExecutionContext): Future[Result] = {
     val updatedAnswers = request.userAnswers.set(questionPage, answer)
 
-    dataCacheConnector
+    dataCacheService
       .save(updatedAnswers.cacheMap)
       .transformWith {
         case Failure(_) =>

@@ -22,22 +22,22 @@ import models.requests.DataRequest
 import navigation.Journey
 import pages.QuestionPage
 import play.api.data.Form
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Results}
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format
+import play.api.mvc._
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class MapCachingController[V](cc: MessagesControllerComponents)(
-  implicit ec: ExecutionContext,
+abstract class MapCachingController[V](cc: MessagesControllerComponents)(implicit
+  ec: ExecutionContext,
   format: Format[V]
 ) extends AccumulatingCachingController[Map[String, V], (String, V)](cc)
     with MapAnswerCaching[String, V]
 
-abstract class AccumulatingCachingController[F <: IterableOnce[A], A](cc: MessagesControllerComponents)(
-  implicit ec: ExecutionContext,
+abstract class AccumulatingCachingController[F <: IterableOnce[A], A](cc: MessagesControllerComponents)(implicit
+  ec: ExecutionContext,
   format: Format[F]
 ) extends FrontendController(cc)
     with I18nSupport
@@ -51,8 +51,8 @@ abstract class AccumulatingCachingController[F <: IterableOnce[A], A](cc: Messag
 
   def questionPage: QuestionPage[F]
 
-  def renderView(preparedForm: Form[A], submitAction: Call, mode: Mode)(
-    implicit request: DataRequest[_]
+  def renderView(preparedForm: Form[A], submitAction: Call, mode: Mode)(implicit
+    request: DataRequest[_]
   ): HtmlFormat.Appendable
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
@@ -75,8 +75,8 @@ abstract class YesNoCachingController(cc: MessagesControllerComponents)(implicit
   override def detailPages: List[QuestionPage[_]]  = journey.detailPages
 }
 
-abstract class AnswerCachingController[A](cc: MessagesControllerComponents)(
-  implicit ec: ExecutionContext,
+abstract class AnswerCachingController[A](cc: MessagesControllerComponents)(implicit
+  ec: ExecutionContext,
   format: Format[A]
 ) extends FrontendController(cc)
     with I18nSupport

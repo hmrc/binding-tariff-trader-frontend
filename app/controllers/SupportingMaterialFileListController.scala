@@ -17,7 +17,6 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import forms.SupportingMaterialFileListFormProvider
 import models.requests.DataRequest
@@ -27,17 +26,18 @@ import pages._
 import play.api.data.{Form, FormError}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
+import service.DataCacheService
+import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 import utils.Notification.{success, _}
 import viewmodels.FileView
 import views.html.supportingMaterialFileList
-import javax.inject.Inject
-import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SupportingMaterialFileListController @Inject() (
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
+  val dataCacheService: DataCacheService,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
@@ -73,8 +73,8 @@ class SupportingMaterialFileListController @Inject() (
   }
 
   def removeFile(id: String, userAnswers: UserAnswers): UserAnswers = {
-    val files                   = userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty[FileAttachment])
-    val remainingFiles          = files.filterNot(_.id == id)
+    val files          = userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty[FileAttachment])
+    val remainingFiles = files.filterNot(_.id == id)
     val confidentialityStatuses = userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty[String, Boolean])
     val remainingStatuses       = confidentialityStatuses.view.filterKeys(_ != id).toMap
 
@@ -99,7 +99,7 @@ class SupportingMaterialFileListController @Inject() (
         routes.SupportingMaterialFileListController.onPageLoad(mode)
       }
 
-      dataCacheConnector
+      dataCacheService
         .save(updatedAnswers.cacheMap)
         .map(_ => Redirect(onwardRoute).flashing(success("supportingMaterialFile.remove.file.success.text")))
   }
@@ -110,13 +110,13 @@ class SupportingMaterialFileListController @Inject() (
         .remove(AddSupportingDocumentsPage)
         .remove(UploadSupportingMaterialMultiplePage)
 
-      dataCacheConnector
+      dataCacheService
         .save(updatedAnswers.cacheMap)
         .map(_ => Redirect(routes.AddSupportingDocumentsController.onPageLoad(mode)))
   }
 
   private def getFileViews(userAnswers: UserAnswers): Seq[FileView] = {
-    val files                   = userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty[FileAttachment])
+    val files = userAnswers.get(UploadSupportingMaterialMultiplePage).getOrElse(Seq.empty[FileAttachment])
     val confidentialityStatuses = userAnswers.get(MakeFileConfidentialPage).getOrElse(Map.empty[String, Boolean])
     files.filter(_.uploaded).map(file => FileView(file.id, file.name, confidentialityStatuses(file.id)))
   }

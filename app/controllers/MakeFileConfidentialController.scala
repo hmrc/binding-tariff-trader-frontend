@@ -17,10 +17,8 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import forms.MakeFileConfidentialFormProvider
-import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
@@ -28,13 +26,15 @@ import pages._
 import play.api.data.Form
 import play.api.mvc.{Call, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
+import service.DataCacheService
 import views.html.makeFileConfidential
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class MakeFileConfidentialController @Inject() (
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
+  val dataCacheService: DataCacheService,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
@@ -50,8 +50,8 @@ class MakeFileConfidentialController @Inject() (
 
   override def submitAction(mode: Mode): Call = routes.MakeFileConfidentialController.onSubmit(mode)
 
-  def renderView(preparedForm: Form[(String, Boolean)], submitAction: Call, mode: Mode)(
-    implicit request: DataRequest[_]
+  def renderView(preparedForm: Form[(String, Boolean)], submitAction: Call, mode: Mode)(implicit
+    request: DataRequest[_]
   ): HtmlFormat.Appendable = {
     val fileId: String = request.userAnswers.get(UploadSupportingMaterialMultiplePage).map(_.last.id).get
     makeFileConfidentialView(appConfig, preparedForm, submitAction, mode, fileId)

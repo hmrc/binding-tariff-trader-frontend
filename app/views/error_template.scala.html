@@ -20,7 +20,7 @@
         govukLayoutWrapper: GovukLayoutWrapper
 )
 
-@(pageTitle: String, heading: String, message: String, appConfig: FrontendAppConfig, signOutLink: String = routes.SignOutController.startFeedbackSurvey.url)(implicit request: Request[_], messages: Messages)
+@(pageTitle: String, heading: String, message: String, appConfig: FrontendAppConfig, signOutLink: String = routes.SignOutController.startFeedbackSurvey.url)(implicit request: RequestHeader, messages: Messages)
 
 @govukLayoutWrapper(pageTitle = pageTitle) {
  <h1 id="title" class="govuk-heading-xl">@heading</h1>

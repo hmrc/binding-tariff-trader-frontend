@@ -17,7 +17,6 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import forms.EnterContactDetailsFormProvider
 import models.requests.DataRequest
@@ -27,6 +26,7 @@ import pages.{EnterContactDetailsPage, RegisteredAddressForEoriPage}
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
 import play.twirl.api.HtmlFormat
+import service.DataCacheService
 import views.html.enterContactDetails
 
 import javax.inject.Inject
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class EnterContactDetailsController @Inject() (
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
+  val dataCacheService: DataCacheService,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,
@@ -66,8 +66,8 @@ class EnterContactDetailsController @Inject() (
       enterContactDetailsForm(request.userAnswers).bindFromRequest().fold(badRequest, submitAnswer(_, mode))
   }
 
-  def renderView(preparedForm: Form[EnterContactDetails], mode: Mode)(
-    implicit request: DataRequest[_]
+  def renderView(preparedForm: Form[EnterContactDetails], mode: Mode)(implicit
+    request: DataRequest[_]
   ): HtmlFormat.Appendable =
     enterContactDetailsView(appConfig, preparedForm, mode)
 

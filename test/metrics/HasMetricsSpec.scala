@@ -92,9 +92,8 @@ class HasMetricsSpec extends AsyncWordSpecLike with Matchers with OptionValues w
       }
 
       "increment failure counter for a failed future" in withTestMetrics { metrics =>
-        metrics.withMetricsTimerAsync(TestMetric)(_ => Future.failed(new Exception)).recover {
-          case _ =>
-            verifyCompletedWithFailure(TestMetric, metrics)
+        metrics.withMetricsTimerAsync(TestMetric)(_ => Future.failed(new Exception)).recover { case _ =>
+          verifyCompletedWithFailure(TestMetric, metrics)
         }
       }
 

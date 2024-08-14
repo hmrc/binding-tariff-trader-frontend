@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.IsSampleHazardousFormProvider
@@ -24,6 +23,7 @@ import models.NormalMode
 import navigation.FakeNavigator
 import play.api.data.Form
 import play.api.mvc.{Call, Request}
+import service.FakeDataCacheService
 import views.html.isSampleHazardous
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -39,7 +39,7 @@ class IsSampleHazardousControllerSpec extends ControllerSpecBase with YesNoCachi
   def controller(dataRetrievalAction: DataRetrievalAction) =
     new IsSampleHazardousController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

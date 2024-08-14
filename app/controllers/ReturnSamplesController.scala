@@ -17,10 +17,8 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import forms.ReturnSamplesFormProvider
-import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
@@ -28,13 +26,15 @@ import pages.ReturnSamplesPage
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import play.twirl.api.HtmlFormat
+import service.DataCacheService
 import views.html.returnSamples
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class ReturnSamplesController @Inject() (
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
+  val dataCacheService: DataCacheService,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,

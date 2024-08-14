@@ -51,31 +51,27 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
   "Pagination" should {
 
     "Render empty page" in {
-      // When
       val doc = view(
         pagination(
-          id       = "ID",
-          pager    = Paged(Seq.empty[String], pageIndex = 1, pageSize = 1, resultCount = 0),
+          id = "ID",
+          pager = Paged(Seq.empty[String], pageIndex = 1, pageSize = 1, resultCount = 0),
           onChange = goToPage
         )(messages)
       )
 
-      // Then
       doc should containElementWithID("ID-none")
       doc shouldNot containElementWithID("ID-some")
     }
 
     "Render 1 page" in {
-      // When
       val doc = view(
         pagination(
-          id       = "ID",
-          pager    = Paged(Seq("", ""), pageIndex = 1, pageSize = 2, resultCount = 2),
+          id = "ID",
+          pager = Paged(Seq("", ""), pageIndex = 1, pageSize = 2, resultCount = 2),
           onChange = goToPage
         )(messages)
       )
 
-      // Then
       doc should containElementWithID("ID-one")
       doc shouldNot containElementWithClass("hmrc-pagination")
 
@@ -85,16 +81,14 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
     }
 
     "Render 1 partially full page" in {
-      // When
       val doc = view(
         pagination(
-          id       = "ID",
-          pager    = Paged(Seq(""), pageIndex = 1, pageSize = 2, resultCount = 1),
+          id = "ID",
+          pager = Paged(Seq(""), pageIndex = 1, pageSize = 2, resultCount = 1),
           onChange = goToPage
         )(messages)
       )
 
-      // Then
       doc should containElementWithID("ID-one")
       doc shouldNot containElementWithClass("hmrc-pagination")
 
@@ -104,16 +98,14 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
     }
 
     "Render 2 pages" in {
-      // When
       val doc = view(
         pagination(
-          id       = "ID",
-          pager    = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 2),
+          id = "ID",
+          pager = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 2),
           onChange = goToPage
         )(messages)
       )
 
-      // Then
       doc should containElementWithID("pagination-label")
       val paginationList  = doc.getElementById("pagination-list")
       val allLinkElements = paginationList.getElementsByTag("li")
@@ -137,16 +129,13 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
     }
 
     "Render 3 pages" in {
-      //When
       val doc = view(
         pagination(
-          id       = "ID",
-          pager    = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 3),
+          id = "ID",
+          pager = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 3),
           onChange = goToPage
         )(messages)
       )
-
-      //Then
 
       doc should containElementWithID("pagination-label")
       val paginationList  = doc.getElementById("pagination-list")
@@ -173,18 +162,15 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
 
     }
 
-    // scalastyle:off magic.number
     "Render 4 pages" in {
-      // When
       val doc = view(
         pagination(
-          id       = "ID",
-          pager    = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 4),
+          id = "ID",
+          pager = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 4),
           onChange = goToPage
         )(messages)
       )
 
-      // Then
       doc should containElementWithID("pagination-label")
       val paginationList  = doc.getElementById("pagination-list")
       val allLinkElements = paginationList.getElementsByTag("li")
@@ -213,11 +199,10 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
     }
 
     "Render more pages" in {
-      // When
       val doc = view(
         pagination(
-          id       = "ID",
-          pager    = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 100),
+          id = "ID",
+          pager = Paged(Seq(""), pageIndex = 1, pageSize = 1, resultCount = 100),
           onChange = goToPage
         )(messages)
       )
@@ -249,19 +234,14 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
       doc shouldNot containElementWithID("ID-page_6")
     }
 
-    // scalastyle:on magic.number
-
     "Render 1 previous page" in {
-      // When
       val doc = view(
         pagination(
-          id       = "ID",
-          pager    = Paged(Seq(""), pageIndex = 2, pageSize = 1, resultCount = 2),
+          id = "ID",
+          pager = Paged(Seq(""), pageIndex = 2, pageSize = 1, resultCount = 2),
           onChange = goToPage
         )(messages)
       )
-
-      // Then
 
       doc should containElementWithID("pagination-label")
       val paginationList  = doc.getElementById("pagination-list")

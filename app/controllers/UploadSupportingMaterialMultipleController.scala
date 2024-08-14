@@ -17,13 +17,10 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
-import java.{util => ju}
-import javax.inject.Inject
-import models.{FileAttachment, Mode, UploadError, UserAnswers}
 import models.requests.{DataRequest, FileStoreInitiateRequest}
+import models.{FileAttachment, Mode, UploadError, UserAnswers}
 import navigation.Navigator
 import pages._
 import play.api.Logging
@@ -31,16 +28,18 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.Html
-import scala.util.control.NonFatal
-import service.FileService
+import service.{DataCacheService, FileService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
+import java.{util => ju}
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 
 class UploadSupportingMaterialMultipleController @Inject() (
   appConfig: FrontendAppConfig,
-  dataCacheConnector: DataCacheConnector,
+  dataCacheService: DataCacheService,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   navigator: Navigator,
@@ -103,7 +102,7 @@ class UploadSupportingMaterialMultipleController @Inject() (
         upsertFile(FileAttachment(id, "", "", 0L, uploaded = true), request.userAnswers)
       }
 
-      dataCacheConnector
+      dataCacheService
         .save(userAnswers.cacheMap)
         .map(_ => Redirect(navigator.nextPage(UploadSupportingMaterialMultiplePage, mode)(userAnswers)))
     }
@@ -112,13 +111,13 @@ class UploadSupportingMaterialMultipleController @Inject() (
     (identify andThen getData andThen requireData).async[FileAttachment](parse.json[FileAttachment]) {
       implicit request: DataRequest[FileAttachment] =>
         val updatedAnswers = upsertFile(request.body, request.userAnswers)
-        dataCacheConnector
+        dataCacheService
           .save(updatedAnswers.cacheMap)
           .map(_ => Ok)
     }
 
-  def renderView(fileId: String, mode: Mode, form: Form[String])(
-    implicit request: DataRequest[AnyContent]
+  def renderView(fileId: String, mode: Mode, form: Form[String])(implicit
+    request: DataRequest[AnyContent]
   ): Future[Html] =
     fileService
       .initiate(
@@ -152,7 +151,7 @@ class UploadSupportingMaterialMultipleController @Inject() (
           logger.error(s"File upload for file with id $fileId failed with error code $errorCode: $errorMessage")
 
           for {
-            _    <- dataCacheConnector.save(userAnswers.cacheMap)
+            _    <- dataCacheService.save(userAnswers.cacheMap)
             html <- renderView(fileId, mode, formWithErrors)
           } yield BadRequest(html)
         }
@@ -161,9 +160,8 @@ class UploadSupportingMaterialMultipleController @Inject() (
           renderView(fileId, mode, form)
             .map(Ok(_))
         }
-        .recoverWith {
-          case NonFatal(_) =>
-            Future.successful(BadGateway)
+        .recoverWith { case NonFatal(_) =>
+          Future.successful(BadGateway)
         }
     }
 }

@@ -16,10 +16,10 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.SupportingMaterialFileListFormProvider
+import models.cache.CacheMap
 import models.{FileAttachment, NormalMode}
 import navigation.FakeNavigator
 import pages.{AddSupportingDocumentsPage, ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
@@ -27,7 +27,7 @@ import play.api.data.Form
 import play.api.libs.json.{JsArray, JsBoolean, JsString, Json}
 import play.api.mvc.{Call, Request}
 import play.api.test.Helpers._
-import models.cache.CacheMap
+import service.FakeDataCacheService
 import views.html.supportingMaterialFileList
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,7 +43,7 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new SupportingMaterialFileListController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
@@ -68,7 +68,7 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       controller,
       onwardRoute,
       viewAsString,
-      formField      = "add-file-choice",
+      formField = "add-file-choice",
       backgroundData = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
     )
 
@@ -141,7 +141,7 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       val resultString = contentAsString(result)
 
       status(result) shouldBe BAD_REQUEST
-      resultString   should include("error-message-add-file-choice-input")
+      resultString     should include("error-message-add-file-choice-input")
       resultString should include(
         messages("supportingMaterialFileList.error.numberFiles", appConfig.fileUploadMaxFiles)
       )
@@ -204,7 +204,7 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       val resultString = contentAsString(result)
 
       status(result) shouldBe BAD_REQUEST
-      resultString   should include("error-message-add-file-choice-input")
+      resultString     should include("error-message-add-file-choice-input")
       resultString should include(
         messages("supportingMaterialFileList.error.numberFiles", appConfig.fileUploadMaxFiles)
       )
@@ -238,8 +238,8 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
       val resultString = contentAsString(result)
 
       status(result) shouldBe BAD_REQUEST
-      resultString   should include("error-message-add-file-choice-input")
-      resultString   should include(messages("supportingMaterialFileList.error.required"))
+      resultString     should include("error-message-add-file-choice-input")
+      resultString     should include(messages("supportingMaterialFileList.error.required"))
       resultString should include(
         messages("supportingMaterialFileList.error.numberFiles", appConfig.fileUploadMaxFiles)
       )

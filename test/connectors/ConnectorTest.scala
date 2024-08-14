@@ -19,13 +19,11 @@ package connectors
 import base.{SpecBase, WireMockObject}
 import com.codahale.metrics.MetricRegistry
 import config.FrontendAppConfig
-import org.apache.pekko.actor.ActorSystem
 import org.mockito.Mockito.{mock, when}
 import org.scalatest.BeforeAndAfterAll
 import play.api.libs.ws.WSClient
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import uk.gov.hmrc.play.audit.http.HttpAuditing
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 
 import scala.io.Source
 
@@ -36,22 +34,10 @@ trait ConnectorTest extends SpecBase with BeforeAndAfterAll {
   protected lazy val fakeAuthToken           = "AUTH_TOKEN"
   protected lazy val wsClient: WSClient      = injector.instanceOf[WSClient]
   protected lazy val metrics: MetricRegistry = new MetricRegistry
-  protected lazy val authenticatedHttpClient = new AuthenticatedHttpClient(
-    auditing,
-    wsClient,
-    actorSystem
-  )(appConfig)
 
-  protected lazy val standardHttpClient: HttpClient = new DefaultHttpClient(
-    app.configuration,
-    auditing,
-    wsClient,
-    actorSystem
-  )
+  protected lazy val httpClient: HttpClientV2 = app.injector.instanceOf[HttpClientV2]
 
   protected implicit val hc: HeaderCarrier = HeaderCarrier()
-  private lazy val actorSystem             = ActorSystem.create("testActorSystem")
-  private lazy val auditing                = injector.instanceOf[HttpAuditing]
 
   override def beforeAll(): Unit = {
     super.beforeAll()
@@ -61,6 +47,7 @@ trait ConnectorTest extends SpecBase with BeforeAndAfterAll {
     when(mockConfig.emailUrl) thenReturn WireMockObject.wireMockUrl
 
     when(mockConfig.apiToken) thenReturn fakeAuthToken
+
   }
 
   protected def fromResource(path: String): String = {

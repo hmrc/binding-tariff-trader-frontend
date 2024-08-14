@@ -17,11 +17,8 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions._
 import forms.AreYouSendingSamplesFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
 import navigation.{Journey, Navigator, YesNoJourney}
@@ -29,13 +26,15 @@ import pages._
 import play.api.data.Form
 import play.api.mvc.MessagesControllerComponents
 import play.twirl.api.HtmlFormat
+import service.DataCacheService
 import views.html.areYouSendingSamples
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class AreYouSendingSamplesController @Inject() (
   appConfig: FrontendAppConfig,
-  val dataCacheConnector: DataCacheConnector,
+  val dataCacheService: DataCacheService,
   val navigator: Navigator,
   val identify: IdentifierAction,
   val getData: DataRetrievalAction,

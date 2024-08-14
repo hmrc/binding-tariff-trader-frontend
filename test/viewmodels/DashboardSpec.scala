@@ -31,7 +31,9 @@ class DashboardSpec extends UnitSpec {
         val dashboard =
           Dashboard(Paged(Seq(oCase.btiCaseExample), SearchPagination(), resultCount = 1), Sort(CREATED_DATE))
 
-        dashboard.columnSortUrlFor("reference") shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=reference&order=asc"
+        dashboard.columnSortUrlFor(
+          "reference"
+        ) shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=reference&order=asc"
       }
     }
 
@@ -40,7 +42,9 @@ class DashboardSpec extends UnitSpec {
         val dashboard =
           Dashboard(Paged(Seq(oCase.btiCaseExample), SearchPagination(), resultCount = 1), Sort(REFERENCE))
 
-        dashboard.columnSortUrlFor("created-date") shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=created-date&order=desc"
+        dashboard.columnSortUrlFor(
+          "created-date"
+        ) shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=created-date&order=desc"
       }
     }
 
@@ -49,7 +53,9 @@ class DashboardSpec extends UnitSpec {
         val dashboard =
           Dashboard(Paged(Seq(oCase.btiCaseExample), SearchPagination(), resultCount = 1), Sort(REFERENCE, DESCENDING))
 
-        dashboard.columnSortUrlFor("reference") shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=reference&order=asc"
+        dashboard.columnSortUrlFor(
+          "reference"
+        ) shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=reference&order=asc"
       }
     }
 
@@ -58,7 +64,9 @@ class DashboardSpec extends UnitSpec {
         val dashboard =
           Dashboard(Paged(Seq(oCase.btiCaseExample), SearchPagination(page = 2), resultCount = 1), Sort(CREATED_DATE))
 
-        dashboard.columnSortUrlFor("reference") shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=reference&order=asc"
+        dashboard.columnSortUrlFor(
+          "reference"
+        ) shouldBe "/advance-tariff-application/applications-and-rulings?page=1&sortBy=reference&order=asc"
       }
     }
 

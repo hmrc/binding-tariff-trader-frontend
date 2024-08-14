@@ -20,7 +20,7 @@ import org.apache.pekko.stream.Materializer
 import com.google.inject.Inject
 import play.api.mvc._
 import play.api.mvc.request.{Cell, RequestAttrKey}
-import uk.gov.hmrc.http.{SessionKeys, HeaderNames => HMRCHeaderNames}
+import uk.gov.hmrc.http.{HeaderNames => HMRCHeaderNames, SessionKeys}
 
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}

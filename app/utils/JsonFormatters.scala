@@ -23,6 +23,7 @@ import play.api.libs.json._
 import uk.gov.hmrc.play.json.Union
 import viewmodels.{FileView, PdfViewModel}
 
+import scala.annotation.nowarn
 import scala.language.implicitConversions
 import scala.util.Try
 
@@ -52,7 +53,8 @@ object JsonFormatters {
     Json.using[Json.WithDefaultValues].format[NewEventRequest]
 
   implicit def formatSetValue[A: Format]: OFormat[SetValue[A]] = Json.format[SetValue[A]]
-  implicit val formatNoChange: OFormat[NoChange.type]          = Json.format[NoChange.type]
+  @nowarn("msg=local val config\\$macro\\$30 in value formatNoChange is never used")
+  implicit val formatNoChange: OFormat[NoChange.type] = Json.format[NoChange.type]
 
   implicit def formatUpdate[A: Format]: Format[Update[A]] =
     Union
@@ -75,11 +77,10 @@ object EnumJson {
 
   private def enumReads[E <: Enumeration](`enum`: E): Reads[E#Value] = {
     case JsString(s) =>
-      Try(JsSuccess(enum.withName(s))).recover {
-        case _: NoSuchElementException =>
-          JsError(
-            s"Expected an enumeration of type: '${enum.getClass.getSimpleName}', but it does not contain the name: '$s'"
-          )
+      Try(JsSuccess(enum.withName(s))).recover { case _: NoSuchElementException =>
+        JsError(
+          s"Expected an enumeration of type: '${enum.getClass.getSimpleName}', but it does not contain the name: '$s'"
+        )
       }.get
 
     case _ => JsError("String value is expected")

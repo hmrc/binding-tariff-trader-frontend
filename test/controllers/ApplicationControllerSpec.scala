@@ -144,9 +144,9 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       val result = controller().applicationPdf(caseRef, Some(token))(request)
 
-      status(result)          shouldBe NOT_FOUND
+      status(result)        shouldBe NOT_FOUND
       contentAsString(result) should include(messages("documentNotFound.application"))
-      contentType(result)     shouldBe Some("text/html")
+      contentType(result)   shouldBe Some("text/html")
     }
 
     "return 502 when the filestore cannot be reached" in {
@@ -200,9 +200,9 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       val result = controller().viewApplication(caseRef, Some(token))(request)
 
-      status(result)          shouldBe OK
+      status(result)        shouldBe OK
       contentAsString(result) should include(messages("view.application.header"))
-      contentType(result)     shouldBe Some("text/html")
+      contentType(result)   shouldBe Some("text/html")
     }
 
     "error when case not found" in {
@@ -246,9 +246,9 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       val result = controller().rulingCertificatePdf(caseRef, Some(token))(request)
 
-      status(result)          shouldBe NOT_FOUND
+      status(result)        shouldBe NOT_FOUND
       contentAsString(result) should include(messages("documentNotFound.rulingCertificate"))
-      contentType(result)     shouldBe Some("text/html")
+      contentType(result)   shouldBe Some("text/html")
     }
 
     "return 502 when the filestore cannot be reached" in {
@@ -312,9 +312,9 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       val result = controller().coverLetterPdf(caseRef, Some(token))(request)
 
-      status(result)          shouldBe NOT_FOUND
+      status(result)        shouldBe NOT_FOUND
       contentAsString(result) should include(messages("documentNotFound.rulingCertificate"))
-      contentType(result)     shouldBe Some("text/html")
+      contentType(result)   shouldBe Some("text/html")
     }
 
     "return 502 when the filestore cannot be reached" in {
@@ -365,9 +365,9 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
 
       val result = controller().viewRulingCertificate(caseRef, Some(token))(request)
 
-      status(result)          shouldBe OK
+      status(result)        shouldBe OK
       contentAsString(result) should include("Advance Tariff Ruling certificate")
-      contentType(result)     shouldBe Some("text/html")
+      contentType(result)   shouldBe Some("text/html")
     }
 
     "error when case not found" in {

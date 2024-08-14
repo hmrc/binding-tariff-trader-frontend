@@ -19,7 +19,6 @@ package controllers
 import audit.AuditService
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import connectors.DataCacheConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import mapper.CaseRequestMapper
 import models._
@@ -28,7 +27,7 @@ import navigation.Navigator
 import pages._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import service.{CasesService, CountriesService, FileService, PdfService}
+import service._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.CheckYourAnswersHelper
@@ -42,7 +41,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CheckYourAnswersController @Inject() (
   appConfig: FrontendAppConfig,
-  dataCacheConnector: DataCacheConnector,
+  dataCacheService: DataCacheService,
   auditService: AuditService,
   navigator: Navigator,
   identify: IdentifierAction,
@@ -139,17 +138,17 @@ class CheckYourAnswersController @Inject() (
         pdfStored <- fileService.uploadApplicationPdf(atar.reference, pdfFile)
         pdfAttachment = Attachment(pdfStored.id, public = false)
         caseUpdate = CaseUpdate(
-          Some(
-            ApplicationUpdate(
-              applicationPdf = SetValue(Some(pdfAttachment))
-            )
-          )
-        )
+                       Some(
+                         ApplicationUpdate(
+                           applicationPdf = SetValue(Some(pdfAttachment))
+                         )
+                       )
+                     )
         _ <- caseService.update(atar.reference, caseUpdate)
         _ <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
         _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
         userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, pdf)
-        _           <- dataCacheConnector.save(userAnswers.cacheMap)
+        _           <- dataCacheService.save(userAnswers.cacheMap)
         res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
       } yield res
   }

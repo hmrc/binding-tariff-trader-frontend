@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models._
@@ -34,7 +33,7 @@ import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.mvc.request.RequestTarget
 import play.api.test.Helpers._
-import service.FileService
+import service.{FakeDataCacheService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.uploadSupportingMaterialMultiple
 
@@ -42,7 +41,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
   private val fileService            = mock(classOf[FileService])
-  private val cacheConnector         = FakeDataCacheConnector
+  private val cacheService           = FakeDataCacheService
   private val formProvider           = new UploadSupportingMaterialMultipleFormProvider()
   private val request                = fakeGETRequestWithCSRF
   private val form                   = formProvider()
@@ -59,7 +58,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new UploadSupportingMaterialMultipleController(
       frontendAppConfig,
-      cacheConnector,
+      cacheService,
       FakeIdentifierAction,
       dataRetrievalAction,
       new FakeNavigator(onwardRoute),
@@ -76,7 +75,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
   }
 
   private val initiateResponse = FileStoreInitiateResponse(
-    id              = "id",
+    id = "id",
     upscanReference = "ref",
     uploadRequest = UpscanFormTemplate(
       "http://localhost:20001/upscan/upload",
@@ -121,7 +120,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
       await(
-        FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
+        FakeDataCacheService.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
       ) shouldBe Some(Seq(uploadedFile))
     }
 
@@ -139,7 +138,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(onwardRoute.url)
       await(
-        FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
+        FakeDataCacheService.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
       ) shouldBe Some(Seq(uploadedFileNoMetadata))
     }
 
@@ -158,11 +157,11 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
-      status(result)          shouldBe BAD_REQUEST
+      status(result)        shouldBe BAD_REQUEST
       contentAsString(result) should include("error-message-file-input")
       contentAsString(result) should include(messages(Other("").errorMessageKey))
       await(
-        FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
+        FakeDataCacheService.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
       ) shouldBe Some(Seq())
     }
 
@@ -180,11 +179,11 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
-      status(result)          shouldBe BAD_REQUEST
+      status(result)        shouldBe BAD_REQUEST
       contentAsString(result) should include("error-message-file-input")
       contentAsString(result) should include(messages(FileTooSmall.errorMessageKey))
       await(
-        FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
+        FakeDataCacheService.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
       ) shouldBe Some(Seq())
     }
 
@@ -202,11 +201,11 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
-      status(result)          shouldBe BAD_REQUEST
+      status(result)        shouldBe BAD_REQUEST
       contentAsString(result) should include("error-message-file-input")
       contentAsString(result) should include(messages(FileTooLarge.errorMessageKey))
       await(
-        FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
+        FakeDataCacheService.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
       ) shouldBe Some(Seq())
     }
 
@@ -224,11 +223,11 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
-      status(result)          shouldBe BAD_REQUEST
+      status(result)        shouldBe BAD_REQUEST
       contentAsString(result) should include("error-message-file-input")
       contentAsString(result) should include(messages(NoFileSelected.errorMessageKey))
       await(
-        FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
+        FakeDataCacheService.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
       ) shouldBe Some(Seq())
     }
 
@@ -241,7 +240,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       status(result) shouldBe OK
       await(
-        FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
+        FakeDataCacheService.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
       ) shouldBe Some(Seq(file))
 
     }
@@ -262,7 +261,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       status(result) shouldBe OK
       await(
-        FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
+        FakeDataCacheService.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
       ) shouldBe Some(Seq(uploadedFile, differentFile))
     }
 
@@ -281,7 +280,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       status(result) shouldBe OK
       await(
-        FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
+        FakeDataCacheService.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
       ) shouldBe Some(Seq(differentFile))
     }
 
@@ -300,7 +299,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       status(result) shouldBe OK
       await(
-        FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
+        FakeDataCacheService.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
       ) shouldBe Some(Seq(differentFile))
     }
 
@@ -319,7 +318,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       status(result) shouldBe OK
       await(
-        FakeDataCacheConnector.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
+        FakeDataCacheService.getEntry[Seq[FileAttachment]](cacheMapId, UploadSupportingMaterialMultiplePage.toString)
       ) shouldBe Some(Seq(differentFile))
     }
 

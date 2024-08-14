@@ -16,53 +16,51 @@
 
 package connectors
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.util.ByteString
 import com.codahale.metrics.MetricRegistry
 import config.FrontendAppConfig
 import metrics.HasMetrics
 import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, FilestoreResponse}
 import models.{Attachment, FileAttachment}
-import play.api.libs.json.{JsResult, Json}
-import play.api.libs.ws.WSClient
+import org.apache.pekko.NotUsed
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.util.ByteString
+import play.api.libs.json.Json
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.{DataPart, FilePart}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BindingTariffFilestoreConnector @Inject() (
-  ws: WSClient,
-  client: AuthenticatedHttpClient,
+  httpClient: HttpClientV2,
   val metrics: MetricRegistry
 )(implicit appConfig: FrontendAppConfig, ec: ExecutionContext)
-    extends InjectAuthHeader
-    with HasMetrics {
+    extends HasMetrics
+    with InjectAuthHeader {
 
-  private val hcConfig = HeaderCarrier.Config.fromConfig(client.configuration)
+  private val env: String = appConfig.bindingTariffFileStoreUrl
 
   def get(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
     withMetricsTimerAsync("get-file-by-id") { _ =>
-      client
-        .GET[FilestoreResponse](s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}", headers = addAuth(appConfig))
+      httpClient.get(url"$env/file/${file.id}").setHeader(authHeaders: _*).execute[FilestoreResponse]
     }
 
   def initiate(request: FileStoreInitiateRequest)(implicit hc: HeaderCarrier): Future[FileStoreInitiateResponse] =
     withMetricsTimerAsync("initiate-file-upload") { _ =>
-      client.POST[FileStoreInitiateRequest, FileStoreInitiateResponse](
-        s"${appConfig.bindingTariffFileStoreUrl}/file/initiate",
-        request,
-        headers = addAuth(appConfig)
-      )
+      httpClient
+        .post(url"$env/file/initiate")
+        .withBody(Json.toJson(request))
+        .setHeader(authHeaders: _*)
+        .execute[FileStoreInitiateResponse]
     }
 
-  def uploadApplicationPdf(reference: String, content: Array[Byte])(
-    implicit hc: HeaderCarrier
+  def uploadApplicationPdf(reference: String, content: Array[Byte])(implicit
+    hc: HeaderCarrier
   ): Future[FilestoreResponse] =
     withMetricsTimerAsync("upload-file") { _ =>
       val dataPart: MultipartFormData.DataPart = DataPart("publish", "true")
@@ -72,27 +70,18 @@ class BindingTariffFilestoreConnector @Inject() (
         Some("application/pdf"),
         Source.single(ByteString(content))
       )
-      val url = s"${appConfig.bindingTariffFileStoreUrl}/file"
-      ws.url(url)
-        .addHttpHeaders(hc.withExtraHeaders(addAuth(appConfig): _*).headersForUrl(hcConfig)(url): _*)
-        .post(Source(List(dataPart, filePart)))
-        .flatMap { response =>
-          Future.fromTry {
-            JsResult.toTry(Json.fromJson[FilestoreResponse](Json.parse(response.body)))
-          }
-        }
+      httpClient
+        .post(url"$env/file")
+        .withBody(Source(List(dataPart, filePart)))
+        .setHeader(authHeaders: _*)
+        .execute[FilestoreResponse]
     }
 
   def downloadFile(url: String)(implicit hc: HeaderCarrier): Future[Option[Source[ByteString, _]]] =
     withMetricsTimerAsync("download-file") { _ =>
-      val fileStoreResponse = ws
-        .url(url)
-        .withHttpHeaders(hc.withExtraHeaders(addAuth(appConfig): _*).headersForUrl(hcConfig)(url): _*)
-        .get()
-
-      fileStoreResponse.flatMap { response =>
+      httpClient.get(url"$url").setHeader(authHeaders: _*).execute[HttpResponse].flatMap { response =>
         if (response.status / 100 == 2) {
-          Future.successful(Some(response.bodyAsSource))
+          Future.successful(Some(Source.single(ByteString(response.body))))
         } else if (response.status / 100 > 4) {
           Future.failed(new RuntimeException("Unable to retrieve file from filestore"))
         } else {
@@ -103,10 +92,7 @@ class BindingTariffFilestoreConnector @Inject() (
 
   def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
     withMetricsTimerAsync("publish-file") { _ =>
-      client.POSTEmpty[FilestoreResponse](
-        s"${appConfig.bindingTariffFileStoreUrl}/file/${file.id}/publish",
-        headers = addAuth(appConfig)
-      )
+      httpClient.post(url"$env/file/${file.id}/publish").setHeader(authHeaders: _*).execute[FilestoreResponse]
     }
 
   def getFileMetadata(
@@ -117,16 +103,13 @@ class BindingTariffFilestoreConnector @Inject() (
         Future.successful(Seq.empty)
       } else {
         val query = s"?${attachments.map(att => s"id=${att.id}").mkString("&")}"
-        val url   = s"${appConfig.bindingTariffFileStoreUrl}/file$query"
-        client.GET[Seq[FilestoreResponse]](url, headers = addAuth(appConfig))
+        val url   = s"$env/file$query"
+        httpClient.get(url"$url").setHeader(authHeaders: _*).execute[Seq[FilestoreResponse]]
       }
     }
 
   def get(attachment: Attachment)(implicit headerCarrier: HeaderCarrier): Future[Option[FilestoreResponse]] =
     withMetricsTimerAsync("get-file-by-id") { _ =>
-      client.GET[Option[FilestoreResponse]](
-        s"${appConfig.bindingTariffFileStoreUrl}/file/${attachment.id}",
-        headers = addAuth(appConfig)
-      )
+      httpClient.get(url"$env/file/${attachment.id}").setHeader(authHeaders: _*).execute[Option[FilestoreResponse]]
     }
 }

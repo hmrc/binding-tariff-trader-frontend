@@ -36,7 +36,7 @@ case class SetValue[A](a: A) extends Update[A]
 case object NoChange extends Update[Nothing]
 
 case class ApplicationUpdate(
-  `type`: String                             = "BTI",
+  `type`: String = "BTI",
   applicationPdf: Update[Option[Attachment]] = NoChange
 )
 

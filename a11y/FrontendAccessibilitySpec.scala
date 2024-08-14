@@ -20,7 +20,7 @@ import models._
 import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.api.data.Forms.{boolean, text, tuple}
-import play.api.mvc.Request
+import play.api.mvc.{Request, RequestHeader}
 import play.api.test.CSRFTokenHelper
 import play.twirl.api.Html
 import service.CountriesService
@@ -45,6 +45,7 @@ class FrontendAccessibilitySpec extends AutomaticAccessibilitySpec {
     new RegisteredAddressForEoriFormProvider
 
   implicit val arbAppConfig: Arbitrary[FrontendAppConfig] = fixed(appConfig)
+  implicit val arbRequestHeader: Arbitrary[RequestHeader] = fixed(fakeRequest)
   implicit val arbHtmlInput: Arbitrary[Html]              = fixed(Html.apply(""))
   override implicit val arbAsciiString: Arbitrary[String] = fixed("/")
 

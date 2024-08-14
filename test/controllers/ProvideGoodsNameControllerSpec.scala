@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.AnswerCachingControllerBehaviours
 import forms.ProvideGoodsNameFormProvider
@@ -26,6 +25,7 @@ import play.api.data.Form
 import play.api.libs.json.JsValue
 import play.api.mvc.{AnyContentAsEmpty, Call, Request}
 import play.api.test.FakeRequest
+import service.FakeDataCacheService
 import views.html.provideGoodsName
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -47,7 +47,7 @@ class ProvideGoodsNameControllerSpec extends ControllerSpecBase with AnswerCachi
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new ProvideGoodsNameController(
       frontendAppConfig,
-      FakeDataCacheConnector,
+      FakeDataCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,

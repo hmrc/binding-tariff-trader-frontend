@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models._
 import models.requests.NewEventRequest
-import org.apache.http.HttpStatus
+import play.api.http.Status.{BAD_GATEWAY, NOT_FOUND, OK}
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import utils.JsonFormatters._
@@ -30,126 +30,122 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
-  private val connector =
-    new BindingTariffClassificationConnector(authenticatedHttpClient, metrics)(mockConfig, implicitly)
+  trait Setup {
+    val connector = new BindingTariffClassificationConnector(httpClient, metrics)(mockConfig, global)
+  }
 
-  private def withHeaderCarrier(value: String) = HeaderCarrier(extraHeaders = Seq("X-Api-Token" -> value))
+  private def withHeaderCarrier(value: String): HeaderCarrier =
+    HeaderCarrier(extraHeaders = Seq("X-Api-Token" -> value))
+
+  val btiCaseExample: Case = oCase.btiCaseExample
+  val responseJSON: String = Json.toJson(btiCaseExample).toString()
 
   "Connector 'Create Case'" should {
-    val request     = oCase.newBtiCaseExample
-    val requestJSON = Json.toJson(request).toString()
+    val request: NewCaseRequest = oCase.newBtiCaseExample
+    val requestJSON: String     = Json.toJson(request).toString()
 
-    "Create valid case with x-api-token" in {
-      val response     = oCase.btiCaseExample
-      val responseJSON = Json.toJson(response).toString()
+    "Create valid case with x-api-token" in new Setup {
 
       WireMock.stubFor(
         post(urlEqualTo("/cases"))
           .withRequestBody(equalToJson(requestJSON))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_OK)
+              .withStatus(OK)
               .withBody(responseJSON)
           )
       )
 
-      await(connector.createCase(request)(withHeaderCarrier("custom token"))) shouldBe response
+      await(connector.createCase(request)(withHeaderCarrier(mockConfig.apiToken))) shouldBe btiCaseExample
 
       WireMock.verify(
         postRequestedFor(urlEqualTo("/cases"))
-          .withHeader("X-Api-Token", equalTo("custom token"))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "Find valid case with x-api-token" in {
-      val responseJSON = Json.toJson(oCase.btiCaseExample).toString()
+    "Find valid case with x-api-token" in new Setup {
 
       WireMock.stubFor(
-        get(urlEqualTo("/cases/id"))
-          .willReturn(
-            aResponse()
-              .withStatus(HttpStatus.SC_OK)
-              .withBody(responseJSON)
-          )
+        get(urlEqualTo("/cases/id")).willReturn(
+          aResponse()
+            .withStatus(OK)
+            .withBody(responseJSON)
+        )
       )
 
-      await(
-        connector.findCase("id")(withHeaderCarrier(appConfig.apiToken))
-      ) shouldBe Some(oCase.btiCaseExample)
+      await(connector.findCase("id")(withHeaderCarrier(mockConfig.apiToken))) shouldBe Some(btiCaseExample)
 
       WireMock.verify(
         getRequestedFor(urlEqualTo("/cases/id"))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "propagate errors with x-api-token" in {
+    "propagate errors with x-api-token" in new Setup {
       WireMock.stubFor(
         post(urlEqualTo("/cases"))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+              .withStatus(BAD_GATEWAY)
           )
       )
 
       intercept[UpstreamErrorResponse] {
-        await(connector.createCase(request)(withHeaderCarrier(appConfig.apiToken)))
+        await(connector.createCase(request)(withHeaderCarrier(mockConfig.apiToken)))
       }
 
       WireMock.verify(
         postRequestedFor(urlEqualTo("/cases"))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "Create valid case without x-api-token" in {
-      val response     = oCase.btiCaseExample
-      val responseJSON = Json.toJson(response).toString()
+    "Create valid case without x-api-token" in new Setup {
 
       WireMock.stubFor(
         post(urlEqualTo("/cases"))
           .withRequestBody(equalToJson(requestJSON))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_OK)
+              .withStatus(OK)
               .withBody(responseJSON)
           )
       )
 
-      await(connector.createCase(request)(hc)) shouldBe response
+      await(connector.createCase(request)(hc)) shouldBe btiCaseExample
 
       WireMock.verify(
         postRequestedFor(urlEqualTo("/cases"))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "Find valid case without x-api-token" in {
-      val responseJSON = Json.toJson(oCase.btiCaseExample).toString()
+    "Find valid case without x-api-token" in new Setup {
 
       WireMock.stubFor(
         get(urlEqualTo("/cases/id"))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_OK)
+              .withStatus(OK)
               .withBody(responseJSON)
           )
       )
 
-      await(connector.findCase("id")(hc)) shouldBe Some(oCase.btiCaseExample)
+      await(connector.findCase("id")(hc)) shouldBe Some(btiCaseExample)
 
       WireMock.verify(
         getRequestedFor(urlEqualTo("/cases/id"))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "propagate errors without x-api-token" in {
+    "propagate errors without x-api-token" in new Setup {
       WireMock.stubFor(
         post(urlEqualTo("/cases"))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+              .withStatus(BAD_GATEWAY)
           )
       )
 
@@ -159,149 +155,143 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
       WireMock.verify(
         postRequestedFor(urlEqualTo("/cases"))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
   }
 
   "Connector 'Put Case'" should {
-    "Execute update for existing case" in {
-      val caseExample = oCase.btiCaseExample
-      val url         = s"/cases/${caseExample.reference}"
+    "Execute update for existing case" in new Setup {
+      val url: String = s"/cases/${btiCaseExample.reference}"
 
       WireMock.stubFor(
         put(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_OK)
-              .withBody(CasePayloads.jsonOf(Some(caseExample)))
+              .withStatus(OK)
+              .withBody(CasePayloads.jsonOf(Some(btiCaseExample)))
           )
       )
 
-      await(
-        connector.putCase(caseExample)(withHeaderCarrier(appConfig.apiToken))
-      ) shouldBe caseExample
+      await(connector.putCase(btiCaseExample)(withHeaderCarrier(mockConfig.apiToken))) shouldBe btiCaseExample
 
       WireMock.verify(
         putRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "Return error for missing case" in {
-      val caseExample = oCase.btiCaseExample
-      val url         = s"/cases/${caseExample.reference}"
+    "Return error for missing case" in new Setup {
+      val url: String = s"/cases/${btiCaseExample.reference}"
 
       WireMock.stubFor(
         put(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_NOT_FOUND)
+              .withStatus(NOT_FOUND)
           )
       )
 
       intercept[UpstreamErrorResponse] {
         await(
-          connector.putCase(caseExample)(withHeaderCarrier(appConfig.apiToken))
+          connector.putCase(btiCaseExample)(withHeaderCarrier(mockConfig.apiToken))
         )
       }
 
       WireMock.verify(
         putRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "Propagate errors" in {
-      val caseExample = oCase.btiCaseExample
-      val url         = s"/cases/${caseExample.reference}"
+    "Propagate errors" in new Setup {
+      val url = s"/cases/${btiCaseExample.reference}"
 
       WireMock.stubFor(
         put(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+              .withStatus(BAD_GATEWAY)
           )
       )
 
       intercept[UpstreamErrorResponse] {
         await(
-          connector.putCase(caseExample)(withHeaderCarrier(appConfig.apiToken))
+          connector.putCase(btiCaseExample)(withHeaderCarrier(mockConfig.apiToken))
         )
       }
 
       WireMock.verify(
         putRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
   }
 
   "Connector 'Update Case'" should {
-    "Execute update for existing case" in {
-      val caseRef = oCase.btiCaseExample.reference
-      val url     = s"/cases/$caseRef"
+    "Execute update for existing case" in new Setup {
+      val caseRef: String = btiCaseExample.reference
+      val url             = s"/cases/$caseRef"
 
       WireMock.stubFor(
         post(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_OK)
-              .withBody(CasePayloads.jsonOf(Some(oCase.btiCaseExample)))
+              .withStatus(OK)
+              .withBody(CasePayloads.jsonOf(Some(btiCaseExample)))
           )
       )
 
-      await(
-        connector.updateCase(caseRef, CaseUpdate())(withHeaderCarrier(appConfig.apiToken))
-      ) shouldBe Some(oCase.btiCaseExample)
+      await(connector.updateCase(caseRef, CaseUpdate())(withHeaderCarrier(mockConfig.apiToken))) shouldBe Some(
+        btiCaseExample
+      )
 
       WireMock.verify(
-        postRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+        postRequestedFor(urlEqualTo(url)).withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "Return empty response for missing case" in {
+    "Return empty response for missing case" in new Setup {
       val url = s"/cases/foo"
 
       WireMock.stubFor(
         post(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_NOT_FOUND)
+              .withStatus(NOT_FOUND)
           )
       )
 
       await(
-        connector.updateCase("foo", CaseUpdate())(withHeaderCarrier(appConfig.apiToken))
+        connector.updateCase("foo", CaseUpdate())(withHeaderCarrier(mockConfig.apiToken))
       ) shouldBe None
 
       WireMock.verify(
         postRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "Propagate errors" in {
+    "Propagate errors" in new Setup {
       val url = "/cases/foo"
 
       WireMock.stubFor(
         post(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+              .withStatus(BAD_GATEWAY)
           )
       )
 
       intercept[UpstreamErrorResponse] {
         await(
-          connector.updateCase("foo", CaseUpdate())(withHeaderCarrier(appConfig.apiToken))
+          connector.updateCase("foo", CaseUpdate())(withHeaderCarrier(mockConfig.apiToken))
         )
       }
 
       WireMock.verify(
         postRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
   }
@@ -309,7 +299,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
   "Connector 'All Cases'" should {
     val pageSize = 50
 
-    "Find empty paged case" in {
+    "Find empty paged case" in new Setup {
       val page = 2
       val url =
         "/cases?sort_by=created-date&sort_direction=desc&page=2&page_size=50&application_type=BTI&migrated=false"
@@ -318,22 +308,22 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_OK)
+              .withStatus(OK)
               .withBody(CasePayloads.pagedEmpty)
           )
       )
 
       await(
-        connector.allCases(SearchPagination(page, pageSize), Sort())(withHeaderCarrier(appConfig.apiToken))
+        connector.allCases(SearchPagination(page, pageSize), Sort())(withHeaderCarrier(mockConfig.apiToken))
       ) shouldBe Paged.empty[Case]
 
       WireMock.verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "Find valid paged case" in {
+    "Find valid paged case" in new Setup {
       val page = 2
       val url =
         "/cases?sort_by=created-date&sort_direction=desc&page=2&page_size=50&application_type=BTI&migrated=false"
@@ -342,22 +332,22 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_OK)
+              .withStatus(OK)
               .withBody(CasePayloads.pagedGatewayCases)
           )
       )
 
       await(
-        connector.allCases(SearchPagination(page, pageSize), Sort())(withHeaderCarrier(appConfig.apiToken))
-      ) shouldBe Paged(Seq(oCase.btiCaseExample))
+        connector.allCases(SearchPagination(page, pageSize), Sort())(withHeaderCarrier(mockConfig.apiToken))
+      ) shouldBe Paged(Seq(btiCaseExample))
 
       WireMock.verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "propagate errors" in {
+    "propagate errors" in new Setup {
       val page = 1
       val url =
         "/cases?sort_by=created-date&sort_direction=desc&page=1&page_size=50&application_type=BTI&migrated=false"
@@ -366,26 +356,26 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+              .withStatus(BAD_GATEWAY)
           )
       )
 
       intercept[UpstreamErrorResponse] {
         await(
-          connector.allCases(SearchPagination(page, pageSize), Sort())(withHeaderCarrier(appConfig.apiToken))
+          connector.allCases(SearchPagination(page, pageSize), Sort())(withHeaderCarrier(mockConfig.apiToken))
         )
       }
 
       WireMock.verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
   }
 
   "Connector 'Find Cases By'" should {
 
-    "Find empty paged case" in {
+    "Find empty paged case" in new Setup {
       val url =
         "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50&migrated=false"
 
@@ -393,7 +383,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_OK)
+              .withStatus(OK)
               .withBody(CasePayloads.pagedEmpty)
           )
       )
@@ -404,16 +394,16 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           Set(CaseStatus.NEW, CaseStatus.OPEN),
           SearchPagination(2),
           Sort()
-        )(withHeaderCarrier(appConfig.apiToken))
+        )(withHeaderCarrier(mockConfig.apiToken))
       ) shouldBe Paged.empty[Case]
 
       WireMock.verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "Find valid paged case" in {
+    "Find valid paged case" in new Setup {
       val url =
         "/cases?eori=eori1234567&status=NEW,OPEN&sort_by=created-date&sort_direction=desc&page=2&page_size=50&migrated=false"
 
@@ -421,7 +411,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_OK)
+              .withStatus(OK)
               .withBody(CasePayloads.pagedGatewayCases)
           )
       )
@@ -432,16 +422,16 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
           Set(CaseStatus.NEW, CaseStatus.OPEN),
           SearchPagination(2),
           Sort()
-        )(withHeaderCarrier(appConfig.apiToken))
-      ) shouldBe Paged(Seq(oCase.btiCaseExample))
+        )(withHeaderCarrier(mockConfig.apiToken))
+      ) shouldBe Paged(Seq(btiCaseExample))
 
       WireMock.verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
 
-    "propagate errors" in {
+    "propagate errors" in new Setup {
       val url =
         "/cases?eori=eori1234567&status=NEW&sort_by=created-date&sort_direction=desc&page=1&page_size=2147483647&migrated=false"
 
@@ -449,7 +439,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
         get(urlEqualTo(url))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_BAD_GATEWAY)
+              .withStatus(BAD_GATEWAY)
           )
       )
 
@@ -460,38 +450,37 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
             Set(CaseStatus.NEW),
             NoPagination(),
             Sort()
-          )(withHeaderCarrier(appConfig.apiToken))
+          )(withHeaderCarrier(mockConfig.apiToken))
         )
       }
 
       WireMock.verify(
         getRequestedFor(urlEqualTo(url))
-          .withHeader("X-Api-Token", equalTo(appConfig.apiToken))
+          .withHeader("X-Api-Token", equalTo(mockConfig.apiToken))
       )
     }
   }
 
   "Connector 'Create Event'" should {
-
     val event: Event =
       Event("id", CaseCreated("Case created"), Operator("", Some("user name")), "case-ref", Instant.now())
     val eventRequest: NewEventRequest =
       NewEventRequest(CaseCreated("comment"), Operator("", Some("user name")), Instant.now())
 
-    "create event" in {
-      val ref               = "case-reference"
-      val validCase         = oCase.btiCaseExample.copy(reference = ref)
-      val validEventRequest = eventRequest
-      val validEvent        = event.copy(caseReference = ref)
-      val requestJson       = Json.toJson(validEventRequest).toString()
-      val responseJson      = Json.toJson(validEvent).toString()
+    "create event" in new Setup {
+      val ref                                = "case-reference"
+      val validCase: Case                    = btiCaseExample.copy(reference = ref)
+      val validEventRequest: NewEventRequest = eventRequest
+      val validEvent: Event                  = event.copy(caseReference = ref)
+      val requestJson: String                = Json.toJson(validEventRequest).toString()
+      val responseJson: String               = Json.toJson(validEvent).toString()
 
       WireMock.stubFor(
         post(urlEqualTo(s"/cases/$ref/events"))
           .withRequestBody(equalToJson(requestJson))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_OK)
+              .withStatus(OK)
               .withBody(responseJson)
           )
       )
@@ -504,18 +493,18 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
       )
     }
 
-    "create event with an unknown case reference" in {
-      val ref               = "unknown-reference"
-      val validCase         = oCase.btiCaseExample.copy(reference = ref)
-      val validEventRequest = eventRequest
-      val requestJson       = Json.toJson(validEventRequest).toString()
+    "create event with an unknown case reference" in new Setup {
+      val ref                                = "unknown-reference"
+      val validCase: Case                    = btiCaseExample.copy(reference = ref)
+      val validEventRequest: NewEventRequest = eventRequest
+      val requestJson: String                = Json.toJson(validEventRequest).toString()
 
       WireMock.stubFor(
         post(urlEqualTo(s"/cases/$ref/events"))
           .withRequestBody(equalToJson(requestJson))
           .willReturn(
             aResponse()
-              .withStatus(HttpStatus.SC_NOT_FOUND)
+              .withStatus(NOT_FOUND)
           )
       )
 

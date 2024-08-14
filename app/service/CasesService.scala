@@ -38,13 +38,15 @@ class CasesService @Inject() (
       c <- connector.createCase(c)
 
       email = ApplicationSubmittedEmail(
-        to = Seq(c.application.contact.email),
-        parameters = ApplicationSubmittedParameters(
-          c.application.contact.name,
-          c.reference
-        )
-      )
-      _ <- emailConnector.send(email) recover loggingAnError(c.reference)
+                to = Seq(c.application.contact.email),
+                parameters = ApplicationSubmittedParameters(
+                  c.application.contact.name,
+                  c.reference
+                )
+              )
+      _ <- emailConnector.send(email).recoverWith {
+             suppressThrownError(s"Failed to send email for Application [${c.reference}]")
+           }
     } yield c
 
   def put(c: Case)(implicit hc: HeaderCarrier): Future[Case] =
@@ -53,17 +55,12 @@ class CasesService @Inject() (
   def update(reference: String, update: CaseUpdate)(implicit hc: HeaderCarrier): Future[Option[Case]] =
     connector.updateCase(reference, update)
 
-  private def loggingAnError(ref: String): PartialFunction[Throwable, Unit] = {
-    case t: Throwable => logger.error(s"Failed to send email for Application [$ref]", t)
-  }
-
   def allCases(pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] =
     connector.allCases(pagination, sort)
 
-  def getCases(eori: String, statuses: Set[CaseStatus], pagination: Pagination, sort: Sort)(
-    implicit hc: HeaderCarrier
-  ): Future[Paged[Case]] =
-    connector.findCasesBy(eori, statuses, pagination, sort)
+  def getCases(eori: String, statuses: Set[CaseStatus], pagination: Pagination, sort: Sort)(implicit
+    hc: HeaderCarrier
+  ): Future[Paged[Case]] = connector.findCasesBy(eori, statuses, pagination, sort)
 
   def getCaseForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Case] =
     getCase(reference, _.hasEoriNumber(userEori))
@@ -84,8 +81,13 @@ class CasesService @Inject() (
 
   private def addEvent(atar: Case, details: Details, operator: Operator)(implicit hc: HeaderCarrier): Future[Unit] = {
     val event = NewEventRequest(details, operator)
-    connector.createEvent(atar, event).recover { t: Throwable =>
-      logger.error(s"Could not create Event for case [${atar.reference}] with payload [${event.details}]", t)
-    } map (_ => ())
+    connector.createEvent(atar, event).map(_ => ()).recoverWith {
+      suppressThrownError(s"Could not create Event for case [${atar.reference}] with payload [${event.details}]")
+    }
+  }
+
+  private def suppressThrownError(message: String): PartialFunction[Throwable, Future[Unit]] = { case t: Throwable =>
+    logger.error(s"$message", t)
+    Future.successful(())
   }
 }

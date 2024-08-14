@@ -23,7 +23,7 @@ import java.io.File
 import javax.inject.{Inject, Provider, Singleton}
 
 @Singleton
-class FopFactoryProvider @Inject() extends Provider[FopFactory]{
+class FopFactoryProvider @Inject() extends Provider[FopFactory] {
   private val baseURI            = getClass.getClassLoader.getResource("./").toURI
   private val cfgBuilder         = new DefaultConfigurationBuilder()
   private val cfg: Configuration = cfgBuilder.buildFromFile(new File("./conf/fop.xconf"))

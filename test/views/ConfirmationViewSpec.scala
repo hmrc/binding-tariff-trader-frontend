@@ -44,7 +44,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
         pdfViewModel,
         _ => Some("example country name"),
         compositeMode = false,
-        urlViewModel  = ConfirmationHomeUrlViewModel,
+        urlViewModel = ConfirmationHomeUrlViewModel,
         fakeRequest,
         messages
       )

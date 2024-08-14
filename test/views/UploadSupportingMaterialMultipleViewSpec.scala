@@ -37,7 +37,7 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
   val request: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
   val initiateResponse: FileStoreInitiateResponse = FileStoreInitiateResponse(
-    id              = "id",
+    id = "id",
     upscanReference = "ref",
     uploadRequest = UpscanFormTemplate(
       "http://localhost:20001/upscan/upload",

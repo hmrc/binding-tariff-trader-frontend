@@ -16,10 +16,10 @@
 
 package controllers
 
-import connectors.FakeDataCacheConnector
 import controllers.actions._
 import controllers.behaviours.AccumulatingCachingControllerBehaviours
 import forms.MakeFileConfidentialFormProvider
+import models.cache.CacheMap
 import models.{FileAttachment, NormalMode, UserAnswers}
 import navigation.FakeNavigator
 import org.scalatest.BeforeAndAfterEach
@@ -27,7 +27,7 @@ import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, QuestionPage, Uplo
 import play.api.data.Form
 import play.api.libs.json._
 import play.api.mvc.{Call, Request}
-import models.cache.CacheMap
+import service.FakeDataCacheService
 import views.html.makeFileConfidential
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -52,12 +52,12 @@ class MakeFileConfidentialControllerSpec
     )
   )
 
-  val fakeCacheConnector =
-    new FakeDataCacheConnector(Map(cacheMapId -> CacheMap(cacheMapId, backgroundData)))
+  val fakeCacheService =
+    new FakeDataCacheService(Map(cacheMapId -> CacheMap(cacheMapId, backgroundData)))
 
   override protected def beforeEach(): Unit = {
-    await(fakeCacheConnector.remove(CacheMap(cacheMapId, Map.empty)))
-    await(fakeCacheConnector.save(CacheMap(cacheMapId, backgroundData)))
+    await(fakeCacheService.remove(CacheMap(cacheMapId, Map.empty)))
+    await(fakeCacheService.save(CacheMap(cacheMapId, backgroundData)))
   }
 
   val makeFileConfidentialView: makeFileConfidential = app.injector.instanceOf(classOf[makeFileConfidential])
@@ -65,7 +65,7 @@ class MakeFileConfidentialControllerSpec
   private def controller(dataRetrievalAction: DataRetrievalAction) =
     new MakeFileConfidentialController(
       frontendAppConfig,
-      fakeCacheConnector,
+      fakeCacheService,
       new FakeNavigator(onwardRoute),
       FakeIdentifierAction,
       dataRetrievalAction,
@@ -76,7 +76,10 @@ class MakeFileConfidentialControllerSpec
     )
 
   private def viewAsString(form: Form[(String, Boolean)], submitAction: Call, request: Request[_]): String =
-    makeFileConfidentialView(frontendAppConfig, form, submitAction, NormalMode, lastFileUploadedId)(request, messages).toString
+    makeFileConfidentialView(frontendAppConfig, form, submitAction, NormalMode, lastFileUploadedId)(
+      request,
+      messages
+    ).toString
 
   val invalidFormData: Map[String, String] = Map("file-id-1" -> "", "confidential" -> "")
 

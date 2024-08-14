@@ -16,28 +16,32 @@
 
 package connectors
 
-import com.google.inject.Inject
 import com.codahale.metrics.MetricRegistry
 import config.FrontendAppConfig
 import metrics.HasMetrics
 import models.Email
-import play.api.libs.json.Writes
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import play.api.libs.json.{Json, Writes}
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class EmailConnector @Inject() (
   configuration: FrontendAppConfig,
-  client: HttpClient,
+  httpClient: HttpClientV2,
   val metrics: MetricRegistry
 )(implicit ec: ExecutionContext)
     extends HasMetrics {
 
   def send[E >: Email[_]](e: E)(implicit hc: HeaderCarrier, writes: Writes[E]): Future[Unit] =
     withMetricsTimerAsync("send-email") { _ =>
-      val url = s"${configuration.emailUrl}/hmrc/email"
-      client.POST(url = url, body = e).map(_ => ())
+      httpClient
+        .post(url"${configuration.emailUrl}/hmrc/email")
+        .withBody(Json.toJson(e))
+        .execute[HttpResponse](throwOnFailure(readEitherOf(readRaw)), ec)
+        .map(_ => ())
     }
 }
