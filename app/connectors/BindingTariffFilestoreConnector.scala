@@ -79,9 +79,9 @@ class BindingTariffFilestoreConnector @Inject() (
 
   def downloadFile(url: String)(implicit hc: HeaderCarrier): Future[Option[Source[ByteString, _]]] =
     withMetricsTimerAsync("download-file") { _ =>
-      httpClient.get(url"$url").setHeader(authHeaders: _*).execute[HttpResponse].flatMap { response =>
+      httpClient.get(url"$url").setHeader(authHeaders: _*).stream[HttpResponse].flatMap { response =>
         if (response.status / 100 == 2) {
-          Future.successful(Some(Source.single(ByteString(response.body))))
+          Future.successful(Some(response.bodyAsSource))
         } else if (response.status / 100 > 4) {
           Future.failed(new RuntimeException("Unable to retrieve file from filestore"))
         } else {
