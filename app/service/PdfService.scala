@@ -29,10 +29,10 @@ import scala.util.{Failure, Success, Try}
 
 @Singleton
 class PdfService @Inject() (
-  pdfGeneratorService: PdfGeneratorService,
-  appConfig: FrontendAppConfig
-) extends Logging
-    with AesCrypto {
+                             pdfGeneratorService: PdfGeneratorService,
+                             appConfig: FrontendAppConfig
+                           ) extends Logging
+  with AesCrypto {
 
   override protected lazy val encryptionKey: String = appConfig.aesKey
 
@@ -53,7 +53,7 @@ class PdfService @Inject() (
         Some(eori)
 
       case Failure(error) =>
-        logger.debug("Bad Token", error)
+        logger.debug("[PdfService][decodeToken] Bad Token", error)
         None
 
       case _ =>

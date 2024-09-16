@@ -38,17 +38,17 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 class IndexController @Inject() (
-  val appConfig: FrontendAppConfig,
-  identify: IdentifierAction,
-  navigator: Navigator,
-  service: CasesService,
-  getData: DataRetrievalAction,
-  dataCacheService: DataCacheService,
-  cc: MessagesControllerComponents,
-  btaUserService: BTAUserService,
-  accountDashboardStatusesView: account_dashboard_statuses
-)(implicit ec: ExecutionContext)
-    extends FrontendController(cc)
+                                  val appConfig: FrontendAppConfig,
+                                  identify: IdentifierAction,
+                                  navigator: Navigator,
+                                  service: CasesService,
+                                  getData: DataRetrievalAction,
+                                  dataCacheService: DataCacheService,
+                                  cc: MessagesControllerComponents,
+                                  btaUserService: BTAUserService,
+                                  accountDashboardStatusesView: account_dashboard_statuses
+                                )(implicit ec: ExecutionContext)
+  extends FrontendController(cc)
     with I18nSupport
     with Logging {
 
@@ -65,10 +65,10 @@ class IndexController @Inject() (
   )
 
   def getApplicationsAndRulings(
-    page: Int,
-    sortBy: Option[SortField],
-    order: Option[SortDirection]
-  ): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[AnyContent] =>
+                                 page: Int,
+                                 sortBy: Option[SortField],
+                                 order: Option[SortDirection]
+                               ): Action[AnyContent] = (identify andThen getData).async { implicit request: OptionalDataRequest[AnyContent] =>
     request.userEoriNumber match {
       case Some(eori: String) =>
         val sort = Sort(sortBy.getOrElse(Dashboard.defaultSortField), order)
@@ -77,7 +77,7 @@ class IndexController @Inject() (
           isBTAUser   <- btaUserService.isBTAUser(request.internalId)
         } yield Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort), isBTAUser))) recover {
           case NonFatal(error) =>
-            logger.error("An error occurred whilst fetching data for dashboard view", error)
+            logger.error("[IndexController][getApplicationsAndRulings] An error occurred whilst fetching data for dashboard view", error)
             Redirect(routes.ErrorController.onPageLoad)
         }
       case None =>

@@ -28,25 +28,25 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CasesService @Inject() (
-  connector: BindingTariffClassificationConnector,
-  emailConnector: EmailConnector
-)(implicit ec: ExecutionContext)
-    extends Logging {
+                               connector: BindingTariffClassificationConnector,
+                               emailConnector: EmailConnector
+                             )(implicit ec: ExecutionContext)
+  extends Logging {
 
   def create(c: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] =
     for {
       c <- connector.createCase(c)
 
       email = ApplicationSubmittedEmail(
-                to = Seq(c.application.contact.email),
-                parameters = ApplicationSubmittedParameters(
-                  c.application.contact.name,
-                  c.reference
-                )
-              )
+        to = Seq(c.application.contact.email),
+        parameters = ApplicationSubmittedParameters(
+          c.application.contact.name,
+          c.reference
+        )
+      )
       _ <- emailConnector.send(email).recoverWith {
-             suppressThrownError(s"Failed to send email for Application [${c.reference}]")
-           }
+        suppressThrownError(s"Failed to send email for Application [${c.reference}]")
+      }
     } yield c
 
   def put(c: Case)(implicit hc: HeaderCarrier): Future[Case] =
@@ -59,7 +59,7 @@ class CasesService @Inject() (
     connector.allCases(pagination, sort)
 
   def getCases(eori: String, statuses: Set[CaseStatus], pagination: Pagination, sort: Sort)(implicit
-    hc: HeaderCarrier
+                                                                                            hc: HeaderCarrier
   ): Future[Paged[Case]] = connector.findCasesBy(eori, statuses, pagination, sort)
 
   def getCaseForUser(userEori: String, reference: String)(implicit hc: HeaderCarrier): Future[Case] =
@@ -87,7 +87,7 @@ class CasesService @Inject() (
   }
 
   private def suppressThrownError(message: String): PartialFunction[Throwable, Future[Unit]] = { case t: Throwable =>
-    logger.error(s"$message", t)
+    logger.error(s"[CasesService][suppressThrownError] $message", t)
     Future.successful(())
   }
 }
