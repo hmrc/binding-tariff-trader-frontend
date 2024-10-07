@@ -38,18 +38,18 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 class UploadSupportingMaterialMultipleController @Inject() (
-                                                             appConfig: FrontendAppConfig,
-                                                             dataCacheService: DataCacheService,
-                                                             identify: IdentifierAction,
-                                                             getData: DataRetrievalAction,
-                                                             navigator: Navigator,
-                                                             requireData: DataRequiredAction,
-                                                             formProvider: UploadSupportingMaterialMultipleFormProvider,
-                                                             fileService: FileService,
-                                                             cc: MessagesControllerComponents,
-                                                             uploadSupportingMaterialMultipleView: uploadSupportingMaterialMultiple
-                                                           )(implicit ec: ExecutionContext)
-  extends FrontendController(cc)
+  appConfig: FrontendAppConfig,
+  dataCacheService: DataCacheService,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  navigator: Navigator,
+  requireData: DataRequiredAction,
+  formProvider: UploadSupportingMaterialMultipleFormProvider,
+  fileService: FileService,
+  cc: MessagesControllerComponents,
+  uploadSupportingMaterialMultipleView: uploadSupportingMaterialMultiple
+)(implicit ec: ExecutionContext)
+    extends FrontendController(cc)
     with I18nSupport
     with Logging {
   private lazy val form = formProvider()
@@ -117,7 +117,7 @@ class UploadSupportingMaterialMultipleController @Inject() (
     }
 
   def renderView(fileId: String, mode: Mode, form: Form[String])(implicit
-                                                                 request: DataRequest[AnyContent]
+    request: DataRequest[AnyContent]
   ): Future[Html] =
     fileService
       .initiate(
@@ -148,7 +148,9 @@ class UploadSupportingMaterialMultipleController @Inject() (
           val uploadError    = UploadError.fromErrorCode(errorCode)
           val userAnswers    = removeFile(fileId, request.userAnswers)
           val formWithErrors = form.withError(FormInputField, uploadError.errorMessageKey)
-          logger.error(s"[UploadSupportingMaterialMultipleController][onPageLoad] File upload for file with id $fileId failed with error code $errorCode: $errorMessage")
+          logger.error(
+            s"[UploadSupportingMaterialMultipleController][onPageLoad] File upload for file with id $fileId failed with error code $errorCode: $errorMessage"
+          )
 
           for {
             _    <- dataCacheService.save(userAnswers.cacheMap)

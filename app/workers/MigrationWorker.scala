@@ -37,17 +37,17 @@ import scala.util.control.NonFatal
 
 @Singleton
 class MigrationWorker @Inject() (
-                                  appConfig: FrontendAppConfig,
-                                  casesService: CasesService,
-                                  countriesService: CountriesService,
-                                  fileService: FileService,
-                                  pdfService: PdfService,
-                                  messagesApi: MessagesApi,
-                                  clock: Clock,
-                                  mongoLockRepository: MongoLockRepository,
-                                  view_application: view_application
-                                )(implicit system: ActorSystem)
-  extends Logging {
+  appConfig: FrontendAppConfig,
+  casesService: CasesService,
+  countriesService: CountriesService,
+  fileService: FileService,
+  pdfService: PdfService,
+  messagesApi: MessagesApi,
+  clock: Clock,
+  mongoLockRepository: MongoLockRepository,
+  view_application: view_application
+)(implicit system: ActorSystem)
+    extends Logging {
 
   implicit val ec: ExecutionContext = system.dispatchers.lookup("migration-dispatcher")
   implicit val hc: HeaderCarrier    = HeaderCarrier()
@@ -101,9 +101,9 @@ class MigrationWorker @Inject() (
       metaById = meta.map(m => (m.id, m)).toMap
 
       fileViews = cse.attachments.map { att =>
-        val fileMeta = metaById.getOrElse(att.id, throw noFileMetadata(cse, att))
-        FileView(att.id, fileMeta.fileName, !att.public)
-      }
+                    val fileMeta = metaById.getOrElse(att.id, throw noFileMetadata(cse, att))
+                    FileView(att.id, fileMeta.fileName, !att.public)
+                  }
 
       pdfModel = PdfViewModel(cse, fileViews)
 
@@ -118,16 +118,18 @@ class MigrationWorker @Inject() (
       pdfAttachment = Attachment(pdfStored.id, public = false, timestamp = creationTime)
 
       caseUpdate = CaseUpdate(
-        Some(
-          ApplicationUpdate(
-            applicationPdf = SetValue(Some(pdfAttachment))
-          )
-        )
-      )
+                     Some(
+                       ApplicationUpdate(
+                         applicationPdf = SetValue(Some(pdfAttachment))
+                       )
+                     )
+                   )
 
       _ <- casesService.update(cse.reference, caseUpdate)
 
-      _ = logger.info(s"[MigrationWorker][regeneratePdf] Successfully regenerated application PDF for case ${cse.reference}")
+      _ = logger.info(
+            s"[MigrationWorker][regeneratePdf] Successfully regenerated application PDF for case ${cse.reference}"
+          )
 
     } yield ()
 }

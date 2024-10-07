@@ -29,10 +29,10 @@ import scala.util.{Failure, Success, Try}
 
 @Singleton
 class PdfService @Inject() (
-                             pdfGeneratorService: PdfGeneratorService,
-                             appConfig: FrontendAppConfig
-                           ) extends Logging
-  with AesCrypto {
+  pdfGeneratorService: PdfGeneratorService,
+  appConfig: FrontendAppConfig
+) extends Logging
+    with AesCrypto {
 
   override protected lazy val encryptionKey: String = appConfig.aesKey
 

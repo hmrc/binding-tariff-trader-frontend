@@ -33,19 +33,19 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmationController @Inject() (
-                                         appConfig: FrontendAppConfig,
-                                         identify: IdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         dataCacheService: DataCacheService,
-                                         countriesService: CountriesService,
-                                         pdfService: PdfService,
-                                         btaUserService: BTAUserService,
-                                         userAnswerDeletionService: UserAnswerDeletionService,
-                                         cc: MessagesControllerComponents,
-                                         confirmationView: confirmation
-                                       )(implicit ec: ExecutionContext)
-  extends FrontendController(cc)
+  appConfig: FrontendAppConfig,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  dataCacheService: DataCacheService,
+  countriesService: CountriesService,
+  pdfService: PdfService,
+  btaUserService: BTAUserService,
+  userAnswerDeletionService: UserAnswerDeletionService,
+  cc: MessagesControllerComponents,
+  confirmationView: confirmation
+)(implicit ec: ExecutionContext)
+    extends FrontendController(cc)
     with I18nSupport
     with Logging {
 
@@ -67,8 +67,8 @@ class ConfirmationController @Inject() (
           for {
             isBTAUser <- btaUserService.isBTAUser(request.internalId)
             updatedUA <- Future.successful(
-              userAnswerDeletionService.deleteAllUserAnswersExcept(request.userAnswers, excludedPages)
-            )
+                           userAnswerDeletionService.deleteAllUserAnswersExcept(request.userAnswers, excludedPages)
+                         )
             _ <- dataCacheService.save(updatedUA.cacheMap)
             token = pdfService.encodeToken(confirmation.eori)
           } yield Ok(
@@ -81,7 +81,7 @@ class ConfirmationController @Inject() (
               urlViewModel = ConfirmationUrlViewModel(isBTAUser)
             )
           )
-          ).recover { case e: Throwable =>
+        ).recover { case e: Throwable =>
           Redirect(routes.ErrorController.onPageLoad)
         }
       case _ =>
@@ -94,7 +94,8 @@ class ConfirmationController @Inject() (
       for {
         isBTAUser <- btaUserService.isBTAUser(request.internalId)
         removed   <- dataCacheService.remove(request.userAnswers.cacheMap)
-        _ = if (!removed) logger.warn("[ConfirmationController][onSubmit] Session entry failed to be removed from the cache")
+        _ = if (!removed)
+              logger.warn("[ConfirmationController][onSubmit] Session entry failed to be removed from the cache")
       } yield Redirect(ConfirmationUrlViewModel(isBTAUser).call)
   }
 

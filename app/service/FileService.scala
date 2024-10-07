@@ -35,11 +35,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FileService @Inject() (
-                              connector: BindingTariffFilestoreConnector,
-                              cc: MessagesControllerComponents,
-                              appConfig: FrontendAppConfig
-                            )(implicit ec: ExecutionContext)
-  extends Logging {
+  connector: BindingTariffFilestoreConnector,
+  cc: MessagesControllerComponents,
+  appConfig: FrontendAppConfig
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   private val messagesApi: MessagesApi = cc.messagesApi
   private implicit val lang: Lang      = Lang.defaultLang
@@ -48,7 +48,7 @@ class FileService @Inject() (
     connector.initiate(request)
 
   def uploadApplicationPdf(reference: String, content: Array[Byte])(implicit
-                                                                    hc: HeaderCarrier
+    hc: HeaderCarrier
   ): Future[FileAttachment] =
     connector.uploadApplicationPdf(reference, content).map(toFileAttachment(content.length.toLong))
 
@@ -92,8 +92,8 @@ class FileService @Inject() (
   }
 
   def validate(
-                file: MultipartFormData.FilePart[TemporaryFile]
-              ): Either[String, MultipartFormData.FilePart[TemporaryFile]] =
+    file: MultipartFormData.FilePart[TemporaryFile]
+  ): Either[String, MultipartFormData.FilePart[TemporaryFile]] =
     if (hasInvalidSize(file)) {
       Left(messagesApi("uploadWrittenAuthorisation.error.size"))
     } else if (hasInvalidContentType(file)) {
