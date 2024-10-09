@@ -87,7 +87,7 @@ class CasesService @Inject() (
   }
 
   private def suppressThrownError(message: String): PartialFunction[Throwable, Future[Unit]] = { case t: Throwable =>
-    logger.error(s"$message", t)
+    logger.error(s"[CasesService][suppressThrownError] $message", t)
     Future.successful(())
   }
 }

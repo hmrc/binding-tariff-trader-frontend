@@ -58,7 +58,7 @@ class MigrationWorker @Inject() (
 
   private val decider: Supervision.Decider = {
     case NonFatal(e) =>
-      logger.error("Skipping case migration due to error", e)
+      logger.error("[MigrationWorker][decider] Skipping case migration due to error", e)
       Supervision.resume
     case _ =>
       Supervision.stop
@@ -71,7 +71,7 @@ class MigrationWorker @Inject() (
           casesService.allCases(pagination, Sort())
         }
         .map { maybeCases =>
-          logger.info("Acquired migration lock")
+          logger.info("[MigrationWorker][migrationSource] Acquired migration lock")
           maybeCases
             .filter(_.nonEmpty)
             .map(cases => (pagination.copy(page = pagination.page + 1), cases.results.toList))
@@ -107,7 +107,7 @@ class MigrationWorker @Inject() (
 
       pdfModel = PdfViewModel(cse, fileViews)
 
-      _ = logger.info(s"Regenerating application PDF for case ${cse.reference}")
+      _ = logger.info(s"[MigrationWorker][regeneratePdf] Regenerating application PDF for case ${cse.reference}")
 
       pdfFile <- pdfService.generatePdf(view_application(appConfig, pdfModel, getCountryName))
 
@@ -127,7 +127,9 @@ class MigrationWorker @Inject() (
 
       _ <- casesService.update(cse.reference, caseUpdate)
 
-      _ = logger.info(s"Successfully regenerated application PDF for case ${cse.reference}")
+      _ = logger.info(
+            s"[MigrationWorker][regeneratePdf] Successfully regenerated application PDF for case ${cse.reference}"
+          )
 
     } yield ()
 }

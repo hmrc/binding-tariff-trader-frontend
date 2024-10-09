@@ -51,7 +51,7 @@ class BTARedirectController @Inject() (
     btaUserService.remove(request.identifier) transformWith {
       case Success(_) => Future.successful(Redirect(appConfig.businessTaxAccountUrl))
       case Failure(error) =>
-        logger.error("An error occurred whilst removing the BTA User", error)
+        logger.error("[BTARedirectController][redirectToBTA] An error occurred whilst removing the BTA User", error)
         Future.successful(Redirect(appConfig.businessTaxAccountUrl))
     }
   }
@@ -60,7 +60,7 @@ class BTARedirectController @Inject() (
     btaUserService.save(requestIdentifier) transformWith {
       case Success(_) => Future.successful(Redirect(call))
       case Failure(error) =>
-        logger.error("An error occurred whilst saving BTA User", error)
+        logger.error("[BTARedirectController][performInternalRedirect] An error occurred whilst saving BTA User", error)
         Future.successful(Redirect(routes.ErrorController.onPageLoad))
     }
 }

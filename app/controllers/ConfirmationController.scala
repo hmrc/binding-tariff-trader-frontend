@@ -94,7 +94,8 @@ class ConfirmationController @Inject() (
       for {
         isBTAUser <- btaUserService.isBTAUser(request.internalId)
         removed   <- dataCacheService.remove(request.userAnswers.cacheMap)
-        _ = if (!removed) logger.warn("Session entry failed to be removed from the cache")
+        _ = if (!removed)
+              logger.warn("[ConfirmationController][onSubmit] Session entry failed to be removed from the cache")
       } yield Redirect(ConfirmationUrlViewModel(isBTAUser).call)
   }
 

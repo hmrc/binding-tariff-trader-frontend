@@ -53,7 +53,7 @@ class PdfService @Inject() (
         Some(eori)
 
       case Failure(error) =>
-        logger.debug("Bad Token", error)
+        logger.debug("[PdfService][decodeToken] Bad Token", error)
         None
 
       case _ =>

@@ -77,7 +77,10 @@ class IndexController @Inject() (
           isBTAUser   <- btaUserService.isBTAUser(request.internalId)
         } yield Ok(accountDashboardStatusesView(appConfig, Dashboard(pagedResult, sort), isBTAUser))) recover {
           case NonFatal(error) =>
-            logger.error("An error occurred whilst fetching data for dashboard view", error)
+            logger.error(
+              "[IndexController][getApplicationsAndRulings] An error occurred whilst fetching data for dashboard view",
+              error
+            )
             Redirect(routes.ErrorController.onPageLoad)
         }
       case None =>

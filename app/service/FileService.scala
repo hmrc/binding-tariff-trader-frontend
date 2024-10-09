@@ -78,7 +78,7 @@ class FileService @Inject() (
     sequence(
       files.map { f: FileAttachment =>
         publish(f).map(Option(_)).recover { case t: Throwable =>
-          logger.error(s"Failed to publish file [${f.id}].", t)
+          logger.error(s"[FileService][publish] Failed to publish file [${f.id}].", t)
           None
         }
       }

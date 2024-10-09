@@ -148,7 +148,9 @@ class UploadSupportingMaterialMultipleController @Inject() (
           val uploadError    = UploadError.fromErrorCode(errorCode)
           val userAnswers    = removeFile(fileId, request.userAnswers)
           val formWithErrors = form.withError(FormInputField, uploadError.errorMessageKey)
-          logger.error(s"File upload for file with id $fileId failed with error code $errorCode: $errorMessage")
+          logger.error(
+            s"[UploadSupportingMaterialMultipleController][onPageLoad] File upload for file with id $fileId failed with error code $errorCode: $errorMessage"
+          )
 
           for {
             _    <- dataCacheService.save(userAnswers.cacheMap)
