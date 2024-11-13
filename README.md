@@ -62,17 +62,6 @@ When running the unit tests, PDFs are generated at **/test/resources/fop** using
 
 Run `./run_all_tests.sh`. This also runs scalafmt and does coverage testing. The last step will also run the a11y test that generates a report.
 
-## Accessibility Tests
-
-### Prerequisites
-Have node installed on your machine
-
-### Execute tests
-To run the tests locally, simply run:
-```bash
-sbt clean A11y/test
-```
-
 ### License
 
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
