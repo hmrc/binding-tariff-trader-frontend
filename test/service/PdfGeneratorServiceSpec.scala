@@ -41,9 +41,10 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
 
   private val view_application: view_application = injector.instanceOf[view_application]
 
-  private val pdfViewModel: PdfViewModel          = oCase.pdf
-  private val pdfViewNoSamplesModel: PdfViewModel = oCase.pdfNoSamples
-  private val hazardousSamplePdf: PdfViewModel    = pdfViewModel.copy(hazardousSample = true)
+  private val pdfViewModel: PdfViewModel                  = oCase.pdf
+  private val pdfViewModelInvalidCharacters: PdfViewModel = oCase.pdf.copy(goodsName = "\u0002")
+  private val pdfViewNoSamplesModel: PdfViewModel         = oCase.pdfNoSamples
+  private val hazardousSamplePdf: PdfViewModel            = pdfViewModel.copy(hazardousSample = true)
 
   private val xlsTransformer = Source.fromResource("view_application.xml").mkString
 
@@ -88,6 +89,12 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
       (
         "withSamples",
         pdfViewModel,
+        headings ++ Seq("Sending samples", "Send your samples to"),
+        Seq("Hazardous samples? Yes")
+      ),
+      (
+        "withInvalidCharacters",
+        pdfViewModelInvalidCharacters,
         headings ++ Seq("Sending samples", "Send your samples to"),
         Seq("Hazardous samples? Yes")
       ),
