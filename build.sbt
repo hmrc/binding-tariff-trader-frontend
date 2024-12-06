@@ -2,7 +2,7 @@ import uk.gov.hmrc.gitstamp.GitStampPlugin.*
 
 lazy val appName: String = "binding-tariff-trader-frontend"
 
-ThisBuild / scalaVersion := "2.13.14"
+ThisBuild / scalaVersion := "2.13.15"
 ThisBuild / majorVersion := 0
 
 lazy val microservice = Project(appName, file("."))
