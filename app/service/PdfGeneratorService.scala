@@ -21,14 +21,13 @@ import org.apache.xmlgraphics.util.MimeConstants
 import play.api.{Environment, Logging}
 import play.twirl.api.Html
 
-import java.io.{File, OutputStream, StringReader}
+import java.io.{ByteArrayOutputStream, File, StringReader}
 import javax.inject.{Inject, Singleton}
 import javax.xml.transform.sax.{SAXResult, SAXTransformerFactory}
 import javax.xml.transform.stream.StreamSource
 import javax.xml.transform.{Source, TransformerFactory, URIResolver}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Using
-import scala.collection.mutable.ArrayBuffer
 
 @Singleton
 class PdfGeneratorService @Inject() (fopFactory: FopFactory, environment: Environment)(implicit ec: ExecutionContext)
@@ -50,7 +49,7 @@ class PdfGeneratorService @Inject() (fopFactory: FopFactory, environment: Enviro
   }
 
   def render(input: Html, xlsTransformer: String): Future[Array[Byte]] = Future {
-    Using.resource(new ByteArrayOutput()) { out =>
+    Using.resource(new ByteArrayOutputStream()) { out =>
       val userAgent: FOUserAgent = fopFactory.newFOUserAgent()
       userAgent.setAccessibility(true)
 
@@ -80,14 +79,4 @@ class PdfGeneratorService @Inject() (fopFactory: FopFactory, environment: Enviro
       out.toByteArray
     }
   }
-}
-class ByteArrayOutput extends OutputStream {
-  private val bufferArray = ArrayBuffer[Byte]()
-
-  override def write(byte: Int): Unit = bufferArray += byte.toByte
-
-  def toByteArray = bufferArray.toArray
-
-  def reset(): Unit = bufferArray.clear()
-
 }
