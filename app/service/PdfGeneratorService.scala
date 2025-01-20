@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,12 @@
 
 package service
 
-import org.apache.commons.io.output.ByteArrayOutputStream
 import org.apache.fop.apps.{FOUserAgent, Fop, FopFactory}
 import org.apache.xmlgraphics.util.MimeConstants
 import play.api.{Environment, Logging}
 import play.twirl.api.Html
 
-import java.io.{File, StringReader}
+import java.io.{ByteArrayOutputStream, File, StringReader}
 import javax.inject.{Inject, Singleton}
 import javax.xml.transform.sax.{SAXResult, SAXTransformerFactory}
 import javax.xml.transform.stream.StreamSource
