@@ -17,7 +17,7 @@
 package models
 
 import play.api.libs.json._
-import uk.gov.hmrc.play.json.Union
+import utils.Union
 
 sealed trait Email[T] {
   val to: Seq[String]
