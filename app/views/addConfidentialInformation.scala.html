@@ -39,7 +39,7 @@
     pageTitle = s"${errorPrefix(addConfidentialInformationForm)} ${messages("addConfidentialInformation.title", goodsName)}"
 ) {
 
-    @formWithCsrf(action = AddConfidentialInformationController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formWithCsrf(action = controllers.routes.AddConfidentialInformationController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @components.error_summary(addConfidentialInformationForm.errors)
 

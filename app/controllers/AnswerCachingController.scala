@@ -52,15 +52,15 @@ abstract class AccumulatingCachingController[F <: IterableOnce[A], A](cc: Messag
   def questionPage: QuestionPage[F]
 
   def renderView(preparedForm: Form[A], submitAction: Call, mode: Mode)(implicit
-    request: DataRequest[_]
+    request: DataRequest[?]
   ): HtmlFormat.Appendable
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request: DataRequest[_] => Ok(renderView(form, submitAction(mode), mode))
+    implicit request: DataRequest[?] => Ok(renderView(form, submitAction(mode), mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request: DataRequest[_] =>
+    implicit request: DataRequest[?] =>
       val badRequest = (formWithErrors: Form[A]) =>
         Future.successful(Results.BadRequest(renderView(formWithErrors, submitAction(mode), mode)))
       form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))
@@ -72,7 +72,7 @@ abstract class YesNoCachingController(cc: MessagesControllerComponents)(implicit
     with YesNoCaching {
   def journey: Journey
   override def questionPage: QuestionPage[Boolean] = journey.questionPage
-  override def detailPages: List[QuestionPage[_]]  = journey.detailPages
+  override def detailPages: List[QuestionPage[?]]  = journey.detailPages
 }
 
 abstract class AnswerCachingController[A](cc: MessagesControllerComponents)(implicit
@@ -86,10 +86,10 @@ abstract class AnswerCachingController[A](cc: MessagesControllerComponents)(impl
   def requireData: DataRequiredAction
   def form: Form[A]
 
-  def renderView(preparedForm: Form[A], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable
+  def renderView(preparedForm: Form[A], mode: Mode)(implicit request: DataRequest[?]): HtmlFormat.Appendable
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request: DataRequest[_] =>
+    implicit request: DataRequest[?] =>
       val preparedForm = request.userAnswers.get(questionPage) match {
         case Some(value) => form.fill(value)
         case _           => form
@@ -99,7 +99,7 @@ abstract class AnswerCachingController[A](cc: MessagesControllerComponents)(impl
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request: DataRequest[_] =>
+    implicit request: DataRequest[?] =>
       val badRequest =
         (formWithErrors: Form[A]) => Future.successful(Results.BadRequest(renderView(formWithErrors, mode)))
       form.bindFromRequest().fold(badRequest, submitAnswer(_, mode))

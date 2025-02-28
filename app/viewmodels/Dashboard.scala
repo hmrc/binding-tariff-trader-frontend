@@ -79,10 +79,10 @@ object Dashboard {
 
   private val ENCODING: String = "UTF-8"
 
-  def getSortBy(implicit request: Request[_]): Option[SortField] =
+  def getSortBy(implicit request: Request[?]): Option[SortField] =
     request.getQueryString(sortFieldParam).map(s => SortField.withName(s))
 
-  def getSortDirection(implicit request: Request[_]): Option[SortDirection] =
+  def getSortDirection(implicit request: Request[?]): Option[SortDirection] =
     request.getQueryString(orderParam).map(s => SortDirection.withName(s))
 
 }

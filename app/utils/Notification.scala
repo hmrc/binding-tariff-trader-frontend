@@ -28,7 +28,7 @@ object NotificationType extends Enumeration {
 
 object Notification {
   def success(key: String, args: Any*)(implicit messages: Messages): (NotificationType, String) =
-    NotificationType.Success -> messages(key, args: _*)
+    NotificationType.Success -> messages(key, args*)
 
   implicit def toFlash(value: (NotificationType, String)): (String, String) = (value._1.key, value._2)
 

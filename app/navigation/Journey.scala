@@ -20,14 +20,14 @@ import pages._
 
 sealed abstract class Journey extends Product with Serializable {
   def questionPage: QuestionPage[Boolean]
-  def detailPages: List[QuestionPage[_]]
+  def detailPages: List[QuestionPage[?]]
 }
 
-case class YesNoJourney(questionPage: QuestionPage[Boolean], detailPages: List[QuestionPage[_]]) extends Journey
+case class YesNoJourney(questionPage: QuestionPage[Boolean], detailPages: List[QuestionPage[?]]) extends Journey
 
 case class LoopingJourney(
   questionPage: QuestionPage[Boolean],
-  detailPages: List[QuestionPage[_]],
+  detailPages: List[QuestionPage[?]],
   continuePage: QuestionPage[Boolean]
 ) extends Journey
 

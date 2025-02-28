@@ -76,11 +76,11 @@ class IndexControllerSpec extends ControllerSpecBase {
 
         val request = fakeRequestWithIdentifier()
 
-        given(
+        `given`(
           casesService
             .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination()), any[Sort])(any[HeaderCarrier])
         ).willReturn(Future.successful(Paged(Seq(btiCaseExample), pageIndex, pageSize, resultCount)))
-        given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
+        `given`(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
 
         val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
 
@@ -93,11 +93,11 @@ class IndexControllerSpec extends ControllerSpecBase {
         "there is an issue fetching data from the btaUserService" in {
           val request = fakeRequestWithIdentifier()
 
-          given(
+          `given`(
             casesService
               .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination()), any[Sort])(any[HeaderCarrier])
           ).willReturn(Future.successful(Paged(Seq(btiCaseExample), pageIndex, pageSize, resultCount)))
-          given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.failed(new RuntimeException("error")))
+          `given`(btaUserService.isBTAUser(request.identifier)).willReturn(Future.failed(new RuntimeException("error")))
 
           val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
 
@@ -121,11 +121,11 @@ class IndexControllerSpec extends ControllerSpecBase {
           val request  = fakeRequestWithIdentifier()
           val testCase = btiCaseWithDecision.copy(status = caseStatus)
 
-          given(
+          `given`(
             casesService
               .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination()), any[Sort])(any[HeaderCarrier])
           ).willReturn(Future.successful(Paged(Seq(testCase), pageIndex, pageSize, resultCount)))
-          given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
+          `given`(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
 
           val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(fakeRequest)
 
@@ -162,11 +162,11 @@ class IndexControllerSpec extends ControllerSpecBase {
         val request  = fakeRequestWithIdentifier()
         val testCase = btiCaseWithDecision.copy(status = CaseStatus.COMPLETED)
 
-        given(
+        `given`(
           casesService
             .getCases(any[String], any[Set[CaseStatus]], refEq(SearchPagination()), any[Sort])(any[HeaderCarrier])
         ).willReturn(Future.successful(Paged(Seq(testCase), pageIndex, pageSize, resultCount)))
-        given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
+        `given`(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
 
         val result = controller().getApplicationsAndRulings(page = 1, sortBy = None, order = None)(request)
 
@@ -193,8 +193,8 @@ class IndexControllerSpec extends ControllerSpecBase {
           UserAnswers(emptyCacheMap)
             .set(ConfirmationPage, confirmation)
 
-        given(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
-        given(cache.remove(ua.cacheMap)).willReturn(Future(true))
+        `given`(btaUserService.isBTAUser(request.identifier)).willReturn(Future.successful(true))
+        `given`(cache.remove(ua.cacheMap)).willReturn(Future(true))
 
         val result = controller().onSubmit()(request)
 

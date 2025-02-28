@@ -41,7 +41,7 @@
     pageTitle = s"${errorPrefix(legalChallengeForm)} ${messages("legalChallengeDetails.title")}"
 ) {
 
-    @formWithCSRF(action = LegalChallengeDetailsController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.LegalChallengeDetailsController.onSubmit(mode)) {
 
         @components.error_summary(legalChallengeForm.errors)
 

@@ -104,14 +104,14 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
               userAnswers = ua
             )
 
-          given(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(false)
+          `given`(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(false)
 
-          given(
+          `given`(
             mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
           ).willReturn(ua)
 
-          given(mockDataCacheService.save(ua.cacheMap)).willReturn(ua.cacheMap)
-          given(mockPdfService.encodeToken("eori")).willReturn("token")
+          `given`(mockDataCacheService.save(ua.cacheMap)).willReturn(ua.cacheMap)
+          `given`(mockPdfService.encodeToken("eori")).willReturn("token")
 
           val result = controller(Some(ua)).onPageLoad(fakeDataRequest)
 
@@ -145,7 +145,7 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
               userAnswers = ua
             )
 
-          given(mockBtaUserService.isBTAUser(fakeDataRequest.internalId))
+          `given`(mockBtaUserService.isBTAUser(fakeDataRequest.internalId))
             .willReturn(Future.failed(new RuntimeException(" Fetch Error")))
 
           val result = controller(Some(ua)).onPageLoad(fakeDataRequest)
@@ -197,14 +197,14 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
               userAnswers = ua
             )
 
-          given(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(true)
+          `given`(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(true)
 
-          given(
+          `given`(
             mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
           ).willReturn(ua)
 
-          given(mockDataCacheService.remove(ua.cacheMap)).willReturn(Future(true))
-          given(mockPdfService.encodeToken("eori")).willReturn("token")
+          `given`(mockDataCacheService.remove(ua.cacheMap)).willReturn(Future(true))
+          `given`(mockPdfService.encodeToken("eori")).willReturn("token")
 
           val result = controller(Some(ua)).onSubmit()(fakeDataRequest)
 
@@ -230,14 +230,14 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
               userAnswers = ua
             )
 
-          given(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(false)
+          `given`(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(false)
 
-          given(
+          `given`(
             mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
           ).willReturn(ua)
 
-          given(mockDataCacheService.remove(ua.cacheMap)).willReturn(Future(true))
-          given(mockPdfService.encodeToken("eori")).willReturn("token")
+          `given`(mockDataCacheService.remove(ua.cacheMap)).willReturn(Future(true))
+          `given`(mockPdfService.encodeToken("eori")).willReturn("token")
 
           val result = controller(Some(ua)).onSubmit()(fakeDataRequest)
 

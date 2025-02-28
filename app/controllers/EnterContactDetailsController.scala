@@ -51,7 +51,7 @@ class EnterContactDetailsController @Inject() (
   val questionPage: EnterContactDetailsPage.type = EnterContactDetailsPage
 
   override def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request: DataRequest[_] =>
+    implicit request: DataRequest[?] =>
       val preparedForm = request.userAnswers.get(questionPage) match {
         case Some(value) => enterContactDetailsForm(request.userAnswers).fill(value)
         case _           => enterContactDetailsForm(request.userAnswers)
@@ -60,14 +60,14 @@ class EnterContactDetailsController @Inject() (
   }
 
   override def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request: DataRequest[_] =>
+    implicit request: DataRequest[?] =>
       val badRequest = (formWithErrors: Form[EnterContactDetails]) =>
         Future.successful(Results.BadRequest(renderView(formWithErrors, mode)))
       enterContactDetailsForm(request.userAnswers).bindFromRequest().fold(badRequest, submitAnswer(_, mode))
   }
 
   def renderView(preparedForm: Form[EnterContactDetails], mode: Mode)(implicit
-    request: DataRequest[_]
+    request: DataRequest[?]
   ): HtmlFormat.Appendable =
     enterContactDetailsView(appConfig, preparedForm, mode)
 

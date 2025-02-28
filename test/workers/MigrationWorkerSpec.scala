@@ -98,41 +98,40 @@ class MigrationWorkerSpec extends UnitSpec with BeforeAndAfterAll with MongoSupp
   )
 
   override protected def beforeAll(): Unit = {
-    given(repository.refreshExpiry(any[String], any[String], any[Duration]))
+    `given`(repository.refreshExpiry(any[String], any[String], any[Duration]))
       .willReturn(Future.successful(true))
-    given(repository.takeLock(any[String], any[String], any[Duration]))
+    `given`(repository.takeLock(any[String], any[String], any[Duration]))
       .willReturn(Future.successful(None))
-    given(repository.releaseLock(any[String], any[String]))
+    `given`(repository.releaseLock(any[String], any[String]))
       .willReturn(Future.successful(()))
-    given(caseService.allCases(any[Pagination], any[Sort])(any[HeaderCarrier]))
+    `given`(caseService.allCases(any[Pagination], any[Sort])(any[HeaderCarrier]))
       .willReturn(Future.successful(pagedCases))
       .willReturn(Future.successful(Paged.empty[Case](pagination)))
-    given(caseService.update(refEq("ref1"), any[CaseUpdate])(any[HeaderCarrier]))
+    `given`(caseService.update(refEq("ref1"), any[CaseUpdate])(any[HeaderCarrier]))
       .willReturn(Future.successful(Some(exampleCases("ref1"))))
-    given(caseService.update(refEq("ref2"), any[CaseUpdate])(any[HeaderCarrier]))
+    `given`(caseService.update(refEq("ref2"), any[CaseUpdate])(any[HeaderCarrier]))
       .willReturn(Future.successful(Some(exampleCases("ref2"))))
-    given(caseService.update(refEq("ref3"), any[CaseUpdate])(any[HeaderCarrier]))
+    `given`(caseService.update(refEq("ref3"), any[CaseUpdate])(any[HeaderCarrier]))
       .willReturn(Future.successful(Some(exampleCases("ref3"))))
-    given(fileService.getAttachmentMetadata(any[Case])(any[HeaderCarrier]))
+    `given`(fileService.getAttachmentMetadata(any[Case])(any[HeaderCarrier]))
       .willReturn(Future.successful(Seq.empty))
-    given(pdfService.generatePdf(any[Html]))
+    `given`(pdfService.generatePdf(any[Html]))
       .willReturn(Future.successful(Array.empty))
-    given(fileService.uploadApplicationPdf(refEq("ref1"), any[Array[Byte]])(any[HeaderCarrier]))
+    `given`(fileService.uploadApplicationPdf(refEq("ref1"), any[Array[Byte]])(any[HeaderCarrier]))
       .willReturn(Future.successful(FileAttachment("id1", "some.pdf", "application/pdf", 0L, uploaded = true)))
-    given(fileService.uploadApplicationPdf(refEq("ref2"), any[Array[Byte]])(any[HeaderCarrier]))
+    `given`(fileService.uploadApplicationPdf(refEq("ref2"), any[Array[Byte]])(any[HeaderCarrier]))
       .willReturn(Future.successful(FileAttachment("id2", "some.pdf", "application/pdf", 0L, uploaded = true)))
-    given(fileService.uploadApplicationPdf(refEq("ref3"), any[Array[Byte]])(any[HeaderCarrier]))
+    `given`(fileService.uploadApplicationPdf(refEq("ref3"), any[Array[Byte]])(any[HeaderCarrier]))
       .willReturn(Future.successful(FileAttachment("id3", "some.pdf", "application/pdf", 0L, uploaded = true)))
   }
 
   "MigrationWorker" should {
-    "regenerate application PDF for cases where it is missing" in {
+    "regenerate application PDF for cases where it is missing" in
       Helpers.running(configuredApp) { app =>
         await(app.injector.instanceOf[MigrationWorker].runMigration)
         verify(caseService).update(refEq("ref1"), refEq(attachmentUpdate("id1")))(any[HeaderCarrier])
         verify(caseService).update(refEq("ref2"), refEq(attachmentUpdate("id2")))(any[HeaderCarrier])
         verify(caseService).update(refEq("ref3"), refEq(attachmentUpdate("id3")))(any[HeaderCarrier])
       }
-    }
   }
 }

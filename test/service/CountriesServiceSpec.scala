@@ -280,10 +280,9 @@ class CountriesServiceSpec extends SpecBase with ScalaCheckDrivenPropertyChecks 
       countriesService.getAllCountries shouldBe expectedCountriesList
     }
 
-    "return countries by ID" in {
+    "return countries by ID" in
       forAll(Gen.oneOf(expectedCountriesList)) { country =>
         countriesService.getAllCountriesById(country.code) shouldBe country
       }
-    }
   }
 }

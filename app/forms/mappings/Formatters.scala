@@ -34,15 +34,15 @@ trait Formatters {
       lazy val country  = data.getOrElse("country", "").trim.toUpperCase
       lazy val postCode = data.getOrElse(key, "").trim
 
-      //validate only GB postcodes
+      // validate only GB postcodes
       if (country == "GB" && postCode.isEmpty) {
-        //if country is gb and no postcode was entered
+        // if country is gb and no postcode was entered
         Left(Seq(FormError(key, emptyPostcodeErrorKey)))
       } else if (country == "GB" && !PostcodeValidator.validate(postCode)) {
-        //if invalid gb postcode
+        // if invalid gb postcode
         Left(Seq(FormError(key, notValidPostcodeErrorKey)))
       } else {
-        //if is empty or non gb country set as is, empty or user input one
+        // if is empty or non gb country set as is, empty or user input one
         Right(Some(postCode))
       }
     }

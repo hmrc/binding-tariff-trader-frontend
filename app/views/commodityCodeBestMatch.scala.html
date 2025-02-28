@@ -38,7 +38,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("commodityCodeBestMatch.title")}"
 ) {
 
-    @formWithCSRF(action = CommodityCodeBestMatchController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.CommodityCodeBestMatchController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

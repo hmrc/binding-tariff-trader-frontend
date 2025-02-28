@@ -48,7 +48,7 @@ class AddAnotherRulingController @Inject() (
   lazy val form: Form[Boolean]            = formProvider()
   val questionPage: QuestionPage[Boolean] = AddAnotherRulingPage
 
-  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[?]): HtmlFormat.Appendable = {
     val rulings = request.userAnswers.get(CommodityCodeRulingReferencePage).getOrElse(List.empty)
     addAnotherRulingView(appConfig, form.copy(errors = preparedForm.errors), mode, rulings)
   }

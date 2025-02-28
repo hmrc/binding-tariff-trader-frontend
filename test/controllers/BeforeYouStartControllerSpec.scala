@@ -58,7 +58,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
 
     "return OK and the correct view for a GET - with EORI" in {
       val cacheMap = emptyCacheMap
-      given(mockDataCacheService.save(any[CacheMap])).willReturn(Future.successful(emptyCacheMap))
+      `given`(mockDataCacheService.save(any[CacheMap])).willReturn(Future.successful(emptyCacheMap))
       val result = controller(identifier = FakeIdentifierAction(Some("eori"))).onPageLoad(fakeRequest)
 
       status(result)          shouldBe OK
@@ -68,7 +68,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
 
     "return OK and the correct view for a GET - without EORI" in {
       val cacheMap = emptyCacheMap
-      given(mockDataCacheService.save(any[CacheMap])).willReturn(Future.successful(emptyCacheMap))
+      `given`(mockDataCacheService.save(any[CacheMap])).willReturn(Future.successful(emptyCacheMap))
       val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
 
       status(result)          shouldBe OK
@@ -77,7 +77,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
     }
 
     "return bad gateway when the data cache connector fails" in {
-      given(mockDataCacheService.save(any[CacheMap])).willReturn(Future.failed(new Exception))
+      `given`(mockDataCacheService.save(any[CacheMap])).willReturn(Future.failed(new Exception))
       val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
 
       status(result) shouldBe BAD_GATEWAY

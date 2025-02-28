@@ -37,7 +37,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("previousBTIRuling.title")}"
 ) {
 
-    @formWithCSRF(action = PreviousBTIRulingController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.PreviousBTIRulingController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

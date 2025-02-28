@@ -52,7 +52,7 @@
         }
 
         @field.errors.map { error =>
-            <span class="govuk-error-message" id="error-message-@{field.id}-input"><span class="govuk-visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
+            <span class="govuk-error-message" id="error-message-@{field.id}-input"><span class="govuk-visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args*)</span>
         }
 
         <div class="govuk-radios">

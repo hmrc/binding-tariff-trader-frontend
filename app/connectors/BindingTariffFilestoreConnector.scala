@@ -31,6 +31,9 @@ import play.api.mvc.MultipartFormData.{DataPart, FilePart}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
+import play.api.libs.ws.writeableOf_JsValue
+import uk.gov.hmrc.http.client.readStreamHttpResponse
+import play.api.libs.ws.bodyWritableOf_Multipart
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,7 +50,7 @@ class BindingTariffFilestoreConnector @Inject() (
 
   def get(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
     withMetricsTimerAsync("get-file-by-id") { _ =>
-      httpClient.get(url"$env/file/${file.id}").setHeader(authHeaders: _*).execute[FilestoreResponse]
+      httpClient.get(url"$env/file/${file.id}").setHeader(authHeaders*).execute[FilestoreResponse]
     }
 
   def initiate(request: FileStoreInitiateRequest)(implicit hc: HeaderCarrier): Future[FileStoreInitiateResponse] =
@@ -55,7 +58,7 @@ class BindingTariffFilestoreConnector @Inject() (
       httpClient
         .post(url"$env/file/initiate")
         .withBody(Json.toJson(request))
-        .setHeader(authHeaders: _*)
+        .setHeader(authHeaders*)
         .execute[FileStoreInitiateResponse]
     }
 
@@ -73,13 +76,13 @@ class BindingTariffFilestoreConnector @Inject() (
       httpClient
         .post(url"$env/file")
         .withBody(Source(List(dataPart, filePart)))
-        .setHeader(authHeaders: _*)
+        .setHeader(authHeaders*)
         .execute[FilestoreResponse]
     }
 
-  def downloadFile(url: String)(implicit hc: HeaderCarrier): Future[Option[Source[ByteString, _]]] =
+  def downloadFile(url: String)(implicit hc: HeaderCarrier): Future[Option[Source[ByteString, ?]]] =
     withMetricsTimerAsync("download-file") { _ =>
-      httpClient.get(url"$url").setHeader(authHeaders: _*).stream[HttpResponse].flatMap { response =>
+      httpClient.get(url"$url").setHeader(authHeaders*).stream[HttpResponse].flatMap { response =>
         if (response.status / 100 == 2) {
           Future.successful(Some(response.bodyAsSource))
         } else if (response.status / 100 > 4) {
@@ -92,7 +95,7 @@ class BindingTariffFilestoreConnector @Inject() (
 
   def publish(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FilestoreResponse] =
     withMetricsTimerAsync("publish-file") { _ =>
-      httpClient.post(url"$env/file/${file.id}/publish").setHeader(authHeaders: _*).execute[FilestoreResponse]
+      httpClient.post(url"$env/file/${file.id}/publish").setHeader(authHeaders*).execute[FilestoreResponse]
     }
 
   def getFileMetadata(
@@ -104,12 +107,12 @@ class BindingTariffFilestoreConnector @Inject() (
       } else {
         val query = s"?${attachments.map(att => s"id=${att.id}").mkString("&")}"
         val url   = s"$env/file$query"
-        httpClient.get(url"$url").setHeader(authHeaders: _*).execute[Seq[FilestoreResponse]]
+        httpClient.get(url"$url").setHeader(authHeaders*).execute[Seq[FilestoreResponse]]
       }
     }
 
   def get(attachment: Attachment)(implicit headerCarrier: HeaderCarrier): Future[Option[FilestoreResponse]] =
     withMetricsTimerAsync("get-file-by-id") { _ =>
-      httpClient.get(url"$env/file/${attachment.id}").setHeader(authHeaders: _*).execute[Option[FilestoreResponse]]
+      httpClient.get(url"$env/file/${attachment.id}").setHeader(authHeaders*).execute[Option[FilestoreResponse]]
     }
 }

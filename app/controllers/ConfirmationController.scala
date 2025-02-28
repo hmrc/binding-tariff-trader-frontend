@@ -57,7 +57,7 @@ class ConfirmationController @Inject() (
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     (request.userAnswers.get(ConfirmationPage), request.userAnswers.get(PdfViewPage)) match {
       case (Some(confirmation), Some(pdf)) =>
-        val excludedPages: Seq[DataPage[_]] =
+        val excludedPages: Seq[DataPage[?]] =
           Seq(
             ConfirmationPage,
             PdfViewPage
@@ -90,7 +90,7 @@ class ConfirmationController @Inject() (
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request: DataRequest[_] =>
+    implicit request: DataRequest[?] =>
       for {
         isBTAUser <- btaUserService.isBTAUser(request.internalId)
         removed   <- dataCacheService.remove(request.userAnswers.cacheMap)

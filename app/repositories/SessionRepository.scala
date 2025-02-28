@@ -31,6 +31,7 @@ import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import org.mongodb.scala.SingleObservableFuture
 
 case class DatedCacheMap(id: String, data: Map[String, JsValue], lastUpdated: Instant = Instant.now())
 
@@ -52,7 +53,7 @@ class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)
           ascending("lastUpdated"),
           IndexOptions()
             .name("userAnswersExpiry")
-            .expireAfter(config.get[Int]("mongodb.timeToLiveInSeconds"), TimeUnit.SECONDS)
+            .expireAfter(config.get[Int]("mongodb.timeToLiveInSeconds").toLong, TimeUnit.SECONDS)
         )
       )
     ) {

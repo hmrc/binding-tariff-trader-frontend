@@ -48,7 +48,7 @@ class RulingControllerSpec extends ControllerSpecBase {
   "Ruling Controller" must {
 
     "return OK and the correct view for a GET" in {
-      given(casesService.getCaseForUser(any[String], any[String])(any[HeaderCarrier]))
+      `given`(casesService.getCaseForUser(any[String], any[String])(any[HeaderCarrier]))
         .willReturn(Future.successful(oCase.btiCaseWithDecision))
       val result = controller().viewRuling("a-ruling")(fakeRequest)
 

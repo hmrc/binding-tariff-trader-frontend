@@ -53,7 +53,7 @@ class UserAnswerDeletionService {
       UploadSupportingMaterialMultiplePage
     )
 
-  def deleteAllUserAnswersExcept(userAnswers: UserAnswers, excludedPages: Seq[DataPage[_]]): UserAnswers =
+  def deleteAllUserAnswersExcept(userAnswers: UserAnswers, excludedPages: Seq[DataPage[?]]): UserAnswers =
     allPages
       .diff(excludedPages)
       .foldLeft(userAnswers)((userAnswers, pageToRemove) => userAnswers.remove(pageToRemove))

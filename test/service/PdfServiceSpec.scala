@@ -37,7 +37,7 @@ class PdfServiceSpec extends SpecBase {
   "Service 'Render Pdf'" should {
 
     "delegate to PdfGeneratorService" in {
-      given(pdfGeneratorService.render(any[Html], any[String])).willReturn(Future.successful(generatorResponse))
+      `given`(pdfGeneratorService.render(any[Html], any[String])).willReturn(Future.successful(generatorResponse))
 
       val file = await(service.generatePdf(pdfHtml))
 
@@ -58,7 +58,7 @@ class PdfServiceSpec extends SpecBase {
     }
 
     "Decode BadToken" in {
-      given(config.aesKey).willReturn(key)
+      `given`(config.aesKey).willReturn(key)
 
       val token = service.decodeToken("token")
 
@@ -66,7 +66,7 @@ class PdfServiceSpec extends SpecBase {
     }
 
     "Reversibly Encode & Decode Token" in {
-      given(config.aesKey).willReturn(key)
+      `given`(config.aesKey).willReturn(key)
 
       val pair: Option[String] = service.decodeToken(service.encodeToken("eori"))
 

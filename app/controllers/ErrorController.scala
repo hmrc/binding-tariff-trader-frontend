@@ -36,7 +36,7 @@ class ErrorController @Inject() (
     Future.successful(InternalServerError(internalServerErrorTemplate).withHeaders(CACHE_CONTROL -> "no-cache"))
   }
 
-  private def internalServerErrorTemplate(implicit request: Request[_]): Html =
+  private def internalServerErrorTemplate(implicit request: Request[?]): Html =
     errorTemplateView(
       Messages("global.error.InternalServerError500.title"),
       Messages("global.error.InternalServerError500.heading"),

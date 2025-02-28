@@ -40,7 +40,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("enterContactDetails.title")}",
 ) {
 
-    @formWithCSRF(action = EnterContactDetailsController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.EnterContactDetailsController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

@@ -77,7 +77,7 @@
 
         <script @CSPNonce.attr >
             const id = "@initiateResponse.id";
-            const targetURL = "@UploadSupportingMaterialMultipleController.onFileSelected().url";
+            const targetURL = "@controllers.routes.UploadSupportingMaterialMultipleController.onFileSelected().url";
             const csrfToken = "@CSRF.getToken.value";
 
             document

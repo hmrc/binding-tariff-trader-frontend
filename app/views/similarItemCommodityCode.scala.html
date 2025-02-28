@@ -33,7 +33,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("similarItemCommodityCode.title")}"
 ) {
 
-    @formWithCSRF(action = SimilarItemCommodityCodeController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.SimilarItemCommodityCodeController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

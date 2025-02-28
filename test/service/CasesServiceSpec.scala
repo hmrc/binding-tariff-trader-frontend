@@ -48,15 +48,15 @@ class CasesServiceSpec extends SpecBase {
   private val service = new CasesService(caseConnector, emailConnector)
 
   "Service 'Create Case'" should {
-    given(existingCase.reference) willReturn caseRef
-    given(existingCase.application) willReturn application
-    given(application.contact) willReturn contact
-    given(contact.email) willReturn "email"
-    given(contact.name) willReturn "name"
+    `given`(existingCase.reference) willReturn caseRef
+    `given`(existingCase.application) willReturn application
+    `given`(application.contact) willReturn contact
+    `given`(contact.email) willReturn "email"
+    `given`(contact.name) willReturn "name"
 
     "delegate to connector" in {
-      given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
-      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]]))
+      `given`(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
+      `given`(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]]))
         .willReturn(Future.successful(()))
 
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
@@ -71,8 +71,8 @@ class CasesServiceSpec extends SpecBase {
     }
 
     "handle error with email silently" in {
-      given(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
-      given(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]]))
+      `given`(caseConnector.createCase(refEq(newCase))(any[HeaderCarrier])).willReturn(Future.successful(existingCase))
+      `given`(emailConnector.send(any[ApplicationSubmittedEmail])(any[HeaderCarrier], any[Writes[Email[_]]]))
         .willReturn(Future.failed(new RuntimeException("Error")))
 
       await(service.create(newCase)(HeaderCarrier())) shouldBe existingCase
@@ -80,7 +80,7 @@ class CasesServiceSpec extends SpecBase {
 
     "propagate any error on case create" in {
       val exception = new RuntimeException("Error")
-      given(caseConnector.createCase(any[NewCaseRequest])(any[HeaderCarrier])).willReturn(Future.failed(exception))
+      `given`(caseConnector.createCase(any[NewCaseRequest])(any[HeaderCarrier])).willReturn(Future.failed(exception))
 
       val caught = intercept[RuntimeException] {
         await(service.create(newCase)(HeaderCarrier()))
@@ -102,7 +102,7 @@ class CasesServiceSpec extends SpecBase {
 
       val pagedResult = Paged(Seq(oCase.btiCaseExample, oCase.btiCaseExample), 1, 2, 2)
 
-      given(
+      `given`(
         caseConnector
           .findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier])
       ).willReturn(Future.successful(pagedResult))
@@ -112,7 +112,7 @@ class CasesServiceSpec extends SpecBase {
 
     "propagate any error" in {
       val exception = new RuntimeException("Error")
-      given(
+      `given`(
         caseConnector
           .findCasesBy(refEq(caseRef), any[Set[CaseStatus]], refEq(pagination), refEq(sort))(any[HeaderCarrier])
       ).willReturn(Future.failed(exception))
@@ -130,7 +130,7 @@ class CasesServiceSpec extends SpecBase {
 
       val caseResult = oCase.btiCaseExample
 
-      given(caseConnector.putCase(refEq(existingCase))(any[HeaderCarrier])).willReturn(Future.successful(caseResult))
+      `given`(caseConnector.putCase(refEq(existingCase))(any[HeaderCarrier])).willReturn(Future.successful(caseResult))
 
       await(service.put(existingCase)(HeaderCarrier())) shouldBe caseResult
     }
@@ -142,7 +142,7 @@ class CasesServiceSpec extends SpecBase {
 
       val caseResult = Some(oCase.btiCaseExample)
 
-      given(caseConnector.updateCase(refEq(caseRef), refEq(CaseUpdate(None)))(any[HeaderCarrier]))
+      `given`(caseConnector.updateCase(refEq(caseRef), refEq(CaseUpdate(None)))(any[HeaderCarrier]))
         .willReturn(Future.successful(caseResult))
 
       await(service.update(caseRef, CaseUpdate(None))(HeaderCarrier())) shouldBe caseResult
@@ -155,7 +155,7 @@ class CasesServiceSpec extends SpecBase {
 
     "create an event" in {
 
-      given(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier]))
+      `given`(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier]))
         .willReturn(Future.successful(mock(classOf[Event])))
 
       await(service.addCaseCreatedEvent(atar, operator)(HeaderCarrier())) shouldBe ()
@@ -169,7 +169,7 @@ class CasesServiceSpec extends SpecBase {
 
       val exception = new RuntimeException("Error")
 
-      given(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier])).willThrow(exception)
+      `given`(caseConnector.createEvent(refEq(atar), any[NewEventRequest])(any[HeaderCarrier])).willThrow(exception)
 
       val caught = intercept[RuntimeException] {
         await(service.addCaseCreatedEvent(atar, operator)(HeaderCarrier()))
@@ -191,14 +191,15 @@ class CasesServiceSpec extends SpecBase {
 
     "return case for trader" in {
       val traderCase = oCase.btiCaseExample.copy(application = oCase.btiApplicationExample.copy(agent = None))
-      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(traderCase)))
+      `given`(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier]))
+        .willReturn(Future.successful(Some(traderCase)))
 
       await(service.getCaseForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe traderCase
     }
 
     "return case for agent for both agent and trader" in {
       val agentCase = oCase.btiCaseExample
-      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
+      `given`(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
 
       await(service.getCaseForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe agentCase
       await(service.getCaseForUser(agentEori, caseRef)(HeaderCarrier()))  shouldBe agentCase
@@ -206,7 +207,7 @@ class CasesServiceSpec extends SpecBase {
 
     "not return case for another EORI" in {
       val someCase = oCase.btiCaseExample
-      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
+      `given`(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseForUser("someEORI", caseRef)(HeaderCarrier()))
@@ -216,7 +217,7 @@ class CasesServiceSpec extends SpecBase {
 
     "propagate any error" in {
       val exception = new RuntimeException("Error")
-      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.failed(exception))
+      `given`(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.failed(exception))
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseForUser("eori", caseRef)(HeaderCarrier()))
@@ -229,14 +230,15 @@ class CasesServiceSpec extends SpecBase {
 
     "return ruling case for trader" in {
       val traderCase = oCase.btiCaseWithDecision.copy(application = oCase.btiApplicationExample.copy(agent = None))
-      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(traderCase)))
+      `given`(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier]))
+        .willReturn(Future.successful(Some(traderCase)))
 
       await(service.getCaseWithRulingForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe traderCase
     }
 
     "return ruling case for agent for both agent and trader" in {
       val agentCase = oCase.btiCaseWithDecision
-      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
+      `given`(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(agentCase)))
 
       await(service.getCaseWithRulingForUser(traderEori, caseRef)(HeaderCarrier())) shouldBe agentCase
       await(service.getCaseWithRulingForUser(agentEori, caseRef)(HeaderCarrier()))  shouldBe agentCase
@@ -244,7 +246,7 @@ class CasesServiceSpec extends SpecBase {
 
     "not return ruling case for another EORI" in {
       val someCase = oCase.btiCaseWithDecision
-      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
+      `given`(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseWithRulingForUser("someEORT", caseRef)(HeaderCarrier()))
@@ -254,7 +256,7 @@ class CasesServiceSpec extends SpecBase {
 
     "not return case without ruling" in {
       val someCase = oCase.btiCaseExample
-      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
+      `given`(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.successful(Some(someCase)))
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseWithRulingForUser(traderEori, caseRef)(HeaderCarrier()))
@@ -264,7 +266,7 @@ class CasesServiceSpec extends SpecBase {
 
     "propagate any error" in {
       val exception = new RuntimeException("Error")
-      given(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.failed(exception))
+      `given`(caseConnector.findCase(refEq(caseRef))(any[HeaderCarrier])).willReturn(Future.failed(exception))
 
       val caught = intercept[RuntimeException] {
         await(service.getCaseForUser("eort", caseRef)(HeaderCarrier()))

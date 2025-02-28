@@ -45,7 +45,7 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
       }
 
     super.beforeEach()
-    given(goToPage.apply(ArgumentMatchers.any[Int])) will returnThePage
+    `given`(goToPage.apply(ArgumentMatchers.any[Int])) will returnThePage
   }
 
   "Pagination" should {

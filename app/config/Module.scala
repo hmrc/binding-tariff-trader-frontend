@@ -26,7 +26,7 @@ import workers.MigrationWorker
 import java.time.Clock
 
 class Module extends PlayModule {
-  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] =
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[?]] =
     Seq(
       bind[DataRetrievalAction].to[DataRetrievalActionImpl].eagerly(),
       bind[DataRequiredAction].to[DataRequiredActionImpl].eagerly(),

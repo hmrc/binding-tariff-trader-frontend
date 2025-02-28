@@ -46,7 +46,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("addSupportingDocuments.title")}",
 ) {
 
-    @formWithCSRF(action = AddSupportingDocumentsController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.AddSupportingDocumentsController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

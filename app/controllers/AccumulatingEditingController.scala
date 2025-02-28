@@ -39,11 +39,11 @@ abstract class AccumulatingEditingController[F <: IterableOnce[A], A, I](
   def editSubmitAction(index: I, mode: Mode): Call
 
   def onEditPageLoad(index: I, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request: DataRequest[_] => Ok(renderView(form, editSubmitAction(index, mode), mode))
+    implicit request: DataRequest[?] => Ok(renderView(form, editSubmitAction(index, mode), mode))
   }
 
   def onEditSubmit(index: I, mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request: DataRequest[_] =>
+    implicit request: DataRequest[?] =>
       val badRequest = (formWithErrors: Form[A]) =>
         Future.successful(Results.BadRequest(renderView(formWithErrors, editSubmitAction(index, mode), mode)))
       form.bindFromRequest().fold(badRequest, editAnswer(index, _, mode))

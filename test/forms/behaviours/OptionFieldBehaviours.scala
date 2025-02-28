@@ -34,9 +34,10 @@ trait OptionFieldBehaviours extends FieldBehaviours {
 
       val generator = stringsExceptSpecificValues(validValues.map(_.toString))
 
-      forAll(generator -> "invalidValue") { value: String =>
-        val result = form.bind(Map(fieldName -> value)).apply(fieldName)
-        result.errors shouldEqual Seq(invalidError)
+      forAll(generator -> "invalidValue") {
+        value: String =>
+          val result = form.bind(Map(fieldName -> value)).apply(fieldName)
+          result.errors shouldEqual Seq(invalidError)
       }
     }
 

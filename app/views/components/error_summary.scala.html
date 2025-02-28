@@ -24,7 +24,7 @@
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
                 @for(error <- errors) {
-                    <li><a href="#@{error.key}">@messages(error.message, error.args:_*)</a></li>
+                    <li><a href="#@{error.key}">@messages(error.message, error.args*)</a></li>
                 }
             </ul>
         </div>

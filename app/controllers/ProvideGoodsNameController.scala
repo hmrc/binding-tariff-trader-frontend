@@ -46,6 +46,6 @@ class ProvideGoodsNameController @Inject() (
   lazy val form: Form[String]                 = provideGoodsNameFormProvider()
   val questionPage: ProvideGoodsNamePage.type = ProvideGoodsNamePage
 
-  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
+  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[?]): HtmlFormat.Appendable =
     provide_goods_name_view(appConfig, preparedForm, mode)
 }

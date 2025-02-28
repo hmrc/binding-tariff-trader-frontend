@@ -38,7 +38,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("returnSamples.title")}",
 ) {
 
-    @formWithCSRF(action = ReturnSamplesController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.ReturnSamplesController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

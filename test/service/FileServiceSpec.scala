@@ -70,7 +70,7 @@ class FileServiceSpec extends SpecBase {
     )
 
     "Delegate to connector" in {
-      given(connector.initiate(initiateRequest)).willReturn(successful(initiateResponse))
+      `given`(connector.initiate(initiateRequest)).willReturn(successful(initiateResponse))
 
       await(service.initiate(initiateRequest)) shouldBe initiateResponse
     }
@@ -79,7 +79,7 @@ class FileServiceSpec extends SpecBase {
   "Upload" should {
     val filestoreResponse = FilestoreResponse("id", "some.pdf", "application/pdf")
     "Delegate to connector" in {
-      given(connector.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier]))
+      `given`(connector.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier]))
         .willReturn(successful(filestoreResponse))
 
       await(service.uploadApplicationPdf("foo", Array.empty[Byte])) shouldBe FileAttachment(
@@ -96,7 +96,7 @@ class FileServiceSpec extends SpecBase {
     val fileContent = Some(Source.single(ByteString("Some file content".getBytes())))
 
     "Delegate to connector" in {
-      given(connector.downloadFile(any[String])(any[HeaderCarrier])).willReturn(successful(fileContent))
+      `given`(connector.downloadFile(any[String])(any[HeaderCarrier])).willReturn(successful(fileContent))
 
       await(service.downloadFile("http://localhost:4572/foo")) shouldBe fileContent
     }
@@ -108,7 +108,7 @@ class FileServiceSpec extends SpecBase {
     val fileUpdated       = FileAttachment("id", "filename-updated", "type", 0)
 
     "Delegate to connector" in {
-      given(connector.get(refEq(outdatedFile))(any[HeaderCarrier])).willReturn(successful(connectorResponse))
+      `given`(connector.get(refEq(outdatedFile))(any[HeaderCarrier])).willReturn(successful(connectorResponse))
 
       await(service.refresh(outdatedFile)) shouldBe fileUpdated
     }
@@ -120,8 +120,8 @@ class FileServiceSpec extends SpecBase {
     "Delegate to connector and return Published" in {
       val connectorResponse =
         FilestoreResponse("id", "filename-updated", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
-      given(connector.get(filePublishing)).willReturn(connectorResponse)
-      given(connector.publish(refEq(filePublishing))(any[HeaderCarrier])).willReturn(successful(connectorResponse))
+      `given`(connector.get(filePublishing)).willReturn(connectorResponse)
+      `given`(connector.publish(refEq(filePublishing))(any[HeaderCarrier])).willReturn(successful(connectorResponse))
 
       await(service.publish(filePublishing)) shouldBe PublishedFileAttachment("id", "filename-updated", "type", 0)
     }
@@ -133,7 +133,7 @@ class FileServiceSpec extends SpecBase {
       val c           = aCase(withLetterOfAuthWithId("1"))
       val expectedAtt = Some(someMetadataWithId("1"))
 
-      given(connector.get(any[Attachment])(any[HeaderCarrier])) willReturn successful(expectedAtt)
+      `given`(connector.get(any[Attachment])(any[HeaderCarrier])) willReturn successful(expectedAtt)
 
       await(service.getLetterOfAuthority(c)) shouldBe expectedAtt
     }
@@ -155,9 +155,9 @@ class FileServiceSpec extends SpecBase {
       val connectorResponse2 =
         FilestoreResponse("id2", "filename2", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
 
-      given(connector.publish(refEq(filePublishing1))(any[HeaderCarrier]))
+      `given`(connector.publish(refEq(filePublishing1))(any[HeaderCarrier]))
         .willReturn(failed(new RuntimeException("Some Error")))
-      given(connector.publish(refEq(filePublishing2))(any[HeaderCarrier])).willReturn(successful(connectorResponse2))
+      `given`(connector.publish(refEq(filePublishing2))(any[HeaderCarrier])).willReturn(successful(connectorResponse2))
 
       await(service.publish(Seq(filePublishing1, filePublishing2))) shouldBe Seq(
         PublishedFileAttachment("id2", "filename2", "type", 0)
@@ -165,9 +165,9 @@ class FileServiceSpec extends SpecBase {
     }
 
     "Handle Exceptions from Publish where all fail" in {
-      given(connector.publish(refEq(filePublishing1))(any[HeaderCarrier]))
+      `given`(connector.publish(refEq(filePublishing1))(any[HeaderCarrier]))
         .willReturn(failed(new RuntimeException("Some Error")))
-      given(connector.publish(refEq(filePublishing2))(any[HeaderCarrier]))
+      `given`(connector.publish(refEq(filePublishing2))(any[HeaderCarrier]))
         .willReturn(failed(new RuntimeException("Some Error")))
 
       await(service.publish(Seq(filePublishing1, filePublishing2))) shouldBe Seq.empty
@@ -176,7 +176,7 @@ class FileServiceSpec extends SpecBase {
 
   "Validate file type" should {
 
-    given(configuration.fileUploadMimeTypes).willReturn(Set("text/plain", "application/pdf", "image/png"))
+    `given`(configuration.fileUploadMimeTypes).willReturn(Set("text/plain", "application/pdf", "image/png"))
 
     "Allow a valid text file" in {
       val file = createFileOfType("txt", "text/plain")
@@ -202,7 +202,7 @@ class FileServiceSpec extends SpecBase {
 
   "Validate file size" should {
 
-    given(configuration.fileUploadMaxSize).willReturn(fileSizeMax)
+    `given`(configuration.fileUploadMaxSize).willReturn(fileSizeMax)
 
     "Allow a small file" in {
       val file = createFileOfSize(fileSizeSmall)
@@ -220,7 +220,7 @@ class FileServiceSpec extends SpecBase {
     val connectorResponse = Seq(FilestoreResponse("id", "filename-updated", "type"))
 
     "Delegate to connector" in {
-      given(connector.getFileMetadata(any[Seq[Attachment]])(any[HeaderCarrier]))
+      `given`(connector.getFileMetadata(any[Seq[Attachment]])(any[HeaderCarrier]))
         .willReturn(successful(connectorResponse))
 
       await(service.getAttachmentMetadata(c)) shouldBe connectorResponse

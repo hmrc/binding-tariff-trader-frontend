@@ -41,7 +41,7 @@ trait AccumulatingAnswerCaching[F <: IterableOnce[A], A] {
   def submitAnswer(
     answer: A,
     mode: Mode
-  )(implicit request: DataRequest[_], writes: Format[F], ec: ExecutionContext): Future[Result] = {
+  )(implicit request: DataRequest[?], writes: Format[F], ec: ExecutionContext): Future[Result] = {
     val withNewAnswer = request.userAnswers
       .get(questionPage)
       .map { fa =>
@@ -80,7 +80,7 @@ trait AnswerCaching[A] {
   def submitAnswer(
     answer: A,
     mode: Mode
-  )(implicit request: DataRequest[_], writes: Writes[A], ec: ExecutionContext): Future[Result] = {
+  )(implicit request: DataRequest[?], writes: Writes[A], ec: ExecutionContext): Future[Result] = {
     val updatedAnswers = request.userAnswers.set(questionPage, answer)
 
     dataCacheService

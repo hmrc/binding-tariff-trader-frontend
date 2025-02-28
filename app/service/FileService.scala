@@ -52,7 +52,7 @@ class FileService @Inject() (
   ): Future[FileAttachment] =
     connector.uploadApplicationPdf(reference, content).map(toFileAttachment(content.length.toLong))
 
-  def downloadFile(url: String)(implicit hc: HeaderCarrier): Future[Option[Source[ByteString, _]]] =
+  def downloadFile(url: String)(implicit hc: HeaderCarrier): Future[Option[Source[ByteString, ?]]] =
     connector.downloadFile(url)
 
   def refresh(file: FileAttachment)(implicit hc: HeaderCarrier): Future[FileAttachment] =
@@ -76,7 +76,7 @@ class FileService @Inject() (
 
   def publish(files: Seq[FileAttachment])(implicit headerCarrier: HeaderCarrier): Future[Seq[PublishedFileAttachment]] =
     sequence(
-      files.map { f: FileAttachment =>
+      files.map { (f: FileAttachment) =>
         publish(f).map(Option(_)).recover { case t: Throwable =>
           logger.error(s"[FileService][publish] Failed to publish file [${f.id}].", t)
           None

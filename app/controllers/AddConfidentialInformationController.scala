@@ -46,7 +46,7 @@ class AddConfidentialInformationController @Inject() (
   lazy val form: Form[Boolean] = formProvider()
   val journey: YesNoJourney    = Journey.confidentialInformation
 
-  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[?]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     add_confidential_information(appConfig, preparedForm, goodsName, mode)
   }

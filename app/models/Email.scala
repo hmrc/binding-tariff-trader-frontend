@@ -27,9 +27,9 @@ sealed trait Email[T] {
 }
 
 object Email {
-  implicit val format: Format[Email[_]] =
+  implicit val format: Format[Email[?]] =
     Union
-      .from[Email[_]]("templateId")
+      .from[Email[?]]("templateId")
       .and[ApplicationSubmittedEmail](EmailType.APPLICATION_SUBMITTED.toString)
       .format
 }
@@ -55,6 +55,7 @@ object ApplicationSubmittedParameters {
 }
 
 object EmailType extends Enumeration {
-  val APPLICATION_SUBMITTED: EmailType.Value   = Value("digital_tariffs_application_submitted")
-  implicit val format: Format[EmailType.Value] = Format(Reads.enumNameReads(EmailType), Writes.enumNameWrites)
+  val APPLICATION_SUBMITTED: EmailType.Value = Value("digital_tariffs_application_submitted")
+  implicit val format: Format[EmailType.Value] =
+    Format(Reads.enumNameReads(EmailType), Writes.enumNameWrites[EmailType.type])
 }

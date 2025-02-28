@@ -24,7 +24,7 @@ trait Constraints {
   private val postCodeMaxLength = 19
 
   protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
-    Constraint { input: A =>
+    Constraint { (input: A) =>
       constraints
         .map(_.apply(input))
         .find(_ != Valid)
@@ -32,7 +32,7 @@ trait Constraints {
     }
 
   protected def minimumValue[A](minimum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint { input: A =>
+    Constraint { (input: A) =>
       import ev._
 
       if (input >= minimum) {
@@ -43,7 +43,7 @@ trait Constraints {
     }
 
   protected def maximumValue[A](maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint { input: A =>
+    Constraint { (input: A) =>
       import ev._
 
       if (input <= maximum) {
@@ -54,7 +54,7 @@ trait Constraints {
     }
 
   protected def inRange[A](minimum: A, maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint { input: A =>
+    Constraint { (input: A) =>
       import ev._
 
       if (input >= minimum && input <= maximum) {

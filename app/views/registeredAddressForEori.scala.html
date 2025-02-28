@@ -58,7 +58,7 @@
     additionalJS = Some(additionalJS)
 ) {
 
-    @formWithCSRF(action = RegisteredAddressForEoriController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.RegisteredAddressForEoriController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

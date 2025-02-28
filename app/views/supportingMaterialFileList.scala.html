@@ -37,7 +37,7 @@
     pageTitle = s"${errorPrefix(form)} ${if(files.size == 1) {messages("supportingMaterialFileList.title.singular", goodsName)} else {messages("supportingMaterialFileList.title.plural", files.size, goodsName)}}"
 ) {
 
-    @formWithCSRF(action = SupportingMaterialFileListController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.SupportingMaterialFileListController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

@@ -40,7 +40,7 @@ class EnterContactDetailsFormProvider @Inject() extends Mappings with Constraint
       "phoneNumber" -> text("enterContactDetails.error.phoneNumber.required")
         .verifying(maxLength(maximumValueForPhoneNumber, "enterContactDetails.error.phoneNumber.length"))
         .verifying(regexp(telephoneRegex, "enterContactDetails.error.phoneNumber.invalid"))
-    )(EnterContactDetails.apply)(EnterContactDetails.unapply)
+    )(EnterContactDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 
   def formWithMinTelNumber: Form[EnterContactDetails] = Form(
@@ -54,6 +54,6 @@ class EnterContactDetailsFormProvider @Inject() extends Mappings with Constraint
         .verifying(maxLength(maximumValueForPhoneNumber, "enterContactDetails.error.phoneNumber.length"))
         .verifying(minNumberLength(minimumValueForPhoneNumber, "enterContactDetails.error.phoneNumber.minLength"))
         .verifying(regexp(telephoneRegex, "enterContactDetails.error.phoneNumber.invalid"))
-    )(EnterContactDetails.apply)(EnterContactDetails.unapply)
+    )(EnterContactDetails.apply)(o => Some(Tuple.fromProductTyped(o)))
   )
 }

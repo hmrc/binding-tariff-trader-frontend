@@ -37,7 +37,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("provideBTIReference.title")}"
 ) {
 
-    @formWithCSRF(action = ProvideBTIReferenceController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.ProvideBTIReferenceController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

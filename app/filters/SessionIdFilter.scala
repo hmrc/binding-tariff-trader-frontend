@@ -32,9 +32,8 @@ class SessionIdFilter(
 ) extends Filter {
 
   @Inject
-  def this(mat: Materializer, ec: ExecutionContext) = {
+  def this(mat: Materializer, ec: ExecutionContext) =
     this(mat, UUID.randomUUID(), ec)
-  }
 
   override def apply(f: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] = {
 

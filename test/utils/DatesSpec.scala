@@ -46,7 +46,7 @@ class DatesSpec extends SpecBase {
     }
   }
 
-  //added to ensure each month in welsh is generated correctly
+  // added to ensure each month in welsh is generated correctly
   "Have each month in welsh" which {
     "Jan should be Ion" in {
       cyMessages.apply("site.month.1") shouldBe "Ion"

@@ -37,7 +37,7 @@
             @components.answer_section(section)
         }
 
-        @formWithCSRF(action = CheckYourAnswersController.onSubmit()) {
+        @formWithCSRF(action = controllers.routes.CheckYourAnswersController.onSubmit()) {
 
             <h2 class="govuk-heading-l">@messages("checkYourAnswers.declaration.subheading")</h2>
 

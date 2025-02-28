@@ -71,7 +71,7 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase with AnswerCa
       validFormData,
       invalidFormData,
       backgroundData,
-      validAnswers: _*
+      validAnswers*
     )
   }
 }

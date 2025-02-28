@@ -247,7 +247,7 @@ class CheckYourAnswersHelper(
     )
   }
 
-  def registeredAddressForEori(implicit request: DataRequest[_]): Option[AnswerRow] =
+  def registeredAddressForEori(implicit request: DataRequest[?]): Option[AnswerRow] =
     userAnswers.get(RegisteredAddressForEoriPage) map { x =>
       val fields = if (request.eoriNumber.isDefined) {
         Seq(

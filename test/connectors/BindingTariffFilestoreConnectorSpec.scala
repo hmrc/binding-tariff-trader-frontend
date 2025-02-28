@@ -95,7 +95,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
     "Connector 'GET' one" should {
       "handle 404" in {
         val att = mock(classOf[Attachment])
-        given(att.id) willReturn "id"
+        when(att.id).thenReturn("id")
 
         WireMock.stubFor(
           get("/file/id")
@@ -112,7 +112,7 @@ class BindingTariffFilestoreConnectorSpec extends ConnectorTest {
 
       "handle response with mandatory fields only" in {
         val att = mock(classOf[Attachment])
-        given(att.id) willReturn "id"
+        when(att.id).thenReturn("id")
 
         WireMock.stubFor(
           get("/file/id")

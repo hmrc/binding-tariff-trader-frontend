@@ -39,10 +39,9 @@ trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks 
       tooLongEmailAddress.length shouldBe maxLength + 1
 
       val invalidEmailAddresses = List(tooLongEmailAddress)
-      invalidEmailAddresses foreach { str: String =>
+      invalidEmailAddresses foreach str: String =>
         val result = form.bind(Map(fieldName -> str)).apply(fieldName)
         result.errors shouldEqual Seq(lengthError)
-      }
     }
 
     "not bind invalid email addresses" in {
@@ -62,10 +61,9 @@ trait EmailFieldBehaviours extends FormSpec with ScalaCheckDrivenPropertyChecks 
         "people@email.-com"
       )
 
-      invalidEmailAddresses foreach { str: String =>
+      invalidEmailAddresses foreach str: String =>
         val result = form.bind(Map(fieldName -> str)).apply(fieldName)
         result.errors shouldEqual Seq(invalidEmailError)
-      }
     }
 
   }

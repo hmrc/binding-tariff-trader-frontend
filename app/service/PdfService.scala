@@ -34,7 +34,7 @@ class PdfService @Inject() (
 ) extends Logging
     with AesCrypto {
 
-  override protected lazy val encryptionKey: String = appConfig.aesKey
+  override protected val encryptionKey: String = appConfig.aesKey
 
   private def encrypt(string: String): String = encrypt(PlainText(string)).value
 

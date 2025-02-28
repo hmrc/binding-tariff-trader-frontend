@@ -35,9 +35,8 @@ class RulingCertificateViewSpec extends ViewSpecBase {
 
     val section = "section-holder"
 
-    "contain the holders name" in {
+    "contain the holders name" in
       assertSectionContains(section, holder.businessName)
-    }
 
     "contain the holders address" in {
       assertSectionContains(section, holder.addressLine1)
@@ -47,60 +46,52 @@ class RulingCertificateViewSpec extends ViewSpecBase {
       assertSectionContains(section, holder.country)
     }
 
-    "contain the holders EORI" in {
+    "contain the holders EORI" in
       assertSectionContains(section, holder.eori)
-    }
   }
 
   "Ruling pdf ruling section" must {
 
     val section = "section-ruling"
 
-    "contain the binding commodity code" in {
+    "contain the binding commodity code" in
       assertSectionContains(section, ruling.bindingCommodityCode)
-    }
 
-    "contain the case reference" in {
+    "contain the case reference" in
       assertSectionContains(section, rulingCase.reference)
-    }
 
-    "contain the ruling start data" in {
+    "contain the ruling start data" in
       assertSectionContains(section, format(ruling.effectiveStartDate)(messages))
-    }
 
-    "contain the ruling end data" in {
+    "contain the ruling end data" in
       assertSectionContains(section, format(ruling.effectiveEndDate)(messages))
-    }
   }
 
   "Ruling pdf goods section" must {
 
     val section = "section-goods"
 
-    "contain the good description" in {
+    "contain the good description" in
       assertSectionContains(section, ruling.goodsDescription)
-    }
   }
 
   "Ruling pdf goods commercial denomination" must {
 
     val section = "section-commercial"
 
-    "contain the good description" in {
+    "contain the good description" in
       assertSectionContains(
         section,
         ruling.methodCommercialDenomination.getOrElse(throw new Exception("Bad test data"))
       )
-    }
   }
 
   "Ruling pdf justification" must {
 
     val section = "section-justification"
 
-    "contain the good description" in {
+    "contain the good description" in
       assertSectionContains(section, ruling.justification)
-    }
   }
 
   private def assertSectionContains(sectionId: String, text: String) =

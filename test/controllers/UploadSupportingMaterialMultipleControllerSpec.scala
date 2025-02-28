@@ -98,7 +98,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val validData       = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+      `given`(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
 
       val result = controller(getRelevantData).onPageLoad(None, NormalMode)(request)
 
@@ -153,7 +153,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+      `given`(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
@@ -175,7 +175,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+      `given`(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
@@ -197,7 +197,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+      `given`(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
@@ -219,7 +219,7 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      given(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+      `given`(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 

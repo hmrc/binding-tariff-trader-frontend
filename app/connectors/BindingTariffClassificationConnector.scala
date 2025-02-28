@@ -27,6 +27,7 @@ import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import utils.JsonFormatters._
+import play.api.libs.ws.writeableOf_JsValue
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,7 +44,7 @@ class BindingTariffClassificationConnector @Inject() (
 
   def createCase(`case`: NewCaseRequest)(implicit hc: HeaderCarrier): Future[Case] =
     withMetricsTimerAsync("create-case") { _ =>
-      httpClient.post(url"$env/cases").withBody(Json.toJson(`case`)).setHeader(authHeaders: _*).execute[Case]
+      httpClient.post(url"$env/cases").withBody(Json.toJson(`case`)).setHeader(authHeaders*).execute[Case]
     }
 
   def putCase(`case`: Case)(implicit hc: HeaderCarrier): Future[Case] =
@@ -51,7 +52,7 @@ class BindingTariffClassificationConnector @Inject() (
       httpClient
         .put(url"$env/cases/${`case`.reference}")
         .withBody(Json.toJson(`case`))
-        .setHeader(authHeaders: _*)
+        .setHeader(authHeaders*)
         .execute[Case]
     }
 
@@ -60,13 +61,13 @@ class BindingTariffClassificationConnector @Inject() (
       httpClient
         .post(url"$env/cases/$reference")
         .withBody(Json.toJson(update))
-        .setHeader(authHeaders: _*)
+        .setHeader(authHeaders*)
         .execute[Option[Case]]
     }
 
   def findCase(reference: String)(implicit hc: HeaderCarrier): Future[Option[Case]] =
     withMetricsTimerAsync("get-case-by-reference") { _ =>
-      httpClient.get(url"$env/cases/$reference").setHeader(authHeaders: _*).execute[Option[Case]]
+      httpClient.get(url"$env/cases/$reference").setHeader(authHeaders*).execute[Option[Case]]
     }
 
   def allCases(pagination: Pagination, sort: Sort)(implicit hc: HeaderCarrier): Future[Paged[Case]] =
@@ -76,7 +77,7 @@ class BindingTariffClassificationConnector @Inject() (
         s"&page=${pagination.page}&page_size=${pagination.pageSize}" +
         "&application_type=BTI&migrated=false"
 
-      httpClient.get(url"$queryUrl").setHeader(authHeaders: _*).execute[Paged[Case]]
+      httpClient.get(url"$queryUrl").setHeader(authHeaders*).execute[Paged[Case]]
     }
 
   def findCasesBy(eori: String, status: Set[CaseStatus], pagination: Pagination, sort: Sort)(implicit
@@ -89,7 +90,7 @@ class BindingTariffClassificationConnector @Inject() (
         s"&page=${pagination.page}&page_size=${pagination.pageSize}" +
         "&migrated=false"
 
-      httpClient.get(url"$queryUrl").setHeader(authHeaders: _*).execute[Paged[Case]]
+      httpClient.get(url"$queryUrl").setHeader(authHeaders*).execute[Paged[Case]]
     }
 
   def createEvent(`case`: Case, event: NewEventRequest)(implicit hc: HeaderCarrier): Future[Event] =
@@ -97,7 +98,7 @@ class BindingTariffClassificationConnector @Inject() (
       httpClient
         .post(url"$env/cases/${`case`.reference}/events")
         .withBody(Json.toJson(event))
-        .setHeader(authHeaders: _*)
+        .setHeader(authHeaders*)
         .execute[Event]
     }
 

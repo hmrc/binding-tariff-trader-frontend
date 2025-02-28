@@ -51,7 +51,7 @@ class MakeFileConfidentialController @Inject() (
   override def submitAction(mode: Mode): Call = routes.MakeFileConfidentialController.onSubmit(mode)
 
   def renderView(preparedForm: Form[(String, Boolean)], submitAction: Call, mode: Mode)(implicit
-    request: DataRequest[_]
+    request: DataRequest[?]
   ): HtmlFormat.Appendable = {
     val fileId: String = request.userAnswers.get(UploadSupportingMaterialMultiplePage).map(_.last.id).get
     makeFileConfidentialView(appConfig, preparedForm, submitAction, mode, fileId)

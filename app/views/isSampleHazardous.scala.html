@@ -33,7 +33,7 @@
     pageTitle = s"${errorPrefix(isSampleHazardousForm)} ${messages("isSampleHazardous.title")}"
 ) {
 
-    @formWithCSRF(action = IsSampleHazardousController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formWithCSRF(action = controllers.routes.IsSampleHazardousController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @components.error_summary(isSampleHazardousForm.errors)
 
