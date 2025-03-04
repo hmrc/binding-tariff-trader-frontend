@@ -44,7 +44,7 @@ class MongoCacheServiceSpec
 
     "save the cache map to the Mongo repository" in {
 
-      when(repository.upsert(any[CacheMap])) thenReturn Future.successful(true)
+      when(repository.upsert(any[CacheMap])) `thenReturn` Future.successful(true)
 
       val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
@@ -66,7 +66,7 @@ class MongoCacheServiceSpec
 
     "remove the cache map to the Mongo repository" in {
 
-      when(repository.remove(any[CacheMap])) thenReturn Future.successful(true)
+      when(repository.remove(any[CacheMap])) `thenReturn` Future.successful(true)
 
       val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
@@ -89,7 +89,7 @@ class MongoCacheServiceSpec
 
       "return None" in {
 
-        when(repository.get(any[String])) thenReturn Future.successful(None)
+        when(repository.get(any[String])) `thenReturn` Future.successful(None)
 
         val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
@@ -110,7 +110,7 @@ class MongoCacheServiceSpec
         val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
         forAll(arbitrary[CacheMap]) { cacheMap =>
-          when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
+          when(repository.get(refEq(cacheMap.id))) `thenReturn` Future.successful(Some(cacheMap))
 
           val result = mongoCacheService.fetch(cacheMap.id)
 
@@ -129,7 +129,7 @@ class MongoCacheServiceSpec
 
       "return None" in {
 
-        when(repository.upsert(any[CacheMap])) thenReturn Future.successful(false)
+        when(repository.upsert(any[CacheMap])) `thenReturn` Future.successful(false)
 
         val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
@@ -147,17 +147,17 @@ class MongoCacheServiceSpec
 
       "return None" in {
 
-        when(repository.upsert(any[CacheMap])) thenReturn Future.successful(false)
+        when(repository.upsert(any[CacheMap])) `thenReturn` Future.successful(false)
 
         val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
 
         val gen = for {
           key      <- nonEmptyString
           cacheMap <- arbitrary[CacheMap]
-        } yield (key, cacheMap copy (data = cacheMap.data - key))
+        } yield (key, cacheMap `copy` (data = cacheMap.data - key))
 
         forAll(gen) { case (k, cacheMap) =>
-          when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
+          when(repository.get(refEq(cacheMap.id))) `thenReturn` Future.successful(Some(cacheMap))
 
           val result = mongoCacheService.getEntry[String](cacheMap.id, k)
 
@@ -178,10 +178,10 @@ class MongoCacheServiceSpec
           key      <- nonEmptyString
           value    <- nonEmptyString
           cacheMap <- arbitrary[CacheMap]
-        } yield (key, value, cacheMap copy (data = cacheMap.data + (key -> JsString(value))))
+        } yield (key, value, cacheMap `copy` (data = cacheMap.data + (key -> JsString(value))))
 
         forAll(gen) { case (k, v, cacheMap) =>
-          when(repository.get(refEq(cacheMap.id))) thenReturn Future.successful(Some(cacheMap))
+          when(repository.get(refEq(cacheMap.id))) `thenReturn` Future.successful(Some(cacheMap))
 
           val result = mongoCacheService.getEntry[String](cacheMap.id, k)
 

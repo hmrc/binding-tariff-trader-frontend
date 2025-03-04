@@ -76,7 +76,7 @@ class CommodityCodeRulingReferenceControllerSpec
       commodityCodeRulingReferenceView
     )
 
-  def viewAsString(form: Form[String], submitAction: Call, request: Request[_]): String =
+  def viewAsString(form: Form[String], submitAction: Call, request: Request[?]): String =
     commodityCodeRulingReferenceView(frontendAppConfig, form, submitAction, NormalMode)(request, messages).toString
 
   private val invalidFormData = Map("value" -> "")

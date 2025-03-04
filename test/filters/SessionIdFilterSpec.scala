@@ -30,7 +30,6 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderNames, HttpVerbs, SessionKeys}
 import utils.UnitSpec
 
-import java.util.UUID
 import scala.concurrent.ExecutionContext
 
 object SessionIdFilterSpec {
@@ -42,7 +41,7 @@ object SessionIdFilterSpec {
   class TestSessionIdFilter @Inject() (
     override val mat: Materializer,
     ec: ExecutionContext
-  ) extends SessionIdFilter(mat, UUID.fromString(sessionId), ec)
+  ) extends SessionIdFilter(mat, ec)
 
 }
 
@@ -60,7 +59,6 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
     )
     .router(router)
     .build()
-  private lazy val sessionId = SessionIdFilterSpec.sessionId
   private lazy val realApp = GuiceApplicationBuilder()
     .configure(
       "metrics.enabled"        -> false,
@@ -91,7 +89,7 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
   private def action: ActionBuilder[MessagesRequest, AnyContent] = cc.messagesActionBuilder.compose(cc.actionBuilder)
 
-  ".apply" must {
+  ".apply" should {
 
     "add a sessionId if one doesn't already exist" in {
 
@@ -99,8 +97,8 @@ class SessionIdFilterSpec extends UnitSpec with GuiceOneAppPerSuite {
 
       val body = contentAsJson(result)
 
-      (body \ "fromHeader").as[String]  shouldBe s"session-$sessionId"
-      (body \ "fromSession").as[String] shouldBe s"session-$sessionId"
+      (body \ "fromHeader").as[String] `should` startWith("session-")
+      (body \ "fromSession").as[String] `should` startWith("session-")
     }
 
     "not override a sessionId if one doesn't already exist" in {

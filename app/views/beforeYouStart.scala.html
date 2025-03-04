@@ -23,7 +23,7 @@
     govukLayoutWrapper: GovukLayoutWrapper
 )
 
-@(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig)(implicit request: Request[?], messages: Messages)
 
 @govukLayoutWrapper(
     pageTitle = messages("beforeYouStart.title"),

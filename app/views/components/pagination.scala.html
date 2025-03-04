@@ -20,7 +20,7 @@
         id: String = "pagination",
         singularNameKey: String = "pagination.result",
         pluralNameKey: String = "pagination.results",
-        pager: Paged[_],
+        pager: Paged[?],
         onChange: Int => Call,
         containerClass: Option[String] = None,
         counterClass: Option[String] = None,
@@ -30,7 +30,7 @@
 <div id="@id" class="govuk-grid-row @containerClass.getOrElse("")">
     @if(pager.pageCount > 1) {
         <div id="@id-links" class="govuk-grid-column-one-half @linksClass.getOrElse("")">
-            @defining(pager.pageCount) { pageCount: Int =>
+            @defining(pager.pageCount) { (pageCount: Int) =>
                 <nav class="hmrc-pagination" id="pagination-label">
                     <p class="govuk-visually-hidden" aria-describedby="pagination-label">Pagination navigation</p>
                     <ul id ="pagination-list" class="hmrc-pagination__list">

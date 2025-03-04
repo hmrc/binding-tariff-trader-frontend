@@ -93,7 +93,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
   }
 
   private def givenTheFileServiceFindsTheAttachments(): OngoingStubbing[Future[Seq[FilestoreResponse]]] =
-    when(fileService.getAttachmentMetadata(any[Case])(any[HeaderCarrier])).thenReturn(successful(Seq.empty))
+    when(fileService.getAttachmentMetadataForCase(any[Case])(any[HeaderCarrier])).thenReturn(successful(Seq.empty))
 
   private def givenTheFileServiceHaveNoLetterOfAuthority(): OngoingStubbing[Future[Option[FilestoreResponse]]] =
     when(fileService.getLetterOfAuthority(any[Case])(any[HeaderCarrier])).thenReturn(successful(None))
@@ -104,7 +104,7 @@ class ApplicationControllerSpec extends ControllerSpecBase with BeforeAndAfterEa
   private def givenThePdfServiceFailsToDecodeTheToken(): OngoingStubbing[Option[String]] =
     when(pdfService.decodeToken(any[String])).thenReturn(None)
 
-  private def givenTheFileServiceFindsThePdf(): OngoingStubbing[Future[Option[Source[ByteString, _]]]] = {
+  private def givenTheFileServiceFindsThePdf(): OngoingStubbing[Future[Option[Source[ByteString, ?]]]] = {
     when(fileService.getAttachmentMetadata(any[Attachment])(any[HeaderCarrier])).thenReturn(
       successful(Some(FilestoreResponse("id", "some.pdf", "application/pdf", Some("http://localhost:4572/file/id"))))
     )

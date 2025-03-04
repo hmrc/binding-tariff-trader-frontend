@@ -44,7 +44,7 @@ class RegisteredAddressForEoriViewSpec extends QuestionViewBehaviours[Registered
   }
 
   private def createViewUsingForm: Form[RegisteredAddressForEori] => HtmlFormat.Appendable = {
-    form: Form[RegisteredAddressForEori] =>
+    (form: Form[RegisteredAddressForEori]) =>
       registeredAddressForEoriView(frontendAppConfig, form, NormalMode, countriesService.getAllCountries)(
         fakeRequestWithEori,
         messages

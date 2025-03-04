@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(
-messageKey: String = "",
-inputType: String = "button"
-)(implicit messages: Messages)
+package metrics
 
-<div class="section">
-    <input type="@inputType" class="govuk-button" value="@messages(messageKey)" />
-</div>
+import com.codahale.metrics.{MetricRegistry, Timer}
+
+class LocalMetrics(val registry: MetricRegistry) {
+  def startTimer(metric: String): Timer.Context     = registry.timer(s"$metric-timer").time()
+  def stopTimer(context: Timer.Context): Long       = context.stop()
+  def incrementSuccessCounter(metric: String): Unit = registry.counter(s"$metric-success-counter").inc()
+  def incrementFailedCounter(metric: String): Unit  = registry.counter(s"$metric-failed-counter").inc()
+}

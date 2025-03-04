@@ -65,7 +65,7 @@ class FileService @Inject() (
   def getAttachmentMetadata(att: Attachment)(implicit hc: HeaderCarrier): Future[Option[FilestoreResponse]] =
     connector.getFileMetadata(Seq(att)).map(_.headOption)
 
-  def getAttachmentMetadata(c: Case)(implicit hc: HeaderCarrier): Future[Seq[FilestoreResponse]] =
+  def getAttachmentMetadataForCase(c: Case)(implicit hc: HeaderCarrier): Future[Seq[FilestoreResponse]] =
     connector.getFileMetadata(c.attachments)
 
   def getLetterOfAuthority(c: Case)(implicit hc: HeaderCarrier): Future[Option[FilestoreResponse]] =

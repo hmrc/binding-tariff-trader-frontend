@@ -17,18 +17,17 @@
 package controllers
 
 import config.FrontendAppConfig
-import controllers.actions._
+import controllers.actions.*
 import models.cache.CacheMap
 import models.requests.DataRequest
 import models.{Confirmation, UserAnswers, oCase}
-import org.mockito.BDDMockito.given
-import org.mockito.Mockito.{mock, reset}
+import org.mockito.Mockito.{mock, reset, when}
 import pages.{ConfirmationPage, PdfViewPage}
 import play.api.libs.json.JsValue
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import service._
-import utils.JsonFormatters._
+import play.api.test.Helpers.*
+import service.*
+import utils.JsonFormatters.*
 import viewmodels.ConfirmationHomeUrlViewModel
 import views.html.confirmation
 
@@ -104,14 +103,14 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
               userAnswers = ua
             )
 
-          `given`(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(false)
+          when(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).thenReturn(Future.successful(false))
 
-          `given`(
+          when(
             mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
-          ).willReturn(ua)
+          ).thenReturn(ua)
 
-          `given`(mockDataCacheService.save(ua.cacheMap)).willReturn(ua.cacheMap)
-          `given`(mockPdfService.encodeToken("eori")).willReturn("token")
+          when(mockDataCacheService.save(ua.cacheMap)).thenReturn(Future.successful(ua.cacheMap))
+          when(mockPdfService.encodeToken("eori")).thenReturn("token")
 
           val result = controller(Some(ua)).onPageLoad(fakeDataRequest)
 
@@ -145,8 +144,8 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
               userAnswers = ua
             )
 
-          `given`(mockBtaUserService.isBTAUser(fakeDataRequest.internalId))
-            .willReturn(Future.failed(new RuntimeException(" Fetch Error")))
+          when(mockBtaUserService.isBTAUser(fakeDataRequest.internalId))
+            .thenReturn(Future.failed(new RuntimeException(" Fetch Error")))
 
           val result = controller(Some(ua)).onPageLoad(fakeDataRequest)
 
@@ -197,14 +196,14 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
               userAnswers = ua
             )
 
-          `given`(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(true)
+          when(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).thenReturn(Future.successful(true))
 
-          `given`(
+          when(
             mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
-          ).willReturn(ua)
+          ).thenReturn(ua)
 
-          `given`(mockDataCacheService.remove(ua.cacheMap)).willReturn(Future(true))
-          `given`(mockPdfService.encodeToken("eori")).willReturn("token")
+          when(mockDataCacheService.remove(ua.cacheMap)).thenReturn(Future(true))
+          when(mockPdfService.encodeToken("eori")).thenReturn("token")
 
           val result = controller(Some(ua)).onSubmit()(fakeDataRequest)
 
@@ -230,14 +229,14 @@ class ConfirmationControllerSpec extends ControllerSpecBase {
               userAnswers = ua
             )
 
-          `given`(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).willReturn(false)
+          when(mockBtaUserService.isBTAUser(fakeDataRequest.internalId)).thenReturn(Future.successful(false))
 
-          `given`(
+          when(
             mockUserAnswerDeletionService.deleteAllUserAnswersExcept(ua, Seq(ConfirmationPage, PdfViewPage))
-          ).willReturn(ua)
+          ).thenReturn(ua)
 
-          `given`(mockDataCacheService.remove(ua.cacheMap)).willReturn(Future(true))
-          `given`(mockPdfService.encodeToken("eori")).willReturn("token")
+          when(mockDataCacheService.remove(ua.cacheMap)).thenReturn(Future(true))
+          when(mockPdfService.encodeToken("eori")).thenReturn("token")
 
           val result = controller(Some(ua)).onSubmit()(fakeDataRequest)
 

@@ -97,7 +97,7 @@ class DashboardSpec extends UnitSpec {
   "getSortBy" when {
     "supplied with a request containing a valid sortBy param value" should {
       "result in the expected SortField" in {
-        implicit val request: Request[_] = mock(classOf[Request[_]])
+        implicit val request: Request[?] = mock(classOf[Request[?]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("sortBy"))).thenReturn(Some("application.goodName"))
 
@@ -107,7 +107,7 @@ class DashboardSpec extends UnitSpec {
 
     "supplied with a request containing an invalid sortBy param value" should {
       "throw NoSuchElementException when attempting to create SortField" in {
-        implicit val request: Request[_] = mock(classOf[Request[_]])
+        implicit val request: Request[?] = mock(classOf[Request[?]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("sortBy")))
           .thenReturn(Some("application.goodsName"))
@@ -120,7 +120,7 @@ class DashboardSpec extends UnitSpec {
 
     "supplied with a request containing no sortBy param" should {
       "result in None" in {
-        implicit val request: Request[_] = mock(classOf[Request[_]])
+        implicit val request: Request[?] = mock(classOf[Request[?]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("sortBy"))).thenReturn(None)
 
@@ -132,7 +132,7 @@ class DashboardSpec extends UnitSpec {
   "getSortDirection" when {
     "supplied with a request containing a valid order param value" should {
       "result in the expected SortDirection" in {
-        implicit val request: Request[_] = mock(classOf[Request[_]])
+        implicit val request: Request[?] = mock(classOf[Request[?]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("order"))).thenReturn(Some("asc"))
 
@@ -142,7 +142,7 @@ class DashboardSpec extends UnitSpec {
 
     "supplied with a request containing an invalid order param value" should {
       "throw NoSuchElementException when attempting to create SortDirection" in {
-        implicit val request: Request[_] = mock(classOf[Request[_]])
+        implicit val request: Request[?] = mock(classOf[Request[?]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("order"))).thenReturn(Some("ascending"))
 
@@ -154,7 +154,7 @@ class DashboardSpec extends UnitSpec {
 
     "supplied with a request containing no order param" should {
       "result in None" in {
-        implicit val request: Request[_] = mock(classOf[Request[_]])
+        implicit val request: Request[?] = mock(classOf[Request[?]])
 
         when(request.getQueryString(org.mockito.ArgumentMatchers.eq("order"))).thenReturn(None)
 

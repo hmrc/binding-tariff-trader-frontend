@@ -53,7 +53,7 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
   }
 
-  private def assertHeading: Int => Unit = n: Int =>
+  private def assertHeading: Int => Unit = (n: Int) =>
     val filesForm = new SupportingMaterialFileListFormProvider
     val htmlView  = asDocument(createViewWithForm(filesForm(), generateFiles(n)))
 

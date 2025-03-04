@@ -52,7 +52,7 @@ class CommodityCodeDigitsControllerSpec extends ControllerSpecBase with AnswerCa
       commodityCodeDigitsView
     )
 
-  def viewAsString(form: Form[String], request: Request[_]): String =
+  def viewAsString(form: Form[String], request: Request[?]): String =
     commodityCodeDigitsView(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
   val testAnswer                            = "1234"

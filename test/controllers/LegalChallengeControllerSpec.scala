@@ -52,7 +52,7 @@ class LegalChallengeControllerSpec extends ControllerSpecBase with YesNoCachingC
 
   private def onwardRoute = Call("GET", "/foo")
 
-  def viewAsString(form: Form[Boolean], request: Request[_]): String =
+  def viewAsString(form: Form[Boolean], request: Request[?]): String =
     legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
   val backgroundData: Map[String, JsString] = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))

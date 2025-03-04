@@ -49,7 +49,7 @@ class ProvideGoodsDescriptionControllerSpec extends ControllerSpecBase with Answ
       cc
     )
 
-  def viewAsString(form: Form[String], request: Request[_]): String =
+  def viewAsString(form: Form[String], request: Request[?]): String =
     provideGoodsDescriptionView(frontendAppConfig, form, testName, NormalMode)(request, messages).toString
 
   val testAnswer = "answer"

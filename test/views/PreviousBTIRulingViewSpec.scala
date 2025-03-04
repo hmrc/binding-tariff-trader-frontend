@@ -61,7 +61,7 @@ class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
       (".f", viewViaF)
     )
 
-    input.foreach(args => (test _).tupled(args))
+    input.foreach(args => test.tupled(args))
 
     behave like yesNoPage(
       createViewUsingForm,

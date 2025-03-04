@@ -49,7 +49,7 @@ class AddSupportingDocumentsControllerSpec extends ControllerSpecBase with YesNo
       addSupportingDocumentsView
     )
 
-  def viewAsString(form: Form[Boolean], request: Request[_]): String =
+  def viewAsString(form: Form[Boolean], request: Request[?]): String =
     addSupportingDocumentsView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
   "AddSupportingDocumentsController" must {

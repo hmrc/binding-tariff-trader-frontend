@@ -54,7 +54,7 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
       (".f", viewViaF)
     )
 
-    input.foreach(args => (test _).tupled(args))
+    input.foreach(args => test.tupled(args))
 
     "show the expected heading when no rulings have been added" in
       assertHeading(0)
@@ -67,8 +67,8 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
 
   }
 
-  private def assertHeading: Int => Unit = n: Int =>
-    new AddAnotherRulingFormProvider
+  private def assertHeading: Int => Unit = (n: Int) =>
+    new AddAnotherRulingFormProvider()
     val htmlView = asDocument(viewWithRulings(generateRulings(n)))
 
     val headings = htmlView.getElementsByTag("h1")

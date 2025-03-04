@@ -42,11 +42,11 @@ trait ConnectorTest extends SpecBase with BeforeAndAfterAll {
   override def beforeAll(): Unit = {
     super.beforeAll()
 
-    when(mockConfig.bindingTariffFileStoreUrl) thenReturn WireMockObject.wireMockUrl
-    when(mockConfig.bindingTariffClassificationUrl) thenReturn WireMockObject.wireMockUrl
-    when(mockConfig.emailUrl) thenReturn WireMockObject.wireMockUrl
+    when(mockConfig.bindingTariffFileStoreUrl) `thenReturn` WireMockObject.wireMockUrl
+    when(mockConfig.bindingTariffClassificationUrl) `thenReturn` WireMockObject.wireMockUrl
+    when(mockConfig.emailUrl) `thenReturn` WireMockObject.wireMockUrl
 
-    when(mockConfig.apiToken) thenReturn fakeAuthToken
+    when(mockConfig.apiToken) `thenReturn` fakeAuthToken
 
   }
 

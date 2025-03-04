@@ -49,7 +49,7 @@ class ReturnSamplesControllerSpec extends ControllerSpecBase with YesNoCachingCo
       returnSamplesView
     )
 
-  def viewAsString(form: Form[Boolean], request: Request[_]): String =
+  def viewAsString(form: Form[Boolean], request: Request[?]): String =
     returnSamplesView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   "ReturnSamples Controller" must {

@@ -49,7 +49,7 @@ class IsSampleHazardousControllerSpec extends ControllerSpecBase with YesNoCachi
       cc
     )
 
-  def viewAsString(form: Form[Boolean], request: Request[_]): String =
+  def viewAsString(form: Form[Boolean], request: Request[?]): String =
     isSampleHazardousView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   "IsSampleHazardousController" must {

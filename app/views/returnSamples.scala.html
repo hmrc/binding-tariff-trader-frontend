@@ -27,7 +27,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, form: Form[Boolean], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[Boolean], mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @contents = {
 <div role="note" class="govuk-form-group">

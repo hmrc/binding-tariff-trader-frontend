@@ -16,28 +16,28 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.UploadSupportingMaterialMultipleFormProvider
-import models._
+import models.*
 import models.cache.CacheMap
 import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, UpscanFormTemplate}
 import navigation.FakeNavigator
-import org.mockito.ArgumentMatchers._
-import org.mockito.BDDMockito.given
-import org.mockito.Mockito.{mock, reset}
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.{mock, reset, when}
 import org.scalatest.BeforeAndAfterEach
 import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
 import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.mvc.request.RequestTarget
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import service.{FakeDataCacheService, FileService}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.uploadSupportingMaterialMultiple
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
   private val fileService            = mock(classOf[FileService])
@@ -98,7 +98,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
       val validData       = Map(ProvideGoodsNamePage.toString -> JsString(goodsName))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      `given`(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+      when(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(initiateResponse))
 
       val result = controller(getRelevantData).onPageLoad(None, NormalMode)(request)
 
@@ -153,7 +154,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      `given`(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+      when(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(initiateResponse))
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
@@ -175,7 +177,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      `given`(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+      when(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(initiateResponse))
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
@@ -197,7 +200,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      `given`(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+      when(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(initiateResponse))
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 
@@ -219,7 +223,8 @@ class UploadSupportingMaterialMultipleControllerSpec extends ControllerSpecBase 
 
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
-      `given`(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier])).willReturn(initiateResponse)
+      when(fileService.initiate(any[FileStoreInitiateRequest])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(initiateResponse))
 
       val result = controller(getRelevantData).onPageLoad(Some(file.id), NormalMode)(upscanRequest)
 

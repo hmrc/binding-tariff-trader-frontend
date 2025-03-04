@@ -27,7 +27,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, goodsNameForm: Form[String], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, goodsNameForm: Form[String], mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @contents = {
     <p class="govuk-body">@messages("provideGoodsName.paragraph")</p>

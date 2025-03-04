@@ -18,7 +18,6 @@ package controllers
 package behaviours
 
 import controllers.actions.{DataRetrievalAction, DataRetrievalActionImpl, FakeDataRetrievalAction}
-import controllers.routes
 import models.cache.CacheMap
 import models.{NormalMode, UserAnswers}
 import play.api.data.Form
@@ -55,7 +54,7 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
   def listEditingController[A: Format](
     controller: DataRetrievalAction => AccumulatingEditingController[List[A], A, Int],
     onwardRoute: Call,
-    createView: (Form[A], Call, Request[_]) => String,
+    createView: (Form[A], Call, Request[?]) => String,
     backgroundData: Map[String, JsValue],
     invalidFormData: Map[String, String],
     validFormData: List[Map[String, String]],
@@ -99,7 +98,7 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
   def accumulatingEditingController[F <: IterableOnce[A]: Format, A: Format, I](
     controller: DataRetrievalAction => AccumulatingEditingController[F, A, I],
     onwardRoute: Call,
-    createView: (Form[A], Call, Request[_]) => String,
+    createView: (Form[A], Call, Request[?]) => String,
     backgroundData: Map[String, JsValue],
     invalidFormData: Map[String, String],
     validFormData: List[Map[String, String]],
@@ -180,7 +179,7 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
   def mapCachingController[A: Format](
     controller: DataRetrievalAction => AccumulatingCachingController[Map[String, A], (String, A)],
     onwardRoute: Call,
-    createView: (Form[(String, A)], Call, Request[_]) => String,
+    createView: (Form[(String, A)], Call, Request[?]) => String,
     backgroundData: Map[String, JsValue],
     invalidFormData: Map[String, String],
     validFormData: List[Map[String, String]],
@@ -216,7 +215,7 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
   def accumulatingCachingController[F <: IterableOnce[A]: Format, A: Format](
     controller: DataRetrievalAction => AccumulatingCachingController[F, A],
     onwardRoute: Call,
-    createView: (Form[A], Call, Request[_]) => String,
+    createView: (Form[A], Call, Request[?]) => String,
     backgroundData: Map[String, JsValue],
     invalidFormData: Map[String, String],
     validFormData: List[Map[String, String]],
@@ -296,7 +295,7 @@ trait YesNoCachingControllerBehaviours extends AnswerCachingControllerBehaviours
   def yesNoCachingController(
     controller: DataRetrievalAction => AnswerCachingController[Boolean],
     onwardRoute: Call,
-    createView: (Form[Boolean], Request[_]) => String,
+    createView: (Form[Boolean], Request[?]) => String,
     formField: String = "value",
     backgroundData: Map[String, JsValue] = Map.empty
   ): Unit = {
@@ -347,7 +346,7 @@ trait AnswerCachingControllerBehaviours { self: ControllerSpecBase =>
   def answerCachingController[A: Format](
     controller: DataRetrievalAction => AnswerCachingController[A],
     onwardRoute: Call,
-    createView: (Form[A], Request[_]) => String,
+    createView: (Form[A], Request[?]) => String,
     validFormData: Map[String, String],
     invalidFormData: Map[String, String],
     backgroundData: Map[String, JsValue],

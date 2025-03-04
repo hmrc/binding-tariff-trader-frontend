@@ -27,7 +27,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, isSampleHazardousForm: Form[Boolean], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, isSampleHazardousForm: Form[Boolean], mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @govukLayoutWrapper(
     pageTitle = s"${errorPrefix(isSampleHazardousForm)} ${messages("isSampleHazardous.title")}"

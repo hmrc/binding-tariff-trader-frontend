@@ -38,7 +38,7 @@
     getCountryName: String => Option[String],
     compositeMode: Boolean = false,
     urlViewModel: ConfirmationUrlViewModel
-)(implicit request: Request[_], messages: Messages)
+)(implicit request: Request[?], messages: Messages)
 
 @createLink(path: String) = @{
     s"${appConfig.host}${routes.Assets.versioned(path)}"

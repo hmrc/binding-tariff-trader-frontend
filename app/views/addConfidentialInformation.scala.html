@@ -29,7 +29,7 @@
         formWithCsrf: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, addConfidentialInformationForm: Form[Boolean], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, addConfidentialInformationForm: Form[Boolean], goodsName: String, mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @contents = {
     <p class="govuk-body">@messages("addConfidentialInformation.p1")</p>

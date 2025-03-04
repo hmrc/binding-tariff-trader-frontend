@@ -54,7 +54,7 @@ class AddAnotherRulingControllerSpec extends ControllerSpecBase with YesNoCachin
 
   private val rulings = List.empty[String]
 
-  def viewAsString(form: Form[_], request: Request[_]): String =
+  def viewAsString(form: Form[?], request: Request[?]): String =
     addAnotherRulingView(frontendAppConfig, formProvider().copy(errors = form.errors), NormalMode, rulings)(
       request,
       messages

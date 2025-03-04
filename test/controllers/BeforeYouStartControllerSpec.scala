@@ -16,15 +16,14 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import models.cache.CacheMap
-import org.mockito.ArgumentMatchers._
-import org.mockito.BDDMockito.given
-import org.mockito.Mockito.{mock, reset, verify}
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.{mock, reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import service.DataCacheService
 import views.html.beforeYouStart
 
@@ -58,7 +57,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
 
     "return OK and the correct view for a GET - with EORI" in {
       val cacheMap = emptyCacheMap
-      `given`(mockDataCacheService.save(any[CacheMap])).willReturn(Future.successful(emptyCacheMap))
+      when(mockDataCacheService.save(any[CacheMap])).thenReturn(Future.successful(emptyCacheMap))
       val result = controller(identifier = FakeIdentifierAction(Some("eori"))).onPageLoad(fakeRequest)
 
       status(result)          shouldBe OK
@@ -68,7 +67,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
 
     "return OK and the correct view for a GET - without EORI" in {
       val cacheMap = emptyCacheMap
-      `given`(mockDataCacheService.save(any[CacheMap])).willReturn(Future.successful(emptyCacheMap))
+      when(mockDataCacheService.save(any[CacheMap])).thenReturn(Future.successful(emptyCacheMap))
       val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
 
       status(result)          shouldBe OK
@@ -77,7 +76,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
     }
 
     "return bad gateway when the data cache connector fails" in {
-      `given`(mockDataCacheService.save(any[CacheMap])).willReturn(Future.failed(new Exception))
+      when(mockDataCacheService.save(any[CacheMap])).thenReturn(Future.failed(new Exception))
       val result = controller(identifier = FakeIdentifierAction(None)).onPageLoad(fakeRequest)
 
       status(result) shouldBe BAD_GATEWAY

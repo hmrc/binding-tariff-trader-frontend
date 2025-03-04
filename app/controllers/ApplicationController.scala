@@ -124,7 +124,7 @@ class ApplicationController @Inject() (
 
   private def renderApplicationHtml(cse: Case)(implicit request: Request[AnyContent]): Future[Result] =
     for {
-      attachments <- fileService.getAttachmentMetadata(cse)
+      attachments <- fileService.getAttachmentMetadataForCase(cse)
       attachmentFileView = attachments.map { attachment =>
                              FileView(
                                id = attachment.id,

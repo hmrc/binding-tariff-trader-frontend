@@ -19,15 +19,14 @@ package connectors
 import com.codahale.metrics.MetricRegistry
 import config.FrontendAppConfig
 import metrics.HasMetrics
-import models.CaseStatus.CaseStatus
-import models._
+import models.*
 import models.requests.NewEventRequest
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import play.api.libs.ws.writeableOf_JsValue
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
-import utils.JsonFormatters._
-import play.api.libs.ws.writeableOf_JsValue
+import utils.JsonFormatters.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

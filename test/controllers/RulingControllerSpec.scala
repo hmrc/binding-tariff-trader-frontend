@@ -19,9 +19,8 @@ package controllers
 import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 import models.oCase
 import org.mockito.ArgumentMatchers.any
-import org.mockito.BDDMockito.given
-import org.mockito.Mockito.mock
-import play.api.test.Helpers.{redirectLocation, _}
+import org.mockito.Mockito.{mock, when}
+import play.api.test.Helpers.{redirectLocation, *}
 import service.CasesService
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.ruling_information
@@ -48,8 +47,8 @@ class RulingControllerSpec extends ControllerSpecBase {
   "Ruling Controller" must {
 
     "return OK and the correct view for a GET" in {
-      `given`(casesService.getCaseForUser(any[String], any[String])(any[HeaderCarrier]))
-        .willReturn(Future.successful(oCase.btiCaseWithDecision))
+      when(casesService.getCaseForUser(any[String], any[String])(any[HeaderCarrier]))
+        .thenReturn(Future.successful(oCase.btiCaseWithDecision))
       val result = controller().viewRuling("a-ruling")(fakeRequest)
 
       status(result)        shouldBe OK

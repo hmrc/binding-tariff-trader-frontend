@@ -54,7 +54,7 @@ class SupportingMaterialFileListControllerSpec extends ControllerSpecBase with Y
     )
 
   // We will not use the provided form here - errors aside, the controller does not prepopulate the view
-  private def viewAsString(form: Form[_], request: Request[_]): String =
+  private def viewAsString(form: Form[?], request: Request[?]): String =
     supportingMaterialFileListView(
       frontendAppConfig,
       formProvider().copy(errors = form.errors),

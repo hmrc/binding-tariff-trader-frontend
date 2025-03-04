@@ -56,7 +56,7 @@ class ProvideBTIReferenceViewSpec extends QuestionViewBehaviours[BTIReference] {
       (".f", viewViaF)
     )
 
-    input.foreach(args => (test _).tupled(args))
+    input.foreach(args => test.tupled(args))
 
     behave like pageWithTextFields(
       createViewUsingForm,

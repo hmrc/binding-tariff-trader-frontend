@@ -38,7 +38,7 @@ class DataRetrievalActionSpec extends SpecBase with ScalaFutures {
 
       "set userAnswers to 'None' in the request" in {
         val dataCacheService = mock(classOf[DataCacheService])
-        when(dataCacheService.fetch("id")) thenReturn Future(None)
+        when(dataCacheService.fetch("id")) `thenReturn` Future(None)
         val action = new Harness(dataCacheService)
 
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, "id", Some("eori-789012")))
@@ -54,7 +54,7 @@ class DataRetrievalActionSpec extends SpecBase with ScalaFutures {
 
       "build a userAnswers object and add it to the request" in {
         val dataCacheService = mock(classOf[DataCacheService])
-        when(dataCacheService.fetch("id")) thenReturn Future(Some(new CacheMap("id", Map())))
+        when(dataCacheService.fetch("id")) `thenReturn` Future(Some(new CacheMap("id", Map())))
         val action = new Harness(dataCacheService)
 
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, "id", Some("eori-789012")))

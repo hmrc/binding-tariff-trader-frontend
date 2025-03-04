@@ -30,7 +30,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, form: Form[RegisteredAddressForEori], mode: Mode, countries: List[Country])(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[RegisteredAddressForEori], mode: Mode, countries: List[Country])(implicit request: Request[?], messages: Messages)
 
 @heading = {
     @if(form("eori").value.isDefined) {

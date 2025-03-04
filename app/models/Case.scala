@@ -16,8 +16,6 @@
 
 package models
 
-import models.CaseStatus.CaseStatus
-
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
@@ -47,7 +45,7 @@ case class Case(
 
   def hasRuling: Boolean = rulingStates.contains(status) && decision.isDefined
 
-  private val rulingStates: Set[models.CaseStatus.Value] = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
+  private val rulingStates: Set[models.CaseStatus] = Set(CaseStatus.COMPLETED, CaseStatus.CANCELLED)
 
   def daysUntilExpiry: Option[Long] =
     this.decision.flatMap(_.effectiveEndDate).map(date => ChronoUnit.DAYS.between(Instant.now, date))

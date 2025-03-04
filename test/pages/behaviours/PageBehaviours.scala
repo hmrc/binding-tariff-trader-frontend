@@ -47,7 +47,7 @@ trait PageBehaviours
             val gen = for {
               page     <- genP
               cacheMap <- arbitrary[CacheMap]
-            } yield (page, cacheMap copy (data = cacheMap.data - page.toString))
+            } yield (page, cacheMap `copy` (data = cacheMap.data - page.toString))
 
             forAll(gen) { case (page, cacheMap) =>
               whenever(!cacheMap.data.keySet.contains(page.toString)) {
@@ -73,7 +73,7 @@ trait PageBehaviours
             } yield (
               page,
               savedValue,
-              cacheMap copy (data = cacheMap.data + (page.toString -> Json.toJson(savedValue)))
+              cacheMap `copy` (data = cacheMap.data + (page.toString -> Json.toJson(savedValue)))
             )
 
             forAll(gen) { case (page, savedValue, cacheMap) =>
@@ -112,7 +112,7 @@ trait PageBehaviours
           page       <- genP
           savedValue <- arbitrary[A]
           cacheMap   <- arbitrary[CacheMap]
-        } yield (page, cacheMap copy (data = cacheMap.data + (page.toString -> Json.toJson(savedValue))))
+        } yield (page, cacheMap `copy` (data = cacheMap.data + (page.toString -> Json.toJson(savedValue))))
 
         forAll(gen) { case (page, cacheMap) =>
           val userAnswers    = UserAnswers(cacheMap)

@@ -107,7 +107,7 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
       )
     )
 
-    input.foreach(args => (test _).tupled(args))
+    input.foreach(args => test.tupled(args))
 
     "log an error when provided HTML is invalid and the PDF cannot be generated" in {
 
@@ -149,7 +149,7 @@ class PdfGeneratorServiceSpec extends SpecBase with ScalaFutures with Integratio
       ("does not start with a custom resolver '*/'", "test/resources/fop/file.xls", "test/resources/fop/file.xls")
     )
 
-    input.foreach(args => (test _).tupled(args))
+    input.foreach(args => test.tupled(args))
 
   }
 }

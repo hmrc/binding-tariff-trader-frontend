@@ -19,34 +19,18 @@ package views
 import models.Paged
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
-import org.mockito.ArgumentMatchers
-import org.mockito.BDDMockito._
-import org.mockito.Mockito.mock
-import org.mockito.invocation.InvocationOnMock
-import org.mockito.stubbing.Answer
 import org.scalatest.BeforeAndAfterEach
 import play.api.mvc.Call
 import play.twirl.api.Html
-import views.ViewMatchers._
+import views.ViewMatchers.*
 import views.html.components.pagination
 
 class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
 
-  private val goToPage: Int => Call = mock(classOf[Int => Call])
+  private def goToPage(page: Int): Call = Call("GET", "/page=" + page)
 
   protected def view(html: Html): Document =
     Jsoup.parse(html.toString())
-
-  override def beforeEach(): Unit = {
-    def returnThePage: Answer[Call] =
-      new Answer[Call] {
-        override def answer(invocation: InvocationOnMock): Call =
-          Call(method = "GET", url = "/page=" + invocation.getArgument(0))
-      }
-
-    super.beforeEach()
-    `given`(goToPage.apply(ArgumentMatchers.any[Int])) will returnThePage
-  }
 
   "Pagination" should {
 
