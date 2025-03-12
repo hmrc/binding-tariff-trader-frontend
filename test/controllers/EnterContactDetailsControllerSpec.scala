@@ -50,7 +50,7 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase with AnswerCa
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private def viewAsString(form: Form[EnterContactDetails], request: Request[_]): String =
+  private def viewAsString(form: Form[EnterContactDetails], request: Request[?]): String =
     enterContactDetailsView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   val validFormData: Map[String, String] =
@@ -71,7 +71,7 @@ class EnterContactDetailsControllerSpec extends ControllerSpecBase with AnswerCa
       validFormData,
       invalidFormData,
       backgroundData,
-      validAnswers: _*
+      validAnswers*
     )
   }
 }

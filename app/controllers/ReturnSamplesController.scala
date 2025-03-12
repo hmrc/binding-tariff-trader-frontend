@@ -47,6 +47,6 @@ class ReturnSamplesController @Inject() (
   lazy val form: Form[Boolean]             = formProvider()
   val questionPage: ReturnSamplesPage.type = ReturnSamplesPage
 
-  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable =
+  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[?]): HtmlFormat.Appendable =
     returnsSamplesView(appConfig, preparedForm, mode)
 }

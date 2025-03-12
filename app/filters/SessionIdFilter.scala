@@ -16,31 +16,23 @@
 
 package filters
 
-import org.apache.pekko.stream.Materializer
 import com.google.inject.Inject
-import play.api.mvc._
+import org.apache.pekko.stream.Materializer
+import play.api.mvc.*
 import play.api.mvc.request.{Cell, RequestAttrKey}
-import uk.gov.hmrc.http.{HeaderNames => HMRCHeaderNames, SessionKeys}
+import uk.gov.hmrc.http.{HeaderNames as HMRCHeaderNames, SessionKeys}
 
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
-class SessionIdFilter(
+class SessionIdFilter @Inject (
   override val mat: Materializer,
-  uuid: => UUID,
   implicit val ec: ExecutionContext
 ) extends Filter {
 
-  @Inject
-  def this(mat: Materializer, ec: ExecutionContext) = {
-    this(mat, UUID.randomUUID(), ec)
-  }
-
-  override def apply(f: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] = {
-
-    lazy val sessionId: String = s"session-$uuid"
-
+  override def apply(f: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] =
     if (rh.session.get(SessionKeys.sessionId).isEmpty) {
+      lazy val sessionId: String = s"session-${UUID.randomUUID()}"
 
       val headers = rh.headers.add(
         HMRCHeaderNames.xSessionId -> sessionId
@@ -60,5 +52,4 @@ class SessionIdFilter(
     } else {
       f(rh)
     }
-  }
 }

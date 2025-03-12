@@ -27,13 +27,13 @@
     formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, form: Form[Boolean], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[Boolean], mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @govukLayoutWrapper(
     pageTitle = s"${errorPrefix(form)} ${messages("similarItemCommodityCode.title")}"
 ) {
 
-    @formWithCSRF(action = SimilarItemCommodityCodeController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.SimilarItemCommodityCodeController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

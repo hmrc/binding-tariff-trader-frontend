@@ -27,13 +27,13 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, isSampleHazardousForm: Form[Boolean], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, isSampleHazardousForm: Form[Boolean], mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @govukLayoutWrapper(
     pageTitle = s"${errorPrefix(isSampleHazardousForm)} ${messages("isSampleHazardous.title")}"
 ) {
 
-    @formWithCSRF(action = IsSampleHazardousController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formWithCSRF(action = controllers.routes.IsSampleHazardousController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @components.error_summary(isSampleHazardousForm.errors)
 

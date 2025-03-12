@@ -2,7 +2,7 @@ import uk.gov.hmrc.gitstamp.GitStampPlugin.*
 
 lazy val appName: String = "binding-tariff-trader-frontend"
 
-ThisBuild / scalaVersion := "2.13.15"
+ThisBuild / scalaVersion := "3.5.2"
 ThisBuild / majorVersion := 0
 
 lazy val microservice = Project(appName, file("."))
@@ -21,7 +21,7 @@ lazy val microservice = Project(appName, file("."))
     scalacOptions ++= Seq(
       "-feature",
       "-Wconf:src=routes/.*:s",
-      "-Wconf:cat=unused-imports&src=views/.*:s"
+      "-Wconf:src=views/.*:s"
     ),
     Compile / unmanagedResourceDirectories += baseDirectory.value / "app" / "views" / "components" / "fop",
     Test / unmanagedResourceDirectories += baseDirectory.value / "app" / "views" / "components" / "fop",

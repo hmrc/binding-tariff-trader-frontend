@@ -16,12 +16,23 @@
 
 package models
 
-import play.api.libs.json.Format
-import utils.EnumJson
+import play.api.libs.json._
 
-object ScanStatus extends Enumeration {
-  type ScanStatus = Value
-  val READY, FAILED = Value
+enum ScanStatus {
+  case READY, FAILED
+}
 
-  implicit val format: Format[models.ScanStatus.Value] = EnumJson.format(ScanStatus)
+object ScanStatus {
+  implicit val format: Format[ScanStatus] = new Format[ScanStatus] {
+    override def reads(json: JsValue): JsResult[ScanStatus] =
+      json.validate[String].flatMap { s =>
+        try
+          JsSuccess(ScanStatus.valueOf(s))
+        catch {
+          case _: IllegalArgumentException => JsError(s"Unknown ScanStatus: $s")
+        }
+      }
+
+    override def writes(status: ScanStatus): JsValue = JsString(status.toString)
+  }
 }

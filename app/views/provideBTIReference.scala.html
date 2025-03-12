@@ -27,7 +27,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, form: Form[BTIReference], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[BTIReference], mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @contents = {
     <p class="govuk-body">@messages("provideBTIReference.paragraph")</p>
@@ -37,7 +37,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("provideBTIReference.title")}"
 ) {
 
-    @formWithCSRF(action = ProvideBTIReferenceController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.ProvideBTIReferenceController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

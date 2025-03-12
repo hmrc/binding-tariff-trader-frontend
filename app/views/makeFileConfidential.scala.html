@@ -27,7 +27,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, makeFileConfidentialForm: Form[(String, Boolean)], submitAction: Call, mode: Mode, fileId: String)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, makeFileConfidentialForm: Form[(String, Boolean)], submitAction: Call, mode: Mode, fileId: String)(implicit request: Request[?], messages: Messages)
 
 @contents = {
 <p class="govuk-body">@messages("makeFileConfidential.infoText")</p>

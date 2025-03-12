@@ -47,7 +47,7 @@ class LegalChallengeDetailsController @Inject() (
   lazy val form: Form[String]                      = formProvider()
   val questionPage: LegalChallengeDetailsPage.type = LegalChallengeDetailsPage
 
-  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[?]): HtmlFormat.Appendable = {
     val goodsName: String = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     legalChallengeDetailsView(appConfig, preparedForm, mode, goodsName)
   }

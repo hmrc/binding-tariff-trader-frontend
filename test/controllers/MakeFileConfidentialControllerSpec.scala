@@ -75,7 +75,7 @@ class MakeFileConfidentialControllerSpec
       makeFileConfidentialView
     )
 
-  private def viewAsString(form: Form[(String, Boolean)], submitAction: Call, request: Request[_]): String =
+  private def viewAsString(form: Form[(String, Boolean)], submitAction: Call, request: Request[?]): String =
     makeFileConfidentialView(frontendAppConfig, form, submitAction, NormalMode, lastFileUploadedId)(
       request,
       messages

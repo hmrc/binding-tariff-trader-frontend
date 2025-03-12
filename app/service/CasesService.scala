@@ -17,7 +17,6 @@
 package service
 
 import connectors.{BindingTariffClassificationConnector, EmailConnector}
-import models.CaseStatus.CaseStatus
 import models._
 import models.requests.NewEventRequest
 import play.api.Logging

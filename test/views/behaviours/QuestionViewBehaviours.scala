@@ -55,8 +55,8 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
             doc,
             "title",
             s"""${messages("error.browser.title.prefix")} ${messages(
-              s"$messageKeyPrefix.title"
-            )}"""
+                s"$messageKeyPrefix.title"
+              )}"""
           )
         }
       }

@@ -28,7 +28,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, dashboard: Dashboard, isBTAUser: Boolean)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, dashboard: Dashboard, isBTAUser: Boolean)(implicit request: Request[?], messages: Messages)
 
 @btaHomeLink = @{
       if(isBTAUser){

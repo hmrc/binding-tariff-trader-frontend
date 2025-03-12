@@ -20,7 +20,7 @@
     govukLayoutWrapper: GovukLayoutWrapper
 )
 
-@(appConfig: FrontendAppConfig, documentType: String, reference: String)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, documentType: String, reference: String)(implicit request: Request[?], messages: Messages)
 
 @govukLayoutWrapper(
     pageTitle = messages("documentNotFound.title")

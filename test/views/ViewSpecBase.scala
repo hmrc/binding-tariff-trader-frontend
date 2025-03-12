@@ -34,7 +34,7 @@ trait ViewSpecBase extends SpecBase {
 
     if (elements.isEmpty) throw new IllegalArgumentException(s"CSS Selector $cssSelector wasn't rendered.")
 
-    //<p> HTML elements are rendered out with a carriage return on some pages, so discount for comparison
+    // <p> HTML elements are rendered out with a carriage return on some pages, so discount for comparison
     assert(elements.first().html().replace("\n", "") == expectedValue)
   }
 
@@ -43,10 +43,10 @@ trait ViewSpecBase extends SpecBase {
     headers.size() match {
       case 0 => ()
       case 1 if headers.select("label").isEmpty =>
-        headers.first.ownText().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*)
+        headers.first.ownText().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args*)
           .replaceAll("&nbsp;", " ")
       case 1 =>
-        headers.select("label").text().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args: _*)
+        headers.select("label").text().replaceAll("\u00a0", " ") shouldBe messages(expectedMessageKey, args*)
           .replaceAll("&nbsp;", " ")
       case _ => throw new RuntimeException(s"Pages should only have (at most) one h1 element. Found ${headers.size}")
     }

@@ -25,7 +25,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, answerSections: Seq[AnswerSection], sendingSamples: Boolean)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, answerSections: Seq[AnswerSection], sendingSamples: Boolean)(implicit request: Request[?], messages: Messages)
 
     @govukLayoutWrapper(
         pageTitle = messages("checkYourAnswers.title")
@@ -37,7 +37,7 @@
             @components.answer_section(section)
         }
 
-        @formWithCSRF(action = CheckYourAnswersController.onSubmit()) {
+        @formWithCSRF(action = controllers.routes.CheckYourAnswersController.onSubmit()) {
 
             <h2 class="govuk-heading-l">@messages("checkYourAnswers.declaration.subheading")</h2>
 

@@ -47,7 +47,7 @@ class CommodityCodeDigitsController @Inject() (
   lazy val form: Form[String]                    = formProvider()
   val questionPage: CommodityCodeDigitsPage.type = CommodityCodeDigitsPage
 
-  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+  def renderView(preparedForm: Form[String], mode: Mode)(implicit request: DataRequest[?]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     commodityCodeDigitsView(appConfig, preparedForm, mode, goodsName)
   }

@@ -17,10 +17,9 @@
 package workers
 
 import com.codahale.metrics.MetricRegistry
-import models._
-import org.mockito.ArgumentMatchers._
-import org.mockito.BDDMockito._
-import org.mockito.Mockito.{mock, verify}
+import models.*
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.{mock, verify, when}
 import org.scalatest.BeforeAndAfterAll
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -98,41 +97,36 @@ class MigrationWorkerSpec extends UnitSpec with BeforeAndAfterAll with MongoSupp
   )
 
   override protected def beforeAll(): Unit = {
-    given(repository.refreshExpiry(any[String], any[String], any[Duration]))
-      .willReturn(Future.successful(true))
-    given(repository.takeLock(any[String], any[String], any[Duration]))
-      .willReturn(Future.successful(None))
-    given(repository.releaseLock(any[String], any[String]))
-      .willReturn(Future.successful(()))
-    given(caseService.allCases(any[Pagination], any[Sort])(any[HeaderCarrier]))
-      .willReturn(Future.successful(pagedCases))
-      .willReturn(Future.successful(Paged.empty[Case](pagination)))
-    given(caseService.update(refEq("ref1"), any[CaseUpdate])(any[HeaderCarrier]))
-      .willReturn(Future.successful(Some(exampleCases("ref1"))))
-    given(caseService.update(refEq("ref2"), any[CaseUpdate])(any[HeaderCarrier]))
-      .willReturn(Future.successful(Some(exampleCases("ref2"))))
-    given(caseService.update(refEq("ref3"), any[CaseUpdate])(any[HeaderCarrier]))
-      .willReturn(Future.successful(Some(exampleCases("ref3"))))
-    given(fileService.getAttachmentMetadata(any[Case])(any[HeaderCarrier]))
-      .willReturn(Future.successful(Seq.empty))
-    given(pdfService.generatePdf(any[Html]))
-      .willReturn(Future.successful(Array.empty))
-    given(fileService.uploadApplicationPdf(refEq("ref1"), any[Array[Byte]])(any[HeaderCarrier]))
-      .willReturn(Future.successful(FileAttachment("id1", "some.pdf", "application/pdf", 0L, uploaded = true)))
-    given(fileService.uploadApplicationPdf(refEq("ref2"), any[Array[Byte]])(any[HeaderCarrier]))
-      .willReturn(Future.successful(FileAttachment("id2", "some.pdf", "application/pdf", 0L, uploaded = true)))
-    given(fileService.uploadApplicationPdf(refEq("ref3"), any[Array[Byte]])(any[HeaderCarrier]))
-      .willReturn(Future.successful(FileAttachment("id3", "some.pdf", "application/pdf", 0L, uploaded = true)))
+    when(repository.refreshExpiry(any[String], any[String], any[Duration])).thenReturn(Future.successful(true))
+    when(repository.takeLock(any[String], any[String], any[Duration])).thenReturn(Future.successful(None))
+    when(repository.releaseLock(any[String], any[String])).thenReturn(Future.successful(()))
+    when(caseService.allCases(any[Pagination], any[Sort])(any[HeaderCarrier]))
+      .thenReturn(Future.successful(pagedCases))
+      .thenReturn(Future.successful(Paged.empty[Case](pagination)))
+    when(caseService.update(refEq("ref1"), any[CaseUpdate])(any[HeaderCarrier]))
+      .thenReturn(Future.successful(Some(exampleCases("ref1"))))
+    when(caseService.update(refEq("ref2"), any[CaseUpdate])(any[HeaderCarrier]))
+      .thenReturn(Future.successful(Some(exampleCases("ref2"))))
+    when(caseService.update(refEq("ref3"), any[CaseUpdate])(any[HeaderCarrier]))
+      .thenReturn(Future.successful(Some(exampleCases("ref3"))))
+    when(fileService.getAttachmentMetadataForCase(any[Case])(any[HeaderCarrier]))
+      .thenReturn(Future.successful(Seq.empty))
+    when(pdfService.generatePdf(any[Html])).thenReturn(Future.successful(Array.empty[Byte]))
+    when(fileService.uploadApplicationPdf(refEq("ref1"), any[Array[Byte]])(any[HeaderCarrier]))
+      .thenReturn(Future.successful(FileAttachment("id1", "some.pdf", "application/pdf", 0L, uploaded = true)))
+    when(fileService.uploadApplicationPdf(refEq("ref2"), any[Array[Byte]])(any[HeaderCarrier]))
+      .thenReturn(Future.successful(FileAttachment("id2", "some.pdf", "application/pdf", 0L, uploaded = true)))
+    when(fileService.uploadApplicationPdf(refEq("ref3"), any[Array[Byte]])(any[HeaderCarrier]))
+      .thenReturn(Future.successful(FileAttachment("id3", "some.pdf", "application/pdf", 0L, uploaded = true)))
   }
 
   "MigrationWorker" should {
-    "regenerate application PDF for cases where it is missing" in {
+    "regenerate application PDF for cases where it is missing" in
       Helpers.running(configuredApp) { app =>
         await(app.injector.instanceOf[MigrationWorker].runMigration)
         verify(caseService).update(refEq("ref1"), refEq(attachmentUpdate("id1")))(any[HeaderCarrier])
         verify(caseService).update(refEq("ref2"), refEq(attachmentUpdate("id2")))(any[HeaderCarrier])
         verify(caseService).update(refEq("ref3"), refEq(attachmentUpdate("id3")))(any[HeaderCarrier])
       }
-    }
   }
 }

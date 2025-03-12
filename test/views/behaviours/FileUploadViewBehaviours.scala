@@ -67,8 +67,8 @@ trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
             doc,
             "title",
             s"""${messages("error.browser.title.prefix")} ${messages(
-              s"$messageKeyPrefix.title"
-            )}"""
+                s"$messageKeyPrefix.title"
+              )}"""
           )
         }
       }
@@ -109,8 +109,8 @@ trait FileUploadViewBehaviours extends QuestionViewBehaviours[String] {
             doc,
             "title",
             s"""${messages("error.browser.title.prefix")} ${messages(
-              s"$messageKeyPrefix.title"
-            )}"""
+                s"$messageKeyPrefix.title"
+              )}"""
           )
         }
       }

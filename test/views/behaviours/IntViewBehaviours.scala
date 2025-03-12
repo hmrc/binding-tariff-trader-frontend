@@ -64,8 +64,8 @@ trait IntViewBehaviours extends QuestionViewBehaviours[Int] {
             doc,
             "title",
             s"""${messages("error.browser.title.prefix")} ${messages(
-              s"$messageKeyPrefix.title"
-            )}"""
+                s"$messageKeyPrefix.title"
+              )}"""
           )
         }
       }

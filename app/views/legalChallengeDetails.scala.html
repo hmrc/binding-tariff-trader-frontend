@@ -27,7 +27,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, legalChallengeForm: Form[String], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, legalChallengeForm: Form[String], mode: Mode, goodsName: String)(implicit request: Request[?], messages: Messages)
 
 @contents = {
     <p class="govuk-body">@messages("legalChallengeDetails.second.paragraph")</p>
@@ -41,7 +41,7 @@
     pageTitle = s"${errorPrefix(legalChallengeForm)} ${messages("legalChallengeDetails.title")}"
 ) {
 
-    @formWithCSRF(action = LegalChallengeDetailsController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.LegalChallengeDetailsController.onSubmit(mode)) {
 
         @components.error_summary(legalChallengeForm.errors)
 

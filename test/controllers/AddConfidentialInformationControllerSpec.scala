@@ -51,7 +51,7 @@ class AddConfidentialInformationControllerSpec extends ControllerSpecBase with Y
       cc
     )
 
-  def viewAsString(form: Form[Boolean], request: Request[_]): String =
+  def viewAsString(form: Form[Boolean], request: Request[?]): String =
     addConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
   "AddConfidentialInformationController" must {

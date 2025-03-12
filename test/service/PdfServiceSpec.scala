@@ -19,8 +19,7 @@ package service
 import base.SpecBase
 import config.FrontendAppConfig
 import org.mockito.ArgumentMatchers.any
-import org.mockito.BDDMockito.given
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.{mock, when}
 import play.twirl.api.Html
 
 import scala.concurrent.Future
@@ -37,7 +36,7 @@ class PdfServiceSpec extends SpecBase {
   "Service 'Render Pdf'" should {
 
     "delegate to PdfGeneratorService" in {
-      given(pdfGeneratorService.render(any[Html], any[String])).willReturn(Future.successful(generatorResponse))
+      when(pdfGeneratorService.render(any[Html], any[String])).thenReturn(Future.successful(generatorResponse))
 
       val file = await(service.generatePdf(pdfHtml))
 
@@ -58,7 +57,7 @@ class PdfServiceSpec extends SpecBase {
     }
 
     "Decode BadToken" in {
-      given(config.aesKey).willReturn(key)
+      when(config.aesKey).thenReturn(key)
 
       val token = service.decodeToken("token")
 
@@ -66,7 +65,7 @@ class PdfServiceSpec extends SpecBase {
     }
 
     "Reversibly Encode & Decode Token" in {
-      given(config.aesKey).willReturn(key)
+      when(config.aesKey).thenReturn(key)
 
       val pair: Option[String] = service.decodeToken(service.encodeToken("eori"))
 

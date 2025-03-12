@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package models.requests
+package models.cache
 
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.{Format, JsValue, Json, OFormat}
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
-case class BTARequest(url: String)
+import java.time.Instant
 
-object BTARequest {
-  implicit val reads: Reads[BTARequest] = Json.reads[BTARequest]
+case class DatedCacheMap(id: String, data: Map[String, JsValue], lastUpdated: Instant = Instant.now())
+
+object DatedCacheMap {
+  implicit val instantFormat: Format[Instant]  = MongoJavatimeFormats.instantFormat
+  implicit val formats: OFormat[DatedCacheMap] = Json.format[DatedCacheMap]
+
+  def apply(cacheMap: CacheMap): DatedCacheMap = DatedCacheMap(cacheMap.id, cacheMap.data)
 }

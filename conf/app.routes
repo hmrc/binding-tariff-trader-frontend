@@ -21,7 +21,7 @@ GET         /redirect-to-bta                                           controlle
 GET         /sign-out                                                  controllers.SignOutController.startFeedbackSurvey
 GET         /force-sign-out                                            controllers.SignOutController.forceSignOut
 GET         /unauthorised-sign-out                                     controllers.SignOutController.unauthorisedSignOut
-GET         /keep-alive                                                controllers.SignOutController.keepAlive
+GET         /keep-alive                                                controllers.SignOutController.keepAlive()
 GET         /cancel-application                                        controllers.SignOutController.cancelApplication
 GET         /something-went-wrong                                      controllers.ErrorController.onPageLoad
 

@@ -53,7 +53,7 @@ class CommodityCodeRulingReferenceController @Inject() (
     routes.CommodityCodeRulingReferenceController.onEditSubmit(index, mode)
 
   def renderView(preparedForm: Form[String], submitAction: Call, mode: Mode)(implicit
-    request: DataRequest[_]
+    request: DataRequest[?]
   ): HtmlFormat.Appendable =
     commodityCodeRulingReferenceView(appConfig, preparedForm, submitAction, mode)
 

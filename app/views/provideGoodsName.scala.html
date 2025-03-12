@@ -27,7 +27,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, goodsNameForm: Form[String], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, goodsNameForm: Form[String], mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @contents = {
     <p class="govuk-body">@messages("provideGoodsName.paragraph")</p>
@@ -37,7 +37,7 @@
     pageTitle = s"${errorPrefix(goodsNameForm)} ${messages("provideGoodsName.title")}"
 ) {
 
-    @formWithCSRF(action = ProvideGoodsNameController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formWithCSRF(action = controllers.routes.ProvideGoodsNameController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @components.error_summary(goodsNameForm.errors)
 

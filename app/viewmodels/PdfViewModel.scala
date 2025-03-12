@@ -33,7 +33,7 @@ case class PdfViewModel(
   sendingSample: Boolean,
   hazardousSample: Boolean,
   returnSample: Boolean,
-  attachments: Seq[FileView] = Seq.empty,
+  attachments: Seq[FileView],
   foundCommodityCode: Option[String],
   legalProblems: Option[String],
   similarAtarReferences: List[String],

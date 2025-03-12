@@ -31,6 +31,6 @@ class ProvideBTIReferenceFormProvider @Inject() extends Mappings {
     mapping(
       "btiReference" -> text("provideBTIReference.error.required")
         .verifying(maxLength(maximumValue, "provideBTIReference.error.length"))
-    )(BTIReference.apply)(BTIReference.unapply)
+    )(BTIReference.apply)(o => Some(o.reference))
   )
 }

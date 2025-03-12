@@ -17,29 +17,19 @@
 package repositories
 
 import com.mongodb.client.model.Indexes.ascending
-import models.cache.CacheMap
+import models.cache.*
 import org.bson.conversions.Bson
-import org.mongodb.scala.model.Filters._
+import org.mongodb.scala.SingleObservableFuture
+import org.mongodb.scala.model.Filters.*
 import org.mongodb.scala.model.{IndexModel, IndexOptions, ReplaceOptions}
 import play.api.Configuration
-import play.api.libs.json.{Format, JsValue, Json, OFormat}
+import play.api.libs.json.OFormat
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
-import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-
-case class DatedCacheMap(id: String, data: Map[String, JsValue], lastUpdated: Instant = Instant.now())
-
-object DatedCacheMap {
-  implicit val instantFormat: Format[Instant]  = MongoJavatimeFormats.instantFormat
-  implicit val formats: OFormat[DatedCacheMap] = Json.format[DatedCacheMap]
-
-  def apply(cacheMap: CacheMap): DatedCacheMap = DatedCacheMap(cacheMap.id, cacheMap.data)
-}
 
 @Singleton
 class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)(implicit ec: ExecutionContext)
@@ -52,10 +42,12 @@ class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)
           ascending("lastUpdated"),
           IndexOptions()
             .name("userAnswersExpiry")
-            .expireAfter(config.get[Int]("mongodb.timeToLiveInSeconds"), TimeUnit.SECONDS)
+            .expireAfter(config.get[Int]("mongodb.timeToLiveInSeconds").toLong, TimeUnit.SECONDS)
         )
       )
     ) {
+
+  private def byId(value: String): Bson = equal("id", value)
 
   def upsert(cm: CacheMap): Future[Boolean] =
     collection
@@ -66,13 +58,10 @@ class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)
   def get(id: String): Future[Option[CacheMap]] =
     collection
       .find(byId(id))
-      .first()
-      .toFutureOption()
-      .map(_.fold(None: Option[CacheMap])(cacheMap => Some(CacheMap(cacheMap.id, cacheMap.data))))
+      .headOption()
+      .map(cacheMapOpt => cacheMapOpt.map(cacheMap => CacheMap(cacheMap.id, cacheMap.data)))
 
   def remove(cm: CacheMap): Future[Boolean] =
     collection.deleteOne(byId(cm.id)).toFuture().map(_.wasAcknowledged())
 
-  private def byId(value: String): Bson =
-    equal("id", value)
 }

@@ -53,7 +53,7 @@ class ProvideConfidentialInformationControllerSpec extends ControllerSpecBase wi
       cc
     )
 
-  def viewAsString(form: Form[String], request: Request[_]): String =
+  def viewAsString(form: Form[String], request: Request[?]): String =
     provideConfidentialInformationView(frontendAppConfig, form, goodsName, NormalMode)(request, messages).toString
 
   val testAnswer                            = "answer"

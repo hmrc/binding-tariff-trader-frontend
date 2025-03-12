@@ -48,7 +48,7 @@ class ProvideBTIReferenceController @Inject() (
   val questionPage: ProvideBTIReferencePage.type = ProvideBTIReferencePage
 
   def renderView(preparedForm: Form[BTIReference], mode: Mode)(implicit
-    request: DataRequest[_]
+    request: DataRequest[?]
   ): HtmlFormat.Appendable =
     provideBTIReferenceView(appConfig, preparedForm, mode)
 }

@@ -121,7 +121,7 @@ class SupportingMaterialFileListController @Inject() (
     files.filter(_.uploaded).map(file => FileView(file.id, file.name, confidentialityStatuses(file.id)))
   }
 
-  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[?]): HtmlFormat.Appendable = {
     val goodsName = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     // We will not use the prepared form here because we don't want to prepopulate the choice; we will only ensure existing errors are populated
     supportingMaterialFileListView(
@@ -134,7 +134,7 @@ class SupportingMaterialFileListController @Inject() (
   }
 
   override def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request: DataRequest[_] =>
+    implicit request: DataRequest[?] =>
       val maxFilesError = FormError(FormInputField, MaxFilesMessage, Seq(appConfig.fileUploadMaxFiles))
       val badRequest =
         (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(renderView(formWithErrors, mode)))

@@ -54,24 +54,21 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
       (".f", viewViaF)
     )
 
-    input.foreach(args => (test _).tupled(args))
+    input.foreach(args => test.tupled(args))
 
-    "show the expected heading when no rulings have been added" in {
+    "show the expected heading when no rulings have been added" in
       assertHeading(0)
-    }
 
-    "show the expected heading when 1 ruling has been added" in {
+    "show the expected heading when 1 ruling has been added" in
       assertHeading(1)
-    }
 
-    "show the expected heading when multiple rulings have been added" in {
+    "show the expected heading when multiple rulings have been added" in
       assertHeading(2)
-    }
 
   }
 
-  private def assertHeading: Int => Unit = { n: Int =>
-    new AddAnotherRulingFormProvider
+  private def assertHeading: Int => Unit = (n: Int) =>
+    new AddAnotherRulingFormProvider()
     val htmlView = asDocument(viewWithRulings(generateRulings(n)))
 
     val headings = htmlView.getElementsByTag("h1")
@@ -85,7 +82,6 @@ class AddAnotherRulingViewSpec extends YesNoViewBehaviours {
     } else {
       assert(heading == messages(s"$messageKeyPrefix.heading"))
     }
-  }
 
   private def generateRulings(number: Int): List[String] =
     (1 to number).map(idx => s"ruling$idx").toList

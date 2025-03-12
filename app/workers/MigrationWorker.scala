@@ -96,7 +96,7 @@ class MigrationWorker @Inject() (
 
   private def regeneratePdf(cse: Case): Future[Unit] =
     for {
-      meta <- fileService.getAttachmentMetadata(cse)
+      meta <- fileService.getAttachmentMetadataForCase(cse)
 
       metaById = meta.map(m => (m.id, m)).toMap
 

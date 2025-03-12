@@ -42,21 +42,18 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(createView)
 
-    "show the expected heading when no files have been uploaded" in {
+    "show the expected heading when no files have been uploaded" in
       assertHeading(0)
-    }
 
-    "show the expected heading when 1 file has been uploaded" in {
+    "show the expected heading when 1 file has been uploaded" in
       assertHeading(1)
-    }
 
-    "show the expected heading when multiple file have been uploaded" in {
+    "show the expected heading when multiple file have been uploaded" in
       assertHeading(2)
-    }
 
   }
 
-  private def assertHeading: Int => Unit = { n: Int =>
+  private def assertHeading: Int => Unit = (n: Int) =>
     val filesForm = new SupportingMaterialFileListFormProvider
     val htmlView  = asDocument(createViewWithForm(filesForm(), generateFiles(n)))
 
@@ -71,7 +68,6 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
     } else {
       assert(heading == messages(s"$messageKeyPrefix.heading", goodsName))
     }
-  }
 
   private def generateFiles(number: Int): Seq[FileView] =
     (1 to number).map(idx => FileView(s"id$idx", s"name$idx", confidential = false))

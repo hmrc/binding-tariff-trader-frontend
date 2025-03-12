@@ -96,12 +96,11 @@ class CaseRequestMapper @Inject() (appConfig: FrontendAppConfig) {
       details.country
     )
 
-  private def toContact: EnterContactDetails => Contact = { details: EnterContactDetails =>
+  private def toContact: EnterContactDetails => Contact = (details: EnterContactDetails) =>
     Contact(
       name = details.name,
       email = details.email,
       phone = Option(details.phoneNumber)
     )
-  }
 
 }

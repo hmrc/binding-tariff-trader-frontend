@@ -41,7 +41,7 @@ class RulingController @Inject() (
   def viewRuling(reference: String): Action[AnyContent] = identify.async { implicit request =>
     request.eoriNumber match {
       case Some(eori: String) =>
-        service.getCaseForUser(eori, reference) flatMap { c: Case =>
+        service.getCaseForUser(eori, reference) flatMap { (c: Case) =>
           Future.successful(Ok(rulingInformationView(appConfig, c)))
         }
 

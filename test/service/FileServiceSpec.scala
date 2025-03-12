@@ -19,14 +19,13 @@ package service
 import base.SpecBase
 import config.FrontendAppConfig
 import connectors.BindingTariffFilestoreConnector
-import models._
+import models.*
 import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, FilestoreResponse, UpscanFormTemplate}
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.ByteString
-import org.mockito.ArgumentMatchers._
-import org.mockito.BDDMockito.given
-import org.mockito.Mockito.{mock, reset}
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.{mock, reset, when}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData
 import play.api.mvc.MultipartFormData.FilePart
@@ -70,7 +69,7 @@ class FileServiceSpec extends SpecBase {
     )
 
     "Delegate to connector" in {
-      given(connector.initiate(initiateRequest)).willReturn(successful(initiateResponse))
+      when(connector.initiate(initiateRequest)).thenReturn(successful(initiateResponse))
 
       await(service.initiate(initiateRequest)) shouldBe initiateResponse
     }
@@ -79,8 +78,8 @@ class FileServiceSpec extends SpecBase {
   "Upload" should {
     val filestoreResponse = FilestoreResponse("id", "some.pdf", "application/pdf")
     "Delegate to connector" in {
-      given(connector.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier]))
-        .willReturn(successful(filestoreResponse))
+      when(connector.uploadApplicationPdf(any[String], any[Array[Byte]])(any[HeaderCarrier]))
+        .thenReturn(successful(filestoreResponse))
 
       await(service.uploadApplicationPdf("foo", Array.empty[Byte])) shouldBe FileAttachment(
         "id",
@@ -96,7 +95,7 @@ class FileServiceSpec extends SpecBase {
     val fileContent = Some(Source.single(ByteString("Some file content".getBytes())))
 
     "Delegate to connector" in {
-      given(connector.downloadFile(any[String])(any[HeaderCarrier])).willReturn(successful(fileContent))
+      when(connector.downloadFile(any[String])(any[HeaderCarrier])).thenReturn(successful(fileContent))
 
       await(service.downloadFile("http://localhost:4572/foo")) shouldBe fileContent
     }
@@ -108,7 +107,7 @@ class FileServiceSpec extends SpecBase {
     val fileUpdated       = FileAttachment("id", "filename-updated", "type", 0)
 
     "Delegate to connector" in {
-      given(connector.get(refEq(outdatedFile))(any[HeaderCarrier])).willReturn(successful(connectorResponse))
+      when(connector.get(refEq(outdatedFile))(any[HeaderCarrier])).thenReturn(successful(connectorResponse))
 
       await(service.refresh(outdatedFile)) shouldBe fileUpdated
     }
@@ -120,8 +119,8 @@ class FileServiceSpec extends SpecBase {
     "Delegate to connector and return Published" in {
       val connectorResponse =
         FilestoreResponse("id", "filename-updated", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
-      given(connector.get(filePublishing)).willReturn(connectorResponse)
-      given(connector.publish(refEq(filePublishing))(any[HeaderCarrier])).willReturn(successful(connectorResponse))
+      when(connector.get(filePublishing)).thenReturn(successful(connectorResponse))
+      when(connector.publish(refEq(filePublishing))(any[HeaderCarrier])).thenReturn(successful(connectorResponse))
 
       await(service.publish(filePublishing)) shouldBe PublishedFileAttachment("id", "filename-updated", "type", 0)
     }
@@ -133,7 +132,7 @@ class FileServiceSpec extends SpecBase {
       val c           = aCase(withLetterOfAuthWithId("1"))
       val expectedAtt = Some(someMetadataWithId("1"))
 
-      given(connector.get(any[Attachment])(any[HeaderCarrier])) willReturn successful(expectedAtt)
+      when(connector.get(any[Attachment])(any[HeaderCarrier])).thenReturn(successful(expectedAtt))
 
       await(service.getLetterOfAuthority(c)) shouldBe expectedAtt
     }
@@ -155,9 +154,9 @@ class FileServiceSpec extends SpecBase {
       val connectorResponse2 =
         FilestoreResponse("id2", "filename2", "type", scanStatus = Some(ScanStatus.READY), url = Some("url"))
 
-      given(connector.publish(refEq(filePublishing1))(any[HeaderCarrier]))
-        .willReturn(failed(new RuntimeException("Some Error")))
-      given(connector.publish(refEq(filePublishing2))(any[HeaderCarrier])).willReturn(successful(connectorResponse2))
+      when(connector.publish(refEq(filePublishing1))(any[HeaderCarrier]))
+        .thenReturn(failed(new RuntimeException("Some Error")))
+      when(connector.publish(refEq(filePublishing2))(any[HeaderCarrier])).thenReturn(successful(connectorResponse2))
 
       await(service.publish(Seq(filePublishing1, filePublishing2))) shouldBe Seq(
         PublishedFileAttachment("id2", "filename2", "type", 0)
@@ -165,10 +164,10 @@ class FileServiceSpec extends SpecBase {
     }
 
     "Handle Exceptions from Publish where all fail" in {
-      given(connector.publish(refEq(filePublishing1))(any[HeaderCarrier]))
-        .willReturn(failed(new RuntimeException("Some Error")))
-      given(connector.publish(refEq(filePublishing2))(any[HeaderCarrier]))
-        .willReturn(failed(new RuntimeException("Some Error")))
+      when(connector.publish(refEq(filePublishing1))(any[HeaderCarrier]))
+        .thenReturn(failed(new RuntimeException("Some Error")))
+      when(connector.publish(refEq(filePublishing2))(any[HeaderCarrier]))
+        .thenReturn(failed(new RuntimeException("Some Error")))
 
       await(service.publish(Seq(filePublishing1, filePublishing2))) shouldBe Seq.empty
     }
@@ -176,7 +175,7 @@ class FileServiceSpec extends SpecBase {
 
   "Validate file type" should {
 
-    given(configuration.fileUploadMimeTypes).willReturn(Set("text/plain", "application/pdf", "image/png"))
+    when(configuration.fileUploadMimeTypes).thenReturn(Set("text/plain", "application/pdf", "image/png"))
 
     "Allow a valid text file" in {
       val file = createFileOfType("txt", "text/plain")
@@ -202,7 +201,7 @@ class FileServiceSpec extends SpecBase {
 
   "Validate file size" should {
 
-    given(configuration.fileUploadMaxSize).willReturn(fileSizeMax)
+    when(configuration.fileUploadMaxSize).thenReturn(fileSizeMax)
 
     "Allow a small file" in {
       val file = createFileOfSize(fileSizeSmall)
@@ -215,15 +214,36 @@ class FileServiceSpec extends SpecBase {
     }
   }
 
-  "GetAttachmentMetadata" should {
+  "GetAttachmentMetadataForCase" should {
     val c: Case           = mock(classOf[Case])
     val connectorResponse = Seq(FilestoreResponse("id", "filename-updated", "type"))
 
     "Delegate to connector" in {
-      given(connector.getFileMetadata(any[Seq[Attachment]])(any[HeaderCarrier]))
-        .willReturn(successful(connectorResponse))
+      when(connector.getFileMetadata(any[Seq[Attachment]])(any[HeaderCarrier]))
+        .thenReturn(successful(connectorResponse))
 
-      await(service.getAttachmentMetadata(c)) shouldBe connectorResponse
+      await(service.getAttachmentMetadataForCase(c)) shouldBe connectorResponse
+    }
+  }
+
+  "GetAttachmentMetadata" should {
+    val a: Attachment     = mock(classOf[Attachment])
+    val connectorResponse = Seq(FilestoreResponse("id", "filename-updated", "type"))
+
+    "Delegate to connector" in {
+      val expected: Option[FilestoreResponse] = connectorResponse.headOption
+      when(connector.getFileMetadata(any[Seq[Attachment]])(any[HeaderCarrier]))
+        .thenReturn(successful(connectorResponse))
+
+      await(service.getAttachmentMetadata(a)) shouldBe expected
+    }
+
+    "Delegate to connector - no attachments" in {
+      val expected: Option[FilestoreResponse] = None
+      when(connector.getFileMetadata(any[Seq[Attachment]])(any[HeaderCarrier]))
+        .thenReturn(successful(Seq()))
+
+      await(service.getAttachmentMetadata(a)) shouldBe expected
     }
   }
 

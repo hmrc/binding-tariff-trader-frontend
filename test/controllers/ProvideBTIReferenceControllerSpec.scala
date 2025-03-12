@@ -35,7 +35,7 @@ class ProvideBTIReferenceControllerSpec extends ControllerSpecBase with AnswerCa
 
   val provideBTIReferenceView: provideBTIReference = app.injector.instanceOf(classOf[provideBTIReference])
 
-  def viewAsString(form: Form[BTIReference], request: Request[_]): String =
+  def viewAsString(form: Form[BTIReference], request: Request[?]): String =
     provideBTIReferenceView(frontendAppConfig, form, NormalMode)(request, messages).toString
 
   private def controller(dataRetrievalAction: DataRetrievalAction) =

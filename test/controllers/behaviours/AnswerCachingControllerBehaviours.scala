@@ -18,7 +18,6 @@ package controllers
 package behaviours
 
 import controllers.actions.{DataRetrievalAction, DataRetrievalActionImpl, FakeDataRetrievalAction}
-import controllers.routes
 import models.cache.CacheMap
 import models.{NormalMode, UserAnswers}
 import play.api.data.Form
@@ -55,7 +54,7 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
   def listEditingController[A: Format](
     controller: DataRetrievalAction => AccumulatingEditingController[List[A], A, Int],
     onwardRoute: Call,
-    createView: (Form[A], Call, Request[_]) => String,
+    createView: (Form[A], Call, Request[?]) => String,
     backgroundData: Map[String, JsValue],
     invalidFormData: Map[String, String],
     validFormData: List[Map[String, String]],
@@ -99,7 +98,7 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
   def accumulatingEditingController[F <: IterableOnce[A]: Format, A: Format, I](
     controller: DataRetrievalAction => AccumulatingEditingController[F, A, I],
     onwardRoute: Call,
-    createView: (Form[A], Call, Request[_]) => String,
+    createView: (Form[A], Call, Request[?]) => String,
     backgroundData: Map[String, JsValue],
     invalidFormData: Map[String, String],
     validFormData: List[Map[String, String]],
@@ -119,9 +118,9 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
       expectedUserAnswers
     )
 
-    "update edited data in the user answers" in {
+    "update edited data in the user answers" in
       validEditFormData.zip(expectedEditedAnswers).foreach { case ((index, formData), userAnswers) =>
-        val postRequest  = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(formData.toSeq: _*)
+        val postRequest  = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(formData.toSeq*)
         val cacheService = noDataController.dataCacheService
 
         val controllerWithData = controller(new DataRetrievalActionImpl(cacheService))
@@ -132,11 +131,10 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
 
         await(cacheService.fetch(cacheMapId)).map(UserAnswers(_)) shouldBe Some(userAnswers)
       }
-    }
 
-    "update edited data in the user answers with bad request" in {
+    "update edited data in the user answers with bad request" in
       validEditFormData.zip(invalidFormData).foreach { case ((index, formData), userAnswers) =>
-        val postRequest  = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(invalidFormData.toSeq: _*)
+        val postRequest  = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(invalidFormData.toSeq*)
         val cacheService = noDataController.dataCacheService
 
         val controllerWithData = controller(new DataRetrievalActionImpl(cacheService))
@@ -144,11 +142,10 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
 
         status(result) shouldBe BAD_REQUEST
       }
-    }
 
-    "update page load" in {
+    "update page load" in
       validEditFormData.zip(expectedUserAnswers).foreach { case ((index, formData), userAnswers) =>
-        val postRequest  = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(formData.toSeq: _*)
+        val postRequest  = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(formData.toSeq*)
         val cacheService = noDataController.dataCacheService
 
         val controllerWithData = controller(new DataRetrievalActionImpl(cacheService))
@@ -156,7 +153,6 @@ trait AccumulatingEditingControllerBehaviours extends AccumulatingCachingControl
 
         status(result) shouldBe OK
       }
-    }
   }
 
 }
@@ -183,7 +179,7 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
   def mapCachingController[A: Format](
     controller: DataRetrievalAction => AccumulatingCachingController[Map[String, A], (String, A)],
     onwardRoute: Call,
-    createView: (Form[(String, A)], Call, Request[_]) => String,
+    createView: (Form[(String, A)], Call, Request[?]) => String,
     backgroundData: Map[String, JsValue],
     invalidFormData: Map[String, String],
     validFormData: List[Map[String, String]],
@@ -219,7 +215,7 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
   def accumulatingCachingController[F <: IterableOnce[A]: Format, A: Format](
     controller: DataRetrievalAction => AccumulatingCachingController[F, A],
     onwardRoute: Call,
-    createView: (Form[A], Call, Request[_]) => String,
+    createView: (Form[A], Call, Request[?]) => String,
     backgroundData: Map[String, JsValue],
     invalidFormData: Map[String, String],
     validFormData: List[Map[String, String]],
@@ -241,7 +237,7 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(validFormData.head.toSeq: _*)
+      val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(validFormData.head.toSeq*)
 
       val controllerWithData = controller(getEmptyCacheMap)
       val result             = controllerWithData.onSubmit(NormalMode)(postRequest)
@@ -254,7 +250,7 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, backgroundData)))
 
       val controllerWithData = controller(getRelevantData)
-      val postRequest        = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(invalidFormData.toSeq: _*)
+      val postRequest        = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(invalidFormData.toSeq*)
       val boundForm          = controllerWithData.form.bind(invalidFormData)
       val submitAction       = controllerWithData.submitAction(NormalMode)
 
@@ -264,9 +260,9 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
       contentAsString(result) shouldBe createView(boundForm, submitAction, postRequest)
     }
 
-    "accumulate valid data into the user answers" in {
+    "accumulate valid data into the user answers" in
       validFormData.zip(expectedUserAnswers).foreach { case (formData, userAnswers) =>
-        val postRequest  = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(formData.toSeq: _*)
+        val postRequest  = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(formData.toSeq*)
         val cacheService = noDataController.dataCacheService
 
         val controllerWithData = controller(new DataRetrievalActionImpl(cacheService))
@@ -277,7 +273,6 @@ trait AccumulatingCachingControllerBehaviours extends AnswerCachingControllerBeh
 
         await(cacheService.fetch(cacheMapId)).map(UserAnswers(_)) shouldBe Some(userAnswers)
       }
-    }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
       val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
@@ -300,7 +295,7 @@ trait YesNoCachingControllerBehaviours extends AnswerCachingControllerBehaviours
   def yesNoCachingController(
     controller: DataRetrievalAction => AnswerCachingController[Boolean],
     onwardRoute: Call,
-    createView: (Form[Boolean], Request[_]) => String,
+    createView: (Form[Boolean], Request[?]) => String,
     formField: String = "value",
     backgroundData: Map[String, JsValue] = Map.empty
   ): Unit = {
@@ -351,7 +346,7 @@ trait AnswerCachingControllerBehaviours { self: ControllerSpecBase =>
   def answerCachingController[A: Format](
     controller: DataRetrievalAction => AnswerCachingController[A],
     onwardRoute: Call,
-    createView: (Form[A], Request[_]) => String,
+    createView: (Form[A], Request[?]) => String,
     validFormData: Map[String, String],
     invalidFormData: Map[String, String],
     backgroundData: Map[String, JsValue],
@@ -371,7 +366,7 @@ trait AnswerCachingControllerBehaviours { self: ControllerSpecBase =>
       contentAsString(result) shouldBe createView(form, request)
     }
 
-    "populate the view correctly on a GET when the question has previously been answered" in {
+    "populate the view correctly on a GET when the question has previously been answered" in
       validAnswers.foreach { validAnswer =>
         val validData       = backgroundData + (noDataController.questionPage.toString -> Json.toJson(validAnswer))
         val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
@@ -383,10 +378,9 @@ trait AnswerCachingControllerBehaviours { self: ControllerSpecBase =>
 
         contentAsString(result) shouldBe createView(form.fill(validAnswer), request)
       }
-    }
 
     "redirect to the next page when valid data is submitted" in {
-      val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(validFormData.toSeq: _*)
+      val postRequest = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(validFormData.toSeq*)
 
       val result = controller(getEmptyCacheMap).onSubmit(NormalMode)(postRequest)
 
@@ -399,7 +393,7 @@ trait AnswerCachingControllerBehaviours { self: ControllerSpecBase =>
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
       val controllerWithData = controller(getRelevantData)
-      val postRequest        = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(invalidFormData.toSeq: _*)
+      val postRequest        = fakePOSTRequestWithCSRF.withFormUrlEncodedBody(invalidFormData.toSeq*)
       val boundForm          = controllerWithData.form.bind(invalidFormData)
 
       val result = controllerWithData.onSubmit(NormalMode)(postRequest)

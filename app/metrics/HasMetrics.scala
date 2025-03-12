@@ -17,47 +17,19 @@
 package metrics
 
 import com.codahale.metrics.{MetricRegistry, Timer}
-import play.api.mvc.{Action, MessagesBaseController, Result}
+import play.api.mvc._
 
 import java.util.concurrent.atomic.AtomicBoolean
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-trait HasActionMetrics extends HasMetrics { self: MessagesBaseController =>
-
-  /** Execute a [[play.api.mvc.Action]] with a metrics timer. Intended for use in controllers that return HTTP
-    * responses.
-    *
-    * @param metric
-    *   The id of the metric to be collected
-    * @param action
-    *   The action to wrap with metrics collection
-    * @param ec
-    *   The [[scala.concurrent.ExecutionContext]] on which the block of code should run
-    * @return
-    *   an action which captures metrics about the wrapped action
-    */
-  def withMetricsTimerAction[A](metric: Metric)(action: Action[A])(implicit ec: ExecutionContext): Action[A] =
-    Action(action.parser).async(request => withMetricsTimerResult(metric)(action(request)))
-}
-
 trait HasMetrics {
-  type Metric = String
 
   def metrics: MetricRegistry
 
-  private lazy val registry: MetricRegistry = metrics
+  val localMetrics = new LocalMetrics(metrics)
 
-  val localMetrics = new LocalMetrics
-
-  class LocalMetrics {
-    def startTimer(metric: Metric): Timer.Context     = registry.timer(s"$metric-timer").time()
-    def stopTimer(context: Timer.Context): Long       = context.stop()
-    def incrementSuccessCounter(metric: Metric): Unit = registry.counter(s"$metric-success-counter").inc()
-    def incrementFailedCounter(metric: Metric): Unit  = registry.counter(s"$metric-failed-counter").inc()
-  }
-
-  class MetricsTimer(metric: Metric) {
+  class MetricsTimer(metric: String) {
     val timer: Timer.Context = localMetrics.startTimer(metric)
     private val timerRunning = new AtomicBoolean(true)
 
@@ -88,7 +60,7 @@ trait HasMetrics {
     * @return
     *   The result of the block of code
     */
-  def withMetricsTimerResult(metric: Metric)(block: => Future[Result])(implicit ec: ExecutionContext): Future[Result] =
+  def withMetricsTimerResult(metric: String)(block: => Future[Result])(implicit ec: ExecutionContext): Future[Result] =
     withMetricsTimer(metric) { timer =>
       try {
         val result = block
@@ -134,7 +106,7 @@ trait HasMetrics {
     *   The result of the block of code
     */
   def withMetricsTimerAsync[T](
-    metric: Metric
+    metric: String
   )(block: MetricsTimer => Future[T])(implicit ec: ExecutionContext): Future[T] =
     withMetricsTimer(metric) { timer =>
       try {
@@ -155,7 +127,7 @@ trait HasMetrics {
       }
     }
 
-  private def withMetricsTimer[T](metric: Metric)(block: MetricsTimer => T): T =
+  private def withMetricsTimer[T](metric: String)(block: MetricsTimer => T): T =
     block(new MetricsTimer(metric))
 
   private def isFailureStatus(status: Int) =

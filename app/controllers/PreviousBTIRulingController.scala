@@ -47,7 +47,7 @@ class PreviousBTIRulingController @Inject() (
   lazy val form: Form[Boolean] = formProvider()
   val journey: YesNoJourney    = Journey.previousBTI
 
-  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+  def renderView(preparedForm: Form[Boolean], mode: Mode)(implicit request: DataRequest[?]): HtmlFormat.Appendable = {
     val goodsName: String = request.userAnswers.get(ProvideGoodsNamePage).getOrElse("goods")
     previousBTIRulingView(appConfig, preparedForm, goodsName, mode)
   }

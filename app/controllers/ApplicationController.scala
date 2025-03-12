@@ -53,16 +53,16 @@ class ApplicationController @Inject() (
   private type Eori          = String
   private type CaseReference = String
 
-  def applicationPdf(reference: String, token: Option[String]): Action[AnyContent] = identify.async {
-    implicit request => getPdfOrHtml(request.eoriNumber, reference, token, getApplicationPDF)
+  def applicationPdf(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+    getPdfOrHtml(request.eoriNumber, reference, token, getApplicationPDF)
   }
 
   def rulingCertificatePdf(reference: String, token: Option[String]): Action[AnyContent] = identify.async {
     implicit request => getPdfOrHtml(request.eoriNumber, reference, token, getRulingPDF)
   }
 
-  def coverLetterPdf(reference: String, token: Option[String]): Action[AnyContent] = identify.async {
-    implicit request => getPdfOrHtml(request.eoriNumber, reference, token, getLetterPDF)
+  def coverLetterPdf(reference: String, token: Option[String]): Action[AnyContent] = identify.async { implicit request =>
+    getPdfOrHtml(request.eoriNumber, reference, token, getLetterPDF)
   }
 
   def viewRulingCertificate(reference: String, token: Option[String]): Action[AnyContent] = identify.async {
@@ -124,7 +124,7 @@ class ApplicationController @Inject() (
 
   private def renderApplicationHtml(cse: Case)(implicit request: Request[AnyContent]): Future[Result] =
     for {
-      attachments <- fileService.getAttachmentMetadata(cse)
+      attachments <- fileService.getAttachmentMetadataForCase(cse)
       attachmentFileView = attachments.map { attachment =>
                              FileView(
                                id = attachment.id,
@@ -152,7 +152,7 @@ class ApplicationController @Inject() (
   private def getRulingPDF(eori: Eori, reference: CaseReference)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
-    caseService.getCaseWithRulingForUser(eori, reference).flatMap { c: Case =>
+    caseService.getCaseWithRulingForUser(eori, reference).flatMap { (c: Case) =>
       val rulingResponse = for {
         decision <- OptionT.fromOption[Future].apply(c.decision)
         pdf      <- OptionT.fromOption[Future](decision.decisionPdf)
@@ -174,7 +174,7 @@ class ApplicationController @Inject() (
   private def getLetterPDF(eori: Eori, reference: CaseReference)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
-    caseService.getCaseWithRulingForUser(eori, reference).flatMap { c: Case =>
+    caseService.getCaseWithRulingForUser(eori, reference).flatMap { (c: Case) =>
       val rulingResponse = for {
         decision <- OptionT.fromOption[Future].apply(c.decision)
         pdf      <- OptionT.fromOption[Future](decision.letterPdf)
@@ -196,7 +196,7 @@ class ApplicationController @Inject() (
   private def rulingCertificateHtmlView(eori: Eori, reference: CaseReference)(implicit
     request: Request[AnyContent]
   ): Future[Result] =
-    caseService.getCaseWithRulingForUser(eori, reference) flatMap { c: Case =>
+    caseService.getCaseWithRulingForUser(eori, reference) flatMap { (c: Case) =>
       Future.successful(Ok(rulingCertificateView(appConfig, c, getCountryName)))
     }
 

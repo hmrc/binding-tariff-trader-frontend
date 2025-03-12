@@ -16,7 +16,23 @@
 
 package models
 
-object CaseStatus extends Enumeration {
-  type CaseStatus = Value
-  val DRAFT, NEW, OPEN, SUPPRESSED, REFERRED, REJECTED, CANCELLED, SUSPENDED, COMPLETED, REVOKED, ANNULLED = Value
+import play.api.libs.json._
+
+enum CaseStatus {
+  case DRAFT, NEW, OPEN, SUPPRESSED, REFERRED, REJECTED, CANCELLED, SUSPENDED, COMPLETED, REVOKED, ANNULLED
+}
+
+object CaseStatus {
+  implicit val format: Format[CaseStatus] = new Format[CaseStatus] {
+    override def reads(json: JsValue): JsResult[CaseStatus] =
+      json.validate[String].flatMap { s =>
+        try
+          JsSuccess(CaseStatus.valueOf(s))
+        catch {
+          case _: IllegalArgumentException => JsError(s"Unknown CaseStatus: $s")
+        }
+      }
+
+    override def writes(status: CaseStatus): JsValue = JsString(status.toString)
+  }
 }

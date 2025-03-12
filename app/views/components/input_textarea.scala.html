@@ -51,7 +51,7 @@ captionMsg: Option[String] = None
         <span id="@{field.id}-hint" class="govuk-form-hint">@hint</span>
     }
     @field.errors.map { error =>
-        <span class="govuk-error-message" id="error-message-@{field.id}-input"><span class="govuk-visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args: _*)</span>
+        <span class="govuk-error-message" id="error-message-@{field.id}-input"><span class="govuk-visually-hidden">@messages("error.browser.title.prefix")</span>@messages(error.message, error.args*)</span>
     }
     <div class="form-control-wrapper char-counter" data-char-counter>
         <textarea class="govuk-textarea @if(field.hasErrors){govuk-textarea--error}"

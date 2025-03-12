@@ -29,7 +29,7 @@ class DataRetrievalActionImpl @Inject() (val dataCacheService: DataCacheService)
     extends DataRetrievalAction {
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
-    dataCacheService.fetch(request.identifier).map { maybeData: Option[CacheMap] =>
+    dataCacheService.fetch(request.identifier).map { (maybeData: Option[CacheMap]) =>
       OptionalDataRequest(request.request, request.identifier, request.eoriNumber, maybeData.map(UserAnswers(_)))
     }
 

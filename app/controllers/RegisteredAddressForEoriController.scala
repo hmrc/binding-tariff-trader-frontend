@@ -54,7 +54,7 @@ class RegisteredAddressForEoriController @Inject() (
   val questionPage: RegisteredAddressForEoriPage.type = RegisteredAddressForEoriPage
 
   def renderView(preparedForm: Form[RegisteredAddressForEori], mode: Mode)(implicit
-    request: DataRequest[_]
+    request: DataRequest[?]
   ): HtmlFormat.Appendable =
     registeredAddressForEoriView(appConfig, preparedForm, mode, countriesService.getAllCountries)
 

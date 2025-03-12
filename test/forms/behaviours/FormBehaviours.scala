@@ -24,7 +24,7 @@ trait FormBehaviours extends FormSpec {
 
   val validData: Map[String, String]
 
-  val form: Form[_]
+  val form: Form[?]
 
   def questionForm[A](expectedResult: A): Unit =
     "bind valid values correctly" in {

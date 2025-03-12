@@ -27,7 +27,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, form: Form[String], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[String], mode: Mode, goodsName: String)(implicit request: Request[?], messages: Messages)
 
 @contents = {
     <p class="govuk-body">@messages("commodityCodeDigits.bodyText")</p>
@@ -37,7 +37,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("commodityCodeDigits.title", goodsName)}"
 ) {
 
-    @formWithCSRF(action = CommodityCodeDigitsController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.CommodityCodeDigitsController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

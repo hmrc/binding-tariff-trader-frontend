@@ -24,7 +24,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
   private val answer = "answer"
 
   private def getMessage(key: String, args: String*): Option[String] =
-    messages(key, args: _*) match {
+    messages(key, args*) match {
       case m if m == key => None
       case s             => Some(s)
     }
@@ -33,7 +33,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
     getMessage(s"$messageKeyPrefix.label") match {
       case Some(l) => l
       case _ =>
-        getMessage(s"$messageKeyPrefix.heading", args: _*) match {
+        getMessage(s"$messageKeyPrefix.heading", args*) match {
           case Some(h) => h
           case _       => ""
         }
@@ -93,7 +93,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         "contain a label for the value" in {
           val doc              = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
-          val expectedLabel    = getExpectedLabel(messageKeyPrefix, messageArgs: _*)
+          val expectedLabel    = getExpectedLabel(messageKeyPrefix, messageArgs*)
 
           assertContainsLabel(doc, expectedFormElementId, expectedLabel, expectedHintText)
         }
@@ -137,8 +137,8 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
           doc,
           "title",
           s"""${messages("error.browser.title.prefix")} ${messages(
-            s"$messageKeyPrefix.title"
-          )}"""
+              s"$messageKeyPrefix.title"
+            )}"""
         )
       }
     }

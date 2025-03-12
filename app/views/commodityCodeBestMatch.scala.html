@@ -27,7 +27,7 @@
     formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, form: Form[Boolean], mode: Mode, goodsName: String)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[Boolean], mode: Mode, goodsName: String)(implicit request: Request[?], messages: Messages)
 
 @contents = {
     <div class="govuk-form-group">
@@ -38,7 +38,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("commodityCodeBestMatch.title")}"
 ) {
 
-    @formWithCSRF(action = CommodityCodeBestMatchController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.CommodityCodeBestMatchController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 

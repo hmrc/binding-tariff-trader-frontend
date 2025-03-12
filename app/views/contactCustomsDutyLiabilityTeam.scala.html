@@ -22,7 +22,7 @@
 )
 
 
-@(appConfig: FrontendAppConfig, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @govukLayoutWrapper(
     pageTitle = s"${messages("contactCustomsDutyLiabilityTeam.title")}",

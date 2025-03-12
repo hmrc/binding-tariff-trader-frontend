@@ -17,12 +17,11 @@
 package utils
 
 import base.SpecBase
-import models._
+import models.*
 import models.requests.DataRequest
-import org.mockito.ArgumentMatchers._
-import org.mockito.BDDMockito.given
-import org.mockito.Mockito.mock
-import pages._
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.{mock, when}
+import pages.*
 import play.api.libs.json.Reads
 import play.api.test.FakeRequest
 import service.CountriesService
@@ -42,47 +41,47 @@ class CheckYourAnswersHelperSpec extends SpecBase {
     "rendering yes/no pages" must {
 
       "return a row with the correct answer for CommodityCodeBestMatchPage" in {
-        given(userAnswers.get(CommodityCodeBestMatchPage)).willReturn(Option(true))
+        when(userAnswers.get(CommodityCodeBestMatchPage)).thenReturn(Option(true))
         checkHelper.commodityCodeBestMatch.get.answer shouldBe "site.yes"
       }
 
       "return a row with the correct answer for AreYouSendingSamplesPage" in {
-        given(userAnswers.get(AreYouSendingSamplesPage)).willReturn(Option(true))
+        when(userAnswers.get(AreYouSendingSamplesPage)).thenReturn(Option(true))
         checkHelper.areYouSendingSamples.get.answer shouldBe "site.yes"
       }
 
       "return a row with the correct answer for IsSampleHazardous" in {
-        given(userAnswers.get(IsSampleHazardousPage)).willReturn(Option(true))
+        when(userAnswers.get(IsSampleHazardousPage)).thenReturn(Option(true))
         checkHelper.isSampleHazardous.get.answer shouldBe "site.yes"
       }
 
       "return a row with the correct answer for ReturnSamplesPage" in {
-        given(userAnswers.get(ReturnSamplesPage)).willReturn(Option(true))
+        when(userAnswers.get(ReturnSamplesPage)).thenReturn(Option(true))
         checkHelper.returnSamples.get.answer shouldBe "site.yes"
       }
 
       "return a row with the correct answer for LegalChallengePage" in {
-        given(userAnswers.get(LegalChallengePage)).willReturn(Option(false))
+        when(userAnswers.get(LegalChallengePage)).thenReturn(Option(false))
         checkHelper.legalChallenge.get.answer shouldBe "site.no"
       }
 
       "return a row with the correct answer for SimilarItemCommodityCodePage" in {
-        given(userAnswers.get(SimilarItemCommodityCodePage)).willReturn(Option(true))
+        when(userAnswers.get(SimilarItemCommodityCodePage)).thenReturn(Option(true))
         checkHelper.similarItemCommodityCode.get.answer shouldBe "site.yes"
       }
 
       "return a row with the correct answer for PreviousBTIRulingPage" in {
-        given(userAnswers.get(PreviousBTIRulingPage)).willReturn(Option(true))
+        when(userAnswers.get(PreviousBTIRulingPage)).thenReturn(Option(true))
         checkHelper.previousBTIRuling.get.answer shouldBe "site.yes"
       }
 
       "return a row with the correct answer for AddConfidentialInformationPage" in {
-        given(userAnswers.get(AddConfidentialInformationPage)).willReturn(Option(true))
+        when(userAnswers.get(AddConfidentialInformationPage)).thenReturn(Option(true))
         checkHelper.addConfidentialInformation().get.answer shouldBe "site.yes"
       }
 
       "return a row with the correct answer for AddSupportingDocumentsPage" in {
-        given(userAnswers.get(AddSupportingDocumentsPage)).willReturn(Option(true))
+        when(userAnswers.get(AddSupportingDocumentsPage)).thenReturn(Option(true))
         checkHelper.supportingMaterialFileListChoice.get.answer shouldBe "site.yes"
       }
     }
@@ -90,82 +89,82 @@ class CheckYourAnswersHelperSpec extends SpecBase {
     "rendering information pages" must {
 
       "return a row with the correct answer for CommodityCodeDigitsPage" in {
-        given(userAnswers.get(CommodityCodeDigitsPage)).willReturn(Option("12131233241324"))
+        when(userAnswers.get(CommodityCodeDigitsPage)).thenReturn(Option("12131233241324"))
         checkHelper.commodityCodeDigits.get.answer shouldBe "12131233241324"
       }
 
       "return a row with the correct answer for LegalChallengeDetailsPage" in {
-        given(userAnswers.get(LegalChallengeDetailsPage)).willReturn(Option("Legal challenge"))
+        when(userAnswers.get(LegalChallengeDetailsPage)).thenReturn(Option("Legal challenge"))
         checkHelper.legalChallengeDetails.get.answer shouldBe "Legal challenge"
       }
 
       "return a row with the correct answer for CommodityCodeRulingReferencePage" in {
-        given(userAnswers.get(any[CommodityCodeRulingReferencePage.type])(any[Reads[List[String]]]))
-          .willReturn(Option(List("code ruling")))
+        when(userAnswers.get(any[CommodityCodeRulingReferencePage.type])(any[Reads[List[String]]]))
+          .thenReturn(Option(List("code ruling")))
         checkHelper.commodityCodeRulingReference.get.answer shouldBe "code ruling"
       }
 
       "return a row with the correct answer for ProvideBTIReferencePage" in {
-        given(userAnswers.get(ProvideBTIReferencePage)).willReturn(Option(BTIReference("122523847624")))
+        when(userAnswers.get(ProvideBTIReferencePage)).thenReturn(Option(BTIReference("122523847624")))
         checkHelper.provideBTIReference.get.answer shouldBe "122523847624"
       }
 
       "return a row with the correct answer for EnterContactDetailsPage Name" in {
-        given(userAnswers.get(EnterContactDetailsPage))
-          .willReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
+        when(userAnswers.get(EnterContactDetailsPage))
+          .thenReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
         checkHelper.enterContactDetailsName.get.answer shouldBe "name"
       }
 
       "return a row with the correct answer for EnterContactDetailsPage Email" in {
-        given(userAnswers.get(EnterContactDetailsPage))
-          .willReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
+        when(userAnswers.get(EnterContactDetailsPage))
+          .thenReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
         checkHelper.enterContactDetailsEmail.get.answer shouldBe "email"
       }
 
       "return a row with the correct answer for EnterContactDetailsPage Telephone" in {
-        given(userAnswers.get(EnterContactDetailsPage))
-          .willReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
+        when(userAnswers.get(EnterContactDetailsPage))
+          .thenReturn(Option(EnterContactDetails("name", "email", "phoneNumber")))
         checkHelper.enterContactDetailsPhone.get.answer shouldBe "phoneNumber"
       }
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check disabled" in {
         val requestWithoutEori = DataRequest(FakeRequest(), "", None, mock(classOf[UserAnswers]))
-        given(userAnswers.get(RegisteredAddressForEoriPage))
-          .willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
+        when(userAnswers.get(RegisteredAddressForEoriPage))
+          .thenReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
         checkHelper.registeredAddressForEori(requestWithoutEori).get.answer shouldBe "eori\nf1\nf2\nf3\nf4\nIreland"
       }
 
       "return a row with the correct answer for RegisteredAddressForEoriPage when CDS check enabled" in {
         val requestWithEori = DataRequest(FakeRequest(), "", Some("eori"), mock(classOf[UserAnswers]))
-        given(userAnswers.get(RegisteredAddressForEoriPage))
-          .willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
+        when(userAnswers.get(RegisteredAddressForEoriPage))
+          .thenReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
         checkHelper.registeredAddressForEori(requestWithEori).get.answer shouldBe "f1\nf2\nf3\nf4\nIreland"
       }
 
       "return a row with the correct answer for registered name" in {
-        given(userAnswers.get(RegisteredAddressForEoriPage))
-          .willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
+        when(userAnswers.get(RegisteredAddressForEoriPage))
+          .thenReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
         checkHelper.registeredName.get.answer shouldBe "f1"
       }
 
       "return a row with the correct answer for registered address" in {
-        given(userAnswers.get(RegisteredAddressForEoriPage))
-          .willReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
+        when(userAnswers.get(RegisteredAddressForEoriPage))
+          .thenReturn(Option(RegisteredAddressForEori("eori", "f1", "f2", "f3", Some("f4"), "IE")))
         checkHelper.registeredAddress.get.answer shouldBe "f2\nf3\nf4\nIreland"
       }
 
       "return a row with the correct answer for ProvideGoodsNamePage" in {
-        given(userAnswers.get(ProvideGoodsNamePage)).willReturn(Option("Goods Name"))
+        when(userAnswers.get(ProvideGoodsNamePage)).thenReturn(Option("Goods Name"))
         checkHelper.provideGoodsName.get.answer shouldBe "Goods Name"
       }
 
       "return a row with the correct answer for ProvideGoodsDescriptionPage" in {
-        given(userAnswers.get(ProvideGoodsDescriptionPage)).willReturn(Option("Goods Description"))
+        when(userAnswers.get(ProvideGoodsDescriptionPage)).thenReturn(Option("Goods Description"))
         checkHelper.provideGoodsDescription.get.answer shouldBe "Goods Description"
       }
 
       "return a row with the correct answer for ProvideConfidentialInformationPage" in {
-        given(userAnswers.get(ProvideConfidentialInformationPage)).willReturn(Option("Confidential info"))
+        when(userAnswers.get(ProvideConfidentialInformationPage)).thenReturn(Option("Confidential info"))
         checkHelper.provideConfidentialInformation.get.answer shouldBe "Confidential info"
       }
     }

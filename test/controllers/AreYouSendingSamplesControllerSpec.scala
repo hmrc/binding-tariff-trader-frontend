@@ -52,7 +52,7 @@ class AreYouSendingSamplesControllerSpec extends ControllerSpecBase with YesNoCa
 
   private def onwardRoute: Call = Call("GET", "/foo")
 
-  private def viewAsString(form: Form[Boolean], request: Request[_]): String =
+  private def viewAsString(form: Form[Boolean], request: Request[?]): String =
     areYouSendingSamplesView(frontendAppConfig, form, NormalMode, goodsName)(request, messages).toString
 
   "AreYouSendingSamplesController" must {

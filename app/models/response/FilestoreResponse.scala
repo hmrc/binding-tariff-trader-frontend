@@ -16,7 +16,7 @@
 
 package models.response
 
-import models.ScanStatus.ScanStatus
+import models.ScanStatus
 import play.api.libs.json.{Json, OFormat}
 
 case class FilestoreResponse(

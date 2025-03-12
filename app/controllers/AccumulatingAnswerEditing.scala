@@ -39,7 +39,7 @@ trait AccumulatingAnswerEditing[F <: IterableOnce[A], A, I] extends Accumulating
     index: I,
     answer: A,
     mode: Mode
-  )(implicit request: DataRequest[_], writes: Format[F], ec: ExecutionContext): Future[Result] =
+  )(implicit request: DataRequest[?], writes: Format[F], ec: ExecutionContext): Future[Result] =
     request.userAnswers
       .get(questionPage)
       .map { fa =>

@@ -51,7 +51,7 @@ class LegalChallengeDetailsControllerSpec extends ControllerSpecBase with Answer
       legalChallengeDetailsView
     )
 
-  def viewAsString(form: Form[String], request: Request[_]): String =
+  def viewAsString(form: Form[String], request: Request[?]): String =
     legalChallengeDetailsView(frontendAppConfig, form, NormalMode, "goodsName")(request, messages).toString
 
   val testAnswer                            = "answer"

@@ -22,7 +22,7 @@
 
 )
 
-@(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, c: Case)(implicit request: Request[?], messages: Messages)
 
     @govukLayoutWrapper(
         pageTitle = s"${messages("rulingInformation.title")}"

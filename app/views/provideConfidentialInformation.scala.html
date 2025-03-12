@@ -27,7 +27,7 @@
     formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, provideConfidentialInformationForm: Form[String], goodsName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, provideConfidentialInformationForm: Form[String], goodsName: String, mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @contents = {
     <p class="govuk-body">@messages("provideConfidentialInformation.description")</p>
@@ -46,7 +46,7 @@
     pageTitle = s"${errorPrefix(provideConfidentialInformationForm)} ${messages("provideConfidentialInformation.title", goodsName)}",
 ) {
 
-    @formWithCSRF(action = ProvideConfidentialInformationController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formWithCSRF(action = controllers.routes.ProvideConfidentialInformationController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @components.error_summary(provideConfidentialInformationForm.errors)
 

@@ -17,13 +17,13 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.client.WireMock._
-import models._
+import com.github.tomakehurst.wiremock.client.WireMock.*
+import models.*
 import models.requests.NewEventRequest
 import play.api.http.Status.{BAD_GATEWAY, NOT_FOUND, OK}
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
-import utils.JsonFormatters._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, UpstreamErrorResponse}
+import utils.JsonFormatters.*
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,7 +35,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
   }
 
   private def withHeaderCarrier(value: String): HeaderCarrier =
-    HeaderCarrier(extraHeaders = Seq("X-Api-Token" -> value))
+    HeaderCarrier(otherHeaders = Seq("X-Api-Token" -> value))
 
   val btiCaseExample: Case = oCase.btiCaseExample
   val responseJSON: String = Json.toJson(btiCaseExample).toString()

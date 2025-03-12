@@ -29,7 +29,7 @@
     formWithCSRF: FormWithCSRF
 )
 
-@(appConfig: FrontendAppConfig, form: Form[Boolean], goodsName: String, files: Seq[FileView], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(appConfig: FrontendAppConfig, form: Form[Boolean], goodsName: String, files: Seq[FileView], mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @headingMessage = @{if(files.size == 1){messages("supportingMaterialFileList.uploadFileCounter.singular", goodsName)} else {messages("supportingMaterialFileList.uploadFileCounter.plural", files.size, goodsName)}}
 
@@ -37,7 +37,7 @@
     pageTitle = s"${errorPrefix(form)} ${if(files.size == 1) {messages("supportingMaterialFileList.title.singular", goodsName)} else {messages("supportingMaterialFileList.title.plural", files.size, goodsName)}}"
 ) {
 
-    @formWithCSRF(action = SupportingMaterialFileListController.onSubmit(mode)) {
+    @formWithCSRF(action = controllers.routes.SupportingMaterialFileListController.onSubmit(mode)) {
 
         @components.error_summary(form.errors)
 
