@@ -44,4 +44,10 @@ class FakeDataCacheService(initialData: Map[String, CacheMap]) extends DataCache
 
     true
   }
+
+  override def keepAlive(cacheMap: CacheMap, expiryTime: Long): Future[CacheMap] = Future.successful {
+    cache.getAndUpdate(current => current.updated(cacheMap.id, cacheMap))
+
+    cacheMap
+  }
 }

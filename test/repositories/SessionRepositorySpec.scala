@@ -70,6 +70,24 @@ class SessionRepositorySpec extends SpecBase with ScalaFutures with BeforeAndAft
       getResult.map(_.data) shouldBe Some(updatedData)
     }
 
+    "update the index for the expiry time of cache of collection" in {
+      val id         = "test-id"
+      val data       = Map("map-test" -> Json.obj("key" -> "value"))
+      val cacheMap   = CacheMap(id, data)
+      val expiryTime = 1L
+
+      repository.upsert(cacheMap).futureValue
+      val getResult = repository.get(id).futureValue
+      getResult shouldBe defined
+
+      repository.extendTime(cacheMap, expiryTime).futureValue
+      println(repository.indexes.foreach(b => println(b)))
+      println(repository.extendTime(cacheMap, expiryTime).futureValue)
+      Thread.sleep(20000)
+
+      repository.get(id).futureValue shouldBe None
+    }
+
     "return None when getting a non-existent cache map" in {
       val id = "non-existent-id"
 

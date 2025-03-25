@@ -16,6 +16,7 @@
 
 package repositories
 
+import com.mongodb.client.model.Indexes
 import com.mongodb.client.model.Indexes.ascending
 import models.cache.*
 import org.bson.conversions.Bson
@@ -60,6 +61,18 @@ class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)
       .find(byId(id))
       .headOption()
       .map(cacheMapOpt => cacheMapOpt.map(cacheMap => CacheMap(cacheMap.id, cacheMap.data)))
+
+  def extendTime(cm: CacheMap, expiryTime: Long): Future[String] =
+    collection.dropIndex(
+      "userAnswersExpiry"
+    )
+
+    collection
+      .createIndex(
+        Indexes.ascending("userAnswersExpiry"),
+        IndexOptions().expireAfter(expiryTime, TimeUnit.SECONDS)
+      )
+      .toFuture()
 
   def remove(cm: CacheMap): Future[Boolean] =
     collection.deleteOne(byId(cm.id)).toFuture().map(_.wasAcknowledged())
