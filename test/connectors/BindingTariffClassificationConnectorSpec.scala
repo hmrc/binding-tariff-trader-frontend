@@ -22,7 +22,7 @@ import models.*
 import models.requests.NewEventRequest
 import play.api.http.Status.{BAD_GATEWAY, NOT_FOUND, OK}
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import utils.JsonFormatters.*
 
 import java.time.Instant

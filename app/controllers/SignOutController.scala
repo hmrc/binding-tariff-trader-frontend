@@ -57,7 +57,7 @@ class SignOutController @Inject() (
   }
 
   def keepAlive(): Action[AnyContent] = (identify andThen getData).async { implicit request =>
-    keepDataCache(request, 7200L)
+    keepDataCache(request)
     successful(Ok("OK"))
   }
 
@@ -69,6 +69,8 @@ class SignOutController @Inject() (
   private def clearDataCache(request: OptionalDataRequest[AnyContent]): Option[Future[Boolean]] =
     request.userAnswers map { answer => dataCacheService.remove(answer.cacheMap) }
 
-  private def keepDataCache(request: OptionalDataRequest[AnyContent], expiryTime: Long): Option[Future[CacheMap]] =
-    request.userAnswers map { answer => dataCacheService.keepAlive(answer.cacheMap, expiryTime) }
+  private def keepDataCache(request: OptionalDataRequest[AnyContent]): Option[Future[CacheMap]] =
+    request.userAnswers map { answer =>
+      dataCacheService.keepAlive(answer.cacheMap, appConfig.extendedTimeOutInSeconds)
+    }
 }

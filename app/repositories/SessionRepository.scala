@@ -62,17 +62,16 @@ class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)
       .headOption()
       .map(cacheMapOpt => cacheMapOpt.map(cacheMap => CacheMap(cacheMap.id, cacheMap.data)))
 
-  def extendTime(cm: CacheMap, expiryTime: Long): Future[String] =
-    collection.dropIndex(
-      "userAnswersExpiry"
-    )
-
+  def extendTime(cm: CacheMap, expiry: Long): Future[Boolean] =
     collection
-      .createIndex(
-        Indexes.ascending("userAnswersExpiry"),
-        IndexOptions().expireAfter(expiryTime, TimeUnit.SECONDS)
-      )
-      .toFuture()
+      .find(byId(cm.id))
+      .headOption()
+      .flatMap {
+        case Some(cmo) =>
+          val updatedExpiry = cmo.copy(lastUpdated = cmo.lastUpdated.plusSeconds(expiry))
+          collection.replaceOne(byId(cm.id), updatedExpiry).toFuture().map(_.wasAcknowledged())
+        case None => Future.successful(false)
+      }
 
   def remove(cm: CacheMap): Future[Boolean] =
     collection.deleteOne(byId(cm.id)).toFuture().map(_.wasAcknowledged())
