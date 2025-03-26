@@ -19,6 +19,7 @@ package repositories
 import base.SpecBase
 import models.cache.CacheMap
 import org.mongodb.scala.SingleObservableFuture
+import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
@@ -70,26 +71,34 @@ class SessionRepositorySpec extends SpecBase with ScalaFutures with BeforeAndAft
       getResult.map(_.data) shouldBe Some(updatedData)
     }
 
-    "update the index for the expiry time of cache of collection" in {
-      val id         = "test-id"
-      val data       = Map("map-test" -> Json.obj("key" -> "value"))
-      val cacheMap   = CacheMap(id, data)
-      val expiryTime = 1L
-
-      repository.upsert(cacheMap).futureValue
-      val getResult = repository.get(id).futureValue
-      getResult shouldBe defined
-
-      repository.extendTime(cacheMap, expiryTime).futureValue
-      println(repository.indexes.foreach(b => println(b)))
-      println(repository.extendTime(cacheMap, expiryTime).futureValue)
-      Thread.sleep(20000)
+    "return None when getting a non-existent cache map" in {
+      val id = "non-existent-id"
 
       repository.get(id).futureValue shouldBe None
     }
 
-    "return None when getting a non-existent cache map" in {
-      val id = "non-existent-id"
+    "update the index for the expiry time of cache map if exists" in {
+      val id         = "test-id"
+      val data       = Map("map-test" -> Json.obj("key" -> "value"))
+      val cacheMap   = CacheMap(id, data)
+      val expiryTime = 10L
+
+      repository.upsert(cacheMap)
+      repository.extendTime(cacheMap, expiryTime).futureValue shouldBe true
+
+      val getResult = repository.get(id).futureValue
+      getResult           shouldBe defined
+      getResult.map(_.id) shouldBe Some(id)
+    }
+
+    ".expiryTime should return None when getting a non-existent cache map" in {
+      val id       = "test-id"
+      val data     = Map("map-test" -> Json.obj("key" -> "value"))
+      val cacheMap = CacheMap("id", data)
+
+      val expiryTime = 10L
+
+      repository.extendTime(cacheMap, expiryTime).futureValue shouldBe false
 
       repository.get(id).futureValue shouldBe None
     }
