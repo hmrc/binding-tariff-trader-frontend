@@ -19,6 +19,7 @@ package repositories
 import base.SpecBase
 import models.cache.CacheMap
 import org.mongodb.scala.SingleObservableFuture
+import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
