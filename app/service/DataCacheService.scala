@@ -43,6 +43,11 @@ class MongoCacheService @Inject() (
       fetch(cacheId).map(optionalCacheMap => optionalCacheMap.flatMap(cacheMap => cacheMap.getEntry(key)))
     }
 
+  def keepAlive(cacheMap: CacheMap, expiry: Long): Future[CacheMap] =
+    withMetricsTimerAsync("mongo-cache-keep-alive")(_ =>
+      sessionRepository.extendTime(cacheMap, expiry).map(_ => cacheMap)
+    )
+
   def remove(cacheMap: CacheMap): Future[Boolean] =
     withMetricsTimerAsync("mongo-cache-remove")(_ => sessionRepository.remove(cacheMap))
 }
@@ -56,5 +61,7 @@ trait DataCacheService {
   def getEntry[A](cacheId: String, key: String)(implicit fmt: Format[A]): Future[Option[A]]
 
   def remove(cacheMap: CacheMap): Future[Boolean]
+
+  def keepAlive(cacheMap: CacheMap, expiry: Long): Future[CacheMap]
 
 }

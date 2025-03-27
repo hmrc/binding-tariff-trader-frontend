@@ -16,6 +16,7 @@
 
 package repositories
 
+import com.mongodb.client.model.Indexes
 import com.mongodb.client.model.Indexes.ascending
 import models.cache.*
 import org.bson.conversions.Bson
@@ -60,6 +61,17 @@ class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)
       .find(byId(id))
       .headOption()
       .map(cacheMapOpt => cacheMapOpt.map(cacheMap => CacheMap(cacheMap.id, cacheMap.data)))
+
+  def extendTime(cm: CacheMap, expiry: Long): Future[Boolean] =
+    collection
+      .find(byId(cm.id))
+      .headOption()
+      .flatMap {
+        case Some(cmo) =>
+          val updatedExpiry = cmo.copy(lastUpdated = cmo.lastUpdated.plusSeconds(expiry))
+          collection.replaceOne(byId(cm.id), updatedExpiry).toFuture().map(_.wasAcknowledged())
+        case None => Future.successful(false)
+      }
 
   def remove(cm: CacheMap): Future[Boolean] =
     collection.deleteOne(byId(cm.id)).toFuture().map(_.wasAcknowledged())

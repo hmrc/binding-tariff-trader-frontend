@@ -71,6 +71,7 @@ class FrontendAppConfig @Inject() (
   lazy val timeOutCountDownSeconds: Int = runModeConfiguration
     .getOptional[Int]("timeoutDialog.time-out-countdown-seconds")
     .getOrElse(timeOutCountDownSecondsAlternative)
+  lazy val extendedTimeOutInSeconds: Int = timeOutSeconds + timeOutCountDownSeconds + 60
 
   lazy val host: String = loadConfig("host")
 

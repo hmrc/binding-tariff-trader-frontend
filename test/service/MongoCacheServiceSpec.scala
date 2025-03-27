@@ -62,6 +62,27 @@ class MongoCacheServiceSpec
 
   }
 
+//  ".keepAlive" must {
+//
+//    "keep the cache map for the length of 2 hours in the Mongo repository" in {
+//
+//      when(repository.extendTime(any[CacheMap])).thenReturn(Future.successful(true))
+//
+//      val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
+//
+//      forAll(arbitrary[CacheMap]) { cacheMap =>
+//        val result = mongoCacheService.keepAlive(cacheMap)
+//
+//        whenReady(result) { savedCacheMap =>
+//          println(savedCacheMap)
+//          savedCacheMap shouldEqual cacheMap
+//          verify(repository).extendTime(cacheMap)
+//        }
+//
+//      }
+//    }
+//  }
+
   ".remove" must {
 
     "remove the cache map to the Mongo repository" in {

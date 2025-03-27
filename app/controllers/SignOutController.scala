@@ -18,6 +18,7 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
+import models.cache.CacheMap
 import models.requests.OptionalDataRequest
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
@@ -55,7 +56,8 @@ class SignOutController @Inject() (
     Redirect(routes.IndexController.getApplicationsAndRulings(1, None, None)).withNewSession
   }
 
-  def keepAlive(): Action[AnyContent] = Action.async {
+  def keepAlive(): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+    keepDataCache(request)
     successful(Ok("OK"))
   }
 
@@ -66,4 +68,9 @@ class SignOutController @Inject() (
 
   private def clearDataCache(request: OptionalDataRequest[AnyContent]): Option[Future[Boolean]] =
     request.userAnswers map { answer => dataCacheService.remove(answer.cacheMap) }
+
+  private def keepDataCache(request: OptionalDataRequest[AnyContent]): Option[Future[CacheMap]] =
+    request.userAnswers map { answer =>
+      dataCacheService.keepAlive(answer.cacheMap, appConfig.extendedTimeOutInSeconds)
+    }
 }
