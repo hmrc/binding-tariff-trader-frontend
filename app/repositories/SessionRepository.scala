@@ -28,6 +28,7 @@ import play.api.libs.json.OFormat
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -68,7 +69,7 @@ class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)
       .headOption()
       .flatMap {
         case Some(cmo) =>
-          val updatedExpiry = cmo.copy(lastUpdated = cmo.lastUpdated.plusSeconds(expiry))
+          val updatedExpiry = cmo.copy(lastUpdated = Instant.now().plusSeconds(expiry))
           collection.replaceOne(byId(cm.id), updatedExpiry).toFuture().map(_.wasAcknowledged())
         case None => Future.successful(false)
       }
