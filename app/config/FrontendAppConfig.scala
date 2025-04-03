@@ -59,6 +59,9 @@ class FrontendAppConfig @Inject() (
   private lazy val feedbackServiceName: String = "ABTIR"
   lazy val feedbackSurvey: String              = s"$feedbackUrl/feedback/$feedbackServiceName"
 
+  private lazy val basGatewayBaseUrl: String = loadConfig("bas-gateway.host")
+  lazy val signOutUrl: String                     = s"$basGatewayBaseUrl/bas-gateway/sign-out-without-state"
+
   lazy val apiToken: String = loadConfig("auth.api-token")
 
   lazy val aesKey: String = loadConfig("pdfService.aes-key")

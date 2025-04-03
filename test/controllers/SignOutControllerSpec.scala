@@ -53,7 +53,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
     "return 200 for a start feedback survey" in {
       val result: Future[Result] = controller.startFeedbackSurvey(fakeRequestWithEori)
       status(result)             shouldBe SEE_OTHER
-      redirectLocation(result).get should endWith("/feedback/ABTIR")
+      redirectLocation(result).get should endWith("feedback%2FABTIR")
     }
 
     "clear user cache when present" in {
@@ -64,13 +64,13 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
 
   "Force sign out controller" must {
 
-    "return 200 for a start feedback survey" in {
+    "return 200 and call bas gateway" in {
       val request = fakeRequestWithEori
       when(btaUserService.remove(request.internalId)).thenReturn(Future.successful(true))
 
       val result: Future[Result] = controller.forceSignOut(request)
       status(result)             shouldBe SEE_OTHER
-      redirectLocation(result).get should endWith("/this-service-has-been-reset")
+      redirectLocation(result).get should endWith("/bas-gateway/sign-out-without-state")
     }
 
     "clear user cache when present" in {

@@ -42,13 +42,13 @@ class SignOutController @Inject() (
 
   def startFeedbackSurvey: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     clearDataCache(request)
-    successful(SeeOther(appConfig.feedbackSurvey).withNewSession)
+    successful(Results.Redirect(appConfig.signOutUrl, Map("continue" -> Seq(appConfig.feedbackSurvey))))
   }
 
   def forceSignOut: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     clearDataCache(request)
     urlCacheService.remove(request.internalId).flatMap { _ =>
-      successful(Results.Redirect(routes.SessionExpiredController.onPageLoad).withNewSession)
+      successful(Results.Redirect(appConfig.signOutUrl))
     }
   }
 
