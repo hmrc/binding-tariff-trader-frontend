@@ -21,21 +21,17 @@ import models.cache.CacheMap
 import org.mongodb.scala.SingleObservableFuture
 import org.mongodb.scala.model.Filters
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.concurrent.PatienceConfiguration.Timeout
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.Span
 import play.api.libs.json.Json
 import uk.gov.hmrc.mongo.test.MongoSupport
 
-class SessionRepositorySpec extends SpecBase with ScalaFutures with BeforeAndAfterEach with MongoSupport {
+class SessionRepositorySpec extends SpecBase with BeforeAndAfterEach with MongoSupport {
 
-  private val repository        = app.injector.instanceOf[SessionRepository]
-  implicit val timeout: Timeout = Timeout(Span(5, org.scalatest.time.Seconds))
+  private val repository = app.injector.instanceOf[SessionRepository]
 
   override def beforeEach(): Unit = {
     super.beforeEach()
 
-    repository.collection.deleteMany(Filters.empty()).toFuture().futureValue
+    await(repository.collection.deleteMany(Filters.empty()).toFuture())
   }
 
   "SessionRepository" should {
@@ -45,9 +41,9 @@ class SessionRepositorySpec extends SpecBase with ScalaFutures with BeforeAndAft
       val data     = Map("map-test" -> Json.obj("key" -> "value"))
       val cacheMap = CacheMap(id, data)
 
-      repository.upsert(cacheMap).futureValue shouldBe true
+      await(repository.upsert(cacheMap)) shouldBe true
 
-      val result = repository.get(id).futureValue
+      val result = await(repository.get(id))
       result             shouldBe defined
       result.map(_.id)   shouldBe Some(id)
       result.map(_.data) shouldBe Some(data)
@@ -61,10 +57,10 @@ class SessionRepositorySpec extends SpecBase with ScalaFutures with BeforeAndAft
       val initialCacheMap = CacheMap(id, initialData)
       val updatedCacheMap = CacheMap(id, updatedData)
 
-      repository.upsert(initialCacheMap).futureValue
-      repository.upsert(updatedCacheMap).futureValue shouldBe true
+      await(repository.upsert(initialCacheMap))
+      await(repository.upsert(updatedCacheMap)) shouldBe true
 
-      val getResult = repository.get(id).futureValue
+      val getResult = await(repository.get(id))
       getResult             shouldBe defined
       getResult.map(_.id)   shouldBe Some(id)
       getResult.map(_.data) shouldBe Some(updatedData)
@@ -73,7 +69,7 @@ class SessionRepositorySpec extends SpecBase with ScalaFutures with BeforeAndAft
     "return None when getting a non-existent cache map" in {
       val id = "non-existent-id"
 
-      repository.get(id).futureValue shouldBe None
+      await(repository.get(id)) shouldBe None
     }
 
     "update the index for the expiry time of cache map if exists" in {
@@ -82,10 +78,10 @@ class SessionRepositorySpec extends SpecBase with ScalaFutures with BeforeAndAft
       val cacheMap   = CacheMap(id, data)
       val expiryTime = 10L
 
-      repository.upsert(cacheMap)
-      repository.extendTime(cacheMap, expiryTime).futureValue shouldBe true
+      await(repository.upsert(cacheMap))
+      await(repository.extendTime(cacheMap, expiryTime)) shouldBe true
 
-      val getResult = repository.get(id).futureValue
+      val getResult = await(repository.get(id))
       getResult           shouldBe defined
       getResult.map(_.id) shouldBe Some(id)
     }
@@ -97,9 +93,9 @@ class SessionRepositorySpec extends SpecBase with ScalaFutures with BeforeAndAft
 
       val expiryTime = 10L
 
-      repository.extendTime(cacheMap, expiryTime).futureValue shouldBe false
+      await(repository.extendTime(cacheMap, expiryTime)) shouldBe false
 
-      repository.get(id).futureValue shouldBe None
+      await(repository.get(id)) shouldBe None
     }
 
     "remove a cache map" in {
@@ -107,16 +103,16 @@ class SessionRepositorySpec extends SpecBase with ScalaFutures with BeforeAndAft
       val data     = Map("map-test" -> Json.obj("key" -> "value"))
       val cacheMap = CacheMap(id, data)
 
-      repository.upsert(cacheMap).futureValue
-      repository.remove(cacheMap).futureValue shouldBe true
-      repository.get(id).futureValue          shouldBe None
+      await(repository.upsert(cacheMap))
+      await(repository.remove(cacheMap)) shouldBe true
+      await(repository.get(id))          shouldBe None
     }
 
     "handle removing a non-existent cache map" in {
       val id       = "non-existent-id"
       val cacheMap = CacheMap(id, Map("map-test" -> Json.obj()))
 
-      repository.remove(cacheMap).futureValue shouldBe true // Always returns true even if nothing was removed
+      await(repository.remove(cacheMap)) shouldBe true // Always returns true even if nothing was removed
     }
 
     "handle multiple cache maps independently" in {
@@ -128,21 +124,21 @@ class SessionRepositorySpec extends SpecBase with ScalaFutures with BeforeAndAft
       val cacheMap1 = CacheMap(id1, data1)
       val cacheMap2 = CacheMap(id2, data2)
 
-      repository.upsert(cacheMap1).futureValue
-      repository.upsert(cacheMap2).futureValue
+      await(repository.upsert(cacheMap1))
+      await(repository.upsert(cacheMap2))
 
-      val result1 = repository.get(id1).futureValue
+      val result1 = await(repository.get(id1))
       result1             shouldBe defined
       result1.map(_.data) shouldBe Some(data1)
 
-      val result2 = repository.get(id2).futureValue
+      val result2 = await(repository.get(id2))
       result2             shouldBe defined
       result2.map(_.data) shouldBe Some(data2)
 
-      repository.remove(cacheMap1).futureValue
-      repository.get(id1).futureValue shouldBe None
+      await(repository.remove(cacheMap1))
+      await(repository.get(id1)) shouldBe None
 
-      val stillExistsResult = repository.get(id2).futureValue
+      val stillExistsResult = await(repository.get(id2))
       stillExistsResult             shouldBe defined
       stillExistsResult.map(_.data) shouldBe Some(data2)
     }
