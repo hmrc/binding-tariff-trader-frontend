@@ -413,7 +413,7 @@ confirmation.important = We try to issue ATaR decisions within 30 working days f
 confirmation.paragraph.signup = You can sign in to
 confirmation.check.status.linkText = check the status of your application.
 confirmation.get.moreInformation = Get more information about samples (opens in a new window or tab)
-confirmation.paragraph.sample.return = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage. Or you can collect your samples from our Southend office.
+confirmation.paragraph.sample.return = Samples will be returned where possible. In some cases they may be damaged during testing. If you want us to send the samples back, you must include return postage.
 
 view.bta.home.link = Go to your business tax account
 
