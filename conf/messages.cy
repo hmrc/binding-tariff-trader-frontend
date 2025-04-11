@@ -422,7 +422,7 @@ confirmation.sendingSamples.address4=14 Westfield Avenue
 confirmation.sendingSamples.address5=Stratford
 confirmation.sendingSamples.address6=E20 1HZ
 confirmation.heading2.whatNext = Yr hyn sy’n digwydd nesaf
-confirmation.important = Rydym yn ceisio anfon penderfyniadau o ran Dyfarniadau Tariffau Uwch (ATaR) cyn pen 30 diwrnod i ddyddiad derbyn y cais. Fodd bynnag, mae’n gallu cymryd hyd at 120 diwrnod, yn unol â chyfraith y DU.
+confirmation.important = Rydym yn ceisio anfon penderfyniadau o ran Dyfarniadau Tariffau Uwch (ATaR) cyn pen 30 diwrnod  gwaith i ddyddiad derbyn y cais. Fodd bynnag, mae’n gallu cymryd hyd at 120 diwrnod, yn unol â chyfraith y DU.
 confirmation.paragraph.signup =  Gallwch fewngofnodi i
 confirmation.check.status.linkText = wirio statws eich cais.
 confirmation.get.moreInformation = Rhagor o wybodaeth am samplau (yn agor ffenestr neu dab newydd)
@@ -446,7 +446,7 @@ view.application.contact.date = Dyddiad cyflwyno
 view.application.ref.text = Cyfeirnod eich cais yw
 view.application.goods.details = Manylion y nwyddau
 view.application.sending.sample.paragraph1 = Mae’n rhaid i chi labeli eich samplau gyda chyfeirnod eich cais
-view.application.paragraph.whatNext = Rydym yn ceisio anfon penderfyniadau o ran Dyfarniadau Tariffau Uwch (ATaR) cyn pen 30 diwrnod i ddyddiad derbyn y cais. Fodd bynnag, mae’n gallu cymryd hyd at 120 diwrnod, yn unol â chyfraith y DU. Gallwch fewngofnodi i wirio statws eich cais.
+view.application.paragraph.whatNext = Rydym yn ceisio anfon penderfyniadau o ran Dyfarniadau Tariffau Uwch (ATaR) cyn pen 30  gwaith diwrnod i ddyddiad derbyn y cais. Fodd bynnag, mae’n gallu cymryd hyd at 120 diwrnod, yn unol â chyfraith y DU. Gallwch fewngofnodi i wirio statws eich cais.
 view.application.paragraph.do.not.send.sample = Peidiwch ag anfon sampl oni bai bod y Tîm Dosbarthu Tariffau wedi gofyn am un.
 
 view.applicationPdf.foundCommodityCode = A ydych wedi dod o hyd i god nwyddau ar gyfer y nwyddau?
