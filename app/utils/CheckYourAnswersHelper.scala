@@ -22,11 +22,13 @@ import models.{CheckMode, Country, FileAttachment, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
+import play.api.Logging
 
 class CheckYourAnswersHelper(
   userAnswers: UserAnswers,
   countries: Map[String, Country]
-)(implicit messages: Messages) {
+)(implicit messages: Messages)
+    extends Logging {
 
   def provideGoodsName: Option[AnswerRow] = userAnswers.get(ProvideGoodsNamePage) map { x =>
     AnswerRow(
@@ -168,7 +170,15 @@ class CheckYourAnswersHelper(
       .getOrElse(Map.empty)
 
     def confidentialLabel(attachment: FileAttachment)(implicit messages: Messages): String =
-      if (keepConfidential(attachment.id)) "- " + messages("site.keep_confidential") else ""
+      keepConfidential.get(attachment.id) match {
+        case Some(true) => "- " + messages("site.keep_confidential")
+        case None =>
+          logger.error(s"No confidentiality setting for attachment ID: ${attachment.id}")
+          throw new RuntimeException(
+            s"[CheckYourAnswersHelper][confidentialLabel] Confidentiality setting missing for attachment ID: ${attachment.id}"
+          )
+        case _ => ""
+      }
 
     userAnswers.get(UploadSupportingMaterialMultiplePage).collect {
       case attachments if attachments.nonEmpty =>
