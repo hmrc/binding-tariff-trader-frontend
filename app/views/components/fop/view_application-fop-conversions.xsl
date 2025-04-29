@@ -57,6 +57,12 @@
     <!-- Added for improved PDF layout -->
   </xsl:attribute-set>
 
+  <xsl:attribute-set name="pre-wrap">
+    <xsl:attribute name="wrap-option">wrap</xsl:attribute>
+    <xsl:attribute name="white-space-collapse">false</xsl:attribute>
+    <!-- Added for improved PDF layout -->
+  </xsl:attribute-set>
+
   <xsl:attribute-set name="reference-number">
     <xsl:attribute name="font-size">2.25em</xsl:attribute>
   </xsl:attribute-set>
