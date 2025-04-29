@@ -104,7 +104,7 @@
       <fo:page-sequence master-reference="main">
         <fo:static-content flow-name="xsl-region-before">
           <fo:block>
-            <xsl:apply-templates select="(//div[@class='header'])[1]/node()" mode="static-content"/>
+            <xsl:apply-templates select="(//div[@class='header'])[1]/node()" mode="pdf"/>
           </fo:block>
         </fo:static-content>
         <fo:flow flow-name="xsl-region-body" text-align="left">
