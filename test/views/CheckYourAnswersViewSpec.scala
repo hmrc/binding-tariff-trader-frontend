@@ -40,7 +40,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     () => checkYourAnswersView(frontendAppConfig, traderAnswers, sendingSamples = true)(fakeRequest, messages)
 
   private def createTraderViewNoSamples: () => Html =
-    () => checkYourAnswersView(frontendAppConfig, traderAnswers, sendingSamples = false)(fakeRequest, messages)
+    () => checkYourAnswersView.render(frontendAppConfig, traderAnswers, sendingSamples = false, fakeRequest, messages)
 
   "Check Your Answers view" must {
     behave like normalPage(createTraderView, messageKeyPrefix)()

@@ -12,7 +12,7 @@ object AppDependencies {
     "uk.gov.hmrc.mongo"     %% "hmrc-mongo-play-30"         % hmrcMongoPlayVersion,
     "commons-codec"          % "commons-codec"              % "1.18.0",
     "org.typelevel"         %% "cats-core"                  % "2.13.0",
-    "commons-io"             % "commons-io"                 % "2.18.0",
+    "commons-io"             % "commons-io"                 % "2.19.0",
     "org.apache.xmlgraphics" % "fop"                        % "2.10",
     "net.sf.saxon"           % "Saxon-HE"                   % "12.5"
   )

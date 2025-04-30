@@ -18,7 +18,7 @@ package models
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json._
+import play.api.libs.json.*
 import java.time.ZonedDateTime
 import utils.JsonFormatters.*
 
@@ -71,7 +71,7 @@ class ApplicationUpdateSpec extends AnyWordSpec with Matchers {
     }
 
     "create an instance with custom values" in {
-      val appUpdate = ApplicationUpdate("BTI", NoChange)
+      val appUpdate = ApplicationUpdate("BTI", NoChange.map(Nothing => None))
       val update    = CaseUpdate(Some(appUpdate))
 
       update.application shouldBe Some(appUpdate)
@@ -85,7 +85,7 @@ class ApplicationUpdateSpec extends AnyWordSpec with Matchers {
     }
 
     "not be equal when application values differ" in {
-      val appUpdate = ApplicationUpdate("BTI", NoChange)
+      val appUpdate = ApplicationUpdate("BTI", NoChange.getOrElse(NoChange))
       val update1   = CaseUpdate(None)
       val update2   = CaseUpdate(Some(appUpdate))
 
@@ -109,7 +109,7 @@ class ApplicationUpdateSpec extends AnyWordSpec with Matchers {
     "serialize an ApplicationUpdate with custom values" in {
       val fixedTime  = ZonedDateTime.parse("2023-01-01T12:00:00Z")
       val attachment = Attachment("id", true, fixedTime)
-      val update     = ApplicationUpdate("BTI", SetValue(Some(attachment)))
+      val update     = ApplicationUpdate("BTI", SetValue(Some(attachment)).map(attachment => attachment))
 
       val expectedJson = Json.obj(
         "type" -> "BTI",

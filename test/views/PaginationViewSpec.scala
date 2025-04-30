@@ -36,11 +36,17 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
 
     "Render empty page" in {
       val doc = view(
-        pagination(
+        pagination.render(
           id = "ID",
+          "pagination.result",
+          "pagination.results",
           pager = Paged(Seq.empty[String], pageIndex = 1, pageSize = 1, resultCount = 0),
-          onChange = goToPage
-        )(messages)
+          onChange = goToPage,
+          None,
+          None,
+          None,
+          messages
+        )
       )
 
       doc should containElementWithID("ID-none")
@@ -49,10 +55,15 @@ class PaginationViewSpec extends ViewSpecBase with BeforeAndAfterEach {
 
     "Render 1 page" in {
       val doc = view(
-        pagination(
-          id = "ID",
-          pager = Paged(Seq("", ""), pageIndex = 1, pageSize = 2, resultCount = 2),
-          onChange = goToPage
+        pagination.ref.f(
+          "ID",
+          "pagination.result",
+          "pagination.results",
+          Paged(Seq("", ""), pageIndex = 1, pageSize = 2, resultCount = 2),
+          goToPage,
+          None,
+          None,
+          None
         )(messages)
       )
 

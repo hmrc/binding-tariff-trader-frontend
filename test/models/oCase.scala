@@ -72,7 +72,8 @@ object oCase {
   val btiCaseWithDecisionNoExplanation: Case = Case(
     reference = "ref",
     status = CaseStatus.COMPLETED,
-    application = btiApplicationExample,
+    application =
+      btiApplicationExample.copy(agent = Some(AgentDetails(eoriDetailsExample, Some(Attachment("id", false))))),
     decision = Some(decisionExample(None))
   )
 
