@@ -33,4 +33,22 @@ class FrontendAppConfigSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
       intercept[Exception](frontendAppConfig.loginUrl).getMessage mustBe "Missing configuration key: urls.login"
     }
   }
+
+  private val configurationWithValues: Configuration = Configuration.from(
+    Map(
+      "email.host"                  -> "localhost",
+      "email.port"                  -> "8300",
+      "urls.helpMakeGovUkBetterUrl" -> "url for helpMakeGovUkBetterUrl",
+      "fileupload.mimeTypes"        -> "pdf, txt"
+    )
+  )
+  private val frontendAppConfigWithValues: FrontendAppConfig =
+    new FrontendAppConfig(configurationWithValues, servicesConfig)
+
+  "show the correct values" in {
+    frontendAppConfigWithValues.emailUrl mustBe "http://localhost:8300"
+    frontendAppConfigWithValues.helpMakeGovUkBetterUrl mustBe "url for helpMakeGovUkBetterUrl"
+    frontendAppConfigWithValues.fileUploadMimeTypes mustBe Set("pdf", "txt")
+  }
+
 }
