@@ -30,7 +30,7 @@ class ConfirmationSpec extends SpecBase {
         Confirmation.apply(btiCaseExample) shouldBe confirmation
       }
     }
-    "do round-trip serialoize/deserialize" when {
+    "do round-trip serialize/deserialize" when {
       "All the fields are present and valid" in {
         Json.toJson(confirmation).as[Confirmation] shouldBe confirmation
       }

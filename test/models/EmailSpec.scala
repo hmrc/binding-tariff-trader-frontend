@@ -26,7 +26,7 @@ class EmailSpec extends SpecBase with Matchers {
   private val applicationSubmittedEmail = ApplicationSubmittedEmail(Seq("abc", "def"), applicationSubmittedParameters)
 
   "ApplicationSubmittedEmail" should {
-    "do round-trip serialoize/deserialize" when {
+    "do round-trip serialize/deserialize" when {
       "All the fields are present and valid" in {
         Json.toJson(applicationSubmittedEmail).as[ApplicationSubmittedEmail] shouldBe applicationSubmittedEmail
       }
