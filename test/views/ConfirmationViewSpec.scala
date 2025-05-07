@@ -51,7 +51,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
   val viewViaF: () => HtmlFormat.Appendable =
     () =>
-      confirmationView.f(
+      confirmationView.ref.f(
         frontendAppConfig,
         confirm,
         "token",

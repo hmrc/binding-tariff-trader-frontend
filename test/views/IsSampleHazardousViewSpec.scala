@@ -41,7 +41,7 @@ class IsSampleHazardousViewSpec extends YesNoViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => isSampleHazardousView.render(frontendAppConfig, form, NormalMode, fakeGETRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => isSampleHazardousView.f(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+    () => isSampleHazardousView.ref.f(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) => isSampleHazardousView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)

@@ -42,7 +42,7 @@ class LegalChallengeViewSpec extends YesNoViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => legalChallengeView.render(frontendAppConfig, form, goodsName, NormalMode, fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => legalChallengeView.f(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+    () => legalChallengeView.ref.f(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) => legalChallengeView(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)

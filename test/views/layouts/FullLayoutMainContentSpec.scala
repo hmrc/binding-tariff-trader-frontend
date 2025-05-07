@@ -28,7 +28,7 @@ class FullLayoutMainContentSpec extends ViewBehaviours {
 
   val viewViaApply: () => HtmlFormat.Appendable  = () => fullLayoutMainContentView(Html("test"))
   val viewViaRender: () => HtmlFormat.Appendable = () => fullLayoutMainContentView.render(Html("test"))
-  val viewViaF: () => HtmlFormat.Appendable      = () => fullLayoutMainContentView.f(Html("test"))
+  val viewViaF: () => HtmlFormat.Appendable      = () => fullLayoutMainContentView.ref.f(Html("test"))
 
   "FullLayoutMainContent view" when {
     def test(method: String, view: () => HtmlFormat.Appendable): Unit =

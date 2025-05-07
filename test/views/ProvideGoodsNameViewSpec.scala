@@ -41,7 +41,7 @@ class ProvideGoodsNameViewSpec extends StringViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => provideGoodsNameView.render(frontendAppConfig, form, NormalMode, fakeGETRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => provideGoodsNameView.f(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
+    () => provideGoodsNameView.ref.f(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)
 
   def createViewUsingForm: Form[String] => Html =
     (form: Form[String]) => provideGoodsNameView(frontendAppConfig, form, NormalMode)(fakeGETRequest, messages)

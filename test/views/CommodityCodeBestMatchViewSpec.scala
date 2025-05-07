@@ -42,7 +42,7 @@ class CommodityCodeBestMatchViewSpec extends YesNoViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => commodityCodeBestMatchView.render(frontendAppConfig, form, NormalMode, goodsName, fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => commodityCodeBestMatchView.f(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+    () => commodityCodeBestMatchView.ref.f(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) =>

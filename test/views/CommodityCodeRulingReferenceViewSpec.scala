@@ -41,7 +41,8 @@ class CommodityCodeRulingReferenceViewSpec extends StringViewBehaviours {
     () =>
       commodityCodeRulingReferenceView.render(frontendAppConfig, form, onwardRoute, NormalMode, fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => commodityCodeRulingReferenceView.f(frontendAppConfig, form, onwardRoute, NormalMode)(fakeRequest, messages)
+    () =>
+      commodityCodeRulingReferenceView.ref.f(frontendAppConfig, form, onwardRoute, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
     (form: Form[String]) =>

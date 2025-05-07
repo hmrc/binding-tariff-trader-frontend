@@ -463,7 +463,7 @@ class BindingTariffClassificationConnectorSpec extends ConnectorTest {
 
   "Connector 'Create Event'" should {
     val event: Event =
-      Event("id", CaseCreated("Case created"), Operator("", Some("user name")), "case-ref", Instant.now())
+      Event("id", CaseCreated("Case created"), Operator("", Some("user name")), "case-ref")
     val eventRequest: NewEventRequest =
       NewEventRequest(CaseCreated("comment"), Operator("", Some("user name")), Instant.now())
 

@@ -19,7 +19,9 @@ package config
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api
 import play.api.Configuration
+import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class FrontendAppConfigSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
@@ -33,4 +35,26 @@ class FrontendAppConfigSpec extends AnyWordSpec with Matchers with GuiceOneAppPe
       intercept[Exception](frontendAppConfig.loginUrl).getMessage mustBe "Missing configuration key: urls.login"
     }
   }
+
+  protected def localGuiceApplicationBuilder: GuiceApplicationBuilder =
+    GuiceApplicationBuilder()
+      .overrides(
+        api.inject.bind[ServicesConfig].toInstance(servicesConfig)
+      )
+      .configure(
+        "email.host"                  -> "localhost",
+        "email.port"                  -> "8300",
+        "urls.helpMakeGovUkBetterUrl" -> "url for helpMakeGovUkBetterUrl",
+        "fileupload.mimeTypes"        -> "pdf, txt"
+      )
+
+  private val frontendAppConfigWithValues: FrontendAppConfig =
+    new FrontendAppConfig(localGuiceApplicationBuilder.configuration, servicesConfig)
+
+  "show the correct values" in {
+    frontendAppConfigWithValues.emailUrl mustBe "http://localhost:8300"
+    frontendAppConfigWithValues.helpMakeGovUkBetterUrl mustBe "url for helpMakeGovUkBetterUrl"
+    frontendAppConfigWithValues.fileUploadMimeTypes mustBe Set("pdf", "txt")
+  }
+
 }

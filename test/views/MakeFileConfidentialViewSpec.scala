@@ -46,7 +46,7 @@ class MakeFileConfidentialViewSpec extends BooleanViewBehaviours[(String, Boolea
         .render(frontendAppConfig, form, onwardRoute, NormalMode, fileId, fakeGETRequestWithCSRF, messages)
   val viewViaF: () => HtmlFormat.Appendable =
     () =>
-      makeFileConfidentialView.f(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(
+      makeFileConfidentialView.ref.f(frontendAppConfig, form, onwardRoute, NormalMode, fileId)(
         fakeGETRequestWithCSRF,
         messages
       )

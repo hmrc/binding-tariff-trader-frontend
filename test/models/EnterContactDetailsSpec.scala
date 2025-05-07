@@ -17,31 +17,24 @@
 package models
 
 import base.SpecBase
-import models.oCase.btiCaseExample
+import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.{JsError, Json}
 
-class ConfirmationSpec extends SpecBase {
-
-  private val confirmation = Confirmation("ref", "eoriAgent", "email")
-
-  "Confirmation" when {
-    "apply" should {
-      "produce the expected confirmation model" in {
-        Confirmation.apply(btiCaseExample) shouldBe confirmation
-      }
-    }
-    "do round-trip serialize/deserialize" when {
+class EnterContactDetailsSpec extends SpecBase with Matchers {
+  "EnterContactDetails" should {
+    "do round-trip serialoize/deserialize" when {
       "All the fields are present and valid" in {
-        Json.toJson(confirmation).as[Confirmation] shouldBe confirmation
+        val enterContactDetails = EnterContactDetails("mane", "email", "phone")
+        Json.toJson(enterContactDetails).as[EnterContactDetails] shouldBe enterContactDetails
       }
     }
     "fail to deserialize" when {
       "there is type mismatch" in {
-        val json = Json.obj("reference" -> true)
-        json.validate[Confirmation] shouldBe a[JsError]
+        val json = Json.obj("name" -> true, "email" -> false, "phoneNumber" -> false)
+        json.validate[EnterContactDetails] shouldBe a[JsError]
       }
       "an empty object" in {
-        Json.obj().validate[Confirmation] shouldBe a[JsError]
+        Json.obj().validate[EnterContactDetails] shouldBe a[JsError]
       }
     }
   }

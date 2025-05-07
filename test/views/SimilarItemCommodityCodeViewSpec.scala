@@ -37,7 +37,7 @@ class SimilarItemCommodityCodeViewSpec extends YesNoViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => similarItemCommodityCodeView.render(frontendAppConfig, form, NormalMode, fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => similarItemCommodityCodeView.f(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+    () => similarItemCommodityCodeView.ref.f(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) => similarItemCommodityCodeView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)

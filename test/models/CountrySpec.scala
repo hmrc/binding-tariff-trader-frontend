@@ -17,9 +17,10 @@
 package models
 
 import base.SpecBase
-import play.api.libs.json.{JsValue, Json}
+import org.scalatest.matchers.should.Matchers
+import play.api.libs.json.{JsError, JsResultException, JsValue, Json}
 
-class CountrySpec extends SpecBase {
+class CountrySpec extends SpecBase with Matchers {
 
   private val model = Country("IE", "title.ireland", "IE", List("Republic of Ireland", "Eire"))
 
@@ -33,10 +34,32 @@ class CountrySpec extends SpecBase {
     """.stripMargin
   )
 
-  "Country" when {
-    "toAutoCompleteJson" should {
+  "Country" should {
+    "toAutoCompleteJson" when {
       "return expected JsObject" in {
         model.toAutoCompleteJson(messages) shouldBe expectedJson
+      }
+    }
+    "do round-trip serialoize/deserialize" when {
+      "All the fields are present and valid" in {
+        Json.toJson(model).as[Country] shouldBe model
+      }
+      "countrySynonyms is empty" in {
+        val modelWithoutCountrySynonyms = model.copy(countrySynonyms = List.empty)
+        Json.toJson(modelWithoutCountrySynonyms).as[Country] shouldBe modelWithoutCountrySynonyms
+      }
+    }
+    "fail to deserialize" when {
+      "there is type mismatch" in {
+        val json = Json.obj(
+          "code"        -> true,
+          "displayName" -> 2,
+          "synonyms"    -> false
+        )
+        json.validate[Country] shouldBe a[JsError]
+      }
+      "an empty object" in {
+        Json.obj().validate[Country] shouldBe a[JsError]
       }
     }
   }

@@ -33,10 +33,17 @@ class ErrorControllerSpec extends ControllerSpecBase {
 
       val result = controller.onPageLoad(fakeRequest)
       status(result) shouldBe INTERNAL_SERVER_ERROR
-      contentAsString(result) shouldBe errorView(expectedTitle, expectedHeading, expectedMessage, appConfig)(
-        fakeRequest,
-        messages
-      ).toString()
+      contentAsString(result) shouldBe errorView
+        .render(
+          expectedTitle,
+          expectedHeading,
+          expectedMessage,
+          appConfig,
+          routes.SignOutController.startFeedbackSurvey.url,
+          fakeRequest,
+          messages
+        )
+        .toString()
     }
   }
 }

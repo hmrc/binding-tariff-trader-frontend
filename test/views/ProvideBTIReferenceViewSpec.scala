@@ -36,7 +36,7 @@ class ProvideBTIReferenceViewSpec extends QuestionViewBehaviours[BTIReference] {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => previousBTIReferenceView.render(frontendAppConfig, form, NormalMode, fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => previousBTIReferenceView.f(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+    () => previousBTIReferenceView.ref.f(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[BTIReference] => HtmlFormat.Appendable =
     (form: Form[BTIReference]) => previousBTIReferenceView(frontendAppConfig, form, NormalMode)(fakeRequest, messages)

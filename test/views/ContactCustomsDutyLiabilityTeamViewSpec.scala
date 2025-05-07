@@ -33,7 +33,7 @@ class ContactCustomsDutyLiabilityTeamViewSpec extends ViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => contactCustomsDutyLiabilityTeamView.render(frontendAppConfig, NormalMode, fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => contactCustomsDutyLiabilityTeamView.f(frontendAppConfig, NormalMode)(fakeRequest, messages)
+    () => contactCustomsDutyLiabilityTeamView.ref.f(frontendAppConfig, NormalMode)(fakeRequest, messages)
 
   "BeforeYouStart view" when {
     def test(method: String, view: () => HtmlFormat.Appendable): Unit =
