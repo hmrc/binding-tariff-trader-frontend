@@ -58,8 +58,7 @@
   </xsl:attribute-set>
 
   <xsl:attribute-set name="pre-wrap">
-    <xsl:attribute name="wrap-option">wrap</xsl:attribute>
-    <xsl:attribute name="white-space-collapse">false</xsl:attribute>
+    <xsl:attribute name="linefeed-treatment">preserve</xsl:attribute>
     <!-- Added for improved PDF layout -->
   </xsl:attribute-set>
 

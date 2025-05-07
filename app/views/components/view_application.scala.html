@@ -239,7 +239,11 @@
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">@messages("supportingMaterialFileList.checkYourAnswersLabel")</dt>
                     <dd class="govuk-summary-list__value prevent-content-split">
-                        <div class="pre-wrap">@{pdf.supportingMaterialFileList}</div>
+                        <div class="pre-wrap">
+                            @for(file <- pdf.supportingMaterialFileList) {
+                            <span>@file</span><br/>
+                            }
+                        </div>
                     </dd>
                 </div>
                 }
