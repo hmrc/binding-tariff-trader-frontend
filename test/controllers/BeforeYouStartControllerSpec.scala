@@ -48,7 +48,7 @@ class BeforeYouStartControllerSpec extends ControllerSpecBase with BeforeAndAfte
 
   val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  private val viewAsString = beforeYouStartView.ref.f(frontendAppConfig)(fakeGETRequest, messages).toString
+  private val viewAsString = beforeYouStartView(frontendAppConfig)(fakeGETRequest, messages).toString
 
   override protected def beforeEach(): Unit =
     reset(mockDataCacheService)

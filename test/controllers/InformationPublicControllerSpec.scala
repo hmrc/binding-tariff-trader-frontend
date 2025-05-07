@@ -37,7 +37,7 @@ class InformationPublicControllerSpec extends ControllerSpecBase {
 
   val fakeGETRequest: FakeRequest[AnyContentAsEmpty.type] = fakeGETRequestWithCSRF
 
-  private def viewAsString() = informationPublicView.render(frontendAppConfig, fakeGETRequest, messages).toString
+  private def viewAsString() = informationPublicView(frontendAppConfig)(fakeGETRequest, messages).toString
 
   "InformationPublic Controller" must {
 

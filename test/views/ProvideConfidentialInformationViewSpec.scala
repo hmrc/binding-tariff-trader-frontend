@@ -48,7 +48,8 @@ class ProvideConfidentialInformationViewSpec extends StringViewBehaviours {
       provideConfidentialInformationView
         .render(frontendAppConfig, form, goodsName, NormalMode, fakeGETRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => provideConfidentialInformationView.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+    () =>
+      provideConfidentialInformationView.ref.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
     (form: Form[String]) =>

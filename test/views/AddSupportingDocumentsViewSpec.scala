@@ -43,7 +43,7 @@ class AddSupportingDocumentsViewSpec extends YesNoViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => addSupportingDocumentsView.render(frontendAppConfig, form, goodsName, NormalMode, fakeGETRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => addSupportingDocumentsView.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+    () => addSupportingDocumentsView.ref.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) =>

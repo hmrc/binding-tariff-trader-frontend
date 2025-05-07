@@ -14,7 +14,7 @@ object AppDependencies {
     "org.typelevel"         %% "cats-core"                  % "2.13.0",
     "commons-io"             % "commons-io"                 % "2.19.0",
     "org.apache.xmlgraphics" % "fop"                        % "2.10",
-    "net.sf.saxon"           % "Saxon-HE"                   % "12.5"
+    "net.sf.saxon"           % "Saxon-HE"                   % "12.6"
   )
 
   private lazy val test: Seq[ModuleID] = Seq(

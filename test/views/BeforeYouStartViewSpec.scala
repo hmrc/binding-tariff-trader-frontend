@@ -19,6 +19,7 @@ package views
 import models.requests.IdentifierRequest
 import views.behaviours.ViewBehaviours
 import views.html.beforeYouStart
+import play.twirl.api.{Html, HtmlFormat}
 
 class BeforeYouStartViewSpec extends ViewBehaviours {
 
@@ -26,13 +27,26 @@ class BeforeYouStartViewSpec extends ViewBehaviours {
 
   val beforeYouStartView: beforeYouStart = app.injector.instanceOf[beforeYouStart]
 
-  private def createView(eori: Option[String] = Some("eori")) =
-    () => beforeYouStartView.render(frontendAppConfig, IdentifierRequest(fakeRequest, "id", eori), messages)
+  val viewViaApply: () => HtmlFormat.Appendable = () =>
+    beforeYouStartView(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", Some("eori")), messages)
+  val viewViaRender: () => HtmlFormat.Appendable = () =>
+    beforeYouStartView.render(frontendAppConfig, IdentifierRequest(fakeRequest, "id", Some("eori")), messages)
+  val viewViaF: () => HtmlFormat.Appendable = () =>
+    beforeYouStartView.ref.f(frontendAppConfig)(IdentifierRequest(fakeRequest, "id", Some("eori")), messages)
 
-  "BeforeYouStart view" must {
-    behave like normalPage(createView(), messageKeyPrefix)()
+  "BeforeYouStart view" when {
+    def test(method: String, view: () => HtmlFormat.Appendable): Unit =
+      s"$method" must {
+        behave like pageWithBackLink(view)
+        behave like normalPage(view, messageKeyPrefix)()
+      }
 
-    behave like pageWithBackLink(createView())
+    val input: Seq[(String, () => HtmlFormat.Appendable)] = Seq(
+      (".apply", viewViaApply),
+      (".render", viewViaRender),
+      (".f", viewViaF)
+    )
+
+    input.foreach(args => test.tupled(args))
   }
-
 }

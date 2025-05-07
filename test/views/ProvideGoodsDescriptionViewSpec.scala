@@ -45,7 +45,7 @@ class ProvideGoodsDescriptionViewSpec extends StringViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => provideGoodsDescriptionView.render(frontendAppConfig, form, goodsName, NormalMode, fakeGETRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => provideGoodsDescriptionView.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+    () => provideGoodsDescriptionView.ref.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   private def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
     (form: Form[String]) =>

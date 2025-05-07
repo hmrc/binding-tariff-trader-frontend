@@ -60,7 +60,7 @@ class UploadSupportingMaterialMultipleViewSpec extends FileUploadViewBehaviours 
         .render(frontendAppConfig, initiateResponse, form, goodsName, NormalMode, request, messages)
   val viewViaF: () => HtmlFormat.Appendable =
     () =>
-      uploadSupportingMaterialMultipleView.f(frontendAppConfig, initiateResponse, form, goodsName, NormalMode)(
+      uploadSupportingMaterialMultipleView.ref.f(frontendAppConfig, initiateResponse, form, goodsName, NormalMode)(
         request,
         messages
       )

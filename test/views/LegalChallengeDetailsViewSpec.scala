@@ -39,7 +39,7 @@ class LegalChallengeDetailsViewSpec extends StringViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => legalChallengeDetailsView.render(frontendAppConfig, form, NormalMode, "goodsName", fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => legalChallengeDetailsView.f(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
+    () => legalChallengeDetailsView.ref.f(frontendAppConfig, form, NormalMode, "goodsName")(fakeRequest, messages)
 
   private def createViewUsingForm: Form[String] => HtmlFormat.Appendable =
     (form: Form[String]) =>

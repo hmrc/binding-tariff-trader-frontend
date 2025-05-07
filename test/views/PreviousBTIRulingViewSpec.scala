@@ -38,7 +38,7 @@ class PreviousBTIRulingViewSpec extends YesNoViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => previousBTIRulingView.render(frontendAppConfig, form, goodsName, NormalMode, fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => previousBTIRulingView.f(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
+    () => previousBTIRulingView.ref.f(frontendAppConfig, form, goodsName, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) =>
