@@ -18,7 +18,7 @@ package models
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json._
+import play.api.libs.json.*
 import java.time.ZonedDateTime
 import utils.JsonFormatters.*
 

@@ -36,7 +36,7 @@ class EnterContactDetailsViewSpec extends QuestionViewBehaviours[EnterContactDet
   val viewViaRender: () => HtmlFormat.Appendable =
     () => enterContactDetailsView.render(frontendAppConfig, form, NormalMode, fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => enterContactDetailsView.f(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
+    () => enterContactDetailsView.ref.f(frontendAppConfig, form, NormalMode)(fakeRequest, messages)
 
   def createViewUsingForm: Form[EnterContactDetails] => HtmlFormat.Appendable =
     (form: Form[EnterContactDetails]) =>

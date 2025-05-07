@@ -27,7 +27,7 @@ class SessionExpiredViewSpec extends ViewBehaviours {
   val viewViaApply: () => HtmlFormat.Appendable = () => sessionExpiredView(frontendAppConfig)(fakeRequest, messages)
   val viewViaRender: () => HtmlFormat.Appendable = () =>
     sessionExpiredView.render(frontendAppConfig, fakeRequest, messages)
-  val viewViaF: () => HtmlFormat.Appendable = () => sessionExpiredView.f(frontendAppConfig)(fakeRequest, messages)
+  val viewViaF: () => HtmlFormat.Appendable = () => sessionExpiredView.ref.f(frontendAppConfig)(fakeRequest, messages)
 
   override val expectTimeoutDialog: Boolean = false
 

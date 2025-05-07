@@ -39,7 +39,7 @@ class AreYouSendingSamplesViewSpec extends YesNoViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable =
     () => areYouSendingSamplesView.render(frontendAppConfig, form, NormalMode, goodsName, fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => areYouSendingSamplesView.f(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+    () => areYouSendingSamplesView.ref.f(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) =>

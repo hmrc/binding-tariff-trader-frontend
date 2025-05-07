@@ -31,7 +31,7 @@ class AcceptItemInformationListViewSpec extends ViewBehaviours {
   val viewViaRender: () => HtmlFormat.Appendable = () =>
     acceptItemInformationListView.render(frontendAppConfig, fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => acceptItemInformationListView.f(frontendAppConfig)(fakeRequest, messages)
+    () => acceptItemInformationListView.ref.f(frontendAppConfig)(fakeRequest, messages)
 
   "AcceptItemInformationList view" when {
     def test(method: String, view: () => HtmlFormat.Appendable): Unit =

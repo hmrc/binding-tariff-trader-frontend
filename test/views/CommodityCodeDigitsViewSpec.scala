@@ -34,9 +34,9 @@ class CommodityCodeDigitsViewSpec extends StringViewBehaviours {
   val commodityCodeView: commodityCodeDigits = app.injector.instanceOf[commodityCodeDigits]
 
   val viewViaApply: () => HtmlFormat.Appendable =
-    () => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+    () => commodityCodeView.render(frontendAppConfig, form, NormalMode, goodsName, fakeRequest, messages)
   val viewViaRender: () => HtmlFormat.Appendable =
-    () => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
+    () => commodityCodeView.ref.f(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
     () => commodityCodeView(frontendAppConfig, form, NormalMode, goodsName)(fakeRequest, messages)
 

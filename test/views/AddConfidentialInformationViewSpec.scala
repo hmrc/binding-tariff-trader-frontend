@@ -44,7 +44,7 @@ class AddConfidentialInformationViewSpec extends YesNoViewBehaviours {
     () =>
       addConfidentialInformationView.render(frontendAppConfig, form, goodsName, NormalMode, fakeGETRequest, messages)
   val viewViaF: () => HtmlFormat.Appendable =
-    () => addConfidentialInformationView.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
+    () => addConfidentialInformationView.ref.f(frontendAppConfig, form, goodsName, NormalMode)(fakeGETRequest, messages)
 
   def createViewUsingForm: Form[Boolean] => HtmlFormat.Appendable =
     (form: Form[Boolean]) =>
