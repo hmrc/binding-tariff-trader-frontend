@@ -103,9 +103,7 @@
 
       <fo:page-sequence master-reference="main">
         <fo:static-content flow-name="xsl-region-before">
-          <fo:block>
             <xsl:apply-templates select="(//div[@class='header'])[1]/node()" mode="pdf"/>
-          </fo:block>
         </fo:static-content>
         <fo:flow flow-name="xsl-region-body" text-align="left">
           <xsl:apply-templates select="." mode="pdf"/>
@@ -118,8 +116,8 @@
   <xsl:function name="custom:insert-soft-breaks" as="xs:string">
     <xsl:param name="text" as="xs:string"/>
     <xsl:choose>
-      <xsl:when test="string-length($text) > 30">
-        <xsl:value-of select="substring($text, 1, 30) || '&#x200B;' || custom:insert-soft-breaks(substring($text, 31))"/>
+      <xsl:when test="string-length($text) > 50">
+        <xsl:value-of select="substring($text, 1, 50) || '&#x200B;' || custom:insert-soft-breaks(substring($text, 51))"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$text"/>
