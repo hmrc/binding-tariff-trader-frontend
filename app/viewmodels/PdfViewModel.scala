@@ -40,11 +40,11 @@ case class PdfViewModel(
   reissuedBTIReference: Option[String]
 ) {
 
-  def supportingMaterialFileList(implicit messages: Messages): String = {
+  def supportingMaterialFileList(implicit messages: Messages): Seq[String] = {
     def confidentialLabel(isConfidential: Boolean): String =
       if (isConfidential) "- " + messages("site.keep_confidential") else ""
 
-    attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential)}").mkString("\n")
+    attachments.map(att => s"${att.name} ${confidentialLabel(att.confidential)}")
   }
 
   def similarAtarCodes: String = similarAtarReferences.mkString("\n")

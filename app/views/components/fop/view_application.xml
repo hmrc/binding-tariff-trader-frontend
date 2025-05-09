@@ -1,4 +1,10 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:fox="http://xmlgraphics.apache.org/fop/extensions" version="2.0">
+<xsl:stylesheet
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+        xmlns:fo="http://www.w3.org/1999/XSL/Format"
+        xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+        xmlns:custom="urn:custom-functions"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        version="2.0">
   <xsl:include href="*/hmrc-frontend-fop-conversions.xsl"/>
   <xsl:include href="*/view_application-fop-conversions.xsl"/>
   <xsl:include href="*/hmrc-frontend-fop-matchers.xsl"/>
@@ -84,8 +90,7 @@
   </xsl:template>
 
 
-  <xsl:template match = "/">
-
+  <xsl:template match="/">
     <fo:root xml:lang="en" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:fox="http://xmlgraphics.apache.org/fop/extensions">
       <fo:layout-master-set>
         <fo:simple-page-master master-name="main" page-height="297mm" page-width="210mm" margin-top="1.3cm"
@@ -98,7 +103,7 @@
 
       <fo:page-sequence master-reference="main">
         <fo:static-content flow-name="xsl-region-before">
-          <xsl:apply-templates select="(//div[@class='header'])[1]/node()" mode="pdf"/>
+            <xsl:apply-templates select="(//div[@class='header'])[1]/node()" mode="pdf"/>
         </fo:static-content>
         <fo:flow flow-name="xsl-region-body" text-align="left">
           <xsl:apply-templates select="." mode="pdf"/>
@@ -106,4 +111,19 @@
       </fo:page-sequence>
     </fo:root>
   </xsl:template>
+
+
+  <xsl:function name="custom:insert-soft-breaks" as="xs:string">
+    <xsl:param name="text" as="xs:string"/>
+    <xsl:choose>
+      <xsl:when test="string-length($text) > 50">
+        <xsl:value-of select="substring($text, 1, 50) || '&#x200B;' || custom:insert-soft-breaks(substring($text, 51))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+
 </xsl:stylesheet>

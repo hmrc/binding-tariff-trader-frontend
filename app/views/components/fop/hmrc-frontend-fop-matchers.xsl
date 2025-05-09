@@ -1,4 +1,9 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:fox="http://xmlgraphics.apache.org/fop/extensions" version="2.0">
+<xsl:stylesheet
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+        xmlns:fo="http://www.w3.org/1999/XSL/Format"
+        xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+        xmlns:custom="urn:custom-functions"
+        version="2.0">
 
   <!-- This stylesheet is used to convert 'hmrc-frontend' HTML to FOP elements for Apache FOP pdf generation.
        It provides generic methods for converting HTML tags and specific implementations to match
@@ -287,5 +292,12 @@
       </xsl:message>
     </xsl:if>
   </xsl:template>
+
+
+  <!-- Normal text -->
+  <xsl:template match="text()" mode="pdf">
+    <xsl:value-of select="custom:insert-soft-breaks(.)"/>
+  </xsl:template>
+
 
 </xsl:stylesheet>
