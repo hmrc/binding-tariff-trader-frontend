@@ -84,10 +84,7 @@
                 .getElementById("file")
                 .addEventListener("change", onFileSelected(id, targetURL, csrfToken));
 
-            window.addEventListener("pageshow", function(event) {
-                const files = document.querySelectorAll('input[type="file"]');
-                files.forEach(input => input.value = '');
-            });
+
         </script>
     }
 }
