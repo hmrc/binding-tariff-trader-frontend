@@ -54,17 +54,15 @@ class MakeFileConfidentialController @Inject() (
     request: DataRequest[?]
   ): HtmlFormat.Appendable = {
     val fileId: String = request.userAnswers.get(UploadSupportingMaterialMultiplePage).map(_.last.id).get
-      makeFileConfidentialView(appConfig, preparedForm, submitAction, mode, fileId)
+    makeFileConfidentialView(appConfig, preparedForm, submitAction, mode, fileId)
   }
 
   override def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request:DataRequest[?] =>
-      val files = request.userAnswers.get(UploadSupportingMaterialMultiplePage)
-      if(files.get.isEmpty){
-        val fileId = request.id.toString
-        Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(Some(fileId), mode))
-      } else {
-        Ok(renderView(form, submitAction(mode), mode))
+    implicit request: DataRequest[?] =>
+      request.userAnswers.get(UploadSupportingMaterialMultiplePage) match {
+        case Some(files) if files.nonEmpty => Ok(renderView(form, submitAction(mode), mode))
+        case _ =>
+          Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(Some(request.id.toString), mode))
       }
   }
 

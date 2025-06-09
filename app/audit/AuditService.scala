@@ -16,7 +16,7 @@
 
 package audit
 
-import audit.AuditPayloadType._
+import audit.AuditPayloadType.*
 import models.{Application, Case}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.DefaultAuditConnector

@@ -17,7 +17,7 @@
 package metrics
 
 import com.codahale.metrics.{MetricRegistry, Timer}
-import play.api.mvc._
+import play.api.mvc.*
 
 import java.util.concurrent.atomic.AtomicBoolean
 import scala.concurrent.{ExecutionContext, Future}

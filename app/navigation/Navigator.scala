@@ -18,7 +18,7 @@ package navigation
 
 import config.FrontendAppConfig
 import controllers.routes
-import models._
+import models.*
 import pages._
 import play.api.mvc.Call
 

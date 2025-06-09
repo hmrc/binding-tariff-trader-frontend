@@ -18,7 +18,7 @@ package service
 
 import config.FrontendAppConfig
 import connectors.BindingTariffFilestoreConnector
-import models._
+import models.*
 import models.requests.FileStoreInitiateRequest
 import models.response.{FileStoreInitiateResponse, FilestoreResponse}
 import org.apache.pekko.stream.scaladsl.Source

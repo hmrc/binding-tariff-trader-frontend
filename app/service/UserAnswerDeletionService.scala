@@ -17,7 +17,7 @@
 package service
 
 import models.UserAnswers
-import pages._
+import pages.*
 
 class UserAnswerDeletionService {
 

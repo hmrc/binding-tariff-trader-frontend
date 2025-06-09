@@ -16,17 +16,24 @@
 
 package controllers
 
-import controllers.actions._
-import controllers.behaviours.AccumulatingCachingControllerBehaviours
+import controllers.actions.*
+import controllers.behaviours.{AccumulatingCachingControllerBehaviours, YesNoCachingControllerBehaviours}
 import forms.MakeFileConfidentialFormProvider
 import models.cache.CacheMap
 import models.{FileAttachment, NormalMode, UserAnswers}
 import navigation.FakeNavigator
+
+import scala.concurrent.duration.*
+import org.apache.pekko.util.Timeout
 import org.scalatest.BeforeAndAfterEach
 import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, QuestionPage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
-import play.api.libs.json._
+import play.api.http.Status.SEE_OTHER
+import play.api.libs.json.*
+import play.api.libs.typedmap.TypedEntry
+import play.api.mvc.request.RequestAttrKey
 import play.api.mvc.{Call, Request}
+import play.api.test.Helpers.redirectLocation
 import service.FakeDataCacheService
 import views.html.makeFileConfidential
 
@@ -116,5 +123,23 @@ class MakeFileConfidentialControllerSpec
       validFormData,
       expectedUserAnswers
     )
+
+    ".onPageLoad()" when {
+      "files are empty" should {
+        "redirect to UploadSupportingMaterialMultiple page" in {
+
+          implicit val timeout: Timeout = Timeout(5.seconds)
+          val request                   = fakeRequestWithIdentifier()
+          val result = controller(getEmptyCacheMap)
+            .onPageLoad(NormalMode)(request)
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(
+            routes.UploadSupportingMaterialMultipleController.onPageLoad(Some(request.id.toString), NormalMode).url
+          )
+
+        }
+      }
+    }
   }
 }
