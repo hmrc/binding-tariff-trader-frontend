@@ -93,11 +93,12 @@ class SupportingMaterialFileListController @Inject() (
     implicit request =>
       val updatedAnswers = removeFile(fileId, request.userAnswers)
 
-      val onwardRoute = if (updatedAnswers.get(UploadSupportingMaterialMultiplePage).get.isEmpty) {
+      val onwardRoute = if (updatedAnswers.get(UploadSupportingMaterialMultiplePage).forall(_.isEmpty)) {
         routes.AddSupportingDocumentsController.onPageLoad(mode)
       } else {
         routes.SupportingMaterialFileListController.onPageLoad(mode)
       }
+
       dataCacheService
         .save(updatedAnswers.cacheMap)
         .map(_ => Redirect(onwardRoute).flashing(success("supportingMaterialFile.remove.file.success.text")))
