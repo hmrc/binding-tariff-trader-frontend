@@ -21,7 +21,7 @@ import config.FrontendAppConfig
 import metrics.HasMetrics
 import models.Email
 import play.api.libs.json.{Json, Writes}
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import play.api.libs.ws.writeableOf_JsValue

@@ -17,7 +17,7 @@
 package controllers
 
 import config.FrontendAppConfig
-import controllers.actions._
+import controllers.actions.*
 import forms.ProvideGoodsNameFormProvider
 import models.Mode
 import models.requests.DataRequest

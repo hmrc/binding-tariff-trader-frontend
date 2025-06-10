@@ -19,9 +19,9 @@ package viewmodels
 import controllers.routes
 import models.SortDirection.SortDirection
 import models.SortField.{CREATED_DATE, SortField}
-import models._
+import models.*
 import play.api.mvc.Request
-import viewmodels.Dashboard._
+import viewmodels.Dashboard.*
 
 import java.net.URLEncoder.encode
 

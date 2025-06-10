@@ -19,7 +19,7 @@ package forms
 import forms.mappings.Mappings
 import models.BTIReference
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.*
 
 import javax.inject.Inject
 

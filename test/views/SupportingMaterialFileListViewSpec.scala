@@ -43,10 +43,10 @@ class SupportingMaterialFileListViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(createView)
 
     "show the expected heading when no files have been uploaded" in
-      assertHeading(0)
+      assertHeading(1)
 
     "show the expected heading when 1 file has been uploaded" in
-      assertHeading(1)
+      assertHeading(2)
 
     "show the expected heading when multiple file have been uploaded" in
       assertHeading(2)

@@ -18,8 +18,8 @@ package mapper
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import models._
-import pages._
+import models.*
+import pages.*
 
 import javax.inject.Singleton
 

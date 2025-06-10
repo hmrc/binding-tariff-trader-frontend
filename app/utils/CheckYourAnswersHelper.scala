@@ -19,7 +19,7 @@ package utils
 import controllers.routes
 import models.requests.DataRequest
 import models.{CheckMode, Country, FileAttachment, UserAnswers}
-import pages._
+import pages.*
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 import play.api.Logging

@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json._
+import play.api.libs.json.*
 
 case class EnterContactDetails(name: String, email: String, phoneNumber: String)
 

@@ -17,9 +17,9 @@
 package utils
 
 import audit.CaseAuditPayload
-import models._
+import models.*
 import models.requests.NewEventRequest
-import play.api.libs.json._
+import play.api.libs.json.*
 import viewmodels.{FileView, PdfViewModel}
 
 import scala.language.implicitConversions

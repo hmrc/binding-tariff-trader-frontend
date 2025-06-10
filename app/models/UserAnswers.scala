@@ -17,8 +17,8 @@
 package models
 
 import models.cache.CacheMap
-import pages._
-import play.api.libs.json._
+import pages.*
+import play.api.libs.json.*
 
 case class UserAnswers(cacheMap: CacheMap) extends Enumerable.Implicits {
 

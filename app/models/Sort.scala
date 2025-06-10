@@ -16,7 +16,7 @@
 
 package models
 
-import cats.syntax.either._
+import cats.syntax.either.*
 import models.SortDirection.{ASCENDING, DESCENDING, SortDirection}
 import models.SortField.{CREATED_DATE, SortField}
 import play.api.mvc.QueryStringBindable

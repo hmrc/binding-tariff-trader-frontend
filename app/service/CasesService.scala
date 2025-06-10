@@ -17,7 +17,7 @@
 package service
 
 import connectors.{BindingTariffClassificationConnector, EmailConnector}
-import models._
+import models.*
 import models.requests.NewEventRequest
 import play.api.Logging
 import uk.gov.hmrc.http.HeaderCarrier

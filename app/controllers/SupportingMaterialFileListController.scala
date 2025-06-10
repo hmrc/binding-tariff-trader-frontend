@@ -17,18 +17,18 @@
 package controllers
 
 import config.FrontendAppConfig
-import controllers.actions._
+import controllers.actions.*
 import forms.SupportingMaterialFileListFormProvider
 import models.requests.DataRequest
 import models.{FileAttachment, Mode, UserAnswers}
 import navigation.Navigator
-import pages._
+import pages.*
 import play.api.data.{Form, FormError}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
 import service.DataCacheService
 import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
-import utils.Notification.{success, _}
+import utils.Notification.{success, *}
 import viewmodels.FileView
 import views.html.supportingMaterialFileList
 
@@ -93,7 +93,7 @@ class SupportingMaterialFileListController @Inject() (
     implicit request =>
       val updatedAnswers = removeFile(fileId, request.userAnswers)
 
-      val onwardRoute = if (updatedAnswers.get(AddSupportingDocumentsPage).isEmpty) {
+      val onwardRoute = if (updatedAnswers.get(UploadSupportingMaterialMultiplePage).forall(_.isEmpty)) {
         routes.AddSupportingDocumentsController.onPageLoad(mode)
       } else {
         routes.SupportingMaterialFileListController.onPageLoad(mode)

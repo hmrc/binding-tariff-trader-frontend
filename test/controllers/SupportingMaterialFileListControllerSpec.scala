@@ -16,17 +16,17 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.SupportingMaterialFileListFormProvider
 import models.cache.CacheMap
-import models.{FileAttachment, NormalMode}
+import models.{FileAttachment, NormalMode, UserAnswers}
 import navigation.FakeNavigator
-import pages.{AddSupportingDocumentsPage, ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
+import pages.{AddSupportingDocumentsPage, ProvideGoodsNamePage, QuestionPage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
-import play.api.libs.json.{JsArray, JsBoolean, JsString, Json}
+import play.api.libs.json.{Format, JsArray, JsBoolean, JsString, JsValue, Json}
 import play.api.mvc.{Call, Request}
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import service.FakeDataCacheService
 import views.html.supportingMaterialFileList
 

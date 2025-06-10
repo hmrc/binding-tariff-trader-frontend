@@ -17,14 +17,14 @@
 package controllers
 
 import config.FrontendAppConfig
-import controllers.actions._
+import controllers.actions.*
 import forms.MakeFileConfidentialFormProvider
-import models.Mode
 import models.requests.DataRequest
+import models.{FileAttachment, Mode}
 import navigation.Navigator
-import pages._
+import pages.*
 import play.api.data.Form
-import play.api.mvc.{Call, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
 import service.DataCacheService
 import views.html.makeFileConfidential
@@ -55,6 +55,15 @@ class MakeFileConfidentialController @Inject() (
   ): HtmlFormat.Appendable = {
     val fileId: String = request.userAnswers.get(UploadSupportingMaterialMultiplePage).map(_.last.id).get
     makeFileConfidentialView(appConfig, preparedForm, submitAction, mode, fileId)
+  }
+
+  override def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+    implicit request: DataRequest[?] =>
+      request.userAnswers.get(UploadSupportingMaterialMultiplePage) match {
+        case Some(files) if files.nonEmpty => Ok(renderView(form, submitAction(mode), mode))
+        case _ =>
+          Redirect(routes.UploadSupportingMaterialMultipleController.onPageLoad(Some(request.id.toString), mode))
+      }
   }
 
 }

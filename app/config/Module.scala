@@ -16,7 +16,7 @@
 
 package config
 
-import controllers.actions._
+import controllers.actions.*
 import org.apache.fop.apps.FopFactory
 import play.api.inject.{Binding, Module => PlayModule}
 import play.api.{Configuration, Environment}

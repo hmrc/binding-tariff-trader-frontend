@@ -16,7 +16,7 @@
 
 package navigation
 
-import pages._
+import pages.*
 
 sealed abstract class Journey extends Product with Serializable {
   def questionPage: QuestionPage[Boolean]

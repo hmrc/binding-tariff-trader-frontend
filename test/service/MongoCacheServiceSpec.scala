@@ -19,6 +19,7 @@ package service
 import connectors.ConnectorTest
 import generators.Generators
 import models.cache.CacheMap
+import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.{any, refEq}
 import org.mockito.Mockito.{mock, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -62,26 +63,24 @@ class MongoCacheServiceSpec
 
   }
 
-//  ".keepAlive" must {
-//
-//    "keep the cache map for the length of 2 hours in the Mongo repository" in {
-//
-//      when(repository.extendTime(any[CacheMap])).thenReturn(Future.successful(true))
-//
-//      val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
-//
-//      forAll(arbitrary[CacheMap]) { cacheMap =>
-//        val result = mongoCacheService.keepAlive(cacheMap)
-//
-//        whenReady(result) { savedCacheMap =>
-//          println(savedCacheMap)
-//          savedCacheMap shouldEqual cacheMap
-//          verify(repository).extendTime(cacheMap)
-//        }
-//
-//      }
-//    }
-//  }
+  ".keepAlive" must {
+
+    "keep the cache map for the length of 2 hours in the Mongo repository" in {
+
+      when(repository.extendTime(any[CacheMap], ArgumentMatchers.eq(7200L))).thenReturn(Future.successful(true))
+
+      val mongoCacheService: MongoCacheService = new MongoCacheService(repository, metrics)
+
+      forAll(arbitrary[CacheMap]) { cacheMap =>
+        val result = mongoCacheService.keepAlive(cacheMap, 7200L)
+
+        whenReady(result) { savedCacheMap =>
+          savedCacheMap shouldEqual cacheMap
+          verify(repository).extendTime(cacheMap, 7200L)
+        }
+      }
+    }
+  }
 
   ".remove" must {
 
