@@ -44,10 +44,3 @@ function onFileSelected(id, targetURL, csrf) {
         }
     }
 }
-
-window.addEventListener("pageshow", function(event) {
-      const files = document.querySelectorAll('input[type="file"]');
-      files.forEach(input => {
-        input.value = ''
-      });
-});

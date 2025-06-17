@@ -17,22 +17,23 @@
 package controllers
 
 import config.FrontendAppConfig
-import controllers.actions._
+import controllers.actions.*
 import forms.UploadSupportingMaterialMultipleFormProvider
 import models.requests.{DataRequest, FileStoreInitiateRequest}
 import models.{FileAttachment, Mode, UploadError, UserAnswers}
 import navigation.Navigator
-import pages._
+import pages.*
 import play.api.Logging
 import play.api.data.Form
+import play.api.data.Forms.{mapping, single, text}
 import play.api.i18n.I18nSupport
-import play.api.mvc._
+import play.api.mvc.*
 import play.twirl.api.Html
 import service.{DataCacheService, FileService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.uploadSupportingMaterialMultiple
 
-import java.{util => ju}
+import java.util as ju
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
