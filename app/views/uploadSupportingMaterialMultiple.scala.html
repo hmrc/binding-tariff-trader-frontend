@@ -42,6 +42,7 @@
 
     @helper.form(
         action = Call("POST", initiateResponse.uploadRequest.href),
+        Symbol("autocomplete")-> "off",
         Symbol("enctype") -> "multipart/form-data",
         Symbol("id") -> "upload-files-form") {
 
