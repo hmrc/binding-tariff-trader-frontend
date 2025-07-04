@@ -16,6 +16,10 @@
 
 @import config.FrontendAppConfig
 @import views.html.helper.CSPNonce
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 
 @this(
         config: FrontendAppConfig,
@@ -28,7 +32,9 @@
         hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
         hmrcLanguageSelect: HmrcLanguageSelect,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-        twoThirdsMainContent: TwoThirdsMainContent
+        twoThirdsMainContent: TwoThirdsMainContent,
+        autocompleteCss: HmrcAccessibleAutocompleteCss,
+        autocompleteJavascript: HmrcAccessibleAutocompleteJavascript
 )
 
 @(
@@ -59,8 +65,8 @@
         )
     }
 
-    @additionalJS.getOrElse({})
-    @additionalCSS.getOrElse({})
+    @additionalJS.getOrElse(autocompleteCss())
+    @additionalCSS.getOrElse(autocompleteJavascript())
 }
 
 @beforeContentBlock = {
