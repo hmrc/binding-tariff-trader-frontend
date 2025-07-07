@@ -3,7 +3,7 @@ import sbt.*
 object AppDependencies {
 
   private val hmrcMongoPlayVersion = "2.6.0"
-  private val bootstrapPlayVersion = "9.13.0"
+  private val bootstrapPlayVersion = "9.14.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
     "commons-validator"      % "commons-validator"          % "1.9.0",
@@ -14,7 +14,7 @@ object AppDependencies {
     "org.typelevel"         %% "cats-core"                  % "2.13.0",
     "commons-io"             % "commons-io"                 % "2.19.0",
     "org.apache.xmlgraphics" % "fop"                        % "2.10",
-    "net.sf.saxon"           % "Saxon-HE"                   % "12.7"
+    "net.sf.saxon"           % "Saxon-HE"                   % "12.8"
   )
 
   private lazy val test: Seq[ModuleID] = Seq(
