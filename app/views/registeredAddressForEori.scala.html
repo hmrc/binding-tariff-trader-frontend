@@ -21,6 +21,7 @@
 @import views.html.helper.CSPNonce
 @import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
 
 
 @import views.ViewUtils._
@@ -46,6 +47,7 @@
         @components.heading(messages("registeredAddressForEori.headingNoEORI"))
     }
 }
+
 
 
 @govukLayoutWrapper(
@@ -102,19 +104,18 @@
             @govukSelect(
                 Select(
                     id = "country",
-                    name = "country-select",
+                    name = "country",
                     errorMessage = form("country").error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*)))),
                     label = Label(content = Text(messages("registeredAddressForEori.country"))),
-                    items = Seq(SelectItem(value = Some(" "), text = "", attributes = Map("label" -> " "))) ++
+                    items = Seq(SelectItem(value = Some(" "), text = "", attributes = Map("label" -> ""))) ++
                     countries.map( c =>
                         SelectItem(
-                        value = Some(c.alphaTwoCode),
-                        text = messages(c.countryName),
-                        selected = form("country").value.contains(c.alphaTwoCode)
+                            value = Some(c.alphaTwoCode),
+                            text = messages(c.countryName),
+                            selected = form("country").value.contains(c.alphaTwoCode)
                         )
                     ),
-                    classes = "js-autocomplete",
-                    formGroup = FormGroup(classes = Some("autocomplete-wrapper"))
+                    formGroup = FormGroup(classes = Some("autocomplete-wrapper govuk-!-width-one-half"))
                 ).asAccessibleAutocomplete()
             )
         }

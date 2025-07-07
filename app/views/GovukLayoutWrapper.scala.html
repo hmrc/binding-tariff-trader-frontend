@@ -120,7 +120,7 @@
         displayHmrcBanner = false
     )),
     beforeContentBlock = Some(beforeContentBlock),
-    scriptsBlock = Some(hmrcScripts()),
+    scriptsBlock = Some(hmrcScripts(Some(autocompleteJavascript()))),
     footerBlock = Some(hmrcStandardFooter()),
     mainContentLayout = Some(optCustomLayout.getOrElse(twoThirdsMainContent(_)))
 )(content)
