@@ -19,6 +19,10 @@
 @import models.Mode
 @import play.api.libs.json.Json
 @import views.html.helper.CSPNonce
+@import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
+
 
 @import views.ViewUtils._
 
@@ -27,7 +31,8 @@
         warning: components.warning_text,
         cancelApplicationLink: components.cancel_application_link,
         govukLayoutWrapper: GovukLayoutWrapper,
-        formWithCSRF: FormWithCSRF
+        formWithCSRF: FormWithCSRF,
+        govukSelect: GovukSelect
 )
 
 @(appConfig: FrontendAppConfig, form: Form[RegisteredAddressForEori], mode: Mode, countries: List[Country])(implicit request: Request[?], messages: Messages)
@@ -43,19 +48,10 @@
     }
 }
 
-@additionalJS = @{
-    Html(s"""<script ${CSPNonce.attr} type="text/javascript" src="${routes.Assets.versioned("javascripts/accessible-autocomplete.min.js")}"></script>""")
-}
-
-@additionalCSS = @{
-    Html(s"""<link rel="stylesheet" href='${routes.Assets.versioned("stylesheets/accessible-autocomplete.min.css")}'/>""")
-}
 
 
 @govukLayoutWrapper(
-    pageTitle = s"${errorPrefix(form)} ${messages("registeredAddressForEori.title")}",
-    additionalCSS = Some(additionalCSS),
-    additionalJS = Some(additionalJS)
+    pageTitle = s"${errorPrefix(form)} ${messages("registeredAddressForEori.title")}"
 ) {
 
     @formWithCSRF(action = controllers.routes.RegisteredAddressForEoriController.onSubmit(mode)) {
@@ -104,17 +100,28 @@
                 autocomplete = true
             )
 
-            @components.select(
-                field = form("country"),
-                elementOptions = countries.map{ c => (c.code, messages(c.countryName).trim) },
-                displayEmptyValue = true,
-                Symbol("_label") -> messages("registeredAddressForEori.country"),
-                Symbol("_selectClass") -> "js-autocomplete"
+
+            @govukSelect(
+                Select(
+                    id = "country",
+                    name = "country",
+                    errorMessage = form("country").error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*)))),
+                    label = Label(content = Text(messages("registeredAddressForEori.country"))),
+                    items = Seq(SelectItem(value = Some(" "), text = "", attributes = Map("label" -> ""))) ++
+                    countries.map( c =>
+                        SelectItem(
+                            value = Some(c.alphaTwoCode),
+                            text = messages(c.countryName),
+                            selected = form("country").value.contains(c.alphaTwoCode)
+                        )
+                    ),
+                    formGroup = FormGroup(classes = Some("autocomplete-wrapper govuk-!-width-one-half"))
+                ).asAccessibleAutocomplete()
             )
-            <script @CSPNonce.attr type="text/javascript" src='@routes.Assets.versioned("javascripts/countrycode.js")'></script>
         }
 
         @submitButton(Some(messages("site.continue")))
         @cancelApplicationLink()
+
     }
 }
