@@ -14,14 +14,17 @@
  * limitations under the License.
  *@
 
-@this()
+@this(govukButton: GovukButton)
 
 @(label: Option[String] = None)(implicit messages: Messages)
 
-<button id="submit" class="govuk-button">
-    @if(label.nonEmpty) {
-        @label
+@govukButton(Button(
+   id = Some("submit"),
+   content = if(label.nonEmpty){
+    Text(label.get)
     } else {
-        @messages("site.continue")
-    }
-</button>
+    Text(messages("site.continue"))
+    },
+   preventDoubleClick = Some(true)
+)
+)
