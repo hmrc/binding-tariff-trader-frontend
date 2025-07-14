@@ -25,7 +25,6 @@ import navigation.Navigator
 import pages.*
 import play.api.Logging
 import play.api.data.Form
-import play.api.data.Forms.{mapping, single, text}
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import play.twirl.api.Html
