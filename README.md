@@ -43,7 +43,7 @@ This application runs on port 9582.
 
 Open `http://localhost:9582/advance-tariff-application`.
 
-### Authentication
+###  Authentication
 
 The service uses the HMRC [auth-client](https://github.com/hmrc/auth-client) for authentication with Government Gateway as the authentication provider. In non production environments you will be redirected to the auth-login-stub. You can log in using the following enrolment information:
 
