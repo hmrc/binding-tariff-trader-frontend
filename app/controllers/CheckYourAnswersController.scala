@@ -109,7 +109,7 @@ class CheckYourAnswersController @Inject() (
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
 
-    implicit request: DataRequest[?] =>
+    implicit request: DataRequest[AnyContent] =>
       val answers        = request.userAnswers
       val newCaseRequest = mapper.map(answers)
 
