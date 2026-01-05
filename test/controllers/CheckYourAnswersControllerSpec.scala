@@ -19,19 +19,21 @@ package controllers
 import audit.AuditService
 import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeDataRetrievalAction, FakeIdentifierAction}
 import mapper.CaseRequestMapper
-import models._
+import models.*
 import models.cache.CacheMap
+import models.requests.DataRequest
 import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers.{any, refEq}
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
-import pages.{CheckYourAnswersPage, MakeFileConfidentialPage, UploadSupportingMaterialMultiplePage}
+import pages.{CheckYourAnswersPage, ConfirmationPage, MakeFileConfidentialPage, PdfViewPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
-import play.api.libs.json._
-import play.api.mvc.Call
-import play.api.test.Helpers._
+import play.api.libs.json.*
+import play.api.mvc.{Call, Result}
+import play.api.test.FakeRequest
+import play.api.test.Helpers.{status, *}
 import play.twirl.api.Html
-import service._
+import service.*
 import uk.gov.hmrc.http.HeaderCarrier
 import viewmodels.AnswerSection
 import views.html.check_your_answers
@@ -47,17 +49,18 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private lazy val error = new IllegalStateException("expected error")
   private val testAnswer = "answer"
 
-  private val mapper              = mock(classOf[CaseRequestMapper])
-  private val newCaseReq          = mock(classOf[NewCaseRequest])
-  private val attachment          = FileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
-  private val publishedAttachment = PublishedFileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
-  private val applicationPdf      = FileAttachment("id", "file.pdf", "application/pdf", 0L)
-  private val createdCase         = mock(classOf[Case])
-  private val auditService        = mock(classOf[AuditService])
-  private val casesService        = mock(classOf[CasesService])
-  private val pdfService          = mock(classOf[PdfService])
-  private val fileService         = mock(classOf[FileService])
-  private val btiApp              = mock(classOf[Application])
+  private val mapper               = mock(classOf[CaseRequestMapper])
+  private val newCaseReq           = mock(classOf[NewCaseRequest])
+  private val attachment           = FileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
+  private val publishedAttachment  = PublishedFileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
+  private val applicationPdf       = FileAttachment("id", "file.pdf", "application/pdf", 0L)
+  private val createdCase          = mock(classOf[Case])
+  private val auditService         = mock(classOf[AuditService])
+  private val casesService         = mock(classOf[CasesService])
+  private val pdfService           = mock(classOf[PdfService])
+  private val fileService          = mock(classOf[FileService])
+  private val btiApp               = mock(classOf[Application])
+  private val mockDataCacheService = mock(classOf[DataCacheService])
 
   private val countriesService = new CountriesService
 
@@ -156,6 +159,21 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
     result.header.status            shouldBe Status.SEE_OTHER
     result.header.headers(LOCATION) shouldBe "/foo"
+  }
+
+  "remove cache and redirect to Index when confirmationPage exists" in {
+
+    val result = controller(
+      new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map("confirmationPage" -> JsBoolean(true)))))
+    ).onSubmit()(fakeRequest)
+
+    when(mockDataCacheService.remove(any()))
+      .thenReturn(Future.successful(()))
+
+    status(result) shouldBe SEE_OTHER
+    redirectLocation(result).value shouldBe
+      routes.IndexController.getApplicationsAndRulings(1, None, None).url
+
   }
 
   "create an event when the ATAR application has been submitted successfully" in {
