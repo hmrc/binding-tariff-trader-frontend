@@ -111,6 +111,7 @@ class CheckYourAnswersController @Inject() (
 
     implicit request: DataRequest[AnyContent] =>
       val answers = request.userAnswers
+
       if (answers.cacheMap.data.contains("confirmationPage")) {
         dataCacheService.remove(answers.cacheMap)
         Future.successful(
