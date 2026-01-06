@@ -49,25 +49,6 @@ class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)
       )
     ) {
 
-  override def ensureIndexes(): Future[Seq[String]] = {
-    val logger = play.api.Logger(getClass)
-    for {
-      indexes <- collection.listIndexes().toFuture()
-      indexesToDrop = indexes.filter(index => index("name").asString().getValue == "userAnswersExpiry")
-      _ = if (indexesToDrop.nonEmpty) {
-            logger.warn(
-              "Found indexes that need to be dropped: " +
-                s"${indexesToDrop.map(index => index("name").asString.getValue).mkString(",")}"
-            )
-          } else {
-            logger.warn("No indexes that need to be dropped")
-          }
-      _ <-
-        Future.sequence(indexesToDrop.map(index => collection.dropIndex(index("name").asString().getValue).toFuture()))
-      ensuring <- super.ensureIndexes()
-    } yield ensuring
-  }
-
   private def byId(value: String): Bson = equal("id", value)
 
   def upsert(cm: CacheMap): Future[Boolean] =
