@@ -110,7 +110,7 @@ class CheckYourAnswersController @Inject() (
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
 
     implicit request: DataRequest[AnyContent] =>
-      val answers        = request.userAnswers
+      val answers = request.userAnswers
       if (answers.cacheMap.data.contains("confirmationPage")) {
         dataCacheService.remove(answers.cacheMap)
         Future.successful(
@@ -144,12 +144,12 @@ class CheckYourAnswersController @Inject() (
           pdfStored <- fileService.uploadApplicationPdf(atar.reference, pdfFile)
           pdfAttachment = Attachment(pdfStored.id, public = false)
           caseUpdate = CaseUpdate(
-                          Some(
-                            ApplicationUpdate(
-                              applicationPdf = SetValue(Some(pdfAttachment))
-                            )
-                          )
-                        )
+                         Some(
+                           ApplicationUpdate(
+                             applicationPdf = SetValue(Some(pdfAttachment))
+                           )
+                         )
+                       )
           _ <- caseService.update(atar.reference, caseUpdate)
           _ <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
           _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)

@@ -47,17 +47,18 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private lazy val error = new IllegalStateException("expected error")
   private val testAnswer = "answer"
 
-  private val mapper              = mock(classOf[CaseRequestMapper])
-  private val newCaseReq          = mock(classOf[NewCaseRequest])
-  private val attachment          = FileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
-  private val publishedAttachment = PublishedFileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
-  private val applicationPdf      = FileAttachment("id", "file.pdf", "application/pdf", 0L)
-  private val createdCase         = mock(classOf[Case])
-  private val auditService        = mock(classOf[AuditService])
-  private val casesService        = mock(classOf[CasesService])
-  private val pdfService          = mock(classOf[PdfService])
-  private val fileService         = mock(classOf[FileService])
-  private val btiApp              = mock(classOf[Application])
+  private val mapper               = mock(classOf[CaseRequestMapper])
+  private val newCaseReq           = mock(classOf[NewCaseRequest])
+  private val attachment           = FileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
+  private val publishedAttachment  = PublishedFileAttachment("file-id", "pikachu.jpg", "image/jpeg", 1L)
+  private val applicationPdf       = FileAttachment("id", "file.pdf", "application/pdf", 0L)
+  private val createdCase          = mock(classOf[Case])
+  private val auditService         = mock(classOf[AuditService])
+  private val casesService         = mock(classOf[CasesService])
+  private val pdfService           = mock(classOf[PdfService])
+  private val fileService          = mock(classOf[FileService])
+  private val btiApp               = mock(classOf[Application])
+  private val mockDataCacheService = mock(classOf[DataCacheService])
 
   private val countriesService = new CountriesService
 
@@ -156,6 +157,21 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
     result.header.status            shouldBe Status.SEE_OTHER
     result.header.headers(LOCATION) shouldBe "/foo"
+  }
+
+  "remove cache and redirect to Index when confirmationPage exists" in {
+
+    val result = controller(
+      new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map("confirmationPage" -> JsBoolean(true)))))
+    ).onSubmit()(fakeRequest)
+
+    when(mockDataCacheService.remove(any()))
+      .thenReturn(Future.successful(()))
+
+    status(result) shouldBe SEE_OTHER
+    redirectLocation(result).value shouldBe
+      routes.IndexController.getApplicationsAndRulings(1, None, None).url
+
   }
 
   "create an event when the ATAR application has been submitted successfully" in {
