@@ -49,7 +49,7 @@ class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)
       )
     ) {
 
-  /*override def ensureIndexes(): Future[Seq[String]] = {
+  override def ensureIndexes(): Future[Seq[String]] = {
     val logger = play.api.Logger(getClass)
     for {
       indexes <- collection.listIndexes().toFuture()
@@ -66,7 +66,7 @@ class SessionRepository @Inject() (config: Configuration, mongo: MongoComponent)
         Future.sequence(indexesToDrop.map(index => collection.dropIndex(index("name").asString().getValue).toFuture()))
       ensuring <- super.ensureIndexes()
     } yield ensuring
-  }*/
+  }
 
   private def byId(value: String): Bson = equal("id", value)
 
