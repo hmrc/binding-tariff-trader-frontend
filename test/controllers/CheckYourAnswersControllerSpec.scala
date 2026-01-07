@@ -160,7 +160,6 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   }
 
   "remove cache and redirect to Index when confirmationPage exists" in {
-
     val result = controller(
       new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map("confirmationPage" -> JsBoolean(true)))))
     ).onSubmit()(fakeRequest)
@@ -171,7 +170,6 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
     status(result) shouldBe SEE_OTHER
     redirectLocation(result).value shouldBe
       routes.IndexController.getApplicationsAndRulings(1, None, None).url
-
   }
 
   "create an event when the ATAR application has been submitted successfully" in {
