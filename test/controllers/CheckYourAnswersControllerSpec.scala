@@ -59,7 +59,8 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private val fileService         = mock(classOf[FileService])
   private val btiApp              = mock(classOf[Application])
 
-  private val countriesService = new CountriesService
+  private val countriesService     = new CountriesService
+  private val mockDataCacheService = mock(classOf[DataCacheService])
 
   val view_application: view_application = injector.instanceOf[view_application]
 
@@ -156,6 +157,19 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
     result.header.status            shouldBe Status.SEE_OTHER
     result.header.headers(LOCATION) shouldBe "/foo"
+  }
+
+  "remove cache and redirect to Index when confirmationPage exists" in {
+    val result = controller(
+      new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map("confirmationPage" -> JsBoolean(true)))))
+    ).onSubmit()(fakeRequest)
+
+    when(mockDataCacheService.remove(any()))
+      .thenReturn(Future.successful(()))
+
+    status(result) shouldBe SEE_OTHER
+    redirectLocation(result).value shouldBe
+      routes.IndexController.getApplicationsAndRulings(1, None, None).url
   }
 
   "create an event when the ATAR application has been submitted successfully" in {

@@ -110,47 +110,54 @@ class CheckYourAnswersController @Inject() (
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
 
     implicit request: DataRequest[AnyContent] =>
-      val answers        = request.userAnswers
-      val newCaseRequest = mapper.map(answers)
+      val answers = request.userAnswers
+      if (answers.cacheMap.data.contains("confirmationPage")) {
+        dataCacheService.remove(answers.cacheMap)
+        Future.successful(
+          Redirect(controllers.routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None))
+        )
+      } else {
+        val newCaseRequest = mapper.map(answers)
 
-      val fileAttachments: Seq[FileAttachment] = answers
-        .get(UploadSupportingMaterialMultiplePage)
-        .getOrElse(Seq.empty)
-        .filter(_.uploaded)
+        val fileAttachments: Seq[FileAttachment] = answers
+          .get(UploadSupportingMaterialMultiplePage)
+          .getOrElse(Seq.empty)
+          .filter(_.uploaded)
 
-      val keepConfidential = answers
-        .get(MakeFileConfidentialPage)
-        .getOrElse(Map.empty)
+        val keepConfidential = answers
+          .get(MakeFileConfidentialPage)
+          .getOrElse(Map.empty)
 
-      val fileView = fileAttachments.map(file => FileView(file.id, file.name, keepConfidential(file.id)))
+        val fileView = fileAttachments.map(file => FileView(file.id, file.name, keepConfidential(file.id)))
 
-      val withStatus = fileAttachments
-        .map(att => Attachment(att.id, public = !keepConfidential(att.id)))
+        val withStatus = fileAttachments
+          .map(att => Attachment(att.id, public = !keepConfidential(att.id)))
 
-      for {
-        published <- fileService.publish(fileAttachments)
-        publishIds  = published.map(_.id)
-        attachments = withStatus.filter(att => publishIds.contains(att.id))
-        atar <- createCase(newCaseRequest, attachments)
+        for {
+          published <- fileService.publish(fileAttachments)
+          publishIds  = published.map(_.id)
+          attachments = withStatus.filter(att => publishIds.contains(att.id))
+          atar <- createCase(newCaseRequest, attachments)
 
-        pdf = PdfViewModel(atar, fileView)
-        pdfFile   <- pdfService.generatePdf(view_application(appConfig, pdf, getCountryName))
-        pdfStored <- fileService.uploadApplicationPdf(atar.reference, pdfFile)
-        pdfAttachment = Attachment(pdfStored.id, public = false)
-        caseUpdate = CaseUpdate(
-                       Some(
-                         ApplicationUpdate(
-                           applicationPdf = SetValue(Some(pdfAttachment))
+          pdf = PdfViewModel(atar, fileView)
+          pdfFile   <- pdfService.generatePdf(view_application(appConfig, pdf, getCountryName))
+          pdfStored <- fileService.uploadApplicationPdf(atar.reference, pdfFile)
+          pdfAttachment = Attachment(pdfStored.id, public = false)
+          caseUpdate = CaseUpdate(
+                         Some(
+                           ApplicationUpdate(
+                             applicationPdf = SetValue(Some(pdfAttachment))
+                           )
                          )
                        )
-                     )
-        _ <- caseService.update(atar.reference, caseUpdate)
-        _ <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
-        _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
-        userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, pdf)
-        _           <- dataCacheService.save(userAnswers.cacheMap)
-        res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
-      } yield res
+          _ <- caseService.update(atar.reference, caseUpdate)
+          _ <- caseService.addCaseCreatedEvent(atar, Operator("", Some(atar.application.contact.name)))
+          _           = auditService.auditBTIApplicationSubmissionSuccessful(atar)
+          userAnswers = answers.set(ConfirmationPage, Confirmation(atar)).set(PdfViewPage, pdf)
+          _           <- dataCacheService.save(userAnswers.cacheMap)
+          res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
+        } yield res
+      }
   }
 
   private def createCase(
