@@ -30,6 +30,7 @@
         hmrcStandardFooter: HmrcStandardFooter,
         hmrcScripts: HmrcScripts,
         hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
+        hmrcLanguageSelect: HmrcLanguageSelect,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
         twoThirdsMainContent: TwoThirdsMainContent,
         autocompleteCss: HmrcAccessibleAutocompleteCss,
@@ -69,6 +70,13 @@
 }
 
 @beforeContentBlock = {
+        @if(config.languageTranslationEnabled && !config.forceNavigation) {
+            @hmrcLanguageSelect(LanguageSelect(
+                if (messages.lang.code == "cy") Cy else En,
+                (En, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.English)}"),
+                (Cy, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.Cymraeg)}")
+            ))
+        }
 
         @if(showBackLink) {
             @govukBackLink(BackLink(
@@ -112,7 +120,7 @@
         userResearchBanner = userResearchBanner,
         phaseBanner = None,
         displayHmrcBanner = false,
-        isWelshTranslationAvailable = true
+        isWelshTranslationAvailable = config.forceNavigation && config.languageTranslationEnabled
     )),
     beforeContentBlock = Some(beforeContentBlock),
     scriptsBlock = Some(hmrcScripts(Some(autocompleteJavascript()))),
