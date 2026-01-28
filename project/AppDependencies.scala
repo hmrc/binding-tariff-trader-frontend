@@ -2,7 +2,7 @@ import sbt.*
 
 object AppDependencies {
 
-  private val hmrcMongoPlayVersion = "2.11.0"
+  private val hmrcMongoPlayVersion = "2.12.0"
   private val bootstrapPlayVersion = "10.5.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
