@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,9 @@ class FrontendAppConfig @Inject() (
   lazy val languageTranslationEnabled: Boolean =
     runModeConfiguration.getOptional[Boolean]("microservice.services.features.welsh-translation").getOrElse(true)
 
+  lazy val forceNavigation: Boolean            =
+    runModeConfiguration.getOptional[Boolean]("play-frontend-hmrc.forceServiceNavigation").getOrElse(false)
+    
   private lazy val eoriCommonComponentUrl = loadConfig("eori-common-component-frontend.host")
   lazy val eoriCommonComponentSubscribeUrl: String =
     s"$eoriCommonComponentUrl/customs-enrolment-services/atar/subscribe"
