@@ -18,7 +18,7 @@ package models
 
 import base.SpecBase
 import org.scalatest.matchers.should.Matchers
-import play.api.libs.json.{JsError, JsResultException, JsValue, Json}
+import play.api.libs.json.{JsError, JsValue, Json}
 
 class CountrySpec extends SpecBase with Matchers {
 

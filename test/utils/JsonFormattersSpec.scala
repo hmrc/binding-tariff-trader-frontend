@@ -21,10 +21,10 @@ import base.SpecBase
 import utils.JsonFormatters.*
 import models.*
 import models.requests.NewEventRequest
-import play.api.libs.json.{JsError, JsSuccess, Json}
+import play.api.libs.json.{JsError, Json}
 import viewmodels.{FileView, PdfViewModel}
 
-import java.time.{Instant, ZonedDateTime}
+import java.time.Instant
 
 class JsonFormattersSpec extends SpecBase {
   "Contact" should {
