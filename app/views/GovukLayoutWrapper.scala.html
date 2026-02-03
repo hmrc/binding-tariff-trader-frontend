@@ -70,11 +70,13 @@
 }
 
 @beforeContentBlock = {
-        @hmrcLanguageSelect(LanguageSelect(
-            if (messages.lang.code == "cy") Cy else En,
-            (En, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.English)}"),
-            (Cy, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.Cymraeg)}")
-        ))
+        @if(config.languageTranslationEnabled && !config.forceNavigation) {
+            @hmrcLanguageSelect(LanguageSelect(
+                if (messages.lang.code == "cy") Cy else En,
+                (En, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.English)}"),
+                (Cy, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.Cymraeg)}")
+            ))
+        }
 
         @if(showBackLink) {
             @govukBackLink(BackLink(
@@ -117,7 +119,8 @@
         signOutUrl = signOut,
         userResearchBanner = userResearchBanner,
         phaseBanner = None,
-        displayHmrcBanner = false
+        displayHmrcBanner = false,
+        isWelshTranslationAvailable = config.forceNavigation && config.languageTranslationEnabled
     )),
     beforeContentBlock = Some(beforeContentBlock),
     scriptsBlock = Some(hmrcScripts(Some(autocompleteJavascript()))),

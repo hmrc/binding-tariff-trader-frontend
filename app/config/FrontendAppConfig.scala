@@ -45,6 +45,9 @@ class FrontendAppConfig @Inject() (
   lazy val languageTranslationEnabled: Boolean =
     runModeConfiguration.getOptional[Boolean]("microservice.services.features.welsh-translation").getOrElse(true)
 
+  lazy val forceNavigation: Boolean            =
+    runModeConfiguration.getOptional[Boolean]("play-frontend-hmrc.forceServiceNavigation").getOrElse(false)
+    
   private lazy val eoriCommonComponentUrl = loadConfig("eori-common-component-frontend.host")
   lazy val eoriCommonComponentSubscribeUrl: String =
     s"$eoriCommonComponentUrl/customs-enrolment-services/atar/subscribe"
