@@ -467,7 +467,7 @@ application.footer.sendingSamples.heading = Anfon samplau
 application.footer.sendingSamplesTo.heading = Anfonwch eich samplau i
 
 pdf.ruling.title=Dyfarniad Tariffau Uwch
-pdf.ruling.HMRCAddress=Tariff Classification Service<br>COVT<br>HM Revenue and Customs
+pdf.ruling.HMRCAddress=Gwasanaeth Dynodi Tariffau/Tariff Classification Service<br>COVT<br>HM Revenue and Customs
 pdf.ruling.dear=Annwyl
 pdf.ruling.thankYou=Diolch am eich cais am Ddyfarniad Tariffau Uwch (ATaR), dyddiedig
 pdf.ruling.askedFor=Gwnaethoch ofyn am Ddyfarniad Tariffau Uwch ar gyfer <strong>{0}</strong>. Dylech gadw’r dystysgrif dyfarniad hon at eich cofnodion. Mae’n rhoi gwybod i chi am y cod nwyddau rwyf wedi penderfynu arno ar gyfer eich nwyddau a’r rhesymau dros y penderfyniad.
