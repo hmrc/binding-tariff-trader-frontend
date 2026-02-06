@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.*
-import controllers.behaviours.{AccumulatingCachingControllerBehaviours, YesNoCachingControllerBehaviours}
+import controllers.behaviours.AccumulatingCachingControllerBehaviours
 import forms.MakeFileConfidentialFormProvider
 import models.cache.CacheMap
 import models.{FileAttachment, NormalMode, UserAnswers}
@@ -30,8 +30,6 @@ import pages.{MakeFileConfidentialPage, ProvideGoodsNamePage, QuestionPage, Uplo
 import play.api.data.Form
 import play.api.http.Status.SEE_OTHER
 import play.api.libs.json.*
-import play.api.libs.typedmap.TypedEntry
-import play.api.mvc.request.RequestAttrKey
 import play.api.mvc.{Call, Request}
 import play.api.test.Helpers.redirectLocation
 import service.FakeDataCacheService

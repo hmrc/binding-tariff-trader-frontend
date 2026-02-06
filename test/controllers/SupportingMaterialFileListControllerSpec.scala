@@ -20,11 +20,11 @@ import controllers.actions.*
 import controllers.behaviours.YesNoCachingControllerBehaviours
 import forms.SupportingMaterialFileListFormProvider
 import models.cache.CacheMap
-import models.{FileAttachment, NormalMode, UserAnswers}
+import models.{FileAttachment, NormalMode}
 import navigation.FakeNavigator
-import pages.{AddSupportingDocumentsPage, ProvideGoodsNamePage, QuestionPage, UploadSupportingMaterialMultiplePage}
+import pages.{AddSupportingDocumentsPage, ProvideGoodsNamePage, UploadSupportingMaterialMultiplePage}
 import play.api.data.Form
-import play.api.libs.json.{Format, JsArray, JsBoolean, JsString, JsValue, Json}
+import play.api.libs.json.{JsArray, JsBoolean, JsString, JsValue, Json}
 import play.api.mvc.{Call, Request}
 import play.api.test.Helpers.*
 import service.FakeDataCacheService

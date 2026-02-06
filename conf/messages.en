@@ -463,6 +463,7 @@ application.footer.sendingSamples.heading = Sending samples
 application.footer.sendingSamplesTo.heading = Send your samples to
 
 pdf.ruling.title=Advance Tariff Ruling
+pdf.ruling.HMRCAddress=Tariff Classification Service<br>COVT<br>HM Revenue and Customs
 pdf.ruling.dear=Dear
 pdf.ruling.thankYou=Thank you for your Advance Tariff Ruling (ATaR) application dated
 pdf.ruling.askedFor=You asked for an Advance Tariff Ruling for <strong>{0}</strong>. This ruling certificate is for you to keep for your records. This tells you the commodity code I have decided is appropriate for your goods and the reasons for the decision.
