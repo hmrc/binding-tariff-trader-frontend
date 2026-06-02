@@ -20,9 +20,17 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.{HmrcStandardPageParams, ServiceURLs}
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.{HmrcStandardPageParams, ServiceURLs, TemplateOverrides}
 
-@this(config: FrontendAppConfig, govukBackLink: GovukBackLink, hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper, autocompleteCss: HmrcAccessibleAutocompleteCss, autocompleteJavascript: HmrcAccessibleAutocompleteJavascript, hmrcStandardPage: HmrcStandardPage, standardBetaBanner: StandardBetaBanner, hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper)
+@this(config: FrontendAppConfig,
+        twoThirdsMainContent: TwoThirdsMainContent,
+        govukBackLink: GovukBackLink,
+        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
+        autocompleteCss: HmrcAccessibleAutocompleteCss,
+        autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
+        hmrcStandardPage: HmrcStandardPage,
+        standardBetaBanner: StandardBetaBanner,
+        hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper)
 
 
 @(
@@ -100,6 +108,9 @@
         banners = Banners(
             phaseBanner = None,
             userResearchBanner = userResearchBanner
+        ),
+        templateOverrides = TemplateOverrides(
+            mainContentLayout = Some(optCustomLayout.getOrElse(twoThirdsMainContent(_)))
         ),
         serviceName = Some(messages("service.name")),
         pageTitle = Some(pageTitle),
