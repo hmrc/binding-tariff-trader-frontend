@@ -104,7 +104,7 @@
         pageTitle = Some(pageTitle),
         isWelshTranslationAvailable = config.languageTranslationEnabled,
         backLink = {
-            if (showBackLink) Some(BackLink.mimicsBrowserBackButtonViaJavaScript) else if(customBackLink.isDefined) Some(customBackLink.get) else None
+            if (showBackLink) Some(BackLink.mimicsBrowserBackButtonViaJavaScript.copy(classes = "govuk-!-display-none-print js-visible", attributes = Map("id" -> "back-link", "data-module" -> "hmrc-back-link"))) else if(customBackLink.isDefined) Some(customBackLink.get) else None
         }
     )
 )(content)
