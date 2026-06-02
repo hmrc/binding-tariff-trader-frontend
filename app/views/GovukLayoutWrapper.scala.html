@@ -39,7 +39,7 @@
         timeoutActive: Boolean = true,
         showBackLink: Boolean = true,
         isUserResearchBannerVisible: Boolean = config.displayMakeGovUkBetterUrl,
-        customBackLink: Option[Html] = None,
+        customBackLink: Option[BackLink] = None,
         optCustomLayout: Option[Html => Html] = None,
         additionalJS: Option[Html] = None,
         additionalCSS: Option[Html] = None,
@@ -61,21 +61,8 @@
         )
     }
 
-    @additionalJS.getOrElse(autocompleteCss())
-    @additionalCSS.getOrElse(autocompleteJavascript())
-}
-
-@backLinkMaybe = {
-
-        @if(showBackLink) {
-            @govukBackLink(BackLink(
-                content = Text(messages("site.back")),
-                attributes = Map("id" -> "back-link")
-            ))
-            <script @{CSPNonce.attr}>document.getElementById("back-link").addEventListener("click", () => window.history.go(-1));</script>
-        }
-
-        @if(customBackLink.isDefined){ @customBackLink.get }
+    @additionalJS.getOrElse(autocompleteJavascript())
+    @additionalCSS.getOrElse(autocompleteCss())
 }
 
 @content = {
@@ -110,12 +97,15 @@
             userResearchBanner = userResearchBanner
         ),
         templateOverrides = TemplateOverrides(
-            mainContentLayout = Some(optCustomLayout.getOrElse(twoThirdsMainContent(_)))
+            mainContentLayout = Some(optCustomLayout.getOrElse(twoThirdsMainContent(_))),
+            additionalHeadBlock = Some(head)
         ),
         serviceName = Some(messages("service.name")),
         pageTitle = Some(pageTitle),
         isWelshTranslationAvailable = config.languageTranslationEnabled,
-        backLink = if (showBackLink) Some(BackLink.mimicsBrowserBackButtonViaJavaScript) else None
+        backLink = {
+            if (showBackLink) Some(BackLink.mimicsBrowserBackButtonViaJavaScript) else if(customBackLink.isDefined) Some(customBackLink.get) else None
+        }
     )
 )(content)
 
