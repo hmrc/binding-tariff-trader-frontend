@@ -18,24 +18,20 @@
 @import views.html.helper.CSPNonce
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
+@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.{HmrcStandardPageParams, ServiceURLs, TemplateOverrides}
 
-@this(
-        config: FrontendAppConfig,
-        govukLayout: GovukLayout,
-        govukBackLink: GovukBackLink,
-        hmrcHead: HmrcHead,
-        hmrcStandardHeader: HmrcStandardHeader,
-        hmrcStandardFooter: HmrcStandardFooter,
-        hmrcScripts: HmrcScripts,
-        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
-        hmrcLanguageSelect: HmrcLanguageSelect,
-        hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
+@this(config: FrontendAppConfig,
         twoThirdsMainContent: TwoThirdsMainContent,
+        govukBackLink: GovukBackLink,
+        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
         autocompleteCss: HmrcAccessibleAutocompleteCss,
-        autocompleteJavascript: HmrcAccessibleAutocompleteJavascript
-)
+        autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
+        hmrcStandardPage: HmrcStandardPage,
+        standardBetaBanner: StandardBetaBanner,
+        hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper)
+
 
 @(
         pageTitle: String,
@@ -43,7 +39,7 @@
         timeoutActive: Boolean = true,
         showBackLink: Boolean = true,
         isUserResearchBannerVisible: Boolean = config.displayMakeGovUkBetterUrl,
-        customBackLink: Option[Html] = None,
+        customBackLink: Option[BackLink] = None,
         optCustomLayout: Option[Html => Html] = None,
         additionalJS: Option[Html] = None,
         additionalCSS: Option[Html] = None,
@@ -65,28 +61,8 @@
         )
     }
 
-    @additionalJS.getOrElse(autocompleteCss())
-    @additionalCSS.getOrElse(autocompleteJavascript())
-}
-
-@beforeContentBlock = {
-        @if(config.languageTranslationEnabled && !config.forceNavigation) {
-            @hmrcLanguageSelect(LanguageSelect(
-                if (messages.lang.code == "cy") Cy else En,
-                (En, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.English)}"),
-                (Cy, s"${controllers.routes.LanguageSwitchController.switchToLanguage(Languages.Cymraeg)}")
-            ))
-        }
-
-        @if(showBackLink) {
-            @govukBackLink(BackLink(
-                content = Text(messages("site.back")),
-                attributes = Map("id" -> "back-link")
-            ))
-            <script @{CSPNonce.attr}>document.getElementById("back-link").addEventListener("click", () => window.history.go(-1));</script>
-        }
-
-        @if(customBackLink.isDefined){ @customBackLink.get }
+    @additionalJS.getOrElse(autocompleteJavascript())
+    @additionalCSS.getOrElse(autocompleteCss())
 }
 
 @content = {
@@ -110,20 +86,26 @@
     }
 }
 
-@govukLayout(
-    pageTitle = Some(pageTitle),
-    headBlock = Some(hmrcHead(headBlock = Some(head))),
-    headerBlock = Some(hmrcStandardHeader(
+@hmrcStandardPage(
+    HmrcStandardPageParams(
+        serviceURLs = ServiceURLs(
         serviceUrl = None,
+        signOutUrl = signOut
+        ),
+        banners = Banners(
+            phaseBanner = None,
+            userResearchBanner = userResearchBanner
+        ),
+        templateOverrides = TemplateOverrides(
+            mainContentLayout = Some(optCustomLayout.getOrElse(twoThirdsMainContent(_))),
+            additionalHeadBlock = Some(head)
+        ),
         serviceName = Some(messages("service.name")),
-        signOutUrl = signOut,
-        userResearchBanner = userResearchBanner,
-        phaseBanner = None,
-        displayHmrcBanner = false,
-        isWelshTranslationAvailable = config.forceNavigation && config.languageTranslationEnabled
-    )),
-    beforeContentBlock = Some(beforeContentBlock),
-    scriptsBlock = Some(hmrcScripts(Some(autocompleteJavascript()))),
-    footerBlock = Some(hmrcStandardFooter()),
-    mainContentLayout = Some(optCustomLayout.getOrElse(twoThirdsMainContent(_)))
+        pageTitle = Some(pageTitle),
+        isWelshTranslationAvailable = config.languageTranslationEnabled,
+        backLink = {
+            if (showBackLink) Some(BackLink.mimicsBrowserBackButtonViaJavaScript.copy(classes = "govuk-!-display-none-print js-visible", attributes = Map("id" -> "back-link", "data-module" -> "hmrc-back-link"))) else if(customBackLink.isDefined) Some(customBackLink.get) else None
+        }
+    )
 )(content)
+
