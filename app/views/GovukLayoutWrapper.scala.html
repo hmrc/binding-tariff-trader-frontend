@@ -29,6 +29,7 @@
         autocompleteCss: HmrcAccessibleAutocompleteCss,
         autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
         hmrcStandardPage: HmrcStandardPage,
+        hmrcScripts: HmrcScripts,
         standardBetaBanner: StandardBetaBanner,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper)
 
@@ -98,7 +99,8 @@
         ),
         templateOverrides = TemplateOverrides(
             mainContentLayout = Some(optCustomLayout.getOrElse(twoThirdsMainContent(_))),
-            additionalHeadBlock = Some(head)
+            additionalHeadBlock = Some(head),
+            additionalScriptsBlock = Some(hmrcScripts(Some(autocompleteJavascript())))
         ),
         serviceName = Some(messages("service.name")),
         pageTitle = Some(pageTitle),
