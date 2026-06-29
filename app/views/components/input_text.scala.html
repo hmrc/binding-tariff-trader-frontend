@@ -63,8 +63,7 @@
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
-        aria-describedby="@if(hint.isDefined){hint-@{field.id}} else if(field.hasErrors){error-message-@{field.id}-input} else {@field.id}"
+        @if(field.hasErrors || hint.isDefined){aria-describedby="@if(hint.isDefined){hint-@{field.id}}@if(field.hasErrors && hint.isDefined){ }@if(field.hasErrors){error-message-@{field.id}-input}"}
         autocomplete=@if(autocomplete){"on"}else{"off"}
     />
 </div>
-
