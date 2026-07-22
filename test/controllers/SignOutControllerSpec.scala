@@ -53,7 +53,7 @@ class SignOutControllerSpec extends ControllerSpecBase with BeforeAndAfterEach {
     "return 200 for a start feedback survey" in {
       val result: Future[Result] = controller.startFeedbackSurvey(fakeRequestWithEori)
       status(result)             shouldBe SEE_OTHER
-      redirectLocation(result).get should endWith("feedback%2FABTIR")
+      redirectLocation(result).get should endWith("feedback%2FABTIR%3FuseServiceNavigation")
     }
 
     "clear user cache when present" in {
