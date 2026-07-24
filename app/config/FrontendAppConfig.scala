@@ -60,7 +60,7 @@ class FrontendAppConfig @Inject() (
 
   private lazy val feedbackUrl: String         = loadConfig("feedback-frontend.host")
   private lazy val feedbackServiceName: String = "ABTIR"
-  lazy val feedbackSurvey: String              = s"$feedbackUrl/feedback/$feedbackServiceName"
+  lazy val feedbackSurvey: String              = s"$feedbackUrl/feedback/$feedbackServiceName?useServiceNavigation"
 
   private lazy val basGatewayBaseUrl: String = loadConfig("bas-gateway.host")
   lazy val signOutUrl: String                = s"$basGatewayBaseUrl/bas-gateway/sign-out-without-state"
