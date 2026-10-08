@@ -2,12 +2,12 @@ import sbt.*
 
 object AppDependencies {
 
-  private val hmrcMongoPlayVersion = "2.13.0"
+  private val hmrcMongoPlayVersion = "2.14.0"
   private val bootstrapPlayVersion = "10.8.0"
 
   private lazy val compile: Seq[ModuleID] = Seq(
     "commons-validator"      % "commons-validator"          % "1.10.1",
-    "uk.gov.hmrc"           %% "play-frontend-hmrc-play-30" % "13.9.0",
+    "uk.gov.hmrc"           %% "play-frontend-hmrc-play-30" % "13.15.0",
     "uk.gov.hmrc"           %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
     "uk.gov.hmrc.mongo"     %% "hmrc-mongo-play-30"         % hmrcMongoPlayVersion,
     "commons-codec"          % "commons-codec"              % "1.22.0",
