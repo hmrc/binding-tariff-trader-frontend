@@ -3,6 +3,7 @@ description: The public frontend for the Manage your Advance Tariff Rulings serv
 repoVisibility: public_0C3F0CE3E6E6448FAD341E7BFA50FCD333E06A20CFF05FCACE61154DDBBADF71
 type: Service
 service-type: Frontend
+serviceNowMapping: SNSVC0005252
 test-repositories:
   - digital-tariffs-operational-performance-tests
   - digital-tariffs-trader-performance-tests
