@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.CheckYourAnswersHelper
 import utils.JsonFormatters._
-import viewmodels.{AnswerSection, FileView, PdfViewModel}
+import viewmodels.{AnswerSection, ConfirmationUrlViewModel, FileView, PdfViewModel}
 import views.html.check_your_answers
 import views.html.components.view_application
 
@@ -51,6 +51,7 @@ class CheckYourAnswersController @Inject() (
   caseService: CasesService,
   pdfService: PdfService,
   fileService: FileService,
+  btaUserService: BTAUserService,
   mapper: CaseRequestMapper,
   cc: MessagesControllerComponents,
   checkYourAnswersView: check_your_answers,
@@ -59,12 +60,22 @@ class CheckYourAnswersController @Inject() (
     extends FrontendController(cc)
     with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val sendingSamplesAnswer = request.userAnswers.get(AreYouSendingSamplesPage).getOrElse(false)
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    if (alreadySubmitted(request.userAnswers)) {
+      redirectToApplicationsAndRulings(request.internalId)
+    } else {
+      successful(Ok(checkYourAnswersView(appConfig, answerSections, sendingSamples)))
+    }
+  }
+
+  private def sendingSamples(implicit request: DataRequest[AnyContent]): Boolean =
+    request.userAnswers.get(AreYouSendingSamplesPage).getOrElse(false)
+
+  private def answerSections(implicit request: DataRequest[AnyContent]): Seq[AnswerSection] = {
 
     val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers, countriesService.getAllCountriesById)
 
-    val sections = Seq(
+    Seq(
       AnswerSection(
         Some("checkYourAnswers.aboutTheGoodsSection"),
         Seq(
@@ -103,8 +114,6 @@ class CheckYourAnswersController @Inject() (
         ).flatten
       )
     )
-
-    Ok(checkYourAnswersView(appConfig, sections, sendingSamplesAnswer))
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -152,6 +161,14 @@ class CheckYourAnswersController @Inject() (
         res: Result <- successful(Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers)))
       } yield res
   }
+
+  private def alreadySubmitted(answers: UserAnswers): Boolean =
+    answers.get(ConfirmationPage).isDefined
+
+  private def redirectToApplicationsAndRulings(internalId: String): Future[Result] =
+    btaUserService
+      .isBTAUser(internalId)
+      .map(isBTAUser => Redirect(ConfirmationUrlViewModel(isBTAUser).call))
 
   private def createCase(
     newCaseRequest: NewCaseRequest,

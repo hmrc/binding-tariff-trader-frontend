@@ -25,7 +25,7 @@ import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers.{any, refEq}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import pages.{CheckYourAnswersPage, MakeFileConfidentialPage, UploadSupportingMaterialMultiplePage}
+import pages.{CheckYourAnswersPage, ConfirmationPage, MakeFileConfidentialPage, UploadSupportingMaterialMultiplePage}
 import play.api.http.Status
 import play.api.libs.json._
 import play.api.mvc.Call
@@ -57,6 +57,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
   private val casesService        = mock(classOf[CasesService])
   private val pdfService          = mock(classOf[PdfService])
   private val fileService         = mock(classOf[FileService])
+  private val btaUserService      = mock(classOf[BTAUserService])
   private val btiApp              = mock(classOf[Application])
 
   private val countriesService = new CountriesService
@@ -85,12 +86,14 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
     when(btiApp.reissuedBTIReference).thenReturn(Some("reissuedBTIReference"))
 
     when(mapper.map(any[UserAnswers])).thenReturn(newCaseReq)
+    when(btaUserService.isBTAUser(any[String])).thenReturn(successful(false))
   }
 
   override protected def afterEach(): Unit = {
     super.afterEach()
     reset(casesService)
     reset(auditService)
+    reset(btaUserService)
   }
 
   val checkYourAnswersView: check_your_answers = app.injector.instanceOf(classOf[check_your_answers])
@@ -108,6 +111,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       casesService,
       pdfService,
       fileService,
+      btaUserService,
       mapper,
       cc,
       checkYourAnswersView,
@@ -141,6 +145,22 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
 
       status(result)           shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(routes.SessionExpiredController.onPageLoad.url)
+    }
+
+    "redirect to applications and rulings for a GET when the application has already been submitted" in {
+      val result = controller(alreadySubmittedData).onPageLoad()(fakeRequest)
+
+      status(result)           shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(applicationsAndRulingsUrl)
+    }
+
+    "redirect to BTA for a GET when a BTA user has already submitted the application" in {
+      when(btaUserService.isBTAUser(any[String])).thenReturn(successful(true))
+
+      val result = controller(alreadySubmittedData).onPageLoad()(fakeRequest)
+
+      status(result)           shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(routes.BTARedirectController.redirectToBTA.url)
     }
   }
 
@@ -255,6 +275,17 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase with BeforeAndAf
       MakeFileConfidentialPage.toString             -> JsObject(Map("file-id" -> JsBoolean(false)))
     )
     new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+  }
+
+  private def applicationsAndRulingsUrl =
+    routes.IndexController.getApplicationsAndRulings(sortBy = None, order = None).url
+
+  // What ConfirmationController.onPageLoad leaves behind once the application has been submitted
+  private def alreadySubmittedData: DataRetrievalAction = {
+    val confirmationData = Map(
+      ConfirmationPage.toString -> Json.toJson(Confirmation("ref", "eori", "marisa@example.test"))
+    )
+    new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, confirmationData)))
   }
 
 }
