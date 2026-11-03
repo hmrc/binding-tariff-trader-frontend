@@ -174,10 +174,10 @@ class CheckYourAnswersHelper(
         case Some(true) => "- " + messages("site.keep_confidential")
         case None =>
           logger.error(
-            s"[CheckYourAnswersHelper][confidentialLabel] No confidentiality setting for attachment ID: ${attachment.id}"
+            s"No confidentiality setting for attachment ID: ${attachment.id}"
           )
           throw new RuntimeException(
-            s"[CheckYourAnswersHelper][confidentialLabel] Confidentiality setting missing for attachment ID: ${attachment.id}"
+            s"Confidentiality setting missing for attachment ID: ${attachment.id}"
           )
         case _ => ""
       }

@@ -73,7 +73,7 @@ class PdfGeneratorService @Inject() (fopFactory: FopFactory, environment: Enviro
 
       } catch {
         case e: Exception =>
-          throw new Exception(s"[PdfGeneratorService][render] Error rendering PDF: ${e.getMessage}")
+          throw new Exception(s"Error rendering PDF: ${e.getMessage}")
       }
 
       out.toByteArray
