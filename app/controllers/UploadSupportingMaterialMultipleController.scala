@@ -149,7 +149,7 @@ class UploadSupportingMaterialMultipleController @Inject() (
           val userAnswers    = removeFile(fileId, request.userAnswers)
           val formWithErrors = form.withError(FormInputField, uploadError.errorMessageKey)
           logger.error(
-            s"[UploadSupportingMaterialMultipleController][onPageLoad] File upload for file with id $fileId failed with error code $errorCode: $errorMessage"
+            s"File upload for file with id $fileId failed with error code $errorCode: $errorMessage"
           )
 
           for {
