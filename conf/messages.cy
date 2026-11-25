@@ -889,6 +889,10 @@ title.zambia=Zambia
 title.zimbabwe=Zimbabwe
 title.aland_islands=Ynysoedd Åland
 
+banner.title=Pwysig
+banner.line1=Rydym yn prosesu nifer fawr o geisiadau ar hyn o bryd.
+banner.line2=Mae’n bosibl y bydd yn cymryd mwy o amser nag arfer i chi gael penderfyniad dyfarnu.
+
 global.error.badRequest400.message=Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
 global.error.pageNotFound404.title=Heb ddod o hyd i’r dudalen – 404
 global.error.pageNotFound404.heading=Ni ellir dod o hyd i’r dudalen hon
