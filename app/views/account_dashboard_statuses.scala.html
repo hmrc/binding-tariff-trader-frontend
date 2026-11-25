@@ -69,6 +69,19 @@
 
 @formWithCSRF(action = routes.IndexController.onSubmit()) {
 
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                @messages("banner.title")
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            @messages("banner.line1")
+            <br>
+            @messages("banner.line2")
+        </div>
+    </div>
+
     @components.heading(
         messages("index.heading"),
         captionMsg = Some(messages("application.dashboard.status.title"))
