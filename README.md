@@ -10,10 +10,10 @@ The public frontend for the Manage your Advance Tariff Rulings service, used to 
 1) [Service Manager 2](https://github.com/hmrc/sm2) installed
 2) [SBT](https://www.scala-sbt.org) Version `>=1.x` installed
 3) [MongoDB](https://www.mongodb.com/) version `>=6.0` installed and running on port 27017
-4) [Localstack](https://github.com/localstack/localstack) installed and running on port 4572
-5) Create an S3 bucket in localstack by using `awslocal s3 mb s3://digital-tariffs-local` within the localstack container
+4) [Moto](https://github.com/getmoto/moto) (MotoServer) running on port 4566
+5) An S3 bucket called `digital-tariffs-local` created in Moto
 
-The easiest way to run MongoDB and Localstack for local development is to use [Docker](https://docs.docker.com/get-docker/).
+The easiest way to run MongoDB and Moto for local development is to use [Docker](https://docs.docker.com/get-docker/).
 
 ##### To run MongoDB
 
@@ -21,13 +21,11 @@ The easiest way to run MongoDB and Localstack for local development is to use [D
 > docker run --restart unless-stopped -d -p 27017-27019:27017-27019 --name mongodb mongo:6.9
 ```
 
-##### To run Localstack and create the S3 bucket
+##### To run Moto and create the S3 bucket
 
 ```
-> docker run -d --restart unless-stopped --name localstack -e SERVICES=s3 -p4572:4566 -p8080:8080 localstack/localstack
-> docker exec -it localstack bash
-> awslocal s3 mb s3://digital-tariffs-local
-> exit
+> docker run -d --restart unless-stopped --name moto -p 4566:5000 motoserver/moto:5.1.18
+> curl -X PUT http://localhost:4566/digital-tariffs-local
 ```
 
 #### Starting the application:
